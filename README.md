@@ -17,10 +17,10 @@ This project is part of a larger initative at Hack for LA around creating a shar
 
 Explain the different ways people can contribute. For example:
 
-- Join the team {on Slack/at our weekly hack night/etc}.
-- To help with user research, {do ABC}.
-- To provide design support, {do XYZ}.
-- To contribute to the code, follow the instructions below.
+- Review the documents in the [host-home shared drive](https://drive.google.com/drive/u/0/folders/1ahxiD9rIsBtx0yAPlPcPaGw8zGrfHHm9).
+- Join the [#host-home slack channel](https://hackforla.slack.com/archives/CRWUG7X0C).
+- Visit our [project board](https://github.com/hackforla/host-home-poc/projects/1) and see issues in the prioritized backlog.
+- Visit our [user stories project board](https://github.com/hackforla/host-home-poc/projects/2).
 
 Remember to provide direct links to each channel.
 
