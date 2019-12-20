@@ -22,8 +22,6 @@ Explain the different ways people can contribute. For example:
 - Visit our [project board](https://github.com/hackforla/host-home-poc/projects/1) and see issues in the prioritized backlog.
 - Visit our [user stories project board](https://github.com/hackforla/host-home-poc/projects/2).
 
-Remember to provide direct links to each channel.
-
 
 
 ## Installation instructions
