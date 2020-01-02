@@ -1,3 +1,3 @@
 export const AppConfig = {
-    AppName: 'Host Home POC'
+    AppName: 'Host Home'
 };
