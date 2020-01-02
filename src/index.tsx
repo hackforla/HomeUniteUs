@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { App } from "./components";
+import { App } from "./App";
 
 window.addEventListener('load', function(){
     console.log(`window:load: about to render app...`);
