@@ -3,17 +3,17 @@ import 'babel-polyfill';
 import * as React from "react";
 import { AppConfig } from './data/config';
 import { BrowserRouter, Route, Switch, NavLink, useParams, useHistory } from 'react-router-dom';
-import { makeStyles, Container, Toolbar, Button, Typography, IconButton, Paper, createStyles } from '@material-ui/core';
-import { Search } from '@material-ui/icons';
-
+import { makeStyles, Container, Toolbar, Button, Typography, IconButton, Paper, createStyles, Box, List, ListItem, ListItemIcon, Grid } from '@material-ui/core';
+import { Search, Dashboard } from '@material-ui/icons';
 
 export interface AppProps {
 }
 
-
-
 const useStyles = makeStyles(theme => (
     createStyles({
+        root: {
+            flexGrow: 1
+        },
         toolbar: {
             borderBottom: `1px solid ${theme.palette.divider}`,
         },
@@ -81,6 +81,11 @@ const useStyles = makeStyles(theme => (
             marginTop: theme.spacing(8),
             padding: theme.spacing(6, 0),
         },
+        paper: {
+          padding: theme.spacing(2),
+          textAlign: 'center',
+          color: theme.palette.text.secondary,
+        }
     })));
 
 const LocationManager = () => {
@@ -96,6 +101,28 @@ const CandidateManager = () => {
         <Paper>
             <h1>Candidates</h1>
         </Paper>
+    );
+};
+
+export const AdminGuestView = () => {
+    const classes = useStyles({});
+    return (
+        <React.Fragment>
+            <Grid container spacing={3}>
+                <Grid item xs={3}>
+                    <Paper className={classes.paper}>Photo</Paper>
+                </Grid>
+                <Grid item xs={9}>
+                    <Paper className={classes.paper}>Details</Paper>
+                </Grid>
+                <Grid item xs={12}>
+                    <Paper className={classes.paper}>Matches</Paper>
+                </Grid>
+                <Grid item xs={12}>
+                    <Paper className={classes.paper}>Unmatched</Paper>
+                </Grid>
+            </Grid>
+        </React.Fragment>
     );
 };
 
@@ -156,7 +183,6 @@ export const WelcomeView = () => {
         </React.Fragment>
     );
 }
-
 export const App = () => {
 
     const classes = useStyles({});
@@ -179,14 +205,50 @@ export const App = () => {
                 <Toolbar
                     className={classes.toolbar}
                 >
-                <NavLink to='/admin/guests' className={classes.toolbarLink}>Admin</NavLink>
-                <NavLink to='/hosts/1' className={classes.toolbarLink}>Hosts</NavLink>
-                <NavLink to='/guests/1' className={classes.toolbarLink}>Guests</NavLink>
-                </Toolbar> 
+                    <List style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        padding: 0,
+                    }}>
+                        <ListItem
+                            button
+                            key='home'
+                            component={NavLink}
+                            to='/'
+                        >
+                            <ListItemIcon>
+                                <Dashboard />
+                            </ListItemIcon>
+                            <span>Home</span>
+                        </ListItem>
+                        <ListItem
+                            button
+                            key='home'
+                            component={NavLink}
+                            to='/admin/guests'
+                        >
+                            <ListItemIcon>
+                                <Dashboard />
+                            </ListItemIcon>
+                            <span>Guests</span>
+                        </ListItem>
+                        <ListItem
+                            button
+                            key='home'
+                            component={NavLink}
+                            to='/admin/guest/1'
+                        >
+                            <ListItemIcon>
+                                <Dashboard />
+                            </ListItemIcon>
+                            <span>Guest 1</span>
+                        </ListItem>
+                    </List>
+                </Toolbar>
                 <main>
                     <Switch>
                         <Route exact path='/' component={WelcomeView} />
-                        <Route path='/admin/guests' component={PlaceholderView} />
+                        <Route path='/admin/guests' component={AdminGuestView} />
                         <Route path='/admin/guest/:id' component={PlaceholderWithIdView} />
                         <Route path='/guests/:id' component={PlaceholderWithIdView} />
                         <Route path='/hosts/:id' component={PlaceholderWithIdView} />
