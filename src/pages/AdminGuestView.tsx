@@ -1,6 +1,10 @@
 
 import * as React from "react";
-import { makeStyles, Paper, createStyles, Grid } from '@material-ui/core';
+import { makeStyles, Paper, createStyles, Grid, Box, Typography } from '@material-ui/core';
+import { useHostHomeData } from "../data/data-context";
+import { GuestMatchSummary } from "../viewmodels/GuestMatchSummary";
+import { MatchResult, Guest } from "../models";
+import { useParams } from "react-router";
 
 const useStyles = makeStyles(theme => (
     createStyles({
@@ -75,14 +79,19 @@ const useStyles = makeStyles(theme => (
             padding: theme.spacing(6, 0),
         },
         paper: {
-          padding: theme.spacing(2),
-          textAlign: 'center',
-          color: theme.palette.text.secondary,
+            padding: theme.spacing(2),
+            textAlign: 'center',
+            color: theme.palette.text.secondary,
         }
     })));
 
+
+
 export const AdminGuestView = () => {
+
     const classes = useStyles({});
+    const { id } = useParams();
+
     return (
         <React.Fragment>
             <Grid container spacing={3}>
@@ -90,7 +99,16 @@ export const AdminGuestView = () => {
                     <Paper className={classes.paper}>Photo</Paper>
                 </Grid>
                 <Grid item xs={9}>
-                    <Paper className={classes.paper}>Details</Paper>
+                    <Paper className={classes.paper}>
+                        <Box display='flex' p={1} m={1}>
+                            <Box p={1} flexGrow={1}>
+                                <Typography component='h5' align='left'>Guest ID</Typography>
+                            </Box>
+                            <Box p={1}>
+                                <Typography component='h5' align='left'>{id}</Typography>
+                            </Box>
+                        </Box>
+                    </Paper>
                 </Grid>
                 <Grid item xs={12}>
                     <Paper className={classes.paper}>Matches</Paper>

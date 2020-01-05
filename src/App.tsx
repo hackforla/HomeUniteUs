@@ -8,6 +8,7 @@ import { Search, Dashboard } from '@material-ui/icons';
 import { Guest } from './models';
 import { AdminGuestView } from './pages/AdminGuestView';
 import { HostHomeDataProvider } from './data/data-context';
+import { AdminView } from './pages/AdminView';
 
 export interface AppProps {
 }
@@ -219,8 +220,8 @@ export const App = () => {
                         <main>
                             <Switch>
                                 <Route exact path='/' component={WelcomeView} />
-                                <Route path='/admin/guests' component={AdminGuestView} />
-                                <Route path='/admin/guest/:id' component={PlaceholderWithIdView} />
+                                <Route path='/admin/guests' component={AdminView} />
+                                <Route path='/admin/guest/:id' component={AdminGuestView} />
                                 <Route path='/guests/:id' component={PlaceholderWithIdView} />
                                 <Route path='/hosts/:id' component={PlaceholderWithIdView} />
                             </Switch>
