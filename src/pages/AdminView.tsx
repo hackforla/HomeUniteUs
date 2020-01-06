@@ -4,6 +4,7 @@ import { useHostHomeData } from '../data/data-context';
 import { GuestMatchSummary } from '../viewmodels/GuestMatchSummary';
 import { MatchResult, Guest } from '../models';
 import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => (
     createStyles({
@@ -89,14 +90,13 @@ const useStyles = makeStyles(theme => (
 export const AdminView = () => {
 
     const classes = useStyles({});
-    
+
     const {
         data,
         dispatch,
         addGuest
     } = useHostHomeData();
-    
-    const history = useHistory();
+
 
     const allGuestMatches = React.useMemo(() => {
 
@@ -112,10 +112,10 @@ export const AdminView = () => {
             };
 
             return guestMatchSummary;
-            
+
         });
 
-        
+
     }, [data.guests, data.matchResults]);
 
 
@@ -140,22 +140,21 @@ export const AdminView = () => {
                             allGuestMatches.map((guestMatchSummary: GuestMatchSummary, index: number) => (
                                 <Box display='flex' p={1} m={1}>
                                     <Box p={1} flexGrow={1}>
-                                        <Typography component='h5' align='left'>{guestMatchSummary.guestName}</Typography>                                
+                                        <Typography component='h5' align='left'>{guestMatchSummary.guestName}</Typography>
                                     </Box>
                                     <Box p={1}>
-                                        <Button 
-                                            onClick={
-                                                () => {
-                                                    history.push(`/admin/guest/${guestMatchSummary.guestId}`);
-                                                }
-                                            }
+                                        <Button
+                                            color='primary'
+                                            component={Link}
+                                            to={`/hosthome/admin/guest/${guestMatchSummary.guestId}`}
+
                                         >
                                             {`${guestMatchSummary.numMatches} matches`}
                                         </Button>
                                     </Box>
-                                </Box>                                
+                                </Box>
                             ))
-                        }                            
+                        }
                     </Paper>
                 </Grid>
             </Grid>

@@ -5,4 +5,5 @@ export interface MatchResult {
     hostId: number;
     restrictionsFailed: Array<Restriction>;
     guestInterestLevel: GuestInterestLevel;
+    lastInterestUpdate: Date;
 };

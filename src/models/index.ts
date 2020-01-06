@@ -8,3 +8,4 @@ export { ResponseMultiplicity } from './RepsonseMultiplicity';
 export { MatchResult } from './MatchResult';
 export { Restriction } from './Restriction';
 export { GuestInterestLevel } from './GuestInterestLevel';
+export { ResponseValue } from './ResponseValue';

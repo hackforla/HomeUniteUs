@@ -10,6 +10,9 @@ import { AdminGuestView } from './pages/AdminGuestView';
 import { HostHomeDataProvider } from './data/data-context';
 import { AdminView } from './pages/AdminView';
 
+import logo from './img/masterSpyLogo3.png';
+
+
 export interface AppProps {
 }
 
@@ -141,12 +144,8 @@ export const WelcomeView = () => {
                 noWrap
                 className={classes.toolbarTitle}
             >
-                Welcome
+                About
             </Typography>
-            {
-                [1, 2, 3].map((id) => <Button onClick={() => { history.push(`/admin/guest/${id}`); }}>Go to guest id: {id}</Button>)
-            }
-
         </React.Fragment>
     );
 }
@@ -161,7 +160,24 @@ export const App = () => {
             <HostHomeDataProvider>
                 <BrowserRouter>
                     <Container maxWidth='lg'>
-                        <Toolbar className={classes.toolbar}>
+                        
+                    <Box display='flex' p={1} m={1}>
+                                <Box p={1} flexGrow={1}>
+                                    {/* <Typography component='h5' align='left'>SPY</Typography> */}
+                                    <img src={logo} alt='Logo' height={60} />
+                                </Box>
+                                <Box p={1}>
+                                    <Button component={NavLink} to={`/hosthome/about`}>
+                                        ABOUT
+                                        </Button>
+                                </Box>
+                                <Box p={1}>
+                                    <Button component={NavLink} to={`/hosthome/admin/guests`}>
+                                        ADMIN
+                                        </Button>
+                                </Box>
+                            </Box>
+                        {/* <Toolbar className={classes.toolbar}>
                             <Typography
                                 component='h2'
                                 variant='h5'
@@ -172,8 +188,8 @@ export const App = () => {
                             >
                                 {AppConfig.AppName}
                             </Typography>
-                        </Toolbar>
-                        <Toolbar
+                        </Toolbar> */}
+                        {/* <Toolbar
                             className={classes.toolbar}
                         >
                             <List style={{
@@ -207,23 +223,25 @@ export const App = () => {
                                     button
                                     key='home'
                                     component={NavLink}
-                                    to='/admin/guest/1'
+                                    to='/admin/guests'
                                 >
                                     <ListItemIcon>
                                         <Dashboard />
                                     </ListItemIcon>
-                                    <span>Guest 1</span>
+                                    <span>Guests</span>
                                 </ListItem>
                             </List>
-                        </Toolbar>
-                        
+                        </Toolbar> */}
+
                         <main>
                             <Switch>
                                 <Route exact path='/' component={WelcomeView} />
-                                <Route path='/admin/guests' component={AdminView} />
-                                <Route path='/admin/guest/:id' component={AdminGuestView} />
-                                <Route path='/guests/:id' component={PlaceholderWithIdView} />
-                                <Route path='/hosts/:id' component={PlaceholderWithIdView} />
+                                <Route exact path='/hosthome' component={WelcomeView} />
+                                <Route path='/hosthome/about' component={WelcomeView} />
+                                <Route path='/hosthome/admin/guests' component={AdminView} />
+                                <Route path='/hosthome/admin/guest/:id' component={AdminGuestView} />
+                                <Route path='/hosthome/guests/:id' component={PlaceholderWithIdView} />
+                                <Route path='/hosthome/hosts/:id' component={PlaceholderWithIdView} />
                             </Switch>
                         </main>
                     </Container>

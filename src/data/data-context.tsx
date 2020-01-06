@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Guest, Host, GuestQuestion, HostQuestion, Restriction, MatchResult, GuestInterestLevel } from "../models";
+import { Guest, Host, GuestQuestion, HostQuestion, Restriction, MatchResult, GuestInterestLevel, ResponseMultiplicity } from "../models";
+import { CommonResponseValues } from "../models/ResponseValue";
 
 
 // design was informed by:
@@ -69,8 +70,31 @@ const initialState: HostHomeData = {
             id: 3
         }
     ],
-    guestQuestions: new Array<GuestQuestion>(),
-    hostQuestions: new Array<HostQuestion>(),
+    guestQuestions: [
+        {
+            id: 1,
+            questionKey: 'smoking',
+            text: 'Do you smoke?',
+            responseValues: [
+                CommonResponseValues.Yes.id,
+                CommonResponseValues.No.id
+            ],
+            multiplicity: ResponseMultiplicity.ONE
+        }
+        
+    ],
+    hostQuestions: [
+        {
+            id: 1,
+            questionKey: 'smoking_allowed',
+            text: 'Is smoking allowed inside your home?',
+            responseValues: [
+                CommonResponseValues.Yes.id,
+                CommonResponseValues.No.id
+            ],
+            multiplicity: ResponseMultiplicity.ONE
+        }
+    ],
     restrictions: new Array<Restriction>(),
     matchResults: [
         {
@@ -85,7 +109,8 @@ const initialState: HostHomeData = {
                     reasonText: 'Can not smoke'
                 }
             ],
-            guestInterestLevel: GuestInterestLevel.Unknown
+            guestInterestLevel: GuestInterestLevel.Unknown,
+            lastInterestUpdate: new Date()
         },
         {
             guestId: 2,
@@ -99,13 +124,22 @@ const initialState: HostHomeData = {
                     reasonText: 'Can not smoke'
                 }
             ],
-            guestInterestLevel: GuestInterestLevel.Unknown
+            guestInterestLevel: GuestInterestLevel.Unknown,
+            lastInterestUpdate: new Date()
         },
         {
             guestId: 3,
             hostId: 1,
             restrictionsFailed: [],
-            guestInterestLevel: GuestInterestLevel.Unknown
+            guestInterestLevel: GuestInterestLevel.Interested,
+            lastInterestUpdate: new Date()
+        },
+        {
+            guestId: 4,
+            hostId: 1,
+            restrictionsFailed: [],
+            guestInterestLevel: GuestInterestLevel.NotInterested,
+            lastInterestUpdate: new Date()
         },
     ]
 };
