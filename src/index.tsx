@@ -7,7 +7,7 @@ window.addEventListener('load', function(){
     console.log(`window:load: about to render app...`);
     ReactDOM.render(
         <App />,
-        document.getElementById("example")
+        document.getElementById("app-root")
     );
     console.log(`window:load: app rendered`);
 });

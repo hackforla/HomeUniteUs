@@ -3,17 +3,24 @@ import 'babel-polyfill';
 import * as React from "react";
 import { AppConfig } from './data/config';
 import { BrowserRouter, Route, Switch, NavLink, useParams, useHistory } from 'react-router-dom';
-import { makeStyles, Container, Toolbar, Button, Typography, IconButton, Paper, createStyles } from '@material-ui/core';
-import { Search } from '@material-ui/icons';
+import { makeStyles, Container, Toolbar, Button, Typography, IconButton, Paper, createStyles, Box, List, ListItem, ListItemIcon, Grid } from '@material-ui/core';
+import { Search, Dashboard } from '@material-ui/icons';
+import { Guest } from './models';
+import { AdminGuestView } from './pages/AdminGuestView';
+import { HostHomeDataProvider } from './data/data-context';
+import { AdminView } from './pages/AdminView';
+
+import logo from './img/masterSpyLogo3.png';
 
 
 export interface AppProps {
 }
 
-
-
 const useStyles = makeStyles(theme => (
     createStyles({
+        root: {
+            flexGrow: 1
+        },
         toolbar: {
             borderBottom: `1px solid ${theme.palette.divider}`,
         },
@@ -81,23 +88,13 @@ const useStyles = makeStyles(theme => (
             marginTop: theme.spacing(8),
             padding: theme.spacing(6, 0),
         },
+        paper: {
+            padding: theme.spacing(2),
+            textAlign: 'center',
+            color: theme.palette.text.secondary,
+        }
     })));
 
-const LocationManager = () => {
-    return (
-        <Paper>
-            <h1>Locations</h1>
-        </Paper>
-    );
-};
-
-const CandidateManager = () => {
-    return (
-        <Paper>
-            <h1>Candidates</h1>
-        </Paper>
-    );
-};
 
 
 export const PlaceholderView = () => {
@@ -147,53 +144,111 @@ export const WelcomeView = () => {
                 noWrap
                 className={classes.toolbarTitle}
             >
-                Welcome
+                About
             </Typography>
-            {
-                [1, 2, 3].map((id) => <Button onClick={() => { history.push(`/admin/guest/${id}`); }}>Go to guest id: {id}</Button>)
-            }
-
         </React.Fragment>
     );
 }
-
 export const App = () => {
 
     const classes = useStyles({});
 
-    return (
-        <BrowserRouter>
-            <Container maxWidth='lg'>
-                <Toolbar className={classes.toolbar}>
-                    <Typography
-                        component='h2'
-                        variant='h5'
-                        color='inherit'
-                        align='center'
-                        noWrap
-                        className={classes.toolbarTitle}
-                    >
-                        {AppConfig.AppName}
-                    </Typography>
-                </Toolbar>
-                <Toolbar
-                    className={classes.toolbar}
-                >
-                <NavLink to='/admin/guests' className={classes.toolbarLink}>Admin</NavLink>
-                <NavLink to='/hosts/1' className={classes.toolbarLink}>Hosts</NavLink>
-                <NavLink to='/guests/1' className={classes.toolbarLink}>Guests</NavLink>
-                </Toolbar> 
-                <main>
-                    <Switch>
-                        <Route exact path='/' component={WelcomeView} />
-                        <Route path='/admin/guests' component={PlaceholderView} />
-                        <Route path='/admin/guest/:id' component={PlaceholderWithIdView} />
-                        <Route path='/guests/:id' component={PlaceholderWithIdView} />
-                        <Route path='/hosts/:id' component={PlaceholderWithIdView} />
-                    </Switch>
-                </main>
-            </Container>
+    let a: JSX.Element;
 
-        </BrowserRouter>
+    return (
+        <React.Fragment>
+            <HostHomeDataProvider>
+                <BrowserRouter>
+                    <Container maxWidth='lg'>
+                        
+                    <Box display='flex' p={1} m={1}>
+                                <Box p={1} flexGrow={1}>
+                                    {/* <Typography component='h5' align='left'>SPY</Typography> */}
+                                    <img src={logo} alt='Logo' height={60} />
+                                </Box>
+                                <Box p={1}>
+                                    <Button component={NavLink} to={`/hosthome/about`}>
+                                        ABOUT
+                                        </Button>
+                                </Box>
+                                <Box p={1}>
+                                    <Button component={NavLink} to={`/hosthome/admin/guests`}>
+                                        ADMIN
+                                        </Button>
+                                </Box>
+                            </Box>
+                        {/* <Toolbar className={classes.toolbar}>
+                            <Typography
+                                component='h2'
+                                variant='h5'
+                                color='inherit'
+                                align='center'
+                                noWrap
+                                className={classes.toolbarTitle}
+                            >
+                                {AppConfig.AppName}
+                            </Typography>
+                        </Toolbar> */}
+                        {/* <Toolbar
+                            className={classes.toolbar}
+                        >
+                            <List style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                padding: 0,
+                            }}>
+                                <ListItem
+                                    button
+                                    key='home'
+                                    component={NavLink}
+                                    to='/'
+                                >
+                                    <ListItemIcon>
+                                        <Dashboard />
+                                    </ListItemIcon>
+                                    <span>Home</span>
+                                </ListItem>
+                                <ListItem
+                                    button
+                                    key='home'
+                                    component={NavLink}
+                                    to='/admin/guests'
+                                >
+                                    <ListItemIcon>
+                                        <Dashboard />
+                                    </ListItemIcon>
+                                    <span>Guests</span>
+                                </ListItem>
+                                <ListItem
+                                    button
+                                    key='home'
+                                    component={NavLink}
+                                    to='/admin/guests'
+                                >
+                                    <ListItemIcon>
+                                        <Dashboard />
+                                    </ListItemIcon>
+                                    <span>Guests</span>
+                                </ListItem>
+                            </List>
+                        </Toolbar> */}
+
+                        <main>
+                            <Switch>
+                                <Route exact path='/' component={WelcomeView} />
+                                <Route exact path='/hosthome' component={WelcomeView} />
+                                <Route path='/hosthome/about' component={WelcomeView} />
+                                <Route path='/hosthome/admin/guests' component={AdminView} />
+                                <Route path='/hosthome/admin/guest/:id' component={AdminGuestView} />
+                                <Route path='/hosthome/guests/:id' component={PlaceholderWithIdView} />
+                                <Route path='/hosthome/hosts/:id' component={PlaceholderWithIdView} />
+                            </Switch>
+                        </main>
+                    </Container>
+
+                </BrowserRouter>
+            </HostHomeDataProvider>
+        </React.Fragment>
+
     );
 };
