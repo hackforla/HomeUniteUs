@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Guest, Host, GuestQuestion, HostQuestion, Restriction, MatchResult, GuestInterestLevel, ResponseMultiplicity } from "../models";
-import { CommonResponseValues } from "../models/ResponseValue";
+import { CommonResponseValues, ResponseValue } from "../models/ResponseValue";
 
 
 // design was informed by:
@@ -18,6 +18,7 @@ interface HostHomeData {
     hostQuestions: Array<HostQuestion>;
     restrictions: Array<Restriction>;
     matchResults: Array<MatchResult>;
+    responseValues: Array<ResponseValue>;
 };
 
 enum HostHomeActionType {
@@ -29,12 +30,12 @@ interface HostHomeAction {
     payload: Guest;
 };
 
-function hostHomeDataReducer(state: HostHomeData, action: HostHomeAction) {
+function hostHomeDataReducer(state: HostHomeData, action: HostHomeAction): HostHomeData {
     switch (action.type) {
         case HostHomeActionType.AddGuest:
             return {
                 ...state,
-                guests: [...state.guests, { id: 1, name: 'tyler' }]
+                guests: [...state.guests, { id: 1, name: 'tyler', imageUrl: '/img/photo.jpg' }]
             };
         default:
             throw new Error(`Unsupported action: ${JSON.stringify(action)}`);
@@ -45,15 +46,18 @@ const initialState: HostHomeData = {
     guests: [
         {
             name: 'John',
-            id: 1
+            id: 1,
+            imageUrl: '/hosthome/img/profile-placeholder.png'
         },
         {
             name: 'Jane',
-            id: 2
+            id: 2,
+            imageUrl: '/hosthome/img/profile-placeholder.png'
         },
         {
             name: 'Jim',
-            id: 3
+            id: 3,
+            imageUrl: '/hosthome/img/profile-placeholder.png'
         }
     ],
     hosts: [
@@ -95,7 +99,15 @@ const initialState: HostHomeData = {
             multiplicity: ResponseMultiplicity.ONE
         }
     ],
-    restrictions: new Array<Restriction>(),
+    restrictions: [
+        {
+            hostQuestionId: 1,
+            guestQuestionId: 1,
+            reasonText: '',
+            hostResponseValue: 1,
+            guestResponseValue: 1
+        }
+    ],
     matchResults: [
         {
             guestId: 1,
@@ -103,9 +115,9 @@ const initialState: HostHomeData = {
             restrictionsFailed: [
                 {
                     hostQuestionId: 1,
-                    hostResponseValue: 'ok',
+                    hostResponseValue: 1,
                     guestQuestionId: 1,
-                    guestResponseValue: 'ok',
+                    guestResponseValue: 1,
                     reasonText: 'Can not smoke'
                 }
             ],
@@ -141,6 +153,38 @@ const initialState: HostHomeData = {
             guestInterestLevel: GuestInterestLevel.NotInterested,
             lastInterestUpdate: new Date()
         },
+    ],
+    responseValues: [
+        {
+            id:1000,
+            text: 'Yes',
+            displayText: 'Smoking is allowed'
+        },
+        {
+            id:1001,
+            text: 'No',
+            displayText: 'Smoking is not allowed'
+        },
+        {
+            id:2000,
+            text: 'Yes',
+            displayText: 'Smokes'
+        },
+        {
+            id:2001,
+            text: 'No',
+            displayText: 'Does not smoke'
+        },
+        {
+            id:2002,
+            text: 'Yes',
+            displayText: 'Can live with smoking'
+        },
+        {
+            id:2003,
+            text: 'Yes',
+            displayText: 'Prefers not to live where smoking is allowed'
+        }
     ]
 };
 

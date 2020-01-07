@@ -114,6 +114,8 @@ export const AdminGuestView = () => {
 
     const history = useHistory();
 
+    const guest: Guest = data.guests.find((g: Guest) => g.id === guestId) || {} as Guest;
+
     const matched = React.useMemo(() => {
 
         return data.hosts.filter((host: Host) => {
@@ -148,7 +150,11 @@ export const AdminGuestView = () => {
             <Grid container spacing={3}>
                 <Grid item xs={3}>
                     <Paper className={classes.paper}>
-                        <ProfilePhoto width={200} />
+                        <img
+            src={guest.imageUrl}
+            width={200}
+            alt='Profile Photo'
+        />
                     </Paper>
                 </Grid>
                 <Grid item xs={9}>

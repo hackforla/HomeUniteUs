@@ -11,6 +11,7 @@ import { HostHomeDataProvider } from './data/data-context';
 import { AdminView } from './pages/AdminView';
 
 import logo from './img/masterSpyLogo3.png';
+import { AboutPage } from './pages/About';
 
 
 export interface AppProps {
@@ -237,7 +238,7 @@ export const App = () => {
                             <Switch>
                                 <Route exact path='/' component={WelcomeView} />
                                 <Route exact path='/hosthome' component={WelcomeView} />
-                                <Route path='/hosthome/about' component={WelcomeView} />
+                                <Route path='/hosthome/about' component={AboutPage} />
                                 <Route path='/hosthome/admin/guests' component={AdminView} />
                                 <Route path='/hosthome/admin/guest/:id' component={AdminGuestView} />
                                 <Route path='/hosthome/guests/:id' component={PlaceholderWithIdView} />

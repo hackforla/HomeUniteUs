@@ -1,7 +1,7 @@
 export interface Restriction {
     hostQuestionId: number;
-    hostResponseValue: string;
+    hostResponseValue: number;
     guestQuestionId: number;
-    guestResponseValue: string;
+    guestResponseValue: number;
     reasonText: string;
 }
