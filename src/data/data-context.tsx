@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Guest, Host, GuestQuestion, HostQuestion, Restriction, MatchResult, GuestInterestLevel, ResponseMultiplicity } from "../models";
+import { Guest, Host, GuestQuestion, HostQuestion, Restriction, MatchResult, GuestInterestLevel, ResponseMultiplicity, GuestResponse, HostResponse } from "../models";
 import { CommonResponseValues, ResponseValue } from "../models/ResponseValue";
 
 
@@ -19,6 +19,8 @@ interface HostHomeData {
     restrictions: Array<Restriction>;
     matchResults: Array<MatchResult>;
     responseValues: Array<ResponseValue>;
+    guestResponses: Array<GuestResponse>;
+    hostResponses: Array<HostResponse>;
 };
 
 enum HostHomeActionType {
@@ -79,10 +81,7 @@ const initialState: HostHomeData = {
             id: 1,
             questionKey: 'smoking',
             text: 'Do you smoke?',
-            responseValues: [
-                CommonResponseValues.Yes.id,
-                CommonResponseValues.No.id
-            ],
+            responseValues: [2000,2001],
             multiplicity: ResponseMultiplicity.ONE
         }
         
@@ -92,10 +91,7 @@ const initialState: HostHomeData = {
             id: 1,
             questionKey: 'smoking_allowed',
             text: 'Is smoking allowed inside your home?',
-            responseValues: [
-                CommonResponseValues.Yes.id,
-                CommonResponseValues.No.id
-            ],
+            responseValues: [1000,1001],
             multiplicity: ResponseMultiplicity.ONE
         }
     ],
@@ -104,55 +100,55 @@ const initialState: HostHomeData = {
             hostQuestionId: 1,
             guestQuestionId: 1,
             reasonText: '',
-            hostResponseValue: 1,
-            guestResponseValue: 1
+            hostResponseValue: 1001,
+            guestResponseValue: 2000
         }
     ],
     matchResults: [
-        {
-            guestId: 1,
-            hostId: 1,
-            restrictionsFailed: [
-                {
-                    hostQuestionId: 1,
-                    hostResponseValue: 1,
-                    guestQuestionId: 1,
-                    guestResponseValue: 1,
-                    reasonText: 'Can not smoke'
-                }
-            ],
-            guestInterestLevel: GuestInterestLevel.Unknown,
-            lastInterestUpdate: new Date()
-        },
-        {
-            guestId: 2,
-            hostId: 1,
-            restrictionsFailed: [
-                {
-                    hostQuestionId: 1,
-                    hostResponseValue: 'ok',
-                    guestQuestionId: 1,
-                    guestResponseValue: 'ok',
-                    reasonText: 'Can not smoke'
-                }
-            ],
-            guestInterestLevel: GuestInterestLevel.Unknown,
-            lastInterestUpdate: new Date()
-        },
-        {
-            guestId: 3,
-            hostId: 1,
-            restrictionsFailed: [],
-            guestInterestLevel: GuestInterestLevel.Interested,
-            lastInterestUpdate: new Date()
-        },
-        {
-            guestId: 4,
-            hostId: 1,
-            restrictionsFailed: [],
-            guestInterestLevel: GuestInterestLevel.NotInterested,
-            lastInterestUpdate: new Date()
-        },
+        // {
+        //     guestId: 1,
+        //     hostId: 1,
+        //     restrictionsFailed: [
+        //         {
+        //             hostQuestionId: 1,
+        //             hostResponseValue: 1,
+        //             guestQuestionId: 1,
+        //             guestResponseValue: 1,
+        //             reasonText: 'Can not smoke'
+        //         }
+        //     ],
+        //     guestInterestLevel: GuestInterestLevel.Unknown,
+        //     lastInterestUpdate: new Date()
+        // },
+        // {
+        //     guestId: 2,
+        //     hostId: 1,
+        //     restrictionsFailed: [
+        //         {
+        //             hostQuestionId: 1,
+        //             hostResponseValue: 1001,
+        //             guestQuestionId: 1,
+        //             guestResponseValue: 2000,
+        //             reasonText: 'Can not smoke'
+        //         }
+        //     ],
+        //     guestInterestLevel: GuestInterestLevel.Unknown,
+        //     lastInterestUpdate: new Date()
+        // },
+        // {
+        //     guestId: 3,
+        //     hostId: 1,
+        //     restrictionsFailed: [],
+        //     guestInterestLevel: GuestInterestLevel.Interested,
+        //     lastInterestUpdate: new Date()
+        // },
+        // {
+        //     guestId: 4,
+        //     hostId: 1,
+        //     restrictionsFailed: [],
+        //     guestInterestLevel: GuestInterestLevel.NotInterested,
+        //     lastInterestUpdate: new Date()
+        // },
     ],
     responseValues: [
         {
@@ -185,10 +181,104 @@ const initialState: HostHomeData = {
             text: 'Yes',
             displayText: 'Prefers not to live where smoking is allowed'
         }
+    ],
+    hostResponses: [
+        {
+            hostId: 1,
+            responseValues: [1001],
+            questionId: 1,            
+        }
+    ],
+    guestResponses: [
+        {
+            guestId: 1,
+            responseValues: [2000],
+            questionId: 1,            
+        }
     ]
 };
 
+interface RestrictionMap {
+    [hostId: string]: Array<number>;
+}
+
+export const computeInitialMatches = () => {   
+
+    /*
+        for all g in guests:
+            for all h in hosts:
+                for all r in restrictions:
+                    gr := g.responses.where(resp.questionId = r.questionId)
+                    hr = 
+     */
+
+     const restrictedPairs: RestrictionMap = {};
+     initialState.hosts.forEach((host: Host) => {
+         restrictedPairs[host.id] = new Array<number>();    
+     });
+
+     
+
+     initialState.restrictions.forEach((restriction: Restriction) => {
+
+        const hostResponses = initialState.hostResponses.filter((hostResponse: HostResponse) => {
+            return hostResponse.responseValues.find((rvId: number) => rvId === restriction.hostResponseValue) !== undefined;
+        });
+
+        const guestResponses = initialState.guestResponses.filter((guestResponse: GuestResponse) => {
+            return guestResponse.responseValues.find((rvId: number) => rvId === restriction.guestResponseValue) !== undefined;
+        });
+
+        // add each pair to the restricted
+        hostResponses.forEach((hostResponse: HostResponse) => {       
+     
+            guestResponses.forEach((guestResponse: GuestResponse) => {
+                restrictedPairs[hostResponse.hostId].push(guestResponse.guestId);
+
+                const existingResult = initialState.matchResults.find(
+                    (matchResult: MatchResult) => {
+                        return matchResult.hostId === hostResponse.hostId
+                            && matchResult.guestId === guestResponse.guestId;
+                    }
+                );
+
+                if(!existingResult) {
+                    initialState.matchResults.push({
+                        hostId: hostResponse.hostId,
+                        guestId: guestResponse.guestId,
+                        restrictionsFailed: [restriction],
+                        guestInterestLevel: GuestInterestLevel.Unknown,
+                        lastInterestUpdate: new Date()
+                    })
+                } else {
+                    existingResult.restrictionsFailed.push(restriction);
+                }
+
+            });
+        });
+     });
+
+     initialState.hosts.forEach((host: Host) => {
+         initialState.guests.forEach((guest: Guest) => {
+            if(restrictedPairs[host.id].find((guestId: number) => guestId === guest.id) === undefined) {
+                initialState.matchResults.push({
+                    hostId: host.id,
+                    guestId: guest.id,
+                    restrictionsFailed: [],
+                    guestInterestLevel: GuestInterestLevel.Unknown,
+                    lastInterestUpdate: new Date()
+                });
+            }
+         });
+     });
+
+};
+
+
 export function HostHomeDataProvider(props: React.PropsWithChildren<{}>): JSX.Element {
+
+    computeInitialMatches();
+    console.log(`HostHomeDataProvider: initialState = ${JSON.stringify(initialState)}`);
 
     const [state, dispatch] = React.useReducer(hostHomeDataReducer, initialState);
 

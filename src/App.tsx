@@ -165,7 +165,9 @@ export const App = () => {
                     <Box display='flex' p={1} m={1}>
                                 <Box p={1} flexGrow={1}>
                                     {/* <Typography component='h5' align='left'>SPY</Typography> */}
-                                    <img src={logo} alt='Logo' height={60} />
+                                    <a href="http://www.safeplaceforyouth.org/">
+                                        <img src={logo} alt='Logo' height={60} />
+                                    </a>
                                 </Box>
                                 <Box p={1}>
                                     <Button component={NavLink} to={`/hosthome/about`}>

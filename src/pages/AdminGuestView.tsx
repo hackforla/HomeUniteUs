@@ -3,7 +3,7 @@ import * as React from "react";
 import { makeStyles, Paper, createStyles, Grid, Box, Typography, Table, TableHead, TableRow, TableCell, TableBody, ValueLabelProps } from '@material-ui/core';
 import { useHostHomeData } from "../data/data-context";
 import { GuestMatchSummary } from "../viewmodels/GuestMatchSummary";
-import { MatchResult, Guest, Host, GuestInterestLevel } from "../models";
+import { MatchResult, Guest, Host, GuestInterestLevel, HostQuestion, HostResponse, ResponseValue } from "../models";
 import { useParams, useHistory } from "react-router";
 import { ProfilePhoto } from "../img/ProfilePhoto";
 
@@ -177,7 +177,14 @@ export const AdminGuestView = () => {
                             <TableHead>
                                 <TableRow>
                                     <TableCell>ID</TableCell>
-                                    <TableCell>Address</TableCell>
+                                    <TableCell>Address</TableCell>                                    
+                                    {
+                                        data.hostQuestions.map((q: HostQuestion) => {
+                                            return (
+                                                <TableCell>{q.questionKey}</TableCell>
+                                            );
+                                        })
+                                    }
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -187,6 +194,37 @@ export const AdminGuestView = () => {
                                             <TableRow key={index}>
                                                 <TableCell>{host.id}</TableCell>
                                                 <TableCell>{host.address}</TableCell>
+                                                
+                                            {
+                                                data.hostQuestions.map((q: HostQuestion) => {
+                                                    return (
+                                                        <TableCell>
+                                                            {
+                                                                (() => {
+                                                                    var response = data.hostResponses
+                                                                        .find((hr: HostResponse) => hr.hostId == host.id && hr.questionId == q.id);
+                                                                    if(!response) {
+                                                                        return 'Not answered';
+                                                                    }
+                                                                    return response
+                                                                        .responseValues
+                                                                        .map((rvId: number) => {
+
+
+                                                                            const rv = data.responseValues
+                                                                                .find((rv: ResponseValue) => rv.id === rvId);
+                                                                            if(!rv) {
+                                                                                throw new Error(`Unknown response value ID: ${rvId}`);
+                                                                            }
+                                                                            return rv.displayText || rv.text;
+                                                                                
+                                                                        })
+                                                                })()
+                                                            }
+                                                        </TableCell>
+                                                    );
+                                                })
+                                            }
                                             </TableRow>
                                             {
                                                 interestByHostId[host.id].interested === GuestInterestLevel.Interested
@@ -218,6 +256,13 @@ export const AdminGuestView = () => {
                                 <TableRow>
                                     <TableCell>ID</TableCell>
                                     <TableCell>Address</TableCell>
+                                    {
+                                        data.hostQuestions.map((q: HostQuestion) => {
+                                            return (
+                                                <TableCell>{q.questionKey}</TableCell>
+                                            );
+                                        })
+                                    }
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -226,6 +271,36 @@ export const AdminGuestView = () => {
                                         (host: Host, index: number) => <TableRow key={index}>
                                             <TableCell>{host.id}</TableCell>
                                             <TableCell>{host.address}</TableCell>
+                                            {
+                                                data.hostQuestions.map((q: HostQuestion) => {
+                                                    return (
+                                                        <TableCell>
+                                                            {
+                                                                (() => {
+                                                                    var response = data.hostResponses
+                                                                        .find((hr: HostResponse) => hr.hostId == host.id && hr.questionId == q.id);
+                                                                    if(!response) {
+                                                                        return 'Not answered';
+                                                                    }
+                                                                    return response
+                                                                        .responseValues
+                                                                        .map((rvId: number) => {
+
+
+                                                                            const rv = data.responseValues
+                                                                                .find((rv: ResponseValue) => rv.id === rvId);
+                                                                            if(!rv) {
+                                                                                throw new Error(`Unknown response value ID: ${rvId}`);
+                                                                            }
+                                                                            return rv.displayText || rv.text;
+                                                                                
+                                                                        })
+                                                                })()
+                                                            }
+                                                        </TableCell>
+                                                    );
+                                                })
+                                            }
                                         </TableRow>
                                     )
                                 }
