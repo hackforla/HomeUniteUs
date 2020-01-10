@@ -9,13 +9,6 @@ import { CommonResponseValues, ResponseValue } from "../models/ResponseValue";
 //   https://kentcdodds.com/blog/how-to-use-react-context-effectively
 
 
-class Condition {
-    subconditions: Array<Condition>;
-    type: 'or' | 'and';
-}
-
-
-
 const AppContext = React.createContext({});
 
 interface HostHomeData {
