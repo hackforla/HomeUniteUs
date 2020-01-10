@@ -9,6 +9,13 @@ import { CommonResponseValues, ResponseValue } from "../models/ResponseValue";
 //   https://kentcdodds.com/blog/how-to-use-react-context-effectively
 
 
+class Condition {
+    subconditions: Array<Condition>;
+    type: 'or' | 'and';
+}
+
+
+
 const AppContext = React.createContext({});
 
 interface HostHomeData {
@@ -207,7 +214,6 @@ export const computeInitialMatches = () => {
     /*
         for all g in guests:
             for all h in hosts:
-                for all r in restrictions:
                     gr := g.responses.where(resp.questionId = r.questionId)
                     hr = 
      */
@@ -302,9 +308,12 @@ export function useHostHomeData() {
     const addGuest = (guest: Guest) => dispatch({ type: HostHomeActionType.AddGuest, payload: guest });
     // ...
     
+const updateHostProfile= () => {};
+
     return {
         data,
+        addGuest,
         dispatch,
-        addGuest
+        updateHostProfile
     };
 };
