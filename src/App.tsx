@@ -7,6 +7,7 @@ import { makeStyles, Container, Toolbar, Button, Typography, IconButton, Paper, 
 import { Search, Dashboard } from '@material-ui/icons';
 import { Guest } from './models';
 import { AdminGuestView } from './pages/AdminGuestView';
+import { HostProfilePage } from './pages/HostProfile';
 import { HostHomeDataProvider } from './data/data-context';
 import { AdminView } from './pages/AdminView';
 
@@ -179,6 +180,11 @@ export const App = () => {
                                         ADMIN
                                         </Button>
                                 </Box>
+                                <Box p={1}>
+                                    <Button component={NavLink} to={`/hosthome/hosts/1`}>
+                                        HOST PROFILE
+                                    </Button>
+                                </Box>
                             </Box>
                         {/* <Toolbar className={classes.toolbar}>
                             <Typography
@@ -243,6 +249,7 @@ export const App = () => {
                                 <Route path='/hosthome/about' component={AboutPage} />
                                 <Route path='/hosthome/admin/guests' component={AdminView} />
                                 <Route path='/hosthome/admin/guest/:id' component={AdminGuestView} />
+                                <Route path='/hosthome/hosts/:id' component={HostProfilePage} />
                                 <Route path='/hosthome/guests/:id' component={PlaceholderWithIdView} />
                                 <Route path='/hosthome/hosts/:id' component={PlaceholderWithIdView} />
                             </Switch>
