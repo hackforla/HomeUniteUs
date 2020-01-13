@@ -2,6 +2,9 @@ import * as React from 'react';
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
+import { useParams, useHistory } from 'react-router';
+import { useHostHomeData } from '../../data/data-context';
+import { ProgressPlugin } from 'webpack';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -25,7 +28,15 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export const ButtonBar = () => {
+
   const classes = useStyles();
+
+  const history = useHistory();
+
+  const {guestId, hostId} = useParams();
+
+
+  const {markAsInterested, markAsNotInterested} = useHostHomeData();
 
   return (
     <React.Fragment>
@@ -35,7 +46,16 @@ export const ButtonBar = () => {
           <Button
             variant="contained"
             color="secondary"
-            onClick={() => console.log("I'm not interested")}
+            onClick={() => {
+
+              markAsNotInterested({
+                guestId: parseInt(guestId || '-1'),
+                hostId: parseInt(hostId || '-1')
+              });
+
+              history.push(`/hosthome/admin/guest/${guestId}`);
+
+            }}
           >
             I'm not interested
           </Button>
@@ -43,7 +63,15 @@ export const ButtonBar = () => {
             variant="contained"
             color="primary"
             className={classes.yesButton}
-            onClick={() =>console.log("I'm interested")}
+            onClick={() =>{
+              markAsInterested({
+                guestId: parseInt(guestId || '-1'),
+                hostId: parseInt(hostId || '-1')
+              });
+
+              history.push(`/hosthome/admin/guest/${guestId}`);
+
+            }}
           >
             I'm interested
           </Button>

@@ -24,20 +24,58 @@ interface HostHomeData {
 };
 
 enum HostHomeActionType {
-    AddGuest
+    AddGuest,
+    MarkAsInterested,
+    MarkAsNotInterested
 };
 
 interface HostHomeAction {
     type: HostHomeActionType;
-    payload: Guest;
+    payload: Guest | MatchPair;
 };
 
 function hostHomeDataReducer(state: HostHomeData, action: HostHomeAction): HostHomeData {
+
+    let newState : HostHomeData;
+
+    console.log(`hostHomeDataReducer: action = ${JSON.stringify(action)}`)
+
     switch (action.type) {
         case HostHomeActionType.AddGuest:
             return {
                 ...state
             };
+        case HostHomeActionType.MarkAsInterested:
+
+            const interestedPair = action.payload as MatchPair;
+
+            newState = {...state};
+
+            (newState.matchResults
+                .find((m: MatchResult) => m.guestId === interestedPair.guestId && m.hostId === interestedPair.hostId) as MatchResult)
+                .guestInterestLevel = GuestInterestLevel.Interested;
+
+                (newState.matchResults
+                    .find((m: MatchResult) => m.guestId === interestedPair.guestId && m.hostId === interestedPair.hostId) as MatchResult)
+                    .lastInterestUpdate = new Date();
+
+            return newState;
+
+        case HostHomeActionType.MarkAsNotInterested:
+
+            const notInterestedPair = action.payload as MatchPair;
+
+            newState = {...state};
+
+            (newState.matchResults
+                .find((m: MatchResult) => m.guestId === notInterestedPair.guestId && m.hostId === notInterestedPair.hostId) as MatchResult)
+                .guestInterestLevel = GuestInterestLevel.NotInterested;
+            
+            (newState.matchResults
+                .find((m: MatchResult) => m.guestId === notInterestedPair.guestId && m.hostId === notInterestedPair.hostId) as MatchResult)
+                .lastInterestUpdate = new Date();
+
+            return newState;
         default:
             throw new Error(`Unsupported action: ${JSON.stringify(action)}`);
     }
@@ -4257,7 +4295,7 @@ const initialState: HostHomeData = {
             "questionKey": "pets_have",
             "id": 0,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         },
         {
             "responseValues": [
@@ -4267,7 +4305,7 @@ const initialState: HostHomeData = {
             "questionKey": "host_pets",
             "id": 1,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         },
         {
             "responseValues": [
@@ -4277,7 +4315,7 @@ const initialState: HostHomeData = {
             "questionKey": "employed",
             "id": 2,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         },
         {
             "responseValues": [
@@ -4287,7 +4325,7 @@ const initialState: HostHomeData = {
             "questionKey": "in_school",
             "id": 3,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         },
         {
             "responseValues": [
@@ -4297,7 +4335,7 @@ const initialState: HostHomeData = {
             "questionKey": "smoking_guest",
             "id": 4,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         },
         {
             "responseValues": [
@@ -4307,7 +4345,7 @@ const initialState: HostHomeData = {
             "questionKey": "substances_household_acceptable",
             "id": 5,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         },
         {
             "responseValues": [
@@ -4317,7 +4355,7 @@ const initialState: HostHomeData = {
             "questionKey": "drinking_household_acceptable",
             "id": 6,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         },
         {
             "responseValues": [
@@ -4327,7 +4365,7 @@ const initialState: HostHomeData = {
             "questionKey": "substances_guest",
             "id": 7,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         },
         {
             "responseValues": [
@@ -4337,7 +4375,7 @@ const initialState: HostHomeData = {
             "questionKey": "mental_illness",
             "id": 8,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         },
         {
             "responseValues": [
@@ -4347,7 +4385,7 @@ const initialState: HostHomeData = {
             "questionKey": "drinking_guest",
             "id": 9,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         },
         {
             "responseValues": [
@@ -4357,7 +4395,7 @@ const initialState: HostHomeData = {
             "questionKey": "mental_illness_care",
             "id": 10,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         },
         {
             "responseValues": [
@@ -4367,7 +4405,7 @@ const initialState: HostHomeData = {
             "questionKey": "parenting_guest",
             "id": 11,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         },
         {
             "responseValues": [
@@ -4377,7 +4415,7 @@ const initialState: HostHomeData = {
             "questionKey": "drinking_concerns",
             "id": 12,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         },
         {
             "responseValues": [
@@ -4387,7 +4425,7 @@ const initialState: HostHomeData = {
             "questionKey": "substances_concerns",
             "id": 13,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         }
     ],
     "hostQuestions": [
@@ -4399,7 +4437,7 @@ const initialState: HostHomeData = {
             "questionKey": "smoking_allowed",
             "id": 0,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         },
         {
             "responseValues": [
@@ -4409,7 +4447,7 @@ const initialState: HostHomeData = {
             "questionKey": "drinking_residents",
             "id": 1,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         },
         {
             "responseValues": [
@@ -4419,7 +4457,7 @@ const initialState: HostHomeData = {
             "questionKey": "drinking_concerns",
             "id": 2,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         },
         {
             "responseValues": [
@@ -4429,7 +4467,7 @@ const initialState: HostHomeData = {
             "questionKey": "substance_residents",
             "id": 3,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         },
         {
             "responseValues": [
@@ -4439,7 +4477,7 @@ const initialState: HostHomeData = {
             "questionKey": "substance_concerns",
             "id": 4,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         },
         {
             "responseValues": [
@@ -4449,7 +4487,7 @@ const initialState: HostHomeData = {
             "questionKey": "pets_hosting",
             "id": 5,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         },
         {
             "responseValues": [
@@ -4459,7 +4497,7 @@ const initialState: HostHomeData = {
             "questionKey": "pet_restrictions",
             "id": 6,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         },
         {
             "responseValues": [
@@ -4469,7 +4507,7 @@ const initialState: HostHomeData = {
             "questionKey": "youth_parenting",
             "id": 7,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         },
         {
             "responseValues": [
@@ -4479,7 +4517,7 @@ const initialState: HostHomeData = {
             "questionKey": "youth_relationship",
             "id": 8,
             "multiplicity": ResponseMultiplicity.ONE,
-			"text": ""
+            "text": ""
         }
     ],
     "responseValues": [
@@ -30655,7 +30693,7 @@ interface RestrictionMap {
     [hostId: string]: Array<number>;
 }
 
-export const computeInitialMatches = () => {   
+export const computeInitialMatches = () => {
 
     /*
         for all g in guests:
@@ -30664,14 +30702,14 @@ export const computeInitialMatches = () => {
                     hr = 
      */
 
-     const restrictedPairs: RestrictionMap = {};
-     initialState.hosts.forEach((host: Host) => {
-         restrictedPairs[host.id] = new Array<number>();    
-     });
+    const restrictedPairs: RestrictionMap = {};
+    initialState.hosts.forEach((host: Host) => {
+        restrictedPairs[host.id] = new Array<number>();
+    });
 
-     
 
-     initialState.restrictions.forEach((restriction: Restriction) => {
+
+    initialState.restrictions.forEach((restriction: Restriction) => {
 
         const hostResponses = initialState.hostResponses.filter((hostResponse: HostResponse) => {
             return hostResponse.responseValues.find((rvId: number) => rvId === restriction.hostResponseValue) !== undefined;
@@ -30682,8 +30720,8 @@ export const computeInitialMatches = () => {
         });
 
         // add each pair to the restricted
-        hostResponses.forEach((hostResponse: HostResponse) => {       
-     
+        hostResponses.forEach((hostResponse: HostResponse) => {
+
             guestResponses.forEach((guestResponse: GuestResponse) => {
                 restrictedPairs[hostResponse.hostId].push(guestResponse.guestId);
 
@@ -30694,7 +30732,7 @@ export const computeInitialMatches = () => {
                     }
                 );
 
-                if(!existingResult) {
+                if (!existingResult) {
                     initialState.matchResults.push({
                         hostId: hostResponse.hostId,
                         guestId: guestResponse.guestId,
@@ -30708,11 +30746,11 @@ export const computeInitialMatches = () => {
 
             });
         });
-     });
+    });
 
-     initialState.hosts.forEach((host: Host) => {
-         initialState.guests.forEach((guest: Guest) => {
-            if(restrictedPairs[host.id].find((guestId: number) => guestId === guest.id) === undefined) {
+    initialState.hosts.forEach((host: Host) => {
+        initialState.guests.forEach((guest: Guest) => {
+            if (restrictedPairs[host.id].find((guestId: number) => guestId === guest.id) === undefined) {
                 initialState.matchResults.push({
                     hostId: host.id,
                     guestId: guest.id,
@@ -30721,15 +30759,15 @@ export const computeInitialMatches = () => {
                     lastInterestUpdate: new Date()
                 });
             }
-         });
-     });
+        });
+    });
 
 };
 
+computeInitialMatches();
 
 export function HostHomeDataProvider(props: React.PropsWithChildren<{}>): JSX.Element {
 
-    computeInitialMatches();
     console.log(`HostHomeDataProvider: matchResults = ${JSON.stringify(initialState.matchResults)}`);
 
     const [state, dispatch] = React.useReducer(hostHomeDataReducer, initialState);
@@ -30737,6 +30775,10 @@ export function HostHomeDataProvider(props: React.PropsWithChildren<{}>): JSX.El
     const value = React.useMemo(() => [state, dispatch], [state]);
     return <AppContext.Provider value={value} {...props} />;
 };
+interface MatchPair {
+    hostId: number;
+    guestId: number;
+}
 
 export function useHostHomeData() {
     const context = React.useContext(AppContext);
@@ -30752,14 +30794,20 @@ export function useHostHomeData() {
     // All Create, Update, Delete operations. 
     // Read operations are accessed directly from data.guests, etc
     const addGuest = (guest: Guest) => dispatch({ type: HostHomeActionType.AddGuest, payload: guest });
+
+    const markAsInterested = (matchPair: MatchPair) => dispatch({ type: HostHomeActionType.MarkAsInterested, payload: matchPair });
+    const markAsNotInterested = (matchPair: MatchPair) => dispatch({ type: HostHomeActionType.MarkAsNotInterested, payload: matchPair });
+
     // ...
-    
-const updateHostProfile= () => {};
+
+    const updateHostProfile = () => { };
 
     return {
         data,
         addGuest,
         dispatch,
-        updateHostProfile
+        updateHostProfile,
+        markAsInterested,
+        markAsNotInterested
     };
 };
