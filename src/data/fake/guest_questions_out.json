@@ -1,0 +1,128 @@
+{
+    "pets_have": {
+        "responseValues": {
+            "Yes": 18,
+            "No": 19
+        },
+        "questionKey": "pets_have",
+        "id": 0,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    },
+    "host_pets": {
+        "responseValues": {
+            "Yes": 20,
+            "No": 21
+        },
+        "questionKey": "host_pets",
+        "id": 1,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    },
+    "employed": {
+        "responseValues": {
+            "Yes": 22,
+            "No": 23
+        },
+        "questionKey": "employed",
+        "id": 2,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    },
+    "in_school": {
+        "responseValues": {
+            "Yes": 24,
+            "No": 25
+        },
+        "questionKey": "in_school",
+        "id": 3,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    },
+    "smoking_guest": {
+        "responseValues": {
+            "Yes": 26,
+            "No": 27
+        },
+        "questionKey": "smoking_guest",
+        "id": 4,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    },
+    "substances_household_acceptable": {
+        "responseValues": {
+            "Yes": 28,
+            "No": 29
+        },
+        "questionKey": "substances_household_acceptable",
+        "id": 5,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    },
+    "drinking_household_acceptable": {
+        "responseValues": {
+            "Yes": 30,
+            "No": 31
+        },
+        "questionKey": "drinking_household_acceptable",
+        "id": 6,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    },
+    "substances_guest": {
+        "responseValues": {
+            "Yes": 32,
+            "No": 33
+        },
+        "questionKey": "substances_guest",
+        "id": 7,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    },
+    "mental_illness": {
+        "responseValues": {
+            "Yes": 34,
+            "No": 35
+        },
+        "questionKey": "mental_illness",
+        "id": 8,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    },
+    "drinking_guest": {
+        "responseValues": {
+            "Yes": 36,
+            "No": 37
+        },
+        "questionKey": "drinking_guest",
+        "id": 9,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    },
+    "mental_illness_care": {
+        "responseValues": {
+            "Yes": 38,
+            "No": 39
+        },
+        "questionKey": "mental_illness_care",
+        "id": 10,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    },
+    "parenting_guest": {
+        "responseValues": {
+            "Yes": 40,
+            "No": 41
+        },
+        "questionKey": "parenting_guest",
+        "id": 11,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    },
+    "drinking_concerns": {
+        "responseValues": {
+            "Yes": 42,
+            "No": 43
+        },
+        "questionKey": "drinking_concerns",
+        "id": 12,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    },
+    "substances_concerns": {
+        "responseValues": {
+            "Yes": 44,
+            "No": 45
+        },
+        "questionKey": "substances_concerns",
+        "id": 13,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    }
+}

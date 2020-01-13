@@ -2,11 +2,14 @@ import * as React from 'react';
 import { Grid, Paper, makeStyles, createStyles, Typography, Box, Button } from '@material-ui/core';
 import { useHostHomeData } from '../data/data-context';
 import { GuestMatchSummary } from '../viewmodels/GuestMatchSummary';
-import { MatchResult, Guest } from '../models';
+import { MatchResult, Guest, GuestInterestLevel } from '../models';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 
+
+
 const useStyles = makeStyles(theme => (
+    
     createStyles({
         root: {
             flexGrow: 1
@@ -85,7 +88,7 @@ const useStyles = makeStyles(theme => (
         }
     })));
 
-
+    
 
 export const AdminView = () => {
 
@@ -103,12 +106,29 @@ export const AdminView = () => {
         return data.guests.map((guest: Guest) => {
 
             const guestMatches = data.matchResults.filter(
-                (matchResult: MatchResult) => guest.id === matchResult.guestId && matchResult.restrictionsFailed.length < 1);
+                (matchResult: MatchResult) => (
+                    guest.id === matchResult.guestId 
+                    && matchResult.restrictionsFailed.length < 1 
+                    && matchResult.guestInterestLevel !== GuestInterestLevel.NotInterested
+                )
+            );
+
+            
+            const guestInterested = data.matchResults.filter(
+                (matchResult: MatchResult) => (
+                    guest.id === matchResult.guestId 
+                    && matchResult.restrictionsFailed.length < 1 
+                    && matchResult.guestInterestLevel === GuestInterestLevel.Interested
+                )
+            );
+
+            
 
             const guestMatchSummary: GuestMatchSummary = {
                 guestId: guest.id,
                 guestName: guest.name,
-                numMatches: guestMatches.length
+                numMatches: guestMatches.length,
+                numBids: guestInterested.length
             };
 
             return guestMatchSummary;
@@ -137,10 +157,15 @@ export const AdminView = () => {
                 <Grid item xs={12}>
                     <Paper className={classes.paper}>
                         {
-                            allGuestMatches.map((guestMatchSummary: GuestMatchSummary, index: number) => (
+                            allGuestMatches
+                            .sort((a: GuestMatchSummary, b: GuestMatchSummary) => a.numMatches > b.numMatches ? -1 : 1)
+                            .map((guestMatchSummary: GuestMatchSummary, index: number) => (
                                 <Box display='flex' p={1} m={1}>
                                     <Box p={1} flexGrow={1}>
                                         <Typography component='h5' align='left'>{guestMatchSummary.guestName}</Typography>
+                                    </Box>
+                                    <Box p={1} flexGrow={1}>
+                                        <Typography component='h6' align='center'>{guestMatchSummary.numBids > 0 ? 'Bid' : 'No Selection'}</Typography>
                                     </Box>
                                     <Box p={1}>
                                         <Button

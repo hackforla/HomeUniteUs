@@ -161,7 +161,7 @@ export const App = () => {
         <React.Fragment>
             <HostHomeDataProvider>
                 <BrowserRouter>
-                    <Container maxWidth='lg'>
+                    <Container maxWidth='xl'>
                         
                     <Box display='flex' p={1} m={1}>
                                 <Box p={1} flexGrow={1}>
@@ -180,11 +180,11 @@ export const App = () => {
                                         ADMIN
                                         </Button>
                                 </Box>
-                                <Box p={1}>
+                                {/* <Box p={1}>
                                     <Button component={NavLink} to={`/hosthome/hosts/1`}>
                                         HOST PROFILE
                                     </Button>
-                                </Box>
+                                </Box> */}
                             </Box>
                         {/* <Toolbar className={classes.toolbar}>
                             <Typography
@@ -249,9 +249,9 @@ export const App = () => {
                                 <Route path='/hosthome/about' component={AboutPage} />
                                 <Route path='/hosthome/admin/guests' component={AdminView} />
                                 <Route path='/hosthome/admin/guest/:id' component={AdminGuestView} />
-                                <Route path='/hosthome/hosts/:id' component={HostProfilePage} />
+                                {/* <Route path='/hosthome/hosts/:id' component={HostProfilePage} /> */}
+                                <Route path='/hosthome/guests/:guestId/matches/:hostId' component={HostProfilePage} />
                                 <Route path='/hosthome/guests/:id' component={PlaceholderWithIdView} />
-                                <Route path='/hosthome/hosts/:id' component={PlaceholderWithIdView} />
                             </Switch>
                         </main>
                     </Container>

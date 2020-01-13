@@ -1,0 +1,83 @@
+{
+    "smoking_allowed": {
+        "responseValues": {
+            "Yes": 0,
+            "No": 1
+        },
+        "questionKey": "smoking_allowed",
+        "id": 0,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    },
+    "drinking_residents": {
+        "responseValues": {
+            "Yes": 2,
+            "No": 3
+        },
+        "questionKey": "drinking_residents",
+        "id": 1,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    },
+    "drinking_concerns": {
+        "responseValues": {
+            "Yes": 4,
+            "No": 5
+        },
+        "questionKey": "drinking_concerns",
+        "id": 2,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    },
+    "substance_residents": {
+        "responseValues": {
+            "Yes": 6,
+            "No": 7
+        },
+        "questionKey": "substance_residents",
+        "id": 3,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    },
+    "substance_concerns": {
+        "responseValues": {
+            "Yes": 8,
+            "No": 9
+        },
+        "questionKey": "substance_concerns",
+        "id": 4,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    },
+    "pets_hosting": {
+        "responseValues": {
+            "Yes": 10,
+            "No": 11
+        },
+        "questionKey": "pets_hosting",
+        "id": 5,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    },
+    "pet_restrictions": {
+        "responseValues": {
+            "Yes": 12,
+            "No": 13
+        },
+        "questionKey": "pet_restrictions",
+        "id": 6,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    },
+    "youth_parenting": {
+        "responseValues": {
+            "Yes": 14,
+            "No": 15
+        },
+        "questionKey": "youth_parenting",
+        "id": 7,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    },
+    "youth_relationship": {
+        "responseValues": {
+            "Yes": 16,
+            "No": 17
+        },
+        "questionKey": "youth_relationship",
+        "id": 8,
+        "multiplicity": "ResponseMultiplicity.ONE"
+    }
+}

@@ -1,19 +1,14 @@
-// export interface Host {
-//     id: number;
-//     address: string;
-//     alchoholUse: boolean;
-//     allowedPets: Array<string>;
-//     gender: string;
-//     allowsGuestsInRelationship: boolean;
-//     allowsGuestsWithChildren: boolean;
-//     isRespite: boolean;
-//     allowsSmoking: boolean;
-//     email: boolean;
-//     numberOfGuests: number;
-//     petsOwned: Array<string>;
-// };
-
 export interface Host {
     id: number;
+    name: string;
     address: string;
+    imageUrl: string;
+    firstName: string;
+    middleInitial: string;
+    dateOfBirth: Date;
+    lastName: string;
+    email: string;
+    phone: string;
+    employmentInfo: string;
+    contactAddress: string;
 }
