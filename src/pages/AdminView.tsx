@@ -137,7 +137,9 @@ export const AdminView = () => {
                 <Grid item xs={12}>
                     <Paper className={classes.paper}>
                         {
-                            allGuestMatches.map((guestMatchSummary: GuestMatchSummary, index: number) => (
+                            allGuestMatches
+                            .sort((a: GuestMatchSummary, b: GuestMatchSummary) => a.numMatches > b.numMatches ? -1 : 1)
+                            .map((guestMatchSummary: GuestMatchSummary, index: number) => (
                                 <Box display='flex' p={1} m={1}>
                                     <Box p={1} flexGrow={1}>
                                         <Typography component='h5' align='left'>{guestMatchSummary.guestName}</Typography>
