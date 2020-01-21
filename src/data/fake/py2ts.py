@@ -88,6 +88,21 @@ QUESTIONS_TEXT = {
     'youth_relationship':'Are you willing to host a guest who is in a relationship?',
 }
 
+QUESTIONS_DISPLAY = {
+    'smoking_allowed': 'Smoking Allowed',
+    'smoking_residents': 'Smoking Residents',
+    'drinking_residents': 'Drinking Residents',
+    'drinking_concerns': 'Drinking Concerns',
+    'substances_residents': 'Substances Residents',
+    'substances_concerns': 'Substances Concerns',
+    'host_type': 'Host Type',
+    'hosting_amount': 'Number of Guests',
+    'pets_hosting': 'Has Pets',
+    'pet_restrictions': 'Pets OK',
+    'youth_parenting': 'Parenting OK',
+    'youth_relationship': 'Relationship OK',
+}
+
 BOOL_Q = [
     'smoking_allowed',
     'smoking_residents',
@@ -166,6 +181,7 @@ def main():
                 'questionKey': q,
                 'id': question_i,
                 'text': QUESTIONS_TEXT[q],
+                'displayName': QUESTIONS_DISPLAY[q],
                 'multiplicity': 'ResponseMultiplicity.ONE'
             }
 
@@ -193,6 +209,7 @@ def main():
                 'questionKey': q,
                 'id': question_i,
                 'text': QUESTIONS_TEXT[q],
+                'displayName': QUESTIONS_DISPLAY[q],
                 'multiplicity': 'ResponseMultiplicity.ONE'
             }
 
@@ -465,6 +482,7 @@ def main():
                 'questionKey': x['questionKey'],
                 'id': x['id'],
                 'text': x['text'],
+                'displayName': x['displayName'],
                 'multiplicity': 'ResponseMultiplicity.ONE'
             } for x in list(questions_out.values())],
             'responseValues': response_values,

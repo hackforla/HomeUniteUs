@@ -3,8 +3,8 @@ import * as React from "react";
 import { makeStyles, Paper, createStyles, Grid, Box, Typography, Table, TableHead, TableRow, TableCell, TableBody, ValueLabelProps } from '@material-ui/core';
 import { useHostHomeData } from "../data/data-context";
 import { GuestMatchSummary } from "../viewmodels/GuestMatchSummary";
-import { MatchResult, Guest, Host, GuestInterestLevel, HostQuestion, HostResponse, ResponseValue, Restriction } from "../models";
-import { useParams, useHistory } from "react-router";
+import { MatchResult, Guest, Host, GuestInterestLevel, HostQuestion, HostResponse, ResponseValue, Restriction, GuestResponse, GuestQuestion } from "../models";
+import { useParams, useHistory, useLocation } from "react-router";
 import { ProfilePhoto } from "../img/ProfilePhoto";
 import './AdminGuestView.css';
 
@@ -106,6 +106,14 @@ const useStyles = makeStyles(theme => (
             lineHeight: '22px',
             color: '#FFFFFF'
         },
+        tableHeaderCell: {
+            fontFamily: 'Brandon Grotesque',
+            fontStyle: 'normal',
+            fontWeight: 'bold',
+            fontSize: '16px',
+            lineHeight: '22px',
+            color: '#FFFFFF'
+        },
         tableRowOdd: {
             fontFamily: 'Brandon Grotesque',
             backgroundColor: '#FFFFFF'
@@ -154,11 +162,38 @@ export const AdminGuestView = () => {
         });
     }, [data.hosts, data.matchResults]);
 
-
-
     const unmatched = React.useMemo(() => {
-        return data.hosts.filter((host: Host) => matched.filter((matchedHost: Host) => host.id === matchedHost.id).length < 1)
-    }, [data.matchResults]);
+
+        return data.hosts.filter((host: Host) => {
+            return data.matchResults.filter((matchResult: MatchResult) => (
+                matchResult.guestId === guestId
+                && matchResult.hostId === host.id
+                && matchResult.restrictionsFailed.length > 0
+            )).length > 0;
+        });
+    }, [data.hosts, data.matchResults]);
+
+    const rejected = React.useMemo(() => {
+
+        return data.hosts.filter((host: Host) => {
+            return data.matchResults.filter((matchResult: MatchResult) => (
+                matchResult.guestId === guestId
+                && matchResult.hostId === host.id
+                && matchResult.restrictionsFailed.length < 1
+                && matchResult.guestInterestLevel === GuestInterestLevel.NotInterested
+            )).length > 0;
+        });
+    }, [data.hosts, data.matchResults]);
+
+
+
+    // const unmatched = React.useMemo(() => {
+    //     return data.hosts.filter((host: Host) => matched.filter((matchedHost: Host) => host.id === matchedHost.id).length < 1)
+    // }, [data.matchResults]);
+
+    // const unmatched = React.useMemo(() => {
+    //     return data.hosts.filter((host: Host) => matched.filter((matchedHost: Host) => host.id === matchedHost.id).length < 1)
+    // }, [data.matchResults]);
 
     const hostQuestionsFailed = data.matchResults
         .filter((matchResult: MatchResult) => (
@@ -176,6 +211,8 @@ export const AdminGuestView = () => {
 
         }, new Map<number, Array<number>>());
 
+    
+
 
     // console.log(`hostQuestionsFailed ${JSON.stringify(hostQuestionsFailed)}`);
 
@@ -190,6 +227,79 @@ export const AdminGuestView = () => {
                 return map;
             }, {} as InterestMapping);
     }, [data.matchResults]);
+
+    const location = useLocation();
+
+    React.useEffect(() => {
+        try {
+            window.scroll({
+              top: 0,
+              left: 0,
+              behavior: 'auto',
+            });
+          } catch (error) {
+            window.scrollTo(0, 0);
+          }
+    }, [location.pathname, location.search]);
+
+    const guestResponsesByKey = data.guestResponses
+        .filter((r: GuestResponse) =>{
+            return r.guestId === guest.id;
+        })
+        .reduce<Map<string, string>>((prev: Map<string,string>, cur: GuestResponse) => {
+            prev.set(
+                (data.guestQuestions.find((q: GuestQuestion) => q.id === cur.questionId) as GuestQuestion).questionKey, 
+                (data.responseValues.find((rv: ResponseValue) => rv.id == cur.responseValues[0]) as ResponseValue).text
+            )
+            return prev;
+        }, new Map<string,string>());
+
+        const questionsByKey = data.guestQuestions
+            .reduce<Map<string, GuestQuestion>>((prev: Map<string,GuestQuestion>, cur: GuestQuestion) => {
+                prev.set(cur.questionKey, cur);
+                return prev;
+            }, new Map<string,GuestQuestion>());
+
+
+        /*
+            'pets_have',
+    'host_pets',
+    'employed',
+    'in_school',
+    'smoking_guest',
+    'substances_household_acceptable',
+    'drinking_household_acceptable',
+    'substances_guest',
+    'mental_illness',
+    'guests_relationship',
+    'smoking_household_acceptable',
+    'drinking_guest',
+    'mental_illness_care',
+    'parenting_guest',
+    'drinking_concerns',
+    'substances_concerns',
+    'pets_kind',
+    'pets_other',
+    'pets_list',
+    'host_pet_restrictions',
+    'languages',
+    'duration_of_stay',
+    'number_of_guests',
+    'smoking_household_acceptable'
+         */
+
+        const firstCol = [
+            'drinking_household_acceptable',
+            'guests_relationship'
+        ];
+        const secondCol = [
+            'smoking_household_acceptable',
+            'pets_have',
+            'host_pets'
+        ];
+
+
+        
 
     return (
         <React.Fragment>
@@ -210,102 +320,46 @@ export const AdminGuestView = () => {
                 </Grid>
                 <Grid item xs={9}>
                     <Paper className={classes.paper}>
-                        <Box display='flex' p={1} m={1}>
-                            <Box p={1} flexGrow={1}>
-                                <Typography component='h5' align='left'>Guest ID</Typography>
-                            </Box>
-                            <Box p={1}>
-                                <Typography component='h5' align='right'>{guestId}</Typography>
-                            </Box>
-                        </Box>
-                        <Box display='flex' p={1} m={1}>
-                            <Box p={1} flexGrow={1}>
-                                <Typography component='h5' align='left'>Name</Typography>
-                            </Box>
-                            <Box p={1}>
-                                <Typography component='h5' align='right'>{guest.name}</Typography>
-                            </Box>
-                        </Box>
-                        <Box display='flex' p={1} m={1}>
-                            <Box p={1} flexGrow={1}>
-                                <Typography component='h5' align='left'>Email</Typography>
-                            </Box>
-                            <Box p={1}>
-                                <Typography component='h5' align='right'>{guest.email}</Typography>
-                            </Box>
-                        </Box>
-                        <Box display='flex' p={1} m={1}>
-                            <Box p={1} flexGrow={1}>
-                                <Typography component='h5' align='left'>Pets</Typography>
-                            </Box>
-                            <Box p={1}>
-                                <Typography component='h5' align='right'>{guest.petsText}</Typography>
-                            </Box>
-                        </Box>
-                        <Box display='flex' p={1} m={1}>
-                            <Box p={1} flexGrow={1}>
-                                <Typography component='h5' align='left'>Drinking</Typography>
-                            </Box>
-                            <Box p={1}>
-                                <Typography component='h5' align='right'>{guest.drinkingText}</Typography>
-                            </Box>
-                        </Box>
-                        <Box display='flex' p={1} m={1}>
-                            <Box p={1} flexGrow={1}>
-                                <Typography component='h5' align='left'>Substances</Typography>
-                            </Box>
-                            <Box p={1}>
-                                <Typography component='h5' align='right'>{guest.substancesText}</Typography>
-                            </Box>
-                        </Box>
-                        <Box display='flex' p={1} m={1}>
-                            <Box p={1} flexGrow={1}>
-                                <Typography component='h5' align='left'>Smoking</Typography>
-                            </Box>
-                            <Box p={1}>
-                                <Typography component='h5' align='right'>{guest.smokingText}</Typography>
-                            </Box>
-                        </Box>
-                        <Box display='flex' p={1} m={1}>
-                            <Box p={1} flexGrow={1}>
-                                <Typography component='h5' align='left'>Pets</Typography>
-                            </Box>
-                            <Box p={1}>
-                                <Typography component='h5' align='right'>{guest.petsText}</Typography>
-                            </Box>
-                        </Box>
-                        <Box display='flex' p={1} m={1}>
-                            <Box p={1} flexGrow={1}>
-                                <Typography component='h5' align='left'>Employment Information</Typography>
-                            </Box>
-                            <Box p={1}>
-                                <Typography component='h5' align='right'>{guest.employmentInfo}</Typography>
-                            </Box>
-                        </Box>
-                        <Box display='flex' p={1} m={1}>
-                            <Box p={1} flexGrow={1}>
-                                <Typography component='h5' align='left'>Guest Introduction</Typography>
-                            </Box>
-                            <Box p={1}>
-                                <Typography component='h5' align='right'>{guest.guestIntro}</Typography>
-                            </Box>
-                        </Box>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12}>
+                            <Typography component='h1'>{`${guest.name}, ${((new Date()).getFullYear() - guest.dateOfBirth.getFullYear())}`}</Typography>
+                            </Grid>
+                            <Grid item xs={6}>
+                                {
+                                    firstCol.map((col: string) => <div>
+                                            {
+                                                `${(questionsByKey.get(col) as GuestQuestion || {text:''}).text}: ${guestResponsesByKey.get(col) as string}`
+                                        }
+                                    </div>)
+                                }
+                            </Grid>
+                            <Grid item xs={6}>
+                                {
+                                    secondCol.map((col: string) => <div>
+                                            {
+                                                `${(questionsByKey.get(col) as GuestQuestion || {text:''}).text}: ${guestResponsesByKey.get(col) as string}`
+                                        }
+                                    </div>)
+                                }
+                                
+                            </Grid>
+                        </Grid>
                     </Paper>
 
                 </Grid>
                 <Grid item xs={12}>
                     <Paper className={classes.paper}>
-                        <Typography component='h4' align='left'>Matched</Typography>
+                        <Typography component='h2' align='left'>Matched</Typography>
                         <Table className={classes.table} aria-label="matched table">
                             <TableHead>
                                 <TableRow className={classes.tableHeader}>
-                                    <TableCell>ID</TableCell>
-                                    <TableCell>Name</TableCell>
-                                    <TableCell>Address</TableCell>
+                                    {/* <TableCell className={classes.tableHeaderCell}>ID</TableCell> */}
+                                    <TableCell className={classes.tableHeaderCell}>Name</TableCell>
+                                    <TableCell className={classes.tableHeaderCell}>Address</TableCell>
                                     {
                                         data.hostQuestions.map((q: HostQuestion) => {
                                             return (
-                                                <TableCell>{q.questionKey}</TableCell>
+                                                <TableCell className={classes.tableHeaderCell}>{q.displayName}</TableCell>
                                             );
                                         })
                                     }
@@ -316,7 +370,7 @@ export const AdminGuestView = () => {
                                     matched.map(
                                         (host: Host, index: number) => <>
                                             <TableRow key={index} className={index % 2 === 0 ? classes.tableRowEven : classes.tableRowOdd}>
-                                                <TableCell>{host.id}</TableCell>
+                                                {/* <TableCell>{host.id}</TableCell> */}
                                                 <TableCell onClick={() => { history.push(`/hosthome/guests/${guestId}/matches/${host.id}`) }}>
                                                     <div style={{ fontWeight: 'bold', textDecoration: 'underline' }}>{host.name}</div>
                                                 </TableCell>
@@ -343,7 +397,7 @@ export const AdminGuestView = () => {
                                                                                 if (!rv) {
                                                                                     throw new Error(`Unknown response value ID: ${rvId}`);
                                                                                 }
-                                                                                return rv.displayText || rv.text;
+                                                                                return  rv.text || rv.displayText;
 
                                                                             })
                                                                     })()
@@ -377,17 +431,83 @@ export const AdminGuestView = () => {
                 </Grid>
                 <Grid item xs={12}>
                     <Paper className={classes.paper}>
-                        <Typography component='h4' align='left'>Unmatched</Typography>
+                        <Typography component='h2' align='left'>Rejected</Typography>
                         <Table className={classes.table} aria-label="unmatched table">
                             <TableHead>
-                                <TableRow>
-                                    <TableCell>ID</TableCell>
-                                    <TableCell>Name</TableCell>
-                                    <TableCell>Address</TableCell>
+                                <TableRow className={classes.tableHeader}>
+                                    {/* <TableCell>ID</TableCell> */}
+                                    <TableCell className={classes.tableHeaderCell}>Name</TableCell>
+                                    <TableCell className={classes.tableHeaderCell}>Address</TableCell>
                                     {
                                         data.hostQuestions.map((q: HostQuestion) => {
                                             return (
-                                                <TableCell>{q.questionKey}</TableCell>
+                                                <TableCell className={classes.tableHeaderCell}>{q.displayName}</TableCell>
+                                            );
+                                        })
+                                    }
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {
+                                    rejected.map(
+                                        (host: Host, index: number) => <TableRow key={index} className={index % 2 === 0 ? classes.tableRowEven : classes.tableRowOdd}>
+                                            {/* <TableCell>{host.id}</TableCell> */}
+                                            <TableCell onClick={() => { history.push(`/hosthome/guests/${guestId}/matches/${host.id}`) }}>
+                                                <div className='host-match-btn' style={{ fontWeight: 'bold', textDecoration: 'underline' }}>{host.name}</div>
+                                            </TableCell>
+                                            <TableCell>{host.address}</TableCell>
+                                            {
+                                                data.hostQuestions.map((q: HostQuestion) => {
+                                                    return (
+                                                        <TableCell>
+                                                            {
+                                                                (() => {
+                                                                    var response = data.hostResponses
+                                                                        .find((hr: HostResponse) => hr.hostId == host.id && hr.questionId == q.id);
+                                                                    if (!response) {
+                                                                        return 'Not answered';
+                                                                    }
+                                                                    return response
+                                                                        .responseValues
+                                                                        .map((rvId: number) => {
+
+                                                                            const rv = data.responseValues
+                                                                                .find((rv: ResponseValue) => rv.id === rvId);
+                                                                            if (!rv) {
+                                                                                throw new Error(`Unknown response value ID: ${rvId}`);
+                                                                            }
+                                                                            return <div>
+                                                                                {rv.text}
+                                                                            </div>;
+
+                                                                        })
+                                                                })()
+                                                            }
+                                                        </TableCell>
+                                                    );
+                                                })
+                                            }
+                                        </TableRow>
+                                    )
+                                }
+                            </TableBody>
+                        </Table>
+                    </Paper>
+                </Grid>
+            
+                <Grid item xs={12}>
+                    <Paper className={classes.paper}>
+                        <Typography component='h2' align='left'>Unmatched</Typography>
+                        <Table className={classes.table} aria-label="unmatched table">
+                            <TableHead>
+                                <TableRow className={classes.tableHeader}>
+                                    {/* <TableCell>ID</TableCell> */}
+                                    <TableCell className={classes.tableHeaderCell}>Name</TableCell>
+                                    <TableCell className={classes.tableHeaderCell}>Address</TableCell>
+                                    {
+                                        data.hostQuestions.map((q: HostQuestion) => {
+                                            return (
+                                                <TableCell className={classes.tableHeaderCell}>{q.displayName}</TableCell>
                                             );
                                         })
                                     }
@@ -396,8 +516,8 @@ export const AdminGuestView = () => {
                             <TableBody>
                                 {
                                     unmatched.map(
-                                        (host: Host, index: number) => <TableRow key={index}>
-                                            <TableCell>{host.id}</TableCell>
+                                        (host: Host, index: number) => <TableRow key={index} className={index % 2 === 0 ? classes.tableRowEven : classes.tableRowOdd}>
+                                            {/* <TableCell>{host.id}</TableCell> */}
                                             <TableCell onClick={() => { history.push(`/hosthome/guests/${guestId}/matches/${host.id}`) }}>
                                                 <div className='host-match-btn' style={{ fontWeight: 'bold', textDecoration: 'underline' }}>{host.name}</div>
                                             </TableCell>
@@ -429,7 +549,7 @@ export const AdminGuestView = () => {
                                                                                         ? classes.failedQuestion
                                                                                         : ''
                                                                                 }>
-                                                                                {rv.displayText || rv.text}
+                                                                                {rv.text}
                                                                             </div>;
 
                                                                         })

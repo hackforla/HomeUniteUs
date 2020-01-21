@@ -2951,6 +2951,7 @@ const initialState: HostHomeData = {
             "questionKey": "smoking_allowed",
             "id": 0,
             "text": "Is smoking allowed in your home?",
+            "displayName": "Smoking Allowed",
             "multiplicity": ResponseMultiplicity.ONE
         },
         {
@@ -2961,6 +2962,7 @@ const initialState: HostHomeData = {
             "questionKey": "smoking_residents",
             "id": 1,
             "text": "Do you or any residents smoke in the home?",
+            "displayName": "Smoking Residents",
             "multiplicity": ResponseMultiplicity.ONE
         },
         {
@@ -2971,6 +2973,7 @@ const initialState: HostHomeData = {
             "questionKey": "drinking_residents",
             "id": 2,
             "text": "Do any residents drink alcohol in the home?",
+            "displayName": "Drinking Residents",
             "multiplicity": ResponseMultiplicity.ONE
         },
         {
@@ -2981,6 +2984,7 @@ const initialState: HostHomeData = {
             "questionKey": "drinking_concerns",
             "id": 3,
             "text": "Do you have concerns about your alcohol use, or that of any resident in the home?",
+            "displayName": "Drinking Concerns",
             "multiplicity": ResponseMultiplicity.ONE
         },
         {
@@ -2991,6 +2995,7 @@ const initialState: HostHomeData = {
             "questionKey": "substances_residents",
             "id": 4,
             "text": "Do you or any residents use substances?",
+            "displayName": "Substances Residents",
             "multiplicity": ResponseMultiplicity.ONE
         },
         {
@@ -3001,6 +3006,7 @@ const initialState: HostHomeData = {
             "questionKey": "substances_concerns",
             "id": 5,
             "text": "Do you have concerns about your substance use, or that of any resident in the home?",
+            "displayName": "Substances Concerns",
             "multiplicity": ResponseMultiplicity.ONE
         },
         {
@@ -3011,6 +3017,7 @@ const initialState: HostHomeData = {
             "questionKey": "pets_hosting",
             "id": 6,
             "text": "Do you have any pets?",
+            "displayName": "Has Pets",
             "multiplicity": ResponseMultiplicity.ONE
         },
         {
@@ -3021,6 +3028,7 @@ const initialState: HostHomeData = {
             "questionKey": "pet_restrictions",
             "id": 7,
             "text": "Are you willing to host a guest who has pets?",
+            "displayName": "Pets OK",
             "multiplicity": ResponseMultiplicity.ONE
         },
         {
@@ -3031,6 +3039,7 @@ const initialState: HostHomeData = {
             "questionKey": "youth_parenting",
             "id": 8,
             "text": "Are you willing to host a guest who is parenting?",
+            "displayName": "Parenting OK",
             "multiplicity": ResponseMultiplicity.ONE
         },
         {
@@ -3041,6 +3050,7 @@ const initialState: HostHomeData = {
             "questionKey": "youth_relationship",
             "id": 9,
             "text": "Are you willing to host a guest who is in a relationship?",
+            "displayName": "Relationship OK",
             "multiplicity": ResponseMultiplicity.ONE
         }
     ],
@@ -16138,9 +16148,6 @@ const initialState: HostHomeData = {
     ],
     "matchResults": []
 };
-
-
-
 
 interface RestrictionMap {
     [hostId: string]: Array<number>;
