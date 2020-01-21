@@ -300,7 +300,16 @@ def main():
                 'drinkingText': responses.get('drinking_text', ''),
                 'smokingText': responses.get('smoking_text', ''),
                 'substancesText': responses.get('substances_text', ''),
-                'householdMembers': responses.get('household_members', [])
+                'householdMembers': responses.get('household_members', []),
+
+                'interests': responses.get('interests', ''),
+                'housingType': responses.get('housing_type', ''), 
+                'languages': responses.get('languages', ''), 
+                'preferredCharacteristics': responses.get('preferred_characteristics', ''),
+                'hostingInterest': responses.get('hosting_interest', ''),
+                'hostingStrenghts': responses.get('hosting_strenghts', ''),
+                'hostingChallenges': responses.get('hosting_challenges', ''),
+                'hostIntro': responses.get('host_intro', '')
             })
 
         except Exception as e:

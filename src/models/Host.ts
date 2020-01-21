@@ -17,5 +17,13 @@ export interface Host {
     drinkingText: string;
     smokingText: string;
     substancesText: string;
-    householdMembers: Array<Housemate>;
+    householdMembers: Array<Housemate>;    
+    interests: string;
+    housingType: string;
+    languages: string;
+    preferredCharacteristics: string;
+    hostingInterest: string;
+    hostingStrenghts: string;
+    hostingChallenges: string;
+    hostIntro: string;
 }

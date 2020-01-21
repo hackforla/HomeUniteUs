@@ -96,6 +96,23 @@ const useStyles = makeStyles(theme => (
         },
         passedQuestion: {
             backgroundColor: '#ecf0f1'
+        },
+        tableHeader: {
+            backgroundColor: '#008DA7',
+            fontFamily: 'Brandon Grotesque',
+            fontStyle: 'normal',
+            fontWeight: 'bold',
+            fontSize: '16px',
+            lineHeight: '22px',
+            color: '#FFFFFF'
+        },
+        tableRowOdd: {
+            fontFamily: 'Brandon Grotesque',
+            backgroundColor: '#FFFFFF'
+        },
+        tableRowEven: {
+            fontFamily: 'Brandon Grotesque',
+            backgroundColor: '#F5F5F5'
         }
     })));
 
@@ -281,7 +298,7 @@ export const AdminGuestView = () => {
                         <Typography component='h4' align='left'>Matched</Typography>
                         <Table className={classes.table} aria-label="matched table">
                             <TableHead>
-                                <TableRow>
+                                <TableRow className={classes.tableHeader}>
                                     <TableCell>ID</TableCell>
                                     <TableCell>Name</TableCell>
                                     <TableCell>Address</TableCell>
@@ -298,7 +315,7 @@ export const AdminGuestView = () => {
                                 {
                                     matched.map(
                                         (host: Host, index: number) => <>
-                                            <TableRow key={index}>
+                                            <TableRow key={index} className={index % 2 === 0 ? classes.tableRowEven : classes.tableRowOdd}>
                                                 <TableCell>{host.id}</TableCell>
                                                 <TableCell onClick={() => { history.push(`/hosthome/guests/${guestId}/matches/${host.id}`) }}>
                                                     <div style={{ fontWeight: 'bold', textDecoration: 'underline' }}>{host.name}</div>
