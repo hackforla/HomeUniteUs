@@ -18,9 +18,9 @@ export interface Host {
     smokingText: string;
     substancesText: string;
     householdMembers: Array<Housemate>;    
-    interests: string;
+    interests: Array<string>;
     housingType: string;
-    languages: string;
+    languages: Array<string>;
     preferredCharacteristics: string;
     hostingInterest: string;
     hostingStrenghts: string;
