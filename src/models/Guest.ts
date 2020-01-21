@@ -11,4 +11,8 @@ export interface Guest {
     employmentInfo: string;
     dateOfBirth: Date;
     guestStayStatement: string;
+    petsText: string;
+    drinkingText: string;
+    smokingText: string;
+    substancesText: string;
 }

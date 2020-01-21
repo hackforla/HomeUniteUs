@@ -1,3 +1,5 @@
+import { Housemate } from "./Housemate";
+
 export interface Host {
     id: number;
     name: string;
@@ -11,4 +13,9 @@ export interface Host {
     phone: string;
     employmentInfo: string;
     contactAddress: string;
+    petsText: string;
+    drinkingText: string;
+    smokingText: string;
+    substancesText: string;
+    householdMembers: Array<Housemate>;
 }

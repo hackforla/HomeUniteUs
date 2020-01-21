@@ -2,3 +2,41 @@
     cursor: pointer;
     background-color: dimgrey;
 }
+
+.match-table-header {
+    background: #008DA7;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 3px;
+
+}
+
+.match-table-heading {
+    font-family: Brandon Grotesque;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 22px;
+    /* or 137% */
+    
+    letter-spacing: -0.01px;
+    
+    color: #FFFFFF;
+
+}
+
+.match-table-content {
+    font-family: Brandon Grotesque;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 22px;
+    letter-spacing: -0.01px;
+    color: #1C1B1B;
+}
+
+.match-tr-even {
+    background-color: #F5F5F5;
+}
+.match-tr-odd {
+    background-color: #FFFFFF;
+}

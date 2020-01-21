@@ -219,6 +219,46 @@ export const AdminGuestView = () => {
                         </Box>
                         <Box display='flex' p={1} m={1}>
                             <Box p={1} flexGrow={1}>
+                                <Typography component='h5' align='left'>Pets</Typography>
+                            </Box>
+                            <Box p={1}>
+                                <Typography component='h5' align='right'>{guest.petsText}</Typography>
+                            </Box>
+                        </Box>
+                        <Box display='flex' p={1} m={1}>
+                            <Box p={1} flexGrow={1}>
+                                <Typography component='h5' align='left'>Drinking</Typography>
+                            </Box>
+                            <Box p={1}>
+                                <Typography component='h5' align='right'>{guest.drinkingText}</Typography>
+                            </Box>
+                        </Box>
+                        <Box display='flex' p={1} m={1}>
+                            <Box p={1} flexGrow={1}>
+                                <Typography component='h5' align='left'>Substances</Typography>
+                            </Box>
+                            <Box p={1}>
+                                <Typography component='h5' align='right'>{guest.substancesText}</Typography>
+                            </Box>
+                        </Box>
+                        <Box display='flex' p={1} m={1}>
+                            <Box p={1} flexGrow={1}>
+                                <Typography component='h5' align='left'>Smoking</Typography>
+                            </Box>
+                            <Box p={1}>
+                                <Typography component='h5' align='right'>{guest.smokingText}</Typography>
+                            </Box>
+                        </Box>
+                        <Box display='flex' p={1} m={1}>
+                            <Box p={1} flexGrow={1}>
+                                <Typography component='h5' align='left'>Pets</Typography>
+                            </Box>
+                            <Box p={1}>
+                                <Typography component='h5' align='right'>{guest.petsText}</Typography>
+                            </Box>
+                        </Box>
+                        <Box display='flex' p={1} m={1}>
+                            <Box p={1} flexGrow={1}>
                                 <Typography component='h5' align='left'>Employment Information</Typography>
                             </Box>
                             <Box p={1}>
