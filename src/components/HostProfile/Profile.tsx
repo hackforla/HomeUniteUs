@@ -5,6 +5,9 @@ import HousePolicies from './HousePolicies';
 import HostAdditionalInfo from './HostAdditionalInfo';
 import Neighborhood from './Neighborhood';
 import ButtonBar from './ButtonBar';
+import { useParams } from "react-router";
+import { useHostHomeData } from "../../data/data-context";
+import { Host } from "../../models";
 
 
 const useStyles = makeStyles(() => ({
@@ -15,12 +18,15 @@ const useStyles = makeStyles(() => ({
 
 export const Profile = () => {
   const classes = useStyles();
+  const {hostId} = useParams();
+  const {data} = useHostHomeData();
+  const host = data.hosts.find((host: Host) => host.id === parseInt(hostId || '-1')) as Host;
 
   return (
     <div className={classes.profileContainer}>
-      <GeneralInfo />
-      <HousePolicies />
-      <HostAdditionalInfo />
+      <GeneralInfo host={host} />
+      <HousePolicies host={host} />
+      <HostAdditionalInfo host={host} />
       <Neighborhood />
       <ButtonBar />
     </div>
