@@ -1,4 +1,4 @@
-import 'babel-polyfill';
+    import 'babel-polyfill';
 
 import * as React from "react";
 import { AppConfig } from './data/config';
