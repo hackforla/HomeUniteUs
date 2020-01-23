@@ -26,4 +26,8 @@ export interface Host {
     hostingStrenghts: string;
     hostingChallenges: string;
     hostIntro: string;
+    durationOfStay: string;
+    hostingAmount: number;
+    youthParenting: boolean;
+    youthRelationship: boolean;
 }

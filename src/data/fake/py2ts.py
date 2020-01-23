@@ -318,7 +318,6 @@ def main():
                 'smokingText': responses.get('smoking_text', ''),
                 'substancesText': responses.get('substances_text', ''),
                 'householdMembers': responses.get('household_members', []),
-
                 'interests': responses.get('interests', ''),
                 'housingType': responses.get('housing_type', ''), 
                 'languages': responses.get('languages', ''), 
@@ -326,7 +325,11 @@ def main():
                 'hostingInterest': responses.get('hosting_interest', ''),
                 'hostingStrenghts': responses.get('hosting_strenghts', ''),
                 'hostingChallenges': responses.get('hosting_challenges', ''),
-                'hostIntro': responses.get('host_intro', '')
+                'hostIntro': responses.get('host_intro', ''),
+                'durationOfStay': responses.get('duration_of_stay', ['N/A'])[0],
+                'hostingAmount': responses.get('hosting_amount', 1),
+                'youthParenting': responses.get('youth_parenting', False),
+                'youthRelationship': responses.get('youth_relationship', False)
             })
 
         except Exception as e:
