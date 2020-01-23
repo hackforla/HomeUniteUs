@@ -1,5 +1,6 @@
 import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { Housemate } from '../../models/Housemate';
 
 const useStyles = makeStyles(() => ({
   roomatesContainer: {
@@ -22,26 +23,13 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const roomates = [
-  {
-    name: "Bonnie Wolfe",
-    age: "39",
-    role: "host"
-  },
-  {
-    name: "Dean Church",
-    age: "40",
-    role: "husband",
-  },
-  {
-    name: "Audrey Church",
-    age: "17",
-    role: "daughter",
-  }
-]
+interface IHostRoomatesProps {
+  roomates: Housemate;
+}
 
-
-const HostRoomates = () => {
+const HostRoomates = ({
+  roomates,
+}: IHostRoomatesProps) => {
   const classes = useStyles();
 
   return (
@@ -53,8 +41,8 @@ const HostRoomates = () => {
       <div className={classes.roomates}>
         {roomates.map(roomate => {
           return (
-            <div>
-              {roomate.name}, {roomate.age}, {roomate.role}
+            <div key={roomate.name}>
+              {roomate.name}, {roomate.age}, {roomate.relationship}
             </div>
           )
         })}

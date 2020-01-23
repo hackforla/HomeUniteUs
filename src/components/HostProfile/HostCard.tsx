@@ -1,9 +1,7 @@
 import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import HostRoomates from './HostRoomates';
-import { useParams } from "react-router";
-import { useHostHomeData } from "../../data/data-context";
-import { Host } from "../../models";
+import { Host } from '../../models/Host';
 
 const useStyles = makeStyles(() => ({
   hostCardContainer: {
@@ -35,15 +33,15 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-export const HostCard = () => {
+
+interface IHostCardProps {
+  host: Host;
+}
+
+export const HostCard = ({
+  host
+}: IHostCardProps) => {
   const classes = useStyles();
-
-
-  const {hostId} = useParams();
-
-  const {data} = useHostHomeData();
-
-  const host = data.hosts.find((host: Host) => host.id === parseInt(hostId || '-1')) as Host;
 
   return (
     <div className={classes.hostCardContainer}>
@@ -56,12 +54,9 @@ export const HostCard = () => {
       </div>
 
       <div className={classes.hostDescriptionContainer}>
-  <div>Name: {host.name}</div>
-  <div>Address: {host.address}</div>
-  <div>Employment Information: {host.employmentInfo}</div>
-  <div>Email: {host.email}</div>
-  <div>Phone: {host.phone}</div>
-        <HostRoomates />
+        <HostRoomates
+          roomates={host.householdMembers}
+        />
       </div>
     </div>
   );

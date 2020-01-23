@@ -6,6 +6,7 @@ import { faSmokingBan } from "@fortawesome/free-solid-svg-icons";
 import { faWineBottle } from "@fortawesome/free-solid-svg-icons";
 import { faPrescriptionBottleAlt } from "@fortawesome/free-solid-svg-icons";
 import { faBaby } from "@fortawesome/free-solid-svg-icons";
+import { Host } from '../../models/Host';
 
 const useStyles = makeStyles(() => ({
   housePolicyContainer: {
@@ -37,31 +38,37 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const policies = [
-  {
-    icon: faPaw,
-    content: "We are a pet free household."
-  },
-    {
-    icon: faSmokingBan,
-    content: "We provide a smoke-free environment."
-  },
-  {
-    icon: faWineBottle,
-    content: "People in this household drink alcohol."
-  },
-  {
-    icon: faPrescriptionBottleAlt,
-    content: "We use substances."
-  },
-  {
-    icon: faBaby,
-    content: "We welcome parents."
-  },
-]
+interface IHousePoliciesProps {
+  host: Host;
+}
 
-export const HousePolicies = () => {
+export const HousePolicies = ({
+  host,
+}: IHousePoliciesProps) => {
   const classes = useStyles();
+
+  const policies = [
+    {
+      icon: faPaw,
+      content: host.petsText,
+    },
+      {
+      icon: faSmokingBan,
+      content: host.smokingText,
+    },
+    {
+      icon: faWineBottle,
+      content: host.drinkingText
+    },
+    {
+      icon: faPrescriptionBottleAlt,
+      content: host.substancesText,
+    },
+    {
+      icon: faBaby,
+      content: "We welcome parents."
+    },
+  ]
 
   return (
     <div className={classes.housePolicyContainer}>
