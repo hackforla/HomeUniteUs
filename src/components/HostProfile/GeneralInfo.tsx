@@ -2,6 +2,7 @@ import * as React from 'react';
 import { makeStyles } from "@material-ui/core/styles";
 import HostCard from './HostCard';
 import LocationCard from './LocationCard';
+import { Host } from '../../models/Host';
 
 const useStyles = makeStyles(() => ({
   generalInfoRow: {
@@ -10,13 +11,19 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-export const GeneralInfo = () => {
+interface IGeneralInfoProps {
+  host: Host;
+}
+
+export const GeneralInfo = ({
+  host
+}: IGeneralInfoProps) => {
   const classes = useStyles();
 
   return (
     <div className={classes.generalInfoRow}>
-      <HostCard />
-      <LocationCard />
+      <HostCard host={host}/>
+      <LocationCard host={host}/>
     </div>
   );
 }

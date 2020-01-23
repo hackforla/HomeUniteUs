@@ -23,7 +23,7 @@ export interface Host {
     languages: Array<string>;
     preferredCharacteristics: string;
     hostingInterest: string;
-    hostingStrenghts: string;
+    hostingStrengths: string;
     hostingChallenges: string;
     hostIntro: string;
     durationOfStay: string;

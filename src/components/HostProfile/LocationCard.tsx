@@ -28,7 +28,13 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-export const LocationCard = () => {
+interface ILocationCardProps {
+  host: Host;
+}
+
+export const LocationCard = ({
+  host
+}: ILocationCardProps) => {
   const classes = useStyles();
 
   return (
@@ -37,7 +43,7 @@ export const LocationCard = () => {
 
       <div className={classes.locationDescriptionContainer}>
         <div className={classes.locationInfo}>
-          Respite | Playa Vista
+          {host.housingType} | City
         </div>
 
         <div className={classes.visitorInfo}>
