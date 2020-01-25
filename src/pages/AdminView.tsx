@@ -152,14 +152,9 @@ export const AdminView = () => {
               .map((guestMatchSummary: GuestMatchSummary, index: number) => (
                 <Box display="flex" p={1} m={1}>
                   <Box p={1} flexGrow={1}>
-                    <Link
-                      style={{ textDecoration: "none", color: "#2F2F2F" }}
-                      to={`/hosthome/admin/guest/${guestMatchSummary.guestId}`}
-                    >
-                      <Typography component="h5" align="left">
-                        {guestMatchSummary.guestName}
-                      </Typography>
-                    </Link>
+                    <Typography component="h5" align="left">
+                      {guestMatchSummary.guestName}
+                    </Typography>
                   </Box>
                   <Box p={1} flexGrow={1}>
                     <Typography component="h6" align="center">

@@ -8,6 +8,8 @@ import { useParams, useHistory, useLocation } from "react-router";
 import { ProfilePhoto } from "../img/ProfilePhoto";
 import './AdminGuestView.css';
 
+import {Profile} from "../components/GuestProfile/Profile"
+
 const useStyles = makeStyles(theme => (
     createStyles({
         root: {
@@ -303,6 +305,7 @@ export const AdminGuestView = () => {
 
     return (
         <React.Fragment>
+            <Profile/>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Paper className={classes.paper}>
