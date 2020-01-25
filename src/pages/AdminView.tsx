@@ -105,12 +105,19 @@ const useStyles = makeStyles(theme =>
 )
 
 export const MatchSummaryRow = (guestMatchSummary: GuestMatchSummary) => {
+  const { data } = useHostHomeData()
+
   return (
     <Grid item xs={12} style={{ paddingBottom: "4px" }}>
       <Grid container>
         <Grid item xs={2} alignContent="flex-start">
           <Typography component="p" align="left">
-            {guestMatchSummary.guestName}
+            <Link
+              to={`/hosthome/guests/${guestMatchSummary.guestId}`}
+              style={{ color: "rgba(0, 0, 0, 0.54)", textDecoration: "none" }}
+            >
+              {guestMatchSummary.guestName}
+            </Link>
           </Typography>
         </Grid>
         <Grid item xs={8}>

@@ -18,8 +18,8 @@ const useStyles = makeStyles(() => ({
 
 export const Profile = () => {
   const classes = useStyles();
-  const {hostId} = useParams();
-  const {data} = useHostHomeData();
+  const { hostId } = useParams();
+  const { data } = useHostHomeData();
   const host = data.hosts.find((host: Host) => host.id === parseInt(hostId || '-1')) as Host;
 
   return (
