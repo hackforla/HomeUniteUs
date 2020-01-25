@@ -43,11 +43,11 @@ export const LocationCard = ({
 
       <div className={classes.locationDescriptionContainer}>
         <div className={classes.locationInfo}>
-          {host.housingType} | City
+          {host.housingType} | {host.address}
         </div>
 
         <div className={classes.visitorInfo}>
-          Our rented multi-unit home can host 1 visitor.
+          Our {host.housingType} home can host {host.hostingAmount} visitor.
         </div>
       </div>
     </div>
