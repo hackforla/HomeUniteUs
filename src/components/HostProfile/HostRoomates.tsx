@@ -24,7 +24,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface IHostRoomatesProps {
-  roomates: Housemate;
+  roomates: Array<Housemate>;
 }
 
 const HostRoomates = ({
@@ -39,7 +39,7 @@ const HostRoomates = ({
       </div>
 
       <div className={classes.roomates}>
-        {roomates.map(roomate => {
+        {roomates.map((roomate: Housemate) => {
           return (
             <div key={roomate.name}>
               {roomate.name}, {roomate.age}, {roomate.relationship}

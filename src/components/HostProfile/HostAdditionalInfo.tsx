@@ -60,7 +60,7 @@ export const HostAdditionalInfo = ({
     },
     {
       label: "I think I would be a good host because:",
-      content: host.hostingStrenghts
+      content: host.hostingStrengths
     },
     {
       label: "These are challenges I might face in being a good host:",
