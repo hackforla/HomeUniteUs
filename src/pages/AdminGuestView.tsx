@@ -6,6 +6,8 @@ import { GuestMatchSummary } from "../viewmodels/GuestMatchSummary";
 import { MatchResult, Guest, Host, GuestInterestLevel, HostQuestion, HostResponse, ResponseValue, Restriction, GuestResponse, GuestQuestion } from "../models";
 import { useParams, useHistory, useLocation } from "react-router";
 import { ProfilePhoto } from "../img/ProfilePhoto";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheckCircle, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import './AdminGuestView.css';
 
 import {Profile} from "../components/GuestProfile/Profile"
@@ -91,7 +93,6 @@ const useStyles = makeStyles(theme => (
             minWidth: 650,
         },
         failedQuestion: {
-            backgroundColor: 'red',
             fontWeight: 'bolder',
             height: '100%',
             width: '100%'
@@ -213,7 +214,7 @@ export const AdminGuestView = () => {
 
         }, new Map<number, Array<number>>());
 
-    
+
 
 
     // console.log(`hostQuestionsFailed ${JSON.stringify(hostQuestionsFailed)}`);
@@ -235,73 +236,47 @@ export const AdminGuestView = () => {
     React.useEffect(() => {
         try {
             window.scroll({
-              top: 0,
-              left: 0,
-              behavior: 'auto',
+                top: 0,
+                left: 0,
+                behavior: 'auto',
             });
-          } catch (error) {
+        } catch (error) {
             window.scrollTo(0, 0);
-          }
+        }
     }, [location.pathname, location.search]);
 
     const guestResponsesByKey = data.guestResponses
-        .filter((r: GuestResponse) =>{
+        .filter((r: GuestResponse) => {
             return r.guestId === guest.id;
         })
-        .reduce<Map<string, string>>((prev: Map<string,string>, cur: GuestResponse) => {
+        .reduce<Map<string, string>>((prev: Map<string, string>, cur: GuestResponse) => {
             prev.set(
-                (data.guestQuestions.find((q: GuestQuestion) => q.id === cur.questionId) as GuestQuestion).questionKey, 
+                (data.guestQuestions.find((q: GuestQuestion) => q.id === cur.questionId) as GuestQuestion).questionKey,
                 (data.responseValues.find((rv: ResponseValue) => rv.id == cur.responseValues[0]) as ResponseValue).text
             )
             return prev;
-        }, new Map<string,string>());
+        }, new Map<string, string>());
 
-        const questionsByKey = data.guestQuestions
-            .reduce<Map<string, GuestQuestion>>((prev: Map<string,GuestQuestion>, cur: GuestQuestion) => {
-                prev.set(cur.questionKey, cur);
-                return prev;
-            }, new Map<string,GuestQuestion>());
-
-
-        /*
-            'pets_have',
-    'host_pets',
-    'employed',
-    'in_school',
-    'smoking_guest',
-    'substances_household_acceptable',
-    'drinking_household_acceptable',
-    'substances_guest',
-    'mental_illness',
-    'guests_relationship',
-    'smoking_household_acceptable',
-    'drinking_guest',
-    'mental_illness_care',
-    'parenting_guest',
-    'drinking_concerns',
-    'substances_concerns',
-    'pets_kind',
-    'pets_other',
-    'pets_list',
-    'host_pet_restrictions',
-    'languages',
-    'duration_of_stay',
-    'number_of_guests',
-    'smoking_household_acceptable'
-         */
-
-        const firstCol = [
-            'drinking_household_acceptable',
-            'guests_relationship'
-        ];
-        const secondCol = [
-            'smoking_household_acceptable',
-            'pets_have',
-            'host_pets'
-        ];
+    const questionsByKey = data.guestQuestions
+        .reduce<Map<string, GuestQuestion>>((prev: Map<string, GuestQuestion>, cur: GuestQuestion) => {
+            prev.set(cur.questionKey, cur);
+            return prev;
+        }, new Map<string, GuestQuestion>());
 
 
-        
+    const firstCol = [
+        'guests_relationship',
+        'parenting_guest',
+        'pets_have'
+    ];
+    const secondCol = [
+        'smoking_household_acceptable',
+        'drinking_household_acceptable',
+        'substances_household_acceptable'
+    ];
+
+
+
 
     return (
         <React.Fragment>
@@ -325,26 +300,26 @@ export const AdminGuestView = () => {
                     <Paper className={classes.paper}>
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
-                            <Typography component='h1'>{`${guest.name}, ${((new Date()).getFullYear() - guest.dateOfBirth.getFullYear())}`}</Typography>
+                                <Typography align='left' component='h1' style={{ fontSize: '1.4em' }}>{`${guest.name}, ${((new Date()).getFullYear() - guest.dateOfBirth.getFullYear())}`}</Typography>
                             </Grid>
                             <Grid item xs={6}>
                                 {
-                                    firstCol.map((col: string) => <div>
-                                            {
-                                                `${(questionsByKey.get(col) as GuestQuestion || {text:''}).text}: ${guestResponsesByKey.get(col) as string}`
+                                    firstCol.map((col: string) => <Typography align='left' component='h4'>
+                                        {
+                                            `${(questionsByKey.get(col) as GuestQuestion || { text: '' }).text}: ${guestResponsesByKey.get(col) as string}`
                                         }
-                                    </div>)
+                                    </Typography>)
                                 }
                             </Grid>
                             <Grid item xs={6}>
                                 {
-                                    secondCol.map((col: string) => <div>
-                                            {
-                                                `${(questionsByKey.get(col) as GuestQuestion || {text:''}).text}: ${guestResponsesByKey.get(col) as string}`
+                                    secondCol.map((col: string) => <Typography align='left' component='h4'>
+                                        {
+                                            `${(questionsByKey.get(col) as GuestQuestion || { text: '' }).text}: ${guestResponsesByKey.get(col) as string}`
                                         }
-                                    </div>)
+                                    </Typography>)
                                 }
-                                
+
                             </Grid>
                         </Grid>
                     </Paper>
@@ -400,7 +375,7 @@ export const AdminGuestView = () => {
                                                                                 if (!rv) {
                                                                                     throw new Error(`Unknown response value ID: ${rvId}`);
                                                                                 }
-                                                                                return  rv.text || rv.displayText;
+                                                                                return rv.text || rv.displayText;
 
                                                                             })
                                                                     })()
@@ -497,7 +472,7 @@ export const AdminGuestView = () => {
                         </Table>
                     </Paper>
                 </Grid>
-            
+
                 <Grid item xs={12}>
                     <Paper className={classes.paper}>
                         <Typography component='h2' align='left'>Unmatched</Typography>
@@ -545,15 +520,33 @@ export const AdminGuestView = () => {
                                                                             if (!rv) {
                                                                                 throw new Error(`Unknown response value ID: ${rvId}`);
                                                                             }
-                                                                            return <div
-                                                                                className={
-                                                                                    hostQuestionsFailed.has(host.id)
-                                                                                        && (hostQuestionsFailed.get(host.id) as Array<number>).find((n: number) => n === q.id)
-                                                                                        ? classes.failedQuestion
-                                                                                        : ''
-                                                                                }>
-                                                                                {rv.text}
-                                                                            </div>;
+                                                                            // return <div
+                                                                            //     className={
+                                                                            //         hostQuestionsFailed.has(host.id)
+                                                                            //             && (hostQuestionsFailed.get(host.id) as Array<number>).find((n: number) => n === q.id)
+                                                                            //             ? classes.failedQuestion
+                                                                            //             : ''
+                                                                            //     }>
+                                                                            //     {rv.text}
+                                                                            // </div>;
+
+                                                                            const isFailed = hostQuestionsFailed.has(host.id)
+                                                                            && (hostQuestionsFailed.get(host.id) as Array<number>).find((n: number) => n === q.id);
+
+                                                                            return <FontAwesomeIcon
+                                                                                icon={
+                                                                                    isFailed   ? faTimesCircle : faCheckCircle
+                                                                                            }
+                                                                                            style={
+                                                                                                isFailed
+                                                                                                ? {
+                                                                                                    'color': 'red'
+                                                                                                }
+                                                                                                : {
+                                                                                                    'color': 'green'
+                                                                                                }
+                                                                                            }
+                                                                                            />
 
                                                                         })
                                                                 })()

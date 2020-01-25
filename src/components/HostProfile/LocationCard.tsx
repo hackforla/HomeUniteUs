@@ -1,6 +1,7 @@
 import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import LocationImages from './LocationImages';
+import { Host } from "../../models";
 
 const useStyles = makeStyles(() => ({
   locationCardContainer: {

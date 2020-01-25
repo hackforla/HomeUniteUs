@@ -120,7 +120,7 @@ BOOL_Q = [
     'drinking_household_acceptable',
     'substances_guest',
     'mental_illness',
-    'guests_relationship'
+    'guests_relationship',
     'smoking_household_acceptable',
     'drinking_guest',
     'mental_illness_care',
@@ -141,6 +141,18 @@ LIST_Q = [
 ]
 
 
+RESTRICTIONS = {
+    'number_of_guests':'hosting_amount',
+    'guests_relationship':'youth_relationship',
+    'parenting_guest':'youth_parenting',
+    'pets_have':'pets_hosting',
+    'duration_of_stay':'duration_of_stay',
+    'smoking_household_acceptable':'smoking_allowed',
+    'drinking_household_acceptable':'drinking_residents',
+    'substances_household_acceptable':'substances_residents'
+}
+
+
 def main():
 
     if(len(sys.argv) < 3):
@@ -149,12 +161,12 @@ def main():
 
     hosts_file = sys.argv[1]
     if not os.path.exists(hosts_file):
-        print('Could not find hosts file: '.format(hosts_file))
+        print('Could not find hosts file: {}'.format(hosts_file))
         exit(-1)
 
     guests_file = sys.argv[2]
     if not os.path.exists(guests_file):
-        print('Could not find guests file: '.format(guests_file))
+        print('Could not find guests file: {}'.format(guests_file))
         exit(-1)
 
     question_i = 0
@@ -170,7 +182,13 @@ def main():
 
     bool_i = 0
 
+    responses_map = dict()
+
+    host_qids = dict()
+    guest_qids = dict()
+
     for q in QUESTIONS:
+        host_qids[q] = question_i
 
         if q in BOOL_Q:
             questions_out[q] = {
@@ -185,6 +203,9 @@ def main():
                 'multiplicity': 'ResponseMultiplicity.ONE'
             }
 
+
+            responses_map[q] = questions_out[q]['responseValues']
+
             response_values.append({
                 'id': bool_i,
                 'text': 'Yes',
@@ -199,8 +220,9 @@ def main():
 
             question_i += 1
             bool_i += 2
+            
 
-        if q in LIST_Q:
+        elif q in LIST_Q:
             questions_out[q] = {
                 'responseValues': {
                     'Yes': bool_i,
@@ -212,6 +234,7 @@ def main():
                 'displayName': QUESTIONS_DISPLAY[q],
                 'multiplicity': 'ResponseMultiplicity.ONE'
             }
+            responses_map[q] = questions_out[q]['responseValues']
 
             response_values.append({
                 'id': bool_i,
@@ -227,12 +250,19 @@ def main():
 
             bool_i += 2
             question_i += 1
+        else:
+            print('skipping host question: {}'.format(q))
 
     question_i = 0
 
     for q in GUEST_QUESTIONS:
+        
+        guest_qids[q] = question_i
+
+        print('- looking at question: {}'.format(q))
 
         if q in BOOL_Q:
+            print('--- type: boolean')
             guest_questions_out[q] = {
                 'responseValues': {
                     'Yes': bool_i,
@@ -243,6 +273,7 @@ def main():
                 'text':GUEST_QUESTIONS_TEXT[q],
                 'multiplicity': 'ResponseMultiplicity.ONE'
             }
+            responses_map[q] = guest_questions_out[q]['responseValues']
 
             response_values.append({
                 'id': bool_i,
@@ -259,7 +290,8 @@ def main():
             question_i += 1
             bool_i += 2
 
-        if q in LIST_Q:
+        elif q in LIST_Q:
+            print('--- type: list')
             guest_questions_out[q] = {
                 'responseValues': {
                     'Yes': bool_i,
@@ -270,6 +302,8 @@ def main():
                 'text':GUEST_QUESTIONS_TEXT[q],
                 'multiplicity': 'ResponseMultiplicity.ONE'
             }
+
+            responses_map[q] = guest_questions_out[q]['responseValues']
 
             response_values.append({
                 'id': bool_i,
@@ -285,6 +319,10 @@ def main():
 
             bool_i += 2
             question_i += 1
+
+        else:
+            print('--- type: other')
+            print('--- ** skipping guest question: {} **'.format(q))
 
     responses_out = {}
 
@@ -469,6 +507,21 @@ def main():
     with open(os.path.join(output_path, 'guests.json'), 'w') as f:
         json.dump(guests, f, indent=4)
 
+
+    restriction_list = list()
+
+    for r in RESTRICTIONS.keys():
+        if r not in responses_map.keys() or RESTRICTIONS[r] not in responses_map.keys():
+            print('missing restriction question: \n\tguest: {}\n\thost: {}'.format(r, RESTRICTIONS[r]))
+            continue
+        restriction_list.append({
+            'hostQuestionId': host_qids[RESTRICTIONS[r]],
+            'guestQuestionId': guest_qids[r],
+            'reasonText': '',
+            'hostResponseValue': responses_map[RESTRICTIONS[r]]['Yes'],
+            'guestResponseValue': responses_map[r]['No']
+        })
+
     with open(os.path.join(output_path, 'data-full.json'), 'w') as f:
         json.dump({
             'guests': guests,
@@ -491,50 +544,51 @@ def main():
             'responseValues': response_values,
             'hostResponses': host_response_data,
             'guestResponses': guest_response_data,
-            'restrictions': [
-                {
-                    'hostQuestionId': 0,
-                    'guestQuestionId': 4,
-                    'reasonText': 'No smoking is allowed',
-                    'hostResponseValue': 1,
-                    'guestResponseValue': 26
-                },
-                {
-                    'hostQuestionId': 1,
-                    'guestQuestionId': 4,
-                    'reasonText': 'Guest prefers non-smoking home',
-                    'hostResponseValue': 2,
-                    'guestResponseValue': 26
-                },
-                {
-                    'hostQuestionId': 6,
-                    'guestQuestionId': 0,
-                    'reasonText': 'Host does not allow pets',
-                    'hostResponseValue': 13,
-                    'guestResponseValue': 18
-                },
-                {
-                    'hostQuestionId': 5,
-                    'guestQuestionId': 1,
-                    'reasonText': 'Guest does not want to live with pets',
-                    'hostResponseValue': 10,
-                    'guestResponseValue': 21
-                },
-                {
-                    'hostQuestionId': 7,
-                    'guestQuestionId': 11,
-                    'reasonText': 'Host does not allow guests who are parenting',
-                    'hostResponseValue': 15,
-                    'guestResponseValue': 40
-                },
-                {
-                    'hostQuestionId': 1,
-                    'guestQuestionId': 9,
-                    'reasonText': 'Host does not allow guests who drink',
-                    'hostResponseValue': 3,
-                    'guestResponseValue': 36
-                },
-            ],
+            'restrictions': restriction_list,
+            # 'restrictions': [
+            #     {
+            #         'hostQuestionId': 0,
+            #         'guestQuestionId': 4,
+            #         'reasonText': 'No smoking is allowed',
+            #         'hostResponseValue': 1,
+            #         'guestResponseValue': 26
+            #     },
+            #     {
+            #         'hostQuestionId': 1,
+            #         'guestQuestionId': 4,
+            #         'reasonText': 'Guest prefers non-smoking home',
+            #         'hostResponseValue': 2,
+            #         'guestResponseValue': 26
+            #     },
+            #     {
+            #         'hostQuestionId': 6,
+            #         'guestQuestionId': 0,
+            #         'reasonText': 'Host does not allow pets',
+            #         'hostResponseValue': 13,
+            #         'guestResponseValue': 18
+            #     },
+            #     {
+            #         'hostQuestionId': 5,
+            #         'guestQuestionId': 1,
+            #         'reasonText': 'Guest does not want to live with pets',
+            #         'hostResponseValue': 10,
+            #         'guestResponseValue': 21
+            #     },
+            #     {
+            #         'hostQuestionId': 7,
+            #         'guestQuestionId': 11,
+            #         'reasonText': 'Host does not allow guests who are parenting',
+            #         'hostResponseValue': 15,
+            #         'guestResponseValue': 40
+            #     },
+            #     {
+            #         'hostQuestionId': 1,
+            #         'guestQuestionId': 9,
+            #         'reasonText': 'Host does not allow guests who drink',
+            #         'hostResponseValue': 3,
+            #         'guestResponseValue': 36
+            #     },
+            # ],
             "matchResults": []
         }, f, indent=4)
 

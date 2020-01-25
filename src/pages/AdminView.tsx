@@ -6,7 +6,14 @@ import {
   createStyles,
   Typography,
   Box,
-  Button
+  Button,
+  Table,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Container
 } from "@material-ui/core"
 import { useHostHomeData } from "../data/data-context"
 import { GuestMatchSummary } from "../viewmodels/GuestMatchSummary"
@@ -90,9 +97,41 @@ const useStyles = makeStyles(theme =>
       padding: theme.spacing(2),
       textAlign: "center",
       color: theme.palette.text.secondary
+    },
+    table: {
+      minWidth: 650
     }
   })
 )
+
+export const MatchSummaryRow = (guestMatchSummary: GuestMatchSummary) => {
+  return (
+    <Grid item xs={12} style={{ paddingBottom: "4px" }}>
+      <Grid container>
+        <Grid item xs={2} alignContent="flex-start">
+          <Typography component="p" align="left">
+            {guestMatchSummary.guestName}
+          </Typography>
+        </Grid>
+        <Grid item xs={8}>
+          <Typography component="h3">
+            {guestMatchSummary.numBids > 0 ? "Bid" : "No Selection"}
+          </Typography>
+        </Grid>
+        <Grid item xs={2} alignContent="flex-end">
+          <Button
+            color="primary"
+            variant="contained"
+            component={Link}
+            to={`/hosthome/admin/guest/${guestMatchSummary.guestId}`}
+          >
+            {`${guestMatchSummary.numMatches} matches`}
+          </Button>
+        </Grid>
+      </Grid>
+    </Grid>
+  )
+}
 
 export const AdminView = () => {
   const classes = useStyles({})
@@ -126,8 +165,6 @@ export const AdminView = () => {
     })
   }, [data.guests, data.matchResults])
 
-  //   console.log(`${JSON.stringify(data.guests)}`)
-
   return (
     <React.Fragment>
       <Grid container spacing={3}>
@@ -144,35 +181,80 @@ export const AdminView = () => {
           </Paper>
         </Grid>
         <Grid item xs={12}>
-          <Paper className={classes.paper}>
-            {allGuestMatches
-              .sort((a: GuestMatchSummary, b: GuestMatchSummary) =>
-                a.numMatches > b.numMatches ? -1 : 1
-              )
-              .map((guestMatchSummary: GuestMatchSummary, index: number) => (
-                <Box display="flex" p={1} m={1}>
-                  <Box p={1} flexGrow={1}>
-                    <Typography component="h5" align="left">
-                      {guestMatchSummary.guestName}
-                    </Typography>
-                  </Box>
-                  <Box p={1} flexGrow={1}>
-                    <Typography component="h6" align="center">
-                      {guestMatchSummary.numBids > 0 ? "Bid" : "No Selection"}
-                    </Typography>
-                  </Box>
-                  <Box p={1}>
-                    <Button
-                      color="primary"
-                      component={Link}
-                      to={`/hosthome/admin/guest/${guestMatchSummary.guestId}`}
-                    >
-                      {`${guestMatchSummary.numMatches} matches`}
-                    </Button>
-                  </Box>
-                </Box>
-              ))}
-          </Paper>
+          <Container>
+            <Paper className={classes.paper}>
+              <Grid container>
+                <Grid item xs={12} style={{ marginBottom: "8px" }}>
+                  <Grid container>
+                    <Grid item xs={2}>
+                      <Typography
+                        component="h3"
+                        style={{ fontWeight: "bold", textDecoration: "und" }}
+                        align="left"
+                      >
+                        Name
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={8}>
+                      <Typography component="h3" style={{ fontWeight: "bold" }}>
+                        Status
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={2}>
+                      <Typography component="h3" style={{ fontWeight: "bold" }}>
+                        Matches
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                {allGuestMatches
+                  .sort((a: GuestMatchSummary, b: GuestMatchSummary) =>
+                    a.numMatches > b.numMatches ? -1 : 1
+                  )
+                  .map(
+                    (guestMatchSummary: GuestMatchSummary, index: number) => (
+                      <MatchSummaryRow {...guestMatchSummary} />
+                    )
+                  )}
+              </Grid>
+
+              {/* 
+                        <TableContainer component={Paper}>
+                            <Table className={classes.table} aria-label="matches table">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell style={{ width: '2rem' }}>Name</TableCell>
+                                        <TableCell>Status</TableCell>
+                                        <TableCell style={{ width: '2rem' }}>Matches</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {
+                                        allGuestMatches
+                                            .sort((a: GuestMatchSummary, b: GuestMatchSummary) => a.numMatches > b.numMatches ? -1 : 1)
+                                            .map((guestMatchSummary: GuestMatchSummary, index: number) => (
+                                                <TableRow key={guestMatchSummary.guestId}>
+                                                    <TableCell style={{ width: '2rem' }}>
+                                                        {guestMatchSummary.guestName}
+                                                    </TableCell>
+                                                    <TableCell>{guestMatchSummary.numBids > 0 ? 'Bid' : 'No Selection'}</TableCell>
+                                                    <TableCell style={{ width: '2rem' }}>
+                                                        <Button
+                                                            color='primary'
+                                                            component={Link}
+                                                            to={`/hosthome/admin/guest/${guestMatchSummary.guestId}`}
+                                                        >
+                                                            {`${guestMatchSummary.numMatches} matches`}
+                                                        </Button>
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))
+                                    }
+                                </TableBody>
+                            </Table>
+                        </TableContainer> */}
+            </Paper>
+          </Container>
         </Grid>
       </Grid>
     </React.Fragment>
