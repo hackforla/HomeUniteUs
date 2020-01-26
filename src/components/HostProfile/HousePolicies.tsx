@@ -53,7 +53,7 @@ export const HousePolicies = ({
       icon: faPaw,
       content: host.petsText,
     },
-      {
+    {
       icon: faSmokingBan,
       content: host.smokingText,
     },
@@ -67,7 +67,7 @@ export const HousePolicies = ({
     }
   ]
 
-  if (host.youthParenting ) {
+  if (host.youthParenting) {
     policies = policies.concat(
       {
         icon: faBaby,
@@ -89,7 +89,7 @@ export const HousePolicies = ({
     <div className={classes.housePolicyContainer}>
 
       <div className={classes.housePolicyTitle}>
-        House Policy 
+        House Policy
       </div>
 
       <div className={classes.housePolicies}>
