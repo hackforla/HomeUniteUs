@@ -1,26 +1,27 @@
-import * as React from 'react';
-import { Profile } from '../components/HostProfile/Profile';
-import { useLocation } from 'react-router';
+import * as React from "react"
+import { Profile } from "../components/HostProfile/Profile"
+import { useLocation } from "react-router"
 
 export const HostProfilePage = () => {
+  const location = useLocation()
 
-    const location = useLocation();
+  React.useEffect(() => {
+    try {
+      window.scroll({
+        top: 0,
+        left: 0,
+        behavior: "auto"
+      })
+    } catch (error) {
+      window.scrollTo(0, 0)
+    }
+  }, [location.pathname, location.search])
 
-    React.useEffect(() => {
-        try {
-            window.scroll({
-              top: 0,
-              left: 0,
-              behavior: 'auto',
-            });
-          } catch (error) {
-            window.scrollTo(0, 0);
-          }
-    }, [location.pathname, location.search]);
-
-    return (
-        <Profile />
-    );
+  return (
+    <div>
+      <Profile />
+    </div>
+  )
 }
 
-export default HostProfilePage;
+export default HostProfilePage

@@ -8,6 +8,7 @@ import { Search, Dashboard } from '@material-ui/icons';
 import { Guest } from './models';
 import { AdminGuestView } from './pages/AdminGuestView';
 import { HostProfilePage } from './pages/HostProfile';
+import { GuestProfilePage } from './pages/GuestProfile';
 import { HostHomeDataProvider } from './data/data-context';
 import { AdminView } from './pages/AdminView';
 
@@ -156,37 +157,37 @@ export const App = () => {
     const classes = useStyles({});
 
     let a: JSX.Element;
-    
+
 
     return (
         <React.Fragment>
             <HostHomeDataProvider>
                 <BrowserRouter>
                     <Container maxWidth='xl'>
-                        
-                    <Box display='flex' p={1} m={1}>
-                                <Box p={1} flexGrow={1}>
-                                    {/* <Typography component='h5' align='left'>SPY</Typography> */}
-                                    <a href="http://www.safeplaceforyouth.org/">
-                                        <img src={logo} alt='Logo' height={60} />
-                                    </a>
-                                </Box>
-                                <Box p={1}>
-                                    <Button component={NavLink} to={`/hosthome/about`}>
-                                        ABOUT
+
+                        <Box display='flex' p={1} m={1}>
+                            <Box p={1} flexGrow={1}>
+                                {/* <Typography component='h5' align='left'>SPY</Typography> */}
+                                <a href="http://www.safeplaceforyouth.org/">
+                                    <img src={logo} alt='Logo' height={60} />
+                                </a>
+                            </Box>
+                            <Box p={1}>
+                                <Button component={NavLink} to={`/hosthome/about`}>
+                                    ABOUT
                                         </Button>
-                                </Box>
-                                <Box p={1}>
-                                    <Button component={NavLink} to={`/hosthome/admin/guests`}>
-                                        ADMIN
+                            </Box>
+                            <Box p={1}>
+                                <Button component={NavLink} to={`/hosthome/admin/guests`}>
+                                    ADMIN
                                         </Button>
-                                </Box>
-                                {/* <Box p={1}>
+                            </Box>
+                            {/* <Box p={1}>
                                     <Button component={NavLink} to={`/hosthome/hosts/1`}>
                                         HOST PROFILE
                                     </Button>
                                 </Box> */}
-                            </Box>
+                        </Box>
                         {/* <Toolbar className={classes.toolbar}>
                             <Typography
                                 component='h2'
@@ -252,7 +253,7 @@ export const App = () => {
                                 <Route path='/hosthome/admin/guest/:id' component={AdminGuestView} />
                                 {/* <Route path='/hosthome/hosts/:id' component={HostProfilePage} /> */}
                                 <Route path='/hosthome/guests/:guestId/matches/:hostId' component={HostProfilePage} />
-                                <Route path='/hosthome/guests/:id' component={PlaceholderWithIdView} />
+                                <Route path='/hosthome/guests/:id' component={GuestProfilePage} />
                             </Switch>
                         </main>
                     </Container>
