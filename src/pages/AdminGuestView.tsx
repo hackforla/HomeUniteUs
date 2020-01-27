@@ -100,7 +100,7 @@ const useStyles = makeStyles(theme => (
         },
         tableHeader: {
             backgroundColor: '#008DA7',
-            fontFamily: 'Brandon Grotesque',
+            // fontFamily: 'Brandon Grotesque',
             fontStyle: 'normal',
             fontWeight: 'bold',
             fontSize: '16px',
@@ -108,7 +108,7 @@ const useStyles = makeStyles(theme => (
             color: '#FFFFFF'
         },
         tableHeaderCell: {
-            fontFamily: 'Brandon Grotesque',
+            // fontFamily: 'Brandon Grotesque',
             fontStyle: 'normal',
             fontWeight: 'bold',
             fontSize: '16px',
@@ -116,11 +116,11 @@ const useStyles = makeStyles(theme => (
             color: '#FFFFFF'
         },
         tableRowOdd: {
-            fontFamily: 'Brandon Grotesque',
+            // fontFamily: 'Brandon Grotesque',
             backgroundColor: '#FFFFFF'
         },
         tableRowEven: {
-            fontFamily: 'Brandon Grotesque',
+            // fontFamily: 'Brandon Grotesque',
             backgroundColor: '#F5F5F5'
         }
     })));
@@ -347,7 +347,8 @@ export const AdminGuestView = () => {
                                             <TableRow key={index} className={index % 2 === 0 ? classes.tableRowEven : classes.tableRowOdd}>
                                                 {/* <TableCell>{host.id}</TableCell> */}
                                                 <TableCell onClick={() => { history.push(`/hosthome/guests/${guestId}/matches/${host.id}`) }}>
-                                                    <div style={{ fontWeight: 'bold', textDecoration: 'underline' }}>{host.name}</div>
+                                                <div className='host-match-btn' style={{ fontWeight: 'bold', textDecoration: 'underline' }}>{host.name}</div>
+                                                    {/* <div style={{ fontWeight: 'bold', textDecoration: 'underline' }}>{host.name}</div> */}
                                                 </TableCell>
                                                 <TableCell>{host.address}</TableCell>
 
@@ -530,7 +531,7 @@ export const AdminGuestView = () => {
                                                                             const isFailed = hostQuestionsFailed.has(host.id)
                                                                             && (hostQuestionsFailed.get(host.id) as Array<number>).find((n: number) => n === q.id);
 
-                                                                            return <FontAwesomeIcon
+                                                                            return <div><FontAwesomeIcon
                                                                                 icon={
                                                                                     isFailed   ? faTimesCircle : faCheckCircle
                                                                                             }
@@ -544,6 +545,8 @@ export const AdminGuestView = () => {
                                                                                                 }
                                                                                             }
                                                                                             />
+                                                                                            <span style={{paddingLeft: '4px'}}>{rv.text}</span>
+                                                                                        </div>
 
                                                                         })
                                                                 })()

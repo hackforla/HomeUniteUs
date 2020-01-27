@@ -361,7 +361,7 @@ def main():
                 'languages': responses.get('languages', ''), 
                 'preferredCharacteristics': responses.get('preferred_characteristics', ''),
                 'hostingInterest': responses.get('hosting_interest', ''),
-                'hostingStrenghts': responses.get('hosting_strenghts', ''),
+                'hostingStrengths': responses.get('hosting_strenghts', ''),
                 'hostingChallenges': responses.get('hosting_challenges', ''),
                 'hostIntro': responses.get('host_intro', ''),
                 'durationOfStay': responses.get('duration_of_stay', ['N/A'])[0],
@@ -517,7 +517,7 @@ def main():
         restriction_list.append({
             'hostQuestionId': host_qids[RESTRICTIONS[r]],
             'guestQuestionId': guest_qids[r],
-            'reasonText': '',
+            'reasonText': 'Yes {} no {}'.format(RESTRICTIONS[r], r),
             'hostResponseValue': responses_map[RESTRICTIONS[r]]['Yes'],
             'guestResponseValue': responses_map[r]['No']
         })

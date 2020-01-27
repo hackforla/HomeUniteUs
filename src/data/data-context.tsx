@@ -2802,7 +2802,8 @@ const initialState: HostHomeData = {
             "dateOfBirth": new Date("1980-07-09"),
             "email": "bonnie@hackforla.com",
             "phone": "310-555-1212",
-            "address": "12751 Millennium Drive, Unit ABC,\nPlaya Vista, CA, 90094",
+            // "address": "12751 Millennium Drive, Unit ABC,\nPlaya Vista, CA, 90094",
+            "address": "Playa Vista, CA",
             "employmentInfo": "Hack For LA, Executive Director, 2018-10-08 to present",
             "contactAddress": "13428 Maxella Avenue, 821,\nMarina Del Rey, CA, 90292",
             "name": "Bonnie Wolfe",
@@ -16885,42 +16886,42 @@ const initialState: HostHomeData = {
         {
             "hostQuestionId": 9,
             "guestQuestionId": 9,
-            "reasonText": "",
-            "hostResponseValue": 18,
-            "guestResponseValue": 39
+            "reasonText": "Yes youth_relationship no guests_relationship",
+            "hostResponseValue": 19,
+            "guestResponseValue": 38
         },
         {
             "hostQuestionId": 8,
             "guestQuestionId": 13,
-            "reasonText": "",
-            "hostResponseValue": 16,
-            "guestResponseValue": 47
+            "reasonText": "Yes youth_parenting no parenting_guest",
+            "hostResponseValue": 17,
+            "guestResponseValue": 46
         },
         {
-            "hostQuestionId": 6,
+            "hostQuestionId": 7,
             "guestQuestionId": 0,
-            "reasonText": "",
-            "hostResponseValue": 12,
-            "guestResponseValue": 21
+            "reasonText": "Yes pets_hosting no pets_have",
+            "hostResponseValue": 15,
+            "guestResponseValue": 20
         },
         {
             "hostQuestionId": 0,
             "guestQuestionId": 16,
-            "reasonText": "",
+            "reasonText": "Yes smoking_allowed no smoking_household_acceptable",
             "hostResponseValue": 0,
             "guestResponseValue": 53
         },
         {
             "hostQuestionId": 2,
             "guestQuestionId": 6,
-            "reasonText": "",
+            "reasonText": "Yes drinking_residents no drinking_household_acceptable",
             "hostResponseValue": 4,
             "guestResponseValue": 33
         },
         {
             "hostQuestionId": 4,
             "guestQuestionId": 5,
-            "reasonText": "",
+            "reasonText": "Yes substances_residents no substances_household_acceptable",
             "hostResponseValue": 8,
             "guestResponseValue": 31
         }
