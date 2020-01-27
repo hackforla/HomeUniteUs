@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-//import './index.css';
+import './index.css';
 //import './fonts/BrandonGrotesque-Regular.ttf'
 
 import { App } from "./App";
