@@ -46,6 +46,7 @@
     "react-dom": "^16.12.0",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
+    "react-scroll": "^1.7.16",
     "style-loader": "^1.1.2",
     "typeface-roboto": "0.0.75"
   }

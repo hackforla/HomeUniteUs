@@ -1,6 +1,7 @@
 import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Host } from '../../models/Host';
+import { Element } from 'react-scroll'
 
 const useStyles = makeStyles(() => ({
   additionalInfoContainer: {
@@ -73,23 +74,26 @@ export const HostAdditionalInfo = ({
   ]
 
   return (
-    <div className={classes.additionalInfoContainer}>
-      <div className={classes.additionalInfoTitle}>
-        Additional Info
-      </div>
+  
+    <Element name="additionalInfo">
+      <div className={classes.additionalInfoContainer}>
+        <div className={classes.additionalInfoTitle}>
+          Additional Info
+        </div>
 
-      <div className={classes.additionalInfos}>
-        {additionalInfos.map(additionalInfo => {
+        <div className={classes.additionalInfos}>
+          {additionalInfos.map(additionalInfo => {
 
-          return (
-            <div className={classes.additionalInfo}>
-              <div className={classes.additionalInfoLabel}>{additionalInfo.label}</div>
-              <div className={classes.additionalInfoContent}>{additionalInfo.content}</div>
-            </div>
-          )
-        })}
+            return (
+              <div className={classes.additionalInfo}>
+                <div className={classes.additionalInfoLabel}>{additionalInfo.label}</div>
+                <div className={classes.additionalInfoContent}>{additionalInfo.content}</div>
+              </div>
+            )
+          })}
+        </div>
       </div>
-    </div>
+    </Element>
   );
 }
 

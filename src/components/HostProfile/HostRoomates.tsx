@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Link } from 'react-scroll'
 import { makeStyles } from "@material-ui/core/styles";
 import { Housemate } from '../../models/Housemate';
 
@@ -49,9 +50,17 @@ const HostRoomates = ({
       </div>
 
       <div className={classes.moreInfo}>
-        <a href="#">
-          more about your host
-        </a>
+        <Link
+          activeClass="active"
+          to="additionalInfo"
+          spy={true}
+          smooth={true}
+          duration={500}
+        >
+          <a href="#">
+            more about your host
+          </a>
+        </Link>
       </div>
     </div>
   );

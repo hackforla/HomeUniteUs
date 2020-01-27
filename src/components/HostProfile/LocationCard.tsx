@@ -48,7 +48,7 @@ export const LocationCard = ({
         </div>
 
         <div className={classes.visitorInfo}>
-          Our {host.housingType} home can host {host.hostingAmount} visitor.
+          Our {host.housingType.toLowerCase()} home can host {host.hostingAmount} visitor.
         </div>
       </div>
     </div>
