@@ -1,13 +1,12 @@
-
 import * as React from "react";
-import { makeStyles, Paper, createStyles, Grid, Box, Typography, Table, TableHead, TableRow, TableCell, TableBody, ValueLabelProps } from '@material-ui/core';
+
+import { makeStyles, Paper, createStyles, Grid, Box, Typography, Table, TableHead, TableRow, TableCell, TableBody, ValueLabelProps, List, ListItem, ListItemAvatar, Avatar, ListItemText } from '@material-ui/core';
 import { useHostHomeData } from "../data/data-context";
-import { GuestMatchSummary } from "../viewmodels/GuestMatchSummary";
 import { MatchResult, Guest, Host, GuestInterestLevel, HostQuestion, HostResponse, ResponseValue, Restriction, GuestResponse, GuestQuestion } from "../models";
 import { useParams, useHistory, useLocation } from "react-router";
-import { ProfilePhoto } from "../img/ProfilePhoto";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import { faCheckCircle, faTimesCircle, faPaw, faSmokingBan, faWineBottle, faPrescriptionBottleAlt, faSmoking, faBaby } from "@fortawesome/free-solid-svg-icons";
+
 import './AdminGuestView.css';
 
 const useStyles = makeStyles(theme => (
@@ -144,8 +143,19 @@ export const AdminGuestView = () => {
     const {
         data,
         dispatch,
-        addGuest
+        addGuest,
+        guestsById,
+        guestsResponsesByGuestId,
+        guestQuestionsById,
+        guestQuestionsByKey
     } = useHostHomeData();
+
+    const petsKeys = ['pets_have', 'host_pets'];
+
+    const havePetsQuestion = guestQuestionsByKey.get('pets_have') as GuestQuestion;
+    const hostPetsQuestion = guestQuestionsByKey.get('host_pets') as GuestQuestion;
+
+
 
     const history = useHistory();
 
@@ -188,6 +198,8 @@ export const AdminGuestView = () => {
 
 
 
+
+
     // const unmatched = React.useMemo(() => {
     //     return data.hosts.filter((host: Host) => matched.filter((matchedHost: Host) => host.id === matchedHost.id).length < 1)
     // }, [data.matchResults]);
@@ -215,7 +227,7 @@ export const AdminGuestView = () => {
 
 
 
-    // console.log(`hostQuestionsFailed ${JSON.stringify(hostQuestionsFailed)}`);
+    console.log(`hostQuestionsFailed: ${JSON.stringify(hostQuestionsFailed)}`);
 
     const interestByHostId: InterestMapping = React.useMemo(() => {
         return data.matchResults
@@ -262,11 +274,19 @@ export const AdminGuestView = () => {
         }, new Map<string, GuestQuestion>());
 
 
+
+    const parentingResponse = guestResponsesByKey.get('parenting_guest') as string;
+    const parenting = parentingResponse.toUpperCase() === 'YES';
+
+
+
+
     const firstCol = [
         'guests_relationship',
         'parenting_guest',
         'pets_have'
     ];
+
     const secondCol = [
         'smoking_household_acceptable',
         'drinking_household_acceptable',
@@ -274,14 +294,18 @@ export const AdminGuestView = () => {
     ];
 
 
-
-
     return (
         <React.Fragment>
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Paper className={classes.paper}>
-                        <Typography component='h1' align='center'>Guest Matches</Typography>
+                        <Typography 
+                        component='h1' 
+                        align='center'
+                        style={{ fontSize: '2em' }}
+                        >
+                            Guest Matches
+                            </Typography>
                     </Paper>
                 </Grid>
                 <Grid item xs={3}>
@@ -297,9 +321,65 @@ export const AdminGuestView = () => {
                     <Paper className={classes.paper}>
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
-                                <Typography align='left' component='h1' style={{ fontSize: '1.4em' }}>{`${guest.name}, ${((new Date()).getFullYear() - guest.dateOfBirth.getFullYear())}`}</Typography>
+                                <Typography
+                                    align='left'
+                                    component='h1'
+                                    style={{ fontSize: '1.4em' }}
+                                    >
+                                    {`${guest.name}, ${((new Date()).getFullYear() - guest.dateOfBirth.getFullYear())}`}
+                                </Typography>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12}>
+                                <List>
+                                    <ListItem>
+                                        <ListItemAvatar>
+                                            <Avatar>
+                                                <FontAwesomeIcon icon={faSmoking} size="sm" />                                                
+                                            </Avatar>
+                                        </ListItemAvatar>
+                                        <ListItemText primary={guest.smokingText} />
+                                    </ListItem>
+                                    <ListItem>
+                                        <ListItemAvatar>
+                                            <Avatar>
+                                                <FontAwesomeIcon icon={faWineBottle} />
+                                            </Avatar>
+                                        </ListItemAvatar>
+                                        <ListItemText primary={guest.drinkingText} />
+                                    </ListItem>
+                                    <ListItem>
+                                        <ListItemAvatar>
+                                            <Avatar>
+                                                <FontAwesomeIcon icon={faPrescriptionBottleAlt} />
+                                            </Avatar>
+                                        </ListItemAvatar>
+                                        <ListItemText primary={guest.substancesText} />
+                                    </ListItem>
+                                    <ListItem>
+                                        <ListItemAvatar>
+                                            <Avatar>
+                                                <FontAwesomeIcon icon={faPaw} />
+                                            </Avatar>
+                                        </ListItemAvatar>
+                                        <ListItemText primary={guest.petsText} />
+                                    </ListItem>
+                                    {
+                                        parenting
+                                        ? <ListItem>
+                                        <ListItemAvatar>
+                                            <Avatar>
+                                                <FontAwesomeIcon icon={faBaby} />
+                                            </Avatar>
+                                        </ListItemAvatar>
+                                        <ListItemText primary='I am parenting' />
+                                    </ListItem>
+                                    : null
+                                    }
+                                    
+                                </List>
+                            </Grid>
+                            {/* Tyler, 1/27: display smokingText, etc. TODO: logically derive */}
+                            {/* <Grid item xs={6}>
                                 {
                                     firstCol.map((col: string) => <Typography align='left' component='h4'>
                                         {
@@ -317,7 +397,7 @@ export const AdminGuestView = () => {
                                     </Typography>)
                                 }
 
-                            </Grid>
+                            </Grid> */}
                         </Grid>
                     </Paper>
 
@@ -347,15 +427,15 @@ export const AdminGuestView = () => {
                                             <TableRow key={index} className={index % 2 === 0 ? classes.tableRowEven : classes.tableRowOdd}>
                                                 {/* <TableCell>{host.id}</TableCell> */}
                                                 <TableCell onClick={() => { history.push(`/hosthome/guests/${guestId}/matches/${host.id}`) }}>
-                                                <div className='host-match-btn' style={{ fontWeight: 'bold', textDecoration: 'underline' }}>{host.name}</div>
+                                                    <div className='host-match-btn' style={{ fontWeight: 'bold', textDecoration: 'underline' }}>{host.name}</div>
                                                     {/* <div style={{ fontWeight: 'bold', textDecoration: 'underline' }}>{host.name}</div> */}
                                                 </TableCell>
                                                 <TableCell>{host.address}</TableCell>
 
                                                 {
-                                                    data.hostQuestions.map((q: HostQuestion) => {
+                                                    data.hostQuestions.map((q: HostQuestion, index: number) => {
                                                         return (
-                                                            <TableCell>
+                                                            <TableCell key={index}>
                                                                 {
                                                                     (() => {
                                                                         var response = data.hostResponses
@@ -373,7 +453,14 @@ export const AdminGuestView = () => {
                                                                                 if (!rv) {
                                                                                     throw new Error(`Unknown response value ID: ${rvId}`);
                                                                                 }
-                                                                                return rv.text || rv.displayText;
+                                                                                return <div key={index}><FontAwesomeIcon
+                                                                                icon={faCheckCircle}
+                                                                                style={{
+                                                                                    'color': '#55bdd9'
+                                                                                }}
+                                                                            />
+                                                                                <span style={{ paddingLeft: '4px' }}>{rv.text}</span>
+                                                                            </div>
 
                                                                             })
                                                                     })()
@@ -407,7 +494,7 @@ export const AdminGuestView = () => {
                 </Grid>
                 <Grid item xs={12}>
                     <Paper className={classes.paper}>
-                        <Typography component='h2' align='left'>Rejected</Typography>
+                        <Typography component='h2' align='left'>Declined</Typography>
                         <Table className={classes.table} aria-label="unmatched table">
                             <TableHead>
                                 <TableRow className={classes.tableHeader}>
@@ -415,9 +502,9 @@ export const AdminGuestView = () => {
                                     <TableCell className={classes.tableHeaderCell}>Name</TableCell>
                                     <TableCell className={classes.tableHeaderCell}>Address</TableCell>
                                     {
-                                        data.hostQuestions.map((q: HostQuestion) => {
+                                        data.hostQuestions.map((q: HostQuestion, index: number) => {
                                             return (
-                                                <TableCell className={classes.tableHeaderCell}>{q.displayName}</TableCell>
+                                                <TableCell className={classes.tableHeaderCell} key={index}>{q.displayName}</TableCell>
                                             );
                                         })
                                     }
@@ -433,9 +520,9 @@ export const AdminGuestView = () => {
                                             </TableCell>
                                             <TableCell>{host.address}</TableCell>
                                             {
-                                                data.hostQuestions.map((q: HostQuestion) => {
+                                                data.hostQuestions.map((q: HostQuestion, index: number) => {
                                                     return (
-                                                        <TableCell>
+                                                        <TableCell key={index}>
                                                             {
                                                                 (() => {
                                                                     var response = data.hostResponses
@@ -445,16 +532,21 @@ export const AdminGuestView = () => {
                                                                     }
                                                                     return response
                                                                         .responseValues
-                                                                        .map((rvId: number) => {
+                                                                        .map((rvId: number, index: number) => {
 
                                                                             const rv = data.responseValues
                                                                                 .find((rv: ResponseValue) => rv.id === rvId);
                                                                             if (!rv) {
                                                                                 throw new Error(`Unknown response value ID: ${rvId}`);
                                                                             }
-                                                                            return <div>
-                                                                                {rv.text}
-                                                                            </div>;
+                                                                            return <div key={index}><FontAwesomeIcon
+                                                                            icon={faCheckCircle}
+                                                                            style={{
+                                                                                'color': '#55bdd9'
+                                                                            }}
+                                                                        />
+                                                                            <span style={{ paddingLeft: '4px' }}>{rv.text}</span>
+                                                                        </div>
 
                                                                         })
                                                                 })()
@@ -481,9 +573,9 @@ export const AdminGuestView = () => {
                                     <TableCell className={classes.tableHeaderCell}>Name</TableCell>
                                     <TableCell className={classes.tableHeaderCell}>Address</TableCell>
                                     {
-                                        data.hostQuestions.map((q: HostQuestion) => {
+                                        data.hostQuestions.map((q: HostQuestion, index: number) => {
                                             return (
-                                                <TableCell className={classes.tableHeaderCell}>{q.displayName}</TableCell>
+                                                <TableCell className={classes.tableHeaderCell} key={index}>{q.displayName}</TableCell>
                                             );
                                         })
                                     }
@@ -494,24 +586,30 @@ export const AdminGuestView = () => {
                                     unmatched.map(
                                         (host: Host, index: number) => <TableRow key={index} className={index % 2 === 0 ? classes.tableRowEven : classes.tableRowOdd}>
                                             {/* <TableCell>{host.id}</TableCell> */}
-                                            <TableCell onClick={() => { history.push(`/hosthome/guests/${guestId}/matches/${host.id}`) }}>
-                                                <div className='host-match-btn' style={{ fontWeight: 'bold', textDecoration: 'underline' }}>{host.name}</div>
+                                            <TableCell>
+                                                <div className='host-match-btn' style={{ fontWeight: 'bold' }}>{host.name}</div>
                                             </TableCell>
                                             <TableCell>{host.address}</TableCell>
                                             {
-                                                data.hostQuestions.map((q: HostQuestion) => {
+                                                data.hostQuestions.map((q: HostQuestion, index: number) => {
+                                                    console.log(`****************************************************************`)
+                                                    console.log(`data.hostQuestions.map: looking at q: ${JSON.stringify(q)}`)
                                                     return (
-                                                        <TableCell>
+                                                        <TableCell key={index}>
                                                             {
                                                                 (() => {
                                                                     var response = data.hostResponses
                                                                         .find((hr: HostResponse) => hr.hostId == host.id && hr.questionId == q.id);
+
+                                                                        
+                                                                        console.log(`data.hostQuestions.map: looking at response: ${JSON.stringify(response)}`)
+
                                                                     if (!response) {
                                                                         return 'Not answered';
                                                                     }
                                                                     return response
                                                                         .responseValues
-                                                                        .map((rvId: number) => {
+                                                                        .map((rvId: number, index: number) => {
 
                                                                             const rv = data.responseValues
                                                                                 .find((rv: ResponseValue) => rv.id === rvId);
@@ -528,25 +626,33 @@ export const AdminGuestView = () => {
                                                                             //     {rv.text}
                                                                             // </div>;
 
-                                                                            const isFailed = hostQuestionsFailed.has(host.id)
-                                                                            && (hostQuestionsFailed.get(host.id) as Array<number>).find((n: number) => n === q.id);
+                                                                            console.log(`data.hostQuestions.map: looking at rv: ${JSON.stringify(rv)}`)
 
-                                                                            return <div><FontAwesomeIcon
+                                                                            const failedQuestionsForHost =hostQuestionsFailed.get(host.id) as Array<number>;
+                                                                            
+                                                                            console.log(`data.hostQuestions.map: looking at failedQuestionsForHost: ${JSON.stringify(failedQuestionsForHost)}`);
+
+                                                                            // const isFailed = (!!(failedQuestionsForHost.find((n: number) => n === q.id)));
+                                                                            const isFailed = failedQuestionsForHost.indexOf(q.id) >= 0;
+
+                                                                            console.log(`data.hostQuestions.map: looking at isFailed: ${JSON.stringify(isFailed)}`);
+
+                                                                            return <div key={index}><FontAwesomeIcon
                                                                                 icon={
-                                                                                    isFailed   ? faTimesCircle : faCheckCircle
-                                                                                            }
-                                                                                            style={
-                                                                                                isFailed
-                                                                                                ? {
-                                                                                                    'color': 'red'
-                                                                                                }
-                                                                                                : {
-                                                                                                    'color': 'green'
-                                                                                                }
-                                                                                            }
-                                                                                            />
-                                                                                            <span style={{paddingLeft: '4px'}}>{rv.text}</span>
-                                                                                        </div>
+                                                                                    isFailed ? faTimesCircle : faCheckCircle
+                                                                                }
+                                                                                style={
+                                                                                    isFailed
+                                                                                        ? {
+                                                                                            'color': 'red'
+                                                                                        }
+                                                                                        : {
+                                                                                            'color': '#55bdd9'
+                                                                                        }
+                                                                                }
+                                                                            />
+                                                                                <span style={{ paddingLeft: '4px' }}>{rv.text}</span>
+                                                                            </div>
 
                                                                         })
                                                                 })()

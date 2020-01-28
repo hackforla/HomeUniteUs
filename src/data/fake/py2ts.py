@@ -10,13 +10,14 @@ GUEST_QUESTIONS = [
     'employed',
     'in_school',
     'smoking_guest',
+    'substances_guest',
+    'drinking_guest',
+    'smoking_household_acceptable',
     'substances_household_acceptable',
     'drinking_household_acceptable',
-    'substances_guest',
     'mental_illness',
     'guests_relationship',
     'smoking_household_acceptable',
-    'drinking_guest',
     'mental_illness_care',
     'parenting_guest',
     'drinking_concerns',
@@ -27,8 +28,7 @@ GUEST_QUESTIONS = [
     'host_pet_restrictions',
     'languages',
     'duration_of_stay',
-    'number_of_guests',
-    'smoking_household_acceptable'
+    'number_of_guests'
 ]
 
 GUEST_QUESTIONS_TEXT = {
@@ -68,7 +68,8 @@ QUESTIONS = [
     'host_type',
     'hosting_amount',
     'pets_hosting',
-    'pet_restrictions',
+    'pets_have',
+    # 'pet_restrictions',
     'youth_parenting',
     'youth_relationship',
 ]
@@ -82,9 +83,11 @@ QUESTIONS_TEXT = {
     'substances_concerns': 'Do you have concerns about your substance use, or that of any resident in the home?',
     'host_type': 'How long would you like to host?',
     'hosting_amount': 'How many guests are you willing to host?',
-    'pets_hosting': 'Do you have any pets?',
-    'pet_restrictions': 'Are you willing to host a guest who has pets?',
+    'pets_hosting': 'Are you willing to host a guest who has pets?',
+    'pets_have': 'Do you have any pets?',
+    # 'pet_restrictions': 'Are you willing to host a guest who has pets?',
     'youth_parenting': 'Are you willing to host a guest who is parenting?',
+    'pets_have': 'Do you have pets?',
     'youth_relationship':'Are you willing to host a guest who is in a relationship?',
 }
 
@@ -97,8 +100,9 @@ QUESTIONS_DISPLAY = {
     'substances_concerns': 'Substances Concerns',
     'host_type': 'Host Type',
     'hosting_amount': 'Number of Guests',
-    'pets_hosting': 'Has Pets',
-    'pet_restrictions': 'Pets OK',
+    'pets_have': 'Has Pets',
+    'pets_hosting': 'Pets OK',
+    # 'pet_restrictions': 'Pet Restrictions',
     'youth_parenting': 'Parenting OK',
     'youth_relationship': 'Relationship OK',
 }
@@ -146,12 +150,21 @@ RESTRICTIONS = {
     'guests_relationship':'youth_relationship',
     'parenting_guest':'youth_parenting',
     'pets_have':'pets_hosting',
+    'smoking_guest':'smoking_allowed',
+    'host_pets': 'pets_have',
     'duration_of_stay':'duration_of_stay',
-    'smoking_household_acceptable':'smoking_allowed',
+    'smoking_household_acceptable':'smoking_residents',
     'drinking_household_acceptable':'drinking_residents',
     'substances_household_acceptable':'substances_residents'
 }
 
+OPPOSITE_RESTRICTIONS = [
+    'pets_have',
+    'parenting_guest',
+    'guests_relationship',
+    'smoking_guest'
+
+]
 
 def main():
 
@@ -514,13 +527,27 @@ def main():
         if r not in responses_map.keys() or RESTRICTIONS[r] not in responses_map.keys():
             print('missing restriction question: \n\tguest: {}\n\thost: {}'.format(r, RESTRICTIONS[r]))
             continue
-        restriction_list.append({
-            'hostQuestionId': host_qids[RESTRICTIONS[r]],
-            'guestQuestionId': guest_qids[r],
-            'reasonText': 'Yes {} no {}'.format(RESTRICTIONS[r], r),
-            'hostResponseValue': responses_map[RESTRICTIONS[r]]['Yes'],
-            'guestResponseValue': responses_map[r]['No']
-        })
+
+        if r in OPPOSITE_RESTRICTIONS:
+
+            restriction_list.append({
+                'hostQuestionId': host_qids[RESTRICTIONS[r]],
+                'guestQuestionId': guest_qids[r],
+                'reasonText': 'No {} yes {}'.format(RESTRICTIONS[r], r),
+                'hostResponseValue': responses_map[RESTRICTIONS[r]]['No'],
+                'guestResponseValue': responses_map[r]['Yes']
+            })
+
+        else:
+
+            restriction_list.append({
+                'hostQuestionId': host_qids[RESTRICTIONS[r]],
+                'guestQuestionId': guest_qids[r],
+                'reasonText': 'Yes {} no {}'.format(RESTRICTIONS[r], r),
+                'hostResponseValue': responses_map[RESTRICTIONS[r]]['Yes'],
+                'guestResponseValue': responses_map[r]['No']
+            })
+
 
     with open(os.path.join(output_path, 'data-full.json'), 'w') as f:
         json.dump({

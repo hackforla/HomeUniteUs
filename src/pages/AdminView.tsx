@@ -107,10 +107,11 @@ const useStyles = makeStyles(theme =>
 export const MatchSummaryRow = (guestMatchSummary: GuestMatchSummary) => {
   const { data } = useHostHomeData()
 
+
   return (
     <Grid item xs={12} style={{ paddingBottom: "4px" }}>
       <Grid container>
-        <Grid item xs={2} alignContent="flex-start">
+        <Grid item xs={2}>
           <Typography component="p" align="left">
             <Link
               to={`/hosthome/guests/${guestMatchSummary.guestId}`}
@@ -125,7 +126,7 @@ export const MatchSummaryRow = (guestMatchSummary: GuestMatchSummary) => {
             {guestMatchSummary.numBids > 0 ? "Bid" : "No Selection"}
           </Typography>
         </Grid>
-        <Grid item xs={2} alignContent="flex-end">
+        <Grid item xs={2}>
           <Button
             color="primary"
             variant="contained"
@@ -170,7 +171,7 @@ export const AdminView = () => {
 
       return guestMatchSummary
     })
-  }, [data.guests, data.matchResults])
+  }, [data.guests, data.matchResults]);
 
   return (
     <React.Fragment>
@@ -178,13 +179,12 @@ export const AdminView = () => {
         <Grid item xs={12}>
           <Paper className={classes.paper}>
             <Typography
-              component="h2"
-              variant="h5"
-              color="inherit"
-              align="center"
+              component='h1'
+              align='center'
+              style={{ fontSize: '2em' }}
             >
-              Guests
-            </Typography>
+              All Guest Matches
+                        </Typography>
           </Paper>
         </Grid>
         <Grid item xs={12}>
@@ -220,7 +220,7 @@ export const AdminView = () => {
                   )
                   .map(
                     (guestMatchSummary: GuestMatchSummary, index: number) => (
-                      <MatchSummaryRow {...guestMatchSummary} />
+                      <MatchSummaryRow key={index} {...guestMatchSummary} />
                     )
                   )}
               </Grid>
