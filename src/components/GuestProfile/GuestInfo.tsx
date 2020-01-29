@@ -8,36 +8,44 @@ import { faPaw, faSmokingBan, faWineBottle, faPrescriptionBottleAlt } from "@for
 const useStyles = makeStyles(() => ({
     guestInfo: {
         width: "900px",
-        height: "550px",
+        height: "400px",
         borderRadius: "5px",
         boxShadow: "0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)",
         display: "flex",
         flexWrap: "wrap",
         alignItems: "space-around",
-        justifyContent: "space-around"
+        justifyContent: "space-around",
+        alignSelf: "flex-start",
+        margin: ".7em 0 0 0",
+        padding: "0 1em"
 
     },
     header: {
         width: "100%",
-        textAlign: "center"
     },
     headerText: {
         fontSize: "24px",
         color: "rgba(0, 0, 0, 0.54)"
     },
     info: {
-        width: "47%",
-        height: "81%",
+        width: "98%",
+        height: "70%",
         display: "inherit",
         flexDirection: "column",
         justifyContent: "space-around",
-        // alignItems: "center",
         color: "rgba(0, 0, 0, 0.54)"
     },
     spacer: {
         height: "19%",
         overflow: "scroll"
-    }
+    },
+    text: {
+        fontSize: "20px"
+    },
+    icon: {
+        transform: "scale(1.8)",
+        margin: "0 1.2em"
+    },
 }))
 
 interface Props {
@@ -51,10 +59,28 @@ const Guest = ({ guest }: Props) => {
     return (
         <div className={style.guestInfo}>
             <div className={style.header}>
-                <p className={style.headerText}>{guest.name}</p>
+                <p className={style.headerText}>{guest.name},{((new Date()).getFullYear() - guest.dateOfBirth.getFullYear())}</p>
             </div>
             <div className={style.info}>
                 <div className={style.spacer}>
+                    <FontAwesomeIcon icon={faSmokingBan} className={style.icon} />
+                    <span className={style.text}>{guest.smokingText}</span>
+                </div>
+                <div className={style.spacer}>
+                    <FontAwesomeIcon icon={faPaw} className={style.icon} />
+                    <span className={style.text}>{guest.petsText}</span>
+                </div>
+                <div className={style.spacer}>
+                    <FontAwesomeIcon icon={faPrescriptionBottleAlt} className={style.icon} />
+                    <span className={style.text}>{guest.substancesText}</span>
+                </div>
+                <div className={style.spacer}>
+                    <FontAwesomeIcon icon={faWineBottle} className={style.icon} />
+                    <span className={style.text}>{guest.drinkingText}</span>
+                </div>
+            </div>
+            {/* <div className={style.info}> */}
+            {/* <div className={style.spacer}>
                     <p>Introduction : {guest.guestIntro}</p>
                 </div>
                 <div className={style.spacer}>
@@ -62,18 +88,18 @@ const Guest = ({ guest }: Props) => {
                 </div>
                 <div className={style.spacer}>
                     <p>Date of Birth : {guest.dateOfBirth.toString()}</p>
-                </div>
-                <div className={style.spacer}>
-                    <FontAwesomeIcon icon={faPaw} size="sm" />
+                </div> */}
+            {/* <div className={style.spacer}>
+                    <FontAwesomeIcon icon={faPaw} />
                     <p>{guest.petsText}</p>
                 </div>
                 <div className={style.spacer}>
-                    <FontAwesomeIcon icon={faWineBottle} size="sm" />
+                    <FontAwesomeIcon icon={faWineBottle} />
                     <p>{guest.drinkingText}</p>
                 </div>
-            </div>
-            <div className={style.info}>
-                <div className={style.spacer}>
+            </div> */}
+            {/* <div className={style.info}> */}
+            {/* <div className={style.spacer}>
                     <p>Statement : {guest.guestStayStatement}</p>
                 </div>
                 <div className={style.spacer}>
@@ -81,16 +107,16 @@ const Guest = ({ guest }: Props) => {
                 </div>
                 <div className={style.spacer}>
                     <p>Challenges : {guest.guestChallenges}</p>
-                </div>
-                <div className={style.spacer}>
-                    <FontAwesomeIcon icon={faSmokingBan} size="sm" />
+                </div> */}
+            {/* <div className={style.spacer}>
+                    <FontAwesomeIcon icon={faSmokingBan} />
                     <p>{guest.smokingText}</p>
                 </div>
                 <div className={style.spacer}>
-                    <FontAwesomeIcon icon={faPrescriptionBottleAlt} size="sm" />
+                    <FontAwesomeIcon icon={faPrescriptionBottleAlt} />
                     <p>{guest.substancesText}</p>
                 </div>
-            </div>
+            </div> */}
         </div >
     )
 }

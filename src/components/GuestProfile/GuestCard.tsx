@@ -4,14 +4,14 @@ import { makeStyles } from "@material-ui/core/styles"
 
 const useStyles = makeStyles(() => ({
     guestCardContainer: {
-        height: "600px",
+        height: "400px",
         // width: "100%",
         padding: "10px 20px",
         flexGrow: 1,
         display: "flex",
         flexWrap: "wrap",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "flex-start"
 
     },
     guestImageContainer: {
@@ -21,7 +21,7 @@ const useStyles = makeStyles(() => ({
         justifyContent: "center",
     },
     guestImage: {
-        borderRadius: "5px",
+
         boxShadow: "0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)"
     }
 }))
