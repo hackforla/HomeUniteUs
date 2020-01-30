@@ -27,8 +27,8 @@ GUEST_QUESTIONS = [
     'pets_list',
     'host_pet_restrictions',
     'languages',
-    'duration_of_stay',
-    'number_of_guests'
+    # 'duration_of_stay',
+    # 'number_of_guests'
 ]
 
 GUEST_QUESTIONS_TEXT = {
@@ -42,7 +42,6 @@ GUEST_QUESTIONS_TEXT = {
     'substances_guest':'Do you use other substances?',
     'mental_illness':'Do you suffer from mental illness?',
     'guests_relationship': 'Are you in a relationship?',
-    'smoking_household_acceptable':'Are you willing to live in a home where smoking is permitted indoors?',
     'drinking_guest':'Do you drink alcohol?',
     'mental_illness_care':'If yes to, are you currently receiving care/treatment?',
     'parenting_guest':'Are you parenting?',
@@ -62,11 +61,11 @@ QUESTIONS = [
     'smoking_allowed',
     'smoking_residents',
     'drinking_residents',
-    'drinking_concerns',
+    # 'drinking_concerns',
     'substances_residents',
-    'substances_concerns',
-    'host_type',
-    'hosting_amount',
+    # 'substances_concerns',
+    # 'duration_of_stay',
+    # 'hosting_amount',
     'pets_hosting',
     'pets_have',
     # 'pet_restrictions',
@@ -87,6 +86,7 @@ QUESTIONS_TEXT = {
     'pets_have': 'Do you have any pets?',
     # 'pet_restrictions': 'Are you willing to host a guest who has pets?',
     'youth_parenting': 'Are you willing to host a guest who is parenting?',
+    'duration_of_stay': 'What duration of stay are you looking for?',
     'pets_have': 'Do you have pets?',
     'youth_relationship':'Are you willing to host a guest who is in a relationship?',
 }
@@ -99,6 +99,7 @@ QUESTIONS_DISPLAY = {
     'substances_residents': 'Substances Residents',
     'substances_concerns': 'Substances Concerns',
     'host_type': 'Host Type',
+    'duration_of_stay': 'Host Type',
     'hosting_amount': 'Number of Guests',
     'pets_have': 'Has Pets',
     'pets_hosting': 'Pets OK',
@@ -163,8 +164,38 @@ OPPOSITE_RESTRICTIONS = [
     'parenting_guest',
     'guests_relationship',
     'smoking_guest'
-
 ]
+
+
+ENUM_Q = {
+    'hosting_amount': 10,
+    'number_of_guests': 10,
+    'duration_of_stay': 3
+}
+
+
+
+
+def get_home_type(responses):
+
+    r = responses.get('duration_of_stay', ['full'])
+
+    if len(r) > 1:
+        return 'HostHomeType.Both'
+
+    elif r[0].lower() == 'full':
+
+        return 'HostHomeType.Full'
+
+    else:
+
+        return 'HostHomeType.Respite'
+
+
+
+
+def get_rvs(start, num):
+    return list(range(start, start + num))
 
 def main():
 
@@ -263,6 +294,29 @@ def main():
 
             bool_i += 2
             question_i += 1
+
+        elif q in ENUM_Q:
+
+            values = get_rvs(bool_i, ENUM_Q[q])
+
+            rvs = dict([(str(x), x) for x in values])
+
+            rvsFull = [{'id': x, 'text': str(x), 'displayText': str(x)} for x in values]
+
+            
+            questions_out[q] = {
+                'responseValues': rvs,
+                'questionKey': q,
+                'id': question_i,
+                'text': QUESTIONS_TEXT[q],
+                'displayName': QUESTIONS_DISPLAY[q],
+                'multiplicity': 'ResponseMultiplicity.ONE'
+            }
+
+            response_values.extend(rvsFull)
+
+            bool_i += ENUM_Q[q]
+
         else:
             print('skipping host question: {}'.format(q))
 
@@ -332,6 +386,28 @@ def main():
 
             bool_i += 2
             question_i += 1
+            
+        # elif q in ENUM_Q:
+
+        #     values = get_rvs(bool_i, ENUM_Q[q])
+
+        #     rvs = dict([(str(x), x) for x in values])
+
+        #     rvsFull = [{'id': x, 'text': str(x), 'displayText': str(x)} for x in values]
+
+        #     questions_out[q] = {
+        #         'responseValues': rvs,
+        #         'questionKey': q,
+        #         'id': question_i,
+        #         'text': QUESTIONS_TEXT[q],
+        #         'displayName': QUESTIONS_DISPLAY[q],
+        #         'multiplicity': 'ResponseMultiplicity.ONE'
+        #     }
+
+        #     response_values.extend(rvsFull)
+
+        #     bool_i += ENUM_Q[q]
+
 
         else:
             print('--- type: other')
@@ -380,7 +456,8 @@ def main():
                 'durationOfStay': responses.get('duration_of_stay', ['N/A'])[0],
                 'hostingAmount': responses.get('hosting_amount', 1),
                 'youthParenting': responses.get('youth_parenting', False),
-                'youthRelationship': responses.get('youth_relationship', False)
+                'youthRelationship': responses.get('youth_relationship', False),
+                'type': get_home_type(responses)
             })
 
         except Exception as e:
@@ -418,6 +495,19 @@ def main():
                     'responseValues': [host_responses[q]],
                     'questionId': questions_out[q]['id']
                 })
+
+            # if q in ENUM_Q:
+
+            #     host_response_data.append({
+            #         'hostId': int(host['id'][1:]),
+            #         'responseValues': [host_responses[q]],
+            #         'questionId': questions_out[q]['id']
+            #     })
+
+
+
+
+
 
         responses_out[host['id']] = host_responses
 
@@ -457,7 +547,9 @@ def main():
                 'petsText': responses.get('pets_text', '') or 'None',
                 'drinkingText': responses.get('drinking_text', ''),
                 'smokingText': responses.get('smoking_text', ''),
-                'substancesText': responses.get('substances_text', '')
+                'numberOfGuests': responses.get('number_of_guests', ''),
+                'substancesText': responses.get('substances_text', ''),
+                'type': get_home_type(responses)
             })
 
         except KeyError as e:
@@ -553,14 +645,46 @@ def main():
         json.dump({
             'guests': guests,
             'hosts': hosts,
-            'guestQuestions': [{
+            'guestQuestions': [
+                {
+                    "responseValues": [],
+                    "questionKey": "duration_of_stay",
+                    "id": 1000,
+                    "text": "How long would you like to stay?",
+                    "multiplicity": 'ResponseMultiplicity.ONE'
+                },
+                {
+                    "responseValues": [],
+                    "questionKey": "number_of_guests",
+                    "id": 2000,
+                    "text": "How many guests?",
+                    "multiplicity": 'ResponseMultiplicity.ONE'
+                }
+            ] + [{
                 'responseValues': list(x['responseValues'].values()),
                 'questionKey': x['questionKey'],
                 'id': x['id'],
                 'text': x['text'],
                 'multiplicity': 'ResponseMultiplicity.ONE'
             } for x in list(guest_questions_out.values())],
-            'hostQuestions': [{
+            'hostQuestions': [
+                {
+                    "responseValues": [],
+                    "questionKey": "hosting_amount",
+                    "id": 2000,
+                    "text": "How many guests?",
+                    "displayName": "Number of Guests",
+                    "multiplicity": 'ResponseMultiplicity.ONE'
+                },
+                {
+                    "responseValues": [],
+                    "questionKey": "duration_of_stay",
+                    "id": 1000,
+                    "text": "How long would you like to host?",
+                    "displayName": "Host Type",
+                    "multiplicity": 'ResponseMultiplicity.ONE'
+                }
+            ]+ [{
                 'responseValues': list(x['responseValues'].values()),
                 'questionKey': x['questionKey'],
                 'id': x['id'],
@@ -621,4 +745,10 @@ def main():
 
 
 if __name__ == '__main__':
+
+
+
+    print('get_rvs(10, 5): {}'.format(get_rvs(10, 5)))
+    print('get_rvs(2, 3): {}'.format(get_rvs(2, 3)))
+    print('get_rvs(46, 12): {}'.format(get_rvs(46, 12)))
     main()

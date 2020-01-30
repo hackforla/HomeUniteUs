@@ -1,3 +1,5 @@
+import { HostHomeType } from "./HostHomeType";
+
 export interface Guest {
     id: number;
     name: string;
@@ -15,4 +17,6 @@ export interface Guest {
     drinkingText: string;
     smokingText: string;
     substancesText: string;
+    type: HostHomeType;
+    numberOfGuests: number;
 }

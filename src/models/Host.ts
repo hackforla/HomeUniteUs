@@ -1,4 +1,5 @@
 import { Housemate } from "./Housemate";
+import { HostHomeType } from "./HostHomeType";
 
 export interface Host {
     id: number;
@@ -30,4 +31,5 @@ export interface Host {
     hostingAmount: number;
     youthParenting: boolean;
     youthRelationship: boolean;
+    type: HostHomeType;
 }
