@@ -21,6 +21,7 @@ const useStyles = makeStyles(theme => ({
   },
   yesButton: {
     marginLeft: "20px",
+    backgroundColor: "#00AAEF"
   },
   extraSpace: {
     height: '50px',

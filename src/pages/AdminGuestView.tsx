@@ -99,7 +99,7 @@ const useStyles = makeStyles(theme => (
             backgroundColor: '#ecf0f1'
         },
         tableHeader: {
-            backgroundColor: '#008DA7',
+            backgroundColor: '#00AAEF',
             // fontFamily: 'Brandon Grotesque',
             fontStyle: 'normal',
             fontWeight: 'bold',
@@ -114,6 +114,15 @@ const useStyles = makeStyles(theme => (
             fontSize: '16px',
             lineHeight: '22px',
             color: '#FFFFFF'
+        },
+        matchingHeaderCell: {
+            // fontFamily: 'Brandon Grotesque',
+            fontStyle: 'normal',
+            fontWeight: 'bold',
+            fontSize: '16px',
+            lineHeight: '22px',
+            color: '#FFFFFF',
+            textAlign: 'center'
         },
         tableRowOdd: {
             // fontFamily: 'Brandon Grotesque',
@@ -134,17 +143,11 @@ interface InterestMapping {
     [key: number]: InterestDescription;
 }
 
-
-
-
-
-
 export const AdminGuestView = () => {
 
     const classes = useStyles({});
     const { id } = useParams();
     const guestId = parseInt(id || '-1');
-
 
     const {
         data,
@@ -161,14 +164,11 @@ export const AdminGuestView = () => {
     const havePetsQuestion = guestQuestionsByKey.get('pets_have') as GuestQuestion;
     const hostPetsQuestion = guestQuestionsByKey.get('host_pets') as GuestQuestion;
 
-
-
     const history = useHistory();
 
     const guest: Guest = data.guests.find((g: Guest) => g.id === guestId) || {} as Guest;
 
     const matched = React.useMemo(() => {
-
         return data.hosts.filter((host: Host) => {
             return data.matchResults.filter((matchResult: MatchResult) => (
                 matchResult.guestId === guestId
@@ -180,7 +180,6 @@ export const AdminGuestView = () => {
     }, [data.hosts, data.matchResults]);
 
     const unmatched = React.useMemo(() => {
-
         return data.hosts.filter((host: Host) => {
             return data.matchResults.filter((matchResult: MatchResult) => (
                 matchResult.guestId === guestId
@@ -201,10 +200,6 @@ export const AdminGuestView = () => {
             )).length > 0;
         });
     }, [data.hosts, data.matchResults]);
-
-
-
-
 
     // const unmatched = React.useMemo(() => {
     //     return data.hosts.filter((host: Host) => matched.filter((matchedHost: Host) => host.id === matchedHost.id).length < 1)
@@ -309,16 +304,19 @@ export const AdminGuestView = () => {
     }
 
     const FailCell = (props: { value: string }) => <div>
-        <div style={{padding:'3px 0px'}}>
+        <div style={{padding:'0px 5px', textAlign: 'center'}}>
             <FontAwesomeIcon
                 icon={faTimesCircle}
                 style={{ 'color': 'red' }}
             />
 
         </div>
-        <div>{props.value}
-        </div>
+        <div style={{padding:'0px 3px', textAlign: 'center'}}>{props.value}</div>
     </div>;
+
+    const SuccessCell = (props: {value:string}) => <div style={{padding:'0px 3px', textAlign: 'center'}}>
+        {props.value}
+    </div>
 
     const MatchTable = (props: { tableName: string, hostList: Array<Host>, displayInterested: boolean, allowClick: boolean }) => {
         return (
@@ -333,7 +331,7 @@ export const AdminGuestView = () => {
                                 {
                                     data.hostQuestions.map((q: HostQuestion, index: number) => {
                                         return (
-                                            <TableCell className={classes.tableHeaderCell} key={index}>{q.displayName}</TableCell>
+                                            <TableCell className={classes.matchingHeaderCell} key={index}>{q.displayName}</TableCell>
                                         );
                                     })
                                 }
@@ -361,30 +359,30 @@ export const AdminGuestView = () => {
                                                                 if (q.questionKey === 'duration_of_stay') {
 
                                                                     if (!hostQuestionsFailed.has(host.id)) {
-                                                                        return <div>{hostTypeDisplay(host.type)}</div>;
+                                                                        return <SuccessCell value={hostTypeDisplay(host.type)} />;
                                                                     }
 
                                                                     const failedQuestionsForHost = hostQuestionsFailed.get(host.id) as Array<number>;
                                                                     const isFailed = failedQuestionsForHost.indexOf(q.id) >= 0;
 
                                                                     return isFailed
-                                                                        ? <FailCell key={index} value={hostTypeDisplay(host.type)} />
-                                                                        : <div>{hostTypeDisplay(host.type)}</div>
+                                                                        ? <FailCell value={hostTypeDisplay(host.type)} />
+                                                                        : <SuccessCell value={hostTypeDisplay(host.type)} />;
 
                                                                 }
 
                                                                 if (q.questionKey === 'hosting_amount') {
 
                                                                     if (!hostQuestionsFailed.has(host.id)) {
-                                                                        return <div>{host.hostingAmount}</div>;
+                                                                        return <SuccessCell value={host.hostingAmount.toString()} />;
                                                                     }
 
                                                                     const failedQuestionsForHost = hostQuestionsFailed.get(host.id) as Array<number>;
                                                                     const isFailed = failedQuestionsForHost.indexOf(q.id) >= 0;
 
                                                                     return isFailed
-                                                                        ? <FailCell key={index} value={host.hostingAmount.toString()} />
-                                                                        : <div>{host.hostingAmount}</div>
+                                                                        ? <FailCell value={host.hostingAmount.toString()} />
+                                                                        : <SuccessCell value={host.hostingAmount.toString()} />;
 
                                                                 }
 
@@ -405,28 +403,21 @@ export const AdminGuestView = () => {
                                                                             throw new Error(`Unknown response value ID: ${rvId}`);
                                                                         }
 
-                                                                        console.log(`data.hostQuestions.map: looking at rv: ${JSON.stringify(rv)}`)
 
                                                                         if (!hostQuestionsFailed.has(host.id)) {
-                                                                            return <div>{rv.text}</div>;
+                                                                            return <SuccessCell value={rv.text} />;
                                                                         }
 
 
                                                                         const failedQuestionsForHost = hostQuestionsFailed.get(host.id) as Array<number>;
 
-                                                                        console.log(`data.hostQuestions.map: looking at failedQuestionsForHost: ${JSON.stringify(failedQuestionsForHost)}`);
 
                                                                         const isFailed = failedQuestionsForHost.indexOf(q.id) >= 0;
-
-                                                                        console.log(`data.hostQuestions.map: looking at isFailed: ${JSON.stringify(isFailed)}`);
 
 
                                                                         return isFailed
                                                                             ? <FailCell key={index} value={rv.text} />
-                                                                            : <div>{rv.text}</div>
-
-
-
+                                                                            : <SuccessCell value={rv.text} />;
 
                                                                     })
                                                             })()

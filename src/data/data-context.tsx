@@ -3387,7 +3387,7 @@ const initialState: HostHomeData = {
             "questionKey": "hosting_amount",
             "id": 2000,
             "text": "How many guests?",
-            "displayName": "Number of Guests",
+            "displayName": "# of Guests",
             "multiplicity": ResponseMultiplicity.ONE
         },
         {

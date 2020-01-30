@@ -93,10 +93,16 @@ const useStyles = makeStyles(theme =>
       marginTop: theme.spacing(8),
       padding: theme.spacing(6, 0)
     },
-    paper: {
+    paperHeader: {
       padding: theme.spacing(2),
       textAlign: "center",
       color: theme.palette.text.secondary
+    },
+    paper: {
+      padding: theme.spacing(3),
+      textAlign: "center",
+      color: theme.palette.text.secondary,
+      border: "1px solid #ADADAD"
     },
     table: {
       minWidth: 650
@@ -131,6 +137,7 @@ export const MatchSummaryRow = (guestMatchSummary: GuestMatchSummary) => {
             color="primary"
             variant="contained"
             component={Link}
+            style={{backgroundColor: '#00AAEF'}}
             to={`/hosthome/admin/guest/${guestMatchSummary.guestId}`}
           >
             {`${guestMatchSummary.numMatches} matches`}
@@ -177,7 +184,7 @@ export const AdminView = () => {
     <React.Fragment>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Paper className={classes.paper}>
+          <Paper className={classes.paperHeader}>
             <Typography
               component='h1'
               align='center'
