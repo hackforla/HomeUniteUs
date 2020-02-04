@@ -1,4 +1,6 @@
 **/node_modules
 **/dist
-src/data/fake/output
+**/output
+build
+
 
