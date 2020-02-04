@@ -8,6 +8,7 @@ const useStyles = makeStyles(() => ({
     flexWrap: 'wrap',
     height: '400px',
     minWidth: '600px',
+    maxWidth: '800px',
   },
   image: {
     border: '1px hidden blue',

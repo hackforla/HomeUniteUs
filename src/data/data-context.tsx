@@ -99,7 +99,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I smoke cigarettes, but I prefer a smoke free environment indoors.",
+            "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Respite
@@ -119,7 +119,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, but I'm not open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -139,7 +139,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol. I have concerns about my drinking: Mind until industry once.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, but I'm not open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -159,7 +159,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I smoke cigarettes, but I prefer a smoke free environment indoors.",
+            "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
             "type": HostHomeType.Full
@@ -179,7 +179,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol and prefer an alcohol-free environment.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Respite
@@ -199,7 +199,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
             "type": HostHomeType.Full
@@ -219,7 +219,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -259,7 +259,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol and prefer an alcohol-free environment.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -279,7 +279,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -299,7 +299,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have pet(s), and would love to live with more pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
             "type": HostHomeType.Full
@@ -319,7 +319,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances. I have concerns about my substance use: Difficult now usually play factor west focus.",
             "type": HostHomeType.Full
@@ -339,7 +339,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have pet(s), and would love to live with more pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I smoke cigarettes, but I prefer a smoke free environment indoors.",
+            "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
             "type": HostHomeType.Full
@@ -359,7 +359,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -379,7 +379,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, but I'm not open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -399,7 +399,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -419,7 +419,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol and prefer an alcohol-free environment. I have concerns about my drinking: System worry can since thank.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances. I have concerns about my substance use: Kid gun finish clearly.",
             "type": HostHomeType.Full
@@ -459,7 +459,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
             "type": HostHomeType.Full
@@ -479,7 +479,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -499,7 +499,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -519,7 +519,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -539,7 +539,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol. I have concerns about my drinking: Method pull beat book her.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -559,7 +559,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and prefer to live in a pet free place.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -579,7 +579,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol and prefer an alcohol-free environment.",
-            "smokingText": "I smoke cigarettes, but I prefer a smoke free environment indoors.",
+            "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -619,7 +619,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -639,7 +639,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -659,7 +659,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and prefer to live in a pet free place.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I smoke cigarettes, but I prefer a smoke free environment indoors.",
+            "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances. I have concerns about my substance use: Experience machine fear themselves hour yet affect.",
             "type": HostHomeType.Full
@@ -679,7 +679,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and prefer to live in a pet free place.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 3,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Respite
@@ -699,7 +699,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and prefer to live in a pet free place.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I smoke cigarettes, but I prefer a smoke free environment indoors.",
+            "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 3,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -719,7 +719,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
             "type": HostHomeType.Full
@@ -739,7 +739,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, but I'm not open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -759,7 +759,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -779,7 +779,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 2,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -799,7 +799,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have pet(s), and would love to live with more pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I smoke cigarettes, but I prefer a smoke free environment indoors.",
+            "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -819,7 +819,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and prefer to live in a pet free place.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I smoke cigarettes, but I prefer a smoke free environment indoors.",
+            "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -839,7 +839,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -859,7 +859,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I smoke cigarettes, but I prefer a smoke free environment indoors.",
+            "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
             "type": HostHomeType.Full
@@ -879,7 +879,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -899,7 +899,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have pet(s), and would love to live with more pets.",
             "drinkingText": "I don't drink alcohol and prefer an alcohol-free environment.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -919,7 +919,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -939,7 +939,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I smoke cigarettes, but I prefer a smoke free environment indoors.",
+            "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -959,7 +959,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have pet(s), and would love to live with more pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -979,7 +979,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, but I'm not open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Respite
@@ -999,7 +999,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "My pet(s) only need new human friends.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances. I have concerns about my substance use: Decade past organization check lose house ask.",
             "type": HostHomeType.Full
@@ -1019,7 +1019,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Respite
@@ -1039,7 +1039,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1059,7 +1059,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1079,7 +1079,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1099,7 +1099,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and prefer to live in a pet free place.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I smoke cigarettes, but I prefer a smoke free environment indoors.",
+            "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1119,7 +1119,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1139,7 +1139,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I smoke cigarettes, but I prefer a smoke free environment indoors.",
+            "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Respite
@@ -1159,7 +1159,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and prefer to live in a pet free place.",
             "drinkingText": "I drink alcohol, but I'm not open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
             "type": HostHomeType.Respite
@@ -1179,7 +1179,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1199,7 +1199,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
             "type": HostHomeType.Full
@@ -1219,7 +1219,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have pet(s), and would love to live with more pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1239,7 +1239,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have pet(s), and would love to live with more pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol. I have concerns about my drinking: Relationship beautiful news.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
             "type": HostHomeType.Full
@@ -1259,7 +1259,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1279,7 +1279,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
             "type": HostHomeType.Full
@@ -1299,7 +1299,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and prefer to live in a pet free place.",
             "drinkingText": "I drink alcohol, but I'm not open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1339,7 +1339,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1359,7 +1359,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol. I have concerns about my drinking: Performance election cell then fill others.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1379,7 +1379,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have pet(s), and would love to live with more pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1399,7 +1399,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1419,7 +1419,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 3,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1439,7 +1439,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol. I have concerns about my drinking: Matter fish candidate reason imagine.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1459,7 +1459,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and prefer to live in a pet free place.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 2,
             "substancesText": "I use substances, but I'm not open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1479,7 +1479,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, but I'm not open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Respite
@@ -1499,7 +1499,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I smoke cigarettes, but I prefer a smoke free environment indoors.",
+            "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1519,7 +1519,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have pet(s), and would love to live with more pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
             "type": HostHomeType.Respite
@@ -1579,7 +1579,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I smoke cigarettes, but I prefer a smoke free environment indoors.",
+            "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1599,7 +1599,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have pet(s), and would love to live with more pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1619,7 +1619,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and prefer to live in a pet free place.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol. I have concerns about my drinking: Character program prevent modern something could coach.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances. I have concerns about my substance use: Front more whole one away foreign again.",
             "type": HostHomeType.Respite
@@ -1639,7 +1639,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have pet(s), and would love to live with more pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1659,7 +1659,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have pet(s), and would love to live with more pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
             "type": HostHomeType.Respite
@@ -1679,7 +1679,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol and prefer an alcohol-free environment.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1699,7 +1699,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I smoke cigarettes, but I prefer a smoke free environment indoors.",
+            "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1719,7 +1719,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1739,7 +1739,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have pet(s), and would love to live with more pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol. I have concerns about my drinking: Loss couple identify certainly military.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
             "type": HostHomeType.Full
@@ -1759,7 +1759,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
             "type": HostHomeType.Full
@@ -1779,7 +1779,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1799,7 +1799,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1819,7 +1819,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and prefer to live in a pet free place.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol. I have concerns about my drinking: Line standard party water successful.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances. I have concerns about my substance use: Point main husband anyone.",
             "type": HostHomeType.Respite
@@ -1839,7 +1839,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, but I'm not open to other people in the household drinking alcohol.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Respite
@@ -1859,7 +1859,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I smoke cigarettes, but I prefer a smoke free environment indoors.",
+            "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 3,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1879,7 +1879,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1899,7 +1899,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol. I have concerns about my drinking: Rather black lawyer.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, but I'm not open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1919,7 +1919,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Respite
@@ -1939,7 +1939,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 3,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1959,7 +1959,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol. I have concerns about my drinking: Pull center sometimes evening role business.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Respite
@@ -1979,7 +1979,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have pet(s), and would love to live with more pets.",
             "drinkingText": "I don't drink alcohol and prefer an alcohol-free environment.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -1999,7 +1999,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol and prefer an alcohol-free environment.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -2019,7 +2019,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 2,
             "substancesText": "I use substances, and I'm open to other people in the household using substances. I have concerns about my substance use: Nature become action station grow.",
             "type": HostHomeType.Respite
@@ -2039,7 +2039,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and prefer to live in a pet free place.",
             "drinkingText": "I drink alcohol, but I'm not open to other people in the household drinking alcohol.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -2059,7 +2059,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I don't smoke, but I'm fine with others smoking indoors.",
+            "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
             "type": HostHomeType.Respite
@@ -2079,7 +2079,7 @@ const initialState: HostHomeData = {
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have no pets and would love to live with pets.",
             "drinkingText": "I don't drink alcohol and prefer an alcohol-free environment.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Full
@@ -2093,13 +2093,13 @@ const initialState: HostHomeData = {
             "email": "kirk.chu@hackforla.com",
             "guestIntro": "Hi, my name's Kirk and I recently lost my place and need a place to stay. I failed this drug screening, and they fired me from my last job. I'm in to sports, movies, hanging out with friends. I enjoy a good mystery novel from time to time.",
             "guestChallenges": "I'm allergic to a lot of dust, so I need a clean environment to be comfortable.",
-            "employmentInfo": "Software Engineer, MerQBiz, 2016-03-06 to present",
+            "employmentInfo": "",
             "guestStayStatement": "My goals are to become a great creator, and create cool things for this world. I feel like having a warm home to stay and a supportive group can help me achieve my dreams.",
             "name": "Kirk Chu",
             "imageUrl": "/hosthome/img/profile-placeholder.png",
             "petsText": "I have pet(s), and would love to live with more pets.",
             "drinkingText": "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-            "smokingText": "I do not smoke cigarettes, and I prefer a smoke-free environment indoors.",
+            "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
             "type": HostHomeType.Respite
@@ -3165,15 +3165,20 @@ const initialState: HostHomeData = {
             "email": "bonnie@hackforla.com",
             "phone": "310-555-1212",
             "address": "Playa Vista, CA",
-            "employmentInfo": "Hack For LA, Executive Director, 2018-10-08 to present",
-            "contactAddress": "13428 Maxella Avenue, 821,\nMarina Del Rey, CA, 90292",
+            "employmentInfo": "",
+            "contactAddress": "Marina Del Rey, CA",
             "name": "Bonnie Wolfe",
             "imageUrl": "/hosthome/img/profile-placeholder.png",
-            "petsText": "None",
-            "drinkingText": "",
-            "smokingText": "",
-            "substancesText": "",
+            "petsText": "We provide a pet free environment.",
+            "drinkingText": "We drink alcohol.",
+            "smokingText": "We provide a smoke free environment.",
+            "substancesText": "We use substances.",
             "householdMembers": [
+                {
+                    "name": "Bonnie A Wolfe",
+                    "age": 39,
+                    "relationship": "host"
+                },
                 {
                     "name": "Dean Church",
                     "age": 40,
@@ -3387,7 +3392,7 @@ const initialState: HostHomeData = {
             "questionKey": "hosting_amount",
             "id": 2000,
             "text": "How many guests?",
-            "displayName": "# of Guests",
+            "displayName": "Number of Guests",
             "multiplicity": ResponseMultiplicity.ONE
         },
         {
@@ -5117,7 +5122,7 @@ const initialState: HostHomeData = {
         {
             "guestId": 1,
             "responseValues": [
-                38
+                39
             ],
             "questionId": 11
         },
@@ -14042,7 +14047,7 @@ const initialState: HostHomeData = {
         {
             "guestId": 76,
             "responseValues": [
-                38
+                39
             ],
             "questionId": 11
         },
@@ -14280,7 +14285,7 @@ const initialState: HostHomeData = {
         {
             "guestId": 78,
             "responseValues": [
-                38
+                39
             ],
             "questionId": 11
         },

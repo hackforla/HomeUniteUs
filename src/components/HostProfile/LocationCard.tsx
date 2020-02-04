@@ -2,6 +2,7 @@ import * as React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import LocationImages from "./LocationImages";
 import { Host } from "../../models";
+import { Grid } from "@material-ui/core";
 
 const useStyles = makeStyles(() => ({
   locationCardContainer: {
@@ -38,19 +39,30 @@ export const LocationCard = ({ host }: ILocationCardProps) => {
 
   return (
     <div className={classes.locationCardContainer}>
-      <LocationImages />
 
+    <Grid container>
+      <Grid xs={12}>
+      <LocationImages />
+        
+      </Grid>
+      <Grid xs={12}>
       <div className={classes.locationDescriptionContainer}>
         <div className={classes.locationInfo}>
           {host.housingType} | {host.address}
         </div>
 
         <div className={classes.visitorInfo}>
-          Our {host.housingType.toLowerCase()} can host {host.hostingAmount}{" "}
-          visitor
-          {host.hostingAmount > 1 ? "s" : ""}.
+          {`Our ${host.housingType.toLowerCase()} can host ${host.hostingAmount} ${host.hostingAmount > 1 ? 'visitors' : 'visitor'}`}
         </div>
       </div>
+        
+      </Grid>
+    </Grid>
+
+
+
+
+
     </div>
   );
 };

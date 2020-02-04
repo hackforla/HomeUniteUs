@@ -247,7 +247,7 @@ export const App = () => {
                         <main>
                             <Switch>
                                 <Route exact path='/' component={AboutPage} />
-                                <Route exact path='/hosthome' component={WelcomeView} />
+                                <Route exact path='/hosthome' component={AdminView} />
                                 <Route path='/hosthome/about' component={AboutPage} />
                                 <Route path='/hosthome/admin/guests' component={AdminView} />
                                 <Route path='/hosthome/admin/guest/:id' component={AdminGuestView} />

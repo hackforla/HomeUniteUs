@@ -1,6 +1,6 @@
 #!/bin/sh
 
-python py2ts.py fakehosts21_v3.json fakeguests101_v3.json
+python py2ts.py fakehosts21_v3.1.json fakeguests101_v3.1.json
 
 cat output/data-full.json \
     | sed 's/"ResponseMultiplicity\.ONE"/ResponseMultiplicity.ONE/g' \
