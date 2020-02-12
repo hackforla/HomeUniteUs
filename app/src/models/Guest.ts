@@ -19,4 +19,6 @@ export interface Guest {
     substancesText: string;
     type: HostHomeType;
     numberOfGuests: number;
+    employmentCompany: string;
+    employmentPosition: string;
 }

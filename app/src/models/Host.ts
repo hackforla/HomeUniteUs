@@ -32,4 +32,6 @@ export interface Host {
     youthParenting: boolean;
     youthRelationship: boolean;
     type: HostHomeType;
+    employmentCompany: string;
+    employmentPosition: string;
 }

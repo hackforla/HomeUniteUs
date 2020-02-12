@@ -41,7 +41,7 @@ export const HostAdditionalInfo = ({
   const additionalInfos = [
     {
       label: "Employment:",
-      content: host.employmentInfo
+      content: `I'm currently employed at ${host.employmentCompany} as ${host.employmentPosition}`
     },
     {
       label: "My passions are:",

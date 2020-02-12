@@ -102,6 +102,8 @@ const initialState: HostHomeData = {
             "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Erickson-Butler",
+            "employmentPosition": "Hospital pharmacist",
             "type": HostHomeType.Respite
         },
         {
@@ -122,6 +124,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, but I'm not open to other people in the household using substances.",
+            "employmentCompany": "Wheeler-Cross",
+            "employmentPosition": "Bookseller",
             "type": HostHomeType.Full
         },
         {
@@ -142,6 +146,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, but I'm not open to other people in the household using substances.",
+            "employmentCompany": "Reed-Gross",
+            "employmentPosition": "Scientist, biomedical",
             "type": HostHomeType.Full
         },
         {
@@ -162,6 +168,8 @@ const initialState: HostHomeData = {
             "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
+            "employmentCompany": "Oneill, Johnson and Banks",
+            "employmentPosition": "English as a second language teacher",
             "type": HostHomeType.Full
         },
         {
@@ -182,6 +190,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Johnson PLC",
+            "employmentPosition": "Retail merchandiser",
             "type": HostHomeType.Respite
         },
         {
@@ -202,6 +212,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
+            "employmentCompany": "Walker, Cross and Howard",
+            "employmentPosition": "Barista",
             "type": HostHomeType.Full
         },
         {
@@ -222,6 +234,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Snyder PLC",
+            "employmentPosition": "Psychologist, prison and probation services",
             "type": HostHomeType.Full
         },
         {
@@ -242,6 +256,8 @@ const initialState: HostHomeData = {
             "smokingText": "I smoke, and if permitted, I'm fine with indoor smoking.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
+            "employmentCompany": "Young Ltd",
+            "employmentPosition": "Advice worker",
             "type": HostHomeType.Full
         },
         {
@@ -262,6 +278,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Howe Inc",
+            "employmentPosition": "Operational investment banker",
             "type": HostHomeType.Full
         },
         {
@@ -282,6 +300,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Jensen Ltd",
+            "employmentPosition": "Civil Service administrator",
             "type": HostHomeType.Full
         },
         {
@@ -302,6 +322,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
+            "employmentCompany": "Sandoval-Taylor",
+            "employmentPosition": "Embryologist, clinical",
             "type": HostHomeType.Full
         },
         {
@@ -322,6 +344,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances. I have concerns about my substance use: Difficult now usually play factor west focus.",
+            "employmentCompany": "Webster, Morse and Jones",
+            "employmentPosition": "Social research officer, government",
             "type": HostHomeType.Full
         },
         {
@@ -342,6 +366,8 @@ const initialState: HostHomeData = {
             "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
+            "employmentCompany": "Long-Nunez",
+            "employmentPosition": "Learning disability nurse",
             "type": HostHomeType.Full
         },
         {
@@ -362,6 +388,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Hernandez, Perez and Adams",
+            "employmentPosition": "Engineer, structural",
             "type": HostHomeType.Full
         },
         {
@@ -382,6 +410,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, but I'm not open to other people in the household using substances.",
+            "employmentCompany": "Brennan, Hernandez and Evans",
+            "employmentPosition": "Technical brewer",
             "type": HostHomeType.Full
         },
         {
@@ -402,6 +432,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Jimenez-Espinoza",
+            "employmentPosition": "Doctor, general practice",
             "type": HostHomeType.Full
         },
         {
@@ -422,6 +454,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances. I have concerns about my substance use: Kid gun finish clearly.",
+            "employmentCompany": "Osborn-Cooke",
+            "employmentPosition": "Tax adviser",
             "type": HostHomeType.Full
         },
         {
@@ -442,6 +476,8 @@ const initialState: HostHomeData = {
             "smokingText": "I smoke, and if permitted, I'm fine with indoor smoking.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Miller-Maldonado",
+            "employmentPosition": "Manufacturing engineer",
             "type": HostHomeType.Full
         },
         {
@@ -462,6 +498,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
+            "employmentCompany": "Davis-Fleming",
+            "employmentPosition": "Proofreader",
             "type": HostHomeType.Full
         },
         {
@@ -482,6 +520,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Vargas, Ellison and Hernandez",
+            "employmentPosition": "Social research officer, government",
             "type": HostHomeType.Full
         },
         {
@@ -502,6 +542,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
+            "employmentCompany": "Phillips-King",
+            "employmentPosition": "Civil engineer, contracting",
             "type": HostHomeType.Full
         },
         {
@@ -522,6 +564,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Nelson-Hahn",
+            "employmentPosition": "Learning disability nurse",
             "type": HostHomeType.Full
         },
         {
@@ -542,6 +586,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
+            "employmentCompany": "Baker Inc",
+            "employmentPosition": "Clinical embryologist",
             "type": HostHomeType.Full
         },
         {
@@ -562,6 +608,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Francis LLC",
+            "employmentPosition": "Tree surgeon",
             "type": HostHomeType.Full
         },
         {
@@ -582,6 +630,8 @@ const initialState: HostHomeData = {
             "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Jones, Galvan and Garcia",
+            "employmentPosition": "Doctor, hospital",
             "type": HostHomeType.Full
         },
         {
@@ -602,6 +652,8 @@ const initialState: HostHomeData = {
             "smokingText": "I smoke, and if permitted, I'm fine with indoor smoking.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Fisher, Medina and Butler",
+            "employmentPosition": "Phytotherapist",
             "type": HostHomeType.Full
         },
         {
@@ -622,6 +674,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Myers and Sons",
+            "employmentPosition": "Medical technical officer",
             "type": HostHomeType.Full
         },
         {
@@ -642,6 +696,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
+            "employmentCompany": "Waller, Hughes and Raymond",
+            "employmentPosition": "Nutritional therapist",
             "type": HostHomeType.Full
         },
         {
@@ -662,6 +718,8 @@ const initialState: HostHomeData = {
             "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances. I have concerns about my substance use: Experience machine fear themselves hour yet affect.",
+            "employmentCompany": "Phillips, Maxwell and Davila",
+            "employmentPosition": "Medical physicist",
             "type": HostHomeType.Full
         },
         {
@@ -682,6 +740,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 3,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Campbell, Smith and King",
+            "employmentPosition": "Engineer, electrical",
             "type": HostHomeType.Respite
         },
         {
@@ -702,6 +762,8 @@ const initialState: HostHomeData = {
             "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 3,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Reed, Flores and Hanna",
+            "employmentPosition": "Hotel manager",
             "type": HostHomeType.Full
         },
         {
@@ -722,6 +784,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
+            "employmentCompany": "Barber Ltd",
+            "employmentPosition": "Metallurgist",
             "type": HostHomeType.Full
         },
         {
@@ -742,6 +806,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Blake-Davis",
+            "employmentPosition": "Energy manager",
             "type": HostHomeType.Full
         },
         {
@@ -762,6 +828,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Taylor Group",
+            "employmentPosition": "Museum/gallery conservator",
             "type": HostHomeType.Full
         },
         {
@@ -782,6 +850,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 2,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
+            "employmentCompany": "Riddle-Johnston",
+            "employmentPosition": "Journalist, newspaper",
             "type": HostHomeType.Full
         },
         {
@@ -802,6 +872,8 @@ const initialState: HostHomeData = {
             "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Rose, Gonzalez and Jackson",
+            "employmentPosition": "Marketing executive",
             "type": HostHomeType.Full
         },
         {
@@ -822,6 +894,8 @@ const initialState: HostHomeData = {
             "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Mathis-Jenkins",
+            "employmentPosition": "Radiographer, diagnostic",
             "type": HostHomeType.Full
         },
         {
@@ -842,6 +916,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
+            "employmentCompany": "Carter PLC",
+            "employmentPosition": "Broadcast presenter",
             "type": HostHomeType.Full
         },
         {
@@ -862,6 +938,8 @@ const initialState: HostHomeData = {
             "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
+            "employmentCompany": "Powers-Mccarthy",
+            "employmentPosition": "Sales executive",
             "type": HostHomeType.Full
         },
         {
@@ -882,6 +960,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Ramirez, Powell and Ruiz",
+            "employmentPosition": "Water engineer",
             "type": HostHomeType.Full
         },
         {
@@ -902,6 +982,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Mccormick Ltd",
+            "employmentPosition": "Therapist, occupational",
             "type": HostHomeType.Full
         },
         {
@@ -922,6 +1004,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
+            "employmentCompany": "Fernandez, Jimenez and Hoffman",
+            "employmentPosition": "Minerals surveyor",
             "type": HostHomeType.Full
         },
         {
@@ -942,6 +1026,8 @@ const initialState: HostHomeData = {
             "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Smith Ltd",
+            "employmentPosition": "Outdoor activities/education manager",
             "type": HostHomeType.Full
         },
         {
@@ -962,6 +1048,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Miller, Robertson and Barnett",
+            "employmentPosition": "Biomedical scientist",
             "type": HostHomeType.Full
         },
         {
@@ -982,6 +1070,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Nixon-Mcdonald",
+            "employmentPosition": "Education officer, museum",
             "type": HostHomeType.Respite
         },
         {
@@ -1002,6 +1092,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances. I have concerns about my substance use: Decade past organization check lose house ask.",
+            "employmentCompany": "Gordon, Ramos and Harris",
+            "employmentPosition": "Public house manager",
             "type": HostHomeType.Full
         },
         {
@@ -1022,6 +1114,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Vance-Evans",
+            "employmentPosition": "Statistician",
             "type": HostHomeType.Respite
         },
         {
@@ -1042,6 +1136,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Hernandez PLC",
+            "employmentPosition": "Museum education officer",
             "type": HostHomeType.Full
         },
         {
@@ -1062,6 +1158,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Hayes-Trujillo",
+            "employmentPosition": "Press sub",
             "type": HostHomeType.Full
         },
         {
@@ -1082,6 +1180,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Jones-Keller",
+            "employmentPosition": "Neurosurgeon",
             "type": HostHomeType.Full
         },
         {
@@ -1102,6 +1202,8 @@ const initialState: HostHomeData = {
             "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
+            "employmentCompany": "Cervantes, Mack and Smith",
+            "employmentPosition": "Publishing copy",
             "type": HostHomeType.Full
         },
         {
@@ -1122,6 +1224,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Williams PLC",
+            "employmentPosition": "Company secretary",
             "type": HostHomeType.Full
         },
         {
@@ -1142,6 +1246,8 @@ const initialState: HostHomeData = {
             "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Johnson-Brown",
+            "employmentPosition": "Data processing manager",
             "type": HostHomeType.Respite
         },
         {
@@ -1162,6 +1268,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
+            "employmentCompany": "Wright-Ward",
+            "employmentPosition": "Architect",
             "type": HostHomeType.Respite
         },
         {
@@ -1182,6 +1290,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Barton-Terrell",
+            "employmentPosition": "Pharmacologist",
             "type": HostHomeType.Full
         },
         {
@@ -1202,6 +1312,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
+            "employmentCompany": "Dominguez and Sons",
+            "employmentPosition": "Production engineer",
             "type": HostHomeType.Full
         },
         {
@@ -1222,6 +1334,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Clark Inc",
+            "employmentPosition": "Water quality scientist",
             "type": HostHomeType.Full
         },
         {
@@ -1242,6 +1356,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
+            "employmentCompany": "Clark Inc",
+            "employmentPosition": "Sales professional, IT",
             "type": HostHomeType.Full
         },
         {
@@ -1262,6 +1378,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Williams, Tanner and Jenkins",
+            "employmentPosition": "Aid worker",
             "type": HostHomeType.Full
         },
         {
@@ -1282,6 +1400,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
+            "employmentCompany": "Peterson and Sons",
+            "employmentPosition": "Best boy",
             "type": HostHomeType.Full
         },
         {
@@ -1302,6 +1422,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
+            "employmentCompany": "Nolan-Wade",
+            "employmentPosition": "Nurse, learning disability",
             "type": HostHomeType.Full
         },
         {
@@ -1322,6 +1444,8 @@ const initialState: HostHomeData = {
             "smokingText": "I smoke, and if permitted, I'm fine with indoor smoking.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
+            "employmentCompany": "Glover-Griffin",
+            "employmentPosition": "Insurance account manager",
             "type": HostHomeType.Full
         },
         {
@@ -1342,6 +1466,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
+            "employmentCompany": "Turner-Rosales",
+            "employmentPosition": "Advice worker",
             "type": HostHomeType.Full
         },
         {
@@ -1362,6 +1488,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
+            "employmentCompany": "Mccarthy, Parker and Mcdonald",
+            "employmentPosition": "Lawyer",
             "type": HostHomeType.Full
         },
         {
@@ -1382,6 +1510,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Smith, White and Cox",
+            "employmentPosition": "Teacher, English as a foreign language",
             "type": HostHomeType.Full
         },
         {
@@ -1402,6 +1532,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Ramirez, Kennedy and Gonzalez",
+            "employmentPosition": "Optician, dispensing",
             "type": HostHomeType.Full
         },
         {
@@ -1422,6 +1554,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 3,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Zimmerman, Wilson and Lloyd",
+            "employmentPosition": "Risk manager",
             "type": HostHomeType.Full
         },
         {
@@ -1442,6 +1576,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
+            "employmentCompany": "Stewart, Glover and Davis",
+            "employmentPosition": "Patent examiner",
             "type": HostHomeType.Full
         },
         {
@@ -1462,6 +1598,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 2,
             "substancesText": "I use substances, but I'm not open to other people in the household using substances.",
+            "employmentCompany": "Vaughan-Moss",
+            "employmentPosition": "Scientist, research (physical sciences)",
             "type": HostHomeType.Full
         },
         {
@@ -1482,6 +1620,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Flynn-Hamilton",
+            "employmentPosition": "Clinical scientist, histocompatibility and immunogenetics",
             "type": HostHomeType.Respite
         },
         {
@@ -1502,6 +1642,8 @@ const initialState: HostHomeData = {
             "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Johnson Inc",
+            "employmentPosition": "Therapeutic radiographer",
             "type": HostHomeType.Full
         },
         {
@@ -1522,6 +1664,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
+            "employmentCompany": "Bauer-Edwards",
+            "employmentPosition": "Financial planner",
             "type": HostHomeType.Respite
         },
         {
@@ -1542,6 +1686,8 @@ const initialState: HostHomeData = {
             "smokingText": "I smoke, and if permitted, I'm fine with indoor smoking.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Bennett, Carson and Guerrero",
+            "employmentPosition": "Sports administrator",
             "type": HostHomeType.Full
         },
         {
@@ -1562,6 +1708,8 @@ const initialState: HostHomeData = {
             "smokingText": "I smoke, and if permitted, I'm fine with indoor smoking.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Little, Ryan and Hicks",
+            "employmentPosition": "Biomedical engineer",
             "type": HostHomeType.Full
         },
         {
@@ -1582,6 +1730,8 @@ const initialState: HostHomeData = {
             "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Campos-Rodriguez",
+            "employmentPosition": "Veterinary surgeon",
             "type": HostHomeType.Full
         },
         {
@@ -1602,6 +1752,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Osborne-Harris",
+            "employmentPosition": "Conservator, museum/gallery",
             "type": HostHomeType.Full
         },
         {
@@ -1622,6 +1774,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances. I have concerns about my substance use: Front more whole one away foreign again.",
+            "employmentCompany": "Sloan, Rogers and Dodson",
+            "employmentPosition": "Chartered legal executive (England and Wales)",
             "type": HostHomeType.Respite
         },
         {
@@ -1642,6 +1796,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
+            "employmentCompany": "Serrano Inc",
+            "employmentPosition": "Illustrator",
             "type": HostHomeType.Full
         },
         {
@@ -1662,6 +1818,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
+            "employmentCompany": "Williams-Knox",
+            "employmentPosition": "Corporate investment banker",
             "type": HostHomeType.Respite
         },
         {
@@ -1682,6 +1840,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
+            "employmentCompany": "Gordon LLC",
+            "employmentPosition": "Secretary, company",
             "type": HostHomeType.Full
         },
         {
@@ -1702,6 +1862,8 @@ const initialState: HostHomeData = {
             "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Anderson-Brown",
+            "employmentPosition": "Printmaker",
             "type": HostHomeType.Full
         },
         {
@@ -1722,6 +1884,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Klein, Meyers and Newton",
+            "employmentPosition": "Health and safety inspector",
             "type": HostHomeType.Full
         },
         {
@@ -1742,6 +1906,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
+            "employmentCompany": "Hayes, Owens and Brown",
+            "employmentPosition": "Barista",
             "type": HostHomeType.Full
         },
         {
@@ -1762,6 +1928,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
+            "employmentCompany": "Acosta-James",
+            "employmentPosition": "Chartered certified accountant",
             "type": HostHomeType.Full
         },
         {
@@ -1782,6 +1950,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Jones PLC",
+            "employmentPosition": "Writer",
             "type": HostHomeType.Full
         },
         {
@@ -1802,6 +1972,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Brown, Jones and Davis",
+            "employmentPosition": "Forensic scientist",
             "type": HostHomeType.Full
         },
         {
@@ -1822,6 +1994,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances. I have concerns about my substance use: Point main husband anyone.",
+            "employmentCompany": "Ryan-Williams",
+            "employmentPosition": "Broadcast engineer",
             "type": HostHomeType.Respite
         },
         {
@@ -1842,6 +2016,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Patrick Group",
+            "employmentPosition": "Primary school teacher",
             "type": HostHomeType.Respite
         },
         {
@@ -1862,6 +2038,8 @@ const initialState: HostHomeData = {
             "smokingText": "I smoke cigerettes, but I prefer a smoke free environment indoors.",
             "numberOfGuests": 3,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Newman, Walters and Davis",
+            "employmentPosition": "Animal technologist",
             "type": HostHomeType.Full
         },
         {
@@ -1882,6 +2060,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Parrish-Hale",
+            "employmentPosition": "Sports therapist",
             "type": HostHomeType.Full
         },
         {
@@ -1902,6 +2082,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, but I'm not open to other people in the household using substances.",
+            "employmentCompany": "Medina, Hubbard and White",
+            "employmentPosition": "Insurance broker",
             "type": HostHomeType.Full
         },
         {
@@ -1922,6 +2104,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Kelley LLC",
+            "employmentPosition": "Dentist",
             "type": HostHomeType.Respite
         },
         {
@@ -1942,6 +2126,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 3,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Nunez, Taylor and Burgess",
+            "employmentPosition": "Company secretary",
             "type": HostHomeType.Full
         },
         {
@@ -1962,6 +2148,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Douglas, Young and Thompson",
+            "employmentPosition": "Scientist, research (physical sciences)",
             "type": HostHomeType.Respite
         },
         {
@@ -1982,6 +2170,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Allen, Galloway and Williams",
+            "employmentPosition": "Quantity surveyor",
             "type": HostHomeType.Full
         },
         {
@@ -2002,6 +2192,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Powell LLC",
+            "employmentPosition": "Emergency planning/management officer",
             "type": HostHomeType.Full
         },
         {
@@ -2022,6 +2214,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 2,
             "substancesText": "I use substances, and I'm open to other people in the household using substances. I have concerns about my substance use: Nature become action station grow.",
+            "employmentCompany": "Harper and Sons",
+            "employmentPosition": "Public relations account executive",
             "type": HostHomeType.Respite
         },
         {
@@ -2042,6 +2236,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 1,
             "substancesText": "I use substances, and I'm open to other people in the household using substances.",
+            "employmentCompany": "Kidd-Kaiser",
+            "employmentPosition": "Museum/gallery conservator",
             "type": HostHomeType.Full
         },
         {
@@ -2062,6 +2258,8 @@ const initialState: HostHomeData = {
             "smokingText": "I don't smoke, but I'm find with others smoking indoors.",
             "numberOfGuests": 2,
             "substancesText": "I don't use substances and prefer a substance-free environment.",
+            "employmentCompany": "Marshall LLC",
+            "employmentPosition": "Barrister",
             "type": HostHomeType.Respite
         },
         {
@@ -2082,6 +2280,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "Bartlett-Brewer",
+            "employmentPosition": "Economist",
             "type": HostHomeType.Full
         },
         {
@@ -2102,6 +2302,8 @@ const initialState: HostHomeData = {
             "smokingText": "I do not smoke cigerettes, and I prefer a smoke-free environment indoors.",
             "numberOfGuests": 1,
             "substancesText": "I don't use substances, but I'm open to other people in the household using substances.",
+            "employmentCompany": "MerQBiz",
+            "employmentPosition": "Software Engineer",
             "type": HostHomeType.Respite
         }
     ],
@@ -2149,6 +2351,8 @@ const initialState: HostHomeData = {
             "hostingInterest": "Wrong market left financial. Southern standard loss deep nation bill high behavior.",
             "hostingStrengths": "Hear base attorney fill.",
             "hostingChallenges": "Look pay believe amount though deal. Throw manager fact campaign still. Opportunity center management true situation might.",
+            "employmentCompany": "Lowe-Zhang",
+            "employmentPosition": "Writer",
             "hostIntro": "Including street many. Fire ball hard you candidate look team. Gas buy not light do shoulder brother. Product become rise enjoy. Say especially evening. Window teach mother benefit parent our direction. Important meet book order themselves.",
             "durationOfStay": "full",
             "hostingAmount": 2,
@@ -2199,6 +2403,8 @@ const initialState: HostHomeData = {
             "hostingInterest": "Radio stock skin live.",
             "hostingStrengths": "Sit push laugh five against.",
             "hostingChallenges": "Environmental about skill white Mrs growth. Explain cover arm sit rather hand. Change rate last ask different study girl election. Mr like weight defense move thousand.",
+            "employmentCompany": "Bonilla LLC",
+            "employmentPosition": "Engineer, civil (contracting)",
             "hostIntro": "Natural partner how. Rock risk heavy natural a. Resource recognize free.",
             "durationOfStay": "full",
             "hostingAmount": 4,
@@ -2254,6 +2460,8 @@ const initialState: HostHomeData = {
             "hostingInterest": "Arrive rock apply speak wait stock second.",
             "hostingStrengths": "Decade very discussion line health these.",
             "hostingChallenges": "Not often final ten. Now order go sometimes practice. Statement section order. Big bank who ask miss safe. Traditional although build together.",
+            "employmentCompany": "Hill-Martinez",
+            "employmentPosition": "Mechanical engineer",
             "hostIntro": "Administration north audience player above speech as. Trouble science interesting south mother impact. Management until back under most mention election. Fall theory offer technology address alone. Citizen arrive or ten computer. There cup become feeling able effect have.",
             "durationOfStay": "full",
             "hostingAmount": 2,
@@ -2314,6 +2522,8 @@ const initialState: HostHomeData = {
             "hostingInterest": "Teacher pull chair nor break outside use.",
             "hostingStrengths": "Where expert people nature husband from. Ball believe truth.",
             "hostingChallenges": "Drop argue adult lawyer go part happy choice. Ok strategy herself operation myself business.",
+            "employmentCompany": "Stevens PLC",
+            "employmentPosition": "Operational researcher",
             "hostIntro": "Her without anything soon mind ok poor reason. Treat look capital true buy professor heart no. Act better middle prepare scientist you. Election stand attack nation. Material discussion green other west huge help. Election other ago say leader describe tough. This value serious college. New common he believe side anything per tend.",
             "durationOfStay": "full",
             "hostingAmount": 4,
@@ -2365,6 +2575,8 @@ const initialState: HostHomeData = {
             "hostingInterest": "Enough hit smile system mouth. American enjoy idea car.",
             "hostingStrengths": "Throughout report child fund finally onto past. Form thank nation official sit whom those.",
             "hostingChallenges": "Pay worry rate deep. Have call free reality stock only.",
+            "employmentCompany": "Carlson PLC",
+            "employmentPosition": "Doctor, general practice",
             "hostIntro": "Media deep employee list. Spend campaign not strategy. Idea already support listen person page. Far team ever collection recognize standard. Street happy someone left establish. Them cost blue seek structure.",
             "durationOfStay": "full",
             "hostingAmount": 1,
@@ -2421,6 +2633,8 @@ const initialState: HostHomeData = {
             "hostingInterest": "Final edge garden investment catch avoid add week. Know scene sell water.",
             "hostingStrengths": "Unit move money down cause.",
             "hostingChallenges": "Car build popular will. Television gas until also task go. Send bar success enough under.",
+            "employmentCompany": "Swanson-Moss",
+            "employmentPosition": "Broadcast presenter",
             "hostIntro": "Grow three be end us others. Quickly base free story occur. Final traditional arm woman share partner list.",
             "durationOfStay": "full",
             "hostingAmount": 3,
@@ -2472,6 +2686,8 @@ const initialState: HostHomeData = {
             "hostingInterest": "Team high let imagine fund push. Impact Mr dark.",
             "hostingStrengths": "Discover find list air middle interesting lead.",
             "hostingChallenges": "Worry nature them Mr. Your chance board. Picture recent member level car.",
+            "employmentCompany": "Sanders-Lara",
+            "employmentPosition": "Microbiologist",
             "hostIntro": "Want tell we investment its. Democrat energy find finish write single. Build line age consider town subject anything. Reveal onto soldier million store interest. Throw something here nothing from foreign lay. Agreement total improve laugh full fire thank. Adult this morning goal remember.",
             "durationOfStay": "full",
             "hostingAmount": 1,
@@ -2532,6 +2748,8 @@ const initialState: HostHomeData = {
             "hostingInterest": "Test away include room never ball outside.",
             "hostingStrengths": "North wide light himself.",
             "hostingChallenges": "Both range water man goal thing feel term. Method ask surface build commercial grow evening treatment. Need whole figure skin place big everybody.",
+            "employmentCompany": "Gay LLC",
+            "employmentPosition": "Armed forces logistics/support/administrative officer",
             "hostIntro": "First peace bar nearly however personal article stuff. Bank bit notice main myself. Human base side. Laugh how whether production know shake play memory. Certain nearly language college event type girl. Six or car day him far.",
             "durationOfStay": "full",
             "hostingAmount": 1,
@@ -2583,6 +2801,8 @@ const initialState: HostHomeData = {
             "hostingInterest": "Society exactly whose they subject design.",
             "hostingStrengths": "Compare and office.",
             "hostingChallenges": "Them require cup analysis deal camera not school. Statement pressure successful. Far career may doctor white ten. Wind her traditional each peace throw his.",
+            "employmentCompany": "Garcia PLC",
+            "employmentPosition": "Drilling engineer",
             "hostIntro": "Through nature ask pay late will. Care possible now team full gun meeting. Camera word week energy.",
             "durationOfStay": "respite",
             "hostingAmount": 3,
@@ -2634,6 +2854,8 @@ const initialState: HostHomeData = {
             "hostingInterest": "Same range sometimes adult lawyer show executive learn. Protect enjoy maintain pattern.",
             "hostingStrengths": "Every seven cold someone everybody.",
             "hostingChallenges": "Ability very arm mention. Put ago early when require note fight.",
+            "employmentCompany": "Gonzales LLC",
+            "employmentPosition": "Child psychotherapist",
             "hostIntro": "Responsibility fly notice dog give so yes. Whom heart reflect color example assume. Support alone right take alone. Several nearly industry piece though. Land entire state admit international thought.",
             "durationOfStay": "full",
             "hostingAmount": 1,
@@ -2685,6 +2907,8 @@ const initialState: HostHomeData = {
             "hostingInterest": "Money bill black fire.",
             "hostingStrengths": "Religious continue understand evening hundred well.",
             "hostingChallenges": "Himself card serve face give. Seem hospital various great board especially religious believe. Training decision language too become contain identify. Human record minute.",
+            "employmentCompany": "Robinson, Brady and Finley",
+            "employmentPosition": "Advertising art director",
             "hostIntro": "Service officer most whom my herself for. Way lay conference step remember character. Agent magazine tough let above threat.",
             "durationOfStay": "full",
             "hostingAmount": 1,
@@ -2736,6 +2960,8 @@ const initialState: HostHomeData = {
             "hostingInterest": "Author month water air. Final discussion discover strategy vote American.",
             "hostingStrengths": "Agree morning reflect bad.",
             "hostingChallenges": "Article three effort. Sit exactly likely vote. Nature thousand stuff perform.",
+            "employmentCompany": "Sanders, Suarez and Combs",
+            "employmentPosition": "Ship broker",
             "hostIntro": "Turn wide quality notice situation fight sometimes. Paper fly few child hair keep. Century condition until purpose. Democrat lay east fight. Report by loss future people option.",
             "durationOfStay": "full",
             "hostingAmount": 11,
@@ -2786,6 +3012,8 @@ const initialState: HostHomeData = {
             "hostingInterest": "Determine arrive radio to hair bag parent course. Window parent treatment final recent laugh.",
             "hostingStrengths": "Foot shoulder short almost step rock police.",
             "hostingChallenges": "Personal kid seem accept wide issue yeah. Agency full audience remain.",
+            "employmentCompany": "Howard, Zavala and House",
+            "employmentPosition": "Surveyor, hydrographic",
             "hostIntro": "Week step care respond number experience actually. Place account of western care business leave. Should you current market.",
             "durationOfStay": "full",
             "hostingAmount": 4,
@@ -2837,6 +3065,8 @@ const initialState: HostHomeData = {
             "hostingInterest": "More late region improve suffer.",
             "hostingStrengths": "Tough here include lead.",
             "hostingChallenges": "Fast half break budget throughout. Kid trip look which necessary range. Sea little truth baby finally. Level firm culture use. These through hospital central serve meet.",
+            "employmentCompany": "Aguirre Inc",
+            "employmentPosition": "Higher education lecturer",
             "hostIntro": "Side begin number to manager take without. Mother difference same find off. Word travel physical into experience local. Whole phone out difference training. Avoid window training beyond plan suffer late. Else short here form enough bar body recognize. Spend source media white Congress game guy happy.",
             "durationOfStay": "full",
             "hostingAmount": 1,
@@ -2888,6 +3118,8 @@ const initialState: HostHomeData = {
             "hostingInterest": "Speech can true as. Rise easy game service.",
             "hostingStrengths": "Business low magazine. Bed commercial admit during national hand black leg.",
             "hostingChallenges": "Sort country size great any yet officer perform. East still audience defense American other. Practice growth brother surface college every. Product develop cut institution if.",
+            "employmentCompany": "Meadows-Morris",
+            "employmentPosition": "Clinical psychologist",
             "hostIntro": "Want six Congress agreement cup item itself. Place discussion leave stage. That cut off still Republican drive deal. Technology great hold group your reflect cultural.",
             "durationOfStay": "full",
             "hostingAmount": 3,
@@ -2938,6 +3170,8 @@ const initialState: HostHomeData = {
             "hostingInterest": "Serve choice market source production.",
             "hostingStrengths": "Around conference house professional may whatever few. Material material no their.",
             "hostingChallenges": "Hit out would available trial share. General help behind. Eye four car arm not. Plant scientist feeling make his what usually.",
+            "employmentCompany": "Bond LLC",
+            "employmentPosition": "Medical sales representative",
             "hostIntro": "Professor guess including middle. Seven professional guess father close chance deal sport. Eye can their company hotel. Sea answer police. Himself growth seat approach. Possible degree decade peace key church. Finally president music yourself. Onto point training table lead ago.",
             "durationOfStay": "full",
             "hostingAmount": 2,
@@ -2988,6 +3222,8 @@ const initialState: HostHomeData = {
             "hostingInterest": "Total body Mr professional yourself. Million ability card continue political low.",
             "hostingStrengths": "Turn happy worry agreement. Most forget similar score former born.",
             "hostingChallenges": "Suffer perhaps sister candidate. Operation deep after doctor.",
+            "employmentCompany": "Cline PLC",
+            "employmentPosition": "Scientist, marine",
             "hostIntro": "Role very wait indeed fire marriage home. Way now may never theory serious. Various thank full with. Hear impact compare return machine. These piece fly set return feel.",
             "durationOfStay": "full",
             "hostingAmount": 1,
@@ -3039,6 +3275,8 @@ const initialState: HostHomeData = {
             "hostingInterest": "Seven recently camera improve have effort action. Law common candidate expect for.",
             "hostingStrengths": "Can speak free it want security game. Serve think like single little.",
             "hostingChallenges": "Maintain fact wait ago. Hundred various type back back these budget. Return between Democrat among ever.",
+            "employmentCompany": "Potter and Sons",
+            "employmentPosition": "Mudlogger",
             "hostIntro": "Protect exactly dark truth budget law. Tell perhaps information. Resource relate series sister between daughter. Join against protect role. Human design car local ability production night walk. Remember west notice everyone beautiful low small.",
             "durationOfStay": "full",
             "hostingAmount": 4,
@@ -3099,6 +3337,8 @@ const initialState: HostHomeData = {
             "hostingInterest": "Mother season create physical black eye add suddenly. Matter condition big.",
             "hostingStrengths": "Paper hold box what yourself my.",
             "hostingChallenges": "Stock idea individual fear. Describe clear born course I debate front report. Quite have never none. With economic development somebody at past page.",
+            "employmentCompany": "Espinoza-Wilkerson",
+            "employmentPosition": "Energy manager",
             "hostIntro": "Show explain not skin television play writer admit. Alone open improve concern stage why. Tonight dog travel staff foreign toward call. Skin opportunity run style consider simple ball.",
             "durationOfStay": "full",
             "hostingAmount": 1,
@@ -3149,6 +3389,8 @@ const initialState: HostHomeData = {
             "hostingInterest": "Information industry remember film remember.",
             "hostingStrengths": "Stock recognize movie without short care.",
             "hostingChallenges": "Discuss study worry late feeling opportunity site entire. Scene kind notice level usually deep together. Military seat fact factor plan simply.",
+            "employmentCompany": "Long, White and Wilson",
+            "employmentPosition": "Quarry manager",
             "hostIntro": "These beat church rule through. Four care piece knowledge. Decision camera impact religious try heart position write. Understand place charge hair.",
             "durationOfStay": "respite",
             "hostingAmount": 2,
@@ -3202,6 +3444,8 @@ const initialState: HostHomeData = {
             "hostingInterest": "I would like to provide a platform from where it is easier to make healthy choices.",
             "hostingStrengths": "I experienced homelessness from 16-20 and I made many difficult choices because of my circumstances.  So I understand the path forward is not always linear.",
             "hostingChallenges": "I have been accused of caring too much and I tend to roll up my sleeves and jump in solving problems..  It might be difficult for me to remain objective.  The burden of my lifetime of experience is that it's just MY experience, and while it can be helpful for others when I share it.  No one can design your life or your experiences for you, you must own those choices yourself informed by the information you seek out and process.",
+            "employmentCompany": "Hack For LA",
+            "employmentPosition": "Executive Director",
             "hostIntro": "I do not take time off.  I don't believe in work in the traditional way.  I find things I am passionate about and they become my life.  That might be starting a tech company, learning a new skill, running a non profit, or helping friends and loved ones.  It has resulted in a life that is full of wonderfull challenges and people, where I can't ever imagine retiring.   When I was young, my mother isolated me from family in an unsafe environment.  This caused me to become very self reliant.  But I really like connecting with people and subscribe to the idea that life is a team sport.  We do everything better when we find people to do them with, a community that helps eachother when we need to, encourages us to learn from our collective mistakes, and celebrates our wins as if they were their own.",
             "durationOfStay": "respite",
             "hostingAmount": 1,

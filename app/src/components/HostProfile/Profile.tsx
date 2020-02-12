@@ -16,7 +16,11 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export const Profile = () => {
+export interface ProfileProps {
+  isUnmatched: boolean;
+}
+
+export const Profile = (props: ProfileProps) => {
   const classes = useStyles();
   const { hostId } = useParams();
   const { data } = useHostHomeData();
@@ -28,7 +32,12 @@ export const Profile = () => {
       <HousePolicies host={host} />
       <HostAdditionalInfo host={host} />
       <Neighborhood />
-      <ButtonBar />
+      {
+        props.isUnmatched
+        ? null
+        : <ButtonBar />
+        
+      }
     </div>
   );
 }

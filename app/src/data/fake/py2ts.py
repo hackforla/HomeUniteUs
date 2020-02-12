@@ -452,6 +452,8 @@ def main():
                 'hostingInterest': responses.get('hosting_interest', ''),
                 'hostingStrengths': responses.get('hosting_strenghts', ''),
                 'hostingChallenges': responses.get('hosting_challenges', ''),
+                'employmentCompany': responses.get('employmentCompany', ''),
+                'employmentPosition': responses.get('employmentPosition', ''),
                 'hostIntro': responses.get('host_intro', ''),
                 'durationOfStay': responses.get('duration_of_stay', ['N/A'])[0],
                 'hostingAmount': responses.get('hosting_amount', 1),
@@ -549,6 +551,8 @@ def main():
                 'smokingText': responses.get('smoking_text', ''),
                 'numberOfGuests': responses.get('number_of_guests', ''),
                 'substancesText': responses.get('substances_text', ''),
+                'employmentCompany': responses.get('employmentCompany', ''),
+                'employmentPosition': responses.get('employmentPosition', ''),
                 'type': get_home_type(responses)
             })
 

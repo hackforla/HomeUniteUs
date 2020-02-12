@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import { useParams, useHistory } from 'react-router';
 import { useHostHomeData } from '../../data/data-context';
 import { ProgressPlugin } from 'webpack';
+import { Host, MatchResult } from '../../models';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -31,13 +32,16 @@ const useStyles = makeStyles(theme => ({
 export const ButtonBar = () => {
 
   const classes = useStyles();
-
   const history = useHistory();
+  let {guestId, hostId} = useParams();
 
-  const {guestId, hostId} = useParams();
 
+  const gid = Number.parseInt(guestId || '');
+  const hid = Number.parseInt(hostId || '');
+  
+  const {data, markAsInterested, markAsNotInterested} = useHostHomeData();
 
-  const {markAsInterested, markAsNotInterested} = useHostHomeData();
+  
 
   return (
     <React.Fragment>
@@ -50,8 +54,8 @@ export const ButtonBar = () => {
             onClick={() => {
 
               markAsNotInterested({
-                guestId: parseInt(guestId || '-1'),
-                hostId: parseInt(hostId || '-1')
+                guestId: gid,
+                hostId: hid
               });
 
               history.push(`/hosthome/admin/guest/${guestId}`);
@@ -66,8 +70,8 @@ export const ButtonBar = () => {
             className={classes.yesButton}
             onClick={() =>{
               markAsInterested({
-                guestId: parseInt(guestId || '-1'),
-                hostId: parseInt(hostId || '-1')
+                guestId: gid,
+                hostId: hid
               });
 
               history.push(`/hosthome/admin/guest/${guestId}`);
@@ -78,6 +82,7 @@ export const ButtonBar = () => {
           </Button>
         </div>
       </AppBar>
+      
       <div className={classes.extraSpace}></div>
     </React.Fragment>
   );

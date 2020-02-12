@@ -343,7 +343,11 @@ export const AdminGuestView = () => {
                                     (host: Host, index: number) => <><TableRow key={index} className={index % 2 === 0 ? classes.tableRowEven : classes.tableRowOdd}>
                                         <TableCell onClick={
                                             props.allowClick
-                                                ? () => { history.push(`/hosthome/guests/${guestId}/matches/${host.id}`) }
+                                                ? () => { 
+                                                    console.log(`AdminGuestView:MatchTable: guestId = ${guestId}`);
+                                                    console.log(`AdminGuestView:MatchTable: host.id = ${host.id}`);
+                                                    history.push(`/hosthome/guests/${guestId}/matches/${host.id}`) 
+                                                }
                                                 : () => { }
                                         }>
                                             <div className='host-match-btn' style={{ fontWeight: 'bold' }}>{host.name}</div>
@@ -417,7 +421,7 @@ export const AdminGuestView = () => {
 
                                                                         return isFailed
                                                                             ? <FailCell key={index} value={rv.text} />
-                                                                            : <SuccessCell value={rv.text} />;
+                                                                            : <SuccessCell key={index} value={rv.text} />;
 
                                                                     })
                                                             })()
@@ -579,7 +583,7 @@ export const AdminGuestView = () => {
                 {/*  */}
                 <MatchTable tableName='Matched' hostList={matched} allowClick={true} displayInterested={true} />
                 <MatchTable tableName='Declined' hostList={rejected} allowClick={true} displayInterested={true} />
-                <MatchTable tableName='Unmatched' hostList={unmatched} allowClick={false} displayInterested={false} />
+                <MatchTable tableName='Unmatched' hostList={unmatched} allowClick={true} displayInterested={false} />
 
             </Grid>
         </React.Fragment>
