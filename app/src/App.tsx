@@ -118,7 +118,7 @@ export const PlaceholderView = () => {
 
 export const PlaceholderWithIdView = () => {
     const classes = useStyles({});
-    const { id } = useParams();
+    const { id } = ();
     return (
         <Typography
             component='h2'
