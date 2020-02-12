@@ -2,30 +2,44 @@ import * as React from 'react';
 import { Container, Paper, Typography, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
-    sidebarAboutBox: {
-      padding: theme.spacing(2),
-      backgroundColor: theme.palette.grey[200],
-    },
-    sidebarSection: {
-      marginTop: theme.spacing(3),
-    },
-  }));
+  sidebarAboutBox: {
+    padding: theme.spacing(2),
+    backgroundColor: theme.palette.grey[200],
+  },
+  sidebarSection: {
+    marginTop: theme.spacing(3),
+  },
+}));
 
 
-const firstParagraph = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Tincidunt dui ut ornare lectus sit amet est. Risus feugiat in ante metus dictum at tempor commodo ullamcorper. Lobortis mattis aliquam faucibus purus in. Congue quisque egestas diam in arcu cursus euismod quis viverra. Volutpat est velit egestas dui id. Quisque non tellus orci ac auctor augue mauris. Pretium vulputate sapien nec sagittis aliquam. Amet aliquam id diam maecenas ultricies mi eget mauris pharetra. Arcu non odio euismod lacinia at. Elit ut aliquam purus sit. Congue nisi vitae suscipit tellus mauris a diam maecenas sed. Purus gravida quis blandit turpis cursus in. Erat velit scelerisque in dictum non consectetur. Faucibus pulvinar elementum integer enim. Non arcu risus quis varius quam. Congue mauris rhoncus aenean vel elit scelerisque mauris pellentesque. Integer malesuada nunc vel risus commodo viverra. Elit pellentesque habitant morbi tristique senectus et netus. At tempor commodo ullamcorper a lacus vestibulum sed arcu non.";
-const secondParagraph = "Id diam vel quam elementum pulvinar etiam non. Sapien et ligula ullamcorper malesuada proin libero nunc consequat. Dui vivamus arcu felis bibendum. Condimentum vitae sapien pellentesque habitant morbi tristique senectus. Enim praesent elementum facilisis leo vel fringilla est ullamcorper eget. Vel quam elementum pulvinar etiam. In pellentesque massa placerat duis ultricies. Semper quis lectus nulla at volutpat diam ut venenatis tellus. Aenean sed adipiscing diam donec adipiscing tristique risus nec feugiat. Nunc sed augue lacus viverra vitae. Et tortor at risus viverra adipiscing at in tellus integer. Mi bibendum neque egestas congue quisque egestas. Ac turpis egestas maecenas pharetra convallis posuere. Faucibus in ornare quam viverra orci. Fermentum leo vel orci porta non pulvinar neque. Tincidunt eget nullam non nisi. Sed euismod nisi porta lorem. Elementum integer enim neque volutpat ac tincidunt vitae semper quis. Purus viverra accumsan in nisl nisi scelerisque. Eget sit amet tellus cras adipiscing.";
+const firstParagraph = "Welcome to Hack for LA's host homes project! Hack for LA is a brigade of Code for America, and we're working with our partners at Safe Place for Youth (SPY) to enhance their host homes program. Together, we're developing a workflow management tool, digitizing key moments within SPY’s host homes initiative to make the process scaleable, reduce institutional bias, and effectively capture data.";
+const secondParagraph = "SPY’s host homes program is centered around housing young people, 18 - 25 years old. Their approach focuses on low-cost, community-driven intervention by matching a willing host with a guest or group of guests, providing a stable housing environment for youths who are experiencing homelessness and seeking stable housing.";
+const thirdParagraph = "We're currently seeking additional stakeholders who run similar host home/empty bedroom programs, to provide input and feedback on how this tool can and could be used. We're also seeking organizations and individuals interested in supporting the project financially."
 
 export const AboutPage = () => {
-    const classes = useStyles();
-    return (
-        <Container>
-            <Paper elevation={0} className={classes.sidebarAboutBox}>
-                <Typography variant="h2" gutterBottom align='center'>About</Typography>
-                <Typography>
-                    <p>{firstParagraph}</p>
-                    <p>{secondParagraph}</p>
-                </Typography>
-            </Paper>
-        </Container>
-    );
+  const classes = useStyles();
+  return (
+    <Container>
+      <Paper elevation={0} className={classes.sidebarAboutBox}>
+        <Typography variant="h2" gutterBottom align='center'>About</Typography>
+        <Typography>
+          <h4>Introduction</h4>
+          <p>{firstParagraph}</p>
+          <h4>Overview</h4>
+          <p>{secondParagraph}</p>
+          <h4>Status</h4>
+          <p>{thirdParagraph}</p>
+          <p>
+            If either of these applies to you, please contact Bonnie Wolfe, Hack for LA's Executive Director
+            <a
+              target="_blank"
+              href="mailto:bonnie@hackforla.org?subject=Host Homes"
+              style={{ color: "black", margin: "0 0 0 .5em" }}>
+              bonnie@hackforla.org
+            </a>
+          </p>
+        </Typography>
+      </Paper>
+    </Container>
+  );
 }
