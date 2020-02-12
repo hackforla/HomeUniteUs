@@ -86,7 +86,8 @@ def delete_host(id: int):
         success = "no"
     return { "success": success "status": hosts.status_code }
 
-####guest routes
+####### guest routes
+
 @app.route('/api/guest', methods=['GET'])
 def get_all_guests():
     guests = request.get_json()
