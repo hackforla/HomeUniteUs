@@ -9,11 +9,7 @@ import {
   Button,
   Link
 } from "@material-ui/core"
-import admin from "../img/adminPage.png"
-import guestMatches from "../img/guest-matches.png"
-import interestButtons from "../img/interest-buttons.png"
-import interested from "../img/annotation-of-interested.png"
-import decline from "../img/annotation-of-decline.png"
+import { useHistory } from "react-router"
 
 const useStyles = makeStyles(theme => ({
   paperHeader: {
@@ -28,9 +24,6 @@ const useStyles = makeStyles(theme => ({
     border: "1px solid #ADADAD"
   },
   images: {
-    backgroundColor: "#333",
-    width: "410px",
-    height: "206px",
     margin: "0 0 65px 0"
   },
   imageTitle: {
@@ -41,6 +34,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export const Demo = () => {
+  const history = useHistory()
   const classes = useStyles()
   return (
     <Container>
@@ -100,8 +94,11 @@ export const Demo = () => {
                       color="primary"
                       // variant="contained"
                       component={Link}
-                      style={{ backgroundColor: "#00AAEF" }}
+                      style={{ color: "white", backgroundColor: "#00AAEF" }}
                       // to={"/hosthome/guests/999/matches/999"}
+                      onClick={() =>
+                        history.push(`/hosthome/guests/999/matches/999`)
+                      }
                     >
                       Profile
                     </Button>
@@ -116,7 +113,7 @@ export const Demo = () => {
                           textDecoration: "none"
                         }}
                       >
-                        Michael Rapkin
+                        Michael Romanov
                       </Link>
                     </Typography>
                   </Grid>
@@ -128,8 +125,9 @@ export const Demo = () => {
                       color="primary"
                       // variant="contained"
                       component={Link}
-                      style={{ backgroundColor: "#00AAEF" }}
+                      style={{ color: "white", backgroundColor: "#00AAEF" }}
                       // to={"placeholder"}
+                      onClick={() => history.push(`placeholder`)}
                     >
                       Profile
                     </Button>
@@ -196,8 +194,9 @@ export const Demo = () => {
                       color="primary"
                       // variant="contained"
                       component={Link}
-                      style={{ backgroundColor: "#00AAEF" }}
+                      style={{ color: "white", backgroundColor: "#00AAEF" }}
                       // to={"/hosthome/guests/999"}
+                      onClick={() => history.push(`/hosthome/guests/999`)}
                     >
                       Profile
                     </Button>
@@ -212,7 +211,7 @@ export const Demo = () => {
                           textDecoration: "none"
                         }}
                       >
-                        Helen Lopez
+                        Megan Sukarnoputri
                       </Link>
                     </Typography>
                   </Grid>
@@ -224,8 +223,9 @@ export const Demo = () => {
                       color="primary"
                       // variant="contained"
                       component={Link}
-                      style={{ backgroundColor: "#00AAEF" }}
+                      style={{ color: "white", backgroundColor: "#00AAEF" }}
                       // to={"placeholder"}
+                      onClick={() => history.push(`placeholder`)}
                     >
                       Profile
                     </Button>
@@ -248,20 +248,22 @@ export const Demo = () => {
               style={{
                 width: "100%",
                 display: "flex",
-                justifyContent: "space-between",
-                flexWrap: "wrap"
+                flexDirection: "column"
               }}
             >
               <div>
                 <div className={classes.imageTitle}>Admin Page</div>
                 <div className={classes.images}>
-                  {/* <img src={admin} alt={"Admin Page"} /> */}
+                  <img src={"/hosthome/img/adminPage.png"} alt={"Admin Page"} />
                 </div>
               </div>
               <div>
                 <div className={classes.imageTitle}>Guest Matches</div>
                 <div className={classes.images}>
-                  {/* <img src={guestMatches} alt={"Guest Matches"} /> */}
+                  <img
+                    src={"/hosthome/img/guestMatches.png"}
+                    alt={"Guest Matches"}
+                  />
                 </div>
               </div>
               <div>
@@ -269,7 +271,10 @@ export const Demo = () => {
                   Interested/Not Interested Buttons
                 </div>
                 <div className={classes.images}>
-                  {/* <img src={interestButtons} alt={"Interested/Not Interested Buttons"} /> */}
+                  <img
+                    src={"/hosthome/img/interestButtons.png"}
+                    alt={"Interested/Not Interested Buttons"}
+                  />
                 </div>
               </div>
               <div>
@@ -277,13 +282,19 @@ export const Demo = () => {
                   Annotation of Interested
                 </div>
                 <div className={classes.images}>
-                  {/* <img src={interested} alt={"Annotation of Interested"} /> */}
+                  <img
+                    src={"/hosthome/img/annotationOfInterested.png"}
+                    alt={"Annotation of Interested"}
+                  />
                 </div>
               </div>
               <div>
                 <div className={classes.imageTitle}>Annotation of Declined</div>
                 <div className={classes.images}>
-                  {/* <img src={decline} alt={"Annotation of Declined"} /> */}
+                  <img
+                    src={"/hosthome/img/annotationOfDecline.png"}
+                    alt={"Annotation of Declined"}
+                  />
                 </div>
               </div>
             </div>
