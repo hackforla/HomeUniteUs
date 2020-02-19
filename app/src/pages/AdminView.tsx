@@ -113,7 +113,6 @@ const useStyles = makeStyles(theme =>
 export const MatchSummaryRow = (guestMatchSummary: GuestMatchSummary) => {
   const { data } = useHostHomeData()
 
-
   return (
     <Grid item xs={12} style={{ paddingBottom: "4px" }}>
       <Grid container>
@@ -137,7 +136,7 @@ export const MatchSummaryRow = (guestMatchSummary: GuestMatchSummary) => {
             color="primary"
             variant="contained"
             component={Link}
-            style={{backgroundColor: '#00AAEF'}}
+            style={{ backgroundColor: "#00AAEF" }}
             to={`/hosthome/admin/guest/${guestMatchSummary.guestId}`}
           >
             {`${guestMatchSummary.numMatches} matches`}
@@ -178,7 +177,7 @@ export const AdminView = () => {
 
       return guestMatchSummary
     })
-  }, [data.guests, data.matchResults]);
+  }, [data.guests, data.matchResults])
 
   return (
     <React.Fragment>
@@ -186,12 +185,12 @@ export const AdminView = () => {
         <Grid item xs={12}>
           <Paper className={classes.paperHeader}>
             <Typography
-              component='h1'
-              align='center'
-              style={{ fontSize: '2em' }}
+              component="h1"
+              align="center"
+              style={{ fontSize: "2em" }}
             >
               All Guest Matches
-                        </Typography>
+            </Typography>
           </Paper>
         </Grid>
         <Grid item xs={12}>
