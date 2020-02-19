@@ -43,7 +43,7 @@ export const ButtonBar = () => {
   return (
     <React.Fragment>
       <AppBar position="fixed" color="inherit" className={classes.appBar}>
-        <div style={{ margin: "0 0 0 50px", fontWeight: "700" }}>
+        <div style={{ margin: "0 0 0 50px", fontWeight: 700 }}>
           Would you like to express interest in this host's home?
         </div>
         <div className={classes.buttons}>

@@ -3,6 +3,8 @@ import { Guest } from "../../models/Guest"
 import { makeStyles } from "@material-ui/core/styles"
 import GuestCard from "./GuestCard"
 import GuestInfo from "./GuestInfo"
+import { Grid, Typography } from "@material-ui/core"
+import { HostHomeType } from "../../models/HostHomeType"
 
 const useStyles = makeStyles(() => ({
   generalInfoRow: {
@@ -26,11 +28,22 @@ interface Props {
   guest: Guest
 }
 
+const guestTypeToString = (hostHomeType: HostHomeType) => hostHomeType === HostHomeType.Respite
+  ? 'respite'
+  : hostHomeType === HostHomeType.Full
+  ? 'full-time'
+  : 'full-time or respite';
+
 const GeneralInfo = ({ guest }: Props) => {
   const style = useStyles()
 
   return (
     <div>
+      <Grid container>
+        <Grid item xs={12}>
+          <Typography variant='h4'>{`${guest.firstName} ${guest.lastName}, guest seeking ${guestTypeToString(guest.type)} host`}</Typography>
+        </Grid>
+      </Grid>
       <div className={style.generalInfoRow}>
         <GuestCard guest={guest} />
         <GuestInfo guest={guest} />

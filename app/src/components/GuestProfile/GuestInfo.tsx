@@ -36,11 +36,10 @@ const useStyles = makeStyles(() => ({
         color: "rgba(0, 0, 0, 0.54)"
     },
     spacer: {
-        height: "19%",
-        overflow: "scroll"
+        height: "19%"
     },
     text: {
-        fontSize: "20px"
+        fontSize: "1.4rem"
     },
     icon: {
         transform: "scale(1.8)",

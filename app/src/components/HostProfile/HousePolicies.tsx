@@ -8,6 +8,7 @@ import { faPrescriptionBottleAlt } from "@fortawesome/free-solid-svg-icons"
 import { faBaby } from "@fortawesome/free-solid-svg-icons"
 import { faUserFriends } from "@fortawesome/free-solid-svg-icons"
 import { Host } from "../../models/Host"
+import { Grid } from "@material-ui/core"
 
 const useStyles = makeStyles(() => ({
   housePolicyContainer: {
@@ -84,7 +85,27 @@ export const HousePolicies = ({ host }: IHousePoliciesProps) => {
     <div className={classes.housePolicyContainer}>
       <div className={classes.housePolicyTitle}>House Policy</div>
 
-      <div className={classes.housePolicies}>
+      <Grid container>
+        {policies.map(policy => {
+          return (
+
+            <Grid item xs={4}>
+            <div className={classes.policy}>
+              <span className={classes.icon}>
+                <FontAwesomeIcon
+                  icon={policy.icon}
+                  aria-hidden="true"
+                  size="7x"
+                />
+              </span>
+              <p className={classes.content}>{policy.content}</p>
+            </div>
+            </Grid>
+
+          )
+        })}
+      </Grid>
+      {/* <div className={classes.housePolicies}>
         {policies.map(policy => {
           return (
             <div className={classes.policy}>
@@ -99,7 +120,7 @@ export const HousePolicies = ({ host }: IHousePoliciesProps) => {
             </div>
           )
         })}
-      </div>
+      </div> */}
     </div>
   )
 }
