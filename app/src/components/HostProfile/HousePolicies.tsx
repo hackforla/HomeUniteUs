@@ -8,7 +8,7 @@ import { faPrescriptionBottleAlt } from "@fortawesome/free-solid-svg-icons"
 import { faBaby } from "@fortawesome/free-solid-svg-icons"
 import { faUserFriends } from "@fortawesome/free-solid-svg-icons"
 import { Host } from "../../models/Host"
-import { Grid } from "@material-ui/core"
+import { Grid, Container } from "@material-ui/core"
 
 const useStyles = makeStyles(() => ({
   housePolicyContainer: {
@@ -22,22 +22,23 @@ const useStyles = makeStyles(() => ({
   },
   housePolicies: {
     border: "1px hidden black",
-    width: "90%",
-    padding: "20px 0",
+    // width: "90%",
+    // padding: "20px 0",
     display: "flex",
     flexWrap: "wrap"
   },
   policy: {
     border: "1px hidden blue",
-    width: "30%",
+    // width: "30%",
     margin: "20px 0",
     display: "flex",
+    textAlign: 'center',
     flexDirection: "column",
     alignItems: "center"
   },
   icon: {},
   content: {
-    paddingLeft: "10px"
+    // paddingLeft: "10px"
   }
 }))
 
@@ -82,30 +83,55 @@ export const HousePolicies = ({ host }: IHousePoliciesProps) => {
   }
 
   return (
-    <div className={classes.housePolicyContainer}>
-      <div className={classes.housePolicyTitle}>House Policy</div>
+    <Container>
+      <div className={classes.housePolicyContainer}>
+        <div className={classes.housePolicyTitle}>House Policy</div>
 
-      <Grid container>
-        {policies.map(policy => {
-          return (
+        <Grid container alignContent='center' alignItems='center'>
+          {
+            policies.slice(0, 3).map(policy => {
+              return (
 
-            <Grid item xs={4}>
-            <div className={classes.policy}>
-              <span className={classes.icon}>
-                <FontAwesomeIcon
-                  icon={policy.icon}
-                  aria-hidden="true"
-                  size="7x"
-                />
-              </span>
-              <p className={classes.content}>{policy.content}</p>
-            </div>
-            </Grid>
+                <Grid item xs alignContent='center' alignItems='center'>
+                  <div className={classes.policy}>
+                    <span className={classes.icon}>
+                      <FontAwesomeIcon
+                        icon={policy.icon}
+                        aria-hidden="true"
+                        size="7x"
+                      />
+                    </span>
+                    <p className={classes.content}>{policy.content}</p>
+                  </div>
+                </Grid>
 
-          )
-        })}
-      </Grid>
-      {/* <div className={classes.housePolicies}>
+              )
+            })
+          }
+        </Grid>
+        <Grid container alignContent='center' alignItems='center'>
+          {
+            policies.slice(3).map(policy => {
+              return (
+
+                <Grid item xs alignContent='center' alignItems='center'>
+                  <div className={classes.policy}>
+                    <span className={classes.icon}>
+                      <FontAwesomeIcon
+                        icon={policy.icon}
+                        aria-hidden="true"
+                        size="7x"
+                      />
+                    </span>
+                    <p className={classes.content}>{policy.content}</p>
+                  </div>
+                </Grid>
+
+              )
+            })
+          }
+        </Grid>
+        {/* <div className={classes.housePolicies}>
         {policies.map(policy => {
           return (
             <div className={classes.policy}>
@@ -121,8 +147,10 @@ export const HousePolicies = ({ host }: IHousePoliciesProps) => {
           )
         })}
       </div> */}
-    </div>
-  )
+      </div>
+
+
+    </Container>)
 }
 
 export default HousePolicies

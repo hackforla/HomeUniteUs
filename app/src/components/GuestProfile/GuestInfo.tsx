@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaw, faSmokingBan, faWineBottle, faPrescriptionBottleAlt } from "@fortawesome/free-solid-svg-icons";
+import { Grid } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
     guestInfo: {
@@ -60,24 +61,8 @@ const Guest = ({ guest }: Props) => {
             <div className={style.header}>
                 <p className={style.headerText}>{guest.name},{((new Date()).getFullYear() - guest.dateOfBirth.getFullYear())}</p>
             </div>
-            <div className={style.info}>
-                <div className={style.spacer}>
-                    <FontAwesomeIcon icon={faSmokingBan} className={style.icon} />
-                    <span className={style.text}>{guest.smokingText}</span>
-                </div>
-                <div className={style.spacer}>
-                    <FontAwesomeIcon icon={faPaw} className={style.icon} />
-                    <span className={style.text}>{guest.petsText}</span>
-                </div>
-                <div className={style.spacer}>
-                    <FontAwesomeIcon icon={faPrescriptionBottleAlt} className={style.icon} />
-                    <span className={style.text}>{guest.substancesText}</span>
-                </div>
-                <div className={style.spacer}>
-                    <FontAwesomeIcon icon={faWineBottle} className={style.icon} />
-                    <span className={style.text}>{guest.drinkingText}</span>
-                </div>
-            </div>
+
+
             {/* <div className={style.info}> */}
             {/* <div className={style.spacer}>
                     <p>Introduction : {guest.guestIntro}</p>
@@ -116,7 +101,7 @@ const Guest = ({ guest }: Props) => {
                     <p>{guest.substancesText}</p>
                 </div>
             </div> */}
-        </div >
+        </div>
     )
 }
 

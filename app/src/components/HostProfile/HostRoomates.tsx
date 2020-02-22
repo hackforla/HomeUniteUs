@@ -35,7 +35,7 @@ const HostRoomates = ({
 
   return (
     <div className={classes.roomatesContainer}>
-      <div className={classes.title}>
+      {/* <div className={classes.title}>
         The Roomates
       </div>
 
@@ -47,7 +47,7 @@ const HostRoomates = ({
             </div>
           )
         })}
-      </div>
+      </div> */}
 
       <div className={classes.moreInfo}>
         <Link
