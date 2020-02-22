@@ -1,4 +1,3 @@
-
 import sys
 from flask import Flask, render_template, send_from_directory, request, jsonify
 import logging
@@ -133,7 +132,7 @@ def get_all_guests():
 
 
 @app.route('/api/guest/{id}', methods=['GET'])
-def get_host_by_id(id: int):
+def get_guest_by_id(id: int):
     guests = request.get_json()
     guest_id = guests[str(id)]
     guest_output = guest[guest_id]
@@ -141,7 +140,7 @@ def get_host_by_id(id: int):
 
 
 @app.route('/api/guest', methods=['POST'])
-def add_host():
+def add_guest():
     global guest
     guests = request.get_json()
     guest.update(guests)
@@ -149,7 +148,7 @@ def add_host():
 
 
 @app.route('/api/guest/{id}', methods=['PUT'])
-def update_host(id: int):
+def update_guest(id: int):
     global guest
     guests = request.get_json()
     try:
@@ -160,7 +159,7 @@ def update_host(id: int):
 
 
 @app.route('/api/guest/{id}', methods=['DELETE'])
-def delete_host(id: int):
+def delete_guest(id: int):
     global guest
     guests = request.get_json()
     guest_id = guests[str(id)]
