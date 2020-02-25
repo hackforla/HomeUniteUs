@@ -112,6 +112,8 @@ module.exports = {
         new CopyPlugin([
             { from: './src/img/favicon.png', to: '', flatten: true },
             { from: './src/img/*.png', to: 'hosthome/img', flatten: true },
+            { from: './src/img/*.svg', to: 'hosthome/img', flatten: true },
+
         ]),
     ]
 };

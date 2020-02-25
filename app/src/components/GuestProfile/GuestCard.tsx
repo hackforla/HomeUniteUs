@@ -5,7 +5,6 @@ import { makeStyles } from "@material-ui/core/styles"
 const useStyles = makeStyles(() => ({
     guestCardContainer: {
         height: "400px",
-        // width: "100%",
         padding: "10px 20px",
         flexGrow: 1,
         display: "flex",
@@ -39,8 +38,9 @@ const GuestCard = ({ guest }: Props) => {
             <div className={style.guestImageContainer}>
                 <img
                     className={style.guestImage}
-                    src="https://placebear.com/400/400"
-                    alt="Guest Image"
+                    src={guest.id === 999 ? "/hosthome/img/kirk.png" : "https://placebear.com/400/400"}
+                    alt={"Guest Image"}
+                    height="400px"
                 />
             </div>
         </div>

@@ -3,6 +3,8 @@ import { makeStyles } from "@material-ui/core/styles"
 import HostRoomates from "./HostRoomates"
 import { Host } from "../../models/Host"
 
+
+
 const useStyles = makeStyles(() => ({
   hostCardContainer: {
     border: "1px hidden purple",
@@ -35,6 +37,9 @@ interface IHostCardProps {
 }
 
 export const HostCard = ({ host }: IHostCardProps) => {
+
+  //bonnie host id = 999
+
   const classes = useStyles()
 
   return (
@@ -42,8 +47,9 @@ export const HostCard = ({ host }: IHostCardProps) => {
       <div className={classes.hostImageContainer}>
         <img
           className={classes.hostImage}
-          src="https://www.fillmurray.com/400/400"
+          src={host.id === 999 ? "/hosthome/img/bonnie.png" : "https://placebear.com/400/400"}
           alt="avatar"
+          height="400px"
         />
       </div>
 

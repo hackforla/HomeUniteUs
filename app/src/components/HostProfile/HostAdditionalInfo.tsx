@@ -10,6 +10,7 @@ const useStyles = makeStyles(() => ({
     marginTop: "50px"
   },
   additionalInfoTitle: {
+    fontWeight: "bold",
     fontSize: "24px",
     border: "1px hidden blue"
   },
@@ -22,9 +23,12 @@ const useStyles = makeStyles(() => ({
     margin: "20px 0"
   },
   additionalInfoLabel: {
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontSize: "24px"
   },
-  additionalInfoContent: {}
+  additionalInfoContent: { fontSize: "20px" },
+  headerText: { fontSize: "24px" },
+  paragraph: { fontSize: "20px" },
 }))
 
 interface IAdditionalInfoProps {

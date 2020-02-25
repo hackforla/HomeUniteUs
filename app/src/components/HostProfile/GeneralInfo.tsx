@@ -10,7 +10,9 @@ const useStyles = makeStyles(() => ({
   generalInfoRow: {
     display: "flex",
     justifyContent: "space-around"
-  }
+  },
+  headerText: { fontSize: "24px" },
+  paragraph: { fontSize: "20px" },
 }))
 
 interface IGeneralInfoProps {
@@ -21,23 +23,23 @@ interface IGeneralInfoProps {
 const hostTypeToString = (hostHomeType: HostHomeType) => hostHomeType === HostHomeType.Respite
   ? 'respite'
   : hostHomeType === HostHomeType.Full
-  ? 'full-time'
-  : 'full-time or respite';
+    ? 'full-time'
+    : 'full-time or respite';
 
 export const GeneralInfo = ({ host }: IGeneralInfoProps) => {
   const classes = useStyles()
 
   return (
     <>
-    <Grid container>
-      <Grid item xs={12}>
-        <Typography variant='h4'>{`${host.firstName} ${host.lastName}, ${hostTypeToString(host.type)} host, ${host.housingType  }`}</Typography>
+      <Grid container>
+        <Grid item xs={12}>
+          <Typography variant='h4' className={classes.headerText}>{`${host.firstName} ${host.lastName}, ${hostTypeToString(host.type)} host, ${host.housingType}`}</Typography>
+        </Grid>
       </Grid>
-    </Grid>
-    <div className={classes.generalInfoRow}>
-      <HostCard host={host} />
-      <LocationCard host={host} />
-    </div>
+      <div className={classes.generalInfoRow}>
+        <HostCard host={host} />
+        <LocationCard host={host} />
+      </div>
     </>
   )
 }
