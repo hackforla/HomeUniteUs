@@ -7,6 +7,7 @@ import { Grid, Typography } from "@material-ui/core"
 import { HostHomeType } from "../../models/HostHomeType"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faPrescriptionBottleAlt, faPaw, faSmokingBan, faWineBottle } from "@fortawesome/free-solid-svg-icons"
+import GuestPolicies from './GuestPolicies'
 
 const useStyles = makeStyles(() => ({
   generalInfoRow: {
@@ -16,7 +17,7 @@ const useStyles = makeStyles(() => ({
   },
   icon: {},
   header: {
-    fontSize: "24px"
+    fontSize: "30px"
   },
   additionalInfo: {
     width: "70%",
@@ -40,6 +41,8 @@ const useStyles = makeStyles(() => ({
     flexDirection: "column",
     alignItems: "center"
   },
+  paragraph: { fontSize: "20px" },
+  headerText: { fontSize: "24px" }
 }))
 
 interface Props {
@@ -67,7 +70,7 @@ const GeneralInfo = ({ guest }: Props) => {
         <GuestInfo guest={guest} />
       </div>
       <div>
-
+        {/* 
         <Grid container alignContent='center' alignItems='center'>
           <Grid item xs alignContent='center' alignItems='center'>
             <div className={style.policy}>
@@ -101,26 +104,27 @@ const GeneralInfo = ({ guest }: Props) => {
             </div>
           </Grid>
 
-        </Grid>
+        </Grid> */}
+        <GuestPolicies guest={guest} />
       </div>
       <div className={style.additionalInfo}>
-        <h5 className={style.header}>Additional Info</h5>
+        <h5 className={style.header}>About the Guest</h5>
         <br />
 
-        <b>Intro:</b>
-        <p>{guest.guestIntro}</p>
+        <b className={style.headerText}>Intro:</b>
+        <p className={style.paragraph}>{guest.guestIntro}</p>
         <br />
 
-        <b>Stay Statement:</b>
-        <p>{guest.guestStayStatement}</p>
+        <b className={style.headerText}>Stay Statement:</b>
+        <p className={style.paragraph}>{guest.guestStayStatement}</p>
         <br />
 
-        <b>Employment:</b>
-        <p>{`I'm currently employed at ${guest.employmentCompany} as ${guest.employmentPosition}`}</p>
+        <b className={style.headerText}>Employment:</b>
+        <p className={style.paragraph}>{`I'm currently employed at ${guest.employmentCompany} as ${guest.employmentPosition}`}</p>
         <br />
 
-        <b>Challenges:</b>
-        <p>{guest.guestChallenges}</p>
+        <b className={style.headerText}>Challenges:</b>
+        <p className={style.paragraph}>{guest.guestChallenges}</p>
         <br />
 
         {/* <p>Date of Birth:</p>
