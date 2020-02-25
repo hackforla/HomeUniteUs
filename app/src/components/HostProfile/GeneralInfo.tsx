@@ -11,8 +11,8 @@ const useStyles = makeStyles(() => ({
     display: "flex",
     justifyContent: "space-around"
   },
-  headerText: { fontSize: "24px" },
-  paragraph: { fontSize: "20px" },
+  headerText: { fontSize: "24px", fontWeight: "bold", margin: "0 0 30px 25px" },
+  paragraph: { fontSize: "20px", margin: "0 0 30px 25px" },
 }))
 
 interface IGeneralInfoProps {
@@ -33,7 +33,8 @@ export const GeneralInfo = ({ host }: IGeneralInfoProps) => {
     <>
       <Grid container>
         <Grid item xs={12}>
-          <Typography variant='h4' className={classes.headerText}>{`${host.firstName} ${host.lastName}, ${hostTypeToString(host.type)} host, ${host.housingType}`}</Typography>
+          <p className={classes.headerText}>Meet {host.firstName}</p>
+          <span className={classes.paragraph}>{`${host.firstName} ${host.lastName} is the ${hostTypeToString(host.type)} host of a ${host.housingType.toLowerCase()} in ${host.address}`}</span>
         </Grid>
       </Grid>
       <div className={classes.generalInfoRow}>

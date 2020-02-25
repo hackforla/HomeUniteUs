@@ -28,7 +28,7 @@ const GuestPolicies = ({ guest }: Props) => {
 
     return (
         <div className={classes.policy}>
-            <h5 style={{ fontSize: "30px", alignSelf: "flex-start", margin: "0 0 50px 25px" }}>{guest.firstName}'s Characteristics</h5>
+            <h5 style={{ fontSize: "24px", alignSelf: "flex-start", margin: "0 0 50px 25px" }}>{guest.firstName}'s Characteristics</h5>
             <Grid container alignContent='center' alignItems='center'>
                 <Grid item xs alignContent='center' alignItems='center'>
                     <div className={classes.holder}>

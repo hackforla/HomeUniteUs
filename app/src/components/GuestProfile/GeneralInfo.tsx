@@ -17,7 +17,7 @@ const useStyles = makeStyles(() => ({
   },
   icon: {},
   header: {
-    fontSize: "30px"
+    fontSize: "24px", fontWeight: "bold"
   },
   additionalInfo: {
     width: "70%",
@@ -62,7 +62,7 @@ const GeneralInfo = ({ guest }: Props) => {
     <div>
       <Grid container>
         <Grid item xs={12}>
-          <Typography variant='h4'>{`${guest.firstName} ${guest.lastName}, guest seeking ${guestTypeToString(guest.type)} host`}</Typography>
+          <span className={style.header}>{`${guest.firstName} ${guest.lastName}, guest seeking ${guestTypeToString(guest.type)} host`}</span>
         </Grid>
       </Grid>
       <div className={style.generalInfoRow}>
