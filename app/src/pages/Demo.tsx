@@ -127,7 +127,7 @@ export const Demo = () => {
                       component={Link}
                       style={{ color: "white", backgroundColor: "#00AAEF" }}
                       // to={"placeholder"}
-                      onClick={() => history.push(`placeholder`)}
+                      onClick={() => history.push(`/hosthome/guests/13/matches/998`)}
                     >
                       Profile
                     </Button>
@@ -225,7 +225,7 @@ export const Demo = () => {
                       component={Link}
                       style={{ color: "white", backgroundColor: "#00AAEF" }}
                       // to={"placeholder"}
-                      onClick={() => history.push(`placeholder`)}
+                      onClick={() => history.push(`/hosthome/guests/998`)}
                     >
                       Profile
                     </Button>

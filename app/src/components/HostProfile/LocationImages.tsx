@@ -17,10 +17,10 @@ const useStyles = makeStyles(() => ({
 }));
 
 const imageURLS = [
-  "https://www.fillmurray.com/400/200",
-  "https://www.fillmurray.com/g/400/200",
-  "https://www.fillmurray.com/400/200",
-  "https://www.fillmurray.com/g/400/200",
+  "/hosthome/img/house1.png",
+  "/hosthome/img/house2.png",
+  "/hosthome/img/house1.png",
+  "/hosthome/img/house2.png",
 ]
 
 export const LocationImages = () => {

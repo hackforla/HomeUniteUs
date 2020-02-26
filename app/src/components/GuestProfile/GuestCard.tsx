@@ -38,7 +38,7 @@ const GuestCard = ({ guest }: Props) => {
             <div className={style.guestImageContainer}>
                 <img
                     className={style.guestImage}
-                    src={guest.id === 999 ? "/hosthome/img/kirk.png" : "https://placebear.com/400/400"}
+                    src={guest.id === 999 ? "/hosthome/img/kirk.png" : guest.id === 998 ? "/hosthome/img/megan.png" : "/hosthome/img/profile2.png"}
                     alt={"Guest Image"}
                     height="400px"
                 />
