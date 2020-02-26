@@ -40,7 +40,9 @@ const useStyles = makeStyles(() => ({
   },
   icon: {},
   content: {
-    fontSize: "24px"
+    width: "285px",
+    fontSize: "24px",
+    lineHeight: 1.3,
     // paddingLeft: "10px"
   }
 }))
@@ -114,7 +116,7 @@ export const HousePolicies = ({ host }: IHousePoliciesProps) => {
       <div className={classes.housePolicyContainer}>
         <div className={classes.housePolicyTitle}>House Policies</div>
 
-        <Grid container alignContent='center' alignItems='center'>
+        <Grid container alignContent='center' alignItems='flex-start'>
           {
             policies.slice(0, 3).map(policy => {
               return (

@@ -120,7 +120,6 @@ export const MatchSummaryRow = (guestMatchSummary: GuestMatchSummary) => {
           <Typography component="p" align="left">
             <Link
               to={`/hosthome/guests/${guestMatchSummary.guestId}`}
-              style={{ color: "rgba(0, 0, 0, 0.54)", textDecoration: "none" }}
             >
               {guestMatchSummary.guestName}
             </Link>

@@ -24,9 +24,13 @@ const useStyles = makeStyles(() => ({
   },
   additionalInfoLabel: {
     fontWeight: "bold",
-    fontSize: "24px"
+    fontSize: "24px",
+    lineHeight: 1.7,
   },
-  additionalInfoContent: { fontSize: "20px" },
+  additionalInfoContent: {
+    fontSize: "20px",
+    lineHeight: 1.3,
+  },
   headerText: { fontSize: "24px" },
   paragraph: { fontSize: "20px" },
 }))
