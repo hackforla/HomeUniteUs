@@ -117,7 +117,7 @@ const useStyles = makeStyles(theme =>
       color: theme.palette.text.secondary
     }
   })
-)
+);
 
 export const PlaceholderView = () => {
   const classes = useStyles({})
@@ -267,7 +267,7 @@ export const App = () => {
             <main>
               <Switch>
                 <Route exact path="/" component={AboutPage} />
-                <Route exact path="/hosthome" component={AdminView} />
+                <Route exact path="/hosthome" component={AboutPage} />
                 <Route exact path="/hosthome/demo" component={Demo} />
                 <Route path="/hosthome/about" component={AboutPage} />
                 <Route path="/hosthome/admin/guests" component={AdminView} />
