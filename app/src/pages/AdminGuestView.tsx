@@ -100,7 +100,6 @@ const useStyles = makeStyles(theme => (
         },
         tableHeader: {
             backgroundColor: '#00AAEF',
-            // fontFamily: 'Brandon Grotesque',
             fontStyle: 'normal',
             fontWeight: 'bold',
             fontSize: '16px',
@@ -108,7 +107,6 @@ const useStyles = makeStyles(theme => (
             color: '#FFFFFF'
         },
         tableHeaderCell: {
-            // fontFamily: 'Brandon Grotesque',
             fontStyle: 'normal',
             fontWeight: 'bold',
             fontSize: '16px',
@@ -116,7 +114,6 @@ const useStyles = makeStyles(theme => (
             color: '#FFFFFF'
         },
         matchingHeaderCell: {
-            // fontFamily: 'Brandon Grotesque',
             fontStyle: 'normal',
             fontWeight: 'bold',
             fontSize: '16px',
@@ -125,11 +122,9 @@ const useStyles = makeStyles(theme => (
             textAlign: 'center'
         },
         tableRowOdd: {
-            // fontFamily: 'Brandon Grotesque',
             backgroundColor: '#FFFFFF'
         },
         tableRowEven: {
-            // fontFamily: 'Brandon Grotesque',
             backgroundColor: '#F5F5F5'
         }
     })));

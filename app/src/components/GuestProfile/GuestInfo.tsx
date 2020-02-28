@@ -59,7 +59,7 @@ const Guest = ({ guest }: Props) => {
     return (
         <div className={style.guestInfo}>
             <div className={style.header}>
-                <p className={style.headerText}>{guest.name},{((new Date()).getFullYear() - guest.dateOfBirth.getFullYear())}</p>
+                <p className={style.headerText}>{guest.name}, {((new Date()).getFullYear() - guest.dateOfBirth.getFullYear())}</p>
             </div>
 
 

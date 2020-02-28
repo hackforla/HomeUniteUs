@@ -17,8 +17,10 @@ const useStyles = makeStyles(() => ({
         flexDirection: "column",
         alignItems: "center"
     },
-    holder: { display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" },
-    textWidth: { width: "285px", margin: "0 0 25px 0", fontSize: "24px" },
+    holder: { display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start" },
+    textWidth: { 
+        width: "285px", margin: "0 0 25px 0", fontSize: "24px", lineHeight: 1.3,
+    },
     image: { margin: "0 0 30px 0" }
 }))
 
