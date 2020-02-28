@@ -146,6 +146,53 @@ export const Guest = () => {
                     />
                 )
             })}
+
+            {/* <div className={style.guestInfo}>
+            <div className={style.header}>
+                <p className={style.headerText}>{guest.name}, {((new Date()).getFullYear() - guest.dateOfBirth.getFullYear())}</p>
+            </div> */}
+
+            {/* regarding above and below that's the stuff for the date. i'll have to make it play nice */}
+
+
+            {/* <div className={style.info}> */}
+            {/* <div className={style.spacer}>
+                    <p>Introduction : {guest.guestIntro}</p>
+                </div>
+                <div className={style.spacer}>
+                    <p>Email : {guest.email}</p>
+                </div>
+                <div className={style.spacer}>
+                    <p>Date of Birth : {guest.dateOfBirth.toString()}</p>
+                </div> */}
+            {/* <div className={style.spacer}>
+                    <FontAwesomeIcon icon={faPaw} />
+                    <p>{guest.petsText}</p>
+                </div>
+                <div className={style.spacer}>
+                    <FontAwesomeIcon icon={faWineBottle} />
+                    <p>{guest.drinkingText}</p>
+                </div>
+            </div> */}
+            {/* <div className={style.info}> */}
+            {/* <div className={style.spacer}>
+                    <p>Statement : {guest.guestStayStatement}</p>
+                </div>
+                <div className={style.spacer}>
+                    <p>Employment : {guest.employmentInfo}</p>
+                </div>
+                <div className={style.spacer}>
+                    <p>Challenges : {guest.guestChallenges}</p>
+                </div> */}
+            {/* <div className={style.spacer}>
+                    <FontAwesomeIcon icon={faSmokingBan} />
+                    <p>{guest.smokingText}</p>
+                </div>
+                <div className={style.spacer}>
+                    <FontAwesomeIcon icon={faPrescriptionBottleAlt} />
+                    <p>{guest.substancesText}</p>
+                </div>
+            </div> */}
         </div>
     );
 }

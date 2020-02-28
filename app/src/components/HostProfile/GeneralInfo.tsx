@@ -34,7 +34,7 @@ export const GeneralInfo = ({ host }: IGeneralInfoProps) => {
       <Grid container>
         <Grid item xs={12}>
           <p className={classes.headerText}>Meet {host.firstName}</p>
-          <span className={classes.paragraph}>{`${host.firstName} ${host.lastName} is the ${hostTypeToString(host.type)} host of a ${host.housingType.toLowerCase()} in ${host.address}`}</span>
+          <span className={classes.paragraph}>{`${host.firstName} ${host.lastName}, ${(new Date()).getFullYear() - host.dateOfBirth.getFullYear()}, is the ${hostTypeToString(host.type)} host of a ${host.housingType.toLowerCase()} in ${host.address}`}</span>
         </Grid>
       </Grid>
       <div className={classes.generalInfoRow}>

@@ -41,7 +41,10 @@ const useStyles = makeStyles(() => ({
     flexDirection: "column",
     alignItems: "center"
   },
-  paragraph: { fontSize: "20px" },
+  paragraph: { 
+    fontSize: "20px",
+    lineHeight: 1.3,
+  },
   headerText: { fontSize: "24px" }
 }))
 
