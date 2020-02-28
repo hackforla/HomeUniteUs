@@ -62,7 +62,6 @@
 //                 <p className={style.headerText}>{guest.name},{((new Date()).getFullYear() - guest.dateOfBirth.getFullYear())}</p>
 //             </div>
 
-
 //             {/* <div className={style.info}> */}
 //             {/* <div className={style.spacer}>
 //                     <p>Introduction : {guest.guestIntro}</p>
@@ -107,56 +106,59 @@
 
 // export default Guest
 
-import * as React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import * as React from "react"
+import { makeStyles } from "@material-ui/core/styles"
 
 const useStyles = makeStyles(() => ({
-    locationImagesContainer: {
-        border: '1px hidden green',
-        display: 'flex',
-        flexWrap: 'wrap',
-        height: '400px',
-        minWidth: '600px',
-        maxWidth: '800px',
-    },
-    image: {
-        border: '1px hidden blue',
-        width: '49%',
-    },
-}));
+  locationImagesContainer: {
+    border: "1px hidden green",
+    display: "flex",
+    flexWrap: "wrap",
+    height: "400px",
+    minWidth: "600px",
+    maxWidth: "800px"
+  },
+  image: {
+    border: "1px hidden blue",
+    width: "49%"
+  }
+}))
 
 const imageURLS = [
-    "/hosthome/img/house1.png",
-    "/hosthome/img/house2.png",
-    "/hosthome/img/house1.png",
-    "/hosthome/img/house2.png",
+  "/hosthome/img/house1.png",
+  "/hosthome/img/house2.png",
+  "/hosthome/img/house1.png",
+  "/hosthome/img/house2.png"
 ]
 
 export const Guest = () => {
-    const classes = useStyles();
+  const classes = useStyles()
 
-    return (
-        <div className={classes.locationImagesContainer}>
-            {imageURLS.map(imageURL => {
-                return (
-                    <img
-                        src={imageURL}
-                        alt="location_image"
-                        className={classes.image}
-                    />
-                )
-            })}
-
-            {/* <div className={style.guestInfo}>
+  return (
+    <div className={classes.locationImagesContainer}>
+      {imageURLS.map(imageURL => {
+        return (
+          <img src={imageURL} alt="location_image" className={classes.image} />
+        )
+      })}
+    </div>
+  )
+  {
+    /* <div className={style.guestInfo}>
             <div className={style.header}>
                 <p className={style.headerText}>{guest.name}, {((new Date()).getFullYear() - guest.dateOfBirth.getFullYear())}</p>
-            </div> */}
+            </div> */
+  }
 
-            {/* regarding above and below that's the stuff for the date. i'll have to make it play nice */}
+  {
+    /* regarding above and below that's the stuff for the date. i'll have to make it play nice */
+  }
 
-
-            {/* <div className={style.info}> */}
-            {/* <div className={style.spacer}>
+  {
+    /* <div className={style.info}> */
+  }
+  {
+    /* <div className={style.spacer}>
                     <p>Introduction : {guest.guestIntro}</p>
                 </div>
                 <div className={style.spacer}>
@@ -164,8 +166,10 @@ export const Guest = () => {
                 </div>
                 <div className={style.spacer}>
                     <p>Date of Birth : {guest.dateOfBirth.toString()}</p>
-                </div> */}
-            {/* <div className={style.spacer}>
+                </div> */
+  }
+  {
+    /* <div className={style.spacer}>
                     <FontAwesomeIcon icon={faPaw} />
                     <p>{guest.petsText}</p>
                 </div>
@@ -173,9 +177,13 @@ export const Guest = () => {
                     <FontAwesomeIcon icon={faWineBottle} />
                     <p>{guest.drinkingText}</p>
                 </div>
-            </div> */}
-            {/* <div className={style.info}> */}
-            {/* <div className={style.spacer}>
+            </div> */
+  }
+  {
+    /* <div className={style.info}> */
+  }
+  {
+    /* <div className={style.spacer}>
                     <p>Statement : {guest.guestStayStatement}</p>
                 </div>
                 <div className={style.spacer}>
@@ -183,8 +191,10 @@ export const Guest = () => {
                 </div>
                 <div className={style.spacer}>
                     <p>Challenges : {guest.guestChallenges}</p>
-                </div> */}
-            {/* <div className={style.spacer}>
+                </div> */
+  }
+  {
+    /* <div className={style.spacer}>
                     <FontAwesomeIcon icon={faSmokingBan} />
                     <p>{guest.smokingText}</p>
                 </div>
@@ -192,9 +202,8 @@ export const Guest = () => {
                     <FontAwesomeIcon icon={faPrescriptionBottleAlt} />
                     <p>{guest.substancesText}</p>
                 </div>
-            </div> */}
-        </div>
-    );
+            </div> */
+  }
 }
 
-export default Guest;
+export default Guest

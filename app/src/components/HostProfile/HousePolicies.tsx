@@ -34,7 +34,7 @@ const useStyles = makeStyles(() => ({
     // width: "30%",
     margin: "20px 0",
     display: "flex",
-    textAlign: 'center',
+    textAlign: "center",
     flexDirection: "column",
     alignItems: "center"
   },
@@ -42,7 +42,7 @@ const useStyles = makeStyles(() => ({
   content: {
     width: "285px",
     fontSize: "24px",
-    lineHeight: 1.3,
+    lineHeight: 1.3
     // paddingLeft: "10px"
   }
 }))
@@ -73,6 +73,9 @@ export const HousePolicies = ({ host }: IHousePoliciesProps) => {
   //   }
   // ]
 
+  // I don't smoke, but I'm find with others smoking indoors.
+  // We don't smoke, but we're ok with others smoking in the house.
+  //We smoke in the house.
 
   let policies = [
     {
@@ -80,7 +83,16 @@ export const HousePolicies = ({ host }: IHousePoliciesProps) => {
       content: host.petsText
     },
     {
-      icon: "/hosthome/img/smoke.png",
+      icon:
+        host.smokingText === "We smoke in the house." ||
+        host.smokingText ===
+          "We don't smoke, but we're ok with others smoking in the house." ||
+        host.smokingText ===
+          "I don't smoke, but I'm find with others smoking indoors." ||
+        host.smokingText ===
+          "I don't smoke, but I'm fine with others smoking indoors."
+          ? "/hosthome/img/doSmoke.png"
+          : "/hosthome/img/smoke.png",
       content: host.smokingText
     },
     {
@@ -110,58 +122,49 @@ export const HousePolicies = ({ host }: IHousePoliciesProps) => {
   //     content: "We welcome youths in relationships."
   //   })
   // }
-
+  // We provide a smoke free environment.
   return (
     <Container>
       <div className={classes.housePolicyContainer}>
         <div className={classes.housePolicyTitle}>House Policies</div>
 
-        <Grid container alignContent='center' alignItems='flex-start'>
-          {
-            policies.slice(0, 3).map(policy => {
-              return (
-
-                <Grid item xs alignContent='center' alignItems='center'>
-                  <div className={classes.policy}>
-                    <span className={classes.icon}>
-                      {/* <FontAwesomeIcon
+        <Grid container alignContent="center" alignItems="flex-start">
+          {policies.slice(0, 3).map(policy => {
+            return (
+              <Grid item xs alignContent="center" alignItems="center">
+                <div className={classes.policy}>
+                  <span className={classes.icon}>
+                    {/* <FontAwesomeIcon
                         icon={policy.icon}
                         aria-hidden="true"
                         size="7x"
                       /> */}
-                      <img width="100px" src={policy.icon} />
-                    </span>
-                    <p className={classes.content}>{policy.content}</p>
-                  </div>
-                </Grid>
-
-              )
-            })
-          }
+                    <img width="100px" src={policy.icon} />
+                  </span>
+                  <p className={classes.content}>{policy.content}</p>
+                </div>
+              </Grid>
+            )
+          })}
         </Grid>
-        <Grid container alignContent='center' alignItems='center'>
-          {
-            policies.slice(3).map(policy => {
-              return (
-
-                <Grid item xs alignContent='center' alignItems='center'>
-                  <div className={classes.policy}>
-                    <span className={classes.icon}>
-                      {/* <FontAwesomeIcon
+        <Grid container alignContent="center" alignItems="center">
+          {policies.slice(3).map(policy => {
+            return (
+              <Grid item xs alignContent="center" alignItems="center">
+                <div className={classes.policy}>
+                  <span className={classes.icon}>
+                    {/* <FontAwesomeIcon
                         icon={policy.icon}
                         aria-hidden="true"
                         size="7x"
                       /> */}
-                      <img width="100px" src={policy.icon} />
-
-                    </span>
-                    <p className={classes.content}>{policy.content}</p>
-                  </div>
-                </Grid>
-
-              )
-            })
-          }
+                    <img width="100px" src={policy.icon} />
+                  </span>
+                  <p className={classes.content}>{policy.content}</p>
+                </div>
+              </Grid>
+            )
+          })}
         </Grid>
         {/* <div className={classes.housePolicies}>
         {policies.map(policy => {
@@ -180,9 +183,8 @@ export const HousePolicies = ({ host }: IHousePoliciesProps) => {
         })}
       </div> */}
       </div>
-
-
-    </Container>)
+    </Container>
+  )
 }
 
 export default HousePolicies
