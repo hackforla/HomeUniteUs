@@ -6,8 +6,13 @@ import GuestInfo from "./GuestInfo"
 import { Grid, Typography } from "@material-ui/core"
 import { HostHomeType } from "../../models/HostHomeType"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faPrescriptionBottleAlt, faPaw, faSmokingBan, faWineBottle } from "@fortawesome/free-solid-svg-icons"
-import GuestPolicies from './GuestPolicies'
+import {
+  faPrescriptionBottleAlt,
+  faPaw,
+  faSmokingBan,
+  faWineBottle
+} from "@fortawesome/free-solid-svg-icons"
+import GuestPolicies from "./GuestPolicies"
 
 const useStyles = makeStyles(() => ({
   generalInfoRow: {
@@ -17,7 +22,8 @@ const useStyles = makeStyles(() => ({
   },
   icon: {},
   header: {
-    fontSize: "24px", fontWeight: "bold"
+    fontSize: "24px",
+    fontWeight: "bold"
   },
   additionalInfo: {
     width: "70%",
@@ -37,13 +43,13 @@ const useStyles = makeStyles(() => ({
     // width: "30%",
     margin: "20px 0",
     display: "flex",
-    textAlign: 'center',
+    textAlign: "center",
     flexDirection: "column",
     alignItems: "center"
   },
-  paragraph: { 
+  paragraph: {
     fontSize: "20px",
-    lineHeight: 1.3,
+    lineHeight: 1.3
   },
   headerText: { fontSize: "24px" }
 }))
@@ -52,11 +58,12 @@ interface Props {
   guest: Guest
 }
 
-const guestTypeToString = (hostHomeType: HostHomeType) => hostHomeType === HostHomeType.Respite
-  ? 'respite'
-  : hostHomeType === HostHomeType.Full
-    ? 'full-time'
-    : 'full-time or respite';
+const guestTypeToString = (hostHomeType: HostHomeType) =>
+  hostHomeType === HostHomeType.Respite
+    ? "respite"
+    : hostHomeType === HostHomeType.Full
+    ? "full-time"
+    : "full-time or respite"
 
 const GeneralInfo = ({ guest }: Props) => {
   const style = useStyles()
@@ -64,8 +71,17 @@ const GeneralInfo = ({ guest }: Props) => {
   return (
     <div>
       <Grid container>
+        <Grid style={{ margin: "0 0 30px 25px" }} className={style.header}>
+          Meet {guest.firstName}
+        </Grid>
         <Grid item xs={12}>
-          <span className={style.header}>{`${guest.firstName} ${guest.lastName}, guest seeking ${guestTypeToString(guest.type)} host`}</span>
+          <span
+            style={{ margin: "0 0 0 25px" }}
+            className={style.paragraph}
+          >{`${guest.firstName} ${guest.lastName}, ${new Date().getFullYear() -
+            guest.dateOfBirth.getFullYear()}, is a guest seeking ${guestTypeToString(
+            guest.type
+          )} host`}</span>
         </Grid>
       </Grid>
       <div className={style.generalInfoRow}>
@@ -123,7 +139,9 @@ const GeneralInfo = ({ guest }: Props) => {
         <br />
 
         <b className={style.headerText}>Employment:</b>
-        <p className={style.paragraph}>{`I'm currently employed at ${guest.employmentCompany} as ${guest.employmentPosition}`}</p>
+        <p
+          className={style.paragraph}
+        >{`I'm currently employed at ${guest.employmentCompany} as ${guest.employmentPosition}`}</p>
         <br />
 
         <b className={style.headerText}>Challenges:</b>

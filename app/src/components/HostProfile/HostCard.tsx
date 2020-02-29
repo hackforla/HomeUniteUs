@@ -38,8 +38,6 @@ interface IHostCardProps {
 
 export const HostCard = ({ host }: IHostCardProps) => {
 
-  //bonnie host id = 999
-
   const classes = useStyles()
 
   return (
@@ -47,7 +45,7 @@ export const HostCard = ({ host }: IHostCardProps) => {
       <div className={classes.hostImageContainer}>
         <img
           className={classes.hostImage}
-          src={host.id === 999 ? "/hosthome/img/bonnie.png" : "https://placebear.com/400/400"}
+          src={host.id === 999 ? "/hosthome/img/bonnie.png" : host.id === 998 ? "/hosthome/img/micheal.png" : "/hosthome/img/profile2.png"}
           alt="avatar"
           height="400px"
         />
