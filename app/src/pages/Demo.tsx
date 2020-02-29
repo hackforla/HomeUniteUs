@@ -36,6 +36,12 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export const Demo = () => {
+
+
+  const [selectedImage, setSelectedImage] = React.useState('none');
+
+
+
   const [visible, showElement] = React.useState({
     adminPage: false,
     guestMatches: false,
@@ -44,15 +50,23 @@ export const Demo = () => {
     annotationOfDecline: false
   })
 
-  const showPic = (e: any) => {
-    showElement({ [e.target.title]: true })
-  }
+  const showPic = (e: React.MouseEvent<HTMLImageElement>) => {
+    
+    // showElement({
+    //   ...visible,
+    //   [imgTitle]: true 
+    // });
+    const imgTitle = e.currentTarget.getAttribute('title') || '';
+    setSelectedImage(imgTitle);
+
+  };
+
 
   const history = useHistory()
   const classes = useStyles()
   return (
     <Container>
-      <Modal visible={visible} showElement={showElement} />
+      <Modal visible={visible} showElement={showElement} selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
       <Paper className={classes.paperHeader}>
         <Typography component="h1" align="center" style={{ fontSize: "2em" }}>
           Host Profiles

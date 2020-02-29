@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const Modal = props => {
+const Modal = (props: any) => {
   const styles = useStyles()
   const visible = props.visible
 
@@ -30,16 +30,21 @@ const Modal = props => {
     <section
       className={styles.modal}
       onClick={() =>
-        props.showElement({
+        {props.showElement({
           adminPage: false,
           guestMatches: false,
           interestButtons: false,
           annotationOfInterested: false,
           annotationOfDecline: false
-        })
+        });
+        
+        props.setSelectedImage('');
+      }
       }
     >
-      {visible.adminPage ? (
+      {
+      // visible.adminPage ? (
+        props.selectedImage === 'adminPage' ? (
         <div>
           <Typography component="h1" align="left" className={styles.text}>
             Admin Page
@@ -51,7 +56,9 @@ const Modal = props => {
           />
         </div>
       ) : null}
-      {visible.guestMatches ? (
+      {
+      // visible.guestMatches ? (
+        props.selectedImage === 'guestMatches' ? (
         <div>
           <Typography component="h1" align="left" className={styles.text}>
             Guest Matches
@@ -63,7 +70,9 @@ const Modal = props => {
           />
         </div>
       ) : null}
-      {visible.interestButtons ? (
+      {
+      // visible.interestButtons ? (
+        props.selectedImage === 'interestButtons' ? (
         <div>
           <Typography component="h1" align="left" className={styles.text}>
             Interest Buttons
@@ -76,7 +85,9 @@ const Modal = props => {
           />
         </div>
       ) : null}
-      {visible.annotationOfInterested ? (
+      {
+      // visible.annotationOfInterested ? (
+        props.selectedImage === 'annotationOfInterested' ? (
         <div>
           <Typography component="h1" align="left" className={styles.text}>
             Annotation of Interested
@@ -88,7 +99,9 @@ const Modal = props => {
           />
         </div>
       ) : null}
-      {visible.annotationOfDecline ? (
+      {
+      // visible.annotationOfDecline ? (
+        props.selectedImage === 'annotationOfDecline' ? (
         <div>
           <Typography component="h1" align="left" className={styles.text}>
             Annotation of Decline

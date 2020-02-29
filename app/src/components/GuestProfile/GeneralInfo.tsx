@@ -86,7 +86,9 @@ const GeneralInfo = ({ guest }: Props) => {
       </Grid>
       <div className={style.generalInfoRow}>
         <GuestCard guest={guest} />
-        <GuestInfo guest={guest} />
+        {/* Tyler 2/29/20 - GuestInfo has been changed and is now called with no props */}
+        {/* <GuestInfo guest={guest} /> */} 
+        <GuestInfo />
       </div>
       <div>
         {/* 
