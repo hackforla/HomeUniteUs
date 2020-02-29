@@ -117,7 +117,7 @@ const useStyles = makeStyles(theme =>
       color: theme.palette.text.secondary
     }
   })
-);
+)
 
 export const PlaceholderView = () => {
   const classes = useStyles({})

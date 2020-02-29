@@ -1,4 +1,5 @@
 import * as React from "react"
+import Modal from "./Modals"
 
 import {
   Container,
@@ -24,7 +25,8 @@ const useStyles = makeStyles(theme => ({
     border: "1px solid #ADADAD"
   },
   images: {
-    margin: "0 0 65px 0"
+    margin: "0 0 65px 0",
+    width: "50%"
   },
   imageTitle: {
     fontSize: "16pt",
@@ -34,10 +36,23 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export const Demo = () => {
+  const [visible, showElement] = React.useState({
+    adminPage: false,
+    guestMatches: false,
+    interestButtons: false,
+    annotationOfInterested: false,
+    annotationOfDecline: false
+  })
+
+  const showPic = (e: any) => {
+    showElement({ [e.target.title]: true })
+  }
+
   const history = useHistory()
   const classes = useStyles()
   return (
     <Container>
+      <Modal visible={visible} showElement={showElement} />
       <Paper className={classes.paperHeader}>
         <Typography component="h1" align="center" style={{ fontSize: "2em" }}>
           Host Profiles
@@ -127,7 +142,9 @@ export const Demo = () => {
                       component={Link}
                       style={{ color: "white", backgroundColor: "#00AAEF" }}
                       // to={"placeholder"}
-                      onClick={() => history.push(`/hosthome/guests/13/matches/998`)}
+                      onClick={() =>
+                        history.push(`/hosthome/guests/13/matches/998`)
+                      }
                     >
                       Profile
                     </Button>
@@ -242,7 +259,7 @@ export const Demo = () => {
         </Typography>
       </Paper>
       <Grid item xs={12} style={{ margin: "50px 0 0 0" }}>
-        <Container>
+        {/* <Container>
           <Paper className={classes.paper} style={{ border: "none" }}>
             <div
               style={{
@@ -296,6 +313,63 @@ export const Demo = () => {
                     alt={"Annotation of Declined"}
                   />
                 </div>
+              </div>
+            </div>
+          </Paper>
+        </Container>
+       */}
+
+        <Container>
+          <Paper className={classes.paper} style={{ border: "none" }}>
+            <div style={{ display: "flex", flexWrap: "wrap" }}>
+              <div className={classes.images}>
+                <div className={classes.imageTitle}>Admin Page</div>
+                <img
+                  title="adminPage"
+                  src={"/hosthome/img/adminPageThumb.png"}
+                  alt={"Admin Page"}
+                  onClick={e => showPic(e)}
+                />
+              </div>
+              <div className={classes.images}>
+                <div className={classes.imageTitle}>Guest Matches</div>
+                <img
+                  title="guestMatches"
+                  src={"/hosthome/img/guestMatchesThumb.png"}
+                  alt={"Guest Matches"}
+                  onClick={e => showPic(e)}
+                />
+              </div>
+              <div className={classes.images}>
+                <div className={classes.imageTitle}>
+                  Interested/Not Interested Buttons
+                </div>
+                <img
+                  title="interestButtons"
+                  src={"/hosthome/img/interestButtonsThumb.png"}
+                  alt={"Interest Buttons"}
+                  onClick={e => showPic(e)}
+                />
+              </div>
+              <div className={classes.images}>
+                <div className={classes.imageTitle}>
+                  Annotation of Interested
+                </div>
+                <img
+                  title="annotationOfInterested"
+                  src={"/hosthome/img/annotationOfInterestedThumb.png"}
+                  alt={"Annotation of Interested"}
+                  onClick={e => showPic(e)}
+                />
+              </div>
+              <div className={classes.images}>
+                <div className={classes.imageTitle}>Annotation of Decline</div>
+                <img
+                  title="annotationOfDecline"
+                  src={"/hosthome/img/annotationOfDeclineThumb.png"}
+                  alt={"Annotation of Decline"}
+                  onClick={e => showPic(e)}
+                />
               </div>
             </div>
           </Paper>
