@@ -108,6 +108,7 @@
 
 import * as React from "react"
 import { makeStyles } from "@material-ui/core/styles"
+import NumberContext from "./NumberContext"
 
 const useStyles = makeStyles(() => ({
   locationImagesContainer: {
@@ -119,20 +120,21 @@ const useStyles = makeStyles(() => ({
     maxWidth: "800px"
   },
   image: {
-    border: "1px hidden blue",
+    // border: "1px solid black",
+    boxShadow:
+      "0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)",
     width: "49%"
   }
 }))
 
-const imageURLS = [
-  "/hosthome/img/house1.png",
-  "/hosthome/img/house2.png",
-  "/hosthome/img/house1.png",
-  "/hosthome/img/house2.png"
-]
-
 export const Guest = () => {
   const classes = useStyles()
+
+  const imageURLS = new Array(4).fill(
+    `/hosthome/img/profileAdd${React.useContext(NumberContext)}.png`
+  )
+
+  console.log(React.useContext(NumberContext))
 
   return (
     <div className={classes.locationImagesContainer}>

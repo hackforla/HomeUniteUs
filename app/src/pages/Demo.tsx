@@ -32,6 +32,9 @@ const useStyles = makeStyles(theme => ({
     fontSize: "16pt",
     color: theme.palette.text.secondary,
     textAlign: "left"
+  },
+  imgBorder: {
+    border: "1px solid #757575"
   }
 }))
 
@@ -45,7 +48,7 @@ export const Demo = () => {
   })
 
   const showPic = (e: any) => {
-    showElement({ [e.target.title]: true })
+    showElement({ ...visible, [e.target.title]: true })
   }
 
   const history = useHistory()
@@ -325,6 +328,7 @@ export const Demo = () => {
               <div className={classes.images}>
                 <div className={classes.imageTitle}>Admin Page</div>
                 <img
+                  className={classes.imgBorder}
                   title="adminPage"
                   src={"/hosthome/img/adminPageThumb.png"}
                   alt={"Admin Page"}
@@ -334,6 +338,7 @@ export const Demo = () => {
               <div className={classes.images}>
                 <div className={classes.imageTitle}>Guest Matches</div>
                 <img
+                  className={classes.imgBorder}
                   title="guestMatches"
                   src={"/hosthome/img/guestMatchesThumb.png"}
                   alt={"Guest Matches"}
@@ -345,6 +350,7 @@ export const Demo = () => {
                   Interested/Not Interested Buttons
                 </div>
                 <img
+                  className={classes.imgBorder}
                   title="interestButtons"
                   src={"/hosthome/img/interestButtonsThumb.png"}
                   alt={"Interest Buttons"}
@@ -356,6 +362,7 @@ export const Demo = () => {
                   Annotation of Interested
                 </div>
                 <img
+                  className={classes.imgBorder}
                   title="annotationOfInterested"
                   src={"/hosthome/img/annotationOfInterestedThumb.png"}
                   alt={"Annotation of Interested"}
@@ -365,6 +372,7 @@ export const Demo = () => {
               <div className={classes.images}>
                 <div className={classes.imageTitle}>Annotation of Decline</div>
                 <img
+                  className={classes.imgBorder}
                   title="annotationOfDecline"
                   src={"/hosthome/img/annotationOfDeclineThumb.png"}
                   alt={"Annotation of Decline"}
