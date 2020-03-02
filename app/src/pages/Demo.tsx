@@ -39,6 +39,12 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export const Demo = () => {
+
+
+  const [selectedImage, setSelectedImage] = React.useState('none');
+
+
+
   const [visible, showElement] = React.useState({
     adminPage: false,
     guestMatches: false,
@@ -55,7 +61,7 @@ export const Demo = () => {
   const classes = useStyles()
   return (
     <Container>
-      <Modal visible={visible} showElement={showElement} />
+      <Modal visible={visible} showElement={showElement} selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
       <Paper className={classes.paperHeader}>
         <Typography component="h1" align="center" style={{ fontSize: "2em" }}>
           Host Profiles

@@ -66,7 +66,9 @@ const Modal = (props: any) => {
       //   })
       // }
     >
-      {visible.adminPage ? (
+      {
+      // visible.adminPage ? (
+        props.selectedImage === 'adminPage' ? (
         <div>
           <div className={styles.textHolder}>
             <Typography className={styles.text}>Admin Page</Typography>
@@ -82,7 +84,9 @@ const Modal = (props: any) => {
           />
         </div>
       ) : null}
-      {visible.guestMatches ? (
+      {
+      // visible.guestMatches ? (
+        props.selectedImage === 'guestMatches' ? (
         <div>
           <div className={styles.textHolder}>
             <Typography className={styles.text}>Guest Matches</Typography>
@@ -98,7 +102,9 @@ const Modal = (props: any) => {
           />
         </div>
       ) : null}
-      {visible.interestButtons ? (
+      {
+      // visible.interestButtons ? (
+        props.selectedImage === 'interestButtons' ? (
         <div>
           <div className={styles.textHolder}>
             <Typography className={styles.text}>Interest Buttons</Typography>
@@ -114,7 +120,9 @@ const Modal = (props: any) => {
           />
         </div>
       ) : null}
-      {visible.annotationOfInterested ? (
+      {
+      // visible.annotationOfInterested ? (
+        props.selectedImage === 'annotationOfInterested' ? (
         <div>
           <div className={styles.textHolder}>
             <Typography className={styles.text}>
@@ -132,7 +140,9 @@ const Modal = (props: any) => {
           />
         </div>
       ) : null}
-      {visible.annotationOfDecline ? (
+      {
+      // visible.annotationOfDecline ? (
+        props.selectedImage === 'annotationOfDecline' ? (
         <div>
           <div className={styles.textHolder}>
             <Typography className={styles.text}>
