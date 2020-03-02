@@ -13,6 +13,7 @@ import {
   faWineBottle
 } from "@fortawesome/free-solid-svg-icons"
 import GuestPolicies from "./GuestPolicies"
+import { NumberProvider } from "./NumberContext"
 
 const useStyles = makeStyles(() => ({
   generalInfoRow: {
@@ -51,7 +52,10 @@ const useStyles = makeStyles(() => ({
     fontSize: "20px",
     lineHeight: 1.3
   },
-  headerText: { fontSize: "24px" }
+  headerText: { fontSize: "24px" },
+  inherit: {
+    all: "inherit"
+  }
 }))
 
 interface Props {
@@ -67,6 +71,8 @@ const guestTypeToString = (hostHomeType: HostHomeType) =>
 
 const GeneralInfo = ({ guest }: Props) => {
   const style = useStyles()
+
+  const random: number = Math.floor(Math.random() * 4)
 
   return (
     <div>
@@ -85,10 +91,10 @@ const GeneralInfo = ({ guest }: Props) => {
         </Grid>
       </Grid>
       <div className={style.generalInfoRow}>
-        <GuestCard guest={guest} />
-        {/* Tyler 2/29/20 - GuestInfo has been changed and is now called with no props */}
-        {/* <GuestInfo guest={guest} /> */} 
-        <GuestInfo />
+        <NumberProvider className={style.inherit} value={random}>
+          <GuestCard guest={guest} />
+          <GuestInfo guest={guest} />
+        </NumberProvider>
       </div>
       <div>
         {/* 
@@ -128,7 +134,7 @@ const GeneralInfo = ({ guest }: Props) => {
         </Grid> */}
         <GuestPolicies guest={guest} />
       </div>
-      <div className={style.additionalInfo}>
+      <div className={style.additionalInfo} name="moreAboutGuest">
         <h5 className={style.header}>About the Guest</h5>
         <br />
 

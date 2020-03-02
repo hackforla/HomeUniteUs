@@ -183,7 +183,7 @@ export const App = () => {
             <Box display="flex" p={1} m={1}>
               <Box p={1} flexGrow={1}>
                 {/* <Typography component='h5' align='left'>SPY</Typography> */}
-                <a href="http://www.safeplaceforyouth.org/">
+                <a href="http://www.safeplaceforyouth.org/" target="_blank">
                   <img src={logo} alt="Logo" height={60} />
                 </a>
               </Box>

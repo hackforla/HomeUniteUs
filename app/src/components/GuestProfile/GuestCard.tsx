@@ -1,6 +1,7 @@
 import * as React from "react"
 import { Guest } from "../../models/Guest"
 import { makeStyles } from "@material-ui/core/styles"
+import NumberContext from "./NumberContext"
 
 const useStyles = makeStyles(() => ({
   guestCardContainer: {
@@ -29,8 +30,6 @@ interface Props {
 }
 
 const GuestCard = ({ guest }: Props) => {
-  const randomProfile = Math.floor(Math.random() * 4)
-
   const style = useStyles()
 
   return (
@@ -43,7 +42,7 @@ const GuestCard = ({ guest }: Props) => {
               ? "/hosthome/img/kirk.png"
               : guest.id === 998
               ? "/hosthome/img/megan.png"
-              : `/hosthome/img/profile${randomProfile}.png`
+              : `/hosthome/img/profile${React.useContext(NumberContext)}.png`
           }
           alt={"Guest Image"}
           height="400px"

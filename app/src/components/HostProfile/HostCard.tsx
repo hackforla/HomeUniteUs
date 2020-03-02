@@ -3,8 +3,6 @@ import { makeStyles } from "@material-ui/core/styles"
 import HostRoomates from "./HostRoomates"
 import { Host } from "../../models/Host"
 
-
-
 const useStyles = makeStyles(() => ({
   hostCardContainer: {
     border: "1px hidden purple",
@@ -37,15 +35,22 @@ interface IHostCardProps {
 }
 
 export const HostCard = ({ host }: IHostCardProps) => {
-
   const classes = useStyles()
+
+  const random = Math.floor(Math.random() * 4)
 
   return (
     <div className={classes.hostCardContainer}>
       <div className={classes.hostImageContainer}>
         <img
           className={classes.hostImage}
-          src={host.id === 999 ? "/hosthome/img/bonnie.png" : host.id === 998 ? "/hosthome/img/micheal.png" : "/hosthome/img/profile2.png"}
+          src={
+            host.id === 999
+              ? "/hosthome/img/bonnie.png"
+              : host.id === 998
+              ? "/hosthome/img/micheal.png"
+              : `/hosthome/img/profile${random}.png`
+          }
           alt="avatar"
           height="400px"
         />
