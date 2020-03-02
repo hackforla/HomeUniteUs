@@ -255,7 +255,7 @@ const initialState: HostHomeData = {
       petsText: "I have no pets and would love to live with pets.",
       drinkingText:
         "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 1,
       substancesText:
         "I don't use substances and prefer a substance-free environment.",
@@ -392,7 +392,7 @@ const initialState: HostHomeData = {
       petsText: "I have pet(s), and would love to live with more pets.",
       drinkingText:
         "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 1,
       substancesText:
         "I don't use substances and prefer a substance-free environment.",
@@ -475,7 +475,7 @@ const initialState: HostHomeData = {
       petsText: "I have no pets and would love to live with pets.",
       drinkingText:
         "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 1,
       substancesText:
         "I don't use substances, but I'm open to other people in the household using substances.",
@@ -557,7 +557,7 @@ const initialState: HostHomeData = {
       petsText: "I have no pets and would love to live with pets.",
       drinkingText:
         "I don't drink alcohol and prefer an alcohol-free environment. I have concerns about my drinking: System worry can since thank.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 1,
       substancesText:
         "I don't use substances, but I'm open to other people in the household using substances. I have concerns about my substance use: Kid gun finish clearly.",
@@ -694,7 +694,7 @@ const initialState: HostHomeData = {
       petsText: "I have no pets and would love to live with pets.",
       drinkingText:
         "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 1,
       substancesText:
         "I don't use substances, but I'm open to other people in the household using substances.",
@@ -749,7 +749,7 @@ const initialState: HostHomeData = {
       petsText: "I have no pets and prefer to live in a pet free place.",
       drinkingText:
         "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 1,
       substancesText:
         "I don't use substances, but I'm open to other people in the household using substances.",
@@ -859,7 +859,7 @@ const initialState: HostHomeData = {
       petsText: "I have no pets and would love to live with pets.",
       drinkingText:
         "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 1,
       substancesText:
         "I use substances, and I'm open to other people in the household using substances.",
@@ -1054,7 +1054,7 @@ const initialState: HostHomeData = {
       petsText: "I have no pets and would love to live with pets.",
       drinkingText:
         "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 2,
       substancesText:
         "I use substances, and I'm open to other people in the household using substances.",
@@ -1221,7 +1221,7 @@ const initialState: HostHomeData = {
       petsText: "I have pet(s), and would love to live with more pets.",
       drinkingText:
         "I don't drink alcohol and prefer an alcohol-free environment.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 1,
       substancesText:
         "I don't use substances, but I'm open to other people in the household using substances.",
@@ -1303,7 +1303,7 @@ const initialState: HostHomeData = {
       petsText: "I have pet(s), and would love to live with more pets.",
       drinkingText:
         "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 1,
       substancesText:
         "I don't use substances, but I'm open to other people in the household using substances.",
@@ -1386,7 +1386,7 @@ const initialState: HostHomeData = {
       petsText: "I have no pets and would love to live with pets.",
       drinkingText:
         "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 2,
       substancesText:
         "I don't use substances, but I'm open to other people in the household using substances.",
@@ -1607,7 +1607,7 @@ const initialState: HostHomeData = {
       petsText: "I have no pets and would love to live with pets.",
       drinkingText:
         "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 2,
       substancesText:
         "I don't use substances, but I'm open to other people in the household using substances.",
@@ -1690,7 +1690,7 @@ const initialState: HostHomeData = {
       petsText: "I have pet(s), and would love to live with more pets.",
       drinkingText:
         "I don't drink alcohol, but I'm open to other people in the household drinking alcohol. I have concerns about my drinking: Relationship beautiful news.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 1,
       substancesText:
         "I don't use substances and prefer a substance-free environment.",
@@ -1717,7 +1717,7 @@ const initialState: HostHomeData = {
       petsText: "I have no pets and would love to live with pets.",
       drinkingText:
         "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 1,
       substancesText:
         "I don't use substances, but I'm open to other people in the household using substances.",
@@ -1744,7 +1744,7 @@ const initialState: HostHomeData = {
       petsText: "I have no pets and would love to live with pets.",
       drinkingText:
         "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 1,
       substancesText:
         "I don't use substances and prefer a substance-free environment.",
@@ -1994,7 +1994,7 @@ const initialState: HostHomeData = {
       petsText: "I have no pets and prefer to live in a pet free place.",
       drinkingText:
         "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 2,
       substancesText:
         "I use substances, but I'm not open to other people in the household using substances.",
@@ -2076,7 +2076,7 @@ const initialState: HostHomeData = {
       petsText: "I have pet(s), and would love to live with more pets.",
       drinkingText:
         "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 1,
       substancesText:
         "I don't use substances and prefer a substance-free environment.",
@@ -2184,7 +2184,7 @@ const initialState: HostHomeData = {
       petsText: "I have pet(s), and would love to live with more pets.",
       drinkingText:
         "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 1,
       substancesText:
         "I don't use substances, but I'm open to other people in the household using substances.",
@@ -2239,7 +2239,7 @@ const initialState: HostHomeData = {
       petsText: "I have pet(s), and would love to live with more pets.",
       drinkingText:
         "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 1,
       substancesText:
         "I use substances, and I'm open to other people in the household using substances.",
@@ -2265,7 +2265,7 @@ const initialState: HostHomeData = {
       petsText: "I have pet(s), and would love to live with more pets.",
       drinkingText:
         "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 1,
       substancesText:
         "I don't use substances and prefer a substance-free environment.",
@@ -2459,7 +2459,7 @@ const initialState: HostHomeData = {
       petsText: "I have no pets and would love to live with pets.",
       drinkingText:
         "I drink alcohol, and I'm open to other people in the household drinking alcohol.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 1,
       substancesText:
         "I don't use substances, but I'm open to other people in the household using substances.",
@@ -2486,7 +2486,7 @@ const initialState: HostHomeData = {
       petsText: "I have no pets and prefer to live in a pet free place.",
       drinkingText:
         "I drink alcohol, and I'm open to other people in the household drinking alcohol. I have concerns about my drinking: Line standard party water successful.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 1,
       substancesText:
         "I don't use substances, but I'm open to other people in the household using substances. I have concerns about my substance use: Point main husband anyone.",
@@ -2513,7 +2513,7 @@ const initialState: HostHomeData = {
       petsText: "I have no pets and would love to live with pets.",
       drinkingText:
         "I drink alcohol, but I'm not open to other people in the household drinking alcohol.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 1,
       substancesText:
         "I don't use substances, but I'm open to other people in the household using substances.",
@@ -2763,7 +2763,7 @@ const initialState: HostHomeData = {
       petsText: "I have no pets and would love to live with pets.",
       drinkingText:
         "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 2,
       substancesText:
         "I use substances, and I'm open to other people in the household using substances. I have concerns about my substance use: Nature become action station grow.",
@@ -2790,7 +2790,7 @@ const initialState: HostHomeData = {
       petsText: "I have no pets and prefer to live in a pet free place.",
       drinkingText:
         "I drink alcohol, but I'm not open to other people in the household drinking alcohol.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 1,
       substancesText:
         "I use substances, and I'm open to other people in the household using substances.",
@@ -2817,7 +2817,7 @@ const initialState: HostHomeData = {
       petsText: "I have no pets and would love to live with pets.",
       drinkingText:
         "I don't drink alcohol, but I'm open to other people in the household drinking alcohol.",
-      smokingText: "I don't smoke,  with others smoking indoors.",
+      smokingText: "I don't smoke, but I'm fine with others smoking indoors.",
       numberOfGuests: 2,
       substancesText:
         "I don't use substances and prefer a substance-free environment.",

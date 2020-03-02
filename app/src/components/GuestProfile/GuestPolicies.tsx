@@ -64,7 +64,14 @@ const GuestPolicies = ({ guest }: Props) => {
           <Grid item xs alignContent="center" alignItems="center">
             <div className={classes.holder}>
               <img
-                src={"/hosthome/img/pets.png"}
+                src={
+                  guest.petsText ===
+                    "I have no pets and would love to live with pets." ||
+                  guest.petsText ===
+                    "I have pet(s), and would love to live with more pets."
+                    ? "/hosthome/img/pets.png"
+                    : "/hosthome/img/petsNo.png"
+                }
                 alt={"Pets Policy"}
                 width={"100px"}
                 className={classes.image}
@@ -75,7 +82,14 @@ const GuestPolicies = ({ guest }: Props) => {
           <Grid item xs alignContent="center" alignItems="center">
             <div className={classes.holder}>
               <img
-                src={"/hosthome/img/smoke.png"}
+                src={
+                  guest.smokingText ===
+                    "I smoke cigerettes, but I prefer a smoke free environment indoors." ||
+                  guest.smokingText ===
+                    "I do not smoke cigerettes, and I prefer a smoke-free environment indoors."
+                    ? "/hosthome/img/smoke.png"
+                    : "/hosthome/img/doSmoke.png"
+                }
                 alt={"Smoke Policy"}
                 width={"100px"}
                 className={classes.image}
@@ -88,7 +102,15 @@ const GuestPolicies = ({ guest }: Props) => {
           <Grid item xs alignContent="center" alignItems="center">
             <div className={classes.holder}>
               <img
-                src={"/hosthome/img/alcohol.png"}
+                src={
+                  guest.drinkingText ===
+                    "I drink alcohol, and I'm open to other people in the household drinking alcohol." ||
+                  guest.drinkingText.startsWith(
+                    "I don't drink alcohol, but I'm open to other people in the household drinking alcohol."
+                  )
+                    ? "/hosthome/img/alcohol.png"
+                    : "/hosthome/img/alcoholNo.png"
+                }
                 alt={"Alcohol Policy"}
                 width={"100px"}
                 className={classes.image}
@@ -99,7 +121,15 @@ const GuestPolicies = ({ guest }: Props) => {
           <Grid item xs alignContent="center" alignItems="center">
             <div className={classes.holder}>
               <img
-                src={"/hosthome/img/meds.png"}
+                src={
+                  guest.substancesText ===
+                    "I use substances, and I'm open to other people in the household using substances." ||
+                  guest.substancesText.startsWith(
+                    "I don't use substances, but I'm open to other people in the household using substances."
+                  )
+                    ? "/hosthome/img/meds.png"
+                    : "/hosthome/img/medsNo.png"
+                }
                 alt={"Meds Policy"}
                 width={"100px"}
                 className={classes.image}
