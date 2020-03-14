@@ -1,6 +1,8 @@
-# Host Home POC
+# Host Home
 
-The host-home-poc is a project of Hack for LA. Hack for LA is a brigade of a Code for America. host-home-poc is a digitization of the existing process as described and created by Andrew Gutierrez, of Safe Place for Youth.  The host-home-poc's purpose is to demonstrate the ability to create a hard grouping between location and youth that match the location criteria.  The project will use fake data to create a database of 100 potential youth, to match with some number of locations.  
+We're working with community non-profits who have a Host Home initiative to develop a workflow management tool to make the process scaleable (across all providers), reduce institutional bias, and effectively capture data.
+
+Host Home programs are centered around housing young people, 18 - 25 years old. Their approach focuses on low-cost, community-driven intervention by matching a willing host with a guest or group of guests, providing a stable housing environment for youths who are experiencing homelessness and seeking stable housing.  
 
 ### Project context
 
