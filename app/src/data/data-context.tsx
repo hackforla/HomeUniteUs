@@ -50,8 +50,6 @@ function hostHomeDataReducer(
 ): HostHomeData {
   let newState: HostHomeData
 
-  // console.log(`hostHomeDataReducer: action = ${JSON.stringify(action)}`)
-
   switch (action.type) {
     case HostHomeActionType.AddGuest:
       return {
@@ -14212,11 +14210,6 @@ computeInitialMatches()
 export function HostHomeDataProvider(
   props: React.PropsWithChildren<{}>
 ): JSX.Element {
-  console.log(
-    `HostHomeDataProvider: matchResults = ${JSON.stringify(
-      initialState.matchResults
-    )}`
-  )
 
   const [state, dispatch] = React.useReducer(hostHomeDataReducer, initialState)
 

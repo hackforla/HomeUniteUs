@@ -19,12 +19,12 @@ export const GuestProfilePage = () => {
     }
   }, [location.pathname, location.search]);
 
-  
+
 
   return (
-    <div>
+    <React.Fragment>
       <Profile />
-    </div>
+    </React.Fragment>
   )
 }
 
