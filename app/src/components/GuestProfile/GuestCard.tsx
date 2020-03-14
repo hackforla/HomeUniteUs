@@ -1,54 +1,28 @@
 import * as React from "react"
 import { Guest } from "../../models/Guest"
-import { makeStyles } from "@material-ui/core/styles"
+import { GuestCardStyle } from "./style"
 import NumberContext from "./NumberContext"
-
-const useStyles = makeStyles(() => ({
-  guestCardContainer: {
-    height: "400px",
-    padding: "10px 20px",
-    flexGrow: 1,
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center",
-    alignItems: "flex-start"
-  },
-  guestImageContainer: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  guestImage: {
-    boxShadow:
-      "0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)"
-  }
-}))
 
 interface Props {
   guest: Guest
 }
 
 const GuestCard = ({ guest }: Props) => {
-  const style = useStyles()
-
   return (
-    <div className={style.guestCardContainer}>
-      <div className={style.guestImageContainer}>
-        <img
-          className={style.guestImage}
+    <GuestCardStyle.GuestCardContainer>
+      <GuestCardStyle.GuestImageContainer>
+        <GuestCardStyle.GuestImage
           src={
             guest.id === 999
               ? "/hosthome/img/kirk.png"
               : guest.id === 998
-              ? "/hosthome/img/megan.png"
-              : `/hosthome/img/profile${React.useContext(NumberContext)}.png`
+                ? "/hosthome/img/megan.png"
+                : `/hosthome/img/profile${React.useContext(NumberContext)}.png`
           }
           alt={"Guest Image"}
-          height="400px"
         />
-      </div>
-    </div>
+      </GuestCardStyle.GuestImageContainer>
+    </GuestCardStyle.GuestCardContainer>
   )
 }
 

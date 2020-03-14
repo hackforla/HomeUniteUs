@@ -1,62 +1,11 @@
 import * as React from "react"
 import { Guest } from "../../models/Guest"
-import { makeStyles } from "@material-ui/core/styles"
+import { HostHomeType } from "../../models/HostHomeType"
+import { NumberProvider } from "./NumberContext"
+import { GeneralInfoStyle } from "./style"
 import GuestCard from "./GuestCard"
 import GuestInfo from "./GuestInfo"
-import { Grid, Typography } from "@material-ui/core"
-import { HostHomeType } from "../../models/HostHomeType"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {
-  faPrescriptionBottleAlt,
-  faPaw,
-  faSmokingBan,
-  faWineBottle
-} from "@fortawesome/free-solid-svg-icons"
 import GuestPolicies from "./GuestPolicies"
-import { NumberProvider } from "./NumberContext"
-
-const useStyles = makeStyles(() => ({
-  generalInfoRow: {
-    display: "flex",
-    justifyContent: "space-around",
-    alignItems: "center"
-  },
-  icon: {},
-  header: {
-    fontSize: "24px",
-    fontWeight: "bold"
-  },
-  additionalInfo: {
-    width: "70%",
-    margin: "0 0 3em 1.6em",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-evenly"
-  },
-  spacer: {
-    height: "19%"
-  },
-  text: {
-    fontSize: "1.4rem"
-  },
-  policy: {
-    border: "1px hidden blue",
-    // width: "30%",
-    margin: "20px 0",
-    display: "flex",
-    textAlign: "center",
-    flexDirection: "column",
-    alignItems: "center"
-  },
-  paragraph: {
-    fontSize: "20px",
-    lineHeight: 1.3
-  },
-  headerText: { fontSize: "24px" },
-  inherit: {
-    all: "inherit"
-  }
-}))
 
 interface Props {
   guest: Guest
@@ -66,104 +15,73 @@ const guestTypeToString = (hostHomeType: HostHomeType) =>
   hostHomeType === HostHomeType.Respite
     ? "respite"
     : hostHomeType === HostHomeType.Full
-    ? "full-time"
-    : "full-time or respite"
+      ? "full-time"
+      : "full-time or respite"
 
 const GeneralInfo = ({ guest }: Props) => {
-  const style = useStyles()
+  const Fragment = React.Fragment
 
   const random: number = Math.floor(Math.random() * 4)
 
   return (
-    <div>
-      <Grid container>
-        <Grid style={{ margin: "0 0 30px 25px" }} className={style.header}>
+    <Fragment>
+      <Fragment>
+        <GeneralInfoStyle.GuestInfoHeader>
           Meet {guest.firstName}
-        </Grid>
-        <Grid item xs={12}>
-          <span
-            style={{ margin: "0 0 0 25px" }}
-            className={style.paragraph}
-          >{`${guest.firstName} ${guest.lastName}, ${new Date().getFullYear() -
-            guest.dateOfBirth.getFullYear()}, is a guest seeking ${guestTypeToString(
-            guest.type
-          )} host`}</span>
-        </Grid>
-      </Grid>
-      <div className={style.generalInfoRow}>
-        <NumberProvider className={style.inherit} value={random}>
+        </GeneralInfoStyle.GuestInfoHeader>
+        <Fragment>
+          <GeneralInfoStyle.SpacedParagraph>
+            {`${guest.firstName} ${guest.lastName}, ${new Date().getFullYear() -
+              guest.dateOfBirth.getFullYear()}, is a guest seeking ${guestTypeToString(
+                guest.type
+              )} host`}
+          </GeneralInfoStyle.SpacedParagraph>
+        </Fragment>
+      </Fragment>
+      <GeneralInfoStyle.GeneralInfoRow>
+        <NumberProvider value={random}>
           <GuestCard guest={guest} />
           <GuestInfo guest={guest} />
         </NumberProvider>
-      </div>
-      <div>
-        {/* 
-        <Grid container alignContent='center' alignItems='center'>
-          <Grid item xs alignContent='center' alignItems='center'>
-            <div className={style.policy}>
-              <FontAwesomeIcon aria-hidden="true"
-                size="7x" icon={faSmokingBan} className={style.icon} />
-              <span className={style.text}>{guest.smokingText}</span>
-            </div>
-          </Grid>
-          <Grid item xs alignContent='center' alignItems='center'>
-            <div className={style.policy}>
-              <FontAwesomeIcon aria-hidden="true"
-                size="7x" icon={faPaw} className={style.icon} />
-              <span className={style.text}>{guest.petsText}</span>
-            </div>
-          </Grid>
-        </Grid>
-
-        <Grid container alignContent='center' alignItems='center'>
-          <Grid item xs alignContent='center' alignItems='center'>
-            <div className={style.policy}>
-              <FontAwesomeIcon aria-hidden="true"
-                size="7x" icon={faPrescriptionBottleAlt} className={style.icon} />
-              <span className={style.text}>{guest.substancesText}</span>
-            </div>
-          </Grid>
-          <Grid item xs alignContent='center' alignItems='center'>
-            <div className={style.policy}>
-              <FontAwesomeIcon aria-hidden="true"
-                size="7x" icon={faWineBottle} className={style.icon} />
-              <span className={style.text}>{guest.drinkingText}</span>
-            </div>
-          </Grid>
-
-        </Grid> */}
+      </GeneralInfoStyle.GeneralInfoRow>
+      <Fragment>
         <GuestPolicies guest={guest} />
-      </div>
-      <div className={style.additionalInfo} name="moreAboutGuest">
-        <h5 className={style.header}>About the Guest</h5>
+      </Fragment>
+      <GeneralInfoStyle.AdditionalInfo name="moreAboutGuest">
+        <GeneralInfoStyle.Header>
+          About the Guest
+        </GeneralInfoStyle.Header>
         <br />
-
-        <b className={style.headerText}>Intro:</b>
-        <p className={style.paragraph}>{guest.guestIntro}</p>
+        <GeneralInfoStyle.Bold>
+          Intro:
+        </GeneralInfoStyle.Bold>
+        <GeneralInfoStyle.Paragraph>
+          {guest.guestIntro}
+        </GeneralInfoStyle.Paragraph>
         <br />
-
-        <b className={style.headerText}>Stay Statement:</b>
-        <p className={style.paragraph}>{guest.guestStayStatement}</p>
+        <GeneralInfoStyle.Bold>
+          Stay Statement:
+        </GeneralInfoStyle.Bold>
+        <GeneralInfoStyle.Paragraph>
+          {guest.guestStayStatement}
+        </GeneralInfoStyle.Paragraph>
         <br />
-
-        <b className={style.headerText}>Employment:</b>
-        <p
-          className={style.paragraph}
-        >{`I'm currently employed at ${guest.employmentCompany} as ${guest.employmentPosition}`}</p>
+        <GeneralInfoStyle.Bold>
+          Employment:
+        </GeneralInfoStyle.Bold>
+        <GeneralInfoStyle.Paragraph>
+          {`I'm currently employed at ${guest.employmentCompany} as ${guest.employmentPosition}`}
+        </GeneralInfoStyle.Paragraph>
         <br />
-
-        <b className={style.headerText}>Challenges:</b>
-        <p className={style.paragraph}>{guest.guestChallenges}</p>
+        <GeneralInfoStyle.Bold>
+          Challenges:
+        </GeneralInfoStyle.Bold>
+        <GeneralInfoStyle.Paragraph>
+          {guest.guestChallenges}
+        </GeneralInfoStyle.Paragraph>
         <br />
-
-        {/* <p>Date of Birth:</p>
-                <p>{guest.dateOfBirth.getFullYear()}</p>
-                <br /> */}
-
-        {/* <p>Email:</p>
-                <p>{guest.email}</p> */}
-      </div>
-    </div>
+      </GeneralInfoStyle.AdditionalInfo>
+    </Fragment>
   )
 }
 

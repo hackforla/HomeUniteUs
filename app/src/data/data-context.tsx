@@ -50,7 +50,7 @@ function hostHomeDataReducer(
 ): HostHomeData {
   let newState: HostHomeData
 
-  console.log(`hostHomeDataReducer: action = ${JSON.stringify(action)}`)
+  // console.log(`hostHomeDataReducer: action = ${JSON.stringify(action)}`)
 
   switch (action.type) {
     case HostHomeActionType.AddGuest:
@@ -61,16 +61,16 @@ function hostHomeDataReducer(
       const interestedPair = action.payload as MatchPair
 
       newState = { ...state }
-      ;(newState.matchResults.find(
-        (m: MatchResult) =>
-          m.guestId === interestedPair.guestId &&
-          m.hostId === interestedPair.hostId
-      ) as MatchResult).guestInterestLevel = GuestInterestLevel.Interested
-      ;(newState.matchResults.find(
-        (m: MatchResult) =>
-          m.guestId === interestedPair.guestId &&
-          m.hostId === interestedPair.hostId
-      ) as MatchResult).lastInterestUpdate = new Date()
+        ; (newState.matchResults.find(
+          (m: MatchResult) =>
+            m.guestId === interestedPair.guestId &&
+            m.hostId === interestedPair.hostId
+        ) as MatchResult).guestInterestLevel = GuestInterestLevel.Interested
+        ; (newState.matchResults.find(
+          (m: MatchResult) =>
+            m.guestId === interestedPair.guestId &&
+            m.hostId === interestedPair.hostId
+        ) as MatchResult).lastInterestUpdate = new Date()
 
       return newState
 
@@ -78,16 +78,16 @@ function hostHomeDataReducer(
       const notInterestedPair = action.payload as MatchPair
 
       newState = { ...state }
-      ;(newState.matchResults.find(
-        (m: MatchResult) =>
-          m.guestId === notInterestedPair.guestId &&
-          m.hostId === notInterestedPair.hostId
-      ) as MatchResult).guestInterestLevel = GuestInterestLevel.NotInterested
-      ;(newState.matchResults.find(
-        (m: MatchResult) =>
-          m.guestId === notInterestedPair.guestId &&
-          m.hostId === notInterestedPair.hostId
-      ) as MatchResult).lastInterestUpdate = new Date()
+        ; (newState.matchResults.find(
+          (m: MatchResult) =>
+            m.guestId === notInterestedPair.guestId &&
+            m.hostId === notInterestedPair.hostId
+        ) as MatchResult).guestInterestLevel = GuestInterestLevel.NotInterested
+        ; (newState.matchResults.find(
+          (m: MatchResult) =>
+            m.guestId === notInterestedPair.guestId &&
+            m.hostId === notInterestedPair.hostId
+        ) as MatchResult).lastInterestUpdate = new Date()
 
       return newState
     default:
@@ -14268,7 +14268,7 @@ export function useHostHomeData() {
     if (!prev.has(cur.guestId)) {
       prev.set(cur.guestId, new Map<number, GuestResponse>())
     }
-    ;(prev.get(cur.guestId) as Map<number, GuestResponse>).set(
+    ; (prev.get(cur.guestId) as Map<number, GuestResponse>).set(
       cur.questionId,
       cur
     )
@@ -14291,7 +14291,7 @@ export function useHostHomeData() {
 
   // ...
 
-  const updateHostProfile = () => {}
+  const updateHostProfile = () => { }
 
   return {
     data,
