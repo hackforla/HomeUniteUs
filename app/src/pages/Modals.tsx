@@ -2,13 +2,13 @@ import * as React from "react"
 import { ModalsStyle } from "./style"
 
 const Modal = (props: any) => {
-  const visible = props.visible
+  const { visible, showElement } = props
 
   return (
     Object.values(visible).some(value => value) ? (
       <ModalsStyle.Modal>
-        {Object.keys(visible).map((modal, i) => {
-          return visible[Object.keys(visible)[i]] ?
+        {Object.keys(visible).map((modal, i) =>
+          visible[Object.keys(visible)[i]] ?
             (
               <React.Fragment>
                 <ModalsStyle.TextHolder>
@@ -21,15 +21,11 @@ const Modal = (props: any) => {
                     }
                   </ModalsStyle.ModalsText>
                   <ModalsStyle.X onClick={() =>
-                    props.showElement({
-                      adminPage: false,
-                      guestMatches: false,
-                      interestButtons: false,
-                      annotationOfInterested: false,
-                      annotationOfDecline: false
+                    showElement({
+                      ...showElement, [modal]: false
                     })}>
                     X
-                </ModalsStyle.X>
+                  </ModalsStyle.X>
                 </ModalsStyle.TextHolder>
                 <ModalsStyle.ImageBorder
                   title={`${modal}`}
@@ -38,7 +34,6 @@ const Modal = (props: any) => {
                 />
               </React.Fragment>
             ) : null
-        }
         )}
       </ModalsStyle.Modal>
     ) : null
