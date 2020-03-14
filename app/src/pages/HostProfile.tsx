@@ -20,24 +20,17 @@ export const HostProfilePage = () => {
   }, [location.pathname, location.search]);
 
   const history = useHistory();
-  
-  let {guestId, hostId} = useParams();
+
+  let { guestId, hostId } = useParams();
 
   const gid = Number.parseInt(guestId || '');
   const hid = Number.parseInt(hostId || '');
-  
-  console.log(`HostProfilePage: guestId = ${guestId}`);
-  console.log(`HostProfilePage: hostId = ${hostId}`);
 
-  console.log(`HostProfilePage: gid = ${gid}`);
-  console.log(`HostProfilePage: hid = ${hid}`);
-
-
-  if(!guestId || !hostId) {
+  if (!guestId || !hostId) {
     history.push('/hosthome');
   }
 
-  const {data} = useHostHomeData();
+  const { data } = useHostHomeData();
 
   const isUnmatched = data.matchResults.filter((matchResult: MatchResult) => (
     matchResult.guestId === gid
@@ -47,9 +40,9 @@ export const HostProfilePage = () => {
 
 
   return (
-    <div>
+    <React.Fragment>
       <Profile isUnmatched={isUnmatched} />
-    </div>
+    </React.Fragment>
   )
 }
 

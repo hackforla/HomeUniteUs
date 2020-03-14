@@ -12,9 +12,9 @@ export const Profile = () => {
   const guest = data.guests.find((guest: Guest) => guest.id === parseInt(id || '-1')) as Guest;
 
   return (
-    <div>
+    <React.Fragment>
       <GeneralInfo guest={guest} />
-    </div>
+    </React.Fragment>
   )
 };
 
