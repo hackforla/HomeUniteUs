@@ -1,8 +1,9 @@
 import * as React from "react"
 import Modal from "./Modals"
+import { useHistory } from "react-router"
+import { DemoStyle } from "./style"
 
 import {
-  Container,
   Paper,
   Typography,
   makeStyles,
@@ -10,40 +11,18 @@ import {
   Button,
   Link
 } from "@material-ui/core"
-import { useHistory } from "react-router"
 
 const useStyles = makeStyles(theme => ({
-  paperHeader: {
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary
-  },
   paper: {
     padding: theme.spacing(3),
     textAlign: "center",
     color: theme.palette.text.secondary,
     border: "1px solid #ADADAD"
-  },
-  images: {
-    margin: "0 0 65px 0",
-    width: "50%"
-  },
-  imageTitle: {
-    fontSize: "16pt",
-    color: theme.palette.text.secondary,
-    textAlign: "left"
-  },
-  imgBorder: {
-    border: "1px solid #757575"
   }
 }))
 
 export const Demo = () => {
-
-
-  const [selectedImage, setSelectedImage] = React.useState('none');
-
-
+  const [selectedImage, setSelectedImage] = React.useState("none")
 
   const [visible, showElement] = React.useState({
     adminPage: false,
@@ -60,15 +39,20 @@ export const Demo = () => {
   const history = useHistory()
   const classes = useStyles()
   return (
-    <Container>
-      <Modal visible={visible} showElement={showElement} selectedImage={selectedImage} setSelectedImage={setSelectedImage} />
-      <Paper className={classes.paperHeader}>
+    <DemoStyle.MainHolder>
+      <Modal
+        visible={visible}
+        showElement={showElement}
+        selectedImage={selectedImage}
+        setSelectedImage={setSelectedImage}
+      />
+      <DemoStyle.DemoHeader>
         <Typography component="h1" align="center" style={{ fontSize: "2em" }}>
           Host Profiles
         </Typography>
-      </Paper>
+      </DemoStyle.DemoHeader>
       <Grid item xs={12} style={{ margin: "30px 0 0 0" }}>
-        <Container>
+        <DemoStyle.DemoHolder>
           <Paper className={classes.paper}>
             <Grid container>
               <Grid item xs={12} style={{ marginBottom: "8px" }}>
@@ -162,15 +146,15 @@ export const Demo = () => {
               </Grid>
             </Grid>
           </Paper>
-        </Container>
+        </DemoStyle.DemoHolder>
       </Grid>
-      <Paper className={classes.paperHeader} style={{ margin: "30px 0 0 0" }}>
+      <DemoStyle.SpacedHeader>
         <Typography component="h1" align="center" style={{ fontSize: "2em" }}>
           Guest Profiles
         </Typography>
-      </Paper>
+      </DemoStyle.SpacedHeader>
       <Grid item xs={12} style={{ margin: "30px 0 0 0" }}>
-        <Container>
+        <DemoStyle.DemoHolder>
           <Paper className={classes.paper}>
             <Grid container>
               <Grid item xs={12} style={{ marginBottom: "8px" }}>
@@ -260,135 +244,72 @@ export const Demo = () => {
               </Grid>
             </Grid>
           </Paper>
-        </Container>
+        </DemoStyle.DemoHolder>
       </Grid>
-      <Paper className={classes.paperHeader} style={{ margin: "30px 0 0 0" }}>
+      <DemoStyle.SpacedHeader>
         <Typography component="h1" align="center" style={{ fontSize: "2em" }}>
           Key Moments
         </Typography>
-      </Paper>
+      </DemoStyle.SpacedHeader>
       <Grid item xs={12} style={{ margin: "50px 0 0 0" }}>
-        {/* <Container>
+        <DemoStyle.DemoHolder>
           <Paper className={classes.paper} style={{ border: "none" }}>
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                flexDirection: "column"
-              }}
-            >
-              <div>
-                <div className={classes.imageTitle}>Admin Page</div>
-                <div className={classes.images}>
-                  <img src={"/hosthome/img/adminPage.png"} alt={"Admin Page"} />
-                </div>
-              </div>
-              <div>
-                <div className={classes.imageTitle}>Guest Matches</div>
-                <div className={classes.images}>
-                  <img
-                    src={"/hosthome/img/guestMatches.png"}
-                    alt={"Guest Matches"}
-                  />
-                </div>
-              </div>
-              <div>
-                <div className={classes.imageTitle}>
-                  Interested/Not Interested Buttons
-                </div>
-                <div className={classes.images}>
-                  <img
-                    src={"/hosthome/img/interestButtons.png"}
-                    alt={"Interested/Not Interested Buttons"}
-                  />
-                </div>
-              </div>
-              <div>
-                <div className={classes.imageTitle}>
-                  Annotation of Interested
-                </div>
-                <div className={classes.images}>
-                  <img
-                    src={"/hosthome/img/annotationOfInterested.png"}
-                    alt={"Annotation of Interested"}
-                  />
-                </div>
-              </div>
-              <div>
-                <div className={classes.imageTitle}>Annotation of Declined</div>
-                <div className={classes.images}>
-                  <img
-                    src={"/hosthome/img/annotationOfDecline.png"}
-                    alt={"Annotation of Declined"}
-                  />
-                </div>
-              </div>
-            </div>
-          </Paper>
-        </Container>
-       */}
-
-        <Container>
-          <Paper className={classes.paper} style={{ border: "none" }}>
-            <div style={{ display: "flex", flexWrap: "wrap" }}>
-              <div className={classes.images}>
-                <div className={classes.imageTitle}>Admin Page</div>
-                <img
-                  className={classes.imgBorder}
+            <DemoStyle.WrapHolder>
+              <DemoStyle.ImageHolder>
+                <DemoStyle.ImageTitle>Admin Page</DemoStyle.ImageTitle>
+                <DemoStyle.DemoImage
                   title="adminPage"
                   src={"/hosthome/img/adminPageThumb.png"}
                   alt={"Admin Page"}
                   onClick={e => showPic(e)}
                 />
-              </div>
-              <div className={classes.images}>
-                <div className={classes.imageTitle}>Guest Matches</div>
-                <img
-                  className={classes.imgBorder}
+              </DemoStyle.ImageHolder>
+              <DemoStyle.ImageHolder>
+                <DemoStyle.ImageTitle>Guest Matches</DemoStyle.ImageTitle>
+                <DemoStyle.DemoImage
                   title="guestMatches"
                   src={"/hosthome/img/guestMatchesThumb.png"}
                   alt={"Guest Matches"}
                   onClick={e => showPic(e)}
                 />
-              </div>
-              <div className={classes.images}>
-                <div className={classes.imageTitle}>
+              </DemoStyle.ImageHolder>
+              <DemoStyle.ImageHolder>
+                <DemoStyle.ImageTitle>
                   Interested/Not Interested Buttons
-                </div>
-                <img
-                  className={classes.imgBorder}
+                </DemoStyle.ImageTitle>
+                <DemoStyle.DemoImage
                   title="interestButtons"
                   src={"/hosthome/img/interestButtonsThumb.png"}
                   alt={"Interest Buttons"}
                   onClick={e => showPic(e)}
                 />
-              </div>
-              <div className={classes.images}>
-                <div className={classes.imageTitle}>
+              </DemoStyle.ImageHolder>
+              <DemoStyle.ImageHolder>
+                <DemoStyle.ImageTitle>
                   Annotation of Interested
-                </div>
-                <img
-                  className={classes.imgBorder}
+                </DemoStyle.ImageTitle>
+                <DemoStyle.DemoImage
                   title="annotationOfInterested"
                   src={"/hosthome/img/annotationOfInterestedThumb.png"}
                   alt={"Annotation of Interested"}
                   onClick={e => showPic(e)}
                 />
-              </div>
-              <div className={classes.images}>
-                <div className={classes.imageTitle}>Annotation of Decline</div>
-                <img
-                  className={classes.imgBorder}
+              </DemoStyle.ImageHolder>
+              <DemoStyle.ImageHolder>
+                <DemoStyle.ImageTitle>
+                  Annotation of Decline
+                </DemoStyle.ImageTitle>
+                <DemoStyle.DemoImage
                   title="annotationOfDecline"
                   src={"/hosthome/img/annotationOfDeclineThumb.png"}
                   alt={"Annotation of Decline"}
                   onClick={e => showPic(e)}
                 />
-              </div>
-            </div>
+              </DemoStyle.ImageHolder>
+            </DemoStyle.WrapHolder>
           </Paper>
-        </Container>
+        </DemoStyle.DemoHolder>
       </Grid>
-    </Container>
+    </DemoStyle.MainHolder>
   )
 }
