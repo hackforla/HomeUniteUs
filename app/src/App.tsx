@@ -10,7 +10,6 @@ import {
 } from "react-router-dom"
 import * as AppStyle from "./AppStyle"
 import logo from "./img/masterSpyLogo3.png"
-import { Button } from "@material-ui/core"
 import { AdminGuestView } from "./pages/AdminGuestView"
 import { HostProfilePage } from "./pages/HostProfile"
 import { GuestProfilePage } from "./pages/GuestProfile"
@@ -21,7 +20,7 @@ import { HostHomeDataProvider } from "./data/data-context"
 import { Guest } from "./models"
 import { AppConfig } from "./data/config"
 
-export interface AppProps {}
+export interface AppProps { }
 
 export const PlaceholderView = () => (
   <AppStyle.ToolBarTitle>Nothing here yet</AppStyle.ToolBarTitle>
@@ -57,19 +56,19 @@ export const App = () => {
                 </a>
               </AppStyle.FlexGrowHolder>
               <AppStyle.Holder>
-                <Button component={NavLink} to={`/hosthome/demo`}>
+                <NavLink to={`/hosthome/demo`}>
                   DEMO
-                </Button>
+                </NavLink>
               </AppStyle.Holder>
               <AppStyle.Holder>
-                <Button component={NavLink} to={`/hosthome/about`}>
+                <NavLink to={`/hosthome/about`}>
                   ABOUT
-                </Button>
+                </NavLink>
               </AppStyle.Holder>
               <AppStyle.Holder>
-                <Button component={NavLink} to={`/hosthome/admin/guests`}>
+                <NavLink to={`/hosthome/admin/guests`}>
                   ADMIN
-                </Button>
+                </NavLink>
               </AppStyle.Holder>
             </AppStyle.FlexHolder>
             <React.Fragment>
