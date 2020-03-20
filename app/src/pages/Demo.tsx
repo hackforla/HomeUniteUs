@@ -3,27 +3,7 @@ import Modal from "./Modals"
 import { useHistory } from "react-router"
 import { DemoStyle } from "./style"
 
-import {
-  Paper,
-  Typography,
-  makeStyles,
-  Grid,
-  Button,
-  Link
-} from "@material-ui/core"
-
-const useStyles = makeStyles(theme => ({
-  paper: {
-    padding: theme.spacing(3),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-    border: "1px solid #ADADAD"
-  }
-}))
-
 export const Demo = () => {
-  const [selectedImage, setSelectedImage] = React.useState("none")
-
   const [visible, showElement] = React.useState({
     adminPage: false,
     guestMatches: false,
@@ -37,223 +17,102 @@ export const Demo = () => {
   }
 
   const history = useHistory()
-  const classes = useStyles()
   return (
     <DemoStyle.MainHolder>
       <Modal
         visible={visible}
         showElement={showElement}
-        selectedImage={selectedImage}
-        setSelectedImage={setSelectedImage}
       />
       <DemoStyle.DemoHeader>
-        <Typography component="h1" align="center" style={{ fontSize: "2em" }}>
+        <DemoStyle.DemoTitle>
           Host Profiles
-        </Typography>
+        </DemoStyle.DemoTitle>
       </DemoStyle.DemoHeader>
-      <Grid item xs={12} style={{ margin: "30px 0 0 0" }}>
+      <DemoStyle.DemoProfileHolders>
         <DemoStyle.DemoHolder>
-          <Paper className={classes.paper}>
-            <Grid container>
-              <Grid item xs={12} style={{ marginBottom: "8px" }}>
-                <Grid container>
-                  <Grid item xs={2}>
-                    <Typography
-                      component="h3"
-                      style={{ fontWeight: "bold", textDecoration: "und" }}
-                      align="left"
-                    >
-                      Name
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <Typography
-                      component="h3"
-                      style={{ fontWeight: "bold" }}
-                    ></Typography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Typography component="h3" style={{ fontWeight: "bold" }}>
-                      Link
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-
-              <Grid item xs={12} style={{ paddingBottom: "4px" }}>
-                <Grid container>
-                  <Grid item xs={2}>
-                    <Typography component="p" align="left">
-                      <Link
-                        style={{
-                          color: "rgba(0, 0, 0, 0.54)",
-                          textDecoration: "none"
-                        }}
-                      >
-                        Bonnie Wolfe
-                      </Link>
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <Typography component="h3"></Typography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Button
-                      color="primary"
-                      // variant="contained"
-                      component={Link}
-                      style={{ color: "white", backgroundColor: "#00AAEF" }}
-                      // to={"/hosthome/guests/999/matches/999"}
-                      onClick={() =>
-                        history.push(`/hosthome/guests/999/matches/999`)
-                      }
-                    >
-                      Profile
-                    </Button>
-                  </Grid>
-                </Grid>
-                <Grid container style={{ margin: "22px 0 0 0" }}>
-                  <Grid item xs={2}>
-                    <Typography component="p" align="left">
-                      <Link
-                        style={{
-                          color: "rgba(0, 0, 0, 0.54)",
-                          textDecoration: "none"
-                        }}
-                      >
-                        Michael Romanov
-                      </Link>
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <Typography component="h3"></Typography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Button
-                      color="primary"
-                      // variant="contained"
-                      component={Link}
-                      style={{ color: "white", backgroundColor: "#00AAEF" }}
-                      // to={"placeholder"}
-                      onClick={() =>
-                        history.push(`/hosthome/guests/13/matches/998`)
-                      }
-                    >
-                      Profile
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Paper>
+          <DemoStyle.InfoPaper>
+            <DemoStyle.HeaderRow>
+              <DemoStyle.SecondHeader>
+                Name
+              </DemoStyle.SecondHeader>
+              <DemoStyle.SecondHeader>
+                Link
+              </DemoStyle.SecondHeader>
+            </DemoStyle.HeaderRow>
+            <DemoStyle.WiderHeaderRow>
+              <DemoStyle.DemoName>
+                Bonnie Wolfe
+              </DemoStyle.DemoName>
+              <DemoStyle.DemoButton
+                onClick={() =>
+                  history.push(`/hosthome/guests/999/matches/999`)
+                }
+              >
+                Profile
+                </DemoStyle.DemoButton>
+            </DemoStyle.WiderHeaderRow>
+            <DemoStyle.WiderHeaderRow>
+              <DemoStyle.DemoName>
+                Michael Romanov
+              </DemoStyle.DemoName>
+              <DemoStyle.DemoButton
+                onClick={() =>
+                  history.push(`/hosthome/guests/13/matches/998`)
+                }
+              >
+                Profile
+              </DemoStyle.DemoButton>
+            </DemoStyle.WiderHeaderRow>
+          </DemoStyle.InfoPaper>
         </DemoStyle.DemoHolder>
-      </Grid>
+      </DemoStyle.DemoProfileHolders>
       <DemoStyle.SpacedHeader>
-        <Typography component="h1" align="center" style={{ fontSize: "2em" }}>
+        <DemoStyle.DemoTitle>
           Guest Profiles
-        </Typography>
+        </DemoStyle.DemoTitle>
       </DemoStyle.SpacedHeader>
-      <Grid item xs={12} style={{ margin: "30px 0 0 0" }}>
+      <DemoStyle.DemoProfileHolders>
         <DemoStyle.DemoHolder>
-          <Paper className={classes.paper}>
-            <Grid container>
-              <Grid item xs={12} style={{ marginBottom: "8px" }}>
-                <Grid container>
-                  <Grid item xs={2}>
-                    <Typography
-                      component="h3"
-                      style={{ fontWeight: "bold", textDecoration: "und" }}
-                      align="left"
-                    >
-                      Name
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <Typography
-                      component="h3"
-                      style={{ fontWeight: "bold" }}
-                    ></Typography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Typography component="h3" style={{ fontWeight: "bold" }}>
-                      Link
-                    </Typography>
-                  </Grid>
-                </Grid>
-              </Grid>
-
-              <Grid item xs={12} style={{ paddingBottom: "4px" }}>
-                <Grid container>
-                  <Grid item xs={2}>
-                    <Typography component="p" align="left">
-                      <Link
-                        style={{
-                          color: "rgba(0, 0, 0, 0.54)",
-                          textDecoration: "none"
-                        }}
-                      >
-                        Kirk Chu
-                      </Link>
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <Typography component="h3"></Typography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Button
-                      color="primary"
-                      // variant="contained"
-                      component={Link}
-                      style={{ color: "white", backgroundColor: "#00AAEF" }}
-                      // to={"/hosthome/guests/999"}
-                      onClick={() => history.push(`/hosthome/guests/999`)}
-                    >
-                      Profile
-                    </Button>
-                  </Grid>
-                </Grid>
-                <Grid container style={{ margin: "22px 0 0 0" }}>
-                  <Grid item xs={2}>
-                    <Typography component="p" align="left">
-                      <Link
-                        style={{
-                          color: "rgba(0, 0, 0, 0.54)",
-                          textDecoration: "none"
-                        }}
-                      >
-                        Megan Sukarnoputri
-                      </Link>
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <Typography component="h3"></Typography>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <Button
-                      color="primary"
-                      // variant="contained"
-                      component={Link}
-                      style={{ color: "white", backgroundColor: "#00AAEF" }}
-                      // to={"placeholder"}
-                      onClick={() => history.push(`/hosthome/guests/998`)}
-                    >
-                      Profile
-                    </Button>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Paper>
+          <DemoStyle.InfoPaper>
+            <DemoStyle.HeaderRow>
+              <DemoStyle.SecondHeader>
+                Name
+              </DemoStyle.SecondHeader>
+              <DemoStyle.SecondHeader>
+                Link
+              </DemoStyle.SecondHeader>
+            </DemoStyle.HeaderRow>
+            <DemoStyle.WiderHeaderRow>
+              <DemoStyle.DemoName>
+                Kirk Chu
+              </DemoStyle.DemoName>
+              <DemoStyle.DemoButton
+                onClick={() => history.push(`/hosthome/guests/999`)}
+              >
+                Profile
+              </DemoStyle.DemoButton>
+            </DemoStyle.WiderHeaderRow>
+            <DemoStyle.WiderHeaderRow>
+              <DemoStyle.DemoName>
+                Megan Sukarnoputri
+              </DemoStyle.DemoName>
+              <DemoStyle.DemoButton
+                onClick={() => history.push(`/hosthome/guests/998`)}
+              >
+                Profile
+              </DemoStyle.DemoButton>
+            </DemoStyle.WiderHeaderRow>
+          </DemoStyle.InfoPaper>
         </DemoStyle.DemoHolder>
-      </Grid>
+      </DemoStyle.DemoProfileHolders>
       <DemoStyle.SpacedHeader>
-        <Typography component="h1" align="center" style={{ fontSize: "2em" }}>
+        <DemoStyle.DemoTitle>
           Key Moments
-        </Typography>
+        </DemoStyle.DemoTitle>
       </DemoStyle.SpacedHeader>
-      <Grid item xs={12} style={{ margin: "50px 0 0 0" }}>
+      <DemoStyle.BigProfileHolder>
         <DemoStyle.DemoHolder>
-          <Paper className={classes.paper} style={{ border: "none" }}>
+          <DemoStyle.InfoPaper>
             <DemoStyle.WrapHolder>
               <DemoStyle.ImageHolder>
                 <DemoStyle.ImageTitle>Admin Page</DemoStyle.ImageTitle>
@@ -307,9 +166,9 @@ export const Demo = () => {
                 />
               </DemoStyle.ImageHolder>
             </DemoStyle.WrapHolder>
-          </Paper>
+          </DemoStyle.InfoPaper>
         </DemoStyle.DemoHolder>
-      </Grid>
-    </DemoStyle.MainHolder>
+      </DemoStyle.BigProfileHolder>
+    </DemoStyle.MainHolder >
   )
 }

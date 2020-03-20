@@ -152,8 +152,88 @@ const DemoHeader = styled.div`
     0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
 `
 
+const DemoTitle = styled.h1`
+  font-size: 2em;
+  text-align:center;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.00938em;
+  margin: 0;
+  color: #757575;
+`
+
 const SpacedHeader = styled(DemoHeader)`
   margin: 30px 0 0 0;
+`
+const DemoProfileHolders = styled.div`
+    margin: 30px 0px 0px;
+    flex-grow: 0;
+    max-width: 100%;
+    flex-basis: 100%;
+    box-sizing: border-box;
+`
+
+const BigProfileHolder = styled(DemoProfileHolders)`
+    margin: 50px 0px 0px;
+`
+
+const DemoButton = styled.a`
+  color: white;
+  background-color: #00AAEF;
+  padding: 8px;
+  font-size: 0.875rem;
+  min-width: 64px;
+  box-sizing: border-box;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 500;
+  line-height: 1.75;
+  border-radius: 4px;
+  letter-spacing: 0.02857em;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  :hover {
+    text-decoration: underline;
+  }
+`
+
+const DemoName = styled.span`
+  color: #757575;
+  text-decoration: none;
+  text-align:left;
+  font-size: 1rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.00938em;
+`
+
+const HeaderRow = styled.div`
+  display: flex; 
+  justify-content: space-between;
+  margin: 0 0 .5em 0;
+  width: 93%;
+  align-items:center;
+`
+
+const WiderHeaderRow = styled(HeaderRow)`
+  width: 95%;
+  margin: 0 0 1.5em 0;
+
+`
+
+const SecondHeader = styled.h3`
+  color: #757575;
+  font-weight: bold;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+`
+
+const InfoPaper = styled.div`
+    border: 1px solid #ADADAD;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+    border-radius: 4px;
 `
 
 export const DemoStyle = {
@@ -164,5 +244,14 @@ export const DemoStyle = {
   DemoImage: DemoImage,
   WrapHolder: WrapHolder,
   DemoHeader: DemoHeader,
-  SpacedHeader: SpacedHeader
+  DemoTitle: DemoTitle,
+  SpacedHeader: SpacedHeader,
+  DemoButton: DemoButton,
+  DemoName: DemoName,
+  DemoProfileHolders: DemoProfileHolders,
+  SecondHeader: SecondHeader,
+  HeaderRow: HeaderRow,
+  WiderHeaderRow: WiderHeaderRow,
+  InfoPaper: InfoPaper,
+  BigProfileHolder: BigProfileHolder
 }
