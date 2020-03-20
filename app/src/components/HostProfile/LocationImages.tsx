@@ -1,40 +1,13 @@
 import * as React from "react"
-import { makeStyles } from "@material-ui/core/styles"
+import { LocationImagesStyle } from "./style"
 
-const useStyles = makeStyles(() => ({
-  locationImagesContainer: {
-    border: "1px hidden green",
-    display: "flex",
-    flexWrap: "wrap",
-    height: "400px",
-    minWidth: "600px",
-    maxWidth: "800px"
-  },
-  image: {
-    border: "1px hidden blue",
-    width: "49%"
-  }
-}))
+const imageURLS = new Array(4).fill("/hosthome/img/house2.png")
 
-const imageURLS = [
-  "/hosthome/img/house2.png",
-  "/hosthome/img/house2.png",
-  "/hosthome/img/house2.png",
-  "/hosthome/img/house2.png"
-]
-
-export const LocationImages = () => {
-  const classes = useStyles()
-
-  return (
-    <div className={classes.locationImagesContainer}>
-      {imageURLS.map(imageURL => {
-        return (
-          <img src={imageURL} alt="location_image" className={classes.image} />
-        )
-      })}
-    </div>
-  )
-}
+const LocationImages = () =>
+  <LocationImagesStyle.LocationImagesContainer>
+    {imageURLS.map(imageURL =>
+      <LocationImagesStyle.LocationImage src={imageURL} alt="location_image" />
+    )}
+  </LocationImagesStyle.LocationImagesContainer>
 
 export default LocationImages

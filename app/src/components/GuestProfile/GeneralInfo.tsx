@@ -29,14 +29,12 @@ const GeneralInfo = ({ guest }: Props) => {
         <GeneralInfoStyle.GuestInfoHeader>
           Meet {guest.firstName}
         </GeneralInfoStyle.GuestInfoHeader>
-        <Fragment>
-          <GeneralInfoStyle.SpacedParagraph>
-            {`${guest.firstName} ${guest.lastName}, ${new Date().getFullYear() -
-              guest.dateOfBirth.getFullYear()}, is a guest seeking ${guestTypeToString(
-                guest.type
-              )} host`}
-          </GeneralInfoStyle.SpacedParagraph>
-        </Fragment>
+        <GeneralInfoStyle.SpacedParagraph>
+          {`${guest.firstName} ${guest.lastName}, ${new Date().getFullYear() -
+            guest.dateOfBirth.getFullYear()}, is a guest seeking ${guestTypeToString(
+              guest.type
+            )} host`}
+        </GeneralInfoStyle.SpacedParagraph>
       </Fragment>
       <GeneralInfoStyle.GeneralInfoRow>
         <NumberProvider value={random}>

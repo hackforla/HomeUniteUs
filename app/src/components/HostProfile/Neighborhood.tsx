@@ -1,38 +1,17 @@
 import * as React from "react"
-import { makeStyles } from "@material-ui/core/styles"
-//import neighborhoodImage from '../../img/neighborhoodImage.png';
+import { NeighborStyle } from "./style"
 
-const useStyles = makeStyles(() => ({
-  neighborhoodContainer: {
-    padding: "10px 20px",
-    border: "1px hidden blue",
-    margin: "50px 0 200px 0"
-  },
-  neighborhoodTitle: {
-    fontSize: "24px",
-    border: "1px hidden blue"
-  },
-  neighborhoodMapImage: {
-    width: "70%"
-  }
-}))
-
-export const Neighborhood = () => {
-  const classes = useStyles()
-
-  return (
-    <div className={classes.neighborhoodContainer}>
-      <div className={classes.neighborhoodTitle}>The neighborhood</div>
-
-      <div className="neighborhood-map">
-        <img
-          src="/hosthome/img/neighborhoodImage.png"
-          alt="neighborhoodMap"
-          className={classes.neighborhoodMapImage}
-        />
-      </div>
+const Neighborhood = () =>
+  <NeighborStyle.NeighborContainer>
+    <NeighborStyle.NeighborTitle>
+      The Neighborhood
+    </NeighborStyle.NeighborTitle>
+    <div className="neighborhood-map">
+      <NeighborStyle.NeighborImage
+        src="/hosthome/img/neighborhoodImage.png"
+        alt="neighborhoodMap"
+      />
     </div>
-  )
-}
+  </NeighborStyle.NeighborContainer>
 
 export default Neighborhood
