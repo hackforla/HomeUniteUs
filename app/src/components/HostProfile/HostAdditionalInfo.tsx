@@ -1,47 +1,13 @@
 import * as React from "react"
-import { makeStyles } from "@material-ui/core/styles"
 import { Host } from "../../models/Host"
 import { Element } from "react-scroll"
-
-const useStyles = makeStyles(() => ({
-  additionalInfoContainer: {
-    padding: "10px 20px",
-    border: "1px hidden blue",
-    marginTop: "50px"
-  },
-  additionalInfoTitle: {
-    fontWeight: "bold",
-    fontSize: "24px",
-    border: "1px hidden blue"
-  },
-  additionalInfos: {
-    width: "70%",
-    border: "1px hidden orange"
-  },
-  additionalInfo: {
-    border: "1px hidden orange",
-    margin: "20px 0"
-  },
-  additionalInfoLabel: {
-    fontWeight: "bold",
-    fontSize: "24px",
-    lineHeight: 1.7,
-  },
-  additionalInfoContent: {
-    fontSize: "20px",
-    lineHeight: 1.3,
-  },
-  headerText: { fontSize: "24px" },
-  paragraph: { fontSize: "20px" },
-}))
+import { AdditionalInfoStyle } from "./style"
 
 interface IAdditionalInfoProps {
   host: Host
 }
 
-export const HostAdditionalInfo = ({ host }: IAdditionalInfoProps) => {
-  const classes = useStyles()
-
+const HostAdditionalInfo = ({ host }: IAdditionalInfoProps) => {
   const additionalInfos = [
     {
       label: "Employment:",
@@ -79,24 +45,23 @@ export const HostAdditionalInfo = ({ host }: IAdditionalInfoProps) => {
 
   return (
     <Element name="additionalInfo">
-      <div className={classes.additionalInfoContainer}>
-        <div className={classes.additionalInfoTitle}>About the Host</div>
-
-        <div className={classes.additionalInfos}>
-          {additionalInfos.map(additionalInfo => {
-            return (
-              <div className={classes.additionalInfo}>
-                <div className={classes.additionalInfoLabel}>
-                  {additionalInfo.label}
-                </div>
-                <div className={classes.additionalInfoContent}>
-                  {additionalInfo.content}
-                </div>
-              </div>
-            )
-          })}
-        </div>
-      </div>
+      <AdditionalInfoStyle.AdditionalInfoContainer>
+        <AdditionalInfoStyle.AdditionalInfoTitle>
+          About the Host
+        </AdditionalInfoStyle.AdditionalInfoTitle>
+        <AdditionalInfoStyle.AdditionalInfoSingleHolder>
+          {additionalInfos.map(additionalHostInfo =>
+            <AdditionalInfoStyle.AdditionalInfo>
+              <AdditionalInfoStyle.AdditionalInfoLabel>
+                {additionalHostInfo.label}
+              </AdditionalInfoStyle.AdditionalInfoLabel>
+              <AdditionalInfoStyle.AdditionalInfoContent>
+                {additionalHostInfo.content}
+              </AdditionalInfoStyle.AdditionalInfoContent>
+            </AdditionalInfoStyle.AdditionalInfo>
+          )}
+        </AdditionalInfoStyle.AdditionalInfoSingleHolder>
+      </AdditionalInfoStyle.AdditionalInfoContainer>
     </Element>
   )
 }

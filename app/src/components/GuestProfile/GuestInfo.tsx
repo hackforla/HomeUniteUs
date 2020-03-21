@@ -10,11 +10,9 @@ export const GuestInfo = () => {
 
   return (
     <GuestInfoStyle.LocationImagesContainer>
-      {imageURLS.map(imageURL => {
-        return (
-          <GuestInfoStyle.PlaceImage src={imageURL} alt="location_image" />
-        )
-      })}
+      {imageURLS.map(imageURL =>
+        <GuestInfoStyle.PlaceImage src={imageURL} alt="location_image" />
+      )}
     </GuestInfoStyle.LocationImagesContainer>
   )
 }

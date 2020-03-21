@@ -1,14 +1,15 @@
 import * as React from "react";
 
-import { makeStyles, Paper, createStyles, Grid, Box, Typography, Table, TableHead, TableRow, TableCell, TableBody, ValueLabelProps, List, ListItem, ListItemAvatar, Avatar, ListItemText } from '@material-ui/core';
+import { makeStyles, Paper, createStyles, Grid, Box, Typography, Table, TableHead, TableRow, TableCell, TableBody, ValueLabelProps, List, ListItem, ListItemAvatar, Avatar, ListItemText } from "@material-ui/core";
 import { useHostHomeData } from "../data/data-context";
 import { MatchResult, Guest, Host, GuestInterestLevel, HostQuestion, HostResponse, ResponseValue, Restriction, GuestResponse, GuestQuestion } from "../models";
 import { useParams, useHistory, useLocation } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckCircle, faTimesCircle, faPaw, faSmokingBan, faWineBottle, faPrescriptionBottleAlt, faSmoking, faBaby, faUsers, faBed, faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faTimesCircle, faPaw, faSmokingBan, faWineBottle, faPrescriptionBottleAlt, faSmoking, faBaby, faUsers, faBed, faHeart } from "@fortawesome/free-solid-svg-icons";
 
-import './AdminGuestView.css';
 import { HostHomeType } from "../models/HostHomeType";
+import { AdminGuestStyle } from "./style"
+// import './AdminGuestView.css';
 
 const useStyles = makeStyles(theme => (
     createStyles({
@@ -271,14 +272,14 @@ export const AdminGuestView = () => {
 
 
 
-        const parentingResponse = guestResponsesByKey.get('parenting_guest') as string;
-        const parenting = parentingResponse.toUpperCase() === 'YES';
-    
-    
-        const relationshipResponse = guestResponsesByKey.get('guests_relationship') as string;
-        const relationship = relationshipResponse.toUpperCase() === 'YES';
-    
-            
+    const parentingResponse = guestResponsesByKey.get('parenting_guest') as string;
+    const parenting = parentingResponse.toUpperCase() === 'YES';
+
+
+    const relationshipResponse = guestResponsesByKey.get('guests_relationship') as string;
+    const relationship = relationshipResponse.toUpperCase() === 'YES';
+
+
 
     const hostTypeDisplay = (t: HostHomeType) => {
         switch (t) {
@@ -299,17 +300,17 @@ export const AdminGuestView = () => {
     }
 
     const FailCell = (props: { value: string }) => <div>
-        <div style={{padding:'0px 5px', textAlign: 'center'}}>
+        <div style={{ padding: '0px 5px', textAlign: 'center' }}>
             <FontAwesomeIcon
                 icon={faTimesCircle}
                 style={{ 'color': 'red' }}
             />
 
         </div>
-        <div style={{padding:'0px 3px', textAlign: 'center'}}>{props.value}</div>
+        <div style={{ padding: '0px 3px', textAlign: 'center' }}>{props.value}</div>
     </div>;
 
-    const SuccessCell = (props: {value:string}) => <div style={{padding:'0px 3px', textAlign: 'center'}}>
+    const SuccessCell = (props: { value: string }) => <div style={{ padding: '0px 3px', textAlign: 'center' }}>
         {props.value}
     </div>
 
@@ -338,14 +339,16 @@ export const AdminGuestView = () => {
                                     (host: Host, index: number) => <><TableRow key={index} className={index % 2 === 0 ? classes.tableRowEven : classes.tableRowOdd}>
                                         <TableCell onClick={
                                             props.allowClick
-                                                ? () => { 
+                                                ? () => {
                                                     console.log(`AdminGuestView:MatchTable: guestId = ${guestId}`);
                                                     console.log(`AdminGuestView:MatchTable: host.id = ${host.id}`);
-                                                    history.push(`/hosthome/guests/${guestId}/matches/${host.id}`) 
+                                                    history.push(`/hosthome/guests/${guestId}/matches/${host.id}`)
                                                 }
                                                 : () => { }
                                         }>
-                                            <div className='host-match-btn' style={{ fontWeight: 'bold' }}>{host.name}</div>
+                                            <AdminGuestStyle.HostMatchClick>
+                                                {host.name}
+                                            </AdminGuestStyle.HostMatchClick>
                                         </TableCell>
                                         <TableCell>{host.address}</TableCell>
                                         {
@@ -510,7 +513,7 @@ export const AdminGuestView = () => {
                                             </Avatar>
                                         </ListItemAvatar>
                                         <ListItemText primary={`${hostTypeDisplay(guest.type)}`} />
-                                    </ListItem>     
+                                    </ListItem>
                                     <ListItem>
                                         <ListItemAvatar>
                                             <Avatar>

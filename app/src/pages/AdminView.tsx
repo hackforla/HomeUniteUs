@@ -1,25 +1,17 @@
 import * as React from "react"
+import { useHostHomeData } from "../data/data-context"
+import { GuestMatchSummary } from "../viewmodels/GuestMatchSummary"
+import { MatchResult, Guest, GuestInterestLevel } from "../models"
+import { Link } from "react-router-dom"
 import {
   Grid,
   Paper,
   makeStyles,
   createStyles,
   Typography,
-  Box,
   Button,
-  Table,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
   Container
 } from "@material-ui/core"
-import { useHostHomeData } from "../data/data-context"
-import { GuestMatchSummary } from "../viewmodels/GuestMatchSummary"
-import { MatchResult, Guest, GuestInterestLevel } from "../models"
-import { useHistory } from "react-router"
-import { Link } from "react-router-dom"
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -229,42 +221,6 @@ export const AdminView = () => {
                     )
                   )}
               </Grid>
-
-              {/* 
-                        <TableContainer component={Paper}>
-                            <Table className={classes.table} aria-label="matches table">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell style={{ width: '2rem' }}>Name</TableCell>
-                                        <TableCell>Status</TableCell>
-                                        <TableCell style={{ width: '2rem' }}>Matches</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {
-                                        allGuestMatches
-                                            .sort((a: GuestMatchSummary, b: GuestMatchSummary) => a.numMatches > b.numMatches ? -1 : 1)
-                                            .map((guestMatchSummary: GuestMatchSummary, index: number) => (
-                                                <TableRow key={guestMatchSummary.guestId}>
-                                                    <TableCell style={{ width: '2rem' }}>
-                                                        {guestMatchSummary.guestName}
-                                                    </TableCell>
-                                                    <TableCell>{guestMatchSummary.numBids > 0 ? 'Bid' : 'No Selection'}</TableCell>
-                                                    <TableCell style={{ width: '2rem' }}>
-                                                        <Button
-                                                            color='primary'
-                                                            component={Link}
-                                                            to={`/hosthome/admin/guest/${guestMatchSummary.guestId}`}
-                                                        >
-                                                            {`${guestMatchSummary.numMatches} matches`}
-                                                        </Button>
-                                                    </TableCell>
-                                                </TableRow>
-                                            ))
-                                    }
-                                </TableBody>
-                            </Table>
-                        </TableContainer> */}
             </Paper>
           </Container>
         </Grid>
