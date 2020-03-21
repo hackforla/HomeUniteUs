@@ -1,6 +1,6 @@
 .host-match-btn:hover {
     cursor: pointer;
-    background-color: dimgrey;
+    /* background-color: dimgrey; */
 }
 
 .match-table-header {

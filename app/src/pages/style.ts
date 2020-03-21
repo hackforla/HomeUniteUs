@@ -255,3 +255,16 @@ export const DemoStyle = {
   InfoPaper: InfoPaper,
   BigProfileHolder: BigProfileHolder
 }
+
+const HostMatchClick = styled.div`
+  font-weight: bold; 
+
+  :hover {
+    color: dimgrey;
+    cursor: pointer;
+  }
+`
+
+export const AdminGuestStyle = {
+  HostMatchClick: HostMatchClick
+}
