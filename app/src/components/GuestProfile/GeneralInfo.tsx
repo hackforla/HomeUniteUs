@@ -45,7 +45,8 @@ const GeneralInfo = ({ guest }: Props) => {
       <Fragment>
         <GuestPolicies guest={guest} />
       </Fragment>
-      <GeneralInfoStyle.AdditionalInfo name="moreAboutGuest">
+      {/* <GeneralInfoStyle.AdditionalInfo name="moreAboutGuest"> */}
+      <GeneralInfoStyle.AdditionalInfo>
         <GeneralInfoStyle.Header>
           About the Guest
         </GeneralInfoStyle.Header>

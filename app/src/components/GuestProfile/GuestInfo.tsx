@@ -1,8 +1,13 @@
 import * as React from "react"
 import { GuestInfoStyle } from "./style"
 import NumberContext from "./NumberContext"
+import { Guest } from "../../models"
 
-export const GuestInfo = () => {
+interface GuestInfoProps {
+  guest: Guest
+};
+
+export const GuestInfo = (props: GuestInfoProps) => {
 
   const imageURLS = new Array(4).fill(
     `/hosthome/img/profileAdd${React.useContext(NumberContext)}.png`
