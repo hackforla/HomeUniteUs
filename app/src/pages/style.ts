@@ -265,6 +265,34 @@ const HostMatchClick = styled.div`
   }
 `
 
+
+const AdminHeader = styled.div`
+  padding: 16px;
+  text-align: center;
+  color: #757575;
+  background-color: #fff;
+  border-radius: 4px;
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+`
+
+const AdminTitle = styled.h1`
+  font-size: 2em;
+  text-align:center;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.00938em;
+  margin: 0;
+  color: #757575;
+`
+
+export const AdminStyle = {
+  AdminHeader,
+  AdminTitle
+}
+
 export const AdminGuestStyle = {
   HostMatchClick: HostMatchClick
 }

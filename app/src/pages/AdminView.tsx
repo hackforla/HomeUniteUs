@@ -2,6 +2,7 @@ import * as React from "react"
 import { useHostHomeData } from "../data/data-context"
 import { GuestMatchSummary } from "../viewmodels/GuestMatchSummary"
 import { MatchResult, Guest, GuestInterestLevel } from "../models"
+import { AdminStyle } from './style'
 import { Link } from "react-router-dom"
 import {
   Grid,
@@ -173,17 +174,11 @@ export const AdminView = () => {
   return (
     <React.Fragment>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <Paper className={classes.paperHeader}>
-            <Typography
-              component="h1"
-              align="center"
-              style={{ fontSize: "2em" }}
-            >
-              All Guest Matches
-            </Typography>
-          </Paper>
-        </Grid>
+        <AdminStyle.AdminHeader>
+          <AdminStyle.AdminTitle>
+            All Guests Matching
+          </AdminStyle.AdminTitle>
+        </AdminStyle.AdminHeader>
         <Grid item xs={12}>
           <Container>
             <Paper className={classes.paper}>
