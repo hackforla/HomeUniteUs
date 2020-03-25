@@ -39,6 +39,8 @@ export const Demo = () => {
                 Link
               </DemoStyle.SecondHeader>
             </DemoStyle.HeaderRow>
+
+
             <DemoStyle.WiderHeaderRow>
               <DemoStyle.DemoName>
                 Bonnie Wolfe
@@ -63,6 +65,8 @@ export const Demo = () => {
                 Profile
               </DemoStyle.DemoButton>
             </DemoStyle.WiderHeaderRow>
+
+
           </DemoStyle.InfoPaper>
         </DemoStyle.DemoHolder>
       </DemoStyle.DemoProfileHolders>

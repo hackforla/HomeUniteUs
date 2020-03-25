@@ -297,7 +297,9 @@ export const AdminStyle = {
   AdminTitle,
   AdminHolder,
   InfoPaper,
+  HeaderRow,
   MainHolder,
+  SecondHeader
 }
 
 export const AdminGuestStyle = {
