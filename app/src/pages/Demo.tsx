@@ -45,26 +45,26 @@ export const Demo = () => {
               <DemoStyle.DemoName>
                 Bonnie Wolfe
               </DemoStyle.DemoName>
-              <DemoStyle.DemoButton
+              <DemoStyle.Button
                 onClick={() =>
                   history.push(`/hosthome/guests/999/matches/999`)
                 }
               >
                 Profile
-                </DemoStyle.DemoButton>
+                </DemoStyle.Button>
             </DemoStyle.WiderHeaderRow>
 
             <DemoStyle.WiderHeaderRow>
               <DemoStyle.DemoName>
                 Michael Romanov
               </DemoStyle.DemoName>
-              <DemoStyle.DemoButton
+              <DemoStyle.Button
                 onClick={() =>
                   history.push(`/hosthome/guests/13/matches/998`)
                 }
               >
                 Profile
-              </DemoStyle.DemoButton>
+              </DemoStyle.Button>
             </DemoStyle.WiderHeaderRow>
 
 
@@ -91,21 +91,21 @@ export const Demo = () => {
               <DemoStyle.DemoName>
                 Kirk Chu
               </DemoStyle.DemoName>
-              <DemoStyle.DemoButton
+              <DemoStyle.Button
                 onClick={() => history.push(`/hosthome/guests/999`)}
               >
                 Profile
-              </DemoStyle.DemoButton>
+              </DemoStyle.Button>
             </DemoStyle.WiderHeaderRow>
             <DemoStyle.WiderHeaderRow>
               <DemoStyle.DemoName>
                 Megan Sukarnoputri
               </DemoStyle.DemoName>
-              <DemoStyle.DemoButton
+              <DemoStyle.Button
                 onClick={() => history.push(`/hosthome/guests/998`)}
               >
                 Profile
-              </DemoStyle.DemoButton>
+              </DemoStyle.Button>
             </DemoStyle.WiderHeaderRow>
           </DemoStyle.InfoPaper>
         </DemoStyle.DemoHolder>

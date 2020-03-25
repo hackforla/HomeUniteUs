@@ -178,7 +178,7 @@ const BigProfileHolder = styled(DemoProfileHolders)`
     margin: 50px 0px 0px;
 `
 
-const DemoButton = styled.a`
+const Button = styled.a`
   color: white;
   background-color: #00AAEF;
   padding: 8px;
@@ -246,7 +246,7 @@ export const DemoStyle = {
   DemoHeader: DemoHeader,
   DemoTitle: DemoTitle,
   SpacedHeader: SpacedHeader,
-  DemoButton: DemoButton,
+  Button: Button,
   DemoName: DemoName,
   DemoProfileHolders: DemoProfileHolders,
   SecondHeader: SecondHeader,
@@ -292,14 +292,44 @@ const AdminHolder = styled.div`
   max-width: 1210px;
 `
 
+
+const AdminLink = styled.a`
+  color: #757575;
+  text-decoration: none;
+  width: 160px;
+  text-align:left;
+  font-size: 1rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+`
+
+const AdminText = styled.p`
+  font-size: 1rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+`
+
+const AdminProfileHolders = styled.div`
+    margin: 30px 0px 0px;
+    flex-grow: 0;
+    max-width: 100%;
+    flex-basis: 100%;
+    box-sizing: border-box;
+`
+
 export const AdminStyle = {
   AdminHeader,
+  AdminLink,
+  AdminText,
   AdminTitle,
+  AdminProfileHolders,
   AdminHolder,
+  Button,
   InfoPaper,
   HeaderRow,
   MainHolder,
-  SecondHeader
+  SecondHeader,
+  WiderHeaderRow
 }
 
 export const AdminGuestStyle = {

@@ -1,55 +1,50 @@
 import * as React from "react"
+import { useHistory } from "react-router"
 import { useHostHomeData } from "../data/data-context"
 import { GuestMatchSummary } from "../viewmodels/GuestMatchSummary"
 import { MatchResult, Guest, GuestInterestLevel } from "../models"
 import { AdminStyle } from './style'
 import { Link } from "react-router-dom"
 import {
-  Grid,
   Typography,
-  Button,
 } from "@material-ui/core"
-
 
 
 export const MatchSummaryRow = (guestMatchSummary: GuestMatchSummary) => {
   const { data } = useHostHomeData()
 
+  const history = useHistory()
   return (
-    <Grid item xs={12} style={{ paddingBottom: "4px" }}>
-      <Grid container>
-        <Grid item xs={2}>
-          <Typography component="p" align="left">
-            <Link
-              to={`/hosthome/guests/${guestMatchSummary.guestId}`}
-            >
-              {guestMatchSummary.guestName}
-            </Link>
-          </Typography>
-        </Grid>
-        <Grid item xs={8}>
-          <Typography component="h3">
-            {guestMatchSummary.numBids > 0 ? "Bid" : "No Selection"}
-          </Typography>
-        </Grid>
-        <Grid item xs={2}>
-          <Button
-            color="primary"
-            variant="contained"
-            component={Link}
-            style={{ backgroundColor: "#00AAEF" }}
-            to={`/hosthome/admin/guest/${guestMatchSummary.guestId}`}
-          >
-            {`${guestMatchSummary.numMatches} matches`}
-          </Button>
-        </Grid>
-      </Grid>
-    </Grid>
+
+    <AdminStyle.WiderHeaderRow>
+      <AdminStyle.AdminLink>
+        <Link
+          to={`/hosthome/guests/${guestMatchSummary.guestId}`}
+        >
+          {guestMatchSummary.guestName}
+        </Link>
+
+      </AdminStyle.AdminLink>
+
+      {/* <Typography component="h3">
+        {guestMatchSummary.numBids > 0 ? "Bid" : "No Selection"}
+      </Typography> */}
+
+      <AdminStyle.AdminText>
+        {guestMatchSummary.numBids > 0 ? "Bid" : "No Selection"}
+      </AdminStyle.AdminText>
+
+
+      <AdminStyle.Button
+        onClick={() => { history.push(`/hosthome/admin/guest/${guestMatchSummary.guestId}`) }}
+      >
+        {`${guestMatchSummary.numMatches} matches`}
+      </AdminStyle.Button>
+    </AdminStyle.WiderHeaderRow>
   )
 }
 
 export const AdminView = () => {
-  // const classes = useStyles({})
 
   const { data, dispatch, addGuest } = useHostHomeData()
 
@@ -90,31 +85,33 @@ export const AdminView = () => {
           </AdminStyle.AdminTitle>
         </AdminStyle.AdminHeader>
 
-        <AdminStyle.AdminHolder>
-          <AdminStyle.InfoPaper>
-            <AdminStyle.HeaderRow>
-              <AdminStyle.SecondHeader>
-                Name
+        <AdminStyle.AdminProfileHolders>
+          <AdminStyle.AdminHolder>
+            <AdminStyle.InfoPaper>
+              <AdminStyle.HeaderRow>
+                <AdminStyle.SecondHeader>
+                  Name
               </AdminStyle.SecondHeader>
-              <AdminStyle.SecondHeader>
-                Status
+                <AdminStyle.SecondHeader style={{ paddingLeft: '100px' }}>
+                  Status
                 </AdminStyle.SecondHeader>
-              <AdminStyle.SecondHeader>
-                Matches
+                <AdminStyle.SecondHeader>
+                  Matches
                 </AdminStyle.SecondHeader>
-            </AdminStyle.HeaderRow>
+              </AdminStyle.HeaderRow>
 
-            {allGuestMatches
-              .sort((a: GuestMatchSummary, b: GuestMatchSummary) =>
-                a.numMatches > b.numMatches ? -1 : 1
-              )
-              .map(
-                (guestMatchSummary: GuestMatchSummary, index: number) => (
-                  <MatchSummaryRow key={index} {...guestMatchSummary} />
+              {allGuestMatches
+                .sort((a: GuestMatchSummary, b: GuestMatchSummary) =>
+                  a.numMatches > b.numMatches ? -1 : 1
                 )
-              )}
-          </AdminStyle.InfoPaper>
-        </AdminStyle.AdminHolder>
+                .map(
+                  (guestMatchSummary: GuestMatchSummary, index: number) => (
+                    <MatchSummaryRow key={index} {...guestMatchSummary} />
+                  )
+                )}
+            </AdminStyle.InfoPaper>
+          </AdminStyle.AdminHolder>
+        </AdminStyle.AdminProfileHolders>
       </AdminStyle.MainHolder>
     </React.Fragment>
   )
