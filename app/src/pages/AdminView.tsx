@@ -173,53 +173,56 @@ export const AdminView = () => {
 
   return (
     <React.Fragment>
-      <Grid container spacing={3}>
+      <AdminStyle.MainHolder>
+
         <AdminStyle.AdminHeader>
           <AdminStyle.AdminTitle>
             All Guests Matching
           </AdminStyle.AdminTitle>
         </AdminStyle.AdminHeader>
-        <Grid item xs={12}>
-          <Container>
-            <Paper className={classes.paper}>
-              <Grid container>
-                <Grid item xs={12} style={{ marginBottom: "8px" }}>
-                  <Grid container>
-                    <Grid item xs={2}>
-                      <Typography
-                        component="h3"
-                        style={{ fontWeight: "bold", textDecoration: "und" }}
-                        align="left"
-                      >
-                        Name
+
+        <AdminStyle.AdminHolder>
+          <AdminStyle.InfoPaper>
+            {/* <Paper className={classes.paper}> */}
+            <Grid container>
+              <Grid item xs={12} style={{ marginBottom: "8px" }}>
+                <Grid container>
+                  <Grid item xs={2}>
+                    <Typography
+                      component="h3"
+                      style={{ fontWeight: "bold", textDecoration: "und" }}
+                      align="left"
+                    >
+                      Name
                       </Typography>
-                    </Grid>
-                    <Grid item xs={8}>
-                      <Typography component="h3" style={{ fontWeight: "bold" }}>
-                        Status
+                  </Grid>
+                  <Grid item xs={8}>
+                    <Typography component="h3" style={{ fontWeight: "bold" }}>
+                      Status
                       </Typography>
-                    </Grid>
-                    <Grid item xs={2}>
-                      <Typography component="h3" style={{ fontWeight: "bold" }}>
-                        Matches
+                  </Grid>
+                  <Grid item xs={2}>
+                    <Typography component="h3" style={{ fontWeight: "bold" }}>
+                      Matches
                       </Typography>
-                    </Grid>
                   </Grid>
                 </Grid>
-                {allGuestMatches
-                  .sort((a: GuestMatchSummary, b: GuestMatchSummary) =>
-                    a.numMatches > b.numMatches ? -1 : 1
-                  )
-                  .map(
-                    (guestMatchSummary: GuestMatchSummary, index: number) => (
-                      <MatchSummaryRow key={index} {...guestMatchSummary} />
-                    )
-                  )}
               </Grid>
-            </Paper>
-          </Container>
-        </Grid>
-      </Grid>
+              {allGuestMatches
+                .sort((a: GuestMatchSummary, b: GuestMatchSummary) =>
+                  a.numMatches > b.numMatches ? -1 : 1
+                )
+                .map(
+                  (guestMatchSummary: GuestMatchSummary, index: number) => (
+                    <MatchSummaryRow key={index} {...guestMatchSummary} />
+                  )
+                )}
+            </Grid>
+            {/* </Paper> */}
+
+          </AdminStyle.InfoPaper>
+        </AdminStyle.AdminHolder>
+      </AdminStyle.MainHolder>
     </React.Fragment>
   )
 }

@@ -287,10 +287,17 @@ const AdminTitle = styled.h1`
   margin: 0;
   color: #757575;
 `
+const AdminHolder = styled.div`
+  margin: 0 auto;
+  max-width: 1210px;
+`
 
 export const AdminStyle = {
   AdminHeader,
-  AdminTitle
+  AdminTitle,
+  AdminHolder,
+  InfoPaper,
+  MainHolder,
 }
 
 export const AdminGuestStyle = {
