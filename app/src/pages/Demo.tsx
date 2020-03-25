@@ -53,6 +53,7 @@ export const Demo = () => {
                 Profile
                 </DemoStyle.DemoButton>
             </DemoStyle.WiderHeaderRow>
+
             <DemoStyle.WiderHeaderRow>
               <DemoStyle.DemoName>
                 Michael Romanov
