@@ -19,27 +19,22 @@ export const MatchSummaryRow = (guestMatchSummary: GuestMatchSummary) => {
         >
           {guestMatchSummary.guestName}
         </Link>
-
       </AdminStyle.AdminLink>
-
-
       <AdminStyle.AdminText>
         {guestMatchSummary.numBids > 0 ? "Bid" : "No Selection"}
       </AdminStyle.AdminText>
-
       <AdminStyle.Button
         onClick={() => { history.push(`/hosthome/admin/guest/${guestMatchSummary.guestId}`) }}
       >
         {`${guestMatchSummary.numMatches} matches`}
       </AdminStyle.Button>
-
     </AdminStyle.WiderHeaderRow>
   )
 }
 
 export const AdminView = () => {
 
-  const { data, dispatch, addGuest } = useHostHomeData()
+  const { data } = useHostHomeData()
 
   const allGuestMatches = React.useMemo(() => {
     return data.guests.map((guest: Guest) => {
