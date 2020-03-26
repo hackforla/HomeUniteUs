@@ -5,9 +5,6 @@ import { GuestMatchSummary } from "../viewmodels/GuestMatchSummary"
 import { MatchResult, Guest, GuestInterestLevel } from "../models"
 import { AdminStyle } from './style'
 import { Link } from "react-router-dom"
-import {
-  Typography,
-} from "@material-ui/core"
 
 
 export const MatchSummaryRow = (guestMatchSummary: GuestMatchSummary) => {
@@ -15,7 +12,6 @@ export const MatchSummaryRow = (guestMatchSummary: GuestMatchSummary) => {
 
   const history = useHistory()
   return (
-
     <AdminStyle.WiderHeaderRow>
       <AdminStyle.AdminLink>
         <Link
@@ -26,20 +22,17 @@ export const MatchSummaryRow = (guestMatchSummary: GuestMatchSummary) => {
 
       </AdminStyle.AdminLink>
 
-      {/* <Typography component="h3">
-        {guestMatchSummary.numBids > 0 ? "Bid" : "No Selection"}
-      </Typography> */}
 
       <AdminStyle.AdminText>
         {guestMatchSummary.numBids > 0 ? "Bid" : "No Selection"}
       </AdminStyle.AdminText>
-
 
       <AdminStyle.Button
         onClick={() => { history.push(`/hosthome/admin/guest/${guestMatchSummary.guestId}`) }}
       >
         {`${guestMatchSummary.numMatches} matches`}
       </AdminStyle.Button>
+
     </AdminStyle.WiderHeaderRow>
   )
 }
@@ -89,10 +82,10 @@ export const AdminView = () => {
           <AdminStyle.AdminHolder>
             <AdminStyle.InfoPaper>
               <AdminStyle.HeaderRow>
-                <AdminStyle.SecondHeader>
+                <AdminStyle.SecondHeader style={{ paddingRight: `100px` }}>
                   Name
               </AdminStyle.SecondHeader>
-                <AdminStyle.SecondHeader style={{ paddingLeft: '100px' }}>
+                <AdminStyle.SecondHeader >
                   Status
                 </AdminStyle.SecondHeader>
                 <AdminStyle.SecondHeader>

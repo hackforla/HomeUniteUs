@@ -219,7 +219,6 @@ const HeaderRow = styled.div`
 const WiderHeaderRow = styled(HeaderRow)`
   width: 95%;
   margin: 0 0 1.5em 0;
-
 `
 
 const SecondHeader = styled.h3`
@@ -265,7 +264,6 @@ const HostMatchClick = styled.div`
   }
 `
 
-
 const AdminHeader = styled.div`
   padding: 16px;
   text-align: center;
@@ -292,29 +290,30 @@ const AdminHolder = styled.div`
   max-width: 1210px;
 `
 
-
 const AdminLink = styled.a`
   color: #757575;
   text-decoration: none;
-  width: 160px;
-  text-align:left;
+  text-align: left;
   font-size: 1rem;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: 400;
+  flex-basis: 160px;
 `
 
 const AdminText = styled.p`
   font-size: 1rem;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: 400;
+  text-align: left;
+
 `
 
 const AdminProfileHolders = styled.div`
-    margin: 30px 0px 0px;
-    flex-grow: 0;
-    max-width: 100%;
-    flex-basis: 100%;
-    box-sizing: border-box;
+  margin: 30px 0px 0px;
+  flex-grow: 0;
+  max-width: 100%;
+  flex-basis: 100%;
+  box-sizing: border-box;
 `
 
 export const AdminStyle = {
