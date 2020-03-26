@@ -43,11 +43,11 @@ const X = styled.span`
 `
 
 export const ModalsStyle = {
-  Modal: Modal,
-  TextHolder: TextHolder,
-  ImageBorder: ImageBorder,
-  ModalsText: ModalsText,
-  X: X
+  Modal,
+  TextHolder,
+  ImageBorder,
+  ModalsText,
+  X
 }
 
 const AboutHolder = styled.div`
@@ -105,11 +105,11 @@ const TextBlock = styled.div`
 `
 
 export const AboutStyle = {
-  AboutHolder: AboutHolder,
-  AboutTitle: AboutTitle,
-  AboutText: AboutText,
-  MailLink: MailLink,
-  TextBlock: TextBlock
+  AboutHolder,
+  AboutTitle,
+  AboutText,
+  MailLink,
+  TextBlock,
 }
 
 const DemoHolder = styled.div`
@@ -236,23 +236,23 @@ const InfoPaper = styled.div`
 `
 
 export const DemoStyle = {
-  DemoHolder: DemoHolder,
-  MainHolder: MainHolder,
-  ImageHolder: ImageHolder,
-  ImageTitle: ImageTitle,
-  DemoImage: DemoImage,
-  WrapHolder: WrapHolder,
-  DemoHeader: DemoHeader,
-  DemoTitle: DemoTitle,
-  SpacedHeader: SpacedHeader,
-  Button: Button,
-  DemoName: DemoName,
-  DemoProfileHolders: DemoProfileHolders,
-  SecondHeader: SecondHeader,
-  HeaderRow: HeaderRow,
-  WiderHeaderRow: WiderHeaderRow,
-  InfoPaper: InfoPaper,
-  BigProfileHolder: BigProfileHolder
+  DemoHolder,
+  MainHolder,
+  ImageHolder,
+  ImageTitle,
+  DemoImage,
+  WrapHolder,
+  DemoHeader,
+  DemoTitle,
+  SpacedHeader,
+  Button,
+  DemoName,
+  DemoProfileHolders,
+  SecondHeader,
+  HeaderRow,
+  WiderHeaderRow,
+  InfoPaper,
+  BigProfileHolder,
 }
 
 const HostMatchClick = styled.div`
@@ -297,7 +297,7 @@ const AdminLink = styled.a`
   font-size: 1rem;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: 400;
-  flex-basis: 160px;
+  flex: 1;
 `
 
 const AdminText = styled.p`
@@ -305,7 +305,7 @@ const AdminText = styled.p`
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: 400;
   text-align: left;
-
+  flex: 1;
 `
 
 const AdminProfileHolders = styled.div`

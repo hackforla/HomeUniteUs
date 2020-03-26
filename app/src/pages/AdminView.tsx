@@ -82,7 +82,7 @@ export const AdminView = () => {
           <AdminStyle.AdminHolder>
             <AdminStyle.InfoPaper>
               <AdminStyle.HeaderRow>
-                <AdminStyle.SecondHeader style={{ paddingRight: `100px` }}>
+                <AdminStyle.SecondHeader >
                   Name
               </AdminStyle.SecondHeader>
                 <AdminStyle.SecondHeader >
