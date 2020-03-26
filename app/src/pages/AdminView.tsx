@@ -73,7 +73,7 @@ export const AdminView = () => {
           </AdminStyle.AdminTitle>
         </AdminStyle.AdminHeader>
 
-        <AdminStyle.AdminProfileHolders>
+        <AdminStyle.AdminMatchHolders>
           <AdminStyle.AdminHolder>
             <AdminStyle.InfoPaper>
               <AdminStyle.HeaderRow>
@@ -99,7 +99,7 @@ export const AdminView = () => {
                 )}
             </AdminStyle.InfoPaper>
           </AdminStyle.AdminHolder>
-        </AdminStyle.AdminProfileHolders>
+        </AdminStyle.AdminMatchHolders>
       </AdminStyle.MainHolder>
     </React.Fragment>
   )

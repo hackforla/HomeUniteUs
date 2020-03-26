@@ -308,7 +308,7 @@ const AdminText = styled.p`
   flex: 1;
 `
 
-const AdminProfileHolders = styled.div`
+const AdminMatchHolders = styled.div`
   margin: 30px 0px 0px;
   flex-grow: 0;
   max-width: 100%;
@@ -321,7 +321,7 @@ export const AdminStyle = {
   AdminLink,
   AdminText,
   AdminTitle,
-  AdminProfileHolders,
+  AdminMatchHolders,
   AdminHolder,
   Button,
   InfoPaper,
