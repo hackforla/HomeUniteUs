@@ -43,11 +43,11 @@ const X = styled.span`
 `
 
 export const ModalsStyle = {
-  Modal: Modal,
-  TextHolder: TextHolder,
-  ImageBorder: ImageBorder,
-  ModalsText: ModalsText,
-  X: X
+  Modal,
+  TextHolder,
+  ImageBorder,
+  ModalsText,
+  X
 }
 
 const AboutHolder = styled.div`
@@ -105,11 +105,11 @@ const TextBlock = styled.div`
 `
 
 export const AboutStyle = {
-  AboutHolder: AboutHolder,
-  AboutTitle: AboutTitle,
-  AboutText: AboutText,
-  MailLink: MailLink,
-  TextBlock: TextBlock
+  AboutHolder,
+  AboutTitle,
+  AboutText,
+  MailLink,
+  TextBlock,
 }
 
 const DemoHolder = styled.div`
@@ -178,7 +178,7 @@ const BigProfileHolder = styled(DemoProfileHolders)`
     margin: 50px 0px 0px;
 `
 
-const DemoButton = styled.a`
+const Button = styled.a`
   color: white;
   background-color: #00AAEF;
   padding: 8px;
@@ -219,7 +219,6 @@ const HeaderRow = styled.div`
 const WiderHeaderRow = styled(HeaderRow)`
   width: 95%;
   margin: 0 0 1.5em 0;
-
 `
 
 const SecondHeader = styled.h3`
@@ -237,23 +236,23 @@ const InfoPaper = styled.div`
 `
 
 export const DemoStyle = {
-  DemoHolder: DemoHolder,
-  MainHolder: MainHolder,
-  ImageHolder: ImageHolder,
-  ImageTitle: ImageTitle,
-  DemoImage: DemoImage,
-  WrapHolder: WrapHolder,
-  DemoHeader: DemoHeader,
-  DemoTitle: DemoTitle,
-  SpacedHeader: SpacedHeader,
-  DemoButton: DemoButton,
-  DemoName: DemoName,
-  DemoProfileHolders: DemoProfileHolders,
-  SecondHeader: SecondHeader,
-  HeaderRow: HeaderRow,
-  WiderHeaderRow: WiderHeaderRow,
-  InfoPaper: InfoPaper,
-  BigProfileHolder: BigProfileHolder
+  DemoHolder,
+  MainHolder,
+  ImageHolder,
+  ImageTitle,
+  DemoImage,
+  WrapHolder,
+  DemoHeader,
+  DemoTitle,
+  SpacedHeader,
+  Button,
+  DemoName,
+  DemoProfileHolders,
+  SecondHeader,
+  HeaderRow,
+  WiderHeaderRow,
+  InfoPaper,
+  BigProfileHolder,
 }
 
 const HostMatchClick = styled.div`
@@ -264,6 +263,73 @@ const HostMatchClick = styled.div`
     cursor: pointer;
   }
 `
+
+const AdminHeader = styled.div`
+  padding: 16px;
+  text-align: center;
+  color: #757575;
+  background-color: #fff;
+  border-radius: 4px;
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+`
+
+const AdminTitle = styled.h1`
+  font-size: 2em;
+  text-align:center;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0.00938em;
+  margin: 0;
+  color: #757575;
+`
+const AdminHolder = styled.div`
+  margin: 0 auto;
+  max-width: 1210px;
+`
+
+const AdminLink = styled.a`
+  color: #757575;
+  text-decoration: none;
+  text-align: left;
+  font-size: 1rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  flex: 1;
+`
+
+const AdminText = styled.p`
+  font-size: 1rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  text-align: left;
+  flex: 1;
+`
+
+const AdminMatchHolders = styled.div`
+  margin: 30px 0px 0px;
+  flex-grow: 0;
+  max-width: 100%;
+  flex-basis: 100%;
+  box-sizing: border-box;
+`
+
+export const AdminStyle = {
+  AdminHeader,
+  AdminLink,
+  AdminText,
+  AdminTitle,
+  AdminMatchHolders,
+  AdminHolder,
+  Button,
+  InfoPaper,
+  HeaderRow,
+  MainHolder,
+  SecondHeader,
+  WiderHeaderRow
+}
 
 export const AdminGuestStyle = {
   HostMatchClick: HostMatchClick
