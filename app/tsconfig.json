@@ -5,7 +5,9 @@
         "lib": [
             "es2015",
             "es6",
-            "dom"
+            "dom",
+            "dom.iterable",
+            "esnext"
         ],
         "noImplicitThis": true,
         "noImplicitAny": true,
@@ -13,6 +15,7 @@
         "strict": true,
         "module": "commonjs",
         "target": "es5",
+        "esModuleInterop": true,
         "jsx": "react",
     }
 }
