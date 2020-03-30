@@ -145,7 +145,7 @@ const NoWrapHolder = styled.div`
   display: flex;
 `
 
-const DemoHeader = styled.div`
+const MainHeader = styled.div`
   padding: 16px;
   text-align: center;
   color: #757575;
@@ -156,7 +156,7 @@ const DemoHeader = styled.div`
     0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
 `
 
-const DemoTitle = styled.h1`
+const MainTitle = styled.h1`
   font-size: 2em;
   text-align:center;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
@@ -167,7 +167,7 @@ const DemoTitle = styled.h1`
   color: #757575;
 `
 
-const SpacedHeader = styled(DemoHeader)`
+const SpacedHeader = styled(MainHeader)`
   margin: 30px 0 0 0;
 `
 const DemoProfileHolders = styled.div`
@@ -246,8 +246,8 @@ export const DemoStyle = {
   ImageTitle,
   DemoImage,
   WrapHolder,
-  DemoHeader,
-  DemoTitle,
+  MainHeader,
+  MainTitle,
   SpacedHeader,
   Button,
   DemoName,
@@ -321,10 +321,10 @@ const AdminMatchHolders = styled.div`
 `
 
 export const AdminStyle = {
-  AdminHeader,
+  MainHeader,
   AdminLink,
   AdminText,
-  AdminTitle,
+  MainTitle,
   AdminMatchHolders,
   AdminHolder,
   Button,
@@ -337,8 +337,8 @@ export const AdminStyle = {
 
 export const AdminGuestStyle = {
   HostMatchClick,
-  AdminHeader,
-  AdminTitle,
+  MainHeader,
+  MainTitle,
   MainHolder,
   NoWrapHolder,
 }

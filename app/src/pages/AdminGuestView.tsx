@@ -461,24 +461,11 @@ export const AdminGuestView = () => {
                 {/* <Grid container spacing={3}> */}
 
                 {/* Page Title */}
-                {/* <Grid item xs={12}>
-                    <Paper className={classes.paper}>
-                        <Typography
-                            component='h1'
-                            align='center'
-                            style={{ fontSize: '2em' }}
-                        >
-                            Guest Matches
-                            </Typography>
-                    </Paper>
-                </Grid> */}
-
-
-                <AdminGuestStyle.AdminHeader>
-                    <AdminGuestStyle.AdminTitle>
+                <AdminGuestStyle.MainHeader>
+                    <AdminGuestStyle.MainTitle>
                         Guest Matches
-                        </AdminGuestStyle.AdminTitle>
-                </AdminGuestStyle.AdminHeader>
+                        </AdminGuestStyle.MainTitle>
+                </AdminGuestStyle.MainHeader>
                 <AdminGuestStyle.NoWrapHolder>
                     {/* Profile Photo */}
                     {/* <Grid item xs={4}> */}
