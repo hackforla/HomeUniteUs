@@ -141,6 +141,10 @@ const WrapHolder = styled.div`
   flex-wrap: wrap;
 `
 
+const NoWrapHolder = styled.div`
+  display: flex;
+`
+
 const DemoHeader = styled.div`
   padding: 16px;
   text-align: center;
@@ -332,5 +336,9 @@ export const AdminStyle = {
 }
 
 export const AdminGuestStyle = {
-  HostMatchClick: HostMatchClick
+  HostMatchClick,
+  AdminHeader,
+  AdminTitle,
+  MainHolder,
+  NoWrapHolder,
 }

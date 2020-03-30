@@ -457,10 +457,11 @@ export const AdminGuestView = () => {
 
     return (
         <React.Fragment>
-            <Grid container spacing={3}>
+            <AdminGuestStyle.MainHolder>
+                {/* <Grid container spacing={3}> */}
 
                 {/* Page Title */}
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                     <Paper className={classes.paper}>
                         <Typography
                             component='h1'
@@ -470,10 +471,17 @@ export const AdminGuestView = () => {
                             Guest Matches
                             </Typography>
                     </Paper>
-                </Grid>
+                </Grid> */}
 
-                {/* Profile Photo */}
-                <Grid item xs={4}>
+
+                <AdminGuestStyle.AdminHeader>
+                    <AdminGuestStyle.AdminTitle>
+                        Guest Matches
+                        </AdminGuestStyle.AdminTitle>
+                </AdminGuestStyle.AdminHeader>
+                <AdminGuestStyle.NoWrapHolder>
+                    {/* Profile Photo */}
+                    {/* <Grid item xs={4}> */}
                     <Paper className={classes.paper}>
                         <img
                             src={guest.imageUrl}
@@ -481,10 +489,10 @@ export const AdminGuestView = () => {
                             alt='Profile Photo'
                         />
                     </Paper>
-                </Grid>
+                    {/* </Grid> */}
 
-                {/* List of Preferences/Proclivities */}
-                <Grid item xs={8}>
+                    {/* List of Preferences/Proclivities */}
+                    {/* <Grid item xs={8}> */}
                     <Paper className={classes.paper}>
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
@@ -575,15 +583,17 @@ export const AdminGuestView = () => {
                             </Grid>
                         </Grid>
                     </Paper>
+                </AdminGuestStyle.NoWrapHolder>
 
-                </Grid>
+                {/* </Grid> */}
 
                 {/*  */}
                 <MatchTable tableName='Matched' hostList={matched} allowClick={true} displayInterested={true} />
                 <MatchTable tableName='Declined' hostList={rejected} allowClick={true} displayInterested={true} />
                 <MatchTable tableName='Unmatched' hostList={unmatched} allowClick={true} displayInterested={false} />
 
-            </Grid>
+                {/* </Grid> */}
+            </AdminGuestStyle.MainHolder>
         </React.Fragment>
     );
 };
