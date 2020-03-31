@@ -1,7 +1,26 @@
+import os
 import sys
-from flask import Flask, render_template, send_from_directory, request, jsonify
+import json
 import logging
 from logging.config import dictConfig
+from urllib.parse import quote_plus
+
+from dotenv import load_dotenv
+load_dotenv()
+
+from flask import (
+    Flask, 
+    render_template, 
+    request, 
+    Response, 
+    make_response,
+    redirect,
+    jsonify,
+    session,
+    url_for,
+    send_from_directory
+)
+import pymongo
 
 dictConfig({
     'version': 1,
@@ -25,6 +44,8 @@ app = Flask(
     static_folder='dist',
     template_folder='dist'
 )
+
+
 
 
 class GuestRepository:
@@ -169,6 +190,80 @@ def delete_guest(id: int):
     else:
         success = "no"
     return {"success": success, "status": guests.status_code}
+
+
+@app.route('/api/test')
+def test_api():    
+
+    try:           
+        mongo_client = pymongo.MongoClient('mongodb://{}:{}@{}:{}'.format(
+            quote_plus(os.getenv('DB_USER')),
+            quote_plus(os.getenv('DB_PWD')),
+            os.getenv('DB_HOST'),
+            os.getenv('DB_PORT')
+        ))
+
+
+        DB_NAME = 'hosthome'
+
+        db = mongo_client[DB_NAME]
+
+        data = {
+            'test'  : 'worked'
+        }
+        
+        js = json.dumps(data)    
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+
+    except Exception as e:
+        data = {
+            'test'  : 'failed',
+
+            'error': str(e)
+        }
+        
+        js = json.dumps(data)    
+        resp = Response(js, status=500, mimetype='application/json')
+        return resp
+
+
+@app.route('/api/profile', methods=['POST'])
+def create_profile():
+    profile = request.get_json()
+
+    print('/mongo -- about to connect...')
+
+    try:           
+        mongo_client = pymongo.MongoClient('mongodb://{}:{}@{}:{}'.format(
+            quote_plus(os.getenv('DB_USER')),
+            quote_plus(os.getenv('DB_USER')),
+            os.getenv('DB_PWD'),
+            os.getenv('DB_HOST'),
+            os.getenv('DB_PORT')
+        ))
+
+
+        DB_NAME = 'hosthome'
+
+        db = mongo_client[DB_NAME]
+        col = db['profiles']
+        result = col.insert_one(profile)
+        js = { '_id': result.inserted_id }
+
+        return jsonify(js)
+
+    except Exception as e:
+        data = {
+            'test'  : 'failed',
+
+            'error': str(e)
+        }
+        
+        js = json.dumps(data)    
+        resp = Response(js, status=500, mimetype='application/json')
+        return resp
+
 
 
 if __name__ == "__main__":

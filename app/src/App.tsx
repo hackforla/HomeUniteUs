@@ -19,82 +19,108 @@ import { AboutPage } from "./pages/About"
 import { HostHomeDataProvider } from "./data/data-context"
 import { Guest } from "./models"
 import { AppConfig } from "./data/config"
+import { useAuth0 } from "./react-auth0-spa"
+import { CreateProfile, CreateHostProfile, CreateGuestProfile } from "./pages/CreateProfile"
 
 export interface AppProps { }
 
-export const PlaceholderView = () => (
-  <AppStyle.ToolBarTitle>Nothing here yet</AppStyle.ToolBarTitle>
-)
+export const LoginView = () => {
+  const { loginWithPopup } = useAuth0();
 
-export const PlaceholderWithIdView = () => {
-  const { id } = useParams()
-  return (
-    <AppStyle.ToolBarTitle>Nothing here yet for ID: {id}</AppStyle.ToolBarTitle>
-  )
-}
+  const onLoginClick: React.EventHandler<React.SyntheticEvent<HTMLAnchorElement>> = async (e: React.SyntheticEvent<HTMLAnchorElement>) => {
 
-export const WelcomeView = () => {
-  const history = useHistory()
+    e.preventDefault();
+
+    await loginWithPopup();
+  };
+
   return (
-    <React.Fragment>
-      <AppStyle.ToolBarTitle>About</AppStyle.ToolBarTitle>
-    </React.Fragment>
-  )
-}
+    <div>
+      <a href='' onClick={onLoginClick}>Login to Host Homes</a>
+    </div>
+  );
+};
+
 export const App = () => {
-  let a: JSX.Element
+
+  const { isInitializing, isAuthenticated, user } = useAuth0();
 
   return (
     <React.Fragment>
-      <HostHomeDataProvider>
-        <BrowserRouter>
-          <React.Fragment>
-            <AppStyle.FlexHolder>
-              <AppStyle.FlexGrowHolder>
-                <a href="http://www.safeplaceforyouth.org/" target="_blank">
-                  <AppStyle.Image src={logo} alt="Logo" />
-                </a>
-              </AppStyle.FlexGrowHolder>
-              <AppStyle.Holder>
-                <NavLink to={`/hosthome/demo`}>
-                  DEMO
-                </NavLink>
-              </AppStyle.Holder>
-              <AppStyle.Holder>
-                <NavLink to={`/hosthome/about`}>
-                  ABOUT
-                </NavLink>
-              </AppStyle.Holder>
-              <AppStyle.Holder>
-                <NavLink to={`/hosthome/admin/guests`}>
-                  ADMIN
-                </NavLink>
-              </AppStyle.Holder>
-            </AppStyle.FlexHolder>
-            <React.Fragment>
-              <Switch>
-                <Route exact path="/" component={AboutPage} />
-                <Route exact path="/hosthome" component={AboutPage} />
-                <Route exact path="/hosthome/demo" component={Demo} />
-                <Route path="/hosthome/about" component={AboutPage} />
-                <Route path="/hosthome/admin/guests" component={AdminView} />
-                <Route
-                  path="/hosthome/admin/guest/:id"
-                  component={AdminGuestView}
-                />
-                <Route
-                  path="/hosthome/guests/:guestId/matches/:hostId"
-                  component={HostProfilePage}
-                />
-                <Route
-                  path="/hosthome/guests/:id"
-                  component={GuestProfilePage}
-                />
-              </Switch>
-            </React.Fragment>
-          </React.Fragment>
-        </BrowserRouter>
-      </HostHomeDataProvider>
+
+
+      {
+        isInitializing
+          ? <div>Loading...</div>
+          : isAuthenticated
+            ? <HostHomeDataProvider>
+              <BrowserRouter>
+                <React.Fragment>
+                  <AppStyle.FlexHolder>
+                    <AppStyle.FlexGrowHolder>
+                      <a href="http://www.safeplaceforyouth.org/" target="_blank">
+                        <AppStyle.Image src={logo} alt="Logo" />
+                      </a>
+                    </AppStyle.FlexGrowHolder>
+                    <AppStyle.Holder>
+                      <NavLink to={`/hosthome/demo`}>
+                        DEMO
+            </NavLink>
+                    </AppStyle.Holder>
+                    <AppStyle.Holder>
+                      <NavLink to={`/hosthome/about`}>
+                        ABOUT
+            </NavLink>
+                    </AppStyle.Holder>
+                    <AppStyle.Holder>
+                      <NavLink to={`/hosthome/admin/guests`}>
+                        ADMIN
+            </NavLink>
+                    </AppStyle.Holder>
+                    <AppStyle.Holder>
+      <span>Hello, {(user && user.name) || 'User'}</span>
+                    </AppStyle.Holder>
+                  </AppStyle.FlexHolder>
+                  <React.Fragment>
+                    <Switch>
+                      <Route exact path="/" component={AboutPage} />
+                      <Route exact path="/hosthome" component={AboutPage} />
+                      <Route exact path="/hosthome/demo" component={Demo} />
+                      <Route path="/hosthome/about" component={AboutPage} />
+                      <Route path="/hosthome/admin/guests" component={AdminView} />
+                      <Route
+                        path="/hosthome/admin/guest/:id"
+                        component={AdminGuestView}
+                      />
+                      <Route
+                        path="/hosthome/guests/:guestId/matches/:hostId"
+                        component={HostProfilePage}
+                      />
+                      <Route
+                        path="/hosthome/guests/:id"
+                        component={GuestProfilePage}
+                      />
+                      <Route
+                        path="/hosthome/profile"
+                        component={CreateProfile}
+                      />
+                      <Route
+                        path="/hosthome/profile/host"
+                        component={CreateHostProfile}
+                      />
+                      <Route
+                        path="/hosthome/profile/guest"
+                        component={CreateGuestProfile}
+                      />
+                    </Switch>
+                  </React.Fragment>
+                </React.Fragment>
+              </BrowserRouter>
+            </HostHomeDataProvider>
+            : <LoginView />
+      }
+
+
     </React.Fragment>
   )
 }

@@ -2,5 +2,7 @@
 **/dist
 **/output
 build
+**/.env
+.env
 
 personalNotes.md
