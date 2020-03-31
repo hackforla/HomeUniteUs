@@ -4,9 +4,6 @@ import { Auth0Provider } from './react-auth0-spa';
 import history from './utils/history';
 
   
-const AUTH0_DOMAIN='dev-w3xfkh4k.auth0.com'
-const AUTH0_CLIENT_ID='Pe9Cr1hBBRjVH2gBzR9KWpF8xPGrDoyN'
-const AUTH0_AUDIENCE='dev-startup-boilerplate-api'
 
 import "./index.css"
 
@@ -15,8 +12,8 @@ import { App } from "./App"
 window.addEventListener("load", function() {
   console.log(`window:load: about to render app...`)
   
-  const auth0Domain = AUTH0_DOMAIN;
-  const auth0ClientId = AUTH0_CLIENT_ID;
+  const auth0Domain = process.env.AUTH0_DOMAIN;
+  const auth0ClientId = process.env.AUTH0_CLIENT_ID;
   const auth0RedirectUri = window.location.origin;
   
   // if (

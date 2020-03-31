@@ -20,6 +20,7 @@ import { HostHomeDataProvider } from "./data/data-context"
 import { Guest } from "./models"
 import { AppConfig } from "./data/config"
 import { useAuth0 } from "./react-auth0-spa"
+import { CreateProfile, CreateHostProfile, CreateGuestProfile } from "./pages/CreateProfile"
 
 export interface AppProps { }
 
@@ -98,6 +99,18 @@ export const App = () => {
                       <Route
                         path="/hosthome/guests/:id"
                         component={GuestProfilePage}
+                      />
+                      <Route
+                        path="/hosthome/profile"
+                        component={CreateProfile}
+                      />
+                      <Route
+                        path="/hosthome/profile/host"
+                        component={CreateHostProfile}
+                      />
+                      <Route
+                        path="/hosthome/profile/guest"
+                        component={CreateGuestProfile}
                       />
                     </Switch>
                   </React.Fragment>
