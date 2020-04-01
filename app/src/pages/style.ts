@@ -341,4 +341,10 @@ export const AdminGuestStyle = {
   MainTitle,
   MainHolder,
   NoWrapHolder,
+  AdminMatchHolders,
+  AdminHolder,
+  SecondHeader,
+  WiderHeaderRow,
+  InfoPaper,
+  HeaderRow,
 }

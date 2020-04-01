@@ -350,6 +350,8 @@ export const AdminGuestView = () => {
                                                 {host.name}
                                             </AdminGuestStyle.HostMatchClick>
                                         </TableCell>
+
+
                                         <TableCell>{host.address}</TableCell>
                                         {
                                             data.hostQuestions.map((q: HostQuestion, index: number) => {
@@ -580,6 +582,36 @@ export const AdminGuestView = () => {
                 <MatchTable tableName='Unmatched' hostList={unmatched} allowClick={true} displayInterested={false} />
 
                 {/* </Grid> */}
+
+                {/* mock table */}
+                <AdminGuestStyle.AdminMatchHolders>
+                    <AdminGuestStyle.AdminHolder>
+                        <AdminGuestStyle.InfoPaper>
+                            <AdminGuestStyle.HeaderRow>
+                                <AdminGuestStyle.SecondHeader>
+                                    Name
+                               </AdminGuestStyle.SecondHeader>
+                                <AdminGuestStyle.SecondHeader>
+                                    Address
+                               </AdminGuestStyle.SecondHeader>
+
+
+                                {
+                                    data.hostQuestions.map((q: HostQuestion, index: number) => {
+                                        return (
+                                            <AdminGuestStyle.SecondHeader>{q.displayName}</AdminGuestStyle.SecondHeader>
+
+                                        );
+                                    })
+                                }
+
+                            </AdminGuestStyle.HeaderRow>
+                        </AdminGuestStyle.InfoPaper>
+
+                    </AdminGuestStyle.AdminHolder>
+                </AdminGuestStyle.AdminMatchHolders>
+
+
             </AdminGuestStyle.MainHolder>
         </React.Fragment>
     );
