@@ -320,23 +320,22 @@ export const AdminGuestView = () => {
                 <Paper className={classes.paper}>
                     <Typography component='h2' align='left'>{props.tableName}</Typography>
                     <Table className={classes.table} aria-label={`${props.tableName.toLowerCase()} table`}>
-                        <TableHead>
-                            <TableRow className={classes.tableHeader}>
-                                <TableCell className={classes.tableHeaderCell}>Name</TableCell>
-                                <TableCell className={classes.tableHeaderCell}>Address</TableCell>
-                                {
-                                    data.hostQuestions.map((q: HostQuestion, index: number) => {
-                                        return (
-                                            <TableCell className={classes.matchingHeaderCell} key={index}>{q.displayName}</TableCell>
-                                        );
-                                    })
-                                }
-                            </TableRow>
-                        </TableHead>
+
+                        <AdminGuestStyle.TableHeaderRow className={classes.tableHeader}>
+                            <AdminGuestStyle.TableHeaderLabel className={classes.tableHeaderCell}>Name</AdminGuestStyle.TableHeaderLabel >
+                            <AdminGuestStyle.TableHeaderLabel className={classes.tableHeaderCell}>Address</AdminGuestStyle.TableHeaderLabel >
+                            {
+                                data.hostQuestions.map((q: HostQuestion, index: number) => {
+                                    return (
+                                        <AdminGuestStyle.TableHeaderLabel className={classes.matchingHeaderCell} key={index}>{q.displayName}</AdminGuestStyle.TableHeaderLabel>
+                                    );
+                                })
+                            }
+                        </AdminGuestStyle.TableHeaderRow>
                         <TableBody>
                             {
                                 props.hostList.map(
-                                    (host: Host, index: number) => <><TableRow key={index} className={index % 2 === 0 ? classes.tableRowEven : classes.tableRowOdd}>
+                                    (host: Host, index: number) => <><AdminGuestStyle.WiderHeaderRow key={index} className={index % 2 === 0 ? classes.tableRowEven : classes.tableRowOdd}>
                                         <TableCell onClick={
                                             props.allowClick
                                                 ? () => {
@@ -430,7 +429,7 @@ export const AdminGuestView = () => {
                                                 );
                                             })
                                         }
-                                    </TableRow>
+                                    </AdminGuestStyle.WiderHeaderRow >
                                         {
                                             props.displayInterested && interestByHostId[host.id].interested === GuestInterestLevel.Interested
                                                 ? <TableRow key={index}>
@@ -575,42 +574,10 @@ export const AdminGuestView = () => {
                 </AdminGuestStyle.NoWrapHolder>
 
                 {/* </Grid> */}
-
-                {/*  */}
                 <MatchTable tableName='Matched' hostList={matched} allowClick={true} displayInterested={true} />
                 <MatchTable tableName='Declined' hostList={rejected} allowClick={true} displayInterested={true} />
                 <MatchTable tableName='Unmatched' hostList={unmatched} allowClick={true} displayInterested={false} />
-
                 {/* </Grid> */}
-
-                {/* mock table */}
-                <AdminGuestStyle.AdminMatchHolders>
-                    <AdminGuestStyle.AdminHolder>
-                        <AdminGuestStyle.InfoPaper>
-                            <AdminGuestStyle.HeaderRow>
-                                <AdminGuestStyle.SecondHeader>
-                                    Name
-                               </AdminGuestStyle.SecondHeader>
-                                <AdminGuestStyle.SecondHeader>
-                                    Address
-                               </AdminGuestStyle.SecondHeader>
-
-
-                                {
-                                    data.hostQuestions.map((q: HostQuestion, index: number) => {
-                                        return (
-                                            <AdminGuestStyle.SecondHeader>{q.displayName}</AdminGuestStyle.SecondHeader>
-
-                                        );
-                                    })
-                                }
-
-                            </AdminGuestStyle.HeaderRow>
-                        </AdminGuestStyle.InfoPaper>
-
-                    </AdminGuestStyle.AdminHolder>
-                </AdminGuestStyle.AdminMatchHolders>
-
 
             </AdminGuestStyle.MainHolder>
         </React.Fragment>

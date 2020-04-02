@@ -223,6 +223,7 @@ const HeaderRow = styled.div`
 const WiderHeaderRow = styled(HeaderRow)`
   width: 95%;
   margin: 0 0 1.5em 0;
+
 `
 
 const SecondHeader = styled.h3`
@@ -268,27 +269,6 @@ const HostMatchClick = styled.div`
   }
 `
 
-const AdminHeader = styled.div`
-  padding: 16px;
-  text-align: center;
-  color: #757575;
-  background-color: #fff;
-  border-radius: 4px;
-  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
-    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
-`
-
-const AdminTitle = styled.h1`
-  font-size: 2em;
-  text-align:center;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  font-weight: 400;
-  line-height: 1.5;
-  letter-spacing: 0.00938em;
-  margin: 0;
-  color: #757575;
-`
 const AdminHolder = styled.div`
   margin: 0 auto;
   max-width: 1210px;
@@ -335,6 +315,22 @@ export const AdminStyle = {
   WiderHeaderRow
 }
 
+
+const TableHeaderRow = styled.div`
+  display: flex; 
+  justify-content: space-between;
+  margin: 0 0 .5em 0;
+  width: 93%;
+  align-items:center;
+`
+const TableHeaderLabel = styled.h3`
+  color: #757575;
+  font-weight: bold;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+`
+
+
+
 export const AdminGuestStyle = {
   HostMatchClick,
   MainHeader,
@@ -343,8 +339,8 @@ export const AdminGuestStyle = {
   NoWrapHolder,
   AdminMatchHolders,
   AdminHolder,
-  SecondHeader,
+  TableHeaderLabel,
   WiderHeaderRow,
   InfoPaper,
-  HeaderRow,
+  TableHeaderRow,
 }
