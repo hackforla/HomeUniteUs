@@ -316,141 +316,141 @@ export const AdminGuestView = () => {
 
     const MatchTable = (props: { tableName: string, hostList: Array<Host>, displayInterested: boolean, allowClick: boolean }) => {
         return (
-            <Grid item xs={12}>
-                <Paper className={classes.paper}>
-                    <Typography component='h2' align='left'>{props.tableName}</Typography>
-                    <Table className={classes.table} aria-label={`${props.tableName.toLowerCase()} table`}>
 
-                        <AdminGuestStyle.TableHeaderRow className={classes.tableHeader}>
-                            <AdminGuestStyle.TableHeaderLabel className={classes.tableHeaderCell}>Name</AdminGuestStyle.TableHeaderLabel >
-                            <AdminGuestStyle.TableHeaderLabel className={classes.tableHeaderCell}>Address</AdminGuestStyle.TableHeaderLabel >
-                            {
-                                data.hostQuestions.map((q: HostQuestion, index: number) => {
-                                    return (
-                                        <AdminGuestStyle.TableHeaderLabel className={classes.matchingHeaderCell} key={index}>{q.displayName}</AdminGuestStyle.TableHeaderLabel>
-                                    );
-                                })
-                            }
-                        </AdminGuestStyle.TableHeaderRow>
-                        <TableBody>
-                            {
-                                props.hostList.map(
-                                    (host: Host, index: number) => <><AdminGuestStyle.WiderHeaderRow key={index} className={index % 2 === 0 ? classes.tableRowEven : classes.tableRowOdd}>
-                                        <TableCell onClick={
-                                            props.allowClick
-                                                ? () => {
-                                                    console.log(`AdminGuestView:MatchTable: guestId = ${guestId}`);
-                                                    console.log(`AdminGuestView:MatchTable: host.id = ${host.id}`);
-                                                    history.push(`/hosthome/guests/${guestId}/matches/${host.id}`)
-                                                }
-                                                : () => { }
-                                        }>
-                                            <AdminGuestStyle.HostMatchClick>
-                                                {host.name}
-                                            </AdminGuestStyle.HostMatchClick>
-                                        </TableCell>
+            <Paper className={classes.paper}>
+                <Typography component='h2' align='left'>{props.tableName}</Typography>
+                <Table className={classes.table} aria-label={`${props.tableName.toLowerCase()} table`}>
+
+                    <AdminGuestStyle.TableHeaderRow className={classes.tableHeader}>
+                        <AdminGuestStyle.TableHeaderLabel className={classes.tableHeaderCell}>Name</AdminGuestStyle.TableHeaderLabel >
+                        <AdminGuestStyle.TableHeaderLabel className={classes.tableHeaderCell}>Address</AdminGuestStyle.TableHeaderLabel >
+                        {
+                            data.hostQuestions.map((q: HostQuestion, index: number) => {
+                                return (
+                                    <AdminGuestStyle.TableHeaderLabel className={classes.matchingHeaderCell} key={index}>{q.displayName}</AdminGuestStyle.TableHeaderLabel>
+                                );
+                            })
+                        }
+                    </AdminGuestStyle.TableHeaderRow>
+                    <TableBody>
+                        {
+                            props.hostList.map(
+                                (host: Host, index: number) => <><AdminGuestStyle.WiderHeaderRow key={index} className={index % 2 === 0 ? classes.tableRowEven : classes.tableRowOdd}>
+                                    <TableCell onClick={
+                                        props.allowClick
+                                            ? () => {
+                                                console.log(`AdminGuestView:MatchTable: guestId = ${guestId}`);
+                                                console.log(`AdminGuestView:MatchTable: host.id = ${host.id}`);
+                                                history.push(`/hosthome/guests/${guestId}/matches/${host.id}`)
+                                            }
+                                            : () => { }
+                                    }>
+                                        <AdminGuestStyle.HostMatchClick>
+                                            {host.name}
+                                        </AdminGuestStyle.HostMatchClick>
+                                    </TableCell>
 
 
-                                        <TableCell>{host.address}</TableCell>
-                                        {
-                                            data.hostQuestions.map((q: HostQuestion, index: number) => {
-                                                return (
-                                                    <TableCell key={index}>
-                                                        {
-                                                            (() => {
+                                    <TableCell>{host.address}</TableCell>
+                                    {
+                                        data.hostQuestions.map((q: HostQuestion, index: number) => {
+                                            return (
+                                                <TableCell key={index}>
+                                                    {
+                                                        (() => {
 
-                                                                if (q.questionKey === 'duration_of_stay') {
+                                                            if (q.questionKey === 'duration_of_stay') {
 
-                                                                    if (!hostQuestionsFailed.has(host.id)) {
-                                                                        return <SuccessCell value={hostTypeDisplay(host.type)} />;
+                                                                if (!hostQuestionsFailed.has(host.id)) {
+                                                                    return <SuccessCell value={hostTypeDisplay(host.type)} />;
+                                                                }
+
+                                                                const failedQuestionsForHost = hostQuestionsFailed.get(host.id) as Array<number>;
+                                                                const isFailed = failedQuestionsForHost.indexOf(q.id) >= 0;
+
+                                                                return isFailed
+                                                                    ? <FailCell value={hostTypeDisplay(host.type)} />
+                                                                    : <SuccessCell value={hostTypeDisplay(host.type)} />;
+
+                                                            }
+
+                                                            if (q.questionKey === 'hosting_amount') {
+
+                                                                if (!hostQuestionsFailed.has(host.id)) {
+                                                                    return <SuccessCell value={host.hostingAmount.toString()} />;
+                                                                }
+
+                                                                const failedQuestionsForHost = hostQuestionsFailed.get(host.id) as Array<number>;
+                                                                const isFailed = failedQuestionsForHost.indexOf(q.id) >= 0;
+
+                                                                return isFailed
+                                                                    ? <FailCell value={host.hostingAmount.toString()} />
+                                                                    : <SuccessCell value={host.hostingAmount.toString()} />;
+
+                                                            }
+
+
+                                                            const response = data.hostResponses
+                                                                .find((hr: HostResponse) => hr.hostId == host.id && hr.questionId == q.id);
+
+                                                            if (!response) {
+                                                                return 'Not answered';
+                                                            }
+                                                            return response
+                                                                .responseValues
+                                                                .map((rvId: number, index: number) => {
+
+                                                                    const rv = data.responseValues
+                                                                        .find((rv: ResponseValue) => rv.id === rvId);
+                                                                    if (!rv) {
+                                                                        throw new Error(`Unknown response value ID: ${rvId}`);
                                                                     }
 
-                                                                    const failedQuestionsForHost = hostQuestionsFailed.get(host.id) as Array<number>;
-                                                                    const isFailed = failedQuestionsForHost.indexOf(q.id) >= 0;
-
-                                                                    return isFailed
-                                                                        ? <FailCell value={hostTypeDisplay(host.type)} />
-                                                                        : <SuccessCell value={hostTypeDisplay(host.type)} />;
-
-                                                                }
-
-                                                                if (q.questionKey === 'hosting_amount') {
 
                                                                     if (!hostQuestionsFailed.has(host.id)) {
-                                                                        return <SuccessCell value={host.hostingAmount.toString()} />;
+                                                                        return <SuccessCell value={rv.text} />;
                                                                     }
 
+
                                                                     const failedQuestionsForHost = hostQuestionsFailed.get(host.id) as Array<number>;
+
+
                                                                     const isFailed = failedQuestionsForHost.indexOf(q.id) >= 0;
 
+
                                                                     return isFailed
-                                                                        ? <FailCell value={host.hostingAmount.toString()} />
-                                                                        : <SuccessCell value={host.hostingAmount.toString()} />;
+                                                                        ? <FailCell key={index} value={rv.text} />
+                                                                        : <SuccessCell key={index} value={rv.text} />;
 
-                                                                }
+                                                                })
+                                                        })()
+                                                    }
+                                                </TableCell>
+                                            );
+                                        })
+                                    }
+                                </AdminGuestStyle.WiderHeaderRow >
+                                    {
+                                        props.displayInterested && interestByHostId[host.id].interested === GuestInterestLevel.Interested
+                                            ? <TableRow key={index}>
+                                                <TableCell
+                                                    colSpan={data.hostQuestions.length + 2}
+                                                    style={{
+                                                        backgroundColor: '#80e27e'
+                                                    }}
+                                                >
+                                                    {`Guest indicated interest at ${interestByHostId[host.id].lastUpdated.toLocaleString()}`}
+                                                </TableCell>
+                                            </TableRow>
+                                            : null
+                                    }
+                                </>
+                            )
+                        }
+                    </TableBody>
+                </Table>
+            </Paper>
 
-
-                                                                const response = data.hostResponses
-                                                                    .find((hr: HostResponse) => hr.hostId == host.id && hr.questionId == q.id);
-
-                                                                if (!response) {
-                                                                    return 'Not answered';
-                                                                }
-                                                                return response
-                                                                    .responseValues
-                                                                    .map((rvId: number, index: number) => {
-
-                                                                        const rv = data.responseValues
-                                                                            .find((rv: ResponseValue) => rv.id === rvId);
-                                                                        if (!rv) {
-                                                                            throw new Error(`Unknown response value ID: ${rvId}`);
-                                                                        }
-
-
-                                                                        if (!hostQuestionsFailed.has(host.id)) {
-                                                                            return <SuccessCell value={rv.text} />;
-                                                                        }
-
-
-                                                                        const failedQuestionsForHost = hostQuestionsFailed.get(host.id) as Array<number>;
-
-
-                                                                        const isFailed = failedQuestionsForHost.indexOf(q.id) >= 0;
-
-
-                                                                        return isFailed
-                                                                            ? <FailCell key={index} value={rv.text} />
-                                                                            : <SuccessCell key={index} value={rv.text} />;
-
-                                                                    })
-                                                            })()
-                                                        }
-                                                    </TableCell>
-                                                );
-                                            })
-                                        }
-                                    </AdminGuestStyle.WiderHeaderRow >
-                                        {
-                                            props.displayInterested && interestByHostId[host.id].interested === GuestInterestLevel.Interested
-                                                ? <TableRow key={index}>
-                                                    <TableCell
-                                                        colSpan={data.hostQuestions.length + 2}
-                                                        style={{
-                                                            backgroundColor: '#80e27e'
-                                                        }}
-                                                    >
-                                                        {`Guest indicated interest at ${interestByHostId[host.id].lastUpdated.toLocaleString()}`}
-                                                    </TableCell>
-                                                </TableRow>
-                                                : null
-                                        }
-                                    </>
-                                )
-                            }
-                        </TableBody>
-                    </Table>
-                </Paper>
-            </Grid>
         );
     }
 
@@ -468,8 +468,8 @@ export const AdminGuestView = () => {
                         </AdminGuestStyle.MainTitle>
                 </AdminGuestStyle.MainHeader>
                 <AdminGuestStyle.NoWrapHolder>
+
                     {/* Profile Photo */}
-                    {/* <Grid item xs={4}> */}
                     <Paper className={classes.paper}>
                         <img
                             src={guest.imageUrl}
@@ -477,10 +477,9 @@ export const AdminGuestView = () => {
                             alt='Profile Photo'
                         />
                     </Paper>
-                    {/* </Grid> */}
 
                     {/* List of Preferences/Proclivities */}
-                    {/* <Grid item xs={8}> */}
+
                     <Paper className={classes.paper}>
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
@@ -573,11 +572,11 @@ export const AdminGuestView = () => {
                     </Paper>
                 </AdminGuestStyle.NoWrapHolder>
 
-                {/* </Grid> */}
+
                 <MatchTable tableName='Matched' hostList={matched} allowClick={true} displayInterested={true} />
                 <MatchTable tableName='Declined' hostList={rejected} allowClick={true} displayInterested={true} />
                 <MatchTable tableName='Unmatched' hostList={unmatched} allowClick={true} displayInterested={false} />
-                {/* </Grid> */}
+
 
             </AdminGuestStyle.MainHolder>
         </React.Fragment>
