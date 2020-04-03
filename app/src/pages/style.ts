@@ -320,7 +320,7 @@ const TableHeaderRow = styled.div`
   display: flex; 
   justify-content: space-between;
   margin: 0 0 .5em 0;
-  width: 93%;
+  width: 100%;
   align-items:center;
 `
 const TableHeaderLabel = styled.h3`
@@ -329,7 +329,24 @@ const TableHeaderLabel = styled.h3`
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 `
 
+const TableRow = styled(HeaderRow)`
+  width: 100%;
+  margin: 0 0 1.5em 0;
+  border-bottom: 1px solid rgba(224, 224, 224, 1);
+`
 
+const TableCell = styled.div`
+  display: table-cell;
+  padding: 1em;
+  font-size: 0.875rem;
+  text-align: left;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  line-height: 1.43;
+  letter-spacing: 0.01071em;
+  vertical-align: inherit;
+  flex: 1;
+`
 
 export const AdminGuestStyle = {
   HostMatchClick,
@@ -340,7 +357,8 @@ export const AdminGuestStyle = {
   AdminMatchHolders,
   AdminHolder,
   TableHeaderLabel,
-  WiderHeaderRow,
+  TableRow,
+  TableCell,
   InfoPaper,
   TableHeaderRow,
 }

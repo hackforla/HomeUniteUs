@@ -112,7 +112,8 @@ const useStyles = makeStyles(theme => (
             fontWeight: 'bold',
             fontSize: '16px',
             lineHeight: '22px',
-            color: '#FFFFFF'
+            color: '#FFFFFF',
+            textAlign: 'center'
         },
         matchingHeaderCell: {
             fontStyle: 'normal',
@@ -147,11 +148,6 @@ export const AdminGuestView = () => {
 
     const {
         data,
-        dispatch,
-        addGuest,
-        guestsById,
-        guestsResponsesByGuestId,
-        guestQuestionsById,
         guestQuestionsByKey
     } = useHostHomeData();
 
@@ -211,18 +207,9 @@ export const AdminGuestView = () => {
             && (matchResult.restrictionsFailed.length > 0 || matchResult.guestInterestLevel === GuestInterestLevel.NotInterested)
         ))
         .reduce<Map<number, Array<number>>>((prev: Map<number, Array<number>>, cur: MatchResult) => {
-
-            // console.log(`hostQuestionsFailed: adding cur: ${JSON.stringify(cur)}`);
-            // console.log(` ... to prev: ${JSON.stringify(prev)}`);
-
             prev.set(cur.hostId, cur.restrictionsFailed.map((r: Restriction) => r.hostQuestionId));
-
             return prev;
-
         }, new Map<number, Array<number>>());
-
-
-
 
     console.log(`hostQuestionsFailed: ${JSON.stringify(hostQuestionsFailed)}`);
 
@@ -316,140 +303,141 @@ export const AdminGuestView = () => {
 
     const MatchTable = (props: { tableName: string, hostList: Array<Host>, displayInterested: boolean, allowClick: boolean }) => {
         return (
+            <AdminGuestStyle.AdminMatchHolders>
+                <Paper className={classes.paper}>
+                    <Typography component='h2' align='left'>{props.tableName}</Typography>
+                    <Table className={classes.table} aria-label={`${props.tableName.toLowerCase()} table`}>
 
-            <Paper className={classes.paper}>
-                <Typography component='h2' align='left'>{props.tableName}</Typography>
-                <Table className={classes.table} aria-label={`${props.tableName.toLowerCase()} table`}>
-
-                    <AdminGuestStyle.TableHeaderRow className={classes.tableHeader}>
-                        <AdminGuestStyle.TableHeaderLabel className={classes.tableHeaderCell}>Name</AdminGuestStyle.TableHeaderLabel >
-                        <AdminGuestStyle.TableHeaderLabel className={classes.tableHeaderCell}>Address</AdminGuestStyle.TableHeaderLabel >
-                        {
-                            data.hostQuestions.map((q: HostQuestion, index: number) => {
-                                return (
-                                    <AdminGuestStyle.TableHeaderLabel className={classes.matchingHeaderCell} key={index}>{q.displayName}</AdminGuestStyle.TableHeaderLabel>
-                                );
-                            })
-                        }
-                    </AdminGuestStyle.TableHeaderRow>
-                    <TableBody>
-                        {
-                            props.hostList.map(
-                                (host: Host, index: number) => <><AdminGuestStyle.WiderHeaderRow key={index} className={index % 2 === 0 ? classes.tableRowEven : classes.tableRowOdd}>
-                                    <TableCell onClick={
-                                        props.allowClick
-                                            ? () => {
-                                                console.log(`AdminGuestView:MatchTable: guestId = ${guestId}`);
-                                                console.log(`AdminGuestView:MatchTable: host.id = ${host.id}`);
-                                                history.push(`/hosthome/guests/${guestId}/matches/${host.id}`)
-                                            }
-                                            : () => { }
-                                    }>
-                                        <AdminGuestStyle.HostMatchClick>
-                                            {host.name}
-                                        </AdminGuestStyle.HostMatchClick>
-                                    </TableCell>
-
-
-                                    <TableCell>{host.address}</TableCell>
-                                    {
-                                        data.hostQuestions.map((q: HostQuestion, index: number) => {
-                                            return (
-                                                <TableCell key={index}>
-                                                    {
-                                                        (() => {
-
-                                                            if (q.questionKey === 'duration_of_stay') {
-
-                                                                if (!hostQuestionsFailed.has(host.id)) {
-                                                                    return <SuccessCell value={hostTypeDisplay(host.type)} />;
-                                                                }
-
-                                                                const failedQuestionsForHost = hostQuestionsFailed.get(host.id) as Array<number>;
-                                                                const isFailed = failedQuestionsForHost.indexOf(q.id) >= 0;
-
-                                                                return isFailed
-                                                                    ? <FailCell value={hostTypeDisplay(host.type)} />
-                                                                    : <SuccessCell value={hostTypeDisplay(host.type)} />;
-
-                                                            }
-
-                                                            if (q.questionKey === 'hosting_amount') {
-
-                                                                if (!hostQuestionsFailed.has(host.id)) {
-                                                                    return <SuccessCell value={host.hostingAmount.toString()} />;
-                                                                }
-
-                                                                const failedQuestionsForHost = hostQuestionsFailed.get(host.id) as Array<number>;
-                                                                const isFailed = failedQuestionsForHost.indexOf(q.id) >= 0;
-
-                                                                return isFailed
-                                                                    ? <FailCell value={host.hostingAmount.toString()} />
-                                                                    : <SuccessCell value={host.hostingAmount.toString()} />;
-
-                                                            }
+                        <AdminGuestStyle.TableHeaderRow className={classes.tableHeader}>
+                            <AdminGuestStyle.TableHeaderLabel className={classes.matchingHeaderCell}>Name</AdminGuestStyle.TableHeaderLabel >
+                            <AdminGuestStyle.TableHeaderLabel className={classes.matchingHeaderCell}>Address</AdminGuestStyle.TableHeaderLabel >
+                            {
+                                data.hostQuestions.map((q: HostQuestion, index: number) => {
+                                    return (
+                                        <AdminGuestStyle.TableHeaderLabel className={classes.matchingHeaderCell} key={index}>{q.displayName}</AdminGuestStyle.TableHeaderLabel>
+                                    );
+                                })
+                            }
+                        </AdminGuestStyle.TableHeaderRow>
+                        <TableBody>
+                            {
+                                props.hostList.map(
+                                    (host: Host, index: number) => <><AdminGuestStyle.TableRow key={index} className={index % 2 === 0 ? classes.tableRowEven : classes.tableRowOdd}>
+                                        <AdminGuestStyle.TableCell onClick={
+                                            props.allowClick
+                                                ? () => {
+                                                    console.log(`AdminGuestView:MatchTable: guestId = ${guestId}`);
+                                                    console.log(`AdminGuestView:MatchTable: host.id = ${host.id}`);
+                                                    history.push(`/hosthome/guests/${guestId}/matches/${host.id}`)
+                                                }
+                                                : () => { }
+                                        }>
+                                            <AdminGuestStyle.HostMatchClick>
+                                                {host.name}
+                                            </AdminGuestStyle.HostMatchClick>
+                                        </AdminGuestStyle.TableCell>
 
 
-                                                            const response = data.hostResponses
-                                                                .find((hr: HostResponse) => hr.hostId == host.id && hr.questionId == q.id);
+                                        <AdminGuestStyle.TableCell>{host.address}</AdminGuestStyle.TableCell>
+                                        {
+                                            data.hostQuestions.map((q: HostQuestion, index: number) => {
+                                                return (
+                                                    <AdminGuestStyle.TableCell key={index}>
+                                                        {
+                                                            (() => {
 
-                                                            if (!response) {
-                                                                return 'Not answered';
-                                                            }
-                                                            return response
-                                                                .responseValues
-                                                                .map((rvId: number, index: number) => {
-
-                                                                    const rv = data.responseValues
-                                                                        .find((rv: ResponseValue) => rv.id === rvId);
-                                                                    if (!rv) {
-                                                                        throw new Error(`Unknown response value ID: ${rvId}`);
-                                                                    }
-
+                                                                if (q.questionKey === 'duration_of_stay') {
 
                                                                     if (!hostQuestionsFailed.has(host.id)) {
-                                                                        return <SuccessCell value={rv.text} />;
+                                                                        return <SuccessCell value={hostTypeDisplay(host.type)} />;
                                                                     }
 
-
                                                                     const failedQuestionsForHost = hostQuestionsFailed.get(host.id) as Array<number>;
-
-
                                                                     const isFailed = failedQuestionsForHost.indexOf(q.id) >= 0;
 
+                                                                    return isFailed
+                                                                        ? <FailCell value={hostTypeDisplay(host.type)} />
+                                                                        : <SuccessCell value={hostTypeDisplay(host.type)} />;
+
+                                                                }
+
+                                                                if (q.questionKey === 'hosting_amount') {
+
+                                                                    if (!hostQuestionsFailed.has(host.id)) {
+                                                                        return <SuccessCell value={host.hostingAmount.toString()} />;
+                                                                    }
+
+                                                                    const failedQuestionsForHost = hostQuestionsFailed.get(host.id) as Array<number>;
+                                                                    const isFailed = failedQuestionsForHost.indexOf(q.id) >= 0;
 
                                                                     return isFailed
-                                                                        ? <FailCell key={index} value={rv.text} />
-                                                                        : <SuccessCell key={index} value={rv.text} />;
+                                                                        ? <FailCell value={host.hostingAmount.toString()} />
+                                                                        : <SuccessCell value={host.hostingAmount.toString()} />;
 
-                                                                })
-                                                        })()
-                                                    }
-                                                </TableCell>
-                                            );
-                                        })
-                                    }
-                                </AdminGuestStyle.WiderHeaderRow >
-                                    {
-                                        props.displayInterested && interestByHostId[host.id].interested === GuestInterestLevel.Interested
-                                            ? <TableRow key={index}>
-                                                <TableCell
-                                                    colSpan={data.hostQuestions.length + 2}
-                                                    style={{
-                                                        backgroundColor: '#80e27e'
-                                                    }}
-                                                >
-                                                    {`Guest indicated interest at ${interestByHostId[host.id].lastUpdated.toLocaleString()}`}
-                                                </TableCell>
-                                            </TableRow>
-                                            : null
-                                    }
-                                </>
-                            )
-                        }
-                    </TableBody>
-                </Table>
-            </Paper>
+                                                                }
+
+
+                                                                const response = data.hostResponses
+                                                                    .find((hr: HostResponse) => hr.hostId == host.id && hr.questionId == q.id);
+
+                                                                if (!response) {
+                                                                    return 'Not answered';
+                                                                }
+                                                                return response
+                                                                    .responseValues
+                                                                    .map((rvId: number, index: number) => {
+
+                                                                        const rv = data.responseValues
+                                                                            .find((rv: ResponseValue) => rv.id === rvId);
+                                                                        if (!rv) {
+                                                                            throw new Error(`Unknown response value ID: ${rvId}`);
+                                                                        }
+
+
+                                                                        if (!hostQuestionsFailed.has(host.id)) {
+                                                                            return <SuccessCell value={rv.text} />;
+                                                                        }
+
+
+                                                                        const failedQuestionsForHost = hostQuestionsFailed.get(host.id) as Array<number>;
+
+
+                                                                        const isFailed = failedQuestionsForHost.indexOf(q.id) >= 0;
+
+
+                                                                        return isFailed
+                                                                            ? <FailCell key={index} value={rv.text} />
+                                                                            : <SuccessCell key={index} value={rv.text} />;
+
+                                                                    })
+                                                            })()
+                                                        }
+                                                    </AdminGuestStyle.TableCell>
+                                                );
+                                            })
+                                        }
+                                    </AdminGuestStyle.TableRow >
+                                        {
+                                            props.displayInterested && interestByHostId[host.id].interested === GuestInterestLevel.Interested
+                                                ? <TableRow key={index}>
+                                                    <TableCell
+                                                        colSpan={data.hostQuestions.length + 2}
+                                                        style={{
+                                                            backgroundColor: '#80e27e'
+                                                        }}
+                                                    >
+                                                        {`Guest indicated interest at ${interestByHostId[host.id].lastUpdated.toLocaleString()}`}
+                                                    </TableCell>
+                                                </TableRow>
+                                                : null
+                                        }
+                                    </>
+                                )
+                            }
+                        </TableBody>
+                    </Table>
+                </Paper>
+            </AdminGuestStyle.AdminMatchHolders>
 
         );
     }
@@ -459,6 +447,7 @@ export const AdminGuestView = () => {
     return (
         <React.Fragment>
             <AdminGuestStyle.MainHolder>
+
                 {/* <Grid container spacing={3}> */}
 
                 {/* Page Title */}
@@ -467,110 +456,114 @@ export const AdminGuestView = () => {
                         Guest Matches
                         </AdminGuestStyle.MainTitle>
                 </AdminGuestStyle.MainHeader>
-                <AdminGuestStyle.NoWrapHolder>
 
-                    {/* Profile Photo */}
-                    <Paper className={classes.paper}>
-                        <img
-                            src={guest.imageUrl}
-                            width={'400em'}
-                            alt='Profile Photo'
-                        />
-                    </Paper>
 
-                    {/* List of Preferences/Proclivities */}
+                <AdminGuestStyle.AdminMatchHolders>
+                    <AdminGuestStyle.NoWrapHolder>
 
-                    <Paper className={classes.paper}>
-                        <Grid container spacing={3}>
-                            <Grid item xs={12}>
-                                <Typography
-                                    align='left'
-                                    component='h1'
-                                    style={{ fontSize: '1.4em' }}
-                                >
-                                    {`${guest.name}, ${((new Date()).getFullYear() - guest.dateOfBirth.getFullYear())}`}
-                                </Typography>
+                        {/* Profile Photo */}
+                        <Paper className={classes.paper}>
+                            <img
+                                src={guest.imageUrl}
+                                width={'400em'}
+                                alt='Profile Photo'
+                            />
+                        </Paper>
+
+                        {/* List of Preferences/Proclivities */}
+
+                        <Paper className={classes.paper}>
+                            <Grid container spacing={3}>
+                                <Grid item xs={12}>
+                                    <Typography
+                                        align='left'
+                                        component='h1'
+                                        style={{ fontSize: '1.4em' }}
+                                    >
+                                        {`${guest.name}, ${((new Date()).getFullYear() - guest.dateOfBirth.getFullYear())}`}
+                                    </Typography>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <List>
+                                        <ListItem>
+                                            <ListItemAvatar>
+                                                <Avatar>
+                                                    <FontAwesomeIcon icon={faUsers} size="sm" />
+                                                </Avatar>
+                                            </ListItemAvatar>
+                                            <ListItemText primary={`I would like accommodations for ${guest.numberOfGuests} guests`} />
+                                        </ListItem>
+                                        <ListItem>
+                                            <ListItemAvatar>
+                                                <Avatar>
+                                                    <FontAwesomeIcon icon={faBed} size="sm" />
+                                                </Avatar>
+                                            </ListItemAvatar>
+                                            <ListItemText primary={`${hostTypeDisplay(guest.type)}`} />
+                                        </ListItem>
+                                        <ListItem>
+                                            <ListItemAvatar>
+                                                <Avatar>
+                                                    <FontAwesomeIcon icon={faSmoking} size="sm" />
+                                                </Avatar>
+                                            </ListItemAvatar>
+                                            <ListItemText primary={guest.smokingText} />
+                                        </ListItem>
+                                        <ListItem>
+                                            <ListItemAvatar>
+                                                <Avatar>
+                                                    <FontAwesomeIcon icon={faWineBottle} />
+                                                </Avatar>
+                                            </ListItemAvatar>
+                                            <ListItemText primary={guest.drinkingText} />
+                                        </ListItem>
+                                        <ListItem>
+                                            <ListItemAvatar>
+                                                <Avatar>
+                                                    <FontAwesomeIcon icon={faPrescriptionBottleAlt} />
+                                                </Avatar>
+                                            </ListItemAvatar>
+                                            <ListItemText primary={guest.substancesText} />
+                                        </ListItem>
+                                        <ListItem>
+                                            <ListItemAvatar>
+                                                <Avatar>
+                                                    <FontAwesomeIcon icon={faPaw} />
+                                                </Avatar>
+                                            </ListItemAvatar>
+                                            <ListItemText primary={guest.petsText} />
+                                        </ListItem>
+                                        {
+                                            relationship
+                                                ? <ListItem>
+                                                    <ListItemAvatar>
+                                                        <Avatar>
+                                                            <FontAwesomeIcon icon={faHeart} />
+                                                        </Avatar>
+                                                    </ListItemAvatar>
+                                                    <ListItemText primary='I am in a relationship' />
+                                                </ListItem>
+                                                : null
+                                        }
+                                        {
+                                            parenting
+                                                ? <ListItem>
+                                                    <ListItemAvatar>
+                                                        <Avatar>
+                                                            <FontAwesomeIcon icon={faBaby} />
+                                                        </Avatar>
+                                                    </ListItemAvatar>
+                                                    <ListItemText primary='I am parenting' />
+                                                </ListItem>
+                                                : null
+                                        }
+
+                                    </List>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12}>
-                                <List>
-                                    <ListItem>
-                                        <ListItemAvatar>
-                                            <Avatar>
-                                                <FontAwesomeIcon icon={faUsers} size="sm" />
-                                            </Avatar>
-                                        </ListItemAvatar>
-                                        <ListItemText primary={`I would like accommodations for ${guest.numberOfGuests} guests`} />
-                                    </ListItem>
-                                    <ListItem>
-                                        <ListItemAvatar>
-                                            <Avatar>
-                                                <FontAwesomeIcon icon={faBed} size="sm" />
-                                            </Avatar>
-                                        </ListItemAvatar>
-                                        <ListItemText primary={`${hostTypeDisplay(guest.type)}`} />
-                                    </ListItem>
-                                    <ListItem>
-                                        <ListItemAvatar>
-                                            <Avatar>
-                                                <FontAwesomeIcon icon={faSmoking} size="sm" />
-                                            </Avatar>
-                                        </ListItemAvatar>
-                                        <ListItemText primary={guest.smokingText} />
-                                    </ListItem>
-                                    <ListItem>
-                                        <ListItemAvatar>
-                                            <Avatar>
-                                                <FontAwesomeIcon icon={faWineBottle} />
-                                            </Avatar>
-                                        </ListItemAvatar>
-                                        <ListItemText primary={guest.drinkingText} />
-                                    </ListItem>
-                                    <ListItem>
-                                        <ListItemAvatar>
-                                            <Avatar>
-                                                <FontAwesomeIcon icon={faPrescriptionBottleAlt} />
-                                            </Avatar>
-                                        </ListItemAvatar>
-                                        <ListItemText primary={guest.substancesText} />
-                                    </ListItem>
-                                    <ListItem>
-                                        <ListItemAvatar>
-                                            <Avatar>
-                                                <FontAwesomeIcon icon={faPaw} />
-                                            </Avatar>
-                                        </ListItemAvatar>
-                                        <ListItemText primary={guest.petsText} />
-                                    </ListItem>
-                                    {
-                                        relationship
-                                            ? <ListItem>
-                                                <ListItemAvatar>
-                                                    <Avatar>
-                                                        <FontAwesomeIcon icon={faHeart} />
-                                                    </Avatar>
-                                                </ListItemAvatar>
-                                                <ListItemText primary='I am in a relationship' />
-                                            </ListItem>
-                                            : null
-                                    }
-                                    {
-                                        parenting
-                                            ? <ListItem>
-                                                <ListItemAvatar>
-                                                    <Avatar>
-                                                        <FontAwesomeIcon icon={faBaby} />
-                                                    </Avatar>
-                                                </ListItemAvatar>
-                                                <ListItemText primary='I am parenting' />
-                                            </ListItem>
-                                            : null
-                                    }
-
-                                </List>
-                            </Grid>
-                        </Grid>
-                    </Paper>
-                </AdminGuestStyle.NoWrapHolder>
+                        </Paper>
+                    </AdminGuestStyle.NoWrapHolder>
+                </AdminGuestStyle.AdminMatchHolders>
 
 
                 <MatchTable tableName='Matched' hostList={matched} allowClick={true} displayInterested={true} />
