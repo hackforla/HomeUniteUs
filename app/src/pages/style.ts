@@ -211,14 +211,14 @@ const DemoName = styled.span`
 const HeaderRow = styled.div`
   display: flex; 
   justify-content: space-between;
-  margin: 0 0 .5em 0;
+  margin: 0 0 -.25em 0;
   width: 93%;
   align-items:center;
 `
 
 const WiderHeaderRow = styled(HeaderRow)`
   width: 95%;
-  margin: 0 0 1.5em 0;
+  /* margin: 0 0 1.5em 0; */
 `
 
 const SecondHeader = styled.h3`
@@ -334,3 +334,4 @@ export const AdminStyle = {
 export const AdminGuestStyle = {
   HostMatchClick: HostMatchClick
 }
+
