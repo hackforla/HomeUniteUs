@@ -315,6 +315,9 @@ export const AdminStyle = {
   WiderHeaderRow
 }
 
+const Table = styled.div`
+  min-width: 650
+`
 
 const TableHeaderRow = styled.div`
   display: flex; 
@@ -355,6 +358,7 @@ export const AdminGuestStyle = {
   NoWrapHolder,
   AdminMatchHolders,
   AdminHolder,
+  Table,
   TableHeaderLabel,
   TableRow,
   TableCell,
