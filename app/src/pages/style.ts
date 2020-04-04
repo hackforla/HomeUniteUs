@@ -331,7 +331,6 @@ const TableHeaderLabel = styled.h3`
 
 const TableRow = styled(HeaderRow)`
   width: 100%;
-  margin: 0 0 1.5em 0;
   border-bottom: 1px solid rgba(224, 224, 224, 1);
 `
 
