@@ -43,9 +43,9 @@ window.addEventListener("load", function() {
   ReactDOM.render(
     (
       <Auth0Provider
-        domain={auth0Domain}
-        client_id={auth0ClientId}
-        redirect_uri={auth0RedirectUri}
+        domain={auth0Domain || ''}
+        client_id={auth0ClientId || ''}
+        redirect_uri={auth0RedirectUri || ''}
         // audience={auth0Audience}
         onRedirectCallback={onAuthRedirectCallback}
       >
