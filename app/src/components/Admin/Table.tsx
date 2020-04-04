@@ -15,9 +15,6 @@ import { AdminGuestStyle } from "../../pages/style"
 
 const useStyles = makeStyles(theme => (
     createStyles({
-        root: {
-            flexGrow: 1
-        },
         paper: {
             padding: theme.spacing(2),
             textAlign: 'center',
