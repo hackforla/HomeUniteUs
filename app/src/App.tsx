@@ -10,6 +10,7 @@ import {
 } from "react-router-dom"
 import * as AppStyle from "./AppStyle"
 import logo from "./img/masterSpyLogo3.png"
+import FourOhFour from "./pages/FourOhFour"
 import { AdminGuestView } from "./pages/AdminGuestView"
 import { HostProfilePage } from "./pages/HostProfile"
 import { GuestProfilePage } from "./pages/GuestProfile"
@@ -65,20 +66,20 @@ export const App = () => {
                     <AppStyle.Holder>
                       <NavLink to={`/hosthome/demo`}>
                         DEMO
-            </NavLink>
+                    </NavLink>
                     </AppStyle.Holder>
                     <AppStyle.Holder>
                       <NavLink to={`/hosthome/about`}>
                         ABOUT
-            </NavLink>
+                    </NavLink>
                     </AppStyle.Holder>
                     <AppStyle.Holder>
                       <NavLink to={`/hosthome/admin/guests`}>
                         ADMIN
-            </NavLink>
+                    </NavLink>
                     </AppStyle.Holder>
                     <AppStyle.Holder>
-      <span>Hello, {(user && user.name) || 'User'}</span>
+                      <span>Hello, {(user && user.name) || 'User'}</span>
                     </AppStyle.Holder>
                   </AppStyle.FlexHolder>
                   <React.Fragment>
@@ -100,18 +101,7 @@ export const App = () => {
                         path="/hosthome/guests/:id"
                         component={GuestProfilePage}
                       />
-                      <Route
-                        path="/hosthome/profile"
-                        component={CreateProfile}
-                      />
-                      <Route
-                        path="/hosthome/profile/host"
-                        component={CreateHostProfile}
-                      />
-                      <Route
-                        path="/hosthome/profile/guest"
-                        component={CreateGuestProfile}
-                      />
+                      <FourOhFour />
                     </Switch>
                   </React.Fragment>
                 </React.Fragment>
@@ -119,8 +109,7 @@ export const App = () => {
             </HostHomeDataProvider>
             : <LoginView />
       }
-
-
     </React.Fragment>
-  )
+  );
+
 }
