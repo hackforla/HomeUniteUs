@@ -237,8 +237,7 @@ def create_profile():
     try:           
         mongo_client = pymongo.MongoClient('mongodb://{}:{}@{}:{}'.format(
             quote_plus(os.getenv('DB_USER')),
-            quote_plus(os.getenv('DB_USER')),
-            os.getenv('DB_PWD'),
+            quote_plus(os.getenv('DB_PWD')),
             os.getenv('DB_HOST'),
             os.getenv('DB_PORT')
         ))
