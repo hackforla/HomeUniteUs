@@ -92,7 +92,7 @@ export const AdminGuestView = () => {
                         </AdminGuestStyle.MainTitle>
                 </AdminGuestStyle.MainHeader>
 
-                <AdminGuestStyle.AdminMatchHolders>
+                <AdminGuestStyle.AdminGuestHolders>
                     <AdminGuestStyle.NoWrapHolder>
                         {/* Profile Photo & Preferences */}
                         <Paper className={classes.paper}>
@@ -102,9 +102,11 @@ export const AdminGuestView = () => {
                                 alt='Profile Photo'
                             />
                         </Paper>
+
                         <Preferences />
+
                     </AdminGuestStyle.NoWrapHolder>
-                </AdminGuestStyle.AdminMatchHolders>
+                </AdminGuestStyle.AdminGuestHolders>
 
                 {/* Match tables */}
                 <MatchTable tableName='Matched' hostList={matched} allowClick={true} displayInterested={true} />
