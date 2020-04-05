@@ -216,15 +216,19 @@ const DemoName = styled.span`
 const HeaderRow = styled.div`
   display: flex; 
   justify-content: space-between;
-  margin: 0 0 .5em 0;
+  margin: 0 0 -.25em 0;
   width: 93%;
   align-items:center;
 `
 
 const WiderHeaderRow = styled(HeaderRow)`
   width: 95%;
+<<<<<<< HEAD
   margin: 0 0 1.5em 0;
 
+=======
+  /* margin: 0 0 1.5em 0; */
+>>>>>>> 148a1f054ef66d7d49ba471e5bb82d10da105d32
 `
 
 const SecondHeader = styled.h3`
