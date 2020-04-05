@@ -84,7 +84,7 @@ export const AdminGuestView = () => {
 
     return (
         <React.Fragment>
-            <AdminGuestStyle.MainHolder>
+            <AdminGuestStyle.AdminGuestMainHolder>
                 {/* Page Title */}
                 <AdminGuestStyle.MainHeader>
                     <AdminGuestStyle.MainTitle>
@@ -114,7 +114,7 @@ export const AdminGuestView = () => {
                 <MatchTable tableName='Unmatched' hostList={unmatched} allowClick={true} displayInterested={false} />
 
 
-            </AdminGuestStyle.MainHolder>
+            </AdminGuestStyle.AdminGuestMainHolder>
         </React.Fragment>
     );
 };

@@ -388,6 +388,10 @@ const TableName = styled.h2`
 
 `
 
+const AdminGuestMainHolder = styled(DemoHolder)`
+  max-width: 1380px;
+`
+
 const AdminGuestHolders = styled.div`
   margin: 30px 0px 0px;
   flex-grow: 0;
@@ -399,15 +403,15 @@ export const AdminGuestStyle = {
   HostMatchClick,
   MainHeader,
   MainTitle,
-  MainHolder,
+  AdminGuestMainHolder,
   NoWrapHolder,
   AdminGuestHolders,
+  InfoPaper,
   AdminHolder,
   Table,
   TableHeaderLabel,
   TableName,
   TableRow,
   TableCell,
-  InfoPaper,
   TableHeaderRow,
 }
