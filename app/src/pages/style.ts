@@ -342,11 +342,11 @@ const TableHeaderLabel = styled.div`
   font-style: normal;
   font-weight: bold;
   font-size: 16px;
-  line-height: 20px;
+  line-height: 22px;
   color: #FFFFFF;
   text-align: ${(prop: { center: boolean }) => prop.center ? 'center' : 'left'};
   display: table-cell;
-  padding: 1em;
+  padding: .85em;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   letter-spacing: 0.01071em;
   vertical-align: inherit;
@@ -357,7 +357,7 @@ const TableRow = styled.div`
   display: flex; 
   justify-content: space-between;
   margin: 0 0 0 0;
-  width: 93%;
+  width: 95%;
   align-items:center;
   width: 100%;
   margin: '0';
@@ -383,9 +383,8 @@ const TableName = styled.h2`
   font-size: 16px;
   font-weight: 400;
   color: rgba(0,0,0,0.54);
-  margin: 0;
+  margin: 0 0 .25em 0;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-
 `
 
 const AdminGuestMainHolder = styled(DemoHolder)`
@@ -399,6 +398,12 @@ const AdminGuestHolders = styled.div`
   flex-basis: 100%;
   box-sizing: border-box;
 `
+
+const AdminGuestPaper = styled(InfoPaper)`
+  border: .05px solid #ADADAD;
+  margin: 0 10px 0 10px;
+
+`
 export const AdminGuestStyle = {
   HostMatchClick,
   MainHeader,
@@ -406,7 +411,7 @@ export const AdminGuestStyle = {
   AdminGuestMainHolder,
   NoWrapHolder,
   AdminGuestHolders,
-  InfoPaper,
+  AdminGuestPaper,
   AdminHolder,
   Table,
   TableHeaderLabel,

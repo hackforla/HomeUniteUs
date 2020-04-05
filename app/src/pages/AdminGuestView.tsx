@@ -1,30 +1,16 @@
 import * as React from "react";
 
-import { makeStyles, Paper, createStyles } from "@material-ui/core";
 import { useHostHomeData } from "../data/data-context";
 import { MatchResult, Guest, Host, GuestInterestLevel } from "../models";
-import { useParams, useHistory, useLocation } from "react-router";
+import { useParams, useLocation } from "react-router";
 import { AdminGuestStyle } from "./style"
 import MatchTable from '../components/Admin/Table'
 import Preferences from '../components/Admin/Preferences'
 
 
-const useStyles = makeStyles(theme => (
-    createStyles({
-        root: {
-            flexGrow: 1
-        },
-        paper: {
-            padding: theme.spacing(2),
-            textAlign: 'center',
-            color: theme.palette.text.secondary,
-        },
-
-    })));
 
 export const AdminGuestView = () => {
 
-    const classes = useStyles({});
     const { id } = useParams();
     const guestId = parseInt(id || '-1');
 
@@ -95,14 +81,14 @@ export const AdminGuestView = () => {
                 <AdminGuestStyle.AdminGuestHolders>
                     <AdminGuestStyle.NoWrapHolder>
                         {/* Profile Photo & Preferences */}
-                        <Paper className={classes.paper}>
+
+                        <AdminGuestStyle.AdminGuestPaper >
                             <img
                                 src={guest.imageUrl}
                                 width={'400em'}
                                 alt='Profile Photo'
                             />
-                        </Paper>
-
+                        </AdminGuestStyle.AdminGuestPaper>
                         <Preferences />
 
                     </AdminGuestStyle.NoWrapHolder>
@@ -112,7 +98,6 @@ export const AdminGuestView = () => {
                 <MatchTable tableName='Matched' hostList={matched} allowClick={true} displayInterested={true} />
                 <MatchTable tableName='Declined' hostList={rejected} allowClick={true} displayInterested={true} />
                 <MatchTable tableName='Unmatched' hostList={unmatched} allowClick={true} displayInterested={false} />
-
 
             </AdminGuestStyle.AdminGuestMainHolder>
         </React.Fragment>

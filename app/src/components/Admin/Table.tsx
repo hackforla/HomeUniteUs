@@ -1,9 +1,9 @@
 
 import * as React from "react";
 
-import { makeStyles, createStyles, TableRow, TableCell } from "@material-ui/core";
+import { makeStyles, createStyles } from "@material-ui/core";
 import { useHostHomeData } from "../../data/data-context"
-import { MatchResult, Guest, Host, GuestInterestLevel, HostQuestion, HostResponse, ResponseValue, Restriction, GuestResponse, GuestQuestion } from "../../models";
+import { MatchResult, Host, GuestInterestLevel, HostQuestion, HostResponse, ResponseValue, Restriction } from "../../models";
 import { useParams, useHistory, useLocation } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
@@ -12,15 +12,6 @@ import { HostHomeType } from "../../models/HostHomeType";
 import { AdminGuestStyle } from "../../pages/style"
 
 
-const useStyles = makeStyles(theme => (
-    createStyles({
-        tableRowOdd: {
-            backgroundColor: '#FFFFFF'
-        },
-        tableRowEven: {
-            backgroundColor: '#F5F5F5'
-        }
-    })));
 
 interface InterestDescription {
     interested: GuestInterestLevel;
@@ -32,9 +23,6 @@ interface InterestMapping {
 }
 
 const MatchTable = (props: { tableName: string, hostList: Array<Host>, displayInterested: boolean, allowClick: boolean }) => {
-
-
-    const classes = useStyles({});
     const { id } = useParams();
     const guestId = parseInt(id || '-1');
 
@@ -111,7 +99,7 @@ const MatchTable = (props: { tableName: string, hostList: Array<Host>, displayIn
 
     return (
         <AdminGuestStyle.AdminGuestHolders>
-            <AdminGuestStyle.InfoPaper>
+            <AdminGuestStyle.AdminGuestPaper>
                 <AdminGuestStyle.TableName >{props.tableName}</AdminGuestStyle.TableName>
                 <AdminGuestStyle.TableHeaderRow >
                     <AdminGuestStyle.TableHeaderLabel center={false}> Name </AdminGuestStyle.TableHeaderLabel >
@@ -222,7 +210,7 @@ const MatchTable = (props: { tableName: string, hostList: Array<Host>, displayIn
                                 })
                             }
                         </AdminGuestStyle.TableRow >
-                            {
+                            {/* {
                                 props.displayInterested && interestByHostId[host.id].interested === GuestInterestLevel.Interested
                                     ? <TableRow key={index}>
                                         <TableCell
@@ -235,11 +223,11 @@ const MatchTable = (props: { tableName: string, hostList: Array<Host>, displayIn
                                         </TableCell>
                                     </TableRow>
                                     : null
-                            }
+                            } */}
                         </>
                     )
                 }
-            </AdminGuestStyle.InfoPaper>
+            </AdminGuestStyle.AdminGuestPaper>
         </AdminGuestStyle.AdminGuestHolders>
 
     );

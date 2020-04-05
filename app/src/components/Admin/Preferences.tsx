@@ -1,28 +1,18 @@
 import * as React from "react";
 
-import { makeStyles, Paper, createStyles, Grid, Box, Typography, Table, TableHead, TableRow, TableCell, TableBody, ValueLabelProps, List, ListItem, ListItemAvatar, Avatar, ListItemText } from "@material-ui/core";
+import { Grid, Typography, List, ListItem, ListItemAvatar, Avatar, ListItemText } from "@material-ui/core";
 import { useHostHomeData } from "../../data/data-context"
-import { MatchResult, Guest, Host, GuestInterestLevel, HostQuestion, HostResponse, ResponseValue, Restriction, GuestResponse, GuestQuestion } from "../../models";
-import { useParams, useHistory, useLocation } from "react-router";
+import { Guest, ResponseValue, GuestResponse, GuestQuestion } from "../../models";
+import { useParams } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimesCircle, faPaw, faSmokingBan, faWineBottle, faPrescriptionBottleAlt, faSmoking, faBaby, faUsers, faBed, faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faPaw, faWineBottle, faPrescriptionBottleAlt, faSmoking, faBaby, faUsers, faBed, faHeart } from "@fortawesome/free-solid-svg-icons";
 
 import { HostHomeType } from "../../models/HostHomeType";
 import { AdminGuestStyle } from "../../pages/style"
 
 
-const useStyles = makeStyles(theme => (
-    createStyles({
-        paper: {
-            padding: theme.spacing(2),
-            textAlign: 'center',
-            color: theme.palette.text.secondary,
-        },
-    })));
-
-
 const Preferences = () => {
-    const classes = useStyles({});
+
     const { id } = useParams();
     const guestId = parseInt(id || '-1');
     const {
@@ -75,7 +65,8 @@ const Preferences = () => {
 
     return (
 
-        <Paper className={classes.paper}>
+
+        <AdminGuestStyle.AdminGuestPaper >
             <Grid container spacing={3}>
                 <Grid item xs={12}>
                     <Typography
@@ -91,7 +82,7 @@ const Preferences = () => {
                         <ListItem>
                             <ListItemAvatar>
                                 <Avatar>
-                                    <FontAwesomeIcon icon={faUsers} size="sm" />
+                                    <FontAwesomeIcon icon={faUsers} />
                                 </Avatar>
                             </ListItemAvatar>
                             <ListItemText primary={`I would like accommodations for ${guest.numberOfGuests} guests`} />
@@ -99,7 +90,7 @@ const Preferences = () => {
                         <ListItem>
                             <ListItemAvatar>
                                 <Avatar>
-                                    <FontAwesomeIcon icon={faBed} size="sm" />
+                                    <FontAwesomeIcon icon={faBed} />
                                 </Avatar>
                             </ListItemAvatar>
                             <ListItemText primary={`${hostTypeDisplay(guest.type)}`} />
@@ -107,7 +98,7 @@ const Preferences = () => {
                         <ListItem>
                             <ListItemAvatar>
                                 <Avatar>
-                                    <FontAwesomeIcon icon={faSmoking} size="sm" />
+                                    <FontAwesomeIcon icon={faSmoking} />
                                 </Avatar>
                             </ListItemAvatar>
                             <ListItemText primary={guest.smokingText} />
@@ -164,7 +155,8 @@ const Preferences = () => {
                     </List>
                 </Grid>
             </Grid>
-        </Paper>
+        </AdminGuestStyle.AdminGuestPaper>
+
     )
 
 }
