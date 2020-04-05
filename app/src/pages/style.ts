@@ -323,7 +323,7 @@ const Table = styled.div`
 const TableHeaderRow = styled.div`
   display: flex; 
   justify-content: space-between;
-  margin: 0 0 .5em 0;
+  margin: 0;
   width: 100%;
   align-items:center;
   background-color: #00AAEF;
@@ -342,12 +342,11 @@ const TableHeaderLabel = styled.div`
   font-style: normal;
   font-weight: bold;
   font-size: 16px;
-  line-height: 22px;
+  line-height: 20px;
   color: #FFFFFF;
   text-align: ${(prop: { center: boolean }) => prop.center ? 'center' : 'left'};
   display: table-cell;
   padding: 1em;
-  font-size: 0.875rem;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   letter-spacing: 0.01071em;
   vertical-align: inherit;
@@ -382,6 +381,7 @@ const TableCell = styled.div`
 const TableName = styled.h2`
   text-align: left;
   font-size: 16px;
+  font-weight: 400;
   color: rgba(0,0,0,0.54);
   margin: 0;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
