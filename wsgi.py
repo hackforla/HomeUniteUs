@@ -1,4 +1,5 @@
 from hosthome import app as application
 
 if __name__ == "__main__":
-    application.run()
+    application.logger.debug('Hello from WSGI')
+    application.run(debug=True)

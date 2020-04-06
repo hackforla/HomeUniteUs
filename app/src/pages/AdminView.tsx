@@ -67,11 +67,11 @@ export const AdminView = () => {
     <React.Fragment>
       <AdminStyle.MainHolder>
 
-        <AdminStyle.AdminHeader>
-          <AdminStyle.AdminTitle>
+        <AdminStyle.MainHeader>
+          <AdminStyle.MainTitle>
             All Guests Matching
-          </AdminStyle.AdminTitle>
-        </AdminStyle.AdminHeader>
+          </AdminStyle.MainTitle>
+        </AdminStyle.MainHeader>
 
         <AdminStyle.AdminMatchHolders>
           <AdminStyle.AdminHolder>
