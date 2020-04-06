@@ -1,36 +1,41 @@
+# Temprorary image to build client bundles
+
+# Name the base image for future reference
 FROM node as bundleBuilder
 
+# move source files into image
 COPY app /app
+
+# do all copies/builds within a subdirectory
 WORKDIR /app
+
+# client package install
 RUN npm install
+
+# secrets
+COPY .env .
+
+# generate bundles from source
 RUN npm run build:docker
-ENTRYPOINT ["/bin/bash"]
 
-FROM mongo:latest
+# END Temporary image
 
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y python3-pip \
-    python3-dev \
-    build-essential \
-    libssl-dev \
-    libffi-dev \
-    python3-setuptools
+# Server image for MongoDB+Flask
+FROM host-home-base
 
+# do all copies/builds within application's subdirectory
 WORKDIR /app
 
-COPY hosthome.py .  
-COPY wsgi.py .  
-COPY requirements.txt .
-RUN pip3 install -r requirements.txt
-
-
+# Server source and launch script, set perms
+COPY *.py ./
 COPY ./startup.sh .
 RUN chmod +x ./startup.sh
 
+# get client bundles from temporary image
 COPY --from=bundleBuilder /app/dist ./dist
 
-
+# tell Docker to allow traffic to reach this port
 EXPOSE 80
 
+# run a shell when the container starts (script to configure and launch the app server)
 ENTRYPOINT ["/bin/bash", "-c", "/app/startup.sh"]

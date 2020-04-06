@@ -15,6 +15,10 @@ window.addEventListener("load", function() {
   const auth0Domain = process.env.AUTH0_DOMAIN;
   const auth0ClientId = process.env.AUTH0_CLIENT_ID;
   const auth0RedirectUri = window.location.origin;
+
+  console.log(`window:load: auth0Domain        = ${auth0Domain}`);
+  console.log(`window:load: auth0ClientId      = ${auth0ClientId}`);
+  console.log(`window:load: auth0RedirectUri   = ${auth0RedirectUri}`);
   
   // if (
   //   auth0Domain === undefined

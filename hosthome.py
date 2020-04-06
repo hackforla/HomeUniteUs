@@ -46,6 +46,11 @@ app = Flask(
 )
 
 
+# connect to gunicorn logger if not running directly
+if __name__ != '__main__':
+    gunicorn_logger = logging.getLogger('gunicorn.error')
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)
 
 
 class GuestRepository:
@@ -94,6 +99,10 @@ def favicon():
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def index(path):
+    app.logger.debug("quote_plus(os.getenv('DB_USER')) = {}".format(os.getenv('DB_USER')) )
+    app.logger.debug("quote_plus(os.getenv('DB_PWD')) = {}".format(os.getenv('DB_PWD')) )
+    app.logger.debug("os.getenv('DB_HOST') = {}".format(os.getenv('DB_HOST')) )
+    app.logger.debug("os.getenv('DB_PORT') = {}".format(os.getenv('DB_PORT')) )
     app.logger.warn('path = {}'.format(path))
     return app.send_static_file("index.html")
 
@@ -270,4 +279,5 @@ if __name__ == "__main__":
     app.logger.addHandler(handler)
     app.logger.setLevel(logging.INFO)
     app.logger.warn('starting app...')
+    
     app.run(host="0.0.0.0", port=8765, debug=True)
