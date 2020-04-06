@@ -26,6 +26,9 @@ FROM host-home-base
 # do all copies/builds within application's subdirectory
 WORKDIR /app
 
+# secrets
+COPY .env .
+
 # Server source and launch script, set perms
 COPY *.py ./
 COPY ./startup.sh .

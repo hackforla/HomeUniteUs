@@ -2,7 +2,6 @@
 
 ### Step 0: Configure your local environment
 1. Copy `.env.example` to a new `.env`, replacing with the correct values. This file is ignored by git
-2. Repeat step 1 for the `.env.example` file inside the `app` directory
 
 ### Step 1: Build the base image
 Note: this script is separated out because it installs dependencies, downloads OS images, etc.. Whenever new dependencies are introduced at the server level, the approprate configs/manifests must be updated and this script re-run for all developers.
@@ -23,21 +22,33 @@ Simple helper script to launch the container and print the IP address to the con
 ```
 
 ### Step 4: Debug runtime issues
-```bash
-
-```
 
 #### View container logs
+```bash
+./scripts/view-logs.sh
+```
 
 #### Shell into container
+```bash
+# get container id
+container_id=$(docker ps -a | grep host-home | awk '{print $1}')
+
+# open bash shell connection to container (interactive TTY)
+docker container exec -ti $container_id /bin/bash
+```
 
 ### Step 5: Update the React bundles in the container
+```bash
+./scripts/live-update-container.sh
+```
 
-### Step 6: Stop the container
+### Step 6: Stop and delete the container
+```bash
+./scripts/stop-container.sh
+```
 
 ### Advanced Docker scripting resources
 
-##### Go Template language
+* [Go Template language](https://golang.org/pkg/text/template/)
 
-https://golang.org/pkg/text/template/
 
