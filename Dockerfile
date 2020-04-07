@@ -32,6 +32,8 @@ COPY .env .
 # Server source and launch script, set perms
 COPY *.py ./
 COPY ./startup.sh .
+COPY ./initMongo.js .
+COPY data/*.json /var/tmp/
 RUN chmod +x ./startup.sh
 
 # get client bundles from temporary image
