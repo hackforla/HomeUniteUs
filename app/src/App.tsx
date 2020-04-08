@@ -10,6 +10,7 @@ import {
 } from "react-router-dom"
 import * as AppStyle from "./AppStyle"
 import logo from "./img/masterSpyLogo3.png"
+import FourOhFour from "./pages/FourOhFour"
 import { AdminGuestView } from "./pages/AdminGuestView"
 import { HostProfilePage } from "./pages/HostProfile"
 import { GuestProfilePage } from "./pages/GuestProfile"
@@ -90,6 +91,7 @@ export const App = () => {
                   path="/hosthome/guests/:id"
                   component={GuestProfilePage}
                 />
+                <FourOhFour />
               </Switch>
             </React.Fragment>
           </React.Fragment>

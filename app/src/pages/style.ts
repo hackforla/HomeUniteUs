@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import { ProgressPlugin } from "webpack"
 
 const Modal = styled.section`
   width: 100vw;
@@ -141,7 +142,11 @@ const WrapHolder = styled.div`
   flex-wrap: wrap;
 `
 
-const DemoHeader = styled.div`
+const NoWrapHolder = styled.div`
+  display: flex;
+`
+
+const MainHeader = styled.div`
   padding: 16px;
   text-align: center;
   color: #757575;
@@ -152,7 +157,7 @@ const DemoHeader = styled.div`
     0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
 `
 
-const DemoTitle = styled.h1`
+const MainTitle = styled.h1`
   font-size: 2em;
   text-align:center;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
@@ -163,7 +168,7 @@ const DemoTitle = styled.h1`
   color: #757575;
 `
 
-const SpacedHeader = styled(DemoHeader)`
+const SpacedHeader = styled(MainHeader)`
   margin: 30px 0 0 0;
 `
 const DemoProfileHolders = styled.div`
@@ -211,14 +216,19 @@ const DemoName = styled.span`
 const HeaderRow = styled.div`
   display: flex; 
   justify-content: space-between;
-  margin: 0 0 .5em 0;
+  margin: 0 0 -.25em 0;
   width: 93%;
   align-items:center;
 `
 
 const WiderHeaderRow = styled(HeaderRow)`
   width: 95%;
+<<<<<<< HEAD
   margin: 0 0 1.5em 0;
+
+=======
+  /* margin: 0 0 1.5em 0; */
+>>>>>>> 148a1f054ef66d7d49ba471e5bb82d10da105d32
 `
 
 const SecondHeader = styled.h3`
@@ -242,8 +252,8 @@ export const DemoStyle = {
   ImageTitle,
   DemoImage,
   WrapHolder,
-  DemoHeader,
-  DemoTitle,
+  MainHeader,
+  MainTitle,
   SpacedHeader,
   Button,
   DemoName,
@@ -264,27 +274,6 @@ const HostMatchClick = styled.div`
   }
 `
 
-const AdminHeader = styled.div`
-  padding: 16px;
-  text-align: center;
-  color: #757575;
-  background-color: #fff;
-  border-radius: 4px;
-  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
-    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
-`
-
-const AdminTitle = styled.h1`
-  font-size: 2em;
-  text-align:center;
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  font-weight: 400;
-  line-height: 1.5;
-  letter-spacing: 0.00938em;
-  margin: 0;
-  color: #757575;
-`
 const AdminHolder = styled.div`
   margin: 0 auto;
   max-width: 1210px;
@@ -317,10 +306,10 @@ const AdminMatchHolders = styled.div`
 `
 
 export const AdminStyle = {
-  AdminHeader,
+  MainHeader,
   AdminLink,
   AdminText,
-  AdminTitle,
+  MainTitle,
   AdminMatchHolders,
   AdminHolder,
   Button,
@@ -331,6 +320,107 @@ export const AdminStyle = {
   WiderHeaderRow
 }
 
+const Table = styled.div`
+  min-width: 650
+`
+
+const TableHeaderRow = styled.div`
+  display: flex; 
+  justify-content: space-between;
+  margin: 0;
+  width: 100%;
+  align-items:center;
+  background-color: #00AAEF;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 22px;
+  color: #FFFFFF;
+`
+const TableHeaderLabel = styled.div`
+  display: flex;
+  color: #757575;
+  font-weight: bold;
+  justify-content: space-between;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 22px;
+  color: #FFFFFF;
+  text-align: ${(prop: { center: boolean }) => prop.center ? 'center' : 'left'};
+  display: table-cell;
+  padding: .85em;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  letter-spacing: 0.01071em;
+  vertical-align: inherit;
+  flex: 1;
+`
+
+const TableRow = styled.div`
+  display: flex; 
+  justify-content: space-between;
+  margin: 0 0 0 0;
+  width: 95%;
+  align-items:center;
+  width: 100%;
+  margin: '0';
+  border-bottom: 1px solid rgba(224, 224, 224, 1);
+  background-color: ${(prop: { rowNumber: string }) => prop.rowNumber === 'even' ? '#F5F5F5' : '#FFFFFF'}
+`
+
+const TableCell = styled.div`
+  display: table-cell;
+  padding: 1em;
+  font-size: 0.875rem;
+  text-align: left;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  color: rgba(0,0,0,0.87);
+  line-height: 1.43;
+  letter-spacing: 0.01071em;
+  vertical-align: inherit;
+  flex: 1;
+`
+const TableName = styled.h2`
+  text-align: left;
+  font-size: 16px;
+  font-weight: 400;
+  color: rgba(0,0,0,0.54);
+  margin: 0 0 .25em 0;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+`
+
+const AdminGuestMainHolder = styled(DemoHolder)`
+  max-width: 1380px;
+`
+
+const AdminGuestHolders = styled.div`
+  margin: 30px 0px 0px;
+  flex-grow: 0;
+  max-width: 100%;
+  flex-basis: 100%;
+  box-sizing: border-box;
+`
+
+const AdminGuestPaper = styled(InfoPaper)`
+  border: .05px solid #ADADAD;
+  margin: 0 10px 0 10px;
+
+`
 export const AdminGuestStyle = {
-  HostMatchClick: HostMatchClick
+  HostMatchClick,
+  MainHeader,
+  MainTitle,
+  AdminGuestMainHolder,
+  NoWrapHolder,
+  AdminGuestHolders,
+  AdminGuestPaper,
+  AdminHolder,
+  Table,
+  TableHeaderLabel,
+  TableName,
+  TableRow,
+  TableCell,
+  TableHeaderRow,
 }

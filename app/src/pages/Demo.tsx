@@ -23,11 +23,11 @@ export const Demo = () => {
         visible={visible}
         showElement={showElement}
       />
-      <DemoStyle.DemoHeader>
-        <DemoStyle.DemoTitle>
+      <DemoStyle.MainHeader>
+        <DemoStyle.MainTitle>
           Host Profiles
-        </DemoStyle.DemoTitle>
-      </DemoStyle.DemoHeader>
+        </DemoStyle.MainTitle>
+      </DemoStyle.MainHeader>
       <DemoStyle.DemoProfileHolders>
         <DemoStyle.DemoHolder>
           <DemoStyle.InfoPaper>
@@ -68,9 +68,9 @@ export const Demo = () => {
         </DemoStyle.DemoHolder>
       </DemoStyle.DemoProfileHolders>
       <DemoStyle.SpacedHeader>
-        <DemoStyle.DemoTitle>
+        <DemoStyle.MainTitle>
           Guest Profiles
-        </DemoStyle.DemoTitle>
+        </DemoStyle.MainTitle>
       </DemoStyle.SpacedHeader>
       <DemoStyle.DemoProfileHolders>
         <DemoStyle.DemoHolder>
@@ -107,9 +107,9 @@ export const Demo = () => {
         </DemoStyle.DemoHolder>
       </DemoStyle.DemoProfileHolders>
       <DemoStyle.SpacedHeader>
-        <DemoStyle.DemoTitle>
+        <DemoStyle.MainTitle>
           Key Moments
-        </DemoStyle.DemoTitle>
+        </DemoStyle.MainTitle>
       </DemoStyle.SpacedHeader>
       <DemoStyle.BigProfileHolder>
         <DemoStyle.DemoHolder>
