@@ -40,6 +40,7 @@ export const Auth0Provider = ({
   const [auth0Client, setAuth0Client] = React.useState<Auth0Client>()
 
   React.useEffect(() => {
+    console.log(`Auth0Provider::useEffect running`);;
     const initAuth0 = async () => {
       const auth0FromHook = await createAuth0Client(initOptions)
       setAuth0Client(auth0FromHook)
@@ -56,6 +57,8 @@ export const Auth0Provider = ({
 
       const authed = await auth0FromHook.isAuthenticated()
 
+      console.log(`authed = ${authed}`);
+
       if (authed) {
         const userProfile = await auth0FromHook.getUser()
 
@@ -66,6 +69,7 @@ export const Auth0Provider = ({
       setIsInitializing(false)
     }
     
+    console.log(`Auth0Provider::useEffect launching initAuth0`);;
     initAuth0()
   }, [])
 
