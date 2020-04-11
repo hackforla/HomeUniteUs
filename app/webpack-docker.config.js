@@ -12,7 +12,7 @@ module.exports = {
         "index": path.resolve(__dirname, "./src/index.tsx")
     },
     output: {
-        path: path.resolve(__dirname, '../build/dist'),
+        path: path.resolve(__dirname, 'dist'),
         filename: '[name].[hash:8].js',
         publicPath: '/',
         // TODO: this line may need to be uncommented and changed for different webserver environments
@@ -108,7 +108,7 @@ module.exports = {
         }),
         new HtmlWebPackPlugin({
             template: "./src/index.html",
-            filename: "../../build/dist/index.html"
+            filename: "../dist/index.html"
         }),
         new webpack.HashedModuleIdsPlugin(),
         new MiniCssExtractPlugin({

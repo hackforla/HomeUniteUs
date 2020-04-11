@@ -1,5 +1,5 @@
 import * as React from "react"
-import { FourOhFourStyle } from "./FourOhFourStyleTemp"
+import { FourOhFourStyle } from "./style"
 
 const FourOhFour = () =>
     <FourOhFourStyle.Holder>

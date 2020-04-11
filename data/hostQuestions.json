@@ -1,0 +1,82 @@
+[
+    {
+      "responseValues": [],
+      "questionKey": "hosting_amount",
+      "id": 2000,
+      "text": "How many guests?",
+      "displayName": "Number of Guests",
+      "multiplicity": "ONE"
+    },
+    {
+      "responseValues": [],
+      "questionKey": "duration_of_stay",
+      "id": 1000,
+      "text": "How long would you like to host?",
+      "displayName": "Host Type",
+      "multiplicity": "ONE"
+    },
+    {
+      "responseValues": [0, 1],
+      "questionKey": "smoking_allowed",
+      "id": 0,
+      "text": "Is smoking allowed in your home?",
+      "displayName": "Smoking Allowed",
+      "multiplicity": "ONE"
+    },
+    {
+      "responseValues": [2, 3],
+      "questionKey": "smoking_residents",
+      "id": 1,
+      "text": "Do you or any residents smoke in the home?",
+      "displayName": "Smoking Residents",
+      "multiplicity": "ONE"
+    },
+    {
+      "responseValues": [4, 5],
+      "questionKey": "drinking_residents",
+      "id": 2,
+      "text": "Do any residents drink alcohol in the home?",
+      "displayName": "Drinking Residents",
+      "multiplicity": "ONE"
+    },
+    {
+      "responseValues": [6, 7],
+      "questionKey": "substances_residents",
+      "id": 3,
+      "text": "Do you or any residents use substances?",
+      "displayName": "Substances Residents",
+      "multiplicity": "ONE"
+    },
+    {
+      "responseValues": [8, 9],
+      "questionKey": "pets_hosting",
+      "id": 4,
+      "text": "Are you willing to host a guest who has pets?",
+      "displayName": "Pets OK",
+      "multiplicity": "ONE"
+    },
+    {
+      "responseValues": [10, 11],
+      "questionKey": "pets_have",
+      "id": 5,
+      "text": "Do you have pets?",
+      "displayName": "Has Pets",
+      "multiplicity": "ONE"
+    },
+    {
+      "responseValues": [12, 13],
+      "questionKey": "youth_parenting",
+      "id": 6,
+      "text": "Are you willing to host a guest who is parenting?",
+      "displayName": "Parenting OK",
+      "multiplicity": "ONE"
+    },
+    {
+      "responseValues": [14, 15],
+      "questionKey": "youth_relationship",
+      "id": 7,
+      "text": "Are you willing to host a guest who is in a relationship?",
+      "displayName": "Relationship OK",
+      "multiplicity": "ONE"
+    }
+  ]
