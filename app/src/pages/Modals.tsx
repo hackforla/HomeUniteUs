@@ -24,7 +24,9 @@ const Modal = (props: any) => {
                     showElement({
                       ...showElement, [modal]: false
                     })}>
-                    X
+                    <span>
+                      X
+                    </span>
                   </ModalsStyle.X>
                 </ModalsStyle.TextHolder>
                 <ModalsStyle.ImageBorder
