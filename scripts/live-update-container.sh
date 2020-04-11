@@ -6,7 +6,7 @@
 
 #and then run 
 
-    # zsh ./start-container.sh
+    # ./start-container.sh
 
 #from root directory
 

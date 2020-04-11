@@ -59,6 +59,7 @@ docker container exec -ti $container_id /bin/bash
 ```
 
 ### Step 5: Update the React bundles in the container
+```npm run build:docker``` from app folder
 ```bash
 ./scripts/live-update-container.sh
 ```
