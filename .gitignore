@@ -2,5 +2,11 @@
 **/dist
 **/output
 build
+**/.env
+.env
+*.log
+**/.log
+initMongo.js
 
 personalNotes.md
+
