@@ -41,8 +41,8 @@ dictConfig({
 app = Flask(
     __name__,
     static_url_path='',
-    static_folder='dist',
-    template_folder='dist'
+    static_folder='app/dist',
+    template_folder='app/dist'
 )
 
 
