@@ -4,21 +4,27 @@ We're working with community non-profits who have a Host Home initiative to deve
 
 Host Home programs are centered around housing young people, 18 - 25 years old. Their approach focuses on low-cost, community-driven intervention by matching a willing host with a guest or group of guests, providing a stable housing environment for youths who are experiencing homelessness and seeking stable housing.  
 
+Come visit us at https://hosthome.lacommunity.site/
+
 ### Project context
 
 This project is part of a larger initative at Hack for LA around creating a shared housing application, that can be used by organizations accross the county to help people tranisition to living independently and sustainably through host homes, empty bedrooms, and roomate matching for shared housing with lease signing.
 
 ### Technology used
 
-- Each platform or framework should get its own bullet.
-- Each platform should include an [active link](#) to the official documentation.
+- [Docker](https://docs.docker.com/)
+- [Terraform](https://www.terraform.io/docs/index.html)
+- [Nginx](https://nginx.org/en/docs/)
+- [AWS](https://docs.aws.amazon.com/)
+- [MongoDB](https://docs.mongodb.com/)
+- [React](https://reactjs.org/docs/getting-started.html)
+- [Styled Components](https://styled-components.com/docs)
 
 
 
 # How to contribute
 
-Explain the different ways people can contribute. For example:
-
+- Review the [Getting Started guide on the Hack for LA website](https://github.com/hackforla/getting-started)
 - Review the documents in the [host-home shared drive](https://drive.google.com/drive/u/0/folders/1ahxiD9rIsBtx0yAPlPcPaGw8zGrfHHm9).
 - Join the [#host-home slack channel](https://hackforla.slack.com/archives/CRWUG7X0C).
 - Visit our [project boards](https://github.com/hackforla/host-home-poc/projects) and see issues in the prioritized backlog.
@@ -60,7 +66,7 @@ To create a new issue, please use the blank issue template (available when you c
 
 # Contact info
 
-Include at least one way (or more, if possible) to reach your team with questions or comments.
+Please join our [Slack channel](https://hackforla.slack.com/archives/CRWUG7X0C) and introduce yourself!
 
 
 ### Licensing

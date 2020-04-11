@@ -23,4 +23,12 @@ const FlexGrowHolder = styled(Holder)`
   flex-grow: 1;
 `
 
-export { ToolBarTitle, Image, Holder, FlexHolder, FlexGrowHolder }
+const AuthHolder = styled.div`
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  width: 100%;
+  min-height: 40em;
+`
+
+export { ToolBarTitle, Image, Holder, FlexHolder, FlexGrowHolder, AuthHolder }
