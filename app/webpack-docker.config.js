@@ -12,13 +12,13 @@ module.exports = {
         "index": path.resolve(__dirname, "./src/index.tsx")
     },
     output: {
-        path: path.resolve(__dirname, '../build/dist'),
+        path: path.resolve(__dirname, 'dist'),
         filename: '[name].[hash:8].js',
-        publicPath: '/',
+        // publicPath: '/',
         // TODO: this line may need to be uncommented and changed for different webserver environments
         //     ...this prefix determines what is prepended to resource requests from "index.html"
         //     ...e.g. the value 'dist' in the injected tag <script src="/dist/react-dom.js"></script>
-        // publicPath: "/dist/"
+        publicPath: "/dist/"
     },
     optimization: {
         runtimeChunk: 'single',
@@ -104,11 +104,11 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(),
         new Dotenv({
-            path: '../.env'
+            path: './.env'
         }),
         new HtmlWebPackPlugin({
             template: "./src/index.html",
-            filename: "../../build/dist/index.html"
+            filename: "../dist/index.html"
         }),
         new webpack.HashedModuleIdsPlugin(),
         new MiniCssExtractPlugin({
