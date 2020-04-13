@@ -31,7 +31,7 @@ const ModalsText = styled.span`
   font-size: 2em;
 `
 
-const X = styled.span`
+const X = styled.div`
   color: black;
   font-size: 2em;
   height: 1.5em;
@@ -41,6 +41,11 @@ const X = styled.span`
   text-align: center;
   transform: scale(0.8, 0.8);
   cursor: default;
+
+  span {
+    position: relative;
+    top: .35em;
+  }
 `
 
 export const ModalsStyle = {
@@ -223,12 +228,7 @@ const HeaderRow = styled.div`
 
 const WiderHeaderRow = styled(HeaderRow)`
   width: 95%;
-<<<<<<< HEAD
-  margin: 0 0 1.5em 0;
-
-=======
-  /* margin: 0 0 1.5em 0; */
->>>>>>> 148a1f054ef66d7d49ba471e5bb82d10da105d32
+  margin: 0 0 1em 0;
 `
 
 const SecondHeader = styled.h3`
