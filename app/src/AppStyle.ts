@@ -12,6 +12,28 @@ const Image = styled.img`
 
 const Holder = styled.div`
   padding: 8px;
+
+  > *{
+  color: #1f1f1f;
+  padding: 18px 8px 35px 8px;
+  font-size: 0.875rem;
+  min-width: 64px;
+  box-sizing: border-box;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 500;
+  /* line-height: 2.5; */
+  border-radius: 4px;
+  letter-spacing: 0.02857em;
+  text-decoration: none;
+  }
+
+  :nth-child(n+2):nth-child(-n+4){
+    height: 3em;
+
+     :hover {
+       background-color: #eee;
+     }
+}
 `
 
 const FlexHolder = styled(Holder)`

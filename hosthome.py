@@ -41,8 +41,8 @@ dictConfig({
 app = Flask(
     __name__,
     static_url_path='',
-    static_folder='dist',
-    template_folder='dist'
+    static_folder='app/dist',
+    template_folder='app/dist'
 )
 
 
@@ -101,6 +101,20 @@ class MongoFacade:
 
         self._log('get_collection', 'items = {}'.format(items))
         return items
+
+            
+    def get_element_by_id(self, collection_name, id):
+        
+        self._log('get_element_by_id', 'acquiring connection...')
+
+        client = self._get_conn()
+
+        db = client[MONGO_DATABASE]
+        collection = db[collection_name]
+        item = collection.find_one({'id': id})
+
+        self._log('get_collection', 'items = {}'.format(items))
+        return item
 
 
     def insert_to_collection(self, collection_name, item):
@@ -282,22 +296,49 @@ def delete_host(id: int):
     return {"success": success, "status": hosts.status_code}
 
 
-@app.route('/api/guest', methods=['GET'])
+@app.route('/api/guests', methods=['GET'])
 def get_all_guests():
-    global guest
-    guests = request.get_json()
-    return {"guests": guests, "status": guests.status_code}
+    try:           
+
+        guests = guestRepository.get()        
+        js = json.dumps(guests)    
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+
+    except Exception as e:
+
+        data = {
+            'error': str(e)
+        }
+        
+        js = json.dumps(data)    
+        resp = Response(js, status=500, mimetype='application/json')
+
+        return resp
 
 
-@app.route('/api/guest/{id}', methods=['GET'])
+@app.route('/api/guests/{id}', methods=['GET'])
 def get_guest_by_id(id: int):
-    guests = request.get_json()
-    guest_id = guests[str(id)]
-    guest_output = guest[guest_id]
-    return {"guest": guest_output, "status": guests.status_code}
+    try:           
+
+        guests = guestRepository.get_element_by_id(id)        
+        js = json.dumps(guests)    
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+
+    except Exception as e:
+
+        data = {
+            'error': str(e)
+        }
+        
+        js = json.dumps(data)    
+        resp = Response(js, status=500, mimetype='application/json')
+        
+        return resp
 
 
-@app.route('/api/guest', methods=['POST'])
+@app.route('/api/guests', methods=['POST'])
 def add_guest():
     global guest
     guests = request.get_json()
@@ -305,7 +346,7 @@ def add_guest():
     return {"guests": guests, }
 
 
-@app.route('/api/guest/{id}', methods=['PUT'])
+@app.route('/api/guests/{id}', methods=['PUT'])
 def update_guest(id: int):
     global guest
     guests = request.get_json()
@@ -316,7 +357,7 @@ def update_guest(id: int):
     return {"guest": guest[str(id)], "status": guests.status_code}
 
 
-@app.route('/api/guest/{id}', methods=['DELETE'])
+@app.route('/api/guests/{id}', methods=['DELETE'])
 def delete_guest(id: int):
     global guest
     guests = request.get_json()
@@ -449,4 +490,4 @@ if __name__ == "__main__":
     app.logger.setLevel(logging.INFO)
     app.logger.warn('starting app...')
     
-    app.run(host="0.0.0.0", port=8765, debug=True)
+    app.run(host="0.0.0.0", port=8080, debug=True)
