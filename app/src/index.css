@@ -14,6 +14,33 @@ code {
     monospace;
   color: #ffffffb1;
 }
+
+.auth-parent {
+  text-align: center;
+  margin: 80px auto 0;
+}
+
+.log-in {
+  color: white;
+  background-color: #00AAEF;
+  padding: 8px;
+  font-size: 0.875rem;
+  min-width: 64px;
+  box-sizing: border-box;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 500;
+  line-height: 1.75;
+  border-radius: 4px;
+  letter-spacing: 0.02857em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.log-in:hover {
+  text-decoration: underline;
+}
+
 /* 
 .eCdTYS > *{
   color: #1f1f1f;
