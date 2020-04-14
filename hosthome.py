@@ -40,7 +40,7 @@ dictConfig({
 
 app = Flask(
     __name__,
-    static_url_path='',
+    static_url_path='/dist',
     static_folder='app/dist',
     template_folder='app/dist'
 )
@@ -238,17 +238,10 @@ def favicon():
     )
 
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def index(path):
-    app.logger.debug("quote_plus(os.getenv('DB_USER')) = {}".format(os.getenv('DB_USER')) )
-    app.logger.debug("quote_plus(os.getenv('DB_PWD')) = {}".format(os.getenv('DB_PWD')) )
-    app.logger.debug("os.getenv('DB_HOST') = {}".format(os.getenv('DB_HOST')) )
-    app.logger.debug("os.getenv('DB_PORT') = {}".format(os.getenv('DB_PORT')) )
-    app.logger.warn('path = {}'.format(path))
-    return app.send_static_file("index.html")
 
-
+###############
+## Hosts API ##
+###############
 @app.route('/api/host', methods=['GET'])
 def get_all_hosts():
     hosts = request.get_json()
@@ -296,6 +289,9 @@ def delete_host(id: int):
     return {"success": success, "status": hosts.status_code}
 
 
+################
+## Guests API ##
+################
 @app.route('/api/guests', methods=['GET'])
 def get_all_guests():
     try:           
@@ -482,6 +478,17 @@ def create_profile():
         resp = Response(js, status=500, mimetype='application/json')
         return resp
 
+
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def index(path):
+    app.logger.debug("quote_plus(os.getenv('DB_USER')) = {}".format(os.getenv('DB_USER')) )
+    app.logger.debug("quote_plus(os.getenv('DB_PWD')) = {}".format(os.getenv('DB_PWD')) )
+    app.logger.debug("os.getenv('DB_HOST') = {}".format(os.getenv('DB_HOST')) )
+    app.logger.debug("os.getenv('DB_PORT') = {}".format(os.getenv('DB_PORT')) )
+    app.logger.warn('path = {}'.format(path))
+    return app.send_static_file("index.html")
 
 
 if __name__ == "__main__":

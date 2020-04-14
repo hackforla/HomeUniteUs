@@ -22,6 +22,7 @@ import { Guest } from "./models"
 import { AppConfig } from "./data/config"
 import { useAuth0 } from "./react-auth0-spa"
 import { CreateProfile, CreateHostProfile, CreateGuestProfile } from "./pages/CreateProfile"
+import { AllHosts } from "./pages/Admin/AllHosts"
 
 export interface AppProps { }
 
@@ -64,18 +65,23 @@ export const App = () => {
                       </a>
                     </AppStyle.FlexGrowHolder>
                     <AppStyle.Holder>
-                      <NavLink to={`/hosthome/demo`}>
+                      <NavLink to={`/demo`}>
                         DEMO
                     </NavLink>
                     </AppStyle.Holder>
                     <AppStyle.Holder>
-                      <NavLink to={`/hosthome/about`}>
+                      <NavLink to={`/about`}>
                         ABOUT
                     </NavLink>
                     </AppStyle.Holder>
                     <AppStyle.Holder>
-                      <NavLink to={`/hosthome/admin/guests`}>
+                      <NavLink to={`/admin/guests`}>
                         ADMIN
+                    </NavLink>
+                    </AppStyle.Holder>
+                    <AppStyle.Holder>
+                      <NavLink to={`/admin/hosts`}>
+                        ALL HOSTS
                     </NavLink>
                     </AppStyle.Holder>
                     <AppStyle.Holder>
@@ -85,21 +91,24 @@ export const App = () => {
                   <React.Fragment>
                     <Switch>
                       <Route exact path="/" component={AboutPage} />
-                      <Route exact path="/hosthome" component={AboutPage} />
-                      <Route exact path="/hosthome/demo" component={Demo} />
-                      <Route path="/hosthome/about" component={AboutPage} />
-                      <Route path="/hosthome/admin/guests" component={AdminView} />
+                      <Route exact path="/demo" component={Demo} />
+                      <Route path="/about" component={AboutPage} />
+                      <Route path="/admin/guests" component={AdminView} />
                       <Route
-                        path="/hosthome/admin/guest/:id"
+                        path="/admin/guest/:id"
                         component={AdminGuestView}
                       />
                       <Route
-                        path="/hosthome/guests/:guestId/matches/:hostId"
+                        path="/guests/:guestId/matches/:hostId"
                         component={HostProfilePage}
                       />
                       <Route
-                        path="/hosthome/guests/:id"
+                        path="/guests/:id"
                         component={GuestProfilePage}
+                      />
+                      <Route
+                        path="/admin/hosts"
+                        component={AllHosts}
                       />
                       <FourOhFour />
                     </Switch>

@@ -2,6 +2,7 @@ import * as React from "react"
 import { Guest } from "../../models/Guest"
 import { Link } from "react-scroll"
 import { GuestPolicyStyle } from "./style"
+import { Constants } from "../../data/config"
 
 interface Props {
   guest: Guest
@@ -33,8 +34,8 @@ const GuestPolicies = ({ guest }: Props) =>
                     "I have no pets and would love to live with pets." ||
                     guest.petsText ===
                     "I have pet(s), and would love to live with more pets."
-                    ? "/hosthome/img/pets.png"
-                    : "/hosthome/img/petsNo.png"
+                    ? `${Constants.StaticFilePrefix}/img/pets.png`
+                    : `${Constants.StaticFilePrefix}/img/petsNo.png`
                 }
                 alt={"Pets Policy"}
               />
@@ -51,8 +52,8 @@ const GuestPolicies = ({ guest }: Props) =>
                     "I smoke cigerettes, but I prefer a smoke free environment indoors." ||
                     guest.smokingText ===
                     "I do not smoke cigerettes, and I prefer a smoke-free environment indoors."
-                    ? "/hosthome/img/smoke.png"
-                    : "/hosthome/img/doSmoke.png"
+                    ? `${Constants.StaticFilePrefix}/img/smoke.png`
+                    : `${Constants.StaticFilePrefix}/img/doSmoke.png`
                 }
                 alt={"Smoke Policy"}
               />
@@ -72,8 +73,8 @@ const GuestPolicies = ({ guest }: Props) =>
                     guest.drinkingText.startsWith(
                       "I don't drink alcohol, but I'm open to other people in the household drinking alcohol."
                     )
-                    ? "/hosthome/img/alcohol.png"
-                    : "/hosthome/img/alcoholNo.png"
+                    ? `${Constants.StaticFilePrefix}/img/alcohol.png`
+                    : `${Constants.StaticFilePrefix}/img/alcoholNo.png`
                 }
                 alt={"Alcohol Policy"}
               />
@@ -91,8 +92,8 @@ const GuestPolicies = ({ guest }: Props) =>
                     guest.substancesText.startsWith(
                       "I don't use substances, but I'm open to other people in the household using substances."
                     )
-                    ? "/hosthome/img/meds.png"
-                    : "/hosthome/img/medsNo.png"
+                    ? `${Constants.StaticFilePrefix}/img/meds.png`
+                    : `${Constants.StaticFilePrefix}/img/medsNo.png`
                 }
                 alt={"Meds Policy"}
               />

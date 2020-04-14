@@ -2,6 +2,7 @@ import * as React from "react"
 import { Guest } from "../../models/Guest"
 import { GuestCardStyle } from "./style"
 import NumberContext from "./NumberContext"
+import { Constants } from "../../data/config"
 
 interface Props {
   guest: Guest
@@ -13,10 +14,10 @@ const GuestCard = ({ guest }: Props) =>
       <GuestCardStyle.GuestImage
         src={
           guest.id === 999
-            ? "/hosthome/img/kirk.png"
+            ? `${Constants.StaticFilePrefix}/img/kirk.png`
             : guest.id === 998
-              ? "/hosthome/img/megan.png"
-              : `/hosthome/img/profile${React.useContext(NumberContext)}.png`
+              ? `${Constants.StaticFilePrefix}/img/megan.png`
+              : `${Constants.StaticFilePrefix}/img/profile${React.useContext(NumberContext)}.png`
         }
         alt={"Guest Image"}
       />

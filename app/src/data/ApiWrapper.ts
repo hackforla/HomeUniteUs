@@ -17,7 +17,6 @@ const getJson = async (uri: string) => {
 
 export class Fetcher<T> {
 
-    // private resourceName: string;
     private endpoint: string;
 
     public constructor(resourceName: string) {
