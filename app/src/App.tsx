@@ -38,7 +38,7 @@ export const LoginView = () => {
 
   return (
     <AppStyle.AuthHolder>
-      <a href='' onClick={onLoginClick}>Login to Host Homes</a>
+      <AppStyle.AuthButton href='' onClick={onLoginClick}>Login to Host Homes</AppStyle.AuthButton>
     </AppStyle.AuthHolder>
   );
 };
