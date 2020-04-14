@@ -2,6 +2,7 @@ import * as React from "react"
 import HostRoomates from "./HostRoomates"
 import { Host } from "../../models/Host"
 import { HostCardStyle } from "./style"
+import { Constants } from "../../data/config"
 
 interface IHostCardProps {
   host: Host
@@ -16,10 +17,10 @@ export const HostCard = ({ host }: IHostCardProps) => {
         <HostCardStyle.HostImage
           src={
             host.id === 999
-              ? "/hosthome/img/bonnie.png"
+              ? `${Constants.StaticFilePrefix}/img/bonnie.png`
               : host.id === 998
-                ? "/hosthome/img/micheal.png"
-                : `/hosthome/img/profile${random}.png`
+                ? `${Constants.StaticFilePrefix}/img/micheal.png`
+                : `${Constants.StaticFilePrefix}/img/profile${random}.png`
           }
           alt="avatar"
         />

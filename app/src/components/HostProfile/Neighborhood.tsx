@@ -1,5 +1,6 @@
 import * as React from "react"
 import { NeighborStyle } from "./style"
+import { Constants } from "../../data/config"
 
 const Neighborhood = () =>
   <NeighborStyle.NeighborContainer>
@@ -8,7 +9,7 @@ const Neighborhood = () =>
     </NeighborStyle.NeighborTitle>
     <div className="neighborhood-map">
       <NeighborStyle.NeighborImage
-        src="/hosthome/img/neighborhoodImage.png"
+        src={`${Constants.StaticFilePrefix}/img/neighborhoodImage.png`}
         alt="neighborhoodMap"
       />
     </div>

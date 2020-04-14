@@ -1,5 +1,6 @@
 import * as React from "react"
 import { ModalsStyle } from "./style"
+import { Constants } from "../data/config"
 
 const Modal = (props: any) => {
   const { visible, showElement } = props
@@ -31,7 +32,7 @@ const Modal = (props: any) => {
                 </ModalsStyle.TextHolder>
                 <ModalsStyle.ImageBorder
                   title={`${modal}`}
-                  src={`/hosthome/img/${modal}.png`}
+                  src={`${Constants.StaticFilePrefix}/img/${modal}.png`}
                   alt={`${modal}`}
                 />
               </React.Fragment>
