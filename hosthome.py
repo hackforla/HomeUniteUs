@@ -242,51 +242,109 @@ def favicon():
 ###############
 ## Hosts API ##
 ###############
-@app.route('/api/host', methods=['GET'])
-def get_all_hosts():
-    hosts = request.get_json()
-    return {"hosts": hosts, "status": hosts.status_code}
+
+@app.route('/api/hosts/{id}', methods=['GET', 'PUT', 'DELETE'])
+def host_by_id(id: str):
+
+    app.logger.warn('host_by_id: request.method = {}'.format(request.method))
+
+    if request.method == 'GET':
 
 
-@app.route('/api/host/{id}', methods=['GET'])
-def get_host_by_id(id: int):
-    global host
-    hosts = request.get_json()
-    host_id = hosts[str(id)]
-    host_output = host[host_id]
-    return {"host": host_output, "status": hosts.status_code}
+        try:           
 
+            host = hostRepository.get_element_by_id(id)        
+            js = json.dumps(host)    
+            resp = Response(js, status=200, mimetype='application/json')
+            return resp
 
-@app.route('/api/host', methods=['POST'])
-def add_host():
-    global host
-    hosts = request.get_json()
-    host.update(hosts)
-    return {"hosts": hosts, }
+        except Exception as e:
 
-
-@app.route('/api/host/{id}', methods=['PUT'])
-def update_host(id: int):
-    global host
-    hosts = request.get_json()
-    try:
-        host[str(id)] = hosts
-    except Exception as e:
-        raise e
-    return {"host": host[str(id)], "status": hosts.status_code}
-
-
-@app.route('/api/host/{id}', methods=['DELETE'])
-def delete_host(id: int):
-    global host
-    hosts = request.get_json()
-    host_id = hosts[str(id)]
-    del host[host_id]
-    if host[host_id] is None:
-        success = "deleted!"
+            data = {
+                'error': str(e)
+            }
+            
+            js = json.dumps(data)    
+            resp = Response(js, status=500, mimetype='application/json')
+            
+            return resp
     else:
-        success = "no"
-    return {"success": success, "status": hosts.status_code}
+        try:           
+
+            responseData = hostRepository.update(id, request.json)      
+            app.logger.debug('responseData = {}'.format(responseData))  
+            js = json.dumps(responseData)    
+            resp = Response(js, status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+            
+            js = json.dumps(data)    
+            resp = Response(js, status=500, mimetype='application/json')
+            
+            return resp
+
+            
+@app.route('/api/hosts', methods=['GET', 'POST'])
+def get_all_hosts():
+
+    app.logger.warn('get_all_hosts: request.method = {}'.format(request.method))
+
+    try:           
+
+        hosts = hostRepository.get()        
+        js = json.dumps(hosts)    
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+
+    except Exception as e:
+
+        data = {
+            'error': str(e)
+        }
+        
+        js = json.dumps(data)    
+        resp = Response(js, status=500, mimetype='application/json')
+
+        return resp
+
+
+
+# @app.route('/api/hosts/{id}', methods=['PUT'])
+# def update_host(id: int):
+#     try:           
+
+#         responseData = hostRepository.update(id, request.json)      
+#         app.logger.debug('responseData = {}'.format(responseData))  
+#         js = json.dumps(responseData)    
+#         resp = Response(js, status=200, mimetype='application/json')
+#         return resp
+
+#     except Exception as e:
+
+#         data = {
+#             'error': str(e)
+#         }
+        
+#         js = json.dumps(data)    
+#         resp = Response(js, status=500, mimetype='application/json')
+        
+#         return resp
+
+
+# @app.route('/api/hosts', methods=['POST'])
+# def add_host():
+#     global host
+#     hosts = request.get_json()
+#     host.update(hosts)
+#     return {"hosts": hosts, }
+
+
+
 
 
 ################
@@ -317,8 +375,8 @@ def get_all_guests():
 def get_guest_by_id(id: int):
     try:           
 
-        guests = guestRepository.get_element_by_id(id)        
-        js = json.dumps(guests)    
+        guest = guestRepository.get_element_by_id(id)        
+        js = json.dumps(guest)    
         resp = Response(js, status=200, mimetype='application/json')
         return resp
 

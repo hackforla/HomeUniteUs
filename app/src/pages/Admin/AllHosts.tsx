@@ -4,7 +4,11 @@
 import * as React from 'react';
 import { Fetcher } from '../../data/ApiWrapper';
 import { Host } from '../../models';
-import { MessageModal } from './TempModal';
+import { MessageModal, LoaderModal, HostEditorModal } from './TempModal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
+
+import './AllHosts.scss';
 
 // helper class to abstract out HTTP and API
 //   implementation details
@@ -13,15 +17,20 @@ const hostsFetcher = new Fetcher<Host>('hosts');
 // the complete model of the UI state for this 
 //    component, and possibly its descendants
 interface AllHostsState {
-    hosts: Array<Host> | null,
+    hosts: Array<Host> | null;
     messageModalState: {
         open: boolean;
         message: string;
-    },
+    };
     loaderState: {
-        loading: boolean,
-        text: string
-    }
+        loading: boolean;
+        text: string;
+    };
+    hostEditorState: {
+        open: boolean;
+        host: Host | null;
+        onComplete: (host: Host) => void;
+    };
 };
 
 // syntactic sugar that lets us have the 
@@ -31,7 +40,9 @@ enum AllHostsActionType {
     DisplayMessage,
     AcknowledgeMessage,
     BeginFetchHosts,
-    FinishFetchHosts
+    FinishFetchHosts,
+    BeginEditHost,
+    FinishEditHost
 };
 
 // objects of this type will be sent to reducer
@@ -42,7 +53,7 @@ enum AllHostsActionType {
 //       e.g. the new data that just arrived, the error message to display, etc.
 interface AllHostsAction {
     type: AllHostsActionType;
-    payload?: string | Array<Host>;
+    payload?: string | Array<Host> | Host;
 };
 
 // set reasonable defaults, make errors obvious (for dev)
@@ -55,6 +66,11 @@ const initialState: AllHostsState = {
     loaderState: {
         loading: false,
         text: 'Loader error'
+    },
+    hostEditorState: {
+        open: false,
+        host: null,
+        onComplete: (host: Host) => { }
     }
 };
 
@@ -107,6 +123,25 @@ const reducer = (state: AllHostsState, action: AllHostsAction): AllHostsState =>
                 hosts: action.payload as Array<Host>
             };
 
+        case AllHostsActionType.BeginEditHost:
+            return {
+                ...state,
+                hostEditorState: {
+                    ...state.hostEditorState,
+                    open: true,
+                    host: action.payload as Host
+                }
+            };
+
+        case AllHostsActionType.FinishEditHost:
+            return {
+                ...state,
+                hostEditorState: {
+                    ...state.hostEditorState,
+                    open: false
+                }
+            };
+
         default:
             throw new Error(`Unsupported action: ${JSON.stringify(action)}`);
     }
@@ -132,7 +167,8 @@ export const AllHosts = () => {
 
             // show the loader
             dispatch({
-                type: AllHostsActionType.BeginFetchHosts
+                type: AllHostsActionType.BeginFetchHosts,
+                payload: 'Retrieving hosts...'
             });
 
             // long-running task runs in component, *not* the reducer
@@ -155,6 +191,48 @@ export const AllHosts = () => {
         }
     };
 
+    const editHost = (host: Host) => {
+        dispatch({
+            type: AllHostsActionType.BeginEditHost,
+            payload: host
+        });
+    };
+
+    const cancelEditHost = () => {
+        dispatch({
+            type: AllHostsActionType.FinishEditHost
+        });
+    };
+
+    const updateHost = async (host: Host) => {
+        console.log(`updateHost: host = ${JSON.stringify(host)}`);
+
+        dispatch({
+            type: AllHostsActionType.FinishEditHost
+        });
+
+        try {
+
+            dispatch({
+                type: AllHostsActionType.BeginFetchHosts,
+                payload: `Updating host ${host.id}...`
+            });
+
+            await hostsFetcher.putById(host.id.toString(), host);
+            await refreshHosts();
+
+
+        } catch(e) {
+
+            // show the message modal with the exception text (dev. mode only)
+            dispatch({
+                type: AllHostsActionType.DisplayMessage,
+                payload: `System error: ${e}`
+            });
+
+        }
+    };
+
     // load the data automatically when component loads,
     //     driven by user events after that
     React.useEffect(() => {
@@ -167,10 +245,25 @@ export const AllHosts = () => {
 
             {/* Modal for notifications and errors */}
             <MessageModal
-                {...state.messageModalState}
+                open={state.messageModalState.open}
+                message={state.messageModalState.message}
                 onAck={() => dispatch({ type: AllHostsActionType.AcknowledgeMessage })}
             />
 
+            {/* Modal for conveying long-running task executing */}
+            <LoaderModal
+                loading={state.loaderState.loading}
+                text={state.loaderState.text}
+            />
+
+            <HostEditorModal
+                host={state.hostEditorState.host}
+                open={state.hostEditorState.open}
+                onComplete={updateHost}
+                onCancel={cancelEditHost}
+            />
+
+            {/* Content */}
             <div>
                 <h1>All Hosts</h1>
                 {
@@ -181,6 +274,7 @@ export const AllHosts = () => {
                                     <th>Name</th>
                                     <th>Address</th>
                                     <th>Phone</th>
+                                    <th>Edit</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -191,6 +285,7 @@ export const AllHosts = () => {
                                                 <td>{`${host.firstName} ${host.lastName}`}</td>
                                                 <td>{host.address}</td>
                                                 <td>{host.phone}</td>
+                                                <td className='host-edit-cell' onClick={() => editHost(host)}><FontAwesomeIcon icon={faEdit} /></td>
                                             </tr>
                                         );
                                     })
@@ -200,18 +295,8 @@ export const AllHosts = () => {
                         </table>
                         : null
                 }
-                <button
-                    onClick={() => dispatch({
-                        type: AllHostsActionType.DisplayMessage,
-                        payload: 'Hello user'
-                    })}
-                >
-                    Refresh Hosts
-                </button>
+                <button onClick={refreshHosts}>Refresh Hosts</button>
             </div>
-
         </>
-
     );
-
 };
