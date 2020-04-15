@@ -20,7 +20,10 @@ from flask import (
     url_for,
     send_from_directory
 )
+from bson import ObjectId
 import pymongo
+
+
 
 dictConfig({
     'version': 1,
@@ -62,6 +65,7 @@ class MongoFacade:
     def __init__(self):
 
         if DEBUG:                
+
             self.url = 'mongodb://{}:{}'.format(
                 os.getenv('DB_HOST'),
                 os.getenv('DB_PORT')
@@ -137,7 +141,7 @@ class MongoFacade:
         db = client[MONGO_DATABASE]
         collection = db[collection_name]
 
-        result = collection.delete_one({'_id':ObjectId(id)})
+        result = collection.delete_one({'id':id})
         self._log('delete_from_collection', 'result.raw_result = {}'.format(result.raw_result))
 
         return result
@@ -152,7 +156,7 @@ class MongoFacade:
         db = client[MONGO_DATABASE]
         collection = db[collection_name]
 
-        result = collection.update_one({'_id':ObjectId(id)}, {'$set': item })
+        result = collection.update_one({'id':id}, {'$set': item })
 
         self._log('update_in_collection', 'result.raw_result = {}'.format(result.raw_result))
 
@@ -160,7 +164,6 @@ class MongoFacade:
 
     def _log(self, method_name, message):
         app.logger.debug('MongoFacade:{}: {}'.format(method_name, message))
-
 
 class Repository:
 
@@ -243,13 +246,12 @@ def favicon():
 ## Hosts API ##
 ###############
 
-@app.route('/api/hosts/{id}', methods=['GET', 'PUT', 'DELETE'])
+@app.route('/api/hosts/<id>', methods=['GET', 'PUT', 'DELETE'])
 def host_by_id(id: str):
 
     app.logger.warn('host_by_id: request.method = {}'.format(request.method))
 
     if request.method == 'GET':
-
 
         try:           
 
@@ -268,13 +270,15 @@ def host_by_id(id: str):
             resp = Response(js, status=500, mimetype='application/json')
             
             return resp
+
     else:
+
         try:           
 
             responseData = hostRepository.update(id, request.json)      
             app.logger.debug('responseData = {}'.format(responseData))  
-            js = json.dumps(responseData)    
-            resp = Response(js, status=200, mimetype='application/json')
+            # js = json.dumps(responseData)    
+            resp = Response(json.dumps({'error': None, 'data': None}), status=200, mimetype='application/json')
             return resp
 
         except Exception as e:
@@ -350,78 +354,78 @@ def get_all_hosts():
 ################
 ## Guests API ##
 ################
-@app.route('/api/guests', methods=['GET'])
-def get_all_guests():
-    try:           
+# @app.route('/api/guests', methods=['GET'])
+# def get_all_guests():
+#     try:           
 
-        guests = guestRepository.get()        
-        js = json.dumps(guests)    
-        resp = Response(js, status=200, mimetype='application/json')
-        return resp
+#         guests = guestRepository.get()        
+#         js = json.dumps(guests)    
+#         resp = Response(js, status=200, mimetype='application/json')
+#         return resp
 
-    except Exception as e:
+#     except Exception as e:
 
-        data = {
-            'error': str(e)
-        }
+#         data = {
+#             'error': str(e)
+#         }
         
-        js = json.dumps(data)    
-        resp = Response(js, status=500, mimetype='application/json')
+#         js = json.dumps(data)    
+#         resp = Response(js, status=500, mimetype='application/json')
 
-        return resp
+#         return resp
 
 
-@app.route('/api/guests/{id}', methods=['GET'])
-def get_guest_by_id(id: int):
-    try:           
+# @app.route('/api/guests/{id}', methods=['GET'])
+# def get_guest_by_id(id: int):
+#     try:           
 
-        guest = guestRepository.get_element_by_id(id)        
-        js = json.dumps(guest)    
-        resp = Response(js, status=200, mimetype='application/json')
-        return resp
+#         guest = guestRepository.get_element_by_id(id)        
+#         js = json.dumps(guest)    
+#         resp = Response(js, status=200, mimetype='application/json')
+#         return resp
 
-    except Exception as e:
+#     except Exception as e:
 
-        data = {
-            'error': str(e)
-        }
+#         data = {
+#             'error': str(e)
+#         }
         
-        js = json.dumps(data)    
-        resp = Response(js, status=500, mimetype='application/json')
+#         js = json.dumps(data)    
+#         resp = Response(js, status=500, mimetype='application/json')
         
-        return resp
+#         return resp
 
 
-@app.route('/api/guests', methods=['POST'])
-def add_guest():
-    global guest
-    guests = request.get_json()
-    guest.update(guests)
-    return {"guests": guests, }
+# @app.route('/api/guests', methods=['POST'])
+# def add_guest():
+#     global guest
+#     guests = request.get_json()
+#     guest.update(guests)
+#     return {"guests": guests, }
 
 
-@app.route('/api/guests/{id}', methods=['PUT'])
-def update_guest(id: int):
-    global guest
-    guests = request.get_json()
-    try:
-        guest[str(id)] = guests
-    except Exception as e:
-        raise e
-    return {"guest": guest[str(id)], "status": guests.status_code}
+# @app.route('/api/guests/{id}', methods=['PUT'])
+# def update_guest(id: int):
+#     global guest
+#     guests = request.get_json()
+#     try:
+#         guest[str(id)] = guests
+#     except Exception as e:
+#         raise e
+#     return {"guest": guest[str(id)], "status": guests.status_code}
 
 
-@app.route('/api/guests/{id}', methods=['DELETE'])
-def delete_guest(id: int):
-    global guest
-    guests = request.get_json()
-    guest_id = guests[str(id)]
-    del guest[guest_id]
-    if guest[guest_id] is None:
-        success = "deleted!"
-    else:
-        success = "no"
-    return {"success": success, "status": guests.status_code}
+# @app.route('/api/guests/{id}', methods=['DELETE'])
+# def delete_guest(id: int):
+#     global guest
+#     guests = request.get_json()
+#     guest_id = guests[str(id)]
+#     del guest[guest_id]
+#     if guest[guest_id] is None:
+#         success = "deleted!"
+#     else:
+#         success = "no"
+#     return {"success": success, "status": guests.status_code}
 
 
 @app.route('/api/dataset', methods=['GET'])
@@ -465,76 +469,76 @@ def get_all_data():
         return resp
 
 
-@app.route('/api/test')
-def test_api():    
+# @app.route('/api/test')
+# def test_api():    
 
-    try:           
-        mongo_client = pymongo.MongoClient('mongodb://{}:{}@{}:{}'.format(
-            quote_plus(os.getenv('DB_USER')),
-            quote_plus(os.getenv('DB_PWD')),
-            os.getenv('DB_HOST'),
-            os.getenv('DB_PORT')
-        ))
+#     try:           
+#         mongo_client = pymongo.MongoClient('mongodb://{}:{}@{}:{}'.format(
+#             quote_plus(os.getenv('DB_USER')),
+#             quote_plus(os.getenv('DB_PWD')),
+#             os.getenv('DB_HOST'),
+#             os.getenv('DB_PORT')
+#         ))
 
 
-        DB_NAME = 'hosthome'
+#         DB_NAME = 'hosthome'
 
-        db = mongo_client[DB_NAME]
+#         db = mongo_client[DB_NAME]
 
-        data = {
-            'test'  : 'worked'
-        }
+#         data = {
+#             'test'  : 'worked'
+#         }
         
-        js = json.dumps(data)    
-        resp = Response(js, status=200, mimetype='application/json')
-        return resp
+#         js = json.dumps(data)    
+#         resp = Response(js, status=200, mimetype='application/json')
+#         return resp
 
-    except Exception as e:
-        data = {
-            'test'  : 'failed',
+#     except Exception as e:
+#         data = {
+#             'test'  : 'failed',
 
-            'error': str(e)
-        }
+#             'error': str(e)
+#         }
         
-        js = json.dumps(data)    
-        resp = Response(js, status=500, mimetype='application/json')
-        return resp
+#         js = json.dumps(data)    
+#         resp = Response(js, status=500, mimetype='application/json')
+#         return resp
 
 
-@app.route('/api/profile', methods=['POST'])
-def create_profile():
-    profile = request.get_json()
+# @app.route('/api/profile', methods=['POST'])
+# def create_profile():
+#     profile = request.get_json()
 
-    print('/mongo -- about to connect...')
+#     print('/mongo -- about to connect...')
 
-    try:           
-        mongo_client = pymongo.MongoClient('mongodb://{}:{}@{}:{}'.format(
-            quote_plus(os.getenv('DB_USER')),
-            quote_plus(os.getenv('DB_PWD')),
-            os.getenv('DB_HOST'),
-            os.getenv('DB_PORT')
-        ))
+#     try:           
+#         mongo_client = pymongo.MongoClient('mongodb://{}:{}@{}:{}'.format(
+#             quote_plus(os.getenv('DB_USER')),
+#             quote_plus(os.getenv('DB_PWD')),
+#             os.getenv('DB_HOST'),
+#             os.getenv('DB_PORT')
+#         ))
 
 
-        DB_NAME = 'hosthome'
+#         DB_NAME = 'hosthome'
 
-        db = mongo_client[DB_NAME]
-        col = db['profiles']
-        result = col.insert_one(profile)
-        js = { '_id': result.inserted_id }
+#         db = mongo_client[DB_NAME]
+#         col = db['profiles']
+#         result = col.insert_one(profile)
+#         js = { '_id': result.inserted_id }
 
-        return jsonify(js)
+#         return jsonify(js)
 
-    except Exception as e:
-        data = {
-            'test'  : 'failed',
+#     except Exception as e:
+#         data = {
+#             'test'  : 'failed',
 
-            'error': str(e)
-        }
+#             'error': str(e)
+#         }
         
-        js = json.dumps(data)    
-        resp = Response(js, status=500, mimetype='application/json')
-        return resp
+#         js = json.dumps(data)    
+#         resp = Response(js, status=500, mimetype='application/json')
+#         return resp
 
 
 

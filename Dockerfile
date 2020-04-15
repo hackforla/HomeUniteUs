@@ -24,7 +24,7 @@ RUN npm run build:docker
 FROM host-home-base
 
 # do all copies/builds within application's subdirectory
-WORKDIR /app
+WORKDIR /hosthome
 
 # secrets
 COPY .env .
@@ -37,10 +37,10 @@ COPY data/*.json /var/tmp/
 RUN chmod +x ./startup.sh
 
 # get client bundles from temporary image
-COPY --from=bundleBuilder /app/dist ./dist
+COPY --from=bundleBuilder /app/dist ./app/dist
 
 # tell Docker to allow traffic to reach this port
 EXPOSE 80
 
 # run a shell when the container starts (script to configure and launch the app server)
-ENTRYPOINT ["/bin/bash", "-c", "/app/startup.sh"]
+ENTRYPOINT ["/bin/bash", "-c", "/hosthome/startup.sh"]
