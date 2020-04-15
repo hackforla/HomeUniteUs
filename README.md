@@ -94,13 +94,13 @@ Include details about the project's open source status.
   3. 
     1. (Optional) Configure a conda or virtualenv project
     2. `pip install -r requirements.txt`
-  4. `python hosthome.py`
+  4. `python hosthome.py` to start server running
 
 3. Run client
 
   1. `cd app`
   2. `npm install`
-  3. `npm run watch:flask`
+  3. `npm run watch:flask` and this will perform a fresh build each time the files are changed
 
 ### Docker
 
