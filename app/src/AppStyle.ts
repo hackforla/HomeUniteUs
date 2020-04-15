@@ -53,4 +53,26 @@ const AuthHolder = styled.div`
   min-height: 40em;
 `
 
-export { ToolBarTitle, Image, Holder, FlexHolder, FlexGrowHolder, AuthHolder }
+const AuthButton = styled.a`
+  color: white;
+  background-color: #00AAEF;
+  padding: 8px;
+  font-size: 0.875rem;
+  min-width: 64px;
+  box-sizing: border-box;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 500;
+  line-height: 1.75;
+  border-radius: 4px;
+  letter-spacing: 0.02857em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+:hover {
+  text-decoration: underline;
+}
+`
+
+export { ToolBarTitle, Image, Holder, FlexHolder, FlexGrowHolder, AuthHolder, AuthButton }

@@ -2,6 +2,7 @@ import * as React from "react"
 import Modal from "./Modals"
 import { useHistory } from "react-router"
 import { DemoStyle } from "./style"
+import { Constants } from "../data/config"
 
 export const Demo = () => {
   const [visible, showElement] = React.useState({
@@ -119,7 +120,7 @@ export const Demo = () => {
                 <DemoStyle.ImageTitle>Admin Page</DemoStyle.ImageTitle>
                 <DemoStyle.DemoImage
                   title="adminPage"
-                  src={"/hosthome/img/adminPageThumb.png"}
+                  src={`${Constants.StaticFilePrefix}/img/adminPageThumb.png`}
                   alt={"Admin Page"}
                   onClick={e => showPic(e)}
                 />
@@ -128,7 +129,7 @@ export const Demo = () => {
                 <DemoStyle.ImageTitle>Guest Matches</DemoStyle.ImageTitle>
                 <DemoStyle.DemoImage
                   title="guestMatches"
-                  src={"/hosthome/img/guestMatchesThumb.png"}
+                  src={`${Constants.StaticFilePrefix}/img/guestMatchesThumb.png`}
                   alt={"Guest Matches"}
                   onClick={e => showPic(e)}
                 />
@@ -139,7 +140,7 @@ export const Demo = () => {
                 </DemoStyle.ImageTitle>
                 <DemoStyle.DemoImage
                   title="interestButtons"
-                  src={"/hosthome/img/interestButtonsThumb.png"}
+                  src={`${Constants.StaticFilePrefix}/img/interestButtonsThumb.png`}
                   alt={"Interest Buttons"}
                   onClick={e => showPic(e)}
                 />
@@ -150,7 +151,7 @@ export const Demo = () => {
                 </DemoStyle.ImageTitle>
                 <DemoStyle.DemoImage
                   title="annotationOfInterested"
-                  src={"/hosthome/img/annotationOfInterestedThumb.png"}
+                  src={`${Constants.StaticFilePrefix}/img/annotationOfInterestedThumb.png`}
                   alt={"Annotation of Interested"}
                   onClick={e => showPic(e)}
                 />
@@ -161,7 +162,7 @@ export const Demo = () => {
                 </DemoStyle.ImageTitle>
                 <DemoStyle.DemoImage
                   title="annotationOfDecline"
-                  src={"/hosthome/img/annotationOfDeclineThumb.png"}
+                  src={`${Constants.StaticFilePrefix}/img/annotationOfDeclineThumb.png`}
                   alt={"Annotation of Decline"}
                   onClick={e => showPic(e)}
                 />

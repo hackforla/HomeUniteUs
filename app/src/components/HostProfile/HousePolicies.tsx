@@ -1,6 +1,7 @@
 import * as React from "react"
 import { Host } from "../../models/Host"
 import { HousePolicyStyle } from "./style"
+import { Constants } from "../../data/config"
 
 interface IHousePoliciesProps {
   host: Host
@@ -13,8 +14,8 @@ const HousePolicies = ({ host }: IHousePoliciesProps) => {
       icon:
         host.petsText === "Our pet(s) only need new human friends." ||
           host.petsText === "We provide a pet free environment."
-          ? "/hosthome/img/petsNo.png"
-          : "/hosthome/img/pets.png",
+          ? `${Constants.StaticFilePrefix}/img/petsNo.png`
+          : `${Constants.StaticFilePrefix}/img/pets.png`,
       content: host.petsText
     },
     {
@@ -24,28 +25,28 @@ const HousePolicies = ({ host }: IHousePoliciesProps) => {
           "We don't smoke, but we're ok with others smoking in the house." ||
           host.smokingText ===
           "I don't smoke, but I'm fine with others smoking indoors."
-          ? "/hosthome/img/doSmoke.png"
-          : "/hosthome/img/smoke.png",
+          ? `${Constants.StaticFilePrefix}/img/doSmoke.png`
+          : `${Constants.StaticFilePrefix}/img/smoke.png`,
       content: host.smokingText
     },
     {
       icon:
         host.drinkingText === "No one in the house drinks alcohol."
-          ? "/hosthome/img/alcoholNo.png"
-          : "/hosthome/img/alcohol.png",
+          ? `${Constants.StaticFilePrefix}/img/alcoholNo.png`
+          : `${Constants.StaticFilePrefix}/img/alcohol.png`,
       content: host.drinkingText
     },
     {
       icon:
         host.substancesText === "We use substances."
-          ? "/hosthome/img/meds.png"
-          : "/hosthome/img/medsNo.png",
+          ? `${Constants.StaticFilePrefix}/img/meds.png`
+          : `${Constants.StaticFilePrefix}/img/medsNo.png`,
       content: host.substancesText
     },
     {
       icon: host.youthParenting
-        ? "/hosthome/img/baby.png"
-        : "/hosthome/img/babyNo.png",
+        ? `${Constants.StaticFilePrefix}/img/baby.png`
+        : `${Constants.StaticFilePrefix}/img/babyNo.png`,
       content: host.youthParenting
         ? "We welcome parents."
         : "We do not welcome parents."

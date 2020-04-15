@@ -1,5 +1,5 @@
 import { ApiConfig } from './config';
-import { Guest } from '../models';
+import { Guest, Host } from '../models';
 
 class ApiFetchError extends Error {}
 
@@ -15,9 +15,29 @@ const getJson = async (uri: string) => {
     }
 };
 
+const putJson = async (uri: string, data: string) => {
+    try {
+        const response = await fetch(
+            uri,
+            {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: data
+            }
+        );
+        if(response.status !== 200) {
+            throw new Error(response.statusText);
+        }
+        return await response.json();
+    } catch(e) {
+        throw new ApiFetchError(`error in getJson(): error fetching '${uri}': ${e}`);
+    }
+};
+
 export class Fetcher<T> {
 
-    // private resourceName: string;
     private endpoint: string;
 
     public constructor(resourceName: string) {
@@ -30,6 +50,10 @@ export class Fetcher<T> {
 
     public async getById(id: string): Promise<T> {
         return await getJson(`${this.endpoint}/${id}`) as T;
+    }
+
+    public async putById(id: string, item: T): Promise<string> {
+        return await putJson(`${this.endpoint}/${id}`, JSON.stringify(item)) as string;
     }
 
 };

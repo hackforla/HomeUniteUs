@@ -322,7 +322,7 @@ export const computeMatches = (data: HostHomeData): HostHomeData => {
                     hr = 
      */
 
-     const newState: HostHomeData = {...data};
+  const newState: HostHomeData = { ...data };
 
   const restrictedPairs: RestrictionMap = {}
   newState.hosts.forEach((host: Host) => {
@@ -526,7 +526,7 @@ const loadData = async (): Promise<HostHomeData> => {
     const response = await fetch('/api/dataset');
     const data = await response.json();
     return data;
-  } catch(e) {
+  } catch (e) {
     console.log(`loadData error: ${e}`);
     throw e;
   }
