@@ -148,19 +148,33 @@ class MongoFacade:
 
     def update_in_collection(self, collection_name, id, item):
 
+        app.logger.warn('MongoFacade:update_in_collection(): id = {} ({})'.format(id, type(id)))
+        app.logger.warn('MongoFacade:update_in_collection(): item = {}'.format(item))
+        app.logger.warn('MongoFacade:update_in_collection(): collection_name = {}'.format(collection_name))
+
         client = self._get_conn()
 
         if not client:
+            app.logger.error('MongoFacade:update_in_collection(): Mongo server not available')
             raise Exception('Mongo server not available')
 
+        app.logger.warn(f'MongoFacade:update_in_collection(): getting DB {MONGO_DATABASE}...')
         db = client[MONGO_DATABASE]
+
+        app.logger.warn(f'MongoFacade:update_in_collection(): getting collection {collection_name}...')
         collection = db[collection_name]
 
-        result = collection.update_one({'id':id}, {'$set': item })
+        app.logger.warn(f'MongoFacade:update_in_collection(): updating item in collection...')
+        result = collection.update_one( { 'id': id }, {'$set': item })
 
-        self._log('update_in_collection', 'result.raw_result = {}'.format(result.raw_result))
 
-        return result
+        app.logger.warn(f'MongoFacade:update_in_collection(): - result.acknowledged: {result.acknowledged}')
+        app.logger.warn(f'MongoFacade:update_in_collection(): - result.matched_count: {result.matched_count}')
+        app.logger.warn(f'MongoFacade:update_in_collection(): - result.matched_count: {result.modified_count}')
+        app.logger.warn(f'MongoFacade:update_in_collection(): - result.raw_result: {result.raw_result}')
+
+
+        return result.acknowledged
 
     def _log(self, method_name, message):
         app.logger.debug('MongoFacade:{}: {}'.format(method_name, message))
@@ -184,7 +198,16 @@ class Repository:
         return result
 
     def update(self, id, item):
-        result = self.mongo_facade.update_in_collection(self.collection_name, id, item)
+        app.logger.warn('Repository:update: id = {}'.format(id))
+        app.logger.warn('Repository:update: item = {}'.format(item))
+        safe_item = { x: item[x] for x in dict(item).keys() if x != '_id' }
+
+        app.logger.warn('Repository:update: safe_item = {}'.format(json.dumps(safe_item, indent=4)))
+        result = self.mongo_facade.update_in_collection(
+            self.collection_name, 
+            id,
+            safe_item
+        )
         return result
 
     def _log(self, method_name, message):
@@ -246,10 +269,11 @@ def favicon():
 ## Hosts API ##
 ###############
 
-@app.route('/api/hosts/<id>', methods=['GET', 'PUT', 'DELETE'])
-def host_by_id(id: str):
+@app.route('/api/hosts/<int:id>', methods=['GET', 'PUT', 'DELETE'])
+def host_by_id(id: int):
 
     app.logger.warn('host_by_id: request.method = {}'.format(request.method))
+    app.logger.warn(f'host_by_id: id = {id} ({type(id)})')
 
     if request.method == 'GET':
 
