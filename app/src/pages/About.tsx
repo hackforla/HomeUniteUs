@@ -8,8 +8,9 @@ export const AboutPage = () => (
       <AboutStyle.AboutText>
         <h4>Introduction</h4>
         <p>
-          Welcome to Hack for LA's host homes project! Hack for LA is a brigade
-          of Code for America, and we're working with our partners at Safe Place
+          Welcome to Hack for LA's Host Home proof of concept.
+          This project was created by the Home Unite Us team at Hack for LA.
+          Hack for LA is a brigade of Code for America, and we're working with our partners at Safe Place
           for Youth (SPY) to enhance their host homes program. Together, we're
           developing a workflow management tool, digitizing key moments within
           SPY’s host homes initiative to make the process scaleable, reduce
