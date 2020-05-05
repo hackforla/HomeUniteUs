@@ -3,33 +3,50 @@ import { useParams, useHistory } from "react-router"
 import { useHostHomeData } from "../../data/data-context"
 import { ProgressPlugin } from "webpack"
 import { Question } from "../../models/Question"
+import { Answer } from "../../models/Answer"
+import styled from "styled-components"
 import { FormControl, FormControlLabel, FormGroup, RadioGroup, Radio, Checkbox, TextField } from '@material-ui/core';
+
+const QuestionContainer = styled.div`
+  min-height: 244px;
+`
 
 interface Props {
   question: Question,
-  setAnswers: React.EventHandler<any>
+  answer: Answer
 }
 
-const QuestionThing = ({ question }: Props) => {
+const QuestionThing = (props: Props) => {
   const history = useHistory()
-  // let { question } = useParams()
-  // const { markAsInterested, markAsNotInterested } = useHostHomeData()
+  const { question } = props;
 
-  function handleChange(e: any) {
+  const [answer, setAnswer] = React.useState(props.answer);
 
-  }
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const questionId = e.target.name;
+    if (e.target.type === 'checkbox') {
+      // todo checkboxes
+      // question.answer[] = e.target.value;
+    } else {
+      answer.value = e.target.value;
+    }
+    console.log(questionId, e.target.value, answer);
+    setAnswer(answer);
+  }  
+
+  console.log('!', answer);
 
   return (
-    <div>
+    <QuestionContainer>
       <h2>{question.question}</h2>
       <div>
         {
           question.type === 'radio' && 
           <FormControl component="fieldset">
-            <RadioGroup aria-label={question.question} key={question.id} name={question.id} value={question.answer} onChange={handleChange}>
+            <RadioGroup aria-label={question.question} key={question.id} name={question.id} value={answer.value} onChange={handleChange}>
               {
                 question.options && question.options.map((option: any) => 
-                  <FormControlLabel value={option.value} control={<Radio />} label={option.label} />
+                  <FormControlLabel key={option.value} value={option.value} control={<Radio />} label={option.label} />
                 )
               }
             </RadioGroup>
@@ -42,7 +59,8 @@ const QuestionThing = ({ question }: Props) => {
               {
                 question.options && question.options.map((option: any) => 
                   <FormControlLabel
-                    control={<Checkbox checked={(question.answer && question.answer.indexOf(option.value) !== -1)} onChange={handleChange} name={question.id + '[' + option.value + ']'} />}
+                    key={option.value}
+                    control={<Checkbox checked={(answer.value && answer.value.indexOf(option.value) !== -1)} onChange={handleChange} name={question.id + '[' + option.value + ']'} />}
                     label={option.label}
                   />
                 )
@@ -52,14 +70,14 @@ const QuestionThing = ({ question }: Props) => {
         }
         {
           question.type === 'text' &&
-          <TextField label="Your response" variant="outlined" value={question.answer} onChange={handleChange} />
+          <TextField label="Your response" variant="outlined" value={answer.value} onChange={handleChange} />
         }
         {
           question.type === 'textarea' &&
-          <TextField label="Your response" variant="outlined" value={question.answer} onChange={handleChange} multiline fullWidth />
+          <TextField label="Your response" variant="outlined" value={answer.value} onChange={handleChange} multiline fullWidth />
         }
       </div>
-    </div>
+    </QuestionContainer>
   )
 }
 
