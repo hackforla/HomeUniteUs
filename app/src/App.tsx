@@ -49,8 +49,6 @@ export const App = () => {
 
   return (
     <React.Fragment>
-
-
       {
         isInitializing
           ? <div>Loading...</div>
