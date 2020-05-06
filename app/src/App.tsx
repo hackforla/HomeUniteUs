@@ -46,73 +46,6 @@ export const LoginView = () => {
   );
 };
 
-const questions = [
-  {
-    id: '1',
-    question: 'How would you describe your home?',
-    type: 'radio',
-    options: [
-      {label: 'Owned Single-Unit', value: 'single'}, 
-      {label: 'Owned Multi-Unit', value: 'multi'},
-      {label: 'Owned House', value: 'house'}
-    ]
-  },
-  {
-    id: '2',
-    question: 'Do you allow drinking there?',
-    type: 'radio',
-    options: [
-      {label: 'Yes', value: 'yes'}, 
-      {label: 'We don\'t drink, but it is allowed', value: 'we-dont'}, 
-      {label: 'No', value: 'no'}
-    ],
-  },
-  {
-    id: '3',
-    question: 'Do you allow smoking at your residence?',
-    type: 'radio',
-    options: [
-      {label: 'Yes, we smoke inside', value: 'inside'},
-      {label: 'Yes, but only outside', value: 'outside'},
-      {label: 'No', value: 'no'}
-    ]
-  },
-  {
-    id: '4',
-    question: 'Do you allow substance use at your residence?',
-    type: 'radio',
-    options: [
-      {label: 'Yes', value: 'yes'},
-      {label: 'No', value: 'no'},
-    ]
-  },
-  {
-    id: '5',
-    question: 'What are your interests?',
-    type: 'checkbox',
-    options: [
-      {label: 'Tinkering', value: 'tinkering'},
-      {label: 'Trashy TV', value: 'tv'},
-      {label: 'Puzzles', value: 'puzzles'},
-      {label: 'Cheesecakes', value: 'cheesecakes'}
-    ]
-  },
-  {
-    id: '6',
-    question: 'Tell us about yourself',
-    type: 'textarea'
-  }
-];
-
-const answers = [
-  {id: '1', value: 'house'},
-  {id: '2', value: ''},
-  {id: '3', value: 'outside'},
-  {id: '4', value: 'no'},
-  {id: '5', value: ['cheesecakes', 'tv']},
-  {id: '6', value: 'my name is philbert rosenthal'}
-];
-
 export const App = () => {
 
   const { isInitializing, isAuthenticated, user } = useAuth0();
@@ -192,7 +125,7 @@ export const App = () => {
                     </React.Fragment>
                   : <React.Fragment>
                       <Switch>
-                        <Route exact path="/" render={(props) => <ProfileEditPage questions={questions} answers={answers} />} />
+                        <Route exact path="/" render={(props) => <ProfileEditPage />} />
                         <Route exact path="/register" component={Register} />
                         <Route exact path="/register/:org/host" component={LoginView} />
                         <Route exact path="/register/:org/guest" component={LoginView} />

@@ -13,28 +13,23 @@ const QuestionContainer = styled.div`
 
 interface Props {
   question: Question,
-  answer: Answer
-}
+  answer: Answer,
+  setAnswer: (id: string, value: any) => void
+};
 
 const QuestionThing = (props: Props) => {
   const history = useHistory()
-  const { question } = props;
-
-  const [answer, setAnswer] = React.useState(props.answer);
+  const { question, answer } = props;
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const questionId = e.target.name;
+    console.log(questionId, e.target.value);
     if (e.target.type === 'checkbox') {
-      // todo checkboxes
-      // question.answer[] = e.target.value;
+      props.setAnswer(questionId, e.target.checked);
     } else {
-      answer.value = e.target.value;
+      props.setAnswer(questionId, e.target.value);
     }
-    console.log(questionId, e.target.value, answer);
-    setAnswer(answer);
   }  
-
-  console.log('!', answer);
 
   return (
     <QuestionContainer>
@@ -43,7 +38,7 @@ const QuestionThing = (props: Props) => {
         {
           question.type === 'radio' && 
           <FormControl component="fieldset">
-            <RadioGroup aria-label={question.question} key={question.id} name={question.id} value={answer.value} onChange={handleChange}>
+            <RadioGroup aria-label={question.question} key={question.id} name={question.id} value={props.answer.value} onChange={handleChange}>
               {
                 question.options && question.options.map((option: any) => 
                   <FormControlLabel key={option.value} value={option.value} control={<Radio />} label={option.label} />
@@ -60,7 +55,7 @@ const QuestionThing = (props: Props) => {
                 question.options && question.options.map((option: any) => 
                   <FormControlLabel
                     key={option.value}
-                    control={<Checkbox checked={(answer.value && answer.value.indexOf(option.value) !== -1)} onChange={handleChange} name={question.id + '[' + option.value + ']'} />}
+                    control={<Checkbox checked={(props.answer.value && props.answer.value.indexOf(option.value) !== -1)} onChange={handleChange} name={question.id + '[' + option.value + ']'} />}
                     label={option.label}
                   />
                 )
@@ -70,11 +65,11 @@ const QuestionThing = (props: Props) => {
         }
         {
           question.type === 'text' &&
-          <TextField label="Your response" variant="outlined" value={answer.value} onChange={handleChange} />
+          <TextField label="Your response" variant="outlined" value={props.answer.value} onChange={handleChange} />
         }
         {
           question.type === 'textarea' &&
-          <TextField label="Your response" variant="outlined" value={answer.value} onChange={handleChange} multiline fullWidth />
+          <TextField label="Your response" variant="outlined" value={props.answer.value} onChange={handleChange} multiline fullWidth />
         }
       </div>
     </QuestionContainer>
