@@ -24,7 +24,7 @@ export const Demo = () => {
         showElement={showElement}
       />
       <DemoStyle.MainHeader>
-        <DemoStyle.MainTitle>
+        <DemoStyle.MainTitle variant="primary">
           Host Profiles
         </DemoStyle.MainTitle>
       </DemoStyle.MainHeader>

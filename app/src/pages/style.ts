@@ -1,5 +1,13 @@
 import styled from "styled-components"
 import { ProgressPlugin } from "webpack"
+import theme from 'styled-theming';
+
+export const backgroundColor = theme.variants('mode', 'variant', {
+  default: { light: 'gray', dark: 'darkgray' },
+  primary: { light: 'blue', dark: 'darkblue' },
+  success: { light: 'green', dark: 'darkgreen' },
+  warning: { light: 'orange', dark: 'darkorange' },
+});
 
 const Modal = styled.section`
   width: 100vw;
@@ -165,7 +173,7 @@ const MainTitle = styled.h1`
   line-height: 1.5;
   letter-spacing: 0.00938em;
   margin: 0;
-  color: #757575;
+  background-color: ${backgroundColor};
 `
 
 const SpacedHeader = styled(MainHeader)`
@@ -223,12 +231,7 @@ const HeaderRow = styled.div`
 
 const WiderHeaderRow = styled(HeaderRow)`
   width: 95%;
-<<<<<<< HEAD
-  margin: 0 0 1.5em 0;
-
-=======
   /* margin: 0 0 1.5em 0; */
->>>>>>> 148a1f054ef66d7d49ba471e5bb82d10da105d32
 `
 
 const SecondHeader = styled.h3`

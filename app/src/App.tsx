@@ -22,6 +22,7 @@ import { Guest } from "./models"
 import { AppConfig } from "./data/config"
 import { useAuth0 } from "./react-auth0-spa"
 import { CreateProfile, CreateHostProfile, CreateGuestProfile } from "./pages/CreateProfile"
+import {ThemeProvider} from 'styled-components';
 
 export interface AppProps { }
 
@@ -46,10 +47,11 @@ export const App = () => {
 
   const { isInitializing, isAuthenticated, user } = useAuth0();
 
+  const theme = { mode: 'dark' }
+
   return (
-    <React.Fragment>
-
-
+    <ThemeProvider theme={theme}>
+      <React.Fragment>
       {
         isInitializing
           ? <div>Loading...</div>
@@ -109,7 +111,8 @@ export const App = () => {
             </HostHomeDataProvider>
             : <LoginView />
       }
-    </React.Fragment>
+      </React.Fragment>
+    </ThemeProvider>
   );
 
 }
