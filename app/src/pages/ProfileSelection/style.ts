@@ -29,24 +29,22 @@ export const Image = styled.img`
 `
 
 export const Btn = styled.button`
-  width: 10rem;
-  margin: 0 auto;
-  box-shadow:inset 0px 1px 0px 0px #54a3f7;
-	background:linear-gradient(to bottom, #007dc1 5%, #0061a7 100%);
-	background-color:#007dc1;
-	border-radius:3px;
-	border:1px solid #124d77;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
-	font-size:13px;
-	padding:6px 24px;
-	text-decoration:none;
-  text-shadow:0px 1px 0px #154682;
+  box-shadow:inset 0px 1px 0px 0px #fce2c1;
+  background:linear-gradient(to bottom, #ffc477 5%, #fb9e25 100%);
+  background-color:#ffc477;
+  border-radius:6px;
+  border:1px solid #eeb44f;
+  display:inline-block;
+  cursor:pointer;
+  color:#ffffff;
+  font-family:Arial;
+  font-size:15px;
+  font-weight:bold;
+  padding:6px 40px;
+  text-decoration:none;
   &:hover {
-    background:linear-gradient(to bottom, #0061a7 5%, #007dc1 100%);
-	  background-color:#0061a7;
+    background:linear-gradient(to bottom, #fb9e25 5%, #ffc477 100%);
+	  background-color:#fb9e25;
   }
   &:active {
     position:relative;
@@ -65,12 +63,18 @@ export const CardHover = styled.div`
   &:hover {
     box-shadow: 10px 8px 20px -2px black;
     transition: box-shadow .5s;
-    curser: pointer;
-    
-    border-radius: 50%;
-    border-radius: 80px;
+    cursor:pointer;
   }
-  &:active {
-    border: 0.8px solid orange;
+`
+
+export const CardHover2 = styled.div`
+  text-align: center;
+  height: 12rem;
+  width: 12rem;
+  border: 1px solid red;
+  &:hover {
+    box-shadow: 10px 8px 20px -2px black;
+    transition: box-shadow .5s;
+    cursor: pointer;
   }
 `
