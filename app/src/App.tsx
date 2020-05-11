@@ -23,6 +23,7 @@ import { AppConfig } from "./data/config"
 import { useAuth0 } from "./react-auth0-spa"
 import { CreateProfile, CreateHostProfile, CreateGuestProfile } from "./pages/CreateProfile"
 import { AllHosts } from "./pages/Admin/AllHosts"
+import ProfileSelection from "./pages/ProfileSelection/ProfileSelection"
 
 export interface AppProps { }
 
@@ -62,6 +63,11 @@ export const App = () => {
                         <AppStyle.Image src={logo} alt="Logo" />
                       </a>
                     </AppStyle.FlexGrowHolder>
+                    <AppStyle.Holder>
+                      <NavLink to={`/profileselection`}>
+                        Profile Selection
+                    </NavLink>
+                    </AppStyle.Holder>
                     <AppStyle.Holder>
                       <NavLink to={`/demo`}>
                         DEMO
@@ -107,6 +113,10 @@ export const App = () => {
                       <Route
                         path="/admin/hosts"
                         component={AllHosts}
+                      />
+                      <Route 
+                        exact path="/profileselection"
+                        component={ProfileSelection}
                       />
                       <FourOhFour />
                     </Switch>

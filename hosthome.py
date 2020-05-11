@@ -340,8 +340,6 @@ def get_all_hosts():
 
         return resp
 
-
-
 # @app.route('/api/hosts/{id}', methods=['PUT'])
 # def update_host(id: int):
 #     try:           
