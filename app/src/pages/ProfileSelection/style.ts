@@ -1,7 +1,14 @@
 import styled from 'styled-components'
 
+export const Header = styled.div`
+  text-align: center;
+  margin: 0 auto;
+  margin-top: 5rem;
+  height: 28px
+`
+
 export const Container = styled.div`
-  min-height: 88.62vh;
+  min-height: 80vh;
   padding: 0;
   background-color: #fff;
   align-item: center;
@@ -24,8 +31,8 @@ export const Card = styled.div`
 `
 
 export const Image = styled.img`
-  height: 10rem;
-  width: 10rem;  
+  height: 12rem;
+  width: 12rem;  
 `
 
 export const Btn = styled.button`
@@ -71,10 +78,22 @@ export const CardHover2 = styled.div`
   text-align: center;
   height: 12rem;
   width: 12rem;
-  border: 1px solid red;
+  border: 3px solid white;
   &:hover {
     box-shadow: 10px 8px 20px -2px black;
     transition: box-shadow .5s;
     cursor: pointer;
   }
+`
+
+export const InnerCard = styled.div`
+  display: flex;
+  justify-content: space-evenly
+`
+
+export const Text = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 368px;
+  margin: 0 auto;
 `
