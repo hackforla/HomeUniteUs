@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom';
+import { useParams } from "react-router";
 import { Container, Card, Image, Btn, CardHover, BtnContainer, CardHover2, Text, InnerCard, Header } from './style'
 
 function ProfileSelection() {
   const history = useHistory()
   const [host, setHost] = useState(false)
   const [guest, setGuest] = useState(false)
+  const {id} = useParams() //grab id from url
 
   const handleToggle = (e: any) => {
     if (e.target.alt === "host") {
@@ -20,7 +22,7 @@ function ProfileSelection() {
 
   const handleClick = () => {
     console.log("clicked")
-    // history.push("/demo")
+    // history.push("/demo") // send them off somewhere after submit
   }
 
   return (

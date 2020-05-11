@@ -63,11 +63,11 @@ export const App = () => {
                         <AppStyle.Image src={logo} alt="Logo" />
                       </a>
                     </AppStyle.FlexGrowHolder>
-                    <AppStyle.Holder>
-                      <NavLink to={`/profileselection`}>
+                    {/* <AppStyle.Holder>
+                      <NavLink to={`/profileselection/:id`}>
                         Profile Selection
                     </NavLink>
-                    </AppStyle.Holder>
+                    </AppStyle.Holder> */}
                     <AppStyle.Holder>
                       <NavLink to={`/demo`}>
                         DEMO
@@ -115,7 +115,7 @@ export const App = () => {
                         component={AllHosts}
                       />
                       <Route 
-                        exact path="/profileselection"
+                        exact path="/profileselection/:id"
                         component={ProfileSelection}
                       />
                       <FourOhFour />
