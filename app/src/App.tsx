@@ -10,7 +10,7 @@ import {
   useHistory
 } from "react-router-dom"
 import * as AppStyle from "./AppStyle"
-import logo from "./img/masterSpyLogo3.png"
+import logo from "./img/masterSpyLogo3.png";
 import FourOhFour from "./pages/FourOhFour"
 import { AdminGuestView } from "./pages/AdminGuestView"
 import { Register } from "./pages/Register"
@@ -26,6 +26,7 @@ import { AppConfig } from "./data/config"
 import { useAuth0 } from "./react-auth0-spa"
 import { CreateProfile, CreateHostProfile, CreateGuestProfile } from "./pages/CreateProfile"
 import { AllHosts } from "./pages/Admin/AllHosts"
+import ProfileSelection from "./pages/ProfileSelection/ProfileSelection"
 
 export interface AppProps { }
 
@@ -52,87 +53,77 @@ export const App = () => {
 
   return (
     <React.Fragment>
-
-
       {
         isInitializing
           ? <div>Loading...</div>
           : <HostHomeDataProvider>
               <BrowserRouter>
-                {isAuthenticated
-                  ? <React.Fragment>
-                      <AppStyle.FlexHolder>
-                        <AppStyle.FlexGrowHolder>
-                          <a href="http://www.safeplaceforyouth.org/" target="_blank">
-                            <AppStyle.Image src={logo} alt="Logo" />
-                          </a>
-                        </AppStyle.FlexGrowHolder>
-                        <AppStyle.Holder>
-                          <NavLink to={`/demo`}>
-                            DEMO
-                          </NavLink>
-                        </AppStyle.Holder>
-                        <AppStyle.Holder>
-                          <NavLink to={`/about`}>
-                            ABOUT
-                          </NavLink>
-                        </AppStyle.Holder>
-                        <AppStyle.Holder>
-                          <NavLink to={`/admin/guests`}>
-                            ADMIN
-                          </NavLink>
-                        </AppStyle.Holder>
-                        <AppStyle.Holder>
-                          <NavLink to={`/admin/hosts`}>
-                            ALL HOSTS
-                          </NavLink>
-                        </AppStyle.Holder>
-                        <AppStyle.Holder>
-                          <span>Hello, {(user && user.name) || 'User'}</span>
-                        </AppStyle.Holder>
-                      </AppStyle.FlexHolder>
-                      <React.Fragment>
-                        <Switch>
-                          <Route exact path="/" component={ProfileEditPage} />
-                          <Route path="/about" component={AboutPage} />
-                          <Route exact path="/register/:org/host" component={ProfileEditPage} />
-                          <Route exact path="/register/:org/guest" component={ProfileEditPage} />
-                          <Route exact path="/demo" component={Demo} />
-                          <Route path="/admin/guests" component={AdminView} />
-                          <Route
-                            path="/admin/guest/:id"
-                            component={AdminGuestView}
-                          />
-                          <Route
-                            path="/guests/:guestId/matches/:hostId"
-                            component={HostProfilePage}
-                          />
-                          <Route
-                            path="/guests/:id"
-                            component={GuestProfilePage}
-                          />
-                          <Route
-                            path="/edit/:id"
-                            component={ProfileEditPage}
-                          />
-                          <Route
-                            path="/admin/hosts"
-                            component={AllHosts}
-                          />
-                          <FourOhFour />
-                        </Switch>
-                      </React.Fragment>
-                    </React.Fragment>
-                  : <React.Fragment>
-                      <Switch>
-                        <Route exact path="/" render={(props) => <ProfileEditPage />} />
-                        <Route exact path="/register" component={Register} />
-                        <Route exact path="/register/:org/host" component={LoginView} />
-                        <Route exact path="/register/:org/guest" component={LoginView} />
-                        <Redirect to="/register" />
-                      </Switch>
-                    </React.Fragment>
-                }
+                <React.Fragment>
+                  <AppStyle.FlexHolder>
+                    <AppStyle.FlexGrowHolder>
+                      <a href="http://www.safeplaceforyouth.org/" target="_blank">
+                        <AppStyle.Image src={logo} alt="Logo" />
+                      </a>
+                    </AppStyle.FlexGrowHolder>
+                    {/* <AppStyle.Holder>
+                      <NavLink to={`/profileselection/:id`}>
+                        Profile Selection
+                    </NavLink>
+                    </AppStyle.Holder> */}
+                    <AppStyle.Holder>
+                      <NavLink to={`/demo`}>
+                        DEMO
+                    </NavLink>
+                    </AppStyle.Holder>
+                    <AppStyle.Holder>
+                      <NavLink to={`/about`}>
+                        ABOUT
+                    </NavLink>
+                    </AppStyle.Holder>
+                    <AppStyle.Holder>
+                      <NavLink to={`/admin/guests`}>
+                        ADMIN
+                    </NavLink>
+                    </AppStyle.Holder>
+                    <AppStyle.Holder>
+                      <NavLink to={`/admin/hosts`}>
+                        ALL HOSTS
+                    </NavLink>
+                    </AppStyle.Holder>
+                    <AppStyle.Holder>
+                      <span>Hello, {(user && user.name) || 'User'}</span>
+                    </AppStyle.Holder>
+                  </AppStyle.FlexHolder>
+                  <React.Fragment>
+                    <Switch>
+                      <Route exact path="/" component={AboutPage} />
+                      <Route exact path="/demo" component={Demo} />
+                      <Route path="/about" component={AboutPage} />
+                      <Route path="/admin/guests" component={AdminView} />
+                      <Route
+                        path="/admin/guest/:id"
+                        component={AdminGuestView}
+                      />
+                      <Route
+                        path="/guests/:guestId/matches/:hostId"
+                        component={HostProfilePage}
+                      />
+                      <Route
+                        path="/guests/:id"
+                        component={GuestProfilePage}
+                      />
+                      <Route
+                        path="/admin/hosts"
+                        component={AllHosts}
+                      />
+                      <Route 
+                        exact path="/profileselection/:id"
+                        component={ProfileSelection}
+                      />
+                      <FourOhFour />
+                    </Switch>
+                  </React.Fragment>
+                </React.Fragment>
               </BrowserRouter>
             </HostHomeDataProvider>
       }
