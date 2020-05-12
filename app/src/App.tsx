@@ -2,7 +2,6 @@ import "babel-polyfill"
 import * as React from "react"
 import {
   BrowserRouter,
-  Redirect,
   Route,
   Switch,
   NavLink,
@@ -13,7 +12,6 @@ import * as AppStyle from "./AppStyle"
 import logo from "./img/masterSpyLogo3.png";
 import FourOhFour from "./pages/FourOhFour"
 import { AdminGuestView } from "./pages/AdminGuestView"
-import { Register } from "./pages/Register"
 import { HostProfilePage } from "./pages/HostProfile"
 import { GuestProfilePage } from "./pages/GuestProfile"
 import { ProfileEditPage } from "./pages/ProfileEdit"
@@ -56,7 +54,8 @@ export const App = () => {
       {
         isInitializing
           ? <div>Loading...</div>
-          : <HostHomeDataProvider>
+          : isAuthenticated
+            ? <HostHomeDataProvider>
               <BrowserRouter>
                 <React.Fragment>
                   <AppStyle.FlexHolder>
@@ -99,6 +98,7 @@ export const App = () => {
                       <Route exact path="/" component={AboutPage} />
                       <Route exact path="/demo" component={Demo} />
                       <Route path="/about" component={AboutPage} />
+                      <Route path="/profile" component={ProfileEditPage} />
                       <Route path="/admin/guests" component={AdminView} />
                       <Route
                         path="/admin/guest/:id"
@@ -126,6 +126,7 @@ export const App = () => {
                 </React.Fragment>
               </BrowserRouter>
             </HostHomeDataProvider>
+            : <LoginView />
       }
     </React.Fragment>
   );
