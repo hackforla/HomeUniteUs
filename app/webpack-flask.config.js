@@ -12,7 +12,7 @@ module.exports = {
         "index": path.resolve(__dirname, "./src/index.tsx")
     },
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, '../dist'),
         filename: '[name].[hash:8].js',
         publicPath: '/dist/',
         // TODO: this line may need to be uncommented and changed for different webserver environments
@@ -25,7 +25,7 @@ module.exports = {
         aggregateTimeout: 300,
         poll: 1000,
         ignored: /node_modules/
-      },
+    },
     optimization: {
         runtimeChunk: 'single',
         splitChunks: {
@@ -73,9 +73,11 @@ module.exports = {
             },
             {
                 test: /\.(png|svg|jpg|gif)$/,
-                use: [
-                    'file-loader'
-                ]
+                loader: 'file-loader',
+                options: {
+                    name: 'images/[name].[ext]'
+                }
+
             },
             {
                 test: /\.(woff|woff2|eot|ttf|otf)(\?v=[0-9]\.[0-9]\.[0-9])?$/,

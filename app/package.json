@@ -10,7 +10,7 @@
     "build": "webpack --config webpack.config.js",
     "build:docker": "webpack --config webpack-docker.config.js",
     "start": "webpack-dev-server --mode development --hot --open",
-    "watch:flask": "webpack --config webpack-flask.config.js --watch --info-verbosity verbose"
+    "watch:flask": "webpack --config webpack-docker.config.js --watch --info-verbosity verbose"
   },
   "author": "",
   "license": "ISC",
