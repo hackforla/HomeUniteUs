@@ -121,7 +121,7 @@ const MatchTable = (props: { tableName: string, hostList: Array<Host>, displayIn
                                     ? () => {
                                         console.log(`AdminGuestView:MatchTable: guestId = ${guestId}`);
                                         console.log(`AdminGuestView:MatchTable: host.id = ${host.id}`);
-                                        history.push(`/hosthome/guests/${guestId}/matches/${host.id}`)
+                                        history.push(`/guests/${guestId}/matches/${host.id}`)
                                     }
                                     : () => { }
                             }>

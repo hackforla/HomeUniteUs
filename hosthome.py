@@ -253,6 +253,7 @@ hostQuestionsRepository = Repository('hostQuestions')
 guestResponsesRepository = Repository('guestResponses')
 hostResponsesRepository = Repository('hostResponses')
 restrictionsRepository = Repository('restrictions')
+responseValuesRepository = Repository('responseValues')
 
 
 @app.route('/favicon.ico')
@@ -461,6 +462,7 @@ def get_all_data():
         hostQuestions = hostQuestionsRepository.get()
         guestResponses = guestResponsesRepository.get()
         hostResponses = hostResponsesRepository.get()
+        responseValues = responseValuesRepository.get()
         restrictions = restrictionsRepository.get()
 
         data = {
@@ -470,6 +472,7 @@ def get_all_data():
             'hostQuestions': hostQuestions,
             'guestResponses': guestResponses,
             'hostResponses': hostResponses,
+            'responseValues': responseValues,
             'restrictions': restrictions,
             'matchResults': []
         }
