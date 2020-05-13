@@ -14,7 +14,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].[hash:8].js',
-        publicPath: '/dist',
+        publicPath: '/dist/',
         // TODO: this line may need to be uncommented and changed for different webserver environments
         //     ...this prefix determines what is prepended to resource requests from "index.html"
         //     ...e.g. the value 'dist' in the injected tag <script src="/dist/react-dom.js"></script>

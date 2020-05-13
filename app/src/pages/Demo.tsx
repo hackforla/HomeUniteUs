@@ -41,9 +41,7 @@ export const Demo = () => {
                             </DemoStyle.DemoName>
                             <DemoStyle.Button
                                 onClick={() =>
-                                    history.push(
-                                        `/hosthome/guests/999/matches/999`
-                                    )
+                                    history.push(`/guests/999/matches/999`)
                                 }
                             >
                                 Profile
@@ -56,9 +54,7 @@ export const Demo = () => {
                             </DemoStyle.DemoName>
                             <DemoStyle.Button
                                 onClick={() =>
-                                    history.push(
-                                        `/hosthome/guests/13/matches/998`
-                                    )
+                                    history.push(`/guests/13/matches/998`)
                                 }
                             >
                                 Profile
@@ -84,9 +80,7 @@ export const Demo = () => {
                         <DemoStyle.WiderHeaderRow>
                             <DemoStyle.DemoName>Kirk Chu</DemoStyle.DemoName>
                             <DemoStyle.Button
-                                onClick={() =>
-                                    history.push(`/hosthome/guests/999`)
-                                }
+                                onClick={() => history.push(`/guests/999`)}
                             >
                                 Profile
                             </DemoStyle.Button>
@@ -96,9 +90,7 @@ export const Demo = () => {
                                 Megan Sukarnoputri
                             </DemoStyle.DemoName>
                             <DemoStyle.Button
-                                onClick={() =>
-                                    history.push(`/hosthome/guests/998`)
-                                }
+                                onClick={() => history.push(`/guests/998`)}
                             >
                                 Profile
                             </DemoStyle.Button>

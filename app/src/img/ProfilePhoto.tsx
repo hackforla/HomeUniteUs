@@ -1,5 +1,5 @@
 import * as React from 'react'
-import profilePlaceholder from './profile-placeholder.png'
+import { AppConfig } from '../data/config'
 
 export interface ProfilePhotoProps {
     width: number
@@ -7,6 +7,10 @@ export interface ProfilePhotoProps {
 
 export const ProfilePhoto = function (props: ProfilePhotoProps) {
     return (
-        <img src={profilePlaceholder} width={props.width} alt="Profile Photo" />
+        <img
+            src={AppConfig.DefaultProfileImageUrl}
+            width={props.width}
+            alt="Profile Photo"
+        />
     )
 }

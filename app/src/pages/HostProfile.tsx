@@ -22,6 +22,9 @@ export const HostProfilePage = () => {
     const history = useHistory()
 
     let { guestId, hostId } = useParams()
+    if (!guestId || !hostId) {
+        history.push('/')
+    }
 
     const gid = Number.parseInt(guestId || '')
     const hid = Number.parseInt(hostId || '')

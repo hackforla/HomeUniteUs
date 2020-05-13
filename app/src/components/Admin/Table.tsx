@@ -152,7 +152,6 @@ const MatchTable = (props: {
                         }
                     )}
                 </AdminGuestStyle.TableHeaderRow>
-
                 {props.hostList.map((host: Host, index: number) => (
                     <>
                         <AdminGuestStyle.TableRow
@@ -170,7 +169,7 @@ const MatchTable = (props: {
                                                   `AdminGuestView:MatchTable: host.id = ${host.id}`
                                               )
                                               history.push(
-                                                  `/hosthome/guests/${guestId}/matches/${host.id}`
+                                                  `/guests/${guestId}/matches/${host.id}`
                                               )
                                           }
                                         : () => {}
@@ -348,6 +347,7 @@ const MatchTable = (props: {
                             } */}
                     </>
                 ))}
+                }
             </AdminGuestStyle.AdminGuestPaper>
         </AdminGuestStyle.AdminGuestHolders>
     )

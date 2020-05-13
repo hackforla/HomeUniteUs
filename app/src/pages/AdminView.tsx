@@ -22,9 +22,7 @@ export const MatchSummaryRow = (guestMatchSummary: GuestMatchSummary) => {
             </AdminStyle.AdminText>
             <AdminStyle.Button
                 onClick={() => {
-                    history.push(
-                        `/hosthome/admin/guest/${guestMatchSummary.guestId}`
-                    )
+                    history.push(`/admin/guest/${guestMatchSummary.guestId}`)
                 }}
             >
                 {`${guestMatchSummary.numMatches} matches`}
