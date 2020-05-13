@@ -32,7 +32,6 @@ const AdditionalInfo = styled.div`
 const Header = styled.h5`
     font-size: 24px;
     font-weight: bold;
-
 `
 
 const Bold = styled.b`
@@ -46,9 +45,8 @@ export const GeneralInfoStyle = {
     GeneralInfoRow: GeneralInfoRow,
     AdditionalInfo: AdditionalInfo,
     Header: Header,
-    Bold: Bold
+    Bold: Bold,
 }
-
 
 const GuestCardContainer = styled.div`
     height: 400px;
@@ -67,16 +65,16 @@ const GuestImageContainer = styled.div`
 `
 
 const GuestImage = styled.img`
-    box-shadow:
-      0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);
-      height: 400px;
+    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+        0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    height: 400px;
 `
 
 export const GuestCardStyle = {
     GuestCardContainer: GuestCardContainer,
-    GuestImageContainer: GuestImageContainer, GuestImage: GuestImage
+    GuestImageContainer: GuestImageContainer,
+    GuestImage: GuestImage,
 }
-
 
 const LocationImagesContainer = styled.div`
     border: 1px hidden green;
@@ -88,14 +86,14 @@ const LocationImagesContainer = styled.div`
 `
 
 const PlaceImage = styled.img`
-    box-shadow:
-      0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12);
+    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+        0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
     width: 49%;
 `
 
 export const GuestInfoStyle = {
     LocationImagesContainer: LocationImagesContainer,
-    PlaceImage: PlaceImage
+    PlaceImage: PlaceImage,
 }
 
 const Policy = styled.div`
@@ -122,7 +120,7 @@ const Holder = styled.div`
 `
 
 const Spacer = styled.div`
-    display:inherit;
+    display: inherit;
     width: inherit;
     justify-content: space-evenly;
 `
@@ -131,7 +129,7 @@ const Fill = styled(Holder)`
 `
 const Image = styled.img`
     margin: 0 0 30px 0;
-    width:100px;
+    width: 100px;
 `
 const Text = styled.span`
     width: 285px;
@@ -147,5 +145,5 @@ export const GuestPolicyStyle = {
     Spacer: Spacer,
     Fill: Fill,
     Image: Image,
-    Text: Text
+    Text: Text,
 }
