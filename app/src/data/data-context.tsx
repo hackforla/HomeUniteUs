@@ -523,9 +523,37 @@ export const computeMatches = (data: HostHomeData): HostHomeData => {
 
 const loadData = async (): Promise<HostHomeData> => {
   try {
+    console.log('loadData: fetching...');
     const response = await fetch('/api/dataset');
+    console.log(`loadData: response: ${response.status}...`);
     const data = await response.json();
-    return data;
+    return {
+      ...data,
+      hosts: data.hosts.map((host:any) => {
+        const hostType = `${host.type}`.toLowerCase();
+        return {
+          ...host,
+          dateOfBirth: new Date(host.dateOfBirth),
+          type: hostType.indexOf('full') < 0 
+            ? hostType.indexOf('respite') < 0
+              ? HostHomeType.Both
+              : HostHomeType.Respite
+            : HostHomeType.Full
+        }
+      }),
+      guests: data.guests.map((guest:any) => {
+        const guestType = `${guest.type}`.toLowerCase();
+        return {
+          ...guest,
+          dateOfBirth: new Date(guest.dateOfBirth),
+          type: guestType.indexOf('full') < 0 
+            ? guestType.indexOf('respite') < 0
+              ? HostHomeType.Both
+              : HostHomeType.Respite
+            : HostHomeType.Full
+        }
+      }),
+    };
   } catch (e) {
     console.log(`loadData error: ${e}`);
     throw e;
@@ -544,7 +572,7 @@ export function HostHomeDataProvider(
     console.log(`loading inital data...`);
     loadData().then((data: HostHomeData) => {
 
-      //console.log(`loaded data: ${JSON.stringify(data)}`);
+      console.log(`loaded data: ${JSON.stringify(data)}`);
 
       const newData = computeMatches(data);
 
