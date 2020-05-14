@@ -27,7 +27,7 @@ export const HostProfilePage = () => {
   const hid = Number.parseInt(hostId || '');
 
   if (!guestId || !hostId) {
-    history.push('/hosthome');
+    history.push('/');
   }
 
   const { data } = useHostHomeData();

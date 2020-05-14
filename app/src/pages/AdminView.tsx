@@ -24,7 +24,7 @@ export const MatchSummaryRow = (guestMatchSummary: GuestMatchSummary) => {
         {guestMatchSummary.numBids > 0 ? "Bid" : "No Selection"}
       </AdminStyle.AdminText>
       <AdminStyle.Button
-        onClick={() => { history.push(`/hosthome/admin/guest/${guestMatchSummary.guestId}`) }}
+        onClick={() => { history.push(`/admin/guest/${guestMatchSummary.guestId}`) }}
       >
         {`${guestMatchSummary.numMatches} matches`}
       </AdminStyle.Button>

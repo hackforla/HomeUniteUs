@@ -26,7 +26,7 @@ const ButtonBar = () => {
               guestId: gid,
               hostId: hid
             })
-            history.push(`/hosthome/admin/guest/${guestId}`)
+            history.push(`/admin/guest/${guestId}`)
           }}
         >
           I'm interested
@@ -37,7 +37,7 @@ const ButtonBar = () => {
               guestId: gid,
               hostId: hid
             })
-            history.push(`/hosthome/admin/guest/${guestId}`)
+            history.push(`/admin/guest/${guestId}`)
           }}
         >
           I'm not interested

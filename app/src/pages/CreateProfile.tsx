@@ -136,17 +136,17 @@ export const CreateProfile = () => {
             switch (type) {
                 case ProfileType.Guest:
                     history.push({
-                        pathname: '/hosthome/profile/guest'
+                        pathname: '/profile/guest'
                     });
                     break;
                 case ProfileType.Administrator:
                     history.push({
-                        pathname: '/hosthome/admin/guests'
+                        pathname: '/admin/guests'
                     });
                     break;
                 case ProfileType.Host:
                     history.push({
-                        pathname: '/hosthome/profile/host'
+                        pathname: '/profile/host'
                     });
                     break;
             }
