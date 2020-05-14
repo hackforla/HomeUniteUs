@@ -9,7 +9,7 @@ function ProfileSelection() {
   const [guest, setGuest] = useState(false)
   const {id} = useParams() //grab id from url
 
-  const handleToggle = (e: any) => {
+  const handleToggle = (e: any): void => {
     if (e.target.alt === "host") {
       setHost(!host)
       setGuest(false)
@@ -20,9 +20,17 @@ function ProfileSelection() {
     }
   }
 
-  const handleClick = () => {
-    console.log("clicked")
-    // history.push("/demo") // send them off somewhere after submit
+  const handleClick = (): void => {
+    //make some type of fetch call to determine whether user is guest or host
+    //so in database user must have isHost and isGuest value
+    if(host){
+      console.log("in host?")
+      history.push(`/host/${id}`) // send them off somewhere after submit
+    }
+    if(guest){
+      console.log("in gues?")
+      history.push(`/guest/${id}`)
+    }
   }
 
   return (

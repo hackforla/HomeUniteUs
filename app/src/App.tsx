@@ -24,6 +24,8 @@ import { useAuth0 } from "./react-auth0-spa"
 import { CreateProfile, CreateHostProfile, CreateGuestProfile } from "./pages/CreateProfile"
 import { AllHosts } from "./pages/Admin/AllHosts"
 import ProfileSelection from "./pages/ProfileSelection/ProfileSelection"
+import HostQuestions from "./pages/HostQuestions"
+import GuestQuestions from "./pages/GuestQuestions"
 
 export interface AppProps { }
 
@@ -117,6 +119,14 @@ export const App = () => {
                       <Route 
                         exact path="/profileselection/:id"
                         component={ProfileSelection}
+                      />
+                      <Route 
+                        exact path="/host/:id"
+                        component={HostQuestions}
+                      />
+                      <Route 
+                        exact path="/guest/:id"
+                        component={GuestQuestions}
                       />
                       <FourOhFour />
                     </Switch>
