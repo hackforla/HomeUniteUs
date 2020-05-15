@@ -124,6 +124,8 @@ const MatchTable = (props: {
         </div>
     )
 
+    console.log('host questions', data.hostQuestions)
+
     return (
         <AdminGuestStyle.AdminGuestHolders>
             <AdminGuestStyle.AdminGuestPaper>
@@ -132,12 +134,10 @@ const MatchTable = (props: {
                 </AdminGuestStyle.TableName>
                 <AdminGuestStyle.TableHeaderRow>
                     <AdminGuestStyle.TableHeaderLabel center={false}>
-                        {' '}
-                        Name{' '}
+                        Name
                     </AdminGuestStyle.TableHeaderLabel>
                     <AdminGuestStyle.TableHeaderLabel center={false}>
-                        {' '}
-                        Address{' '}
+                        Address
                     </AdminGuestStyle.TableHeaderLabel>
                     {data.hostQuestions.map(
                         (q: HostQuestion, index: number) => {
@@ -347,7 +347,6 @@ const MatchTable = (props: {
                             } */}
                     </>
                 ))}
-                }
             </AdminGuestStyle.AdminGuestPaper>
         </AdminGuestStyle.AdminGuestHolders>
     )

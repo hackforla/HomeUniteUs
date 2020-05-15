@@ -591,11 +591,11 @@ export function HostHomeDataProvider(
     React.useEffect(() => {
         console.log(`loading inital data...`)
         loadData().then((data: HostHomeData) => {
-            console.log(`loaded data: ${JSON.stringify(data)}`)
+            // console.log(`loaded data: ${JSON.stringify(data)}`)
 
             const newData = computeMatches(data)
 
-            console.log(`got matches: ${JSON.stringify(newData.matchResults)}`)
+            // console.log(`got matches: ${JSON.stringify(newData.matchResults)}`)
             dispatch({
                 type: HostHomeActionType.LoadData,
                 payload: newData,
