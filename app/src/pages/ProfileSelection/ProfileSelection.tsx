@@ -25,7 +25,7 @@ function ProfileSelection() {
     //so in database user must have isHost and isGuest value
     if(host){
       console.log("in host?")
-      history.push(`/host/${id}`) // send them off somewhere after submit
+      history.push(`/host/${id}`)// send them off somewhere after submit
     }
     if(guest){
       console.log("in gues?")
