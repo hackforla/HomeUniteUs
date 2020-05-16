@@ -25,7 +25,7 @@ import { CreateProfile, CreateHostProfile, CreateGuestProfile } from "./pages/Cr
 import { AllHosts } from "./pages/Admin/AllHosts"
 import ProfileSelection from "./pages/ProfileSelection/ProfileSelection"
 import HostQuestions from "./pages/HostQuestions"
-import GuestQuestions from "./pages/GuestQuestions"
+import GuestQuestions from "./pages/GuestQuestions/GuestQuestions"
 
 export interface AppProps { }
 
