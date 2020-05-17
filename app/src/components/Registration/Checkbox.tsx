@@ -14,16 +14,15 @@ const CheckboxInput = (props: {
     label: string
     options: Array<string>
     checked: boolean
+    helperText: string
 }) => {
-    const { onChange, className, label, options, checked } = props
+    const { onChange, className, label, options, checked, helperText } = props
 
     return (
         <>
             <form className={className}>
                 <FormControl component="fieldset">
-                    <FormLabel component="legend">
-                        Assign responsibility
-                    </FormLabel>
+                    <FormLabel component="legend">{label}</FormLabel>
                     <FormGroup>
                         {options.map((checkLabel: string) => {
                             return (
@@ -35,13 +34,13 @@ const CheckboxInput = (props: {
                                             name={checkLabel}
                                         />
                                     }
-                                    label={label}
+                                    label={checkLabel}
                                 />
                             )
                         })}
                         />
                     </FormGroup>
-                    <FormHelperText>Be careful</FormHelperText>
+                    <FormHelperText>{helperText}</FormHelperText>
                 </FormControl>
             </form>
         </>
