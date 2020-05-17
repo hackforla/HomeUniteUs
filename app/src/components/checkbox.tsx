@@ -9,31 +9,35 @@ import {
 } from '@material-ui/core'
 
 const CheckboxInput = (props: any) => {
-    const { name, onChange, classes, label, options, checked } = props
+    const { onChange, classes, label, options, checked } = props
 
     return (
         <>
-            <FormControl component="fieldset" className={classes}>
-                <FormLabel component="legend">Assign responsibility</FormLabel>
-                <FormGroup>
-                    {options.map((checkLabel: string) => {
-                        return (
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={checked}
-                                        onChange={onChange}
-                                        name={checkLabel}
-                                    />
-                                }
-                                label={label}
-                            />
-                        )
-                    })}
-                    />
-                </FormGroup>
-                <FormHelperText>Be careful</FormHelperText>
-            </FormControl>
+            <form className={classes}>
+                <FormControl component="fieldset" className={classes}>
+                    <FormLabel component="legend">
+                        Assign responsibility
+                    </FormLabel>
+                    <FormGroup>
+                        {options.map((checkLabel: string) => {
+                            return (
+                                <FormControlLabel
+                                    control={
+                                        <Checkbox
+                                            checked={checked}
+                                            onChange={onChange}
+                                            name={checkLabel}
+                                        />
+                                    }
+                                    label={label}
+                                />
+                            )
+                        })}
+                        />
+                    </FormGroup>
+                    <FormHelperText>Be careful</FormHelperText>
+                </FormControl>
+            </form>
         </>
     )
 }

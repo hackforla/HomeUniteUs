@@ -7,7 +7,18 @@ import {
     Select,
 } from '@material-ui/core'
 
-const DropdownSelect = (props: any) => {
+const DropdownSelect = (props: {
+    name: string
+    value: string
+    onChange: (event: object) => void
+    placeholder: string
+    id: string
+    itemValue: string
+    classes: string
+    htmlFor: string
+    helperText: string
+    options: Array<string>
+}) => {
     const {
         name,
         value,
@@ -23,22 +34,28 @@ const DropdownSelect = (props: any) => {
 
     return (
         <>
-            <FormControl className={classes}>
-                <InputLabel htmlFor={htmlFor}>{placeholder}</InputLabel>
-                <Select
-                    value={value}
-                    onChange={onChange}
-                    inputProps={{
-                        name,
-                        id,
-                    }}
-                >
-                    {options.map((menuItem: string) => {
-                        return <MenuItem value={itemValue}>{menuItem}</MenuItem>
-                    })}
-                </Select>
-                <FormHelperText>{helperText}}</FormHelperText>
-            </FormControl>
+            <form className={classes}>
+                <FormControl>
+                    <InputLabel htmlFor={htmlFor}>{placeholder}</InputLabel>
+                    <Select
+                        value={value}
+                        onChange={onChange}
+                        inputProps={{
+                            name,
+                            id,
+                        }}
+                    >
+                        {options.map((menuItem: string) => {
+                            return (
+                                <MenuItem value={itemValue}>
+                                    {menuItem}
+                                </MenuItem>
+                            )
+                        })}
+                    </Select>
+                    <FormHelperText>{helperText}}</FormHelperText>
+                </FormControl>
+            </form>
         </>
     )
 }
