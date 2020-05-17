@@ -1,51 +1,57 @@
-import "babel-polyfill"
-import * as React from "react"
+import 'babel-polyfill'
+import * as React from 'react'
 import {
-  BrowserRouter,
-  Route,
-  Switch,
-  NavLink,
-  useParams,
-  useHistory,
-  Link
-} from "react-router-dom"
-import * as AppStyle from "./AppStyle"
-import logo from "./img/masterSpyLogo3.png";
-import FourOhFour from "./pages/FourOhFour"
-import { AdminGuestView } from "./pages/AdminGuestView"
-import { HostProfilePage } from "./pages/HostProfile"
-import { GuestProfilePage } from "./pages/GuestProfile"
-import { AdminView } from "./pages/AdminView"
-import { Demo } from "./pages/Demo"
-import { AboutPage } from "./pages/About"
-import { HostHomeDataProvider } from "./data/data-context"
-import { Guest } from "./models"
-import { AppConfig } from "./data/config"
-import { useAuth0 } from "./react-auth0-spa"
-import { CreateProfile, CreateHostProfile, CreateGuestProfile } from "./pages/CreateProfile"
-import { AllHosts } from "./pages/Admin/AllHosts"
-import ProfileSelection from "./pages/ProfileSelection/ProfileSelection"
-import HostQuestions from "./pages/HostQuestions"
-import GuestQuestions from "./pages/GuestQuestions/GuestQuestions"
+    BrowserRouter,
+    Route,
+    Switch,
+    NavLink,
+    useParams,
+    useHistory,
+} from 'react-router-dom'
+import * as AppStyle from './AppStyle'
+import logo from './img/masterSpyLogo3.png'
+import FourOhFour from './pages/FourOhFour'
+import { AdminGuestView } from './pages/AdminGuestView'
+import { HostProfilePage } from './pages/HostProfile'
+import { GuestProfilePage } from './pages/GuestProfile'
+import { AdminView } from './pages/AdminView'
+import { Demo } from './pages/Demo'
+import { AboutPage } from './pages/About'
+import { HostHomeDataProvider } from './data/data-context'
+import { Guest } from './models'
+import { AppConfig } from './data/config'
+import { useAuth0 } from './react-auth0-spa'
+import {
+    CreateProfile,
+    CreateHostProfile,
+    CreateGuestProfile,
+} from './pages/CreateProfile'
+import { AllHosts } from './pages/Admin/AllHosts'
+import ProfileSelection from './pages/ProfileSelection/ProfileSelection'
+import HostQuestions from './pages/HostQuestions'
+import GuestQuestions from './pages/GuestQuestions/GuestQuestions'
 
-export interface AppProps { }
+export interface AppProps {}
 
 export const LoginView = () => {
-  const { loginWithPopup } = useAuth0();
+    const { loginWithPopup } = useAuth0()
 
-  const onLoginClick: React.EventHandler<React.SyntheticEvent<HTMLAnchorElement>> = async (e: React.SyntheticEvent<HTMLAnchorElement>) => {
+    const onLoginClick: React.EventHandler<React.SyntheticEvent<
+        HTMLAnchorElement
+    >> = async (e: React.SyntheticEvent<HTMLAnchorElement>) => {
+        e.preventDefault()
 
-    e.preventDefault();
+        await loginWithPopup()
+    }
 
-    await loginWithPopup();
-  };
-
-  return (
-    <AppStyle.AuthHolder>
-      <AppStyle.AuthButton href='' onClick={onLoginClick}>Login to Host Homes</AppStyle.AuthButton>
-    </AppStyle.AuthHolder>
-  );
-};
+    return (
+        <AppStyle.AuthHolder>
+            <AppStyle.AuthButton href="" onClick={onLoginClick}>
+                Login to Host Homes
+            </AppStyle.AuthButton>
+        </AppStyle.AuthHolder>
+    )
+}
 
 export const App = () => {
   const history = useHistory()

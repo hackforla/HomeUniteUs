@@ -1,1 +1,1 @@
-export { AdminHostView } from './AdminHostView';
+export { AdminHostView } from './AdminHostView'
