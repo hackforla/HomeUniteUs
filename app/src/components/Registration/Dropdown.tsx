@@ -14,7 +14,7 @@ const DropdownSelect = (props: {
     placeholder: string
     id: string
     itemValue: string
-    classes: string
+    className: string
     htmlFor: string
     helperText: string
     options: Array<string>
@@ -26,7 +26,7 @@ const DropdownSelect = (props: {
         placeholder,
         id,
         itemValue,
-        classes,
+        className,
         htmlFor,
         helperText,
         options,
@@ -34,7 +34,7 @@ const DropdownSelect = (props: {
 
     return (
         <>
-            <form className={classes}>
+            <form className={className}>
                 <FormControl>
                     <InputLabel htmlFor={htmlFor}>{placeholder}</InputLabel>
                     <Select

@@ -13,13 +13,22 @@ const RadioButtons = (props: {
     onChange: (event: object) => void
     ariaLabel: string
     formLabel: string
+    className: string
     options: Array<string>
 }) => {
-    const { name, value, onChange, ariaLabel, formLabel, options } = props
+    const {
+        name,
+        value,
+        onChange,
+        ariaLabel,
+        formLabel,
+        options,
+        className,
+    } = props
 
     return (
         <>
-            <form>
+            <form className={className}>
                 <FormControl component="fieldset">
                     <FormLabel component="legend">{formLabel}</FormLabel>
                     <RadioGroup

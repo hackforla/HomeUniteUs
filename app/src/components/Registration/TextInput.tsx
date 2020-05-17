@@ -9,7 +9,7 @@ const TextInput = (props: {
     type: string
     id: string
     label: string
-    classes: string
+    className: string
 }) => {
     const {
         name,
@@ -19,12 +19,12 @@ const TextInput = (props: {
         type,
         id,
         label,
-        classes,
+        className,
     } = props
 
     return (
         <>
-            <form className={classes}>
+            <form className={className}>
                 <TextField
                     id={id}
                     label={label}

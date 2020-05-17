@@ -10,17 +10,17 @@ import {
 
 const CheckboxInput = (props: {
     onChange: (event: object) => void
-    classes: string
+    className: string
     label: string
     options: Array<string>
     checked: boolean
 }) => {
-    const { onChange, classes, label, options, checked } = props
+    const { onChange, className, label, options, checked } = props
 
     return (
         <>
-            <form className={classes}>
-                <FormControl component="fieldset" className={classes}>
+            <form className={className}>
+                <FormControl component="fieldset">
                     <FormLabel component="legend">
                         Assign responsibility
                     </FormLabel>
