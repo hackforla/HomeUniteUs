@@ -8,7 +8,13 @@ import {
     Checkbox,
 } from '@material-ui/core'
 
-const CheckboxInput = (props: any) => {
+const CheckboxInput = (props: {
+    onChange: (event: object) => void
+    classes: string
+    label: string
+    options: Array<string>
+    checked: boolean
+}) => {
     const { onChange, classes, label, options, checked } = props
 
     return (

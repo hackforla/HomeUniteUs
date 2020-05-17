@@ -1,42 +1,45 @@
 import * as React from 'react'
-import Radio from '@material-ui/core/Radio'
-import RadioGroup from '@material-ui/core/RadioGroup'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import FormControl from '@material-ui/core/FormControl'
-import FormLabel from '@material-ui/core/FormLabel'
+import {
+    Radio,
+    RadioGroup,
+    FormControlLabel,
+    FormControl,
+    FormLabel,
+} from '@material-ui/core'
 
-const RadioButtons = (props: any) => {
-    const {
-        name,
-        value,
-        onChange,
-        label,
-        ariaLabel,
-        formLabel,
-        options,
-    } = props
-    //props to give input
+const RadioButtons = (props: {
+    name: string
+    value: string
+    onChange: (event: object) => void
+    ariaLabel: string
+    formLabel: string
+    options: Array<string>
+}) => {
+    const { name, value, onChange, ariaLabel, formLabel, options } = props
+
     return (
         <>
-            <FormControl component="fieldset">
-                <FormLabel component="legend">{formLabel}</FormLabel>
-                <RadioGroup
-                    aria-label={ariaLabel}
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                >
-                    {options.map((buttonLabel: string) => {
-                        return (
-                            <FormControlLabel
-                                value={buttonLabel}
-                                control={<Radio />}
-                                label={buttonLabel}
-                            />
-                        )
-                    })}
-                </RadioGroup>
-            </FormControl>
+            <form>
+                <FormControl component="fieldset">
+                    <FormLabel component="legend">{formLabel}</FormLabel>
+                    <RadioGroup
+                        aria-label={ariaLabel}
+                        name={name}
+                        value={value}
+                        onChange={onChange}
+                    >
+                        {options.map((buttonLabel: string) => {
+                            return (
+                                <FormControlLabel
+                                    value={buttonLabel}
+                                    control={<Radio />}
+                                    label={buttonLabel}
+                                />
+                            )
+                        })}
+                    </RadioGroup>
+                </FormControl>
+            </form>
         </>
     )
 }

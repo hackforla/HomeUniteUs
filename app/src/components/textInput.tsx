@@ -1,17 +1,41 @@
 import * as React from 'react'
-import { Input } from '@material-ui/core'
+import TextField from '@material-ui/core/TextField'
 
-const TextInput = (props: any) => {
-    const { name, value, onChange, placeholder, type } = props
+const TextInput = (props: {
+    name: string
+    value: string
+    onChange: (event: object) => void
+    placeholder: string
+    type: string
+    id: string
+    label: string
+    classes: string
+}) => {
+    const {
+        name,
+        value,
+        onChange,
+        placeholder,
+        type,
+        id,
+        label,
+        classes,
+    } = props
 
     return (
-        <Input
-            name={name}
-            value={value}
-            onChange={onChange}
-            placeholder={placeholder}
-            type={type}
-        ></Input>
+        <>
+            <form className={classes}>
+                <TextField
+                    id={id}
+                    label={label}
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    placeholder={placeholder}
+                    type={type}
+                ></TextField>
+            </form>
+        </>
     )
 }
 
