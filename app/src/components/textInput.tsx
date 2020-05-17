@@ -3,7 +3,7 @@ import { Input } from '@material-ui/core'
 
 const TextInput = (props: any) => {
     const { name, value, onChange, placeholder, type } = props
-    //props to give input
+
     return (
         <Input
             name={name}
