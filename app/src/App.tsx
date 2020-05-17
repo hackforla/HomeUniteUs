@@ -6,7 +6,8 @@ import {
   Switch,
   NavLink,
   useParams,
-  useHistory
+  useHistory,
+  Link
 } from "react-router-dom"
 import * as AppStyle from "./AppStyle"
 import logo from "./img/masterSpyLogo3.png";
@@ -47,8 +48,14 @@ export const LoginView = () => {
 };
 
 export const App = () => {
+  const history = useHistory()
 
-  const { isInitializing, isAuthenticated, user } = useAuth0();
+  const logoutClick = () => {
+    logout()
+    history.push('/') //route not working but you get signed out
+  }
+
+  const { isInitializing, isAuthenticated, user, logout } = useAuth0();
 
   return (
     <React.Fragment>
@@ -65,11 +72,11 @@ export const App = () => {
                         <AppStyle.Image src={logo} alt="Logo" />
                       </a>
                     </AppStyle.FlexGrowHolder>
-                    {/* <AppStyle.Holder>
-                      <NavLink to={`/profileselection/:id`}>
-                        Profile Selection
-                    </NavLink>
-                    </AppStyle.Holder> */}
+                    <AppStyle.Holder>
+                      <p onClick={logoutClick}>
+                        Logout
+                    </p>
+                    </AppStyle.Holder>
                     <AppStyle.Holder>
                       <NavLink to={`/demo`}>
                         DEMO
@@ -116,15 +123,15 @@ export const App = () => {
                         path="/admin/hosts"
                         component={AllHosts}
                       />
-                      <Route 
+                      <Route
                         exact path="/profileselection/:id"
                         component={ProfileSelection}
                       />
-                      <Route 
+                      <Route
                         exact path="/host/:id"
                         component={HostQuestions}
                       />
-                      <Route 
+                      <Route
                         exact path="/guest/:id"
                         component={GuestQuestions}
                       />
@@ -138,5 +145,4 @@ export const App = () => {
       }
     </React.Fragment>
   );
-
 }

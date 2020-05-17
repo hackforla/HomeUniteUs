@@ -572,7 +572,7 @@ export function HostHomeDataProvider(
     console.log(`loading inital data...`);
     loadData().then((data: HostHomeData) => {
 
-      console.log(`loaded data: ${JSON.stringify(data)}`);
+      // console.log(`loaded data: ${JSON.stringify(data)}`);
 
       const newData = computeMatches(data);
 
