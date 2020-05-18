@@ -20,6 +20,7 @@
     "@types/jest": "^24.0.25",
     "@types/react": "^16.9.17",
     "@types/react-dom": "^16.9.4",
+    "@types/yup": "^0.28.3",
     "babel-plugin-transform-imports": "^2.0.0",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^5.1.1",
@@ -51,6 +52,7 @@
     "babel-polyfill": "^6.26.0",
     "core-js": "^2.6.11",
     "css-loader": "^3.4.2",
+    "formik": "^2.1.4",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-router": "^5.1.2",
@@ -58,6 +60,7 @@
     "react-scroll": "^1.7.16",
     "style-loader": "^1.1.2",
     "styled-components": "^5.0.1",
-    "typeface-roboto": "0.0.75"
+    "typeface-roboto": "0.0.75",
+    "yup": "^0.28.5"
   }
 }
