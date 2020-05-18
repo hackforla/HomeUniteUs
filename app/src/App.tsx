@@ -29,7 +29,6 @@ import {
 import { AllHosts } from './pages/Admin/AllHosts'
 import ProfileSelection from './pages/ProfileSelection/ProfileSelection'
 import HostQuestions from './pages/HostQuestions'
-import GuestQuestions from './pages/GuestQuestions/GuestQuestions'
 
 export interface AppProps {}
 
@@ -62,14 +61,14 @@ export const App = () => {
   }
 
   const { isInitializing, isAuthenticated, user, logout } = useAuth0();
-  // const [hasAccount, setHasAccount] = React.useState(false)
+  const [hasAccount, setHasAccount] = React.useState(false)
 
-  // React.useEffect(() => {
-  //   if(isAuthenticated){
-  //     //fetch call here
-  //     setHasAccount(data !== null)
-  //   }
-  // }, [isAuthenticated])
+  React.useEffect(() => {
+    if(isAuthenticated){
+      //fetch call here
+      setHasAccount(data !== null)
+    }
+  }, [isAuthenticated])
 
   return (
     <React.Fragment>
@@ -144,10 +143,6 @@ export const App = () => {
                       <Route
                         exact path="/host/:id"
                         component={HostQuestions}
-                      />
-                      <Route
-                        exact path="/guest/:id"
-                        component={GuestQuestions}
                       />
                       <FourOhFour />
                     </Switch>
