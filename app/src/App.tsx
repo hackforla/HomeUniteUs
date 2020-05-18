@@ -62,6 +62,14 @@ export const App = () => {
   }
 
   const { isInitializing, isAuthenticated, user, logout } = useAuth0();
+  // const [hasAccount, setHasAccount] = React.useState(false)
+
+  // React.useEffect(() => {
+  //   if(isAuthenticated){
+  //     //fetch call here
+  //     setHasAccount(data !== null)
+  //   }
+  // }, [isAuthenticated])
 
   return (
     <React.Fragment>
