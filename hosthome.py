@@ -654,55 +654,146 @@ def get_guestQuestion_by_id(id: int):
 
 
 
-@app.route('/api/guests/<int:id>/responses', methods=['GET'])
+@app.route('/api/guests/<int:id>/responses', methods=['GET','POST'])
 def get_guest_responses(id: int):
 
     app.logger.warning('get_guest_responses: request.method = {}'.format(request.method))
+    app.logger.warning(f'guest_by_id: id = {id} ({type(id)})')
 
-    try:
+    if request.method == 'GET':
 
-        guestResponses = guestResponsesRepository.get()
-        guestResponses = [response for response in guestResponses if response['guestId']==id]
-        js = json.dumps(guestResponses)
-        resp = Response(js, status=200, mimetype='application/json')
-        return resp
+        try:
 
-    except Exception as e:
+            guestResponses = guestResponsesRepository.get()
+            guestResponses = [response for response in guestResponses if response['guestId']==id]
+            js = json.dumps(guestResponses)
+            resp = Response(js, status=200, mimetype='application/json')
+            return resp
 
-        data = {
-            'error': str(e)
-        }
+        except Exception as e:
 
-        js = json.dumps(data)
-        resp = Response(js, status=500, mimetype='application/json')
+            data = {
+                'error': str(e)
+            }
 
-        return resp
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    elif request.method == 'POST':
+
+        try:
+
+            guest_response = request.json
+            responseData = guestResponsesRepository.add(guest_response)
+            app.logger.debug('responseData = {}'.format(responseData))
+            resp = Response({'error': None,'data': None},
+                             status=200, mimetype='application/json')
+
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    else:
+
+        app.logger.debug(f'what is {request.method} even doing here.')
 
 
-@app.route('/api/guests/<int:guest_id>/responses/<int:question_id>', methods=['GET'])
+@app.route('/api/guests/<int:guest_id>/responses/<int:question_id>', methods=['GET','PUT','DELETE'])
 def get_guest_response_by_id(guest_id: int, question_id: int):
 
     app.logger.warning('get_guest_response_by_id: request.method = {}'.format(request.method))
 
-    try:
+    if request.method == 'GET':
 
-        guestResponses = guestResponsesRepository.get()
-        guestResponses = [response['responseValues'] for response in guestResponses\
-                            if response['guestId']==guest_id and response['questionId']==question_id]
-        js = json.dumps(guestResponses)
-        resp = Response(js, status=200, mimetype='application/json')
-        return resp
+        try:
 
-    except Exception as e:
+            guestResponses = guestResponsesRepository.get()
+            guestResponses = [response['responseValues'] for response in guestResponses\
+                                if response['guestId']==guest_id and response['questionId']==question_id]
+            js = json.dumps(guestResponses[0])
+            resp = Response(js, status=200, mimetype='application/json')
+            return resp
 
-        data = {
-            'error': str(e)
-        }
+        except Exception as e:
 
-        js = json.dumps(data)
-        resp = Response(js, status=500, mimetype='application/json')
+            data = {
+                'error': str(e)
+            }
 
-        return resp
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    elif request.method == 'PUT':
+
+        try:
+
+            guestResponses = guestResponsesRepository.get()
+            response_id = [response['responseValues'] for response in guestResponses\
+                                 if response['guestId']==guest_id and\
+                                    response['questionId']==question_id][0]
+
+            #this is really shaky, need to know what's being passed back
+            #needs guest_id and question_id
+            responseData = guestResponsesRepository.update(response_id, request.json)
+            app.logger.debug('responseData = {}'.format(responseData))
+            resp = Response(json.dumps({'error': None, 'data': None}),
+                            status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+
+    elif request.method == 'DELETE':
+
+        try:
+            guestResponses = guestResponsesRepository.get()
+            response_id = [response['responseValues'] for response in guestResponses\
+                                  if response['guestId']==guest_id and\
+                                     response['questionId']==question_id][0]
+
+            responseData = guestResponsesRepository.delete(guest_id)
+            app.logger.debug('responseData = {}'.format(responseData))
+            resp = Response(json.dumps({'error': None, 'data': None}),
+                            status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+
+    else:
+
+        app.logger.debug(f'what is {request.method} even doing here.')
 
 # @app.route('/api/guests', methods=['POST'])
 # def add_guest():
@@ -782,6 +873,7 @@ def get_all_data():
 # TODO: Better error handling for items not found in db
 # TODO: Test PUT/DELETE for host/guest by id and POST for hosts/guests
 # TODO: Decide if there are unnecessary info that shouldn't get returned like _id
+# TODO: Verify IDs are being used properly across routes
 
 # @app.route('/api/test')
 # def test_api():
