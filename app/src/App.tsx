@@ -14,6 +14,7 @@ import FourOhFour from './pages/FourOhFour'
 import { AdminGuestView } from './pages/AdminGuestView'
 import { HostProfilePage } from './pages/HostProfile'
 import { GuestProfilePage } from './pages/GuestProfile'
+import { ProfileEditPage } from './pages/ProfileEdit'
 import { AdminView } from './pages/AdminView'
 import { Demo } from './pages/Demo'
 import { AboutPage } from './pages/About'
@@ -119,6 +120,7 @@ export const App = () => {
                       <Route exact path="/" component={AboutPage} />
                       <Route exact path="/demo" component={Demo} />
                       <Route path="/about" component={AboutPage} />
+                      <Route path="/profile" component={ProfileEditPage} />
                       <Route path="/admin/guests" component={AdminView} />
                       <Route
                         path="/admin/guest/:id"
