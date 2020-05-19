@@ -37,6 +37,31 @@ const putJson = async (uri: string, data: string) => {
     }
 }
 
+const getEmail = async (uri: string, data: any) => {
+    try{
+        const response = await fetch(uri, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: data
+        })
+        if(response.status !== 200){
+            throw new Error(response.statusText)
+        }
+        // console.log(`response: ${response.statusText}`, "<---------------------------------------response status text?");
+
+        // return await response.json()
+        const resp = await response.json()
+        console.log(resp, "<-----------------------------------------------------the resp")
+        return resp
+    } catch(e) {
+        throw new ApiFetchError(
+            `error in getByEmail(): error fetching '${uri}': ${e}`
+        )
+    }
+}
+
 export class Fetcher<T> {
     private endpoint: string
 
@@ -57,6 +82,10 @@ export class Fetcher<T> {
             `${this.endpoint}/${id}`,
             JSON.stringify(item)
         )) as string
+    }
+    
+    public async getByEmail(data: any): Promise<string>{
+        return (await getEmail(`${this.endpoint}`, JSON.stringify(data)))
     }
 }
 

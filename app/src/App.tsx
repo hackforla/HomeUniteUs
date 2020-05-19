@@ -30,6 +30,7 @@ import {
 import { AllHosts } from './pages/Admin/AllHosts'
 import ProfileSelection from './pages/ProfileSelection/ProfileSelection'
 import HostQuestions from './pages/HostQuestions'
+import { Fetcher } from './data/ApiWrapper'
 
 export interface AppProps {}
 
@@ -54,20 +55,22 @@ export const LoginView = () => {
 }
 
 export const App = () => {
-  const history = useHistory()
+  // const history = useHistory()
 
   const logoutClick = () => {
     logout()
-    history.push('/') //route not working but you get signed out
+    // history.push('/') //route not working but you get signed out
   }
 
   const { isInitializing, isAuthenticated, user, logout } = useAuth0();
-  const [hasAccount, setHasAccount] = React.useState(false)
+  const [hasAccount, setHasAccount] = React.useState()
 
   React.useEffect(() => {
     if(isAuthenticated){
-      //fetch call here
-      setHasAccount(data !== null)
+      let fetch = new Fetcher('checkEmail')
+      let data = fetch.getByEmail(user)
+      console.log(data, "<--------------------------------------what this?")
+      // setHasAccount(data !== null)
     }
   }, [isAuthenticated])
 
@@ -87,9 +90,9 @@ export const App = () => {
                       </a>
                     </AppStyle.FlexGrowHolder>
                     <AppStyle.Holder>
-                      <p onClick={logoutClick}>
+                      <span onClick={logoutClick}>
                         Logout
-                    </p>
+                    </span>
                     </AppStyle.Holder>
                     <AppStyle.Holder>
                       <NavLink to={`/demo`}>

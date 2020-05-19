@@ -119,7 +119,17 @@ class MongoFacade:
 
         self._log('get_collection', 'items = {}'.format(items))
         return item
-
+    ###########################################################attempt
+    def get_user_by_email(self): #need to add param called email here
+        self._log('get_user_by_email', 'acquiring connection...')
+        client = self._get_conn()
+        db = client[MONGO_DATABASE]
+        collection = db['hosts']
+        user = collection.find_one({ 'email': 'diana.patterson@gmail.com' }) #email needs to be replace with request body
+        
+        self._log('get_collections', 'items = {}'.format(user))
+        return user
+    #####################################################################
 
     def insert_to_collection(self, collection_name, item):
         client = self._get_conn()
@@ -209,6 +219,11 @@ class Repository:
             safe_item
         )
         return result
+    ########################################attempt
+    def get_using_email(self): #pass in the request body here
+        resp = self.mongo_facade.get_user_by_email() ##add the request here
+        return resp
+    #########################################
 
     def _log(self, method_name, message):
         app.logger.debug('Repository[{}]:{}: {}'.format(self.collection_name, method_name, message))
@@ -340,6 +355,34 @@ def get_all_hosts():
         resp = Response(js, status=500, mimetype='application/json')
 
         return resp
+
+@app.route('/api/checkEmail', methods=["POST"])
+def check_by_email():
+    try:
+        # req = request.json() #get req from front end
+        host = hostRepository.get_using_email()
+        # js = json.dumps(host)    
+        # resp = Response(js, status=200, mimetype='application/json')
+        resp = Response(host, status=200, mimetype='application/json')
+        return resp
+        #attemp here too but doesnt work
+        # print("<,-----------------------------------------in here?1")
+        # hosts = hostRepository.get()
+        # print("<,-----------------------------------------in here?2")
+        # cur = myMongoClient['hosthome']['hosts'].find({'email':'diana.patterson@gmail.com'})
+        # print("<,-----------------------------------------in here?3")
+        # print(f'{[x for x in cur]}', "<------------------------------------------please print")
+
+        # cur = hosts.find({'email':'diana.patterson@gmail.com'})
+        # print(cur, "<--------------------------did it find it?")
+
+        #this works
+        # for host in hosts: 
+        #     if host['email'] == 'diana.patterson@gmail.com': # replace email with req['email']
+        #         print("found!!")
+                
+    except Exception as e:
+        return e
 
 # @app.route('/api/hosts/{id}', methods=['PUT'])
 # def update_host(id: int):
