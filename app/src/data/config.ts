@@ -1,4 +1,18 @@
+export const Constants = {
+    ApiHost: '',
+    ApiPort: '80',
+    ApiPrefix: 'api',
+    StaticFilePrefix: '/dist',
+}
+
+export const ApiConfig = {
+    UriPrefix:
+        Constants.ApiHost.length > 0
+            ? `${Constants.ApiHost}:${Constants.ApiPort}/${Constants.ApiPrefix}`
+            : `/${Constants.ApiPrefix}`,
+}
+
 export const AppConfig = {
     AppName: 'Host Home',
-    DefaultProfileImageUrl: '/hosthome/img/profile-placeholder.png'
-};
+    DefaultProfileImageUrl: `${Constants.StaticFilePrefix}/img/profile-placeholder.png`,
+}

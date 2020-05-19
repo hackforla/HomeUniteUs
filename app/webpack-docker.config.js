@@ -14,11 +14,11 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].[hash:8].js',
-        // publicPath: '/',
+        publicPath: '/dist/',
         // TODO: this line may need to be uncommented and changed for different webserver environments
         //     ...this prefix determines what is prepended to resource requests from "index.html"
         //     ...e.g. the value 'dist' in the injected tag <script src="/dist/react-dom.js"></script>
-        publicPath: "/dist/"
+        // publicPath: "/dist/"
     },
     optimization: {
         runtimeChunk: 'single',
@@ -104,11 +104,11 @@ module.exports = {
     plugins: [
         new CleanWebpackPlugin(),
         new Dotenv({
-            path: './.env'
+            path: '../.env'
         }),
         new HtmlWebPackPlugin({
             template: "./src/index.html",
-            filename: "../dist/index.html"
+            filename: "index.html"
         }),
         new webpack.HashedModuleIdsPlugin(),
         new MiniCssExtractPlugin({
@@ -117,8 +117,8 @@ module.exports = {
         }),
         new CopyPlugin([
             { from: './src/img/favicon.png', to: '', flatten: true },
-            { from: './src/img/*.png', to: 'hosthome/img', flatten: true },
-            { from: './src/img/*.svg', to: 'hosthome/img', flatten: true },
+            { from: './src/img/*.png', to: 'img', flatten: true },
+            { from: './src/img/*.svg', to: 'img', flatten: true },
 
         ]),
     ],

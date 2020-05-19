@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled from 'styled-components'
 
 const NeighborContainer = styled.div`
     padding: 10px 20px;
@@ -11,13 +11,12 @@ const NeighborTitle = styled.div`
 
 const NeighborImage = styled.img`
     width: 70%;
-
 `
 
 export const NeighborStyle = {
     NeighborContainer: NeighborContainer,
     NeighborTitle: NeighborTitle,
-    NeighborImage: NeighborImage
+    NeighborImage: NeighborImage,
 }
 
 const LocationImagesContainer = styled.div`
@@ -34,7 +33,7 @@ const LocationImage = styled.img`
 
 export const LocationImagesStyle = {
     LocationImage: LocationImage,
-    LocationImagesContainer: LocationImagesContainer
+    LocationImagesContainer: LocationImagesContainer,
 }
 
 const LocationCardContainer = styled.div`
@@ -67,39 +66,39 @@ export const LocationCardStyle = {
     LocationCardContainer: LocationCardContainer,
     LocationInfoContainer: LocationInfoContainer,
     LocationDescriptionContainer: LocationDescriptionContainer,
-    LocationInfo: LocationInfo
+    LocationInfo: LocationInfo,
 }
 
 const HousePolicyContainer = styled.div`
-  width: 100%;
-  box-sizing: border-box;
-  margin: 50px auto 0 auto;
-  display: flex; 
-  align-items:center;
-  flex-direction: column;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 50px auto 0 auto;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 
-  @media (min-width: 1280px) {
-    div {
-      max-width: 1280px;
+    @media (min-width: 1280px) {
+        div {
+            max-width: 1280px;
+        }
     }
-  }
 
-  @media (min-width: 960px) {
-    div {
-      padding: 0 32px;
+    @media (min-width: 960px) {
+        div {
+            padding: 0 32px;
+        }
     }
-  }
 
-  @media (min-width: 600px) {
-    div {
-      padding: 0 24px;
+    @media (min-width: 600px) {
+        div {
+            padding: 0 24px;
+        }
     }
-  }
 `
 
 const IconHolderRow = styled(HousePolicyContainer)`
-    flex-direction:row;
-    margin:0;
+    flex-direction: row;
+    margin: 0;
 `
 
 const HousePolicyTitle = styled.div`
@@ -128,10 +127,10 @@ const PolicyIconHolder = styled.div`
 `
 
 const SinglePolicyCopyAndIconHolder = styled.div`
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 `
 
 export const HousePolicyStyle = {
@@ -141,7 +140,7 @@ export const HousePolicyStyle = {
     HousePolicyImage: HousePolicyImage,
     HousePolicyContent: HousePolicyContent,
     PolicyIconHolder: PolicyIconHolder,
-    SinglePolicyCopyAndIconHolder: SinglePolicyCopyAndIconHolder
+    SinglePolicyCopyAndIconHolder: SinglePolicyCopyAndIconHolder,
 }
 
 export const RoommateContainer = styled.div`
@@ -178,7 +177,7 @@ export const HostCardStyle = {
     HostImage: HostImage,
     HostCardContainer: HostCardContainer,
     HostImageContainer: HostImageContainer,
-    HostDescriptionContainer: HostDescriptionContainer
+    HostDescriptionContainer: HostDescriptionContainer,
 }
 
 const AdditionalInfoContainer = styled.div`
@@ -216,7 +215,7 @@ export const AdditionalInfoStyle = {
     AdditionalInfoSingleHolder: AdditionalInfoSingleHolder,
     AdditionalInfo: AdditionalInfo,
     AdditionalInfoLabel: AdditionalInfoLabel,
-    AdditionalInfoContent: AdditionalInfoContent
+    AdditionalInfoContent: AdditionalInfoContent,
 }
 
 const GeneralInfoRow = styled.div`
@@ -227,7 +226,7 @@ const GeneralInfoRow = styled.div`
 const GeneralHeaderText = styled.p`
     font-size: 24px;
     font-weight: bold;
-    margin: 0 0 30px 25px; 
+    margin: 0 0 30px 25px;
 `
 
 const GeneralContent = styled.span`
@@ -238,7 +237,7 @@ const GeneralContent = styled.span`
 export const GeneralInfoStyle = {
     GeneralInfoRow: GeneralInfoRow,
     GeneralHeaderText: GeneralHeaderText,
-    GeneralContent: GeneralContent
+    GeneralContent: GeneralContent,
 }
 
 const Bar = styled.header`
@@ -259,7 +258,9 @@ const Bar = styled.header`
     flex-shrink: 0;
     transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     background-color: #fff;
-    box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12);
+    box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2),
+        0px 4px 5px 0px rgba(0, 0, 0, 0.14),
+        0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 `
 
 const ButtonHolder = styled.div`
@@ -278,7 +279,7 @@ const NoButton = styled.button`
     font-size: 0.875rem;
     min-width: 64px;
     box-sizing: border-box;
-    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
     font-weight: 500;
     line-height: 1.75;
     border-radius: 4px;
@@ -292,15 +293,18 @@ const NoButton = styled.button`
     justify-content: center;
     text-decoration: none;
     cursor: pointer;
-    transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-    box-shadow: 0px 3px 1px -2px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 1px 5px 0px rgba(0,0,0,0.12);
+    transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+        box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+        border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
+        0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
     -webkit-appearance: none;
     -webkit-tap-highlight-color: transparent;
 `
 
 const YesButton = styled(NoButton)`
-    color:white;
-    background-color: #00AAEF;
+    color: white;
+    background-color: #00aaef;
     margin: 0 25px 0 20px;
 `
 
@@ -309,5 +313,5 @@ export const ButtonBarStyle = {
     BarTitle: BarTitle,
     Bar: Bar,
     NoButton: NoButton,
-    YesButton: YesButton
+    YesButton: YesButton,
 }

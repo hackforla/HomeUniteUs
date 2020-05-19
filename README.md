@@ -74,3 +74,34 @@ Please join our [Slack channel](https://hackforla.slack.com/archives/CRWUG7X0C) 
 Include details about the project's open source status.
 
 *this readme file sourced from [Jessica Sand](http://jessicasand.com/other-stuff/just-enough-docs/)*
+
+
+# Local development environment
+
+### Flask, Mongo and NPM
+
+1. Ensure npm, mongodb and python3 are installed. Get the code:
+`git clone git@github.com/hackforla/host-home`
+
+
+2. Run server
+
+  1. `cd host-home`
+
+  2. `./seed-local-db.sh`
+    - check that data was seeded correctly by printing first three guest objects: `mongoexport -d=hosthome -c=guests --jsonArray --pretty --limit=3`
+
+  3. 
+    1. (Optional) Configure a conda or virtualenv project
+    2. `pip install -r requirements.txt`
+  4. `python hosthome.py` to start server running
+
+3. Run client
+
+  1. `cd app`
+  2. `npm install`
+  3. `npm run watch:flask` and this will perform a fresh build each time the files are changed
+
+### Docker
+
+  1. See the [README in 'scripts'](./scripts/README.md)
