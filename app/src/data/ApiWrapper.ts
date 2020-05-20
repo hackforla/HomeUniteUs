@@ -37,7 +37,7 @@ const putJson = async (uri: string, data: string) => {
     }
 }
 
-const getEmail = async (uri: string, data: any) => {
+const getEmail = async (uri: string, data: any | undefined) => {
     try{
         const response = await fetch(uri, {
             method: "POST",
@@ -46,15 +46,17 @@ const getEmail = async (uri: string, data: any) => {
             },
             body: data
         })
+        console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++ it goes here?")
         if(response.status !== 200){
+            console.log("is it in the error?")
             throw new Error(response.statusText)
         }
-        // console.log(`response: ${response.statusText}`, "<---------------------------------------response status text?");
+        console.log("------------------------------------------------------ it goes here?")
+        console.log(typeof(response), "<-------------------------------------------------------json()")
+        return await response.json()
+        // let r = await response
+        // return r
 
-        // return await response.json()
-        const resp = await response.json()
-        console.log(resp, "<-----------------------------------------------------the resp")
-        return resp
     } catch(e) {
         throw new ApiFetchError(
             `error in getByEmail(): error fetching '${uri}': ${e}`

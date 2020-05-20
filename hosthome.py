@@ -361,25 +361,12 @@ def check_by_email():
     try:
         # req = request.json() #get req from front end
         host = hostRepository.get_using_email()
-        # js = json.dumps(host)    
+        # print(host, "<------------------------------------------------the host") this is a dictionary
+        # js = json.dumps(host) #<----------------this doesnt work for some reason
         # resp = Response(js, status=200, mimetype='application/json')
         resp = Response(host, status=200, mimetype='application/json')
+        print(resp, "<----------------------------------resp")
         return resp
-        #attemp here too but doesnt work
-        # print("<,-----------------------------------------in here?1")
-        # hosts = hostRepository.get()
-        # print("<,-----------------------------------------in here?2")
-        # cur = myMongoClient['hosthome']['hosts'].find({'email':'diana.patterson@gmail.com'})
-        # print("<,-----------------------------------------in here?3")
-        # print(f'{[x for x in cur]}', "<------------------------------------------please print")
-
-        # cur = hosts.find({'email':'diana.patterson@gmail.com'})
-        # print(cur, "<--------------------------did it find it?")
-
-        #this works
-        # for host in hosts: 
-        #     if host['email'] == 'diana.patterson@gmail.com': # replace email with req['email']
-        #         print("found!!")
                 
     except Exception as e:
         return e
