@@ -360,14 +360,16 @@ def get_all_hosts():
 def check_by_email():
     try:
         # req = request.json() #get req from front end
-        host = hostRepository.get_using_email()
-        # print(host, "<------------------------------------------------the host") this is a dictionary
-        # js = json.dumps(host) #<----------------this doesnt work for some reason
-        # resp = Response(js, status=200, mimetype='application/json')
-        resp = Response(host, status=200, mimetype='application/json')
-        print(resp, "<----------------------------------resp")
+        hosts = hostRepository.get_using_email()
+        # js = json.dumps(hosts) #this does not work
+        resp = Response(json.dumps(hosts), status=200, mimetype='application/json')
         return resp
-                
+        #other ways to send Json VV
+        # return jsonify(data=resp_dict, status={'code': 200, 'message': 'success'})
+        # json.loads(yourobj.to_json())
+        # some = model_to_dict(example)
+        # return jsonify(data=some, status={"code": 201, "message": "success"})
+           
     except Exception as e:
         return e
 
