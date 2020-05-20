@@ -69,6 +69,7 @@ export const App = () => {
     if(isAuthenticated){
       let fetch = new Fetcher('checkEmail')
       let data = fetch.getByEmail(user)
+      console.log(data, "<----------------------------data")
       // setHasAccount(data !== null)
     }
   }, [isAuthenticated])

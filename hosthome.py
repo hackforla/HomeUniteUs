@@ -120,13 +120,14 @@ class MongoFacade:
         self._log('get_collection', 'items = {}'.format(items))
         return item
     ###########################################################attempt
-    def get_user_by_email(self): #need to add param called email here
+    def get_user_by_email(self, collection_name): #need to add param called email here
         self._log('get_user_by_email', 'acquiring connection...')
         client = self._get_conn()
         db = client[MONGO_DATABASE]
-        collection = db['hosts']
+        collection = db[collection_name]
         user = collection.find_one({ 'email': 'diana.patterson@gmail.com' }) #email needs to be replace with request body
-        
+        user['_id'] = str(user['_id']) 
+
         self._log('get_collections', 'items = {}'.format(user))
         return user
     #####################################################################
@@ -221,7 +222,7 @@ class Repository:
         return result
     ########################################attempt
     def get_using_email(self): #pass in the request body here
-        resp = self.mongo_facade.get_user_by_email() ##add the request here
+        resp = self.mongo_facade.get_user_by_email(self.collection_name) ##add the request here
         return resp
     #########################################
 
@@ -361,17 +362,19 @@ def check_by_email():
     try:
         # req = request.json() #get req from front end
         hosts = hostRepository.get_using_email()
-        # js = json.dumps(hosts) #this does not work
-        resp = Response(json.dumps(hosts), status=200, mimetype='application/json')
+        js = json.dumps(hosts) #this does not work
+        resp = Response(js, status=200, mimetype='application/json') 
         return resp
-        #other ways to send Json VV
-        # return jsonify(data=resp_dict, status={'code': 200, 'message': 'success'})
-        # json.loads(yourobj.to_json())
-        # some = model_to_dict(example)
-        # return jsonify(data=some, status={"code": 201, "message": "success"})
            
     except Exception as e:
-        return e
+        data = {
+            'error': str(e)
+        }
+        
+        js = json.dumps(data)    
+        resp = Response(js, status=500, mimetype='application/json')
+
+        return resp
 
 # @app.route('/api/hosts/{id}', methods=['PUT'])
 # def update_host(id: int):

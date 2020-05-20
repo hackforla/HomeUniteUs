@@ -46,16 +46,11 @@ const getEmail = async (uri: string, data: any | undefined) => {
             },
             body: data
         })
-        console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++ it goes here?")
         if(response.status !== 200){
             console.log("is it in the error?")
             throw new Error(response.statusText)
         }
-        console.log("------------------------------------------------------ it goes here?")
-        console.log(typeof(response), "<-------------------------------------------------------json()")
         return await response.json()
-        // let r = await response
-        // return r
 
     } catch(e) {
         throw new ApiFetchError(
