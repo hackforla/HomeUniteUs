@@ -31,50 +31,9 @@ import { AllHosts } from './pages/Admin/AllHosts'
 import ProfileSelection from './pages/ProfileSelection/ProfileSelection'
 import HostQuestions from './pages/HostQuestions'
 import { Fetcher } from './data/ApiWrapper'
+import { Host } from './models/Host'
 
 export interface AppProps {}
-
-interface HouseHoldMembers {
-  name: string
-  age: number
-  relationship: string
-}
-
-interface UserObj {
-  address: string
-  contactAddress: string
-  dateOfBirth: string
-  drinkingText: string
-  durationOfStay: string
-  email: string
-  employmentCompany: string
-  employmentInfo: string
-  employmentPosition: string
-  firstName: string
-  hostIntro: string
-  hostingAmount: number
-  hostingChallenges: string
-  hostingInterest: string
-  hostingStrengths: string
-  householdMembers: Array<HouseHoldMembers>
-  housingType: string
-  id: number
-  imageUrl: string
-  interests: string[]
-  languages: string[]
-  lastName: string
-  middleInitial: string
-  name: string
-  petsText: string
-  phone: string
-  preferredCharacteristics: string
-  smokingText: string
-  substancesText: string
-  type: string
-  youthParenting: boolean
-  youthRelationship: boolean
-  _id: string
-}
 
 export const LoginView = () => {
     const { loginWithPopup } = useAuth0()
@@ -111,7 +70,8 @@ export const App = () => {
     const fetch = async () => {
       if(isAuthenticated){
         let fetch = new Fetcher('checkEmail')
-        let data = await fetch.getByEmail(user)
+        let data: Host
+        data = await fetch.getByEmail(user)
         console.log(data, "<----------------------------data")
         // if(data?.email === user?.email){
         //   setHasAccount(true)
