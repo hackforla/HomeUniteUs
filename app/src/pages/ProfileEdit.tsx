@@ -1,9 +1,8 @@
 import * as React from "react"
-import QuestionField from "../components/ProfileEdit/QuestionField"
+import Question from "../components/ProfileEdit/Question"
 
 import styled from "styled-components"
 import { Button, LinearProgress } from '@material-ui/core';
-import { Question } from "../models/Question"
 
 const Container = styled.div`
   margin: 30px auto;
@@ -117,7 +116,7 @@ export const ProfileEditPage = () => {
     <Container>
       <LinearProgress variant="determinate" value={state.questionIndex / state.questions.length * 100} />
       <form noValidate autoComplete="off">
-        <QuestionField question={state.questions[state.questionIndex]} setAnswer={setAnswer}></QuestionField>
+        <Question question={state.questions[state.questionIndex]} setAnswer={setAnswer}></Question>
       </form>
       <StyledButton variant="contained" color="primary" onClick={() => state.questionIndex > 0 && setQuestionIndex(state.questionIndex - 1)}>Back</StyledButton>
       <StyledButton variant="contained" color="primary" onClick={() => state.questionIndex < state.questions.length - 1 && setQuestionIndex(state.questionIndex + 1)}>Forward</StyledButton>
