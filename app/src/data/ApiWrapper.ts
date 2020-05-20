@@ -47,11 +47,9 @@ const getEmail = async (uri: string, data: any | undefined) => {
             body: data
         })
         if(response.status !== 200){
-            console.log("is it in the error?")
             throw new Error(response.statusText)
         }
         return await response.json()
-
     } catch(e) {
         throw new ApiFetchError(
             `error in getByEmail(): error fetching '${uri}': ${e}`

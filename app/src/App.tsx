@@ -34,6 +34,48 @@ import { Fetcher } from './data/ApiWrapper'
 
 export interface AppProps {}
 
+interface HouseHoldMembers {
+  name: string
+  age: number
+  relationship: string
+}
+
+interface UserObj {
+  address: string
+  contactAddress: string
+  dateOfBirth: string
+  drinkingText: string
+  durationOfStay: string
+  email: string
+  employmentCompany: string
+  employmentInfo: string
+  employmentPosition: string
+  firstName: string
+  hostIntro: string
+  hostingAmount: number
+  hostingChallenges: string
+  hostingInterest: string
+  hostingStrengths: string
+  householdMembers: Array<HouseHoldMembers>
+  housingType: string
+  id: number
+  imageUrl: string
+  interests: string[]
+  languages: string[]
+  lastName: string
+  middleInitial: string
+  name: string
+  petsText: string
+  phone: string
+  preferredCharacteristics: string
+  smokingText: string
+  substancesText: string
+  type: string
+  youthParenting: boolean
+  youthRelationship: boolean
+  _id: string
+}
+
 export const LoginView = () => {
     const { loginWithPopup } = useAuth0()
 
@@ -63,15 +105,21 @@ export const App = () => {
   }
 
   const { isInitializing, isAuthenticated, user, logout } = useAuth0();
-  const [hasAccount, setHasAccount] = React.useState()
+  const [hasAccount, setHasAccount] = React.useState(false)
 
   React.useEffect(() => {
-    if(isAuthenticated){
-      let fetch = new Fetcher('checkEmail')
-      let data = fetch.getByEmail(user)
-      console.log(data, "<----------------------------data")
-      // setHasAccount(data !== null)
+    const fetch = async () => {
+      if(isAuthenticated){
+        let fetch = new Fetcher('checkEmail')
+        let data = await fetch.getByEmail(user)
+        console.log(data, "<----------------------------data")
+        // if(data?.email === user?.email){
+        //   setHasAccount(true)
+        // }
+        // setHasAccount(data !== null)
+      }
     }
+    fetch()
   }, [isAuthenticated])
 
   return (

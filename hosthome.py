@@ -361,8 +361,8 @@ def get_all_hosts():
 def check_by_email():
     try:
         # req = request.json() #get req from front end
-        hosts = hostRepository.get_using_email()
-        js = json.dumps(hosts) #this does not work
+        hosts = hostRepository.get_using_email() #pass the req in here when ready
+        js = json.dumps(hosts) 
         resp = Response(js, status=200, mimetype='application/json') 
         return resp
            
