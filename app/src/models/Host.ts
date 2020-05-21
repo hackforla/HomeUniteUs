@@ -8,7 +8,7 @@ export interface Host {
     imageUrl: string
     firstName: string
     middleInitial: string
-    dateOfBirth: string //original is: Date
+    dateOfBirth: Date //original is: Date
     lastName: string
     email: string
     phone: string
@@ -31,7 +31,7 @@ export interface Host {
     hostingAmount: number
     youthParenting: boolean
     youthRelationship: boolean
-    type: string // original is: HostHomeType
+    type: HostHomeType // original is: HostHomeType
     employmentCompany: string
     employmentPosition: string
 }
