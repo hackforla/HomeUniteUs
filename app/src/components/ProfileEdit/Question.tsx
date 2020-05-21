@@ -6,14 +6,16 @@ import { QuestionType } from "../../models/QuestionType"
 import styled from "styled-components"
 import { FormControl, FormControlLabel, FormGroup, RadioGroup, Radio, Checkbox, TextField } from '@material-ui/core';
 
-const QuestionContainer = styled.div`
-  min-height: 244px;
-`
 
 interface Props {
   question: QuestionType,
   setAnswer: (id: string, value: any) => void
 };
+
+const QuestionLabel = styled.label`
+  margin: 15px 0;
+  display: block;
+`
 
 const Question = (props: Props) => {
   const { question } = props;
@@ -31,8 +33,8 @@ const Question = (props: Props) => {
   }
 
   return (
-    <QuestionContainer>
-      <h2>{question.question}</h2>
+    <div>
+      <QuestionLabel>{question.question}</QuestionLabel>
       <div>
         {
           question.type === 'radio' && 
@@ -71,7 +73,7 @@ const Question = (props: Props) => {
           <TextField label="Your response" variant="outlined" value={props.question.answer} onChange={handleChange} multiline rows={8} fullWidth />
         }
       </div>
-    </QuestionContainer>
+    </div>
   )
 }
 
