@@ -827,6 +827,31 @@ def get_guest_response_by_id(guest_id: int, question_id: int):
 #     return {"success": success, "status": guests.status_code}
 
 
+@app.route('/api/responseValues', methods=['GET'])
+def get_all_response_values():
+
+    try:
+        responseValues = responseValuesRepository.get()
+        js = json.dumps(responseValues)
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+
+    except Exception as e:
+        
+        data = {
+            'error': str(e)
+        }
+
+        js = json.dumps(data)
+        resp = Response(js, status=500, mimetype='application/json')
+        return resp
+
+
+
+
+
+# TODO: Mark for deprecation! no need to dl the whole set for any view in the app
+
 @app.route('/api/dataset', methods=['GET'])
 def get_all_data():
 

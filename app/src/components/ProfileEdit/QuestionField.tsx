@@ -11,9 +11,24 @@ const QuestionContainer = styled.div`
 `
 
 interface Props {
-  question: Question,
+  question: QuestionResponse,
   setAnswer: (id: string, value: any) => void
 };
+
+
+interface QuestionLabelProps {
+  label: string;
+  value: string;
+}
+
+interface QuestionResponse {
+  id: string;
+  question: string;
+  type: string;
+  options: Array<QuestionLabelProps>;
+  answer: string | {[key:string]: boolean};
+};
+
 
 const QuestionField = (props: Props) => {
   const { question } = props;
@@ -22,7 +37,7 @@ const QuestionField = (props: Props) => {
     const questionId = props.question.id;
     if (e.target.type === 'checkbox') {
       if ('checked' in e.target) {
-        props.question.answer[e.target.value] = e.target.checked;
+        (props.question.answer as {[key:string]: boolean})[e.target.value] = e.target.checked;
       }
       props.setAnswer(questionId, props.question.answer);
     } else {

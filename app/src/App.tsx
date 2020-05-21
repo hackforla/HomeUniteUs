@@ -29,8 +29,8 @@ import {
 } from './pages/CreateProfile'
 import { AllHosts } from './pages/Admin/AllHosts'
 import ProfileSelection from './pages/ProfileSelection/ProfileSelection'
-import HostQuestions from './pages/HostQuestions'
-import GuestQuestions from './pages/GuestQuestions/GuestQuestions'
+import HostQuestionsPage from './pages/HostQuestions'
+import GuestQuestionsPage from './pages/GuestQuestions'
 
 export interface AppProps {}
 
@@ -55,11 +55,11 @@ export const LoginView = () => {
 }
 
 export const App = () => {
-  const history = useHistory()
+  // const history = useHistory()
 
   const logoutClick = () => {
     logout()
-    history.push('/') //route not working but you get signed out
+    // history.push('/') //route not working but you get signed out
   }
 
   const { isInitializing, isAuthenticated, user, logout } = useAuth0();
@@ -137,11 +137,11 @@ export const App = () => {
                       />
                       <Route
                         exact path="/host/:id"
-                        component={HostQuestions}
+                        component={HostQuestionsPage}
                       />
                       <Route
                         exact path="/guest/:id"
-                        component={GuestQuestions}
+                        component={GuestQuestionsPage}
                       />
                       <FourOhFour />
                     </Switch>
