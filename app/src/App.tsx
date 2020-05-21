@@ -67,7 +67,6 @@ export const App = () => {
   const [hasAccount, setHasAccount] = React.useState(false)
 
   React.useEffect(() => {
-    console.log(user, "<-----------------------------------user?")
     const fetch = async () => {
       if (isAuthenticated) {
         let fetch = new Fetcher<Host>('checkEmail')
@@ -163,7 +162,7 @@ export const App = () => {
                   </React.Fragment>
                 </BrowserRouter>
               </HostHomeDataProvider>
-              : <h1>Registeruser Component Goes here</h1>
+              : <ProfileSelection /> //<-----------if no user was found go to profile selection
             : <LoginView />
       }
     </React.Fragment>
