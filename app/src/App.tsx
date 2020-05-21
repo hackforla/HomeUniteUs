@@ -67,15 +67,12 @@ export const App = () => {
   const [hasAccount, setHasAccount] = React.useState(false)
 
   React.useEffect(() => {
+    console.log(user, "<-----------------------------------user?")
     const fetch = async () => {
       if(isAuthenticated){
-        let fetch = new Fetcher('checkEmail')
-        let data: Host
-        data = await fetch.getByEmail(user)
-        console.log(data, "<----------------------------data")
-        // if(data?.email === user?.email){
-        //   setHasAccount(true)
-        // }
+        // let fetch = new Fetcher('checkEmail')
+        // let data: Host | undefined = await fetch.getByEmail(user)
+        // console.log(data, "<----------------------------data")
         // setHasAccount(data !== null)
       }
     }
