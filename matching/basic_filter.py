@@ -41,41 +41,79 @@ def write_to_json_file(name, data):
 
 # Load all collections
 
-data = {x: load_from_json_file(os.path.join(os.getcwd(), '..', 'data', f'{x}.json')) for x in entities}
+# Tyler 5/21/2020: use this for local testing from flat file
+# data = {x: load_from_json_file(os.path.join(os.getcwd(), '..', 'data', f'{x}.json')) for x in entities}
+
+
 
 # reshape data for fast access to responses by question ID
 
-guest_response_map = {
-    q['id']: [
-        {
-            'id': gr['guestId'],
-            'values': gr['responseValues']
-        } for gr in data['guestResponses'] if gr['questionId'] == q['id']
-    ] for q in data['guestQuestions']
-}
 
-host_response_map = {
-    q['id']: [
-        {
-            'id': gr['hostId'],
-            'values': gr['responseValues']
-        } for gr in data['hostResponses'] if gr['questionId'] == q['id']
-    ] for q in data['hostQuestions']
-}
+class BasicFilter:
+    
+    def __init__(self, repos):
+        self.repos = repos
 
-restricted_pairs = {}
+    def get_all_match_results(self):
 
-for r in data['restrictions']:
+        data = {
+            'hosts': self.repos['hosts'].get(),
+            'guests': self.repos['guests'].get(),
+            'guestResponses': self.repos['guestResponses'].get(),
+            'hostResponses': self.repos['hostResponses'].get(),
+            'guestQuestions': self.repos['guestQuestions'].get(),
+            'hostQuestions': self.repos['hostQuestions'].get(),
+            'restrictions': self.repos['restrictions'].get(),
+            'responseValues': self.repos['responseValues'].get()
+        }
 
-    print(f'- looking at restriction: {dict(r)}')
+        guest_response_map = {
+            q['id']: [
+                {
+                    'id': gr['guestId'],
+                    'values': gr['responseValues']
+                } for gr in data['guestResponses'] if gr['questionId'] == q['id']
+            ] for q in data['guestQuestions']
+        }
 
-    host_responses = host_response_map[r['hostQuestionId']]
-    guest_responses = guest_response_map[r['guestQuestionId']]
+        host_response_map = {
+            q['id']: [
+                {
+                    'id': gr['hostId'],
+                    'values': gr['responseValues']
+                } for gr in data['hostResponses'] if gr['questionId'] == q['id']
+            ] for q in data['hostQuestions']
+        }
 
-    restricted = {(h['id'],g['id']): r for h in host_responses if r['hostResponseValue'] in h['values'] for g in guest_responses if r['guestResponseValue'] in g['values']
+        restricted_pairs = {}
 
-    for pair, restriction in restricted.items():
-        if pair not in restricted_pairs.keys():
-            restricted_pairs[pair] = list()
-        restricted_pairs[pair].append(restriction)
+        for r in data['restrictions']:
 
+            print(f'- looking at restriction: {dict(r)}')
+
+            host_responses = host_response_map[r['hostQuestionId']]
+            guest_responses = guest_response_map[r['guestQuestionId']]
+
+            restricted = [
+                (
+                    (h['id'],g['id']), 
+                    r
+                ) for h in host_responses if r['hostResponseValue'] in h['values'] for g in guest_responses if r['guestResponseValue'] in g['values']]
+
+            for pair, restriction in restricted:
+                if pair not in restricted_pairs.keys():
+                    restricted_pairs[pair] = list()
+                restricted_pairs[pair].append(restriction)
+
+        match_results = [
+            {
+                'hostId': pair[0],
+                'guestId': pair[1],
+                'restrictionsFailed': restrictions_failed,
+                'guestInterestLevel': 'Unknown',
+                'lastInterestUpdate': None
+                
+            } for pair, restrictions_failed in restricted_pairs.items()
+        ]
+
+        return match_results
