@@ -126,7 +126,7 @@ class MongoFacade:
         db = client[MONGO_DATABASE]
         collection = db[collection_name]
         user = collection.find_one({ 'email': 'diana.patterson@gmail.com' }) #email needs to be replace with request body
-        user['_id'] = str(user['_id']) 
+        user['_id'] = str(user['_id'])
 
         self._log('get_collections', 'items = {}'.format(user))
         return user
