@@ -3,7 +3,7 @@ import Question from './Question'
 import { QuestionType } from '../../models/QuestionType'
 
 import styled from 'styled-components'
-import { Button, LinearProgress } from '@material-ui/core'
+import { Box, Button, LinearProgress } from '@material-ui/core'
 
 const StyledButton = styled(Button)`
     font-size: 16px;
@@ -14,7 +14,10 @@ const QuestionContainer = styled.div`
     min-height: 244px;
 `
 
-export const QuestionPage = (props: {questions: Array<QuestionType>}) => {
+export const QuestionPage = (props: {
+    questions: Array<QuestionType>
+    stepwise: boolean
+}) => {
     const initialState = {
         questionIndex: 0,
         questions: props.questions,
@@ -22,7 +25,9 @@ export const QuestionPage = (props: {questions: Array<QuestionType>}) => {
 
     const [state, setState] = React.useState(initialState)
 
-    const topLevelQuestions = state.questions.filter((question) => !question.parent)
+    const topLevelQuestions = state.questions.filter(
+        (question) => !question.parent
+    )
 
     function setAnswer(id: string, answer: any) {
         setState({
@@ -46,52 +51,76 @@ export const QuestionPage = (props: {questions: Array<QuestionType>}) => {
 
     return (
         <div>
-            <LinearProgress
-                variant="determinate"
-                value={(state.questionIndex / topLevelQuestions.length) * 100}
-            />
+            {props.stepwise && (
+                <LinearProgress
+                    variant="determinate"
+                    value={
+                        (state.questionIndex / topLevelQuestions.length) * 100
+                    }
+                />
+            )}
             <QuestionContainer>
                 <form noValidate autoComplete="off">
-                    <Question
-                        question={topLevelQuestions[state.questionIndex]}
-                        setAnswer={setAnswer}
-                    ></Question>
-                    {state.questions
-                        .filter(
-                            (question: QuestionType) =>
-                                question.parent ===
-                                state.questions[state.questionIndex].id
-                        )
-                        .map((question: QuestionType) => {
-                            return (
+                    {props.stepwise ? (
+                        <>
+                            <Question
+                                question={
+                                    topLevelQuestions[state.questionIndex]
+                                }
+                                setAnswer={setAnswer}
+                            ></Question>
+                            {state.questions
+                                .filter(
+                                    (question: QuestionType) =>
+                                        question.parent ===
+                                        state.questions[state.questionIndex].id
+                                )
+                                .map((question: QuestionType) => {
+                                    return (
+                                        <Question
+                                            question={question}
+                                            setAnswer={setAnswer}
+                                        ></Question>
+                                    )
+                                })}
+                        </>
+                    ) : (
+                        state.questions.map((question: QuestionType) => (
+                            <Box my={5}>
                                 <Question
                                     question={question}
                                     setAnswer={setAnswer}
                                 ></Question>
-                            )
-                        })}
+                            </Box>
+                        ))
+                    )}
                 </form>
             </QuestionContainer>
-            <StyledButton
-                variant="contained"
-                color="primary"
-                onClick={() =>
-                    state.questionIndex > 0 &&
-                    setQuestionIndex(state.questionIndex - 1)
-                }
-            >
-                Back
-            </StyledButton>
-            <StyledButton
-                variant="contained"
-                color="primary"
-                onClick={() =>
-                    state.questionIndex < topLevelQuestions.length - 1 &&
-                    setQuestionIndex(state.questionIndex + 1)
-                }
-            >
-                Forward
-            </StyledButton>
+            {props.stepwise && (
+                <>
+                    <StyledButton
+                        variant="contained"
+                        color="primary"
+                        onClick={() =>
+                            state.questionIndex > 0 &&
+                            setQuestionIndex(state.questionIndex - 1)
+                        }
+                    >
+                        Back
+                    </StyledButton>
+                    <StyledButton
+                        variant="contained"
+                        color="primary"
+                        onClick={() =>
+                            state.questionIndex <
+                                topLevelQuestions.length - 1 &&
+                            setQuestionIndex(state.questionIndex + 1)
+                        }
+                    >
+                        Forward
+                    </StyledButton>
+                </>
+            )}
         </div>
     )
 }

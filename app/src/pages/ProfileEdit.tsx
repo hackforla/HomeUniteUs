@@ -108,7 +108,7 @@ export const ProfileEditPage = () => {
     return (
         <Container>
             <h2>Hello! Answer these questions:</h2>
-            <QuestionPage questions={getQuestions('spy', 'basic')}></QuestionPage>
+            <QuestionPage stepwise={false} questions={getQuestions('spy', 'basic')}></QuestionPage>
         </Container>
     )
 }
