@@ -10,7 +10,7 @@ const Container = styled.div`
 `
 
 const getQuestions = (org: string, section: string) => {
-    const questions = [
+    return [
         {
             id: '7',
             question: 'First Name',
@@ -101,14 +101,17 @@ const getQuestions = (org: string, section: string) => {
             answer: 'I have many leather-bound books',
         },
     ]
-    return questions
+}
+
+const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    console.log(e.target);  
 }
 
 export const ProfileEditPage = () => {
     return (
         <Container>
             <h2>Hello! Answer these questions:</h2>
-            <QuestionPage stepwise={false} questions={getQuestions('spy', 'basic')}></QuestionPage>
+            <QuestionPage stepwise={true} onSubmit={handleSubmit} questions={getQuestions('spy', 'basic')}></QuestionPage>
         </Container>
     )
 }
