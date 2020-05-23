@@ -53,7 +53,7 @@ const DropdownSelect = (props: Props) => {
                             )
                         })}
                     </Select>
-                    <FormHelperText>{helperText}}</FormHelperText>
+                    <FormHelperText>{helperText}</FormHelperText>
                 </FormControl>
             </form>
         </>

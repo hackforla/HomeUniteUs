@@ -15,10 +15,11 @@ interface Props {
     options: Array<string>
     checked: boolean
     helperText: string
+    value: string
 }
 
 const CheckboxInput = (props: Props) => {
-    const { onChange, label, options, checked, helperText } = props
+    const { onChange, label, options, checked, helperText, value } = props
 
     return (
         <>
@@ -34,13 +35,13 @@ const CheckboxInput = (props: Props) => {
                                             checked={checked}
                                             onChange={onChange}
                                             name={checkLabel}
+                                            value={value}
                                         />
                                     }
                                     label={checkLabel}
                                 />
                             )
                         })}
-                        />
                     </FormGroup>
                     <FormHelperText>{helperText}</FormHelperText>
                 </FormControl>
