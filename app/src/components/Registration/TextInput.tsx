@@ -1,7 +1,7 @@
 import * as React from 'react'
 import TextField from '@material-ui/core/TextField'
 
-const TextInput = (props: {
+interface Props {
     name: string
     value: string
     onChange: (event: object) => void
@@ -9,22 +9,14 @@ const TextInput = (props: {
     type: string
     id: string
     label: string
-    className: string
-}) => {
-    const {
-        name,
-        value,
-        onChange,
-        placeholder,
-        type,
-        id,
-        label,
-        className,
-    } = props
+}
+
+const TextInput = (props: Props) => {
+    const { name, value, onChange, placeholder, type, id, label } = props
 
     return (
         <>
-            <form className={className}>
+            <form>
                 <TextField
                     id={id}
                     label={label}

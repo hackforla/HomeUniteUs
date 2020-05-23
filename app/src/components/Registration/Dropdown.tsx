@@ -7,18 +7,19 @@ import {
     Select,
 } from '@material-ui/core'
 
-const DropdownSelect = (props: {
+interface Props {
     name: string
     value: string
     onChange: (event: object) => void
     placeholder: string
     id: string
     itemValue: string
-    className: string
     htmlFor: string
     helperText: string
     options: Array<string>
-}) => {
+}
+
+const DropdownSelect = (props: Props) => {
     const {
         name,
         value,
@@ -26,7 +27,6 @@ const DropdownSelect = (props: {
         placeholder,
         id,
         itemValue,
-        className,
         htmlFor,
         helperText,
         options,
@@ -34,7 +34,7 @@ const DropdownSelect = (props: {
 
     return (
         <>
-            <form className={className}>
+            <form>
                 <FormControl>
                     <InputLabel htmlFor={htmlFor}>{placeholder}</InputLabel>
                     <Select

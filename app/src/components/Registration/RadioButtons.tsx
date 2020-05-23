@@ -7,31 +7,26 @@ import {
     FormLabel,
 } from '@material-ui/core'
 
-const RadioButtons = (props: {
+interface Props {
+    id: string
     name: string
     value: string
     onChange: (event: object) => void
     ariaLabel: string
     formLabel: string
-    className: string
     options: Array<string>
-}) => {
-    const {
-        name,
-        value,
-        onChange,
-        ariaLabel,
-        formLabel,
-        options,
-        className,
-    } = props
+}
+
+const RadioButtons = (props: Props) => {
+    const { id, name, value, onChange, ariaLabel, formLabel, options } = props
 
     return (
         <>
-            <form className={className}>
+            <form>
                 <FormControl component="fieldset">
                     <FormLabel component="legend">{formLabel}</FormLabel>
                     <RadioGroup
+                        id={id}
                         aria-label={ariaLabel}
                         name={name}
                         value={value}

@@ -8,6 +8,7 @@ const AllInputs = (props) => {
     return (
         <>
             <Checkbox
+                id={'1'}
                 options={['yes', 'no']}
                 label={`check me`}
                 checked={false}
@@ -16,9 +17,41 @@ const AllInputs = (props) => {
                     console.log('check')
                 }}
             ></Checkbox>
-            <Dropdown></Dropdown>
-            <RadioButtons></RadioButtons>
-            <TextInput></TextInput>
+            <Dropdown
+                id={'1'}
+                options={['yes', 'no']}
+                name={`test`}
+                value={`test`}
+                placeholder={`test`}
+                itemValue={`test`}
+                htmlFor={`test`}
+                helperText={`dropdown input`}
+                onChange={(event) => {
+                    console.log('drop')
+                }}
+            ></Dropdown>
+            <RadioButtons
+                id={'1'}
+                options={['yes', 'no']}
+                name={`test`}
+                value={`test`}
+                ariaLabel={`test`}
+                formLabel={`test`}
+                onChange={(event) => {
+                    console.log('radio')
+                }}
+            ></RadioButtons>
+            <TextInput
+                id={'1'}
+                label={`check me`}
+                name={`test`}
+                type={`text`}
+                value={`test`}
+                placeholder={`test`}
+                onChange={(event) => {
+                    console.log('text')
+                }}
+            ></TextInput>
         </>
     )
 }
