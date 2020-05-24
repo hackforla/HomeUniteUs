@@ -9,7 +9,16 @@ import { ThemeProvider } from 'styled-components'
 const theme = createMuiTheme()
 
 const AllInputs = (props: any) => {
-    const handleChange = (event: any) => console.log(event.target)
+    const [checked, setChecked] = React.useState(false)
+    const [value, setValue] = React.useState('')
+
+    const handleChange = (event: any) => {
+        setValue(event.target.value)
+    }
+
+    const handleCheck = (event: any) => {
+        setChecked(event.target.checked)
+    }
 
     return (
         //theme provider can wrap in questions component
@@ -24,13 +33,13 @@ const AllInputs = (props: any) => {
                 >
                     <Checkbox
                         id={'1'}
-                        options={['yes', 'no']}
+                        options={['yes']}
                         label={`check me`}
-                        checked={false}
+                        checked={checked}
                         value={`yes`}
                         helperText={`checked input`}
                         onChange={(event) => {
-                            handleChange(event)
+                            handleCheck(event)
                         }}
                     ></Checkbox>
                 </div>
