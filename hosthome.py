@@ -24,6 +24,8 @@ from bson import ObjectId
 import pymongo
 
 
+from matching.basic_filter import BasicFilter
+
 
 dictConfig({
     'version': 1,
@@ -124,7 +126,6 @@ class MongoFacade:
 
     def insert_to_collection(self, collection_name, item):
         client = self._get_conn()
-
 
         db = client[MONGO_DATABASE]
         collection = db[collection_name]
@@ -257,6 +258,24 @@ restrictionsRepository = Repository('restrictions')
 responseValuesRepository = Repository('responseValues')
 
 
+# TODO: Tyler 5/21/2020: Somebody will need to fix this -- should be
+#  in another file, ideally DI of some sort
+# .....but definitely not this way
+repos = {}
+
+repos['hosts'] = hostRepository
+repos['guests'] = guestRepository
+repos['guestQuestions'] = guestQuestionsRepository
+repos['hostQuestions'] = hostQuestionsRepository
+repos['guestResponses'] = guestResponsesRepository
+repos['hostResponses'] = hostResponsesRepository
+repos['restrictions'] = restrictionsRepository
+repos['responseValues'] = responseValuesRepository
+
+
+matcher = BasicFilter(repos)
+
+
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(
@@ -264,6 +283,8 @@ def favicon():
         'favicon.ico',
         mimetype='image/vnd.microsoft.icon'
     )
+
+
 
 
 
@@ -827,6 +848,31 @@ def get_guest_response_by_id(guest_id: int, question_id: int):
 #     return {"success": success, "status": guests.status_code}
 
 
+@app.route('/api/responseValues', methods=['GET'])
+def get_all_response_values():
+
+    try:
+        responseValues = responseValuesRepository.get()
+        js = json.dumps(responseValues)
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+
+    except Exception as e:
+        
+        data = {
+            'error': str(e)
+        }
+
+        js = json.dumps(data)
+        resp = Response(js, status=500, mimetype='application/json')
+        return resp
+
+
+
+
+
+# TODO: Mark for deprecation! no need to dl the whole set for any view in the app
+
 @app.route('/api/dataset', methods=['GET'])
 def get_all_data():
 
@@ -862,6 +908,31 @@ def get_all_data():
         data = {
             'test'  : 'failed',
 
+            'error': str(e)
+        }
+
+        js = json.dumps(data)
+        resp = Response(js, status=500, mimetype='application/json')
+        return resp
+
+
+
+@app.route('/api/matchResults', methods=['GET'])
+def get_all_match_results():
+
+    try:
+
+        match_results = matcher.get_all_match_results()
+
+        js = json.dumps(match_results)
+        resp = Response(js, status=200, mimetype='application/json')
+
+        return resp
+
+    except Exception as e:
+
+        data = {
+            'test'  : 'failed',
             'error': str(e)
         }
 
