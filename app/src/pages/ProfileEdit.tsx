@@ -86,6 +86,10 @@ const questions = [
 ];
 
 const initialState = {
+
+  // TODO: Please move this to props, so we can use 
+  //   this component for Host and Guest, which have 
+  //   different question sets
   questions,
   questionIndex: 0
 };
