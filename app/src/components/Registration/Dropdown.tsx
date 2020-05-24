@@ -11,7 +11,6 @@ interface Props {
     name: string
     value: string
     onChange: (event: object) => void
-    placeholder: string
     id: string
     itemValue: string
     htmlFor: string
@@ -24,7 +23,6 @@ const DropdownSelect = (props: Props) => {
         name,
         value,
         onChange,
-        placeholder,
         id,
         itemValue,
         htmlFor,
@@ -36,9 +34,10 @@ const DropdownSelect = (props: Props) => {
         <>
             <form>
                 <FormControl>
-                    <InputLabel htmlFor={htmlFor}>{placeholder}</InputLabel>
+                    <InputLabel htmlFor={htmlFor}></InputLabel>
                     <Select
                         value={value}
+                        variant={`outlined`}
                         onChange={onChange}
                         inputProps={{
                             name,

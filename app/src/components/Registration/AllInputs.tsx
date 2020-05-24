@@ -4,7 +4,7 @@ import Dropdown from './Dropdown'
 import RadioButtons from './RadioButtons'
 import TextInput from './TextInput'
 import { createMuiTheme } from '@material-ui/core/styles'
-import styled, { ThemeProvider } from 'styled-components'
+import { ThemeProvider } from 'styled-components'
 
 const theme = createMuiTheme()
 
@@ -12,6 +12,7 @@ const AllInputs = (props: any) => {
     const handleChange = (event: any) => console.log(event.target)
 
     return (
+        //theme provider can wrap in questions component
         <ThemeProvider theme={theme}>
             <div style={{ padding: '5em' }}>
                 <div
@@ -44,8 +45,7 @@ const AllInputs = (props: any) => {
                         id={'1'}
                         options={['yes', 'no']}
                         name={`test`}
-                        value={`test`}
-                        placeholder={`test`}
+                        value={`yes`}
                         itemValue={`test`}
                         htmlFor={`test`}
                         helperText={`dropdown input`}

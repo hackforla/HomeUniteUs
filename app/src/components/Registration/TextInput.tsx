@@ -25,6 +25,7 @@ const TextInput = (props: Props) => {
                     onChange={onChange}
                     placeholder={placeholder}
                     type={type}
+                    variant={'outlined'}
                 ></TextField>
             </form>
         </>
