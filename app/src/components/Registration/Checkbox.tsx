@@ -13,13 +13,13 @@ interface Props {
     onChange: (event: object) => void
     label: string
     options: Array<string>
-    checked: boolean
     helperText: string
-    value: string
 }
 
+//checkbox for multi-select
 const CheckboxInput = (props: Props) => {
-    const { onChange, label, options, checked, helperText, value } = props
+    const { onChange, label, options, helperText } = props
+    let checked: boolean
 
     return (
         <>
@@ -35,7 +35,7 @@ const CheckboxInput = (props: Props) => {
                                             checked={checked}
                                             onChange={onChange}
                                             name={checkLabel}
-                                            value={value}
+                                            value={checkLabel}
                                         />
                                     }
                                     label={checkLabel}

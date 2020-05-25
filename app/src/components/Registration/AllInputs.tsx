@@ -9,15 +9,23 @@ import { ThemeProvider } from 'styled-components'
 const theme = createMuiTheme()
 
 const AllInputs = (props: any) => {
-    const [checked, setChecked] = React.useState(false)
+    //checkbox
+    const [checked, setChecked] = React.useState({
+        yes: false,
+        no: false,
+    })
+    const handleCheck = (event: any) => {
+        setChecked({ ...checked, [event.target.name]: event.target.checked })
+    }
+
+    //input, radio, dropdown, text
     const [value, setValue] = React.useState('')
+
+    //dropdown
+    const [age, setAge] = React.useState('')
 
     const handleChange = (event: any) => {
         setValue(event.target.value)
-    }
-
-    const handleCheck = (event: any) => {
-        setChecked(event.target.checked)
     }
 
     return (
@@ -33,10 +41,8 @@ const AllInputs = (props: any) => {
                 >
                     <Checkbox
                         id={'1'}
-                        options={['yes']}
+                        options={['yes', 'no']}
                         label={`check me`}
-                        checked={checked}
-                        value={`yes`}
                         helperText={`checked input`}
                         onChange={(event) => {
                             handleCheck(event)
@@ -52,12 +58,12 @@ const AllInputs = (props: any) => {
                 >
                     <Dropdown
                         id={'1'}
-                        options={['yes', 'no']}
-                        name={`test`}
-                        value={`yes`}
-                        itemValue={`test`}
+                        options={['10', '20']}
+                        name={`20`}
+                        value={value}
+                        itemValue={`20`}
                         htmlFor={`test`}
-                        helperText={`dropdown input`}
+                        helperText={`dropdown`}
                         onChange={(event) => {
                             handleChange(event)
                         }}
@@ -93,7 +99,7 @@ const AllInputs = (props: any) => {
                 >
                     <TextInput
                         id={'1'}
-                        label={`check me`}
+                        label={`text-field`}
                         name={`test`}
                         type={`text`}
                         value={`test`}

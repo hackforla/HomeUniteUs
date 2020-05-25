@@ -17,6 +17,7 @@ interface Props {
     options: Array<string>
 }
 
+//radiobuttons for single option answers
 const RadioButtons = (props: Props) => {
     const { id, name, value, onChange, ariaLabel, formLabel, options } = props
 
