@@ -9,7 +9,6 @@ import {
 } from '@material-ui/core'
 
 interface Props {
-    id: string
     onChange: (event: object) => void
     label: string
     options: Array<string>

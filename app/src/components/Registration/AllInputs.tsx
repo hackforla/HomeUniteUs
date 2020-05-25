@@ -20,12 +20,14 @@ const AllInputs = (props: any) => {
 
     //input, radio, dropdown, text
     const [value, setValue] = React.useState('')
-
-    //dropdown
-    const [age, setAge] = React.useState('')
+    const [text, setText] = React.useState('')
 
     const handleChange = (event: any) => {
         setValue(event.target.value)
+    }
+
+    const handleText = (event: any) => {
+        setText(event.target.value)
     }
 
     return (
@@ -40,7 +42,6 @@ const AllInputs = (props: any) => {
                     }}
                 >
                     <Checkbox
-                        id={'1'}
                         options={['yes', 'no']}
                         label={`check me`}
                         helperText={`checked input`}
@@ -57,12 +58,11 @@ const AllInputs = (props: any) => {
                     }}
                 >
                     <Dropdown
-                        id={'1'}
+                        id={`demo-simple-select-outlined-label`}
+                        labelId={`demo-simple-select-outlined-label`}
+                        label={`Age`}
                         options={['10', '20']}
-                        name={`20`}
                         value={value}
-                        itemValue={`20`}
-                        htmlFor={`test`}
                         helperText={`dropdown`}
                         onChange={(event) => {
                             handleChange(event)
@@ -81,9 +81,9 @@ const AllInputs = (props: any) => {
                         id={'1'}
                         options={['yes', 'no']}
                         name={`test`}
-                        value={`yes`}
+                        value={value}
                         ariaLabel={`test`}
-                        formLabel={`test`}
+                        formLabel={`radio buttons`}
                         onChange={(event) => {
                             handleChange(event)
                         }}
@@ -102,10 +102,10 @@ const AllInputs = (props: any) => {
                         label={`text-field`}
                         name={`test`}
                         type={`text`}
-                        value={`test`}
+                        value={text}
                         placeholder={`test`}
                         onChange={(event) => {
-                            handleChange(event)
+                            handleText(event)
                         }}
                     ></TextInput>
                 </div>

@@ -6,49 +6,55 @@ import {
     FormControl,
     Select,
 } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles((theme) => ({
+    formControl: {
+        margin: theme.spacing(0),
+        minWidth: 200,
+    },
+    selectEmpty: {
+        marginTop: theme.spacing(2),
+    },
+}))
 
 interface Props {
-    name: string
     value: string
     onChange: (event: object) => void
     id: string
-    itemValue: string
-    htmlFor: string
     helperText: string
     options: Array<string>
+    label: string
+    labelId: string
 }
 
 const DropdownSelect = (props: Props) => {
-    const {
-        name,
-        value,
-        onChange,
-        id,
-        itemValue,
-        htmlFor,
-        helperText,
-        options,
-    } = props
+    const classes = useStyles()
+    const { value, onChange, id, helperText, options, label, labelId } = props
 
     return (
         <>
             <form>
-                <FormControl>
-                    <InputLabel htmlFor={htmlFor}></InputLabel>
+                <FormControl
+                    variant={`outlined`}
+                    className={classes.formControl}
+                >
+                    <InputLabel id={id}>{label}</InputLabel>
                     <Select
+                        labelId={id}
                         value={value}
-                        variant={`outlined`}
                         onChange={onChange}
                         inputProps={{
                             name,
                             id,
                         }}
                     >
+                        <MenuItem value="">
+                            <em>None</em>
+                        </MenuItem>
                         {options.map((menuItem: string) => {
                             return (
-                                <MenuItem value={itemValue}>
-                                    {menuItem}
-                                </MenuItem>
+                                <MenuItem value={menuItem}>{menuItem}</MenuItem>
                             )
                         })}
                     </Select>
