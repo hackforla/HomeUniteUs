@@ -1,8 +1,11 @@
 import React from 'react'
-import Checkbox from './Checkbox'
-import Dropdown from './Dropdown'
-import RadioButtons from './RadioButtons'
-import TextInput from './TextInput'
+import {
+    Checkbox,
+    Dropdown,
+    RadioButtons,
+    LargeTextInput,
+    TextInput,
+} from './index'
 import { createMuiTheme } from '@material-ui/core/styles'
 import { ThemeProvider } from 'styled-components'
 
@@ -31,7 +34,6 @@ const AllInputs = (props: any) => {
     }
 
     return (
-        //theme provider can wrap in questions component
         <ThemeProvider theme={theme}>
             <div style={{ padding: '5em' }}>
                 <div
@@ -43,7 +45,7 @@ const AllInputs = (props: any) => {
                 >
                     <Checkbox
                         options={['yes', 'no']}
-                        label={`check me`}
+                        label={`checkbox`}
                         helperText={`checked input`}
                         onChange={(event) => {
                             handleCheck(event)
@@ -99,15 +101,36 @@ const AllInputs = (props: any) => {
                 >
                     <TextInput
                         id={'1'}
-                        label={`text-field`}
+                        label={`small-form`}
                         name={`test`}
                         type={`text`}
                         value={text}
                         placeholder={`test`}
+                        helperText={`Some important text`}
                         onChange={(event) => {
                             handleText(event)
                         }}
                     ></TextInput>
+                </div>
+                <div
+                    style={{
+                        border: `1px solid black`,
+                        margin: `1em`,
+                        padding: `1em`,
+                    }}
+                >
+                    <LargeTextInput
+                        id={'1'}
+                        label={`large-form`}
+                        name={`test`}
+                        type={`text`}
+                        value={text}
+                        placeholder={`test`}
+                        helperText={`Some important text`}
+                        onChange={(event) => {
+                            handleText(event)
+                        }}
+                    ></LargeTextInput>
                 </div>
             </div>
         </ThemeProvider>

@@ -152,7 +152,7 @@ export const App = () => {
                                     />
                                     <Route
                                         exact
-                                        path="/test"
+                                        path="/componentlibrary"
                                         component={AllInputs}
                                     />
                                     <FourOhFour />
