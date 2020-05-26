@@ -34,6 +34,7 @@ const Question = (props: Props) => {
     ) {
         const questionId = props.question.id
         if (e.target.type === 'checkbox') {
+            if (!props.question.answer) props.question.answer = {};
             if ('checked' in e.target) {
                 props.question.answer[e.target.value] = e.target.checked
             }
@@ -78,7 +79,7 @@ const Question = (props: Props) => {
                                         control={
                                             <Checkbox
                                                 checked={
-                                                    props.question.answer[
+                                                    props.question.answer && props.question.answer[
                                                         option.value
                                                     ]
                                                 }
