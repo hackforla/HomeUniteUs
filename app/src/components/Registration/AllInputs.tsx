@@ -1,3 +1,5 @@
+/*** sandbox component to view component lib : check out at route localhost:8080/componentlibrary ***/
+
 import React from 'react'
 import {
     Checkbox,
@@ -9,10 +11,17 @@ import {
 import { createMuiTheme } from '@material-ui/core/styles'
 import { ThemeProvider } from 'styled-components'
 
-const theme = createMuiTheme()
+const theme = createMuiTheme() // default mui theme assigned to Styled Component's theme provider
 
-const AllInputs = (props: any) => {
-    //checkbox
+const AllInputs = () => {
+    //mocking options key in Questions interface
+    const options = {
+        check: ['yes', 'no'],
+        drop: ['10', '20'],
+        radio: ['yes', 'no'],
+    }
+
+    //checkbox -> should only be used for multi-selecton
     const [checked, setChecked] = React.useState({
         yes: false,
         no: false,
@@ -25,10 +34,12 @@ const AllInputs = (props: any) => {
     const [value, setValue] = React.useState('')
     const [text, setText] = React.useState('')
 
+    //radio + dropdown
     const handleChange = (event: any) => {
         setValue(event.target.value)
     }
 
+    //text inputs
     const handleText = (event: any) => {
         setText(event.target.value)
     }
@@ -44,7 +55,7 @@ const AllInputs = (props: any) => {
                     }}
                 >
                     <Checkbox
-                        options={['yes', 'no']}
+                        options={options.check}
                         label={`checkbox`}
                         helperText={`checked input`}
                         onChange={(event) => {
@@ -63,7 +74,8 @@ const AllInputs = (props: any) => {
                         id={`demo-simple-select-outlined-label`}
                         labelId={`demo-simple-select-outlined-label`}
                         label={`Age`}
-                        options={['10', '20']}
+                        placeholder={'hi'}
+                        options={options.drop}
                         value={value}
                         helperText={`dropdown`}
                         onChange={(event) => {
@@ -81,7 +93,7 @@ const AllInputs = (props: any) => {
                 >
                     <RadioButtons
                         id={'1'}
-                        options={['yes', 'no']}
+                        options={options.radio}
                         name={`test`}
                         value={value}
                         ariaLabel={`test`}

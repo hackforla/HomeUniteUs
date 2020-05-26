@@ -26,11 +26,12 @@ interface Props {
     options: Array<string>
     label: string
     labelId: string
+    placeholder: string
 }
 
 const DropdownSelect = (props: Props) => {
     const classes = useStyles()
-    const { value, onChange, id, helperText, options, label, labelId } = props
+    const { value, onChange, id, helperText, options, label } = props
 
     return (
         <>
