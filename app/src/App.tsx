@@ -28,6 +28,7 @@ import {
 } from './pages/CreateProfile'
 import { AllHosts } from './pages/Admin/AllHosts'
 import ProfileSelection from './pages/ProfileSelection/ProfileSelection'
+
 import HostQuestions from './pages/HostQuestions'
 import { Fetcher } from './data/ApiWrapper'
 import { Host } from './models/Host'
@@ -61,6 +62,7 @@ export const App = () => {
 
   const logoutClick = () => {
     logout() //something has to be updated on auth0 side to go to the right route
+
   }
 
   React.useEffect(() => {
