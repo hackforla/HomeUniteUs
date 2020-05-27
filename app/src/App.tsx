@@ -29,10 +29,9 @@ import {
 import { AllHosts } from './pages/Admin/AllHosts'
 import ProfileSelection from './pages/ProfileSelection/ProfileSelection'
 import HostQuestions from './pages/HostQuestions'
-import { Fetcher } from './data/ApiWrapper'
+import { ApiWrapper } from './data/ApiWrapper'
 import { Host } from './models/Host'
-
-export interface AppProps { }
+import { Accounts } from './models/Accounts'
 
 export const LoginView = () => {
   const { loginWithPopup } = useAuth0()
@@ -60,18 +59,22 @@ export const App = () => {
   const [hasAccount, setHasAccount] = React.useState(false)
 
   const logoutClick = () => {
-    logout() //something has to be updated on auth0 side to go to the right route
+    logout()
   }
 
   React.useEffect(() => {
     const fetch = async () => {
-      if (isAuthenticated) {
-        let fetch = new Fetcher<Host>('checkEmail')
-        let data: any | undefined = await fetch.getByEmail(user)
-        if (data?.email === user?.email) {
-          setHasAccount(data !== null)
-        }
-        // history.push(`/profileselection/${user.id}`) auth0 doesnt have user id
+      // if (isAuthenticated) {
+      //   let fetch = new Fetcher<Host>('checkEmail')
+      //   let data: any | undefined = await fetch.getByEmail(user) //change any to account interface
+      //   if (data?.email === user?.email) { //change to status if status 200 then its gooooooood!
+      //     setHasAccount(data !== null)
+      //   }
+      //   history.push('profileselection')
+      // }
+      if(isAuthenticated){
+        let fetching = new ApiWrapper()
+        let data: Accounts | undefined = await fetching.getUserAccount(user)
       }
     }
     fetch()

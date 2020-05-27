@@ -120,16 +120,23 @@ class MongoFacade:
         self._log('get_collection', 'items = {}'.format(items))
         return item
     ###########################################################attempt
-    def get_user_by_email(self, collection_name): #need to add param called email here
-        self._log('get_user_by_email', 'acquiring connection...')
-        client = self._get_conn()
-        db = client[MONGO_DATABASE]
-        collection = db[collection_name]
-        user = collection.find_one({ 'email': 'diana.patterson@gmail.com' }) #email needs to be replace with request body
-        user['_id'] = str(user['_id'])
+    def get_user_by_email(self, collection_name, email): #need to add param called email here
+        try: 
+            self._log('get_user_by_email', 'acquiring connection...')
+            client = self._get_conn()
+            db = client[MONGO_DATABASE]
+            collection = db[collection_name]
+            
+            user = collection.find_one({ 'email': email }) #email needs to be replace with request body
+            if user is None:
+                return None 
+            user['_id'] = str(user['_id'])
+            self._log('get_collections', 'items = {}'.format(user))
+            return user
+        except Exception as e:
+            self._log("get_user_by_email", f"error {e}")
+            raise e
 
-        self._log('get_collections', 'items = {}'.format(user))
-        return user
     #####################################################################
 
     def insert_to_collection(self, collection_name, item):
@@ -221,8 +228,8 @@ class Repository:
         )
         return result
     ########################################attempt
-    def get_using_email(self): #pass in the request body here
-        resp = self.mongo_facade.get_user_by_email(self.collection_name) ##add the request here
+    def get_using_email(self, email): #pass in the request body here
+        resp = self.mongo_facade.get_user_by_email(self.collection_name, email) ##add the request here
         return resp
     #########################################
 
@@ -263,6 +270,7 @@ class Repository:
 
 
 hostRepository = Repository('hosts')
+accountsRepository = Repository('accounts')
 guestRepository = Repository('guests')
 guestQuestionsRepository = Repository('guestQuestions')
 hostQuestionsRepository = Repository('hostQuestions')
@@ -360,11 +368,11 @@ def get_all_hosts():
 @app.route('/api/checkEmail', methods=["POST"])
 def check_by_email():
     try:
-        # req = request.json() #get req from front end
-        hosts = hostRepository.get_using_email() #pass the req in here when ready
-        js = json.dumps(hosts) 
-        resp = Response(js, status=200, mimetype='application/json') 
-        return resp
+        req = request.json() #get req from front end
+        accounts = accountsRepository.get_using_email(req['email']) #pass the req in here when ready
+        if accounts is None:
+            return Response(status=400, mimetype='application/json') 
+        return Response(status=200, mimetype='application/json') 
            
     except Exception as e:
         data = {
