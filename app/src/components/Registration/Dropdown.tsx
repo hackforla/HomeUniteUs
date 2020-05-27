@@ -6,38 +6,42 @@ import {
     FormControl,
     Select,
 } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 
-const DropdownSelect = (props: {
-    name: string
+const useStyles = makeStyles((theme) => ({
+    formControl: {
+        margin: theme.spacing(0),
+        minWidth: 200,
+    },
+    selectEmpty: {
+        marginTop: theme.spacing(2),
+    },
+}))
+
+interface Props {
     value: string
     onChange: (event: object) => void
-    placeholder: string
     id: string
-    itemValue: string
-    className: string
-    htmlFor: string
     helperText: string
     options: Array<string>
-}) => {
-    const {
-        name,
-        value,
-        onChange,
-        placeholder,
-        id,
-        itemValue,
-        className,
-        htmlFor,
-        helperText,
-        options,
-    } = props
+    label: string
+    labelId: string
+}
+
+const DropdownSelect = (props: Props) => {
+    const classes = useStyles()
+    const { value, onChange, id, helperText, options, label } = props
 
     return (
         <>
-            <form className={className}>
-                <FormControl>
-                    <InputLabel htmlFor={htmlFor}>{placeholder}</InputLabel>
+            <form>
+                <FormControl
+                    variant={`outlined`}
+                    className={classes.formControl}
+                >
+                    <InputLabel id={id}>{label}</InputLabel>
                     <Select
+                        labelId={id}
                         value={value}
                         onChange={onChange}
                         inputProps={{
@@ -45,15 +49,16 @@ const DropdownSelect = (props: {
                             id,
                         }}
                     >
+                        <MenuItem value="">
+                            <em>None</em>
+                        </MenuItem>
                         {options.map((menuItem: string) => {
                             return (
-                                <MenuItem value={itemValue}>
-                                    {menuItem}
-                                </MenuItem>
+                                <MenuItem value={menuItem}>{menuItem}</MenuItem>
                             )
                         })}
                     </Select>
-                    <FormHelperText>{helperText}}</FormHelperText>
+                    <FormHelperText>{helperText}</FormHelperText>
                 </FormControl>
             </form>
         </>

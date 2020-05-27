@@ -28,6 +28,7 @@ import {
 } from './pages/CreateProfile'
 import { AllHosts } from './pages/Admin/AllHosts'
 import ProfileSelection from './pages/ProfileSelection/ProfileSelection'
+import AllInputs from './components/Registration/AllInputs'
 
 import HostQuestions from './pages/HostQuestions'
 import { ApiWrapper } from './data/ApiWrapper'
@@ -155,6 +156,11 @@ export const App = () => {
                     <Route
                       exact path="/host/:id"
                       component={HostQuestions}
+                    />
+                    <Route
+                        exact
+                        path="/componentlibrary"
+                        component={AllInputs}
                     />
                     <FourOhFour />
                   </Switch>

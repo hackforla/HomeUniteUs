@@ -8,19 +8,21 @@ import {
     Checkbox,
 } from '@material-ui/core'
 
-const CheckboxInput = (props: {
+interface Props {
     onChange: (event: object) => void
-    className: string
     label: string
     options: Array<string>
-    checked: boolean
     helperText: string
-}) => {
-    const { onChange, className, label, options, checked, helperText } = props
+}
+
+//checkbox for multi-select
+const CheckboxInput = (props: Props) => {
+    const { onChange, label, options, helperText } = props
+    let checked: boolean
 
     return (
         <>
-            <form className={className}>
+            <form>
                 <FormControl component="fieldset">
                     <FormLabel component="legend">{label}</FormLabel>
                     <FormGroup>
@@ -32,13 +34,13 @@ const CheckboxInput = (props: {
                                             checked={checked}
                                             onChange={onChange}
                                             name={checkLabel}
+                                            value={checkLabel}
                                         />
                                     }
                                     label={checkLabel}
                                 />
                             )
                         })}
-                        />
                     </FormGroup>
                     <FormHelperText>{helperText}</FormHelperText>
                 </FormControl>

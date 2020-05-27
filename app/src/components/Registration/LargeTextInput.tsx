@@ -12,7 +12,7 @@ interface Props {
     helperText: string
 }
 
-const TextInput = (props: Props) => {
+const LargeTextInput = (props: Props) => {
     const {
         name,
         value,
@@ -33,14 +33,16 @@ const TextInput = (props: Props) => {
                     name={name}
                     value={value}
                     onChange={onChange}
-                    helperText={helperText}
                     placeholder={placeholder}
+                    helperText={helperText}
                     type={type}
                     variant={'outlined'}
+                    multiline
+                    rows={4}
                 ></TextField>
             </form>
         </>
     )
 }
 
-export default TextInput
+export default LargeTextInput
