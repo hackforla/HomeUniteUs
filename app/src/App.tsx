@@ -54,12 +54,12 @@ export const LoginView = () => {
 }
 
 export const App = () => {
-    //const history = useHistory()
+    // const history = useHistory()
 
-    // const logoutClick = () => {
-    //     logout()
-    //     history.push('/') //route not working but you get signed out
-    // }
+    const logoutClick = () => {
+        logout()
+        // history.push('/') //route not working but you get signed out
+    }
 
     const { isInitializing, isAuthenticated, user, logout } = useAuth0()
 
@@ -81,7 +81,7 @@ export const App = () => {
                                     </a>
                                 </AppStyle.FlexGrowHolder>
                                 <AppStyle.Holder>
-                                    {/* <p onClick={logoutClick}>Logout</p> */}
+                                    <p onClick={logoutClick}>Logout</p>
                                 </AppStyle.Holder>
                                 <AppStyle.Holder>
                                     <NavLink to={`/demo`}>DEMO</NavLink>

@@ -5,7 +5,7 @@ import styled from "styled-components"
 import { Button, LinearProgress } from '@material-ui/core';
 import { Question } from "../models/Question"
 import { Fetcher } from "../data/ApiWrapper";
-import { HostQuestion, ResponseValue } from "../models";
+import { GuestQuestion, ResponseValue } from "../models";
 
 const Container = styled.div`
   margin: 30px auto;
@@ -18,7 +18,7 @@ const StyledButton = styled(Button)`
   margin: 5px !important;
 `
 
-interface HostQuestionsPageProps {
+interface GuestQuestionsPageProps {
 
 }
 
@@ -52,16 +52,16 @@ interface QuestionResponse {
 //   answer: 'house'
 // }
 
-export const HostQuestionsPage = () => {
+export const GuestQuestionsPage = () => {
   const [state, setState] = React.useState(initialState);
 
-  const fetcher = new Fetcher<HostQuestion>('hostQuestions');
+  const fetcher = new Fetcher<GuestQuestion>('hostQuestions');
   const rvFetcher = new Fetcher<ResponseValue>('responseValues');
 
   React.useEffect(() => {
 
     rvFetcher.getAll().then((rvs: Array<ResponseValue>) => {
-      fetcher.getAll().then((questions: Array<HostQuestion>) => {
+      fetcher.getAll().then((questions: Array<GuestQuestion>) => {
         setState({
           ...state,
           questions: questions.map((q, index) => {
@@ -128,4 +128,4 @@ export const HostQuestionsPage = () => {
 }
 
 
-export default HostQuestionsPage
+export default GuestQuestionsPage
