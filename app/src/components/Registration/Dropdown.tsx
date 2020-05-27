@@ -34,33 +34,26 @@ const DropdownSelect = (props: Props) => {
 
     return (
         <>
-            <form>
-                <FormControl
-                    variant={`outlined`}
-                    className={classes.formControl}
+            <FormControl variant={`outlined`} className={classes.formControl}>
+                <InputLabel id={id}>{label}</InputLabel>
+                <Select
+                    labelId={id}
+                    value={value}
+                    onChange={onChange}
+                    inputProps={{
+                        name,
+                        id,
+                    }}
                 >
-                    <InputLabel id={id}>{label}</InputLabel>
-                    <Select
-                        labelId={id}
-                        value={value}
-                        onChange={onChange}
-                        inputProps={{
-                            name,
-                            id,
-                        }}
-                    >
-                        <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem>
-                        {options.map((menuItem: string) => {
-                            return (
-                                <MenuItem value={menuItem}>{menuItem}</MenuItem>
-                            )
-                        })}
-                    </Select>
-                    <FormHelperText>{helperText}</FormHelperText>
-                </FormControl>
-            </form>
+                    <MenuItem value="">
+                        <em>None</em>
+                    </MenuItem>
+                    {options.map((menuItem: string, index: number) => {
+                        return <MenuItem value={index}>{menuItem}</MenuItem>
+                    })}
+                </Select>
+                <FormHelperText>{helperText}</FormHelperText>
+            </FormControl>
         </>
     )
 }

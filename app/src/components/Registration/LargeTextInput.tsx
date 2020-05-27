@@ -26,21 +26,19 @@ const LargeTextInput = (props: Props) => {
 
     return (
         <>
-            <form>
-                <TextField
-                    id={id}
-                    label={label}
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    placeholder={placeholder}
-                    helperText={helperText}
-                    type={type}
-                    variant={'outlined'}
-                    multiline
-                    rows={4}
-                ></TextField>
-            </form>
+            <TextField
+                id={id}
+                label={label}
+                name={name}
+                value={value}
+                onChange={onChange}
+                placeholder={placeholder}
+                helperText={helperText}
+                type={type}
+                variant={'outlined'}
+                multiline
+                rows={4}
+            ></TextField>
         </>
     )
 }

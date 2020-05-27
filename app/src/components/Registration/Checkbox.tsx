@@ -22,29 +22,27 @@ const CheckboxInput = (props: Props) => {
 
     return (
         <>
-            <form>
-                <FormControl component="fieldset">
-                    <FormLabel component="legend">{label}</FormLabel>
-                    <FormGroup>
-                        {options.map((checkLabel: string) => {
-                            return (
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            checked={checked}
-                                            onChange={onChange}
-                                            name={checkLabel}
-                                            value={checkLabel}
-                                        />
-                                    }
-                                    label={checkLabel}
-                                />
-                            )
-                        })}
-                    </FormGroup>
-                    <FormHelperText>{helperText}</FormHelperText>
-                </FormControl>
-            </form>
+            <FormControl component="fieldset">
+                <FormLabel component="legend">{label}</FormLabel>
+                <FormGroup>
+                    {options.map((checkLabel: string) => {
+                        return (
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={checked}
+                                        onChange={onChange}
+                                        name={checkLabel}
+                                        value={checkLabel}
+                                    />
+                                }
+                                label={checkLabel}
+                            />
+                        )
+                    })}
+                </FormGroup>
+                <FormHelperText>{helperText}</FormHelperText>
+            </FormControl>
         </>
     )
 }
