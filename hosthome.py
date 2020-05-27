@@ -9,10 +9,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from flask import (
-    Flask, 
-    render_template, 
-    request, 
-    Response, 
+    Flask,
+    render_template,
+    request,
+    Response,
     make_response,
     redirect,
     jsonify,
@@ -23,6 +23,8 @@ from flask import (
 from bson import ObjectId
 import pymongo
 
+
+from matching.basic_filter import BasicFilter
 
 
 dictConfig({
@@ -64,7 +66,7 @@ class MongoFacade:
 
     def __init__(self):
 
-        if DEBUG:                
+        if DEBUG:
 
             self.url = 'mongodb://{}:{}'.format(
                 os.getenv('DB_HOST'),
@@ -88,9 +90,9 @@ class MongoFacade:
         except Exception as e:
             app.logger.debug("Server not available: {}".format(e))
             raise e
-            
+
     def get_collection(self, collection_name):
-        
+
         self._log('get_collection', 'acquiring connection...')
 
         client = self._get_conn()
@@ -106,9 +108,9 @@ class MongoFacade:
         self._log('get_collection', 'items = {}'.format(items))
         return items
 
-            
+
     def get_element_by_id(self, collection_name, id):
-        
+
         self._log('get_element_by_id', 'acquiring connection...')
 
         client = self._get_conn()
@@ -116,8 +118,9 @@ class MongoFacade:
         db = client[MONGO_DATABASE]
         collection = db[collection_name]
         item = collection.find_one({'id': id})
+        item['_id'] = str(item['_id']) # repeating this as above, but seems bad...
 
-        self._log('get_collection', 'items = {}'.format(items))
+        self._log('get_collection', 'item = {}'.format(item))
         return item
     ###########################################################attempt
     def get_user_by_email(self, collection_name, email): #need to add param called email here
@@ -142,7 +145,6 @@ class MongoFacade:
     def insert_to_collection(self, collection_name, item):
         client = self._get_conn()
 
-
         db = client[MONGO_DATABASE]
         collection = db[collection_name]
 
@@ -166,9 +168,9 @@ class MongoFacade:
 
     def update_in_collection(self, collection_name, id, item):
 
-        app.logger.warn('MongoFacade:update_in_collection(): id = {} ({})'.format(id, type(id)))
-        app.logger.warn('MongoFacade:update_in_collection(): item = {}'.format(item))
-        app.logger.warn('MongoFacade:update_in_collection(): collection_name = {}'.format(collection_name))
+        app.logger.warning('MongoFacade:update_in_collection(): id = {} ({})'.format(id, type(id)))
+        app.logger.warning('MongoFacade:update_in_collection(): item = {}'.format(item))
+        app.logger.warning('MongoFacade:update_in_collection(): collection_name = {}'.format(collection_name))
 
         client = self._get_conn()
 
@@ -176,20 +178,20 @@ class MongoFacade:
             app.logger.error('MongoFacade:update_in_collection(): Mongo server not available')
             raise Exception('Mongo server not available')
 
-        app.logger.warn(f'MongoFacade:update_in_collection(): getting DB {MONGO_DATABASE}...')
+        app.logger.warning(f'MongoFacade:update_in_collection(): getting DB {MONGO_DATABASE}...')
         db = client[MONGO_DATABASE]
 
-        app.logger.warn(f'MongoFacade:update_in_collection(): getting collection {collection_name}...')
+        app.logger.warning(f'MongoFacade:update_in_collection(): getting collection {collection_name}...')
         collection = db[collection_name]
 
-        app.logger.warn(f'MongoFacade:update_in_collection(): updating item in collection...')
+        app.logger.warning(f'MongoFacade:update_in_collection(): updating item in collection...')
         result = collection.update_one( { 'id': id }, {'$set': item })
 
 
-        app.logger.warn(f'MongoFacade:update_in_collection(): - result.acknowledged: {result.acknowledged}')
-        app.logger.warn(f'MongoFacade:update_in_collection(): - result.matched_count: {result.matched_count}')
-        app.logger.warn(f'MongoFacade:update_in_collection(): - result.matched_count: {result.modified_count}')
-        app.logger.warn(f'MongoFacade:update_in_collection(): - result.raw_result: {result.raw_result}')
+        app.logger.warning(f'MongoFacade:update_in_collection(): - result.acknowledged: {result.acknowledged}')
+        app.logger.warning(f'MongoFacade:update_in_collection(): - result.matched_count: {result.matched_count}')
+        app.logger.warning(f'MongoFacade:update_in_collection(): - result.matched_count: {result.modified_count}')
+        app.logger.warning(f'MongoFacade:update_in_collection(): - result.raw_result: {result.raw_result}')
 
 
         return result.acknowledged
@@ -199,11 +201,11 @@ class MongoFacade:
 
 class Repository:
 
-    def __init__(self, collection_name):        
+    def __init__(self, collection_name):
         self.mongo_facade = MongoFacade()
         self.collection_name = collection_name
 
-    def get(self):        
+    def get(self):
         items = self.mongo_facade.get_collection(self.collection_name)
         return items
 
@@ -212,17 +214,17 @@ class Repository:
         return result
 
     def delete(self, id):
-        self.mongo_facade.delete_from_collection(self.collection_name, id)
+        result = self.mongo_facade.delete_from_collection(self.collection_name, id)
         return result
 
     def update(self, id, item):
-        app.logger.warn('Repository:update: id = {}'.format(id))
-        app.logger.warn('Repository:update: item = {}'.format(item))
+        app.logger.warning('Repository:update: id = {}'.format(id))
+        app.logger.warning('Repository:update: item = {}'.format(item))
         safe_item = { x: item[x] for x in dict(item).keys() if x != '_id' }
 
-        app.logger.warn('Repository:update: safe_item = {}'.format(json.dumps(safe_item, indent=4)))
+        app.logger.warning('Repository:update: safe_item = {}'.format(json.dumps(safe_item, indent=4)))
         result = self.mongo_facade.update_in_collection(
-            self.collection_name, 
+            self.collection_name,
             id,
             safe_item
         )
@@ -280,6 +282,24 @@ restrictionsRepository = Repository('restrictions')
 responseValuesRepository = Repository('responseValues')
 
 
+# TODO: Tyler 5/21/2020: Somebody will need to fix this -- should be
+#  in another file, ideally DI of some sort
+# .....but definitely not this way
+repos = {}
+
+repos['hosts'] = hostRepository
+repos['guests'] = guestRepository
+repos['guestQuestions'] = guestQuestionsRepository
+repos['hostQuestions'] = hostQuestionsRepository
+repos['guestResponses'] = guestResponsesRepository
+repos['hostResponses'] = hostResponsesRepository
+repos['restrictions'] = restrictionsRepository
+repos['responseValues'] = responseValuesRepository
+
+
+matcher = BasicFilter(repos)
+
+
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(
@@ -290,6 +310,8 @@ def favicon():
 
 
 
+
+
 ###############
 ## Hosts API ##
 ###############
@@ -297,15 +319,15 @@ def favicon():
 @app.route('/api/hosts/<int:id>', methods=['GET', 'PUT', 'DELETE'])
 def host_by_id(id: int):
 
-    app.logger.warn('host_by_id: request.method = {}'.format(request.method))
-    app.logger.warn(f'host_by_id: id = {id} ({type(id)})')
+    app.logger.warning('host_by_id: request.method = {}'.format(request.method))
+    app.logger.warning(f'host_by_id: id = {id} ({type(id)})')
 
     if request.method == 'GET':
 
-        try:           
+        try:
 
-            host = hostRepository.get_element_by_id(id)        
-            js = json.dumps(host)    
+            host = hostRepository.mongo_facade.get_element_by_id('hosts',id)
+            js = json.dumps(host)
             resp = Response(js, status=200, mimetype='application/json')
             return resp
 
@@ -314,20 +336,20 @@ def host_by_id(id: int):
             data = {
                 'error': str(e)
             }
-            
-            js = json.dumps(data)    
+
+            js = json.dumps(data)
             resp = Response(js, status=500, mimetype='application/json')
-            
+
             return resp
 
-    else:
+    elif request.method == 'PUT':
 
-        try:           
+        try:
 
-            responseData = hostRepository.update(id, request.json)      
-            app.logger.debug('responseData = {}'.format(responseData))  
-            # js = json.dumps(responseData)    
-            resp = Response(json.dumps({'error': None, 'data': None}), status=200, mimetype='application/json')
+            responseData = hostRepository.update(id, request.json)
+            app.logger.debug('responseData = {}'.format(responseData))
+            resp = Response(json.dumps({'error': None, 'data': None}),
+                            status=200, mimetype='application/json')
             return resp
 
         except Exception as e:
@@ -335,22 +357,99 @@ def host_by_id(id: int):
             data = {
                 'error': str(e)
             }
-            
-            js = json.dumps(data)    
+
+            js = json.dumps(data)
             resp = Response(js, status=500, mimetype='application/json')
-            
+
             return resp
 
-            
+    elif request.method == 'DELETE':
+
+        try:
+
+            responseData = hostRepository.delete(id)
+            app.logger.debug('responseData = {}'.format(responseData))
+            resp = Response(json.dumps({'error': None, 'data': None}),
+                            status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    else:
+
+        app.logger.debug(f'what is {request.method} even doing here.')
+
+
 @app.route('/api/hosts', methods=['GET', 'POST'])
 def get_all_hosts():
 
-    app.logger.warn('get_all_hosts: request.method = {}'.format(request.method))
+    app.logger.warning('get_all_hosts: request.method = {}'.format(request.method))
 
-    try:           
+    if request.method == 'GET':
 
-        hosts = hostRepository.get()        
-        js = json.dumps(hosts)    
+        try:
+
+            hosts = hostRepository.get()
+            js = json.dumps(hosts)
+            resp = Response(js, status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    elif request.method == 'POST':
+
+        try:
+
+            host = request.json
+            responseData = hostRepository.add(host)
+            app.logger.debug('responseData = {}'.format(responseData))
+            resp = Response({'error': None,'data': None},
+                             status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    else:
+
+        app.logger.debug(f'what is {request.method} even doing here.')
+
+
+@app.route('/api/hostQuestions', methods=['GET'])
+def get_all_hostQuestions():
+
+    app.logger.warning('get_all_hostQuestions: request.method = {}'.format(request.method))
+
+    try:
+
+        hostQuestions = hostQuestionsRepository.get()
+        js = json.dumps(hostQuestions)
         resp = Response(js, status=200, mimetype='application/json')
         return resp
 
@@ -359,8 +458,32 @@ def get_all_hosts():
         data = {
             'error': str(e)
         }
-        
-        js = json.dumps(data)    
+
+        js = json.dumps(data)
+        resp = Response(js, status=500, mimetype='application/json')
+
+        return resp
+
+
+@app.route('/api/hostQuestions/<int:id>', methods=['GET'])
+def get_hostQuestion_by_id(id: int):
+
+    app.logger.warning('get_hostQuestion_by_id: request.method = {}'.format(request.method))
+
+    try:
+
+        hostQuestion = hostQuestionsRepository.mongo_facade.get_element_by_id('hostQuestions', id)
+        js = json.dumps(hostQuestion)
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+
+    except Exception as e:
+
+        data = {
+            'error': str(e)
+        }
+
+        js = json.dumps(data)
         resp = Response(js, status=500, mimetype='application/json')
 
         return resp
@@ -386,11 +509,11 @@ def check_by_email():
 
 # @app.route('/api/hosts/{id}', methods=['PUT'])
 # def update_host(id: int):
-#     try:           
+#     try:
 
-#         responseData = hostRepository.update(id, request.json)      
-#         app.logger.debug('responseData = {}'.format(responseData))  
-#         js = json.dumps(responseData)    
+#         responseData = hostRepository.update(id, request.json)
+#         app.logger.debug('responseData = {}'.format(responseData))
+#         js = json.dumps(responseData)
 #         resp = Response(js, status=200, mimetype='application/json')
 #         return resp
 
@@ -399,10 +522,10 @@ def check_by_email():
 #         data = {
 #             'error': str(e)
 #         }
-        
-#         js = json.dumps(data)    
+
+#         js = json.dumps(data)
 #         resp = Response(js, status=500, mimetype='application/json')
-        
+
 #         return resp
 
 
@@ -420,47 +543,321 @@ def check_by_email():
 ################
 ## Guests API ##
 ################
-# @app.route('/api/guests', methods=['GET'])
-# def get_all_guests():
-#     try:           
+@app.route('/api/guests', methods=['GET', 'POST'])
+def get_all_guests():
 
-#         guests = guestRepository.get()        
-#         js = json.dumps(guests)    
-#         resp = Response(js, status=200, mimetype='application/json')
-#         return resp
+    app.logger.warning('get_all_guests: request.method = {}'.format(request.method))
 
-#     except Exception as e:
+    if request.method == 'GET':
 
-#         data = {
-#             'error': str(e)
-#         }
-        
-#         js = json.dumps(data)    
-#         resp = Response(js, status=500, mimetype='application/json')
+        try:
 
-#         return resp
+            guests = guestRepository.get()
+            js = json.dumps(guests)
+            resp = Response(js, status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    elif request.method == 'POST':
+
+        try:
+
+            guest = request.json
+            responseData = guestRepository.add(guest)
+            app.logger.debug('responseData = {}'.format(responseData))
+            resp = Response({'error': None,'data': None},
+                             status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    else:
+
+        app.logger.debug(f'what is {request.method} even doing here.')
 
 
-# @app.route('/api/guests/{id}', methods=['GET'])
-# def get_guest_by_id(id: int):
-#     try:           
 
-#         guest = guestRepository.get_element_by_id(id)        
-#         js = json.dumps(guest)    
-#         resp = Response(js, status=200, mimetype='application/json')
-#         return resp
+@app.route('/api/guests/<int:id>', methods=['GET', 'PUT', 'DELETE'])
+def guest_by_id(id: int):
 
-#     except Exception as e:
+    app.logger.warning('guest_by_id: request.method = {}'.format(request.method))
+    app.logger.warning(f'guest_by_id: id = {id} ({type(id)})')
 
-#         data = {
-#             'error': str(e)
-#         }
-        
-#         js = json.dumps(data)    
-#         resp = Response(js, status=500, mimetype='application/json')
-        
-#         return resp
+    if request.method == 'GET':
 
+        try:
+
+            guest = guestRepository.mongo_facade.get_element_by_id('guests',id)
+            js = json.dumps(guest)
+            resp = Response(js, status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    elif request.method == 'PUT':
+
+        try:
+
+            responseData = guestRepository.update(id, request.json)
+            app.logger.debug('responseData = {}'.format(responseData))
+            resp = Response(json.dumps({'error': None, 'data': None}),
+                            status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    elif request.method == 'DELETE':
+
+        try:
+
+            responseData = guestRepository.delete(id)
+            app.logger.debug('responseData = {}'.format(responseData))
+            resp = Response(json.dumps({'error': None, 'data': None}),
+                            status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    else:
+
+        app.logger.debug(f'what is {request.method} even doing here.')
+
+
+@app.route('/api/guestQuestions', methods=['GET'])
+def get_all_guestQuestions():
+
+    app.logger.warning('get_all_guestQuestions: request.method = {}'.format(request.method))
+
+    try:
+
+        guestQuestions = guestQuestionsRepository.get()
+        js = json.dumps(guestQuestions)
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+
+    except Exception as e:
+
+        data = {
+            'error': str(e)
+        }
+
+        js = json.dumps(data)
+        resp = Response(js, status=500, mimetype='application/json')
+
+        return resp
+
+
+@app.route('/api/guestQuestions/<int:id>', methods=['GET'])
+def get_guestQuestion_by_id(id: int):
+
+    app.logger.warning('get_guestQuestion_by_id: request.method = {}'.format(request.method))
+
+    try:
+
+        guestQuestion = guestQuestionsRepository.mongo_facade.get_element_by_id('guestQuestions', id)
+        js = json.dumps(guestQuestion)
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+
+    except Exception as e:
+
+        data = {
+            'error': str(e)
+        }
+
+        js = json.dumps(data)
+        resp = Response(js, status=500, mimetype='application/json')
+
+        return resp
+
+
+
+@app.route('/api/guests/<int:id>/responses', methods=['GET','POST'])
+def get_guest_responses(id: int):
+
+    app.logger.warning('get_guest_responses: request.method = {}'.format(request.method))
+    app.logger.warning(f'guest_by_id: id = {id} ({type(id)})')
+
+    if request.method == 'GET':
+
+        try:
+
+            guestResponses = guestResponsesRepository.get()
+            guestResponses = [response for response in guestResponses if response['guestId']==id]
+            js = json.dumps(guestResponses)
+            resp = Response(js, status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    elif request.method == 'POST':
+
+        try:
+
+            guest_response = request.json
+            responseData = guestResponsesRepository.add(guest_response)
+            app.logger.debug('responseData = {}'.format(responseData))
+            resp = Response({'error': None,'data': None},
+                             status=200, mimetype='application/json')
+
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    else:
+
+        app.logger.debug(f'what is {request.method} even doing here.')
+
+
+@app.route('/api/guests/<int:guest_id>/responses/<int:question_id>', methods=['GET','PUT','DELETE'])
+def get_guest_response_by_id(guest_id: int, question_id: int):
+
+    app.logger.warning('get_guest_response_by_id: request.method = {}'.format(request.method))
+
+    if request.method == 'GET':
+
+        try:
+
+            guestResponses = guestResponsesRepository.get()
+            guestResponses = [response['responseValues'] for response in guestResponses\
+                                if response['guestId']==guest_id and response['questionId']==question_id]
+            js = json.dumps(guestResponses[0])
+            resp = Response(js, status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    elif request.method == 'PUT':
+
+        try:
+
+            guestResponses = guestResponsesRepository.get()
+            response_id = [response['responseValues'] for response in guestResponses\
+                                 if response['guestId']==guest_id and\
+                                    response['questionId']==question_id][0]
+
+            #this is really shaky, need to know what's being passed back
+            #needs guest_id and question_id
+            responseData = guestResponsesRepository.update(response_id, request.json)
+            app.logger.debug('responseData = {}'.format(responseData))
+            resp = Response(json.dumps({'error': None, 'data': None}),
+                            status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+
+    elif request.method == 'DELETE':
+
+        try:
+            guestResponses = guestResponsesRepository.get()
+            response_id = [response['responseValues'] for response in guestResponses\
+                                  if response['guestId']==guest_id and\
+                                     response['questionId']==question_id][0]
+
+            responseData = guestResponsesRepository.delete(guest_id)
+            app.logger.debug('responseData = {}'.format(responseData))
+            resp = Response(json.dumps({'error': None, 'data': None}),
+                            status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+
+    else:
+
+        app.logger.debug(f'what is {request.method} even doing here.')
 
 # @app.route('/api/guests', methods=['POST'])
 # def add_guest():
@@ -494,10 +891,35 @@ def check_by_email():
 #     return {"success": success, "status": guests.status_code}
 
 
+@app.route('/api/responseValues', methods=['GET'])
+def get_all_response_values():
+
+    try:
+        responseValues = responseValuesRepository.get()
+        js = json.dumps(responseValues)
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+
+    except Exception as e:
+        
+        data = {
+            'error': str(e)
+        }
+
+        js = json.dumps(data)
+        resp = Response(js, status=500, mimetype='application/json')
+        return resp
+
+
+
+
+
+# TODO: Mark for deprecation! no need to dl the whole set for any view in the app
+
 @app.route('/api/dataset', methods=['GET'])
 def get_all_data():
 
-    try:           
+    try:
 
         hosts = hostRepository.get()
         guests = guestRepository.get()
@@ -520,8 +942,8 @@ def get_all_data():
             'matchResults': []
         }
 
-        
-        js = json.dumps(data)    
+
+        js = json.dumps(data)
         resp = Response(js, status=200, mimetype='application/json')
         return resp
 
@@ -531,16 +953,46 @@ def get_all_data():
 
             'error': str(e)
         }
-        
-        js = json.dumps(data)    
+
+        js = json.dumps(data)
         resp = Response(js, status=500, mimetype='application/json')
         return resp
 
 
-# @app.route('/api/test')
-# def test_api():    
 
-#     try:           
+@app.route('/api/matchResults', methods=['GET'])
+def get_all_match_results():
+
+    try:
+
+        match_results = matcher.get_all_match_results()
+
+        js = json.dumps(match_results)
+        resp = Response(js, status=200, mimetype='application/json')
+
+        return resp
+
+    except Exception as e:
+
+        data = {
+            'test'  : 'failed',
+            'error': str(e)
+        }
+
+        js = json.dumps(data)
+        resp = Response(js, status=500, mimetype='application/json')
+        return resp
+
+
+# TODO: Better error handling for items not found in db
+# TODO: Test PUT/DELETE for host/guest by id and POST for hosts/guests
+# TODO: Decide if there are unnecessary info that shouldn't get returned like _id
+# TODO: Verify IDs are being used properly across routes
+
+# @app.route('/api/test')
+# def test_api():
+
+#     try:
 #         mongo_client = pymongo.MongoClient('mongodb://{}:{}@{}:{}'.format(
 #             quote_plus(os.getenv('DB_USER')),
 #             quote_plus(os.getenv('DB_PWD')),
@@ -556,8 +1008,8 @@ def get_all_data():
 #         data = {
 #             'test'  : 'worked'
 #         }
-        
-#         js = json.dumps(data)    
+
+#         js = json.dumps(data)
 #         resp = Response(js, status=200, mimetype='application/json')
 #         return resp
 
@@ -567,8 +1019,8 @@ def get_all_data():
 
 #             'error': str(e)
 #         }
-        
-#         js = json.dumps(data)    
+
+#         js = json.dumps(data)
 #         resp = Response(js, status=500, mimetype='application/json')
 #         return resp
 
@@ -579,7 +1031,7 @@ def get_all_data():
 
 #     print('/mongo -- about to connect...')
 
-#     try:           
+#     try:
 #         mongo_client = pymongo.MongoClient('mongodb://{}:{}@{}:{}'.format(
 #             quote_plus(os.getenv('DB_USER')),
 #             quote_plus(os.getenv('DB_PWD')),
@@ -603,8 +1055,8 @@ def get_all_data():
 
 #             'error': str(e)
 #         }
-        
-#         js = json.dumps(data)    
+
+#         js = json.dumps(data)
 #         resp = Response(js, status=500, mimetype='application/json')
 #         return resp
 
@@ -617,7 +1069,7 @@ def index(path):
     app.logger.debug("quote_plus(os.getenv('DB_PWD')) = {}".format(os.getenv('DB_PWD')) )
     app.logger.debug("os.getenv('DB_HOST') = {}".format(os.getenv('DB_HOST')) )
     app.logger.debug("os.getenv('DB_PORT') = {}".format(os.getenv('DB_PORT')) )
-    app.logger.warn('path = {}'.format(path))
+    app.logger.warning('path = {}'.format(path))
     return app.send_static_file("index.html")
 
 
@@ -625,6 +1077,6 @@ if __name__ == "__main__":
     handler = logging.StreamHandler(sys.stdout)
     app.logger.addHandler(handler)
     app.logger.setLevel(logging.INFO)
-    app.logger.warn('starting app...')
-    
+    app.logger.warning('starting app...')
+
     app.run(host="0.0.0.0", port=8080, debug=True)
