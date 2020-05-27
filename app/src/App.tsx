@@ -155,6 +155,11 @@ export const App = () => {
                                     path="/host/:id"
                                     component={HostQuestions}
                                 />
+                                <Route
+                                    exact
+                                    path="/componentlibrary"
+                                    component={AllInputs}
+                                />
                                 <FourOhFour />
                             </Switch>
                         </React.Fragment>
