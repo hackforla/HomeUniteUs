@@ -2,6 +2,7 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { Auth0Provider } from './react-auth0-spa'
 import history from './utils/history'
+import { BrowserRouter } from 'react-router-dom'
 
 import './index.css'
 
@@ -35,8 +36,8 @@ window.addEventListener('load', function () {
         // Clears auth0 query string parameters from url
         const targetUrl =
             redirectResult &&
-            redirectResult.appState &&
-            redirectResult.appState.targetUrl
+                redirectResult.appState &&
+                redirectResult.appState.targetUrl
                 ? redirectResult.appState.targetUrl
                 : window.location.pathname
 
@@ -51,7 +52,9 @@ window.addEventListener('load', function () {
             // audience={auth0Audience}
             onRedirectCallback={onAuthRedirectCallback}
         >
-            <App />
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
         </Auth0Provider>,
         document.getElementById('app-root')
     )
