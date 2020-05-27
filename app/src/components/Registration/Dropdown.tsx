@@ -30,6 +30,7 @@ interface Props {
 
 const DropdownSelect = (props: Props) => {
     const classes = useStyles()
+    //drop down select 'options' can be an array of objects to store and id to pass to value and a menu label
     const { value, onChange, id, helperText, options, label } = props
 
     return (
@@ -48,8 +49,8 @@ const DropdownSelect = (props: Props) => {
                     <MenuItem value="">
                         <em>None</em>
                     </MenuItem>
-                    {options.map((menuItem: string, index: number) => {
-                        return <MenuItem value={index}>{menuItem}</MenuItem>
+                    {options.map((menuItem: string) => {
+                        return <MenuItem value={menuItem}>{menuItem}</MenuItem>
                     })}
                 </Select>
                 <FormHelperText>{helperText}</FormHelperText>
