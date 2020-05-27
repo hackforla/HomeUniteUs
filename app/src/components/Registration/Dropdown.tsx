@@ -26,7 +26,6 @@ interface Props {
     options: Array<string>
     label: string
     labelId: string
-    placeholder: string
 }
 
 const DropdownSelect = (props: Props) => {

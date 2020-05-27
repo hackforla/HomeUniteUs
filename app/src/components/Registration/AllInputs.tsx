@@ -8,10 +8,8 @@ import {
     LargeTextInput,
     TextInput,
 } from './index'
-import { createMuiTheme } from '@material-ui/core/styles'
-import { ThemeProvider } from 'styled-components'
-
-const theme = createMuiTheme() // default mui theme assigned to Styled Component's theme provider
+import { theme } from './style'
+import { MuiThemeProvider } from '@material-ui/core/styles'
 
 const AllInputs = () => {
     //mocking options key in Questions interface
@@ -33,10 +31,15 @@ const AllInputs = () => {
     //input, radio, dropdown, text
     const [value, setValue] = React.useState('')
     const [text, setText] = React.useState('')
+    const [select, setSelect] = React.useState('')
 
     //radio + dropdown
     const handleChange = (event: any) => {
         setValue(event.target.value)
+    }
+
+    const handleSelect = (event: any) => {
+        setSelect(event.target.value)
     }
 
     //text inputs
@@ -45,11 +48,11 @@ const AllInputs = () => {
     }
 
     return (
-        <ThemeProvider theme={theme}>
+        <MuiThemeProvider theme={theme}>
             <div style={{ padding: '5em' }}>
                 <div
                     style={{
-                        border: `1px solid black`,
+                        border: `1px solid gray`,
                         margin: `1em`,
                         padding: `1em`,
                     }}
@@ -74,12 +77,11 @@ const AllInputs = () => {
                         id={`demo-simple-select-outlined-label`}
                         labelId={`demo-simple-select-outlined-label`}
                         label={`Age`}
-                        placeholder={'hi'}
                         options={options.drop}
-                        value={value}
+                        value={select}
                         helperText={`dropdown`}
                         onChange={(event) => {
-                            handleChange(event)
+                            handleSelect(event)
                         }}
                     ></Dropdown>
                 </div>
@@ -145,7 +147,7 @@ const AllInputs = () => {
                     ></LargeTextInput>
                 </div>
             </div>
-        </ThemeProvider>
+        </MuiThemeProvider>
     )
 }
 
