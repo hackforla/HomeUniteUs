@@ -1,9 +1,9 @@
 import * as React from "react"
-import QuestionField from "../components/ProfileEdit/QuestionField"
+import QuestionField from "../components/ProfileEdit/Question"
 
 import styled from "styled-components"
 import { Button, LinearProgress } from '@material-ui/core';
-import { Question } from "../models/Question"
+import { QuestionType } from "../models/QuestionType"
 import { Fetcher } from "../data/ApiWrapper";
 import { GuestQuestion, ResponseValue } from "../models";
 
