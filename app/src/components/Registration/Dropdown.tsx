@@ -30,37 +30,31 @@ interface Props {
 
 const DropdownSelect = (props: Props) => {
     const classes = useStyles()
+    //drop down select 'options' can be an array of objects to store and id to pass to value and a menu label
     const { value, onChange, id, helperText, options, label } = props
 
     return (
         <>
-            <form>
-                <FormControl
-                    variant={`outlined`}
-                    className={classes.formControl}
+            <FormControl variant={`outlined`} className={classes.formControl}>
+                <InputLabel id={id}>{label}</InputLabel>
+                <Select
+                    labelId={id}
+                    value={value}
+                    onChange={onChange}
+                    inputProps={{
+                        name,
+                        id,
+                    }}
                 >
-                    <InputLabel id={id}>{label}</InputLabel>
-                    <Select
-                        labelId={id}
-                        value={value}
-                        onChange={onChange}
-                        inputProps={{
-                            name,
-                            id,
-                        }}
-                    >
-                        <MenuItem value="">
-                            <em>None</em>
-                        </MenuItem>
-                        {options.map((menuItem: string) => {
-                            return (
-                                <MenuItem value={menuItem}>{menuItem}</MenuItem>
-                            )
-                        })}
-                    </Select>
-                    <FormHelperText>{helperText}</FormHelperText>
-                </FormControl>
-            </form>
+                    <MenuItem value="">
+                        <em>None</em>
+                    </MenuItem>
+                    {options.map((menuItem: string) => {
+                        return <MenuItem value={menuItem}>{menuItem}</MenuItem>
+                    })}
+                </Select>
+                <FormHelperText>{helperText}</FormHelperText>
+            </FormControl>
         </>
     )
 }

@@ -26,19 +26,17 @@ const TextInput = (props: Props) => {
 
     return (
         <>
-            <form>
-                <TextField
-                    id={id}
-                    label={label}
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    helperText={helperText}
-                    placeholder={placeholder}
-                    type={type}
-                    variant={'outlined'}
-                ></TextField>
-            </form>
+            <TextField
+                id={id}
+                label={label}
+                name={name}
+                value={value}
+                onChange={onChange}
+                helperText={helperText}
+                placeholder={placeholder}
+                type={type}
+                variant={'outlined'}
+            ></TextField>
         </>
     )
 }
