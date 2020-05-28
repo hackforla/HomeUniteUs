@@ -47,12 +47,24 @@ const AllInputs = () => {
         setText(event.target.value)
     }
 
+    console.log('theme', theme)
+    const { palette } = theme
+
     return (
         <MuiThemeProvider theme={theme}>
             <div style={{ padding: '5em' }}>
+                <h1
+                    style={{
+                        color: palette.primary.main,
+                        margin: '1em',
+                        padding: '1em',
+                    }}
+                >
+                    Check out these mui inputs
+                </h1>
                 <div
                     style={{
-                        border: `1px solid gray`,
+                        border: `1px solid ${palette.primary.main}`,
                         margin: `1em`,
                         padding: `1em`,
                     }}
