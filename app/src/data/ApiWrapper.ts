@@ -38,8 +38,7 @@ const putJson = async (uri: string, data: string) => {
     }
 }
 
-const getAccounts = async (uri: string, data: any | undefined) => {
-    console.log(data, "<------------------------data before getAccounts")
+const getAccount = async (uri: string, data: any | undefined) => {
     try {
         const response = await fetch(uri, {
             method: "POST",
@@ -47,15 +46,12 @@ const getAccounts = async (uri: string, data: any | undefined) => {
                 'Content-Type': 'application/json'
             },
             body: data
-        })
-        console.log(data, "<------------------------data after getAccounts")
-        // if (response.status !== 200) {
-        //     throw new Error(response.statusText)
-        // }
+        }) 
         return await response.json()
+
     } catch (e) {
         throw new ApiFetchError(
-            `error in getByEmail(): error fetching '${uri}': ${e}`
+            `error in getAccount(): error fetching '${uri}': ${e}`
         )
     }
 }
@@ -83,21 +79,20 @@ export class Fetcher<T> {
     }
 
     public async getUserAccountByEmail(data: any): Promise<T> {
-        console.log(data, "<--------------------------------getUserAccountByEmail")
-        return (await getAccounts(
+        return (await getAccount(
             `${this.endpoint}`,
             JSON.stringify(data)
-        ))
+        )) 
     }
 }
 
 export class ApiWrapper {
     private guestFetcher: Fetcher<Guest>
-    private accountsFetcher: Fetcher<Accounts>
+    private accountsFetcher: Fetcher<any>
 
     public constructor() {
         this.guestFetcher = new Fetcher<Guest>('guests')
-        this.accountsFetcher = new Fetcher<Accounts>('checkEmail')
+        this.accountsFetcher = new Fetcher<any>('checkEmail')
     }
 
     // Guests
@@ -109,8 +104,7 @@ export class ApiWrapper {
         return await this.guestFetcher.getById(id)
     }
 
-    public async getUserAccount(data: any): Promise<Accounts> {
-        console.log(data, "<-----------------------------getUserAccount data")
+    public async getUserAccount(data: any): Promise<any> {
         return await this.accountsFetcher.getUserAccountByEmail(data)
     }
 }

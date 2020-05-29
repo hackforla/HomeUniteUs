@@ -25,8 +25,9 @@ interface QuestionResponse {
   id: string;
   question: string;
   type: string;
-  options: Array<QuestionLabelProps>;
-  answer: string | {[key:string]: boolean};
+  options?: Array<QuestionLabelProps>;
+  // answer: string | {[key:string]: boolean};
+  answer: any; //i changed this temporary just to get something working
 };
 
 

@@ -65,17 +65,14 @@ export const App = () => {
 
   React.useEffect(() => {
     const fetch = async () => {
-      // if (isAuthenticated) {
-      //   let fetch = new Fetcher<Host>('checkEmail')
-      //   let data: any | undefined = await fetch.getByEmail(user) //change any to account interface
-      //   if (data?.email === user?.email) { //change to status if status 200 then its gooooooood!
-      //     setHasAccount(data !== null)
-      //   }
-      //   history.push('profileselection')
-      // }
       if(isAuthenticated){
         let fetching = new ApiWrapper()
-        let data: Accounts | undefined = await fetching.getUserAccount(user)
+        let data: any | undefined = await fetching.getUserAccount(user)
+        if(data.status === 400){
+          history.push('/profileselection')
+        } else {
+          setHasAccount(data ! == null)
+        }
       }
     }
     fetch()
