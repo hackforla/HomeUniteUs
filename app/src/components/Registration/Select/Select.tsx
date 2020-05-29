@@ -6,17 +6,8 @@ import {
     FormControl,
     Select,
 } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
-
-const useStyles = makeStyles((theme) => ({
-    formControl: {
-        margin: theme.spacing(0),
-        minWidth: 200,
-    },
-    selectEmpty: {
-        marginTop: theme.spacing(2),
-    },
-}))
+import { styles } from './styles'
+import { withStyles } from '@material-ui/core/styles'
 
 interface Props {
     value: string
@@ -26,12 +17,22 @@ interface Props {
     options: Array<string>
     label: string
     labelId: string
+    labelWidth: number
+    classes: any
 }
 
 const DropdownSelect = (props: Props) => {
-    const classes = useStyles()
     //drop down select 'options' can be an array of objects to store and id to pass to value and a menu label
-    const { value, onChange, id, helperText, options, label } = props
+    const {
+        classes,
+        value,
+        onChange,
+        id,
+        helperText,
+        options,
+        label,
+        labelWidth,
+    } = props
 
     return (
         <>
@@ -39,6 +40,7 @@ const DropdownSelect = (props: Props) => {
                 <InputLabel id={id}>{label}</InputLabel>
                 <Select
                     labelId={id}
+                    labelWidth={labelWidth}
                     value={value}
                     onChange={onChange}
                     inputProps={{
@@ -59,4 +61,4 @@ const DropdownSelect = (props: Props) => {
     )
 }
 
-export default DropdownSelect
+export default withStyles(styles)(DropdownSelect)

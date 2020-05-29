@@ -9,20 +9,10 @@ interface Props {
     type: string
     id: string
     label: string
-    helperText: string
 }
 
 const TextInput = (props: Props) => {
-    const {
-        name,
-        value,
-        onChange,
-        placeholder,
-        type,
-        id,
-        label,
-        helperText,
-    } = props
+    const { name, value, onChange, placeholder, type, id, label } = props
 
     return (
         <>
@@ -32,7 +22,6 @@ const TextInput = (props: Props) => {
                 name={name}
                 value={value}
                 onChange={onChange}
-                helperText={helperText}
                 placeholder={placeholder}
                 type={type}
                 variant={'outlined'}

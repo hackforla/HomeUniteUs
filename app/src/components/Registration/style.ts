@@ -1,4 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles'
+import { Typography } from '@material-ui/core'
 
 // []colors
 // []fonts
@@ -15,7 +16,7 @@ export const theme = createMuiTheme({
             contrastText: '#FFFFFF',
         },
         secondary: {
-            main: '#55B1EB',
+            main: '#999999',
             contrastText: '#FFFFFF',
         },
         error: {
@@ -40,6 +41,38 @@ export const theme = createMuiTheme({
         },
         text: {
             primary: '#2F2F2F',
+        },
+    },
+    typography: {
+        fontFamily: [
+            'Josefin Sans',
+            '-apple-system',
+            'BlinkMacSystemFont',
+            'Segoe UI',
+            'Roboto',
+            'Oxygen',
+            'Ubuntu',
+            'Cantarell',
+            'Fira Sans',
+            'Droid Sans',
+            'Helvetica Neue',
+            'sans-serif',
+        ].join(''),
+    },
+    overrides: {
+        MuiInputBase: {
+            root: {
+                background: '#FFFFFF',
+                borderRadius: '50px',
+                boxShadow: '0px 2px 5px 2px rgba(0, 0, 0, 0.10)',
+            },
+        },
+        MuiTextField: {
+            root: {
+                background: '#FFFFFF',
+                width: '800px',
+                boxShadow: '0px 2px 5px 2px rgba(0, 0, 0, 0.10)',
+            },
         },
     },
 })

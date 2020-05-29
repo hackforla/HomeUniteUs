@@ -1,7 +1,7 @@
 import Checkbox from './Checkbox'
-import Dropdown from './Dropdown'
+import Select from './Select/Select'
 import RadioButtons from './RadioButtons'
 import LargeTextInput from './LargeTextInput'
 import TextInput from './TextInput'
 
-export { Checkbox, Dropdown, RadioButtons, LargeTextInput, TextInput }
+export { Checkbox, Select, RadioButtons, LargeTextInput, TextInput }

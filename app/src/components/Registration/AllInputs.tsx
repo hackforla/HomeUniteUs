@@ -3,7 +3,7 @@
 import React from 'react'
 import {
     Checkbox,
-    Dropdown,
+    Select,
     RadioButtons,
     LargeTextInput,
     TextInput,
@@ -85,9 +85,10 @@ const AllInputs = () => {
                         padding: `1em`,
                     }}
                 >
-                    <Dropdown
+                    <Select
                         id={`demo-simple-select-outlined-label`}
                         labelId={`demo-simple-select-outlined-label`}
+                        labelWidth={25}
                         label={`Age`}
                         options={options.drop}
                         value={select}
@@ -95,7 +96,7 @@ const AllInputs = () => {
                         onChange={(event) => {
                             handleSelect(event)
                         }}
-                    ></Dropdown>
+                    ></Select>
                 </div>
 
                 <div
@@ -132,7 +133,6 @@ const AllInputs = () => {
                         type={`text`}
                         value={text}
                         placeholder={`test`}
-                        helperText={`Some important text`}
                         onChange={(event) => {
                             handleText(event)
                         }}
