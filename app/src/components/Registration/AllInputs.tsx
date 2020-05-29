@@ -8,7 +8,7 @@ import {
     LargeTextInput,
     TextInput,
 } from './index'
-import { theme } from './style'
+import { theme } from './theme'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 
 const AllInputs = () => {
@@ -78,26 +78,6 @@ const AllInputs = () => {
                         }}
                     ></Checkbox>
                 </div>
-                <div
-                    style={{
-                        border: `1px solid black`,
-                        margin: `1em`,
-                        padding: `1em`,
-                    }}
-                >
-                    <Select
-                        id={`demo-simple-select-outlined-label`}
-                        labelId={`demo-simple-select-outlined-label`}
-                        labelWidth={25}
-                        label={`Age`}
-                        options={options.drop}
-                        value={select}
-                        helperText={`dropdown`}
-                        onChange={(event) => {
-                            handleSelect(event)
-                        }}
-                    ></Select>
-                </div>
 
                 <div
                     style={{
@@ -118,14 +98,20 @@ const AllInputs = () => {
                         }}
                     ></RadioButtons>
                 </div>
+                <div>
+                    <Select
+                        id={`demo-simple-select-outlined-label`}
+                        labelId={`demo-simple-select-outlined-label`}
+                        label={`Age`}
+                        options={options.drop}
+                        value={select}
+                        onChange={(event) => {
+                            handleSelect(event)
+                        }}
+                    ></Select>
+                </div>
 
-                <div
-                    style={{
-                        border: `1px solid black`,
-                        margin: `1em`,
-                        padding: `1em`,
-                    }}
-                >
+                <div>
                     <TextInput
                         id={'1'}
                         label={`small-form`}
@@ -138,15 +124,10 @@ const AllInputs = () => {
                         }}
                     ></TextInput>
                 </div>
-                <div
-                    style={{
-                        border: `1px solid black`,
-                        margin: `1em`,
-                        padding: `1em`,
-                    }}
-                >
+                <div>
                     <LargeTextInput
                         id={'1'}
+                        rows={8}
                         label={`large-form`}
                         name={`test`}
                         type={`text`}

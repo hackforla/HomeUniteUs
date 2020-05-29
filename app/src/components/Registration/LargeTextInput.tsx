@@ -10,6 +10,7 @@ interface Props {
     id: string
     label: string
     helperText: string
+    rows: number
 }
 
 const LargeTextInput = (props: Props) => {
@@ -22,6 +23,7 @@ const LargeTextInput = (props: Props) => {
         id,
         label,
         helperText,
+        rows,
     } = props
 
     return (
@@ -37,7 +39,7 @@ const LargeTextInput = (props: Props) => {
                 type={type}
                 variant={'outlined'}
                 multiline
-                rows={4}
+                rows={rows}
             ></TextField>
         </>
     )

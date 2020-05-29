@@ -1,11 +1,10 @@
 import { createMuiTheme } from '@material-ui/core/styles'
-import { Typography } from '@material-ui/core'
+import { Theme } from '@material-ui/core'
 
 // []colors
 // []fonts
 // []overrides: input, cssbaseline global font
 // []individual style sheets
-// []withStyles HOC api
 // []dynamic adjustments to text input width & height
 
 export const theme = createMuiTheme({
@@ -59,19 +58,13 @@ export const theme = createMuiTheme({
             'sans-serif',
         ].join(''),
     },
+    shadows: ([] as unknown) as Theme['shadows'],
     overrides: {
-        MuiInputBase: {
+        MuiOutlinedInput: {
             root: {
-                background: '#FFFFFF',
-                borderRadius: '50px',
-                boxShadow: '0px 2px 5px 2px rgba(0, 0, 0, 0.10)',
-            },
-        },
-        MuiTextField: {
-            root: {
-                background: '#FFFFFF',
-                width: '800px',
-                boxShadow: '0px 2px 5px 2px rgba(0, 0, 0, 0.10)',
+                width: '650px',
+                height: '48px',
+                margin: '8px',
             },
         },
     },
