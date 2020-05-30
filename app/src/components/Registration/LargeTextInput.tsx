@@ -37,7 +37,6 @@ const LargeTextInput = (props: Props) => {
                 placeholder={placeholder}
                 helperText={helperText}
                 type={type}
-                variant={'outlined'}
                 multiline
                 rows={rows}
             ></TextField>
