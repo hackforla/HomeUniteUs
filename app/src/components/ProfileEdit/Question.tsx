@@ -15,8 +15,9 @@ import {
 } from '@material-ui/core'
 
 interface Props {
+    index: number
     question: QuestionType
-    setAnswer: (id: string, value: any) => void
+    setAnswer: (index: number, value: any) => void
 }
 
 const QuestionLabel = styled.label`
@@ -32,15 +33,14 @@ const Question = (props: Props) => {
             | React.ChangeEvent<HTMLInputElement>
             | React.ChangeEvent<HTMLTextAreaElement>
     ) {
-        const questionId = props.question.id
         if (e.target.type === 'checkbox') {
             if (!props.question.answer) props.question.answer = {};
             if ('checked' in e.target) {
                 props.question.answer[e.target.value] = e.target.checked
             }
-            props.setAnswer(questionId, props.question.answer)
+            props.setAnswer(props.index, props.question.answer)
         } else {
-            props.setAnswer(questionId, e.target.value)
+            props.setAnswer(props.index, e.target.value)
         }
     }
 

@@ -117,12 +117,15 @@ export const GuestQuestionsPage = () => {
 
   return (
     <Container>
-      <LinearProgress variant="determinate" value={state.questionIndex / state.questions.length * 100} />
+
+      {/* this can be relaced with the QuestionPage component */}
+
+      {/* <LinearProgress variant="determinate" value={state.questionIndex / state.questions.length * 100} />
       <form noValidate autoComplete="off">
         <QuestionField question={state.questions[state.questionIndex]} setAnswer={setAnswer}></QuestionField>
       </form>
       <StyledButton variant="contained" color="primary" onClick={() => state.questionIndex > 0 && setQuestionIndex(state.questionIndex - 1)}>Back</StyledButton>
-      <StyledButton variant="contained" color="primary" onClick={() => state.questionIndex < state.questions.length - 1 && setQuestionIndex(state.questionIndex + 1)}>Forward</StyledButton>
+      <StyledButton variant="contained" color="primary" onClick={() => state.questionIndex < state.questions.length - 1 && setQuestionIndex(state.questionIndex + 1)}>Forward</StyledButton> */}
     </Container>
   )
 }
