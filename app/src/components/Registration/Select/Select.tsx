@@ -2,7 +2,7 @@ import * as React from 'react'
 import {
     InputLabel,
     MenuItem,
-    FormHelperText,
+    FormHelperText, //imported but not in style guide
     FormControl,
     Select,
 } from '@material-ui/core'

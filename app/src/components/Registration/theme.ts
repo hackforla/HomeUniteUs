@@ -1,11 +1,10 @@
 import { createMuiTheme } from '@material-ui/core/styles'
 import { Theme } from '@material-ui/core'
 
-// []colors
-// []fonts
-// []overrides: input, cssbaseline global font
-// []individual style sheets
-// []dynamic adjustments to text input width & height
+// overrides: input, cssbaseline global font
+// dynamic adjustments to text input width & height
+
+/*** themed styles can be inlined, or preferably with the withStyles HOC API ***/
 
 export const theme = createMuiTheme({
     palette: {

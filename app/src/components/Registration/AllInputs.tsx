@@ -48,6 +48,9 @@ const AllInputs = () => {
     }
 
     console.log('theme', theme)
+
+    //injects color palette from our theming
+
     const { palette } = theme
 
     return (

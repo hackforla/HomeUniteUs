@@ -1,4 +1,4 @@
-import Checkbox from './Checkbox'
+import Checkbox from './Checkbox/Checkbox'
 import Select from './Select/Select'
 import RadioButtons from './RadioButtons'
 import LargeTextInput from './LargeTextInput'
