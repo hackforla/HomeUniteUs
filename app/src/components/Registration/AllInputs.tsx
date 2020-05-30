@@ -7,6 +7,8 @@ import {
     RadioButtons,
     LargeTextInput,
     TextInput,
+    TextArea,
+    Button,
 } from './index'
 import { theme } from './theme'
 import { MuiThemeProvider } from '@material-ui/core/styles'
@@ -117,7 +119,6 @@ const AllInputs = () => {
                 <div>
                     <TextInput
                         id={'1'}
-                        label={`small-form`}
                         name={`test`}
                         type={`text`}
                         value={text}
@@ -131,12 +132,10 @@ const AllInputs = () => {
                     <LargeTextInput
                         id={'1'}
                         rows={8}
-                        label={`large-form`}
                         name={`test`}
                         type={`text`}
                         value={text}
                         placeholder={`test`}
-                        helperText={`Some important text`}
                         onChange={(event) => {
                             handleText(event)
                         }}

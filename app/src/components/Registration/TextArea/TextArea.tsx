@@ -1,4 +1,6 @@
 import * as React from 'react'
+import { withStyles } from '@material-ui/core/styles'
+import { styles } from './styles'
 
 import TextareaAutosize from '@material-ui/core/TextareaAutosize'
 
@@ -13,4 +15,4 @@ const TextArea = (props: Props) => {
     )
 }
 
-export default TextArea
+export default withStyles(styles)(TextArea)

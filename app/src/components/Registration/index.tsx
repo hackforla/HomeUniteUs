@@ -1,10 +1,10 @@
 import Checkbox from './Checkbox/Checkbox'
 import Select from './Select/Select'
-import RadioButtons from './RadioButtons'
-import LargeTextInput from './LargeTextInput'
-import TextInput from './TextInput'
-import TextArea from './TextArea'
-import Button from './Button'
+import RadioButtons from './RadioButtons/RadioButtons'
+import LargeTextInput from './LargeTextInput/LargeTextInput'
+import TextInput from './TextInput/TextInput'
+import TextArea from './TextArea/TextArea'
+import Button from './Button/Button'
 
 export {
     Checkbox,

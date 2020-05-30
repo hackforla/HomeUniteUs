@@ -1,6 +1,8 @@
 import React from 'react'
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
+import { withStyles } from '@material-ui/core/styles'
+import { styles } from './styles'
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -18,7 +20,7 @@ interface Props {
     label: string
 }
 
-export default function ButtonSizes(props: Props) {
+export default withStyles(styles)(function ButtonSizes(props: Props) {
     const classes = useStyles()
     const { label, name, value, id } = props
 
@@ -39,4 +41,4 @@ export default function ButtonSizes(props: Props) {
             </div>
         </div>
     )
-}
+})

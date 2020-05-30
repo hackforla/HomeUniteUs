@@ -10,7 +10,7 @@ import {
 import { withStyles } from '@material-ui/core/styles'
 import { styles } from './styles'
 
-interface classes {
+interface Classes {
     checkbox: string
 }
 
@@ -19,7 +19,7 @@ interface Props {
     label: string
     options: Array<string>
     helperText: string
-    classes: classes
+    classes: Classes
 }
 
 //checkbox for multi-select

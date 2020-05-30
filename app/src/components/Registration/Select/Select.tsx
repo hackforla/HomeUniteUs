@@ -1,3 +1,5 @@
+/** KNOWN OPEN ISSUE VIA MUI: https://github.com/mui-org/material-ui/issues/20064 re: elevation   **/
+
 import * as React from 'react'
 import {
     InputLabel,
@@ -9,6 +11,10 @@ import {
 import { styles } from './styles'
 import { withStyles } from '@material-ui/core/styles'
 
+interface Classes {
+    formControl: string
+}
+
 interface Props {
     value: string
     onChange: (event: object) => void
@@ -16,7 +22,7 @@ interface Props {
     options: Array<string>
     label: string
     labelId: string
-    classes: any
+    classes: Classes
 }
 
 const DropdownSelect = (props: Props) => {
@@ -25,7 +31,7 @@ const DropdownSelect = (props: Props) => {
 
     return (
         <>
-            <FormControl variant={`outlined`} className={classes}>
+            <FormControl variant={`outlined`} className={classes.formControl}>
                 <InputLabel id={id}>{label}</InputLabel>
                 <Select
                     labelId={id}

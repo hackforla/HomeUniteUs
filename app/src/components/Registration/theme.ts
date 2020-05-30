@@ -59,10 +59,16 @@ export const theme = createMuiTheme({
     },
     shadows: ([] as unknown) as Theme['shadows'],
     overrides: {
+        MuiButton: {
+            // Name of the rule
+            text: {
+                // Some CSS
+                color: 'white',
+            },
+        },
         MuiOutlinedInput: {
             root: {
                 width: '650px',
-                height: '48px',
                 margin: '8px',
             },
         },
