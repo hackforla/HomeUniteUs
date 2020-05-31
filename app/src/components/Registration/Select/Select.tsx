@@ -1,10 +1,10 @@
-/** KNOWN OPEN ISSUE VIA MUI: https://github.com/mui-org/material-ui/issues/20064 re: elevation   **/
+/** MUI serves an 'elevation prop' warning; does not impact build/compile  **/
 
 import * as React from 'react'
 import {
     InputLabel,
     MenuItem,
-    FormHelperText, //imported but not in style guide
+    FormHelperText,
     FormControl,
     Select,
 } from '@material-ui/core'
