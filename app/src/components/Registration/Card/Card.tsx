@@ -5,7 +5,6 @@ import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Button from '../Button/Button'
-import { makeStyles } from '@material-ui/core/styles'
 
 interface Props {
     classes: {
@@ -13,6 +12,7 @@ interface Props {
     }
 }
 
+//to use as container OR can use Styled-Components
 export default withStyles(styles)(function SimplePaper(props: Props) {
     const { classes } = props
     return (
