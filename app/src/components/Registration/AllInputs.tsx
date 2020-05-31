@@ -49,8 +49,6 @@ const AllInputs = () => {
         setText(event.target.value)
     }
 
-    console.log('theme', theme)
-
     //injects color palette from our theming
 
     const { palette } = theme
