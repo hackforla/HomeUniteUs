@@ -6,6 +6,7 @@ import TextInput from './TextInput/TextInput'
 import TextArea from './TextArea/TextArea'
 import Button from './Button/Button'
 import Paper from './Paper/Paper'
+import Card from './Card/Card'
 
 export {
     Checkbox,
@@ -16,4 +17,5 @@ export {
     TextArea,
     Button,
     Paper,
+    Card,
 }

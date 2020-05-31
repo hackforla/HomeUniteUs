@@ -4,25 +4,19 @@ import Button from '@material-ui/core/Button'
 import { withStyles } from '@material-ui/core/styles'
 import { styles } from './styles'
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        margin: {
-            margin: theme.spacing(1),
-        },
-    })
-)
-
 interface Props {
     id: string
     name: string
     value: string
     onClick: (event: object) => void
     label: string
+    classes: {
+        root: string
+    }
 }
 
-export default withStyles(styles)(function ButtonSizes(props: Props) {
-    const classes = useStyles()
-    const { label, name, value, id } = props
+export default withStyles(styles)(function SimpleButton(props: Props) {
+    const { label, name, value, id, classes } = props
 
     return (
         <div>
@@ -34,7 +28,7 @@ export default withStyles(styles)(function ButtonSizes(props: Props) {
                     value={value}
                     size="large"
                     color="primary"
-                    className={classes.margin}
+                    className={classes.root}
                 >
                     {label}
                 </Button>

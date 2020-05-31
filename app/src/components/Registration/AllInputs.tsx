@@ -10,6 +10,7 @@ import {
     TextArea,
     Button,
     Paper,
+    Card,
 } from './index'
 import { theme } from './theme'
 import { MuiThemeProvider } from '@material-ui/core/styles'
@@ -66,6 +67,7 @@ const AllInputs = () => {
                 >
                     Check out these mui inputs
                 </h1>
+                <Card></Card>
                 <div
                     style={{
                         border: `1px solid ${palette.primary.main}`,
