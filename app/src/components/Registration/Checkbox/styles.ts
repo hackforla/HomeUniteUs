@@ -1,11 +1,13 @@
-export const styles = (theme: any) => ({
-    //example of additional classes for conditional styles used with theming
-    checkbox: {
-        color: theme.palette.primary.secondary, //<-- an example to showcase themeing
-    },
-})
+import { createStyles } from '@material-ui/core'
 
-//potential idea is a 'checkboxLarge' for the styles that have larger checkbox inputs
-//as there will be various resizing
+/*** createStyles is just the identity function; it doesn't "do anything" at runtime, 
+ just helps guide type inference at compile time. ***/
+
+export const styles = (theme: any) =>
+    createStyles({
+        checkbox: {
+            color: theme.palette.primary.secondary, //<-- an example to showcase themeing
+        },
+    })
 
 //a prop can be used on the component to conditionally render the correct style
