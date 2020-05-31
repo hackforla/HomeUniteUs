@@ -5,6 +5,7 @@ import LargeTextInput from './LargeTextInput/LargeTextInput'
 import TextInput from './TextInput/TextInput'
 import TextArea from './TextArea/TextArea'
 import Button from './Button/Button'
+import Paper from './Paper/Paper'
 
 export {
     Checkbox,
@@ -14,4 +15,5 @@ export {
     TextInput,
     TextArea,
     Button,
+    Paper,
 }

@@ -9,6 +9,7 @@ import {
     TextInput,
     TextArea,
     Button,
+    Paper,
 } from './index'
 import { theme } from './theme'
 import { MuiThemeProvider } from '@material-ui/core/styles'

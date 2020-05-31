@@ -56,7 +56,10 @@ const themeStyle = {
         ].join(''),
     },
     shadows: ([] as unknown) as Theme['shadows'],
-    spacing: (factor: number) => `${0.25 * factor}rem`,
+    // spacing: 16,
+
+    //responsive calculation approach
+    spacing: (factor: number) => `${factor}rem`,
     overrides: {
         MuiButton: {
             // Name of the rule
