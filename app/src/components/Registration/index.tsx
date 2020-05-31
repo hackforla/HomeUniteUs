@@ -7,6 +7,7 @@ import TextArea from './TextArea/TextArea'
 import Button from './Button/Button'
 import Paper from './Paper/Paper'
 import Card from './Card/Card'
+import Stepper from './HorizontalStepper/HorizontalStepper'
 
 export {
     Checkbox,
@@ -18,4 +19,5 @@ export {
     Button,
     Paper,
     Card,
+    Stepper,
 }

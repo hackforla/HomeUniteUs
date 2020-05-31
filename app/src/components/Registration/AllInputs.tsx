@@ -11,6 +11,7 @@ import {
     Button,
     Paper,
     Card,
+    Stepper,
 } from './index'
 import { theme } from './theme'
 import { MuiThemeProvider } from '@material-ui/core/styles'
@@ -67,6 +68,15 @@ const AllInputs = () => {
                 >
                     Check out these mui inputs
                 </h1>
+                <div
+                    style={{
+                        border: `1px solid black`,
+                        margin: `1em`,
+                        padding: `1em`,
+                    }}
+                >
+                    <Stepper></Stepper>
+                </div>
                 <Card></Card>
                 <div
                     style={{
