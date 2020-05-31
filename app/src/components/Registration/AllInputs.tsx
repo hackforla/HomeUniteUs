@@ -57,13 +57,14 @@ const AllInputs = () => {
     const { palette } = theme
 
     return (
+        //themes can be inlined or injected via withStyles api (latter preferred)
         <MuiThemeProvider theme={theme}>
-            <div style={{ padding: '5em' }}>
+            <div style={{ padding: theme.spacing(2) }}>
                 <h1
                     style={{
                         color: palette.primary.main,
-                        margin: '1em',
-                        padding: '1em',
+                        margin: theme.spacing(1),
+                        padding: theme.spacing(1),
                     }}
                 >
                     Check out these mui inputs
@@ -71,8 +72,8 @@ const AllInputs = () => {
                 <div
                     style={{
                         border: `1px solid black`,
-                        margin: `1em`,
-                        padding: `1em`,
+                        margin: theme.spacing(1),
+                        padding: theme.spacing(1),
                     }}
                 >
                     <Stepper></Stepper>
@@ -81,8 +82,8 @@ const AllInputs = () => {
                 <div
                     style={{
                         border: `1px solid ${palette.primary.main}`,
-                        margin: `1em`,
-                        padding: `1em`,
+                        margin: theme.spacing(1),
+                        padding: theme.spacing(1),
                     }}
                 >
                     <Checkbox
@@ -98,8 +99,8 @@ const AllInputs = () => {
                 <div
                     style={{
                         border: `1px solid black`,
-                        margin: `1em`,
-                        padding: `1em`,
+                        margin: theme.spacing(1),
+                        padding: theme.spacing(1),
                     }}
                 >
                     <RadioButtons
