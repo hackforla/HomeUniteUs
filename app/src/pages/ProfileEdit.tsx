@@ -60,7 +60,7 @@ const getQuestions = (org: string, section: string) => {
             options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
         },
         {
-            id: '15',
+            id: '1',
             type: 'radio',
             group: 'Introductory Questions',
             order: -45,
@@ -68,7 +68,7 @@ const getQuestions = (org: string, section: string) => {
             options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
         },
         {
-            id: '15',
+            id: '2',
             type: 'radio',
             group: 'Introductory Questions',
             order: -45,
@@ -76,7 +76,7 @@ const getQuestions = (org: string, section: string) => {
             options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
         },
         {
-            id: '15',
+            id: '3',
             type: 'radio',
             group: 'Introductory Questions',
             order: -45,

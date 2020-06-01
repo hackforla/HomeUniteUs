@@ -26,24 +26,6 @@ export const QuestionPage = (props: Props) => {
         return (a.order || 0) - (b.order || 0);
     })
 
-    // get group structure
-    var groups: [[QuestionType[]]] = [[[]]]
-    var groupI = 0
-    var subgroupI = 0
-    for (var i = 0; i < props.questions.length; i += 1) {
-        if (props.questions[i - 1]) {
-            if (props.questions[i].group === undefined || props.questions[i].group !== props.questions[i - 1].group) {
-                groupI++
-                subgroupI = 0
-            } else if (props.questions[i].subgroup === undefined || props.questions[i].subgroup !== props.questions[i - 1].subgroup) {
-                subgroupI++
-            }
-        }
-        if (!groups[groupI]) groups[groupI] = [[]]
-        if (!groups[groupI][subgroupI]) groups[groupI][subgroupI] = []
-        groups[groupI][subgroupI].push(props.questions[i])
-    }
-
     const initialState = {
         questions: props.questions,
         groupIndex: 0,
@@ -52,9 +34,28 @@ export const QuestionPage = (props: Props) => {
 
     const [state, setState] = React.useState(initialState)
 
+    // get group structure
+    var groups: [[QuestionType[]]] = [[[]]]
+    var groupI = 0
+    var subgroupI = 0
+    for (var i = 0; i < state.questions.length; i += 1) {
+        if (state.questions[i - 1]) {
+            if (state.questions[i].group === undefined || state.questions[i].group !== state.questions[i - 1].group) {
+                groupI++
+                subgroupI = 0
+            } else if (state.questions[i].subgroup === undefined || state.questions[i].subgroup !== state.questions[i - 1].subgroup) {
+                subgroupI++
+            }
+        }
+        if (!groups[groupI]) groups[groupI] = [[]]
+        if (!groups[groupI][subgroupI]) groups[groupI][subgroupI] = []
+        groups[groupI][subgroupI].push(state.questions[i])
+    }
+
     function setAnswer(index: number, answer: any) {
-        state.questions[index].answer = answer
-        setState(state)
+        var state2 = {...state}
+        state2.questions[index].answer = answer
+        setState(state2)
     }
 
     function clickBack() {
@@ -104,9 +105,11 @@ export const QuestionPage = (props: Props) => {
 
                                 {groups[state.groupIndex][state.subgroupIndex]
                                     .map((question: QuestionType) => {
+                                        const index = state.questions.indexOf(question)
                                         return (
                                             <Question
-                                                index={props.questions.indexOf(question)}
+                                                key={index}
+                                                index={index}
                                                 question={question}
                                                 setAnswer={setAnswer}
                                             ></Question>

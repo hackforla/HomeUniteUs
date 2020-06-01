@@ -34,11 +34,11 @@ const Question = (props: Props) => {
             | React.ChangeEvent<HTMLTextAreaElement>
     ) {
         if (e.target.type === 'checkbox') {
-            if (!props.question.answer) props.question.answer = {};
+            if (!question.answer) question.answer = {};
             if ('checked' in e.target) {
-                props.question.answer[e.target.value] = e.target.checked
+                question.answer[e.target.value] = e.target.checked
             }
-            props.setAnswer(props.index, props.question.answer)
+            props.setAnswer(props.index, question.answer)
         } else {
             props.setAnswer(props.index, e.target.value)
         }
@@ -54,7 +54,7 @@ const Question = (props: Props) => {
                             aria-label={question.question}
                             key={question.id}
                             name={question.id}
-                            value={props.question.answer}
+                            value={question.answer || ''}
                             onChange={handleChange}
                         >
                             {question.options &&
@@ -79,7 +79,7 @@ const Question = (props: Props) => {
                                         control={
                                             <Checkbox
                                                 checked={
-                                                    props.question.answer && props.question.answer[
+                                                    question.answer && question.answer[
                                                         option.value
                                                     ]
                                                 }
@@ -98,7 +98,7 @@ const Question = (props: Props) => {
                     <TextField
                         label=""
                         variant="outlined"
-                        value={props.question.answer}
+                        value={question.answer || ''}
                         onChange={handleChange}
                     />
                 )}
@@ -106,7 +106,7 @@ const Question = (props: Props) => {
                     <TextField
                         label=""
                         variant="outlined"
-                        value={props.question.answer}
+                        value={question.answer || ''}
                         onChange={handleChange}
                         multiline
                         rows={8}
