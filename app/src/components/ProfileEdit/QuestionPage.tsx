@@ -30,25 +30,18 @@ export const QuestionPage = (props: Props) => {
     var groups: [[QuestionType[]]] = [[[]]]
     var groupI = 0
     var subgroupI = 0
-    var questionI = 0
-    var lastQuestion
     for (var i = 0; i < props.questions.length; i += 1) {
-        if (lastQuestion) {
-            if (props.questions[i].group === undefined || props.questions[i].group !== lastQuestion.group) {
+        if (props.questions[i - 1]) {
+            if (props.questions[i].group === undefined || props.questions[i].group !== props.questions[i - 1].group) {
                 groupI++
                 subgroupI = 0
-                questionI = 0
-            } else if (props.questions[i].subgroup === undefined || props.questions[i].subgroup !== lastQuestion.subgroup) {
+            } else if (props.questions[i].subgroup === undefined || props.questions[i].subgroup !== props.questions[i - 1].subgroup) {
                 subgroupI++
-                questionI = 0
-            } else {
-                questionI++
             }
         }
         if (!groups[groupI]) groups[groupI] = [[]]
         if (!groups[groupI][subgroupI]) groups[groupI][subgroupI] = []
-        groups[groupI][subgroupI][questionI] = props.questions[i]
-        lastQuestion = props.questions[i]
+        groups[groupI][subgroupI].push(props.questions[i])
     }
 
     const initialState = {
