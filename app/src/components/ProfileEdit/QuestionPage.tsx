@@ -30,6 +30,7 @@ export const QuestionPage = (props: Props) => {
         questions: props.questions,
         groupIndex: 0,
         subgroupIndex: 0,
+        submitPage: false,
     }
 
     const [state, setState] = React.useState(initialState)
@@ -59,7 +60,9 @@ export const QuestionPage = (props: Props) => {
     }
 
     function clickBack() {
-        if (state.subgroupIndex > 0) {
+        if (state.submitPage) {
+            setState({...state, submitPage: false});
+        } else if (state.subgroupIndex > 0) {
             setState({...state, subgroupIndex: state.subgroupIndex - 1})
         } else if (state.groupIndex > 0) {
             setState({...state, groupIndex: state.groupIndex - 1, subgroupIndex: groups[state.groupIndex - 1].length - 1})
@@ -72,7 +75,7 @@ export const QuestionPage = (props: Props) => {
         } else if (state.groupIndex < groups.length - 1) {
             setState({...state, groupIndex: state.groupIndex + 1, subgroupIndex: 0})
         } else {
-            // the end
+            setState({...state, submitPage: true});
         }
     }
 
@@ -97,7 +100,7 @@ export const QuestionPage = (props: Props) => {
             )}
             <QuestionContainer>
                 <form noValidate autoComplete="off" onSubmit={props.onSubmit}>
-                    {groups[state.groupIndex] ? (
+                    {!state.submitPage ? (
                         props.stepwise ? (
                             <>
                                 <h2 style={{height: 24.8}}>{groups[state.groupIndex][state.subgroupIndex][0].group}</h2>
@@ -139,6 +142,7 @@ export const QuestionPage = (props: Props) => {
                     )}
                 </form>
             </QuestionContainer>
+
             {props.stepwise ? (
                 <>
                     <StyledButton
