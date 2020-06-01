@@ -82,7 +82,7 @@ export const App = () => {
         <React.Fragment>
             {isInitializing ? (
                 <div>Loading...</div>
-            ) : /*isAuthenticated ?*/ (
+            ) : isAuthenticated ? (
                 // ? hasAccount
                 <HostHomeDataProvider>
                     <React.Fragment>
@@ -165,9 +165,9 @@ export const App = () => {
                         </React.Fragment>
                     </React.Fragment>
                 </HostHomeDataProvider>
-            // ) : (
-            //     // : <ProfileSelection /> //<-----------if no user was found go to profile selection
-            //     <LoginView />
+            ) : (
+                // : <ProfileSelection /> //<-----------if no user was found go to profile selection
+                <LoginView />
             )}
         </React.Fragment>
     )
