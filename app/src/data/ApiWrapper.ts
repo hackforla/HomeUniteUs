@@ -38,7 +38,7 @@ const putJson = async (uri: string, data: string) => {
     }
 }
 
-const getAccount = async (uri: string, data: any | undefined) => {
+const hasAccount = async (uri: string, data: any | undefined) => {
     try {
         const response = await fetch(uri, {
             method: "POST",
@@ -47,11 +47,14 @@ const getAccount = async (uri: string, data: any | undefined) => {
             },
             body: data
         }) 
+        if (response.status !== 200) {
+            return { errorMessage: "User doesn't exist "}
+        }
         return await response.json()
 
     } catch (e) {
         throw new ApiFetchError(
-            `error in getAccount(): error fetching '${uri}': ${e}`
+            `error in hasAccount(): error fetching '${uri}': ${e}`
         )
     }
 }
@@ -77,22 +80,13 @@ export class Fetcher<T> {
             JSON.stringify(item)
         )) as string
     }
-
-    public async getUserAccountByEmail(data: any): Promise<T> {
-        return (await getAccount(
-            `${this.endpoint}`,
-            JSON.stringify(data)
-        )) 
-    }
 }
 
 export class ApiWrapper {
     private guestFetcher: Fetcher<Guest>
-    private accountsFetcher: Fetcher<any>
 
     public constructor() {
         this.guestFetcher = new Fetcher<Guest>('guests')
-        this.accountsFetcher = new Fetcher<any>('checkEmail')
     }
 
     // Guests
@@ -105,6 +99,6 @@ export class ApiWrapper {
     }
 
     public async getUserAccount(data: any): Promise<any> {
-        return await this.accountsFetcher.getUserAccountByEmail(data)
+        return await hasAccount(`${ApiConfig.UriPrefix}/checkEmail`, data)
     }
 }

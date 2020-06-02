@@ -495,7 +495,6 @@ def check_by_email():
         accounts = accountsRepository.get_using_email(req['email']) #pass the req in here when ready
         if accounts is None:
             return Response(json.dumps({'error': None, 'status': 400}),status=400, mimetype='application/json')
-            # return Response(json.dumps({'error': None}),status=400, mimetype='application/json')
         return Response(status=200, mimetype='application/json') 
            
     except Exception as e:

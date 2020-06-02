@@ -28,7 +28,6 @@ import {
 } from './pages/CreateProfile'
 import { AllHosts } from './pages/Admin/AllHosts'
 import ProfileSelection from './pages/ProfileSelection/ProfileSelection'
-
 import HostQuestions from './pages/HostQuestions'
 import { ApiWrapper } from './data/ApiWrapper'
 import { Host } from './models/Host'
@@ -65,13 +64,13 @@ export const App = () => {
 
   React.useEffect(() => {
     const fetch = async () => {
-      if(isAuthenticated){
+      if (isAuthenticated) {
         let fetching = new ApiWrapper()
         let data: any | undefined = await fetching.getUserAccount(user)
-        if(data.status === 400){
+        if (data.errorMessage) {
           history.push('/profileselection')
         } else {
-          setHasAccount(data ! == null)
+          setHasAccount(true) 
         }
       }
     }
@@ -81,10 +80,9 @@ export const App = () => {
   return (
     <React.Fragment>
       {
-        isInitializing
+        isInitializing 
           ? <div>Loading...</div>
-          : isAuthenticated
-            // ? hasAccount
+          : isAuthenticated && hasAccount
             ? <HostHomeDataProvider>
               <React.Fragment>
                 <AppStyle.FlexHolder>
@@ -146,7 +144,7 @@ export const App = () => {
                       component={AllHosts}
                     />
                     <Route
-                      exact path="/profileselection/:id"
+                      exact path="/profileselection"
                       component={ProfileSelection}
                     />
                     <Route
@@ -158,7 +156,6 @@ export const App = () => {
                 </React.Fragment>
               </React.Fragment>
             </HostHomeDataProvider>
-            // : <ProfileSelection /> //<-----------if no user was found go to profile selection
             : <LoginView />
       }
     </React.Fragment>
