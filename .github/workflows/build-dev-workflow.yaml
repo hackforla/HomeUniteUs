@@ -22,6 +22,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: cd app && npm ci
-    - run: npm run build:docker
-    - run: npm run test
+    - run: cd app && npm run build:docker
+    - run: cd app && npm run test
     
