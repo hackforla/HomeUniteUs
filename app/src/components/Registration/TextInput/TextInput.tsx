@@ -1,5 +1,7 @@
 import * as React from 'react'
 import TextField from '@material-ui/core/TextField'
+import { withStyles } from '@material-ui/core/styles'
+import { styles } from './styles'
 
 interface Props {
     name: string
@@ -8,31 +10,17 @@ interface Props {
     placeholder: string
     type: string
     id: string
-    label: string
-    helperText: string
 }
-
 const TextInput = (props: Props) => {
-    const {
-        name,
-        value,
-        onChange,
-        placeholder,
-        type,
-        id,
-        label,
-        helperText,
-    } = props
+    const { name, value, onChange, placeholder, type, id } = props
 
     return (
         <>
             <TextField
                 id={id}
-                label={label}
                 name={name}
                 value={value}
                 onChange={onChange}
-                helperText={helperText}
                 placeholder={placeholder}
                 type={type}
                 variant={'outlined'}
@@ -41,4 +29,4 @@ const TextInput = (props: Props) => {
     )
 }
 
-export default TextInput
+export default withStyles(styles)(TextInput)

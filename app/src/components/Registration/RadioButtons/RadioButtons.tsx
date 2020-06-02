@@ -6,6 +6,8 @@ import {
     FormControl,
     FormLabel,
 } from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles'
+import { styles } from './styles'
 
 interface Props {
     id: string
@@ -47,4 +49,4 @@ const RadioButtons = (props: Props) => {
     )
 }
 
-export default RadioButtons
+export default withStyles(styles)(RadioButtons)

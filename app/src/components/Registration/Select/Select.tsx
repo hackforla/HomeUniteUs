@@ -1,3 +1,5 @@
+/** MUI serves an 'elevation prop' warning; does not impact build/compile  **/
+
 import * as React from 'react'
 import {
     InputLabel,
@@ -6,32 +8,26 @@ import {
     FormControl,
     Select,
 } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { styles } from './styles'
+import { withStyles } from '@material-ui/core/styles'
 
-const useStyles = makeStyles((theme) => ({
-    formControl: {
-        margin: theme.spacing(0),
-        minWidth: 200,
-    },
-    selectEmpty: {
-        marginTop: theme.spacing(2),
-    },
-}))
+interface Classes {
+    formControl: string
+}
 
 interface Props {
     value: string
     onChange: (event: object) => void
     id: string
-    helperText: string
     options: Array<string>
     label: string
     labelId: string
+    classes: Classes
 }
 
 const DropdownSelect = (props: Props) => {
-    const classes = useStyles()
     //drop down select 'options' can be an array of objects to store and id to pass to value and a menu label
-    const { value, onChange, id, helperText, options, label } = props
+    const { classes, value, onChange, id, options, label } = props
 
     return (
         <>
@@ -53,10 +49,9 @@ const DropdownSelect = (props: Props) => {
                         return <MenuItem value={menuItem}>{menuItem}</MenuItem>
                     })}
                 </Select>
-                <FormHelperText>{helperText}</FormHelperText>
             </FormControl>
         </>
     )
 }
 
-export default DropdownSelect
+export default withStyles(styles)(DropdownSelect)

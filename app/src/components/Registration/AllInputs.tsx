@@ -3,12 +3,17 @@
 import React from 'react'
 import {
     Checkbox,
-    Dropdown,
+    Select,
     RadioButtons,
     LargeTextInput,
     TextInput,
+    TextArea,
+    Button,
+    Paper,
+    Card,
+    Stepper,
 } from './index'
-import { theme } from './style'
+import { theme } from './theme'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 
 const AllInputs = () => {
@@ -47,14 +52,38 @@ const AllInputs = () => {
         setText(event.target.value)
     }
 
+    //injects color palette from our theming
+
+    const { palette } = theme
+
     return (
+        //themes can be inlined or injected via withStyles api (latter preferred)
         <MuiThemeProvider theme={theme}>
-            <div style={{ padding: '5em' }}>
+            <div style={{ padding: theme.spacing(2) }}>
+                <h1
+                    style={{
+                        color: palette.primary.main,
+                        margin: theme.spacing(1),
+                        padding: theme.spacing(1),
+                    }}
+                >
+                    Check out these mui inputs
+                </h1>
                 <div
                     style={{
-                        border: `1px solid gray`,
-                        margin: `1em`,
-                        padding: `1em`,
+                        border: `1px solid black`,
+                        margin: theme.spacing(1),
+                        padding: theme.spacing(1),
+                    }}
+                >
+                    <Stepper></Stepper>
+                </div>
+                <Card></Card>
+                <div
+                    style={{
+                        border: `1px solid ${palette.primary.main}`,
+                        margin: theme.spacing(1),
+                        padding: theme.spacing(1),
                     }}
                 >
                     <Checkbox
@@ -66,31 +95,12 @@ const AllInputs = () => {
                         }}
                     ></Checkbox>
                 </div>
-                <div
-                    style={{
-                        border: `1px solid black`,
-                        margin: `1em`,
-                        padding: `1em`,
-                    }}
-                >
-                    <Dropdown
-                        id={`demo-simple-select-outlined-label`}
-                        labelId={`demo-simple-select-outlined-label`}
-                        label={`Age`}
-                        options={options.drop}
-                        value={select}
-                        helperText={`dropdown`}
-                        onChange={(event) => {
-                            handleSelect(event)
-                        }}
-                    ></Dropdown>
-                </div>
 
                 <div
                     style={{
                         border: `1px solid black`,
-                        margin: `1em`,
-                        padding: `1em`,
+                        margin: theme.spacing(1),
+                        padding: theme.spacing(1),
                     }}
                 >
                     <RadioButtons
@@ -105,42 +115,39 @@ const AllInputs = () => {
                         }}
                     ></RadioButtons>
                 </div>
+                <div>
+                    <Select
+                        id={`demo-simple-select-outlined-label`}
+                        labelId={`demo-simple-select-outlined-label`}
+                        label={`Age`}
+                        options={options.drop}
+                        value={select}
+                        onChange={(event) => {
+                            handleSelect(event)
+                        }}
+                    ></Select>
+                </div>
 
-                <div
-                    style={{
-                        border: `1px solid black`,
-                        margin: `1em`,
-                        padding: `1em`,
-                    }}
-                >
+                <div>
                     <TextInput
                         id={'1'}
-                        label={`small-form`}
                         name={`test`}
                         type={`text`}
                         value={text}
                         placeholder={`test`}
-                        helperText={`Some important text`}
                         onChange={(event) => {
                             handleText(event)
                         }}
                     ></TextInput>
                 </div>
-                <div
-                    style={{
-                        border: `1px solid black`,
-                        margin: `1em`,
-                        padding: `1em`,
-                    }}
-                >
+                <div>
                     <LargeTextInput
                         id={'1'}
-                        label={`large-form`}
+                        rows={8}
                         name={`test`}
                         type={`text`}
                         value={text}
                         placeholder={`test`}
-                        helperText={`Some important text`}
                         onChange={(event) => {
                             handleText(event)
                         }}
