@@ -1,4 +1,4 @@
-import 'babel-polyfill'
+// import 'babel-polyfill'
 import * as React from 'react'
 import { Route, Switch, NavLink, useParams, useHistory } from 'react-router-dom'
 import * as AppStyle from './AppStyle'

@@ -11,7 +11,7 @@ import {
     GuestResponse,
     HostResponse,
 } from '../models'
-import { CommonResponseValues, ResponseValue } from '../models/ResponseValue'
+import { ResponseValue } from '../models/ResponseValue'
 import { HostHomeType } from '../models/HostHomeType'
 
 // design was informed by:

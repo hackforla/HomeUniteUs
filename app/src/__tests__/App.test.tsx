@@ -3,7 +3,9 @@ import {render, fireEvent, waitForElement, screen} from '@testing-library/react'
 
 import {App} from '../App';
 
-const renderApp = () => render(<div>TEST</div>);
+function renderApp(props: Partial<any> = {}) {
+    return render(<App {...props} />);
+};
 
 describe('<App />', () => {
     test('should render without crashing', () => {

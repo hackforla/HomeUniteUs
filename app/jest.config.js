@@ -1,7 +1,8 @@
 module.exports = {
     roots: ["<rootDir>/src"],
+    preset: 'ts-jest',
     transform: {
-      "^.+\\.tsx?$": "ts-jest"
+      '^.+\\.tsx?$': 'babel-jest',
     },
     setupFilesAfterEnv: [
       "@testing-library/react/cleanup-after-each",

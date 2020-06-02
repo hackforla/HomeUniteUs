@@ -14,7 +14,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: '[name].[hash:8].js',
-        publicPath: '/dist/',
+        publicPath: '/',
         // TODO: this line may need to be uncommented and changed for different webserver environments
         //     ...this prefix determines what is prepended to resource requests from "index.html"
         //     ...e.g. the value 'dist' in the injected tag <script src="/dist/react-dom.js"></script>
@@ -132,13 +132,13 @@ module.exports = {
     devServer: {
         historyApiFallback: true,
         publicPath: '/',
-        contentBase: path.resolve(__dirname, './dist'),
-        port: 3434,
+        contentBase: path.resolve(__dirname, './build/dist'),
+        port: 3000,
         proxy: {
             '/api': {
                 target: 'http://localhost:8080',
                 secure: false
             }
         }
-    }
+    },
 };
