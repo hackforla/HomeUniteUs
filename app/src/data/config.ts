@@ -2,7 +2,7 @@ export const Constants = {
     ApiHost: '',
     ApiPort: '80',
     ApiPrefix: 'api',
-    StaticFilePrefix: '/dist',
+    StaticFilePrefix: '',
 }
 
 export const ApiConfig = {

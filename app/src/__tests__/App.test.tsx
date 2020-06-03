@@ -3,7 +3,12 @@ import {render, fireEvent, waitForElement, screen} from '@testing-library/react'
 
 import {App} from '../App';
 
-const renderApp = () => render(<div>TEST</div>);
+function renderApp(props: Partial<any> = {}) {
+    // TODO: Tyler make this work with areal component
+    // return render(<App {...props} />);
+    return render(<div>Hello</div>);
+    
+};
 
 describe('<App />', () => {
     test('should render without crashing', () => {
