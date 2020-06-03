@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
-import { useParams } from 'react-router'
 import {
     Container,
     Card,
@@ -18,7 +17,6 @@ function ProfileSelection() {
     const history = useHistory()
     const [host, setHost] = useState(false)
     const [guest, setGuest] = useState(false)
-    const { id } = useParams() //grab id from url
 
     const handleToggle = (e: any): void => {
         if (e.target.alt === 'host') {
@@ -31,17 +29,8 @@ function ProfileSelection() {
         }
     }
 
-    const handleClick = (): void => {
-        //make some type of fetch call to determine whether user is guest or host
-        //so in database user must have isHost and isGuest value
-        if (host) {
-            console.log('in host?')
-            history.push(`/host/${id}`) // send them off somewhere after submit
-        }
-        if (guest) {
-            console.log('in gues?')
-            history.push(`/guests/${id}`)
-        }
+    const handleClick = (e: any) => {
+        console.log("hitting")
     }
 
     return (

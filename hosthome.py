@@ -491,10 +491,10 @@ def get_hostQuestion_by_id(id: int):
 @app.route('/api/checkEmail', methods=["POST"])
 def check_by_email():
     try:
-        req = request.json() #get req from front end
+        req = request.get_json() #get req from front end
         accounts = accountsRepository.get_using_email(req['email']) #pass the req in here when ready
         if accounts is None:
-            return Response(status=400, mimetype='application/json') 
+            return Response(json.dumps({'error': None, 'status': 400}),status=400, mimetype='application/json')
         return Response(status=200, mimetype='application/json') 
            
     except Exception as e:
