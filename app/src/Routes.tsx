@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Switch, NavLink, useParams, useHistory } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 import { AdminGuestView } from './pages/AdminGuestView'
 import { HostProfilePage } from './pages/HostProfile'
 import { GuestProfilePage } from './pages/GuestProfile'
@@ -7,7 +7,6 @@ import { ProfileEditPage } from './pages/ProfileEdit'
 import { AdminView } from './pages/AdminView'
 import { Demo } from './pages/Demo'
 import { AboutPage } from './pages/About'
-
 import {
     CreateProfile,
     CreateHostProfile,
@@ -15,7 +14,6 @@ import {
 } from './pages/CreateProfile'
 import { AllHosts } from './pages/Admin/AllHosts'
 import ProfileSelection from './pages/ProfileSelection/ProfileSelection'
-import AllInputs from './components/Registration/AllInputs'
 import FourOhFour from './pages/FourOhFour'
 
 export default function Routes() {
