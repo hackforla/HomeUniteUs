@@ -54,121 +54,106 @@ export const App = () => {
     const { isInitializing, isAuthenticated, user, logout } = useAuth0()
     const [hasAccount, setHasAccount] = React.useState(false)
 
-    const logoutClick = () => {
-        logout()
-    }
+  const logoutClick = () => {
+    logout()
+  }
 
-    React.useEffect(() => {
-        const fetch = async () => {
-            // if (isAuthenticated) {
-            //   let fetch = new Fetcher<Host>('checkEmail')
-            //   let data: any | undefined = await fetch.getByEmail(user) //change any to account interface
-            //   if (data?.email === user?.email) { //change to status if status 200 then its gooooooood!
-            //     setHasAccount(data !== null)
-            //   }
-            //   history.push('profileselection')
-            // }
-            if (isAuthenticated) {
-                let fetching = new ApiWrapper()
-                let data: Accounts | undefined = await fetching.getUserAccount(
-                    user
-                )
-            }
+  React.useEffect(() => {
+    const fetch = async () => {
+      if (isAuthenticated) {
+        let fetching = new ApiWrapper()
+        let data: any | undefined = await fetching.getUserAccount(user)
+        if (data.errorMessage) {
+          history.push('/profileselection')
+        } else {
+          setHasAccount(true) 
         }
-        fetch()
-    }, [isAuthenticated])
+      }
+    }
+    fetch()
+  }, [isAuthenticated])
 
-    return (
-        <React.Fragment>
-            {isInitializing ? (
-                <div>Loading...</div>
-            ) : isAuthenticated ? (
-                // ? hasAccount
-                <HostHomeDataProvider>
-                    <React.Fragment>
-                        <AppStyle.FlexHolder>
-                            <AppStyle.FlexGrowHolder>
-                                <a
-                                    href="http://www.safeplaceforyouth.org/"
-                                    target="_blank"
-                                >
-                                    <AppStyle.Image src={logo} alt="Logo" />
-                                </a>
-                            </AppStyle.FlexGrowHolder>
-                            <AppStyle.Holder>
-                                <NavLink to={`/demo`}>DEMO</NavLink>
-                            </AppStyle.Holder>
-                            <AppStyle.Holder>
-                                <NavLink to={`/about`}>ABOUT</NavLink>
-                            </AppStyle.Holder>
-                            <AppStyle.Holder>
-                                <NavLink to={`/admin/guests`}>ADMIN</NavLink>
-                            </AppStyle.Holder>
-                            <AppStyle.Holder>
-                                <NavLink to={`/admin/hosts`}>ALL HOSTS</NavLink>
-                            </AppStyle.Holder>
-                            <AppStyle.Holder>
-                                <span>
-                                    Hello, {(user && user.name) || 'User'}
-                                </span>
-                            </AppStyle.Holder>
-                            <AppStyle.Holder>
-                                <span onClick={logoutClick}>Logout</span>
-                            </AppStyle.Holder>
-                        </AppStyle.FlexHolder>
-                        <React.Fragment>
-                            <Switch>
-                                <Route exact path="/" component={AboutPage} />
-                                <Route exact path="/demo" component={Demo} />
-                                <Route path="/about" component={AboutPage} />
-                                <Route
-                                    path="/profile"
-                                    component={ProfileEditPage}
-                                />
-                                <Route
-                                    path="/admin/guests"
-                                    component={AdminView}
-                                />
-                                <Route
-                                    path="/admin/guest/:id"
-                                    component={AdminGuestView}
-                                />
-                                <Route
-                                    path="/guests/:guestId/matches/:hostId"
-                                    component={HostProfilePage}
-                                />
-                                <Route
-                                    path="/guests/:id"
-                                    component={GuestProfilePage}
-                                />
-                                <Route
-                                    path="/admin/hosts"
-                                    component={AllHosts}
-                                />
-                                <Route
-                                    exact
-                                    path="/profileselection/:id"
-                                    component={ProfileSelection}
-                                />
-                                <Route
-                                    exact
-                                    path="/host/:id"
-                                    component={HostQuestions}
-                                />
-                                <Route
-                                    exact
-                                    path="/componentlibrary"
-                                    component={AllInputs}
-                                />
-                                <FourOhFour />
-                            </Switch>
-                        </React.Fragment>
-                    </React.Fragment>
-                </HostHomeDataProvider>
-            ) : (
-                // : <ProfileSelection /> //<-----------if no user was found go to profile selection
-                <LoginView />
-            )}
-        </React.Fragment>
-    )
+  return (
+    <React.Fragment>
+      {
+        isInitializing 
+          ? <div>Loading...</div>
+          : isAuthenticated && hasAccount
+            ? <HostHomeDataProvider>
+              <React.Fragment>
+                <AppStyle.FlexHolder>
+                  <AppStyle.FlexGrowHolder>
+                    <a href="http://www.safeplaceforyouth.org/" target="_blank">
+                      <AppStyle.Image src={logo} alt="Logo" />
+                    </a>
+                  </AppStyle.FlexGrowHolder>
+                  <AppStyle.Holder>
+                    <NavLink to={`/demo`}>
+                      DEMO
+                    </NavLink>
+                  </AppStyle.Holder>
+                  <AppStyle.Holder>
+                    <NavLink to={`/about`}>
+                      ABOUT
+                    </NavLink>
+                  </AppStyle.Holder>
+                  <AppStyle.Holder>
+                    <NavLink to={`/admin/guests`}>
+                      ADMIN
+                    </NavLink>
+                  </AppStyle.Holder>
+                  <AppStyle.Holder>
+                    <NavLink to={`/admin/hosts`}>
+                      ALL HOSTS
+                    </NavLink>
+                  </AppStyle.Holder>
+                  <AppStyle.Holder>
+                    <span>Hello, {(user && user.name) || 'User'}</span>
+                  </AppStyle.Holder>
+                  <AppStyle.Holder>
+                    <span onClick={logoutClick}>
+                      Logout
+                    </span>
+                  </AppStyle.Holder>
+                </AppStyle.FlexHolder>
+                <React.Fragment>
+                  <Switch>
+                    <Route exact path="/" component={AboutPage} />
+                    <Route exact path="/demo" component={Demo} />
+                    <Route path="/about" component={AboutPage} />
+                    <Route path="/profile" component={ProfileEditPage} />
+                    <Route path="/admin/guests" component={AdminView} />
+                    <Route
+                      path="/admin/guest/:id"
+                      component={AdminGuestView}
+                    />
+                    <Route
+                      path="/guests/:guestId/matches/:hostId"
+                      component={HostProfilePage}
+                    />
+                    <Route
+                      path="/guests/:id"
+                      component={GuestProfilePage}
+                    />
+                    <Route
+                      path="/admin/hosts"
+                      component={AllHosts}
+                    />
+                    <Route
+                      exact path="/profileselection"
+                      component={ProfileSelection}
+                    />
+                    <Route
+                      exact path="/host/:id"
+                      component={HostQuestions}
+                    />
+                    <FourOhFour />
+                  </Switch>
+                </React.Fragment>
+              </React.Fragment>
+            </HostHomeDataProvider>
+            : <LoginView />
+      }
+    </React.Fragment>
+  );
 }
