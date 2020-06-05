@@ -57,6 +57,7 @@ export const QuestionPage = (props: Props) => {
 
     const [state, setState] = React.useState(initialState)
     const [open, setOpen] = React.useState(false) //for modal
+    const [disableSubmit, setDisableSubmit] = React.useState(false)
 
     // get group structure
     var groups: [[QuestionType[]]] = [[[]]]
@@ -80,8 +81,12 @@ export const QuestionPage = (props: Props) => {
         const indexQuesitons = [0, 1, 2, 3, 4, 5, 6, 7, 8] //for modalv
         indexQuesitons.find(indexId => {
             if (indexId === index && answer === "no") {
+                setDisableSubmit(true)
                 setOpen(true)
+            } else {
+                setDisableSubmit(false)
             }
+            return
         })
         //for modal^
         var state2 = { ...state }
@@ -113,6 +118,11 @@ export const QuestionPage = (props: Props) => {
     const handleClose = () => {
         setOpen(false);
     }; // for modal
+
+    const handleClick = (e: any) => {
+        e.preventDefault()
+        console.log("Testing the submit button")
+    }
 
     return (
         <>
@@ -172,6 +182,8 @@ export const QuestionPage = (props: Props) => {
                                     variant="contained"
                                     color="primary"
                                     type="submit"
+                                    onClick={handleClick}
+                                    disabled={disableSubmit}
                                 >
                                     Submit
                                 </StyledButton>
