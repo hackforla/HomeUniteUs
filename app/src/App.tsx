@@ -78,7 +78,8 @@ export const App = () => {
       {
         isInitializing 
           ? <div>Loading...</div>
-          : isAuthenticated && hasAccount
+          // : isAuthenticated && hasAccount
+          : isAuthenticated
             ? <HostHomeDataProvider>
               <React.Fragment>
                 <AppStyle.FlexHolder>
@@ -105,6 +106,11 @@ export const App = () => {
                   <AppStyle.Holder>
                     <NavLink to={`/admin/hosts`}>
                       ALL HOSTS
+                    </NavLink>
+                  </AppStyle.Holder>
+                  <AppStyle.Holder>
+                    <NavLink to={`/profile`}>
+                      Profile
                     </NavLink>
                   </AppStyle.Holder>
                   <AppStyle.Holder>
