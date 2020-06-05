@@ -78,20 +78,11 @@ export const QuestionPage = (props: Props) => {
     }
     
     function setAnswer(index: number, answer: any) {
-
-        const indexQuesitons = [0, 1, 2, 3, 4, 5, 6, 7, 8] //for modalv
-        if(answer === "no"){
-            const testing = indexQuesitons.includes(index)
-            if(testing){
-                setDisableSubmit(true)
-                setOpen(true)
-            } 
-        } else {
-            setDisableSubmit(false)
-        }
-        //for modal^
         var state2 = { ...state }
         state2.questions[index].answer = answer
+        answer === "no" && state2.questions[index].showstopper //this makes sense 
+            ? (setDisableSubmit(true), setOpen(true))
+            : setDisableSubmit(false)
         setState(state2)
     }
 
@@ -119,11 +110,6 @@ export const QuestionPage = (props: Props) => {
     const handleClose = () => {
         setOpen(false);
     }; // for modal
-
-    const handleClick = (e: any) => {
-        e.preventDefault()
-        console.log("Testing the submit button")
-    }
 
     return (
         <>
@@ -183,7 +169,6 @@ export const QuestionPage = (props: Props) => {
                                     variant="contained"
                                     color="primary"
                                     type="submit"
-                                    onClick={handleClick}
                                     disabled={disableSubmit}
                                 >
                                     Submit
@@ -218,10 +203,9 @@ export const QuestionPage = (props: Props) => {
                     )}
             </div>
 
-            <div>
+            <>
                 <Modal
-                    aria-labelledby="transition-modal-title"
-                    aria-describedby="transition-modal-description"
+
                     className={classes.modal}
                     open={open}
                     onClose={handleClose}
@@ -233,12 +217,12 @@ export const QuestionPage = (props: Props) => {
                 >
                     <Fade in={open}>
                         <div className={classes.paper}>
-                            <h2 id="transition-modal-title" style={{ color: "red"}}>Warning</h2>
-                            <p id="transition-modal-description">We're sorry this answer will disqualifies you from participating in this program.</p>
+                            <h2 style={{ color: "red"}}>Warning</h2>
+                            <p>We're sorry this answer will disqualifies you from participating in this program.</p>
                         </div>
                     </Fade>
                 </Modal>
-            </div>
+            </>
         </>
     )
 }
