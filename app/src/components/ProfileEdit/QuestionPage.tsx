@@ -76,18 +76,19 @@ export const QuestionPage = (props: Props) => {
         if (!groups[groupI][subgroupI]) groups[groupI][subgroupI] = []
         groups[groupI][subgroupI].push(state.questions[i])
     }
-
+    
     function setAnswer(index: number, answer: any) {
+
         const indexQuesitons = [0, 1, 2, 3, 4, 5, 6, 7, 8] //for modalv
-        indexQuesitons.find(indexId => {
-            if (indexId === index && answer === "no") {
+        if(answer === "no"){
+            const testing = indexQuesitons.includes(index)
+            if(testing){
                 setDisableSubmit(true)
                 setOpen(true)
-            } else {
-                setDisableSubmit(false)
-            }
-            return
-        })
+            } 
+        } else {
+            setDisableSubmit(false)
+        }
         //for modal^
         var state2 = { ...state }
         state2.questions[index].answer = answer
