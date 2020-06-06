@@ -12,3 +12,4 @@ hosthomeenv
 personalNotes.md
 
 **/*.pyc
+**/__pycache__
