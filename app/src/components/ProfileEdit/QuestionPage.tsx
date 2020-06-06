@@ -188,7 +188,8 @@ export const QuestionPage = (props: Props) => {
                 handleClose={handleClose} 
                 modalOpen={state.modalOpen} 
                 headerText={"Warning"} 
-                text={"We're sorry this answer will disqualifies you from participating in this program."}/>
+                text={"We're sorry this answer will disqualifies you from participating in this program."}
+            />
         </>
     )
 }
