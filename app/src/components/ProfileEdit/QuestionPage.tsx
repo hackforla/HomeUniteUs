@@ -61,7 +61,7 @@ export const QuestionPage = (props: Props) => {
         var state2 = { ...state }
         state2.questions[index].answer = answer
 
-        if(answer === "no" && state2.questions[index].showstopper){
+        if(answer === state2.questions[index].showstopper){
             state2 = { ...state, modalOpen: true, disableSubmit: true }
         } else {
             state2 = { ...state, disableSubmit: false }
