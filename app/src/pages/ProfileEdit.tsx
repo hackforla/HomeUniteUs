@@ -9,6 +9,18 @@ const Container = styled.div`
     max-width: 1140px;
 `
 
+const getQuestionsAsync = async (org: string, section: string) => {
+    try {
+        const response = await fetch('/api/v1/questions');
+        if(response.status !== 200) {
+            throw new Error(`fetching questions encountered: ${response.statusText}`);
+        }
+        return await response.json();
+    } catch(e) {
+        throw new Error(`getQuestionsAsync: error: ${e}`);
+    }
+};
+
 const getQuestions = (org: string, section: string) => {
     return [
         {
@@ -269,7 +281,7 @@ export const ProfileEditPage = () => {
     return (
         <Container>
             <h2>Hello! Answer these questions:</h2>
-            <QuestionPage stepwise={true} onSubmit={handleSubmit} questions={getQuestions('spy', 'basic')}></QuestionPage>
+            <QuestionPage stepwise={true} onSubmit={handleSubmit} questions={getQuestionsAsync('spy', 'basic')}></QuestionPage>
         </Container>
     )
 }
