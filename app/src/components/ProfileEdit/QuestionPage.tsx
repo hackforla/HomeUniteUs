@@ -184,7 +184,11 @@ export const QuestionPage = (props: Props) => {
                         </StyledButton>
                     )}
             </div>
-            <MUIModal handleClose={handleClose} modalOpen={state.modalOpen} headerText={"Warning"} text={"We're sorry this answer will disqualifies you from participating in this program."}/>
+            <MUIModal 
+                handleClose={handleClose} 
+                modalOpen={state.modalOpen} 
+                headerText={"Warning"} 
+                text={"We're sorry this answer will disqualifies you from participating in this program."}/>
         </>
     )
 }
