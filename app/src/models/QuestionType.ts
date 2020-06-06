@@ -9,4 +9,5 @@ export interface QuestionType {
     order?: number,
     conditional_id?: string,
     conditional_value?: string
+    showstopper?: string
 }
