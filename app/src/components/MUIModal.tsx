@@ -1,32 +1,33 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'; //for modal
-import Modal from '@material-ui/core/Modal'; //for modal
-import Backdrop from '@material-ui/core/Backdrop'; //for modal
-import Fade from '@material-ui/core/Fade'; //for modal
+import { makeStyles } from '@material-ui/core/styles';
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
 
 interface Props {
-  handleClose(): any 
+  handleClose: () => void
   modalOpen: boolean
+  headerText: string
+  text: string
 }
 
-//for modal
 const useStyles = makeStyles((theme) => ({
   modal: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   paper: {
-      backgroundColor: theme.palette.background.paper,
-      border: '2px solid #000',
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 4, 3),
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing(2, 4, 3),
   },
-})); //for modal
+}));
 
-function WarningModal(props: Props) {
-  const { handleClose, modalOpen } = props
-  const classes = useStyles(); //for modal
+function MUIModal(props: Props) {
+  const { handleClose, modalOpen, headerText, text } = props
+  const classes = useStyles();
 
   return (
     <>
@@ -42,8 +43,8 @@ function WarningModal(props: Props) {
       >
         <Fade in={modalOpen}>
           <div className={classes.paper}>
-            <h2 style={{ color: "red" }}>Warning</h2>
-            <p>We're sorry this answer will disqualifies you from participating in this program.</p>
+            <h2 style={{ color: "red" }}>{headerText}</h2>
+            <p>{text}</p>
           </div>
         </Fade>
       </Modal>
@@ -51,4 +52,4 @@ function WarningModal(props: Props) {
   )
 }
 
-export default WarningModal
+export default MUIModal

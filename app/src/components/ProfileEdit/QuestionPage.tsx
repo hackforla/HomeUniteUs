@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Question from './Question'
 import { QuestionType } from '../../models/QuestionType'
-import WarningModal from '../MUIModal'
+import MUIModal from '../MUIModal'
 
 import styled from 'styled-components'
 import { Box, Button, LinearProgress } from '@material-ui/core'
@@ -33,14 +33,14 @@ export const QuestionPage = (props: Props) => {
         groupIndex: 0,
         subgroupIndex: 0,
         submitPage: false,
+        modalOpen: false,
+        disableSubmit: false
     }
 
     const [state, setState] = React.useState(initialState)
-    const [modalOpen, setModalOpen] = React.useState(false) //for modal
-    const [disableSubmit, setDisableSubmit] = React.useState(false)
 
     // get group structure
-    var groups: [[QuestionType[]]] = [[[]]]
+    var groups: [[QuestionType[]]] = [[[]]] 
     var groupI = 0
     var subgroupI = 0
     for (var i = 0; i < state.questions.length; i += 1) {
@@ -60,9 +60,12 @@ export const QuestionPage = (props: Props) => {
     function setAnswer(index: number, answer: any) {
         var state2 = { ...state }
         state2.questions[index].answer = answer
-        answer === "no" && state2.questions[index].showstopper //this makes sense 
-            ? (setDisableSubmit(true), setModalOpen(true))
-            : setDisableSubmit(false)
+
+        if(answer === "no" && state2.questions[index].showstopper){
+            state2 = { ...state, modalOpen: true, disableSubmit: true }
+        } else {
+            state2 = { ...state, disableSubmit: false }
+        }
         setState(state2)
     }
 
@@ -86,10 +89,9 @@ export const QuestionPage = (props: Props) => {
         }
     }
 
-    // for modal
     const handleClose = () => {
-        setModalOpen(false);
-    }; // for modal
+        setState({ ...state, modalOpen: false});
+    }; 
 
     return (
         <>
@@ -149,7 +151,7 @@ export const QuestionPage = (props: Props) => {
                                     variant="contained"
                                     color="primary"
                                     type="submit"
-                                    disabled={disableSubmit}
+                                    disabled={state.disableSubmit}
                                 >
                                     Submit
                                 </StyledButton>
@@ -182,7 +184,7 @@ export const QuestionPage = (props: Props) => {
                         </StyledButton>
                     )}
             </div>
-            <WarningModal handleClose={handleClose} modalOpen={modalOpen}/>
+            <MUIModal handleClose={handleClose} modalOpen={state.modalOpen} headerText={"Warning"} text={"We're sorry this answer will disqualifies you from participating in this program."}/>
         </>
     )
 }
