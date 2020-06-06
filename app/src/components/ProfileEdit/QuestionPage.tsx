@@ -187,9 +187,10 @@ export const QuestionPage = (props: Props) => {
             <MUIModal 
                 handleClose={handleClose} 
                 modalOpen={state.modalOpen} 
-                headerText={"Warning"} 
-                text={"We're sorry this answer will disqualifies you from participating in this program."}
-            />
+            >
+                <h2 id="transition-modal-title" style={{"color": "red"}}>Warning</h2>
+                <p id="transition-modal-description">We're sorry but your answer disqualifies you from participating in this program</p>
+            </MUIModal>
         </>
     )
 }

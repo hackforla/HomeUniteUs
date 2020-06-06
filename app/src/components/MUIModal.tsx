@@ -4,13 +4,6 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 
-interface Props {
-  handleClose: () => void
-  modalOpen: boolean
-  headerText: string
-  text: string
-}
-
 const useStyles = makeStyles((theme) => ({
   modal: {
     display: 'flex',
@@ -25,8 +18,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function MUIModal(props: Props) {
-  const { handleClose, modalOpen, headerText, text } = props
+function MUIModal(props: any) {
+  const { handleClose, modalOpen } = props
   const classes = useStyles();
 
   return (
@@ -43,8 +36,7 @@ function MUIModal(props: Props) {
       >
         <Fade in={modalOpen}>
           <div className={classes.paper}>
-            <h2 style={{ color: "red" }}>{headerText}</h2>
-            <p>{text}</p>
+            {props.children}
           </div>
         </Fade>
       </Modal>
