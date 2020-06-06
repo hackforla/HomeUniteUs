@@ -1,13 +1,10 @@
 import * as React from 'react'
 import Question from './Question'
 import { QuestionType } from '../../models/QuestionType'
+import WarningModal from '../MUIModal'
 
 import styled from 'styled-components'
 import { Box, Button, LinearProgress } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'; //for modal
-import Modal from '@material-ui/core/Modal'; //for modal
-import Backdrop from '@material-ui/core/Backdrop'; //for modal
-import Fade from '@material-ui/core/Fade'; //for modal
 
 
 interface Props {
@@ -25,24 +22,7 @@ const QuestionContainer = styled.div`
     min-height: 374px;
 `
 
-//for modal
-const useStyles = makeStyles((theme) => ({
-    modal: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    paper: {
-        backgroundColor: theme.palette.background.paper,
-        border: '2px solid #000',
-        boxShadow: theme.shadows[5],
-        padding: theme.spacing(2, 4, 3),
-    },
-})); //for modal
-
 export const QuestionPage = (props: Props) => {
-    const classes = useStyles(); //for modal
-
     // sort by order
     props.questions.sort((a, b) => {
         return (a.order || 0) - (b.order || 0);
@@ -56,7 +36,7 @@ export const QuestionPage = (props: Props) => {
     }
 
     const [state, setState] = React.useState(initialState)
-    const [open, setOpen] = React.useState(false) //for modal
+    const [modalOpen, setModalOpen] = React.useState(false) //for modal
     const [disableSubmit, setDisableSubmit] = React.useState(false)
 
     // get group structure
@@ -81,7 +61,7 @@ export const QuestionPage = (props: Props) => {
         var state2 = { ...state }
         state2.questions[index].answer = answer
         answer === "no" && state2.questions[index].showstopper //this makes sense 
-            ? (setDisableSubmit(true), setOpen(true))
+            ? (setDisableSubmit(true), setModalOpen(true))
             : setDisableSubmit(false)
         setState(state2)
     }
@@ -108,7 +88,7 @@ export const QuestionPage = (props: Props) => {
 
     // for modal
     const handleClose = () => {
-        setOpen(false);
+        setModalOpen(false);
     }; // for modal
 
     return (
@@ -202,27 +182,7 @@ export const QuestionPage = (props: Props) => {
                         </StyledButton>
                     )}
             </div>
-
-            <>
-                <Modal
-
-                    className={classes.modal}
-                    open={open}
-                    onClose={handleClose}
-                    closeAfterTransition
-                    BackdropComponent={Backdrop}
-                    BackdropProps={{
-                        timeout: 500,
-                    }}
-                >
-                    <Fade in={open}>
-                        <div className={classes.paper}>
-                            <h2 style={{ color: "red"}}>Warning</h2>
-                            <p>We're sorry this answer will disqualifies you from participating in this program.</p>
-                        </div>
-                    </Fade>
-                </Modal>
-            </>
+            <WarningModal handleClose={handleClose} modalOpen={modalOpen}/>
         </>
     )
 }
