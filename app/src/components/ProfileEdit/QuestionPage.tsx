@@ -171,6 +171,7 @@ export const QuestionPage = (props: Props) => {
                                     (question: QuestionType, i) => (
                                         <Box my={5}>
                                             <Question
+                                                key={i}
                                                 index={i}
                                                 question={question}
                                                 setAnswer={setAnswer}
