@@ -106,6 +106,23 @@ export const QuestionPage = (props: Props) => {
         setState({ ...state, modalOpen: false })
     }
 
+    const isNestedActive = (question: QuestionType) => {
+        if (question.conditional_id === undefined) {
+            return true
+        }
+        let parentQuestion
+        for (let i = 0; i < state.questions.length; i += 1) {
+            if (state.questions[i].id === question.conditional_id) {
+                parentQuestion = state.questions[i]
+                break
+            }
+        }
+        return (
+            !parentQuestion ||
+            parentQuestion.answer === question.conditional_value
+        )
+    }
+
     return (
         <>
             <div>
@@ -157,27 +174,30 @@ export const QuestionPage = (props: Props) => {
                                             question
                                         )
                                         return (
-                                            <Question
-                                                key={index}
-                                                index={index}
-                                                question={question}
-                                                setAnswer={setAnswer}
-                                            ></Question>
+                                            isNestedActive(question) && (
+                                                <Question
+                                                    key={index}
+                                                    index={index}
+                                                    question={question}
+                                                    setAnswer={setAnswer}
+                                                ></Question>
+                                            )
                                         )
                                     })}
                                 </>
                             ) : (
                                 state.questions.map(
-                                    (question: QuestionType, i) => (
-                                        <Box my={5}>
-                                            <Question
-                                                key={i}
-                                                index={i}
-                                                question={question}
-                                                setAnswer={setAnswer}
-                                            ></Question>
-                                        </Box>
-                                    )
+                                    (question: QuestionType, i) =>
+                                        isNestedActive(question) && (
+                                            <Box my={5}>
+                                                <Question
+                                                    key={i}
+                                                    index={i}
+                                                    question={question}
+                                                    setAnswer={setAnswer}
+                                                ></Question>
+                                            </Box>
+                                        )
                                 )
                             )
                         ) : (

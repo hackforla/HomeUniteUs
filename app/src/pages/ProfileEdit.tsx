@@ -367,6 +367,7 @@ const getQuestions = (org: string, section: string) => {
                 { label: 'Dog', value: 'dog' },
                 { label: 'Cat', value: 'cat' },
                 { label: 'Tortoise', value: 'tortoise' },
+                { label: 'Other', value: 'other' },
             ],
             conditional_id: '35',
             conditional_value: 'yes',
@@ -377,9 +378,9 @@ const getQuestions = (org: string, section: string) => {
             group: 'Host Pets',
             subgroup: 'Pet',
             order: 25,
-            question: 'Other kind',
-            conditional_id: '35',
-            conditional_value: 'yes',
+            question: 'Other kind of pet',
+            conditional_id: '36',
+            conditional_value: 'other',
         },
     ]
 }
