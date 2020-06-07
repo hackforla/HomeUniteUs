@@ -62,7 +62,7 @@ export const QuestionPage = (props: Props) => {
         groups[groupI][subgroupI].push(state.questions[i])
     }
 
-    function setAnswer(index: number, answer: any) {
+    const setAnswer = (index: number, answer: any) => {
         let state2 = { ...state }
         state2.questions[index].answer = answer
 
@@ -74,7 +74,7 @@ export const QuestionPage = (props: Props) => {
         setState(state2)
     }
 
-    function clickBack() {
+    const clickBack = () => {
         if (state.submitPage) {
             setState({ ...state, submitPage: false })
         } else if (state.subgroupIndex > 0) {
@@ -88,7 +88,7 @@ export const QuestionPage = (props: Props) => {
         }
     }
 
-    function clickForward() {
+    const clickForward = () => {
         if (state.subgroupIndex < groups[state.groupIndex].length - 1) {
             setState({ ...state, subgroupIndex: state.subgroupIndex + 1 })
         } else if (state.groupIndex < groups.length - 1) {
