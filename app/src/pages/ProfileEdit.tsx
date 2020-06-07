@@ -11,15 +11,17 @@ const Container = styled.div`
 
 const getQuestionsAsync = async (org: string, section: string) => {
     try {
-        const response = await fetch('/api/v1/questions');
-        if(response.status !== 200) {
-            throw new Error(`fetching questions encountered: ${response.statusText}`);
+        const response = await fetch('/api/v1/questions')
+        if (response.status !== 200) {
+            throw new Error(
+                `fetching questions encountered: ${response.statusText}`
+            )
         }
-        return await response.json();
-    } catch(e) {
-        throw new Error(`getQuestionsAsync: error: ${e}`);
+        return await response.json()
+    } catch (e) {
+        throw new Error(`getQuestionsAsync: error: ${e}`)
     }
-};
+}
 
 const getQuestions = (org: string, section: string) => {
     return [
@@ -28,18 +30,26 @@ const getQuestions = (org: string, section: string) => {
             type: 'radio',
             group: 'Introductory Questions',
             order: -50,
-            question: 'Do you have an extra bedroom or private space in their home?',
-            options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
-            showstopper: "no"
+            question:
+                'Do you have an extra bedroom or private space in their home?',
+            options: [
+                { label: 'Yes', value: 'yes' },
+                { label: 'No', value: 'no' },
+            ],
+            showstopper: 'no',
         },
         {
             id: '11',
             type: 'radio',
             group: 'Introductory Questions',
             order: -49,
-            question: 'Are you able to provide Guest with access to a kitchen in which to prepare meals, store food and access to shared or private bathroom?',
-            options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
-            showstopper: "no"
+            question:
+                'Are you able to provide Guest with access to a kitchen in which to prepare meals, store food and access to shared or private bathroom?',
+            options: [
+                { label: 'Yes', value: 'yes' },
+                { label: 'No', value: 'no' },
+            ],
+            showstopper: 'no',
         },
         {
             id: '12',
@@ -47,62 +57,89 @@ const getQuestions = (org: string, section: string) => {
             group: 'Introductory Questions',
             order: -48,
             question: 'Do you have homeowners/renters insurance?',
-            options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
-            showstopper: "no"
+            options: [
+                { label: 'Yes', value: 'yes' },
+                { label: 'No', value: 'no' },
+            ],
+            showstopper: 'no',
         },
         {
             id: '13',
             type: 'radio',
             group: 'Introductory Questions',
             order: -47,
-            question: 'Do you live on the westside of Los Angeles or within reasonable distance to public transportation?',
-            options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
-            showstopper: "no"
+            question:
+                'Do you live on the westside of Los Angeles or within reasonable distance to public transportation?',
+            options: [
+                { label: 'Yes', value: 'yes' },
+                { label: 'No', value: 'no' },
+            ],
+            showstopper: 'no',
         },
         {
             id: '14',
             type: 'radio',
             group: 'Introductory Questions',
             order: -46,
-            question: 'Are you able and willing to pass a LiveScan background clearance check?',
-            options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
-            showstopper: "no"
+            question:
+                'Are you able and willing to pass a LiveScan background clearance check?',
+            options: [
+                { label: 'Yes', value: 'yes' },
+                { label: 'No', value: 'no' },
+            ],
+            showstopper: 'no',
         },
         {
             id: '15',
             type: 'radio',
             group: 'Introductory Questions',
             order: -45,
-            question: 'Do you agree to complete this application, undergo and interview and a home inspection?',
-            options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
-            showstopper: "no"
+            question:
+                'Do you agree to complete this application, undergo and interview and a home inspection?',
+            options: [
+                { label: 'Yes', value: 'yes' },
+                { label: 'No', value: 'no' },
+            ],
+            showstopper: 'no',
         },
         {
             id: '1',
             type: 'radio',
             group: 'Introductory Questions',
             order: -45,
-            question: 'Do you agree to attend a 3-hour SPY Volunteer Orientation and a 1-day Host Home Orientation Training?',
-            options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
-            showstopper: "no"
+            question:
+                'Do you agree to attend a 3-hour SPY Volunteer Orientation and a 1-day Host Home Orientation Training?',
+            options: [
+                { label: 'Yes', value: 'yes' },
+                { label: 'No', value: 'no' },
+            ],
+            showstopper: 'no',
         },
         {
             id: '2',
             type: 'radio',
             group: 'Introductory Questions',
             order: -45,
-            question: 'Do you commit to attending monthly meetings with SPY staff and other hosts?',
-            options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
-            showstopper: "no"
+            question:
+                'Do you commit to attending monthly meetings with SPY staff and other hosts?',
+            options: [
+                { label: 'Yes', value: 'yes' },
+                { label: 'No', value: 'no' },
+            ],
+            showstopper: 'no',
         },
         {
             id: '3',
             type: 'radio',
             group: 'Introductory Questions',
             order: -45,
-            question: 'Do you commit to providing a welcoming, safe, non-judgmental environment and to supporting the self-determined goals of youth Guest?',
-            options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
-            showstopper: "no"
+            question:
+                'Do you commit to providing a welcoming, safe, non-judgmental environment and to supporting the self-determined goals of youth Guest?',
+            options: [
+                { label: 'Yes', value: 'yes' },
+                { label: 'No', value: 'no' },
+            ],
+            showstopper: 'no',
         },
         {
             id: '7',
@@ -142,19 +179,23 @@ const getQuestions = (org: string, section: string) => {
             order: 5,
             question: 'Gender identity',
             options: [
-                {label: 'option 1', value: '1'},
-                {label: 'option 2', value: '2'},
-                {label: 'option 3', value: '3'},
-                {label: 'option 4', value: '4'},
-            ]
+                { label: 'option 1', value: '1' },
+                { label: 'option 2', value: '2' },
+                { label: 'option 3', value: '3' },
+                { label: 'option 4', value: '4' },
+            ],
         },
         {
             id: '18',
             type: 'radio',
             group: 'Host bio',
             order: 6,
-            question: 'Do you have another family member to add?- opens duplicate screen of page 11 for a new family member if yes',
-            options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
+            question:
+                'Do you have another family member to add?- opens duplicate screen of page 11 for a new family member if yes',
+            options: [
+                { label: 'Yes', value: 'yes' },
+                { label: 'No', value: 'no' },
+            ],
         },
         {
             id: '19',
@@ -176,7 +217,11 @@ const getQuestions = (org: string, section: string) => {
             group: 'Contact Info',
             order: 10,
             question: 'Prefered contact method',
-            options: [{label: 'Email', value: 'email'}, {label: 'SMS', value: 'sms'}, {label: 'Call', value: 'call'}],
+            options: [
+                { label: 'Email', value: 'email' },
+                { label: 'SMS', value: 'sms' },
+                { label: 'Call', value: 'call' },
+            ],
         },
         {
             id: '22',
@@ -207,8 +252,12 @@ const getQuestions = (org: string, section: string) => {
             type: 'radio',
             group: 'Contact Info',
             order: 13,
-            question: 'Is your contact address the same as your residential address?- opens duplicate screen of question 15 if no',
-            options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
+            question:
+                'Is your contact address the same as your residential address?- opens duplicate screen of question 15 if no',
+            options: [
+                { label: 'Yes', value: 'yes' },
+                { label: 'No', value: 'no' },
+            ],
         },
         {
             id: '26',
@@ -240,7 +289,10 @@ const getQuestions = (org: string, section: string) => {
             group: 'Home Info',
             order: 17,
             question: 'Housing Type',
-            options: [{label: 'Owned', value: 'owned'}, {label: 'Rented', value: 'rented'}],
+            options: [
+                { label: 'Owned', value: 'owned' },
+                { label: 'Rented', value: 'rented' },
+            ],
         },
         {
             id: '30',
@@ -250,10 +302,10 @@ const getQuestions = (org: string, section: string) => {
             order: 18,
             question: 'Housing Type',
             options: [
-                {label: 'Single family house', value: 'single'}, 
-                {label: 'Multi-unit', value: 'multi'},
-                {label: 'Mobile home', value: 'mobile'},
-                {label: 'Apartment', value: 'apartment'},
+                { label: 'Single family house', value: 'single' },
+                { label: 'Multi-unit', value: 'multi' },
+                { label: 'Mobile home', value: 'mobile' },
+                { label: 'Apartment', value: 'apartment' },
             ],
         },
         {
@@ -269,8 +321,12 @@ const getQuestions = (org: string, section: string) => {
             type: 'radio',
             group: 'Home Info',
             order: 20,
-            question: 'Are you interested in being a temporary (1-10 days) or full time host (3-6 months)?',
-            options: [{label: 'Temporary', value: 'temporary'}, {label: 'Full time', value: 'full'}],
+            question:
+                'Are you interested in being a temporary (1-10 days) or full time host (3-6 months)?',
+            options: [
+                { label: 'Temporary', value: 'temporary' },
+                { label: 'Full time', value: 'full' },
+            ],
         },
         {
             id: '32',
@@ -284,14 +340,18 @@ const getQuestions = (org: string, section: string) => {
 
 const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
-    console.log(e.target);  
+    console.log(e.target)
 }
 
 export const ProfileEditPage = () => {
     return (
         <Container>
             <h2>Hello! Answer these questions:</h2>
-            <QuestionPage stepwise={true} onSubmit={handleSubmit} questions={getQuestionsAsync('spy', 'basic')}></QuestionPage>
+            <QuestionPage
+                stepwise={true}
+                onSubmit={handleSubmit}
+                questions={getQuestionsAsync('spy', 'basic')}
+            ></QuestionPage>
         </Container>
     )
 }

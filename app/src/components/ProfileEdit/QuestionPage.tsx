@@ -6,7 +6,6 @@ import MUIModal from '../MUIModal'
 import styled from 'styled-components'
 import { Box, Button, LinearProgress } from '@material-ui/core'
 
-
 interface Props {
     questions: Array<QuestionType>
     stepwise: boolean
@@ -25,7 +24,7 @@ const QuestionContainer = styled.div`
 export const QuestionPage = (props: Props) => {
     // sort by order
     props.questions.sort((a, b) => {
-        return (a.order || 0) - (b.order || 0);
+        return (a.order || 0) - (b.order || 0)
     })
 
     const initialState = {
@@ -34,21 +33,27 @@ export const QuestionPage = (props: Props) => {
         subgroupIndex: 0,
         submitPage: false,
         modalOpen: false,
-        disableSubmit: false
+        disableSubmit: false,
     }
 
     const [state, setState] = React.useState(initialState)
 
     // get group structure
-    let groups: [[QuestionType[]]] = [[[]]] 
+    let groups: [[QuestionType[]]] = [[[]]]
     let groupI = 0
     let subgroupI = 0
     for (let i = 0; i < state.questions.length; i += 1) {
         if (state.questions[i - 1]) {
-            if (state.questions[i].group === undefined || state.questions[i].group !== state.questions[i - 1].group) {
+            if (
+                state.questions[i].group === undefined ||
+                state.questions[i].group !== state.questions[i - 1].group
+            ) {
                 groupI++
                 subgroupI = 0
-            } else if (state.questions[i].subgroup === undefined || state.questions[i].subgroup !== state.questions[i - 1].subgroup) {
+            } else if (
+                state.questions[i].subgroup === undefined ||
+                state.questions[i].subgroup !== state.questions[i - 1].subgroup
+            ) {
                 subgroupI++
             }
         }
@@ -56,12 +61,12 @@ export const QuestionPage = (props: Props) => {
         if (!groups[groupI][subgroupI]) groups[groupI][subgroupI] = []
         groups[groupI][subgroupI].push(state.questions[i])
     }
-    
+
     function setAnswer(index: number, answer: any) {
         let state2 = { ...state }
         state2.questions[index].answer = answer
 
-        if(answer === state2.questions[index].showstopper){
+        if (answer === state2.questions[index].showstopper) {
             state2 = { ...state, modalOpen: true, disableSubmit: true }
         } else {
             state2 = { ...state, disableSubmit: false }
@@ -71,11 +76,15 @@ export const QuestionPage = (props: Props) => {
 
     function clickBack() {
         if (state.submitPage) {
-            setState({ ...state, submitPage: false });
+            setState({ ...state, submitPage: false })
         } else if (state.subgroupIndex > 0) {
             setState({ ...state, subgroupIndex: state.subgroupIndex - 1 })
         } else if (state.groupIndex > 0) {
-            setState({ ...state, groupIndex: state.groupIndex - 1, subgroupIndex: groups[state.groupIndex - 1].length - 1 })
+            setState({
+                ...state,
+                groupIndex: state.groupIndex - 1,
+                subgroupIndex: groups[state.groupIndex - 1].length - 1,
+            })
         }
     }
 
@@ -83,15 +92,19 @@ export const QuestionPage = (props: Props) => {
         if (state.subgroupIndex < groups[state.groupIndex].length - 1) {
             setState({ ...state, subgroupIndex: state.subgroupIndex + 1 })
         } else if (state.groupIndex < groups.length - 1) {
-            setState({ ...state, groupIndex: state.groupIndex + 1, subgroupIndex: 0 })
+            setState({
+                ...state,
+                groupIndex: state.groupIndex + 1,
+                subgroupIndex: 0,
+            })
         } else {
-            setState({ ...state, submitPage: true });
+            setState({ ...state, submitPage: true })
         }
     }
 
     const handleClose = () => {
-        setState({ ...state, modalOpen: false});
-    }; 
+        setState({ ...state, modalOpen: false })
+    }
 
     return (
         <>
@@ -100,43 +113,62 @@ export const QuestionPage = (props: Props) => {
                     <>
                         <LinearProgress
                             variant="determinate"
-                            value={
-                                (state.groupIndex / groups.length) * 100
-                            }
+                            value={(state.groupIndex / groups.length) * 100}
                         />
                         <Box my={3}></Box>
                         <LinearProgress
                             variant="determinate"
                             value={
-                                (state.subgroupIndex / groups[state.groupIndex].length) * 100
+                                (state.subgroupIndex /
+                                    groups[state.groupIndex].length) *
+                                100
                             }
                         />
                     </>
                 )}
                 <QuestionContainer>
-                    <form noValidate autoComplete="off" onSubmit={props.onSubmit}>
+                    <form
+                        noValidate
+                        autoComplete="off"
+                        onSubmit={props.onSubmit}
+                    >
                         {!state.submitPage ? (
                             props.stepwise ? (
                                 <>
-                                    <h2 style={{ height: 24.8 }}>{groups[state.groupIndex][state.subgroupIndex][0].group}</h2>
-                                    <h3 style={{ height: 14.2 }}>{groups[state.groupIndex][state.subgroupIndex][0].subgroup}</h3>
+                                    <h2 style={{ height: 24.8 }}>
+                                        {
+                                            groups[state.groupIndex][
+                                                state.subgroupIndex
+                                            ][0].group
+                                        }
+                                    </h2>
+                                    <h3 style={{ height: 14.2 }}>
+                                        {
+                                            groups[state.groupIndex][
+                                                state.subgroupIndex
+                                            ][0].subgroup
+                                        }
+                                    </h3>
 
-                                    {groups[state.groupIndex][state.subgroupIndex]
-                                        .map((question: QuestionType) => {
-                                            const index = state.questions.indexOf(question)
-                                            return (
-                                                <Question
-                                                    key={index}
-                                                    index={index}
-                                                    question={question}
-                                                    setAnswer={setAnswer}
-                                                ></Question>
-                                            )
-                                        })
-                                    }
+                                    {groups[state.groupIndex][
+                                        state.subgroupIndex
+                                    ].map((question: QuestionType) => {
+                                        const index = state.questions.indexOf(
+                                            question
+                                        )
+                                        return (
+                                            <Question
+                                                key={index}
+                                                index={index}
+                                                question={question}
+                                                setAnswer={setAnswer}
+                                            ></Question>
+                                        )
+                                    })}
                                 </>
                             ) : (
-                                    state.questions.map((question: QuestionType, i) => (
+                                state.questions.map(
+                                    (question: QuestionType, i) => (
                                         <Box my={5}>
                                             <Question
                                                 index={i}
@@ -144,18 +176,19 @@ export const QuestionPage = (props: Props) => {
                                                 setAnswer={setAnswer}
                                             ></Question>
                                         </Box>
-                                    ))
+                                    )
                                 )
+                            )
                         ) : (
-                                <StyledButton
-                                    variant="contained"
-                                    color="primary"
-                                    type="submit"
-                                    disabled={state.disableSubmit}
-                                >
-                                    Submit
-                                </StyledButton>
-                            )}
+                            <StyledButton
+                                variant="contained"
+                                color="primary"
+                                type="submit"
+                                disabled={state.disableSubmit}
+                            >
+                                Submit
+                            </StyledButton>
+                        )}
                     </form>
                 </QuestionContainer>
 
@@ -168,7 +201,7 @@ export const QuestionPage = (props: Props) => {
                             onClick={clickBack}
                         >
                             Back
-                    </StyledButton>
+                        </StyledButton>
                         <StyledButton
                             variant="contained"
                             color="primary"
@@ -176,20 +209,26 @@ export const QuestionPage = (props: Props) => {
                             onClick={clickForward}
                         >
                             Forward
-                    </StyledButton>
+                        </StyledButton>
                     </>
                 ) : (
-                        <StyledButton variant="contained" color="primary" type="submit">
-                            Submit
-                        </StyledButton>
-                    )}
+                    <StyledButton
+                        variant="contained"
+                        color="primary"
+                        type="submit"
+                    >
+                        Submit
+                    </StyledButton>
+                )}
             </div>
-            <MUIModal 
-                handleClose={handleClose} 
-                modalOpen={state.modalOpen} 
-            >
-                <h2 id="transition-modal-title" style={{"color": "red"}}>Warning</h2>
-                <p id="transition-modal-description">We're sorry but your answer disqualifies you from participating in this program</p>
+            <MUIModal handleClose={handleClose} modalOpen={state.modalOpen}>
+                <h2 id="transition-modal-title" style={{ color: 'red' }}>
+                    Warning
+                </h2>
+                <p id="transition-modal-description">
+                    We're sorry but your answer disqualifies you from
+                    participating in this program
+                </p>
             </MUIModal>
         </>
     )
