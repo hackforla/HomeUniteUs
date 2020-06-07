@@ -38,11 +38,29 @@ export const QuestionPage = (props: Props) => {
 
     const [state, setState] = React.useState(initialState)
 
+    const isNestedActive = (question: QuestionType) => {
+        if (question.conditional_id === undefined) {
+            return true
+        }
+        let parentQuestion
+        for (let i = 0; i < state.questions.length; i += 1) {
+            if (state.questions[i].id === question.conditional_id) {
+                parentQuestion = state.questions[i]
+                break
+            }
+        }
+        return (
+            !parentQuestion ||
+            parentQuestion.answer === question.conditional_value
+        )
+    }
+
     // get group structure
     let groups: [[QuestionType[]]] = [[[]]]
     let groupI = 0
     let subgroupI = 0
     for (let i = 0; i < state.questions.length; i += 1) {
+        if (!isNestedActive(state.questions[i])) continue
         if (state.questions[i - 1]) {
             if (
                 state.questions[i].group === undefined ||
@@ -106,23 +124,6 @@ export const QuestionPage = (props: Props) => {
         setState({ ...state, modalOpen: false })
     }
 
-    const isNestedActive = (question: QuestionType) => {
-        if (question.conditional_id === undefined) {
-            return true
-        }
-        let parentQuestion
-        for (let i = 0; i < state.questions.length; i += 1) {
-            if (state.questions[i].id === question.conditional_id) {
-                parentQuestion = state.questions[i]
-                break
-            }
-        }
-        return (
-            !parentQuestion ||
-            parentQuestion.answer === question.conditional_value
-        )
-    }
-
     return (
         <>
             <div>
@@ -174,14 +175,12 @@ export const QuestionPage = (props: Props) => {
                                             question
                                         )
                                         return (
-                                            isNestedActive(question) && (
-                                                <Question
-                                                    key={index}
-                                                    index={index}
-                                                    question={question}
-                                                    setAnswer={setAnswer}
-                                                ></Question>
-                                            )
+                                            <Question
+                                                key={index}
+                                                index={index}
+                                                question={question}
+                                                setAnswer={setAnswer}
+                                            ></Question>
                                         )
                                     })}
                                 </>
