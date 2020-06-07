@@ -40,10 +40,10 @@ export const QuestionPage = (props: Props) => {
     const [state, setState] = React.useState(initialState)
 
     // get group structure
-    var groups: [[QuestionType[]]] = [[[]]] 
-    var groupI = 0
-    var subgroupI = 0
-    for (var i = 0; i < state.questions.length; i += 1) {
+    let groups: [[QuestionType[]]] = [[[]]] 
+    let groupI = 0
+    let subgroupI = 0
+    for (let i = 0; i < state.questions.length; i += 1) {
         if (state.questions[i - 1]) {
             if (state.questions[i].group === undefined || state.questions[i].group !== state.questions[i - 1].group) {
                 groupI++
@@ -58,7 +58,7 @@ export const QuestionPage = (props: Props) => {
     }
     
     function setAnswer(index: number, answer: any) {
-        var state2 = { ...state }
+        let state2 = { ...state }
         state2.questions[index].answer = answer
 
         if(answer === state2.questions[index].showstopper){
