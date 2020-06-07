@@ -960,6 +960,54 @@ def get_all_data():
 
 
 
+# TODO: Mark for deprecation! no need to dl the whole set for any view in the app
+
+@app.route('/api/v1/questions', methods=['GET'])
+def get_questions_v1():
+
+    try:
+        hostQuestions = hostQuestionsRepository.get()
+        responseValues = responseValuesRepository.get()
+
+        # Sample model from client proto
+        # {
+        #     id: '10',
+        #     type: 'radio',
+        #     group: 'Introductory Questions',
+        #     order: -50,
+        #     question: 'Do you have an extra bedroom or private space in their home?',
+        #     options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
+        # },
+
+        data = [{
+            'id': q['_id'],
+            'type': 'radio',
+            'group': 'MatchingQuestions',
+            'order': i,
+            'question': q['text'],
+            'options': [
+                opt['text'] for opt in responseValues if opt['id'] in q['responseValues']
+            ]
+        } for (i, q) in enumerate(hostQuestions)]
+
+
+        js = json.dumps(data)
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+
+    except Exception as e:
+        data = {
+            'test'  : 'failed',
+
+            'error': str(e)
+        }
+
+        js = json.dumps(data)
+        resp = Response(js, status=500, mimetype='application/json')
+        return resp
+
+
+
 @app.route('/api/matchResults', methods=['GET'])
 def get_all_match_results():
 

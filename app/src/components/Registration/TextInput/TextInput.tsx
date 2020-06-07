@@ -5,25 +5,27 @@ import { styles } from './styles'
 
 interface Props {
     name: string
-    value: string
-    onChange: (event: object) => void
-    placeholder: string
-    type: string
-    id: string
+    value?: string
+    label?: string
+    onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void
+    placeholder?: string
+    type?: string
+    autocomplete?: string
 }
 const TextInput = (props: Props) => {
-    const { name, value, onChange, placeholder, type, id } = props
+    const { name, value, label, onChange, placeholder, type, autocomplete } = props
 
     return (
         <>
             <TextField
-                id={id}
                 name={name}
                 value={value}
+                label={label}
                 onChange={onChange}
                 placeholder={placeholder}
                 type={type}
                 variant={'outlined'}
+                autoComplete={autocomplete}
             ></TextField>
         </>
     )

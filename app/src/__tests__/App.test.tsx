@@ -6,7 +6,7 @@ import {App} from '../App';
 function renderApp(props: Partial<any> = {}) {
     // TODO: Tyler make this work with areal component
     // return render(<App {...props} />);
-    return render(<div>Hello</div>);
+    return render(<div>TEST</div>);
     
 };
 

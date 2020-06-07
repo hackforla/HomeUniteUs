@@ -9,6 +9,18 @@ const Container = styled.div`
     max-width: 1140px;
 `
 
+const getQuestionsAsync = async (org: string, section: string) => {
+    try {
+        const response = await fetch('/api/v1/questions');
+        if(response.status !== 200) {
+            throw new Error(`fetching questions encountered: ${response.statusText}`);
+        }
+        return await response.json();
+    } catch(e) {
+        throw new Error(`getQuestionsAsync: error: ${e}`);
+    }
+};
+
 const getQuestions = (org: string, section: string) => {
     return [
         {
@@ -18,6 +30,7 @@ const getQuestions = (org: string, section: string) => {
             order: -50,
             question: 'Do you have an extra bedroom or private space in their home?',
             options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
+            showstopper: "no"
         },
         {
             id: '11',
@@ -26,6 +39,7 @@ const getQuestions = (org: string, section: string) => {
             order: -49,
             question: 'Are you able to provide Guest with access to a kitchen in which to prepare meals, store food and access to shared or private bathroom?',
             options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
+            showstopper: "no"
         },
         {
             id: '12',
@@ -34,6 +48,7 @@ const getQuestions = (org: string, section: string) => {
             order: -48,
             question: 'Do you have homeowners/renters insurance?',
             options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
+            showstopper: "no"
         },
         {
             id: '13',
@@ -42,6 +57,7 @@ const getQuestions = (org: string, section: string) => {
             order: -47,
             question: 'Do you live on the westside of Los Angeles or within reasonable distance to public transportation?',
             options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
+            showstopper: "no"
         },
         {
             id: '14',
@@ -50,6 +66,7 @@ const getQuestions = (org: string, section: string) => {
             order: -46,
             question: 'Are you able and willing to pass a LiveScan background clearance check?',
             options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
+            showstopper: "no"
         },
         {
             id: '15',
@@ -58,6 +75,7 @@ const getQuestions = (org: string, section: string) => {
             order: -45,
             question: 'Do you agree to complete this application, undergo and interview and a home inspection?',
             options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
+            showstopper: "no"
         },
         {
             id: '1',
@@ -66,6 +84,7 @@ const getQuestions = (org: string, section: string) => {
             order: -45,
             question: 'Do you agree to attend a 3-hour SPY Volunteer Orientation and a 1-day Host Home Orientation Training?',
             options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
+            showstopper: "no"
         },
         {
             id: '2',
@@ -74,6 +93,7 @@ const getQuestions = (org: string, section: string) => {
             order: -45,
             question: 'Do you commit to attending monthly meetings with SPY staff and other hosts?',
             options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
+            showstopper: "no"
         },
         {
             id: '3',
@@ -82,6 +102,7 @@ const getQuestions = (org: string, section: string) => {
             order: -45,
             question: 'Do you commit to providing a welcoming, safe, non-judgmental environment and to supporting the self-determined goals of youth Guest?',
             options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
+            showstopper: "no"
         },
         {
             id: '7',
@@ -262,6 +283,7 @@ const getQuestions = (org: string, section: string) => {
 }
 
 const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault()
     console.log(e.target);  
 }
 
@@ -269,7 +291,7 @@ export const ProfileEditPage = () => {
     return (
         <Container>
             <h2>Hello! Answer these questions:</h2>
-            <QuestionPage stepwise={true} onSubmit={handleSubmit} questions={getQuestions('spy', 'basic')}></QuestionPage>
+            <QuestionPage stepwise={true} onSubmit={handleSubmit} questions={getQuestionsAsync('spy', 'basic')}></QuestionPage>
         </Container>
     )
 }
