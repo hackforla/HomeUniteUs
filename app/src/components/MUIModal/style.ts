@@ -1,7 +1,7 @@
 // import { makeStyles, Theme } from '@material-ui/core/styles';
-import { createStyles, Theme } from '@material-ui/core'
+import { createStyles } from '@material-ui/core'
 
-export const styles = (theme: Theme) => {
+export const styles = (theme: any) => {
   createStyles({
     modal: {
       display: 'flex',
@@ -17,7 +17,7 @@ export const styles = (theme: Theme) => {
   })
 }
 
-// export const useStyles = makeStyles((theme) => ({
+// export const useStyles = makeStyles((theme: any) => ({
 //   modal: {
 //     display: 'flex',
 //     alignItems: 'center',
