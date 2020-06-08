@@ -1,12 +1,28 @@
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
-import { useStyles } from './style'
+// import { useStyles } from './style'
+import { styles } from './style'
+import { withStyles } from '@material-ui/core/styles'
 
-function MUIModal(props: any) {
-  const { handleClose, modalOpen } = props
-  const classes = useStyles();
+interface Props {
+  handleClose: () => void
+  modalOpen: boolean
+  classes: {
+    [className in keyof typeof styles]: string
+  }
+  // classes: {
+  //   modal: string
+  //   paper: string
+  // }
+  children: any
+}
+
+const MUIModal = (props: Props) => {
+  // const MUIModal: FunctionComponent<ConsistentWith<Props, { classes: Record<never, string>; }>> = (props: Props) {
+  const { handleClose, modalOpen, classes } = props
+  // const classes = useStyles();
 
   return (
     <>
@@ -30,4 +46,4 @@ function MUIModal(props: any) {
   )
 }
 
-export default MUIModal
+export default withStyles(styles)(MUIModal)
