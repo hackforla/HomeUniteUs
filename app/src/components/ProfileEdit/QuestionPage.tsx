@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Question from './Question'
 import { QuestionType } from '../../models/QuestionType'
-import MUIModal from '../MUIModal'
+import MUIModal from '../MUIModal/MUIModal'
 
 import styled from 'styled-components'
 import { Box, Button, LinearProgress } from '@material-ui/core'
