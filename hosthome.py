@@ -124,15 +124,15 @@ class MongoFacade:
         return item
     ###########################################################attempt
     def get_user_by_email(self, collection_name, email): #need to add param called email here
-        try: 
+        try:
             self._log('get_user_by_email', 'acquiring connection...')
             client = self._get_conn()
             db = client[MONGO_DATABASE]
             collection = db[collection_name]
-            
+
             user = collection.find_one({ 'email': email }) #email needs to be replace with request body
             if user is None:
-                return None 
+                return None
             user['_id'] = str(user['_id'])
             self._log('get_collections', 'items = {}'.format(user))
             return user
@@ -495,14 +495,14 @@ def check_by_email():
         accounts = accountsRepository.get_using_email(req['email']) #pass the req in here when ready
         if accounts is None:
             return Response(json.dumps({'error': None, 'status': 400}),status=400, mimetype='application/json')
-        return Response(status=200, mimetype='application/json') 
-           
+        return Response(status=200, mimetype='application/json')
+
     except Exception as e:
         data = {
             'error': str(e)
         }
-        
-        js = json.dumps(data)    
+
+        js = json.dumps(data)
         resp = Response(js, status=500, mimetype='application/json')
 
         return resp
@@ -718,18 +718,19 @@ def get_guestQuestion_by_id(id: int):
 
 
 
-@app.route('/api/guests/<int:id>/responses', methods=['GET','POST'])
-def get_guest_responses(id: int):
+@app.route('/api/guests/<int:guest_id>/responses', methods=['GET','POST'])
+def get_guest_responses(guest_id: int):
 
     app.logger.warning('get_guest_responses: request.method = {}'.format(request.method))
-    app.logger.warning(f'guest_by_id: id = {id} ({type(id)})')
+    app.logger.warning(f'guest_by_id: id = {guest_id} ({type(guest_id)})')
 
     if request.method == 'GET':
 
         try:
 
             guestResponses = guestResponsesRepository.get()
-            guestResponses = [response for response in guestResponses if response['guestId']==id]
+            guestResponses = [response for response in guestResponses\
+                    if response['guestId']==guest_id]
             js = json.dumps(guestResponses)
             resp = Response(js, status=200, mimetype='application/json')
             return resp
@@ -859,36 +860,173 @@ def get_guest_response_by_id(guest_id: int, question_id: int):
 
         app.logger.debug(f'what is {request.method} even doing here.')
 
-# @app.route('/api/guests', methods=['POST'])
-# def add_guest():
-#     global guest
-#     guests = request.get_json()
-#     guest.update(guests)
-#     return {"guests": guests, }
+
+@app.route('/api/hosts/<int:host_id>/responses', methods=['GET','POST'])
+def get_host_responses(host_id: int):
+
+    app.logger.warning('get_host_responses: request.method = {}'.format(request.method))
+    app.logger.warning(f'host_by_id: id = {host_id} ({type(host_id)})')
+
+    if request.method == 'GET':
+
+        try:
+
+            hostResponses = hostResponsesRepository.get()
+            hostResponses = [response for response in hostResponses\
+                    if response['hostId']==host_id]
+            js = json.dumps(hostResponses)
+            resp = Response(js, status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    elif request.method == 'POST':
+
+        try:
+
+            host_response = request.json
+            responseData = hostResponsesRepository.add(host_response)
+            app.logger.debug('responseData = {}'.format(responseData))
+            resp = Response({'error': None,'data': None},
+                             status=200, mimetype='application/json')
+
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    else:
+
+        app.logger.debug(f'what is {request.method} even doing here.')
 
 
-# @app.route('/api/guests/{id}', methods=['PUT'])
-# def update_guest(id: int):
-#     global guest
-#     guests = request.get_json()
-#     try:
-#         guest[str(id)] = guests
-#     except Exception as e:
-#         raise e
-#     return {"guest": guest[str(id)], "status": guests.status_code}
+@app.route('/api/hosts/<int:host_id>/responses/<int:question_id>', methods=['GET','PUT','DELETE'])
+def get_host_response_by_id(host_id: int, question_id: int):
+
+    app.logger.warning('get_host_response_by_id: request.method = {}'.format(request.method))
+
+    if request.method == 'GET':
+
+        try:
+
+            hostResponses = hostResponsesRepository.get()
+            hostResponses = [response['responseValues'] for response in hostResponses\
+                                if response['hostId']==host_id and response['questionId']==question_id]
+            js = json.dumps(hostResponses[0])
+            resp = Response(js, status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    elif request.method == 'PUT':
+
+        try:
+
+            hostResponses = hostResponsesRepository.get()
+            response_id = [response['responseValues'] for response in hostResponses\
+                                 if response['hostId']==host_id and\
+                                    response['questionId']==question_id][0]
+
+            #this is really shaky, need to know what's being passed back
+            #needs host_id and question_id
+            responseData = hostResponsesRepository.update(response_id, request.json)
+            app.logger.debug('responseData = {}'.format(responseData))
+            resp = Response(json.dumps({'error': None, 'data': None}),
+                            status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
 
 
-# @app.route('/api/guests/{id}', methods=['DELETE'])
-# def delete_guest(id: int):
-#     global guest
-#     guests = request.get_json()
-#     guest_id = guests[str(id)]
-#     del guest[guest_id]
-#     if guest[guest_id] is None:
-#         success = "deleted!"
-#     else:
-#         success = "no"
-#     return {"success": success, "status": guests.status_code}
+    elif request.method == 'DELETE':
+
+        try:
+            hostResponses = hostResponsesRepository.get()
+            response_id = [response['responseValues'] for response in hostResponses\
+                                  if response['hostId']==host_id and\
+                                     response['questionId']==question_id][0]
+
+            responseData = hostResponsesRepository.delete(host_id)
+            app.logger.debug('responseData = {}'.format(responseData))
+            resp = Response(json.dumps({'error': None, 'data': None}),
+                            status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+
+    else:
+
+        app.logger.debug(f'what is {request.method} even doing here.')
+
+
+@app.route('/api/restrictions', methods=['GET'])
+def get_all_restrictions():
+
+    app.logger.warning('all_restrictions: request.method = {}'.format(request.method))
+
+    try:
+
+        restrictions = restrictionsRepository.get()
+        js = json.dumps(restrictions)
+        resp = Response(js, status=200, mimetype='application/json')
+
+        return resp
+
+    except Exception as e:
+
+        data = {
+            'error': str(e)
+        }
+
+        js = json.dumps(data)
+        resp = Response(js, status=500, mimetype='application/json')
+
+        return resp
 
 
 @app.route('/api/responseValues', methods=['GET'])
@@ -901,7 +1039,7 @@ def get_all_response_values():
         return resp
 
     except Exception as e:
-        
+
         data = {
             'error': str(e)
         }
