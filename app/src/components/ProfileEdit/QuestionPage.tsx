@@ -227,7 +227,8 @@ export const QuestionPage = (props: Props) => {
                         <StyledButton
                             variant="contained"
                             color="primary"
-                            type="submit"
+                            type="button"
+                            onClick={clickForward}
                         >
                             Forward
                         </StyledButton>
