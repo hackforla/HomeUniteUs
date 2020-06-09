@@ -10,36 +10,35 @@ import { withStyles } from '@material-ui/core/styles'
 import { styles } from './styles'
 
 interface Props {
-    id: string
     name: string
     value: string
-    onChange: (event: object) => void
+    label?: string
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
     ariaLabel: string
-    formLabel: string
-    options: Array<string>
+    options: Array<any>
 }
 
 //radiobuttons for single option answers
 const RadioButtons = (props: Props) => {
-    const { id, name, value, onChange, ariaLabel, formLabel, options } = props
+    const { name, value, onChange, ariaLabel, label, options } = props
 
     return (
         <>
             <FormControl component="fieldset">
-                <FormLabel component="legend">{formLabel}</FormLabel>
+                <FormLabel component="legend">{label}</FormLabel>
                 <RadioGroup
-                    id={id}
                     aria-label={ariaLabel}
                     name={name}
                     value={value}
                     onChange={onChange}
                 >
-                    {options.map((buttonLabel: string) => {
+                    {options.map((option: any) => {
                         return (
                             <FormControlLabel
-                                value={buttonLabel}
+                                key={option.value}
+                                label={option.label}
                                 control={<Radio />}
-                                label={buttonLabel}
+                                value={option.value}
                             />
                         )
                     })}
