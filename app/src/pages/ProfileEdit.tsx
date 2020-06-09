@@ -23,7 +23,7 @@ const getQuestionsAsync = async (org: string, section: string) => {
     }
 }
 
-const getQuestions = (org: string, section: string) => {
+const getQuestions = () => {
     return [
         {
             id: '10',
@@ -350,7 +350,7 @@ export const ProfileEditPage = () => {
             <QuestionPage
                 stepwise={true}
                 onSubmit={handleSubmit}
-                questions={getQuestionsAsync('spy', 'basic')}
+                questions={getQuestions()}
             ></QuestionPage>
         </Container>
     )
