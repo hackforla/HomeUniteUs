@@ -1,7 +1,9 @@
 import * as React from 'react'
 import Question from './Question'
 import { QuestionType } from '../../models/QuestionType'
-import MUIModal from '../MUIModal'
+import MUIModal from '../MUIModal/MUIModal'
+import { MuiThemeProvider } from '@material-ui/core/styles'
+import { theme } from '../Registration/theme'
 
 import styled from 'styled-components'
 import { Box, Button, LinearProgress } from '@material-ui/core'
@@ -125,7 +127,7 @@ export const QuestionPage = (props: Props) => {
     }
 
     return (
-        <>
+        <MuiThemeProvider theme={theme}>
             <div>
                 {props.stepwise && (
                     <>
@@ -225,8 +227,7 @@ export const QuestionPage = (props: Props) => {
                         <StyledButton
                             variant="contained"
                             color="primary"
-                            type="button"
-                            onClick={clickForward}
+                            type="submit"
                         >
                             Forward
                         </StyledButton>
@@ -250,7 +251,7 @@ export const QuestionPage = (props: Props) => {
                     participating in this program
                 </p>
             </MUIModal>
-        </>
+        </MuiThemeProvider>
     )
 }
 
