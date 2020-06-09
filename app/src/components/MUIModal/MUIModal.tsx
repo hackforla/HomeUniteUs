@@ -2,14 +2,12 @@ import React from 'react'
 import Modal from '@material-ui/core/Modal'
 import Backdrop from '@material-ui/core/Backdrop'
 import Fade from '@material-ui/core/Fade'
-// import { useStyles } from './style'
 import { styles } from './style'
 import { withStyles } from '@material-ui/core/styles'
 
 interface Props {
     handleClose: () => void
     modalOpen: boolean
-    // classes?: any
     classes: {
         modal: string
         paper: string
@@ -19,8 +17,6 @@ interface Props {
 
 const MUIModal = (props: Props) => {
     const { handleClose, modalOpen, classes } = props
-    // const { handleClose, modalOpen } = props
-    // const classes = useStyles()
 
     return (
         <>
@@ -43,4 +39,3 @@ const MUIModal = (props: Props) => {
 }
 
 export default withStyles(styles)(MUIModal)
-// export default MUIModal
