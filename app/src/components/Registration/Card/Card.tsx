@@ -1,15 +1,13 @@
 import React from 'react'
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles, WithStyles } from '@material-ui/core/'
 import { styles } from './styles'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Button from '../Button/Button'
 
-interface Props {
-    classes: {
-        card: string
-    }
+interface Props extends WithStyles<typeof styles> {
+    // add props excluding classes
 }
 
 //to use as container OR can use Styled-Components

@@ -3,15 +3,11 @@ import Modal from '@material-ui/core/Modal'
 import Backdrop from '@material-ui/core/Backdrop'
 import Fade from '@material-ui/core/Fade'
 import { styles } from './style'
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles, WithStyles } from '@material-ui/core/'
 
-interface Props {
+interface Props extends WithStyles<typeof styles> {
     handleClose: () => void
     modalOpen: boolean
-    classes: {
-        modal: string
-        paper: string
-    }
     children: any
 }
 

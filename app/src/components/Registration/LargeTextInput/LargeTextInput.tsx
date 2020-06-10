@@ -1,9 +1,9 @@
 import * as React from 'react'
 import TextField from '@material-ui/core/TextField'
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles, WithStyles } from '@material-ui/core/'
 import { styles } from './styles'
 
-interface Props {
+interface Props extends WithStyles<typeof styles> {
     name: string
     value?: string
     label?: string
