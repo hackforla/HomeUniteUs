@@ -36,38 +36,23 @@ export const LoginView = () => {
 export const App = () => {
     const history = useHistory()
     const { isInitializing, isAuthenticated, user, logout } = useAuth0()
-    const [hasAccount, setHasAccount] = React.useState(false)
-
-    React.useEffect(() => {
-        const fetch = async () => {
-            if (isAuthenticated) {
-                let fetching = new ApiWrapper()
-                let data: any | undefined = await fetching.getUserAccount(user)
-                if (data.errorMessage) {
-                    history.push('/profileselection')
-                } else {
-                    setHasAccount(true)
-                }
-            }
-        }
-        fetch()
-    }, [isAuthenticated])
 
     return (
         <React.Fragment>
             {isInitializing ? (
                 <div>Loading...</div>
-            ) : isAuthenticated ? ( //&& hasAccount
-                <HostHomeDataProvider>
-                    <React.Fragment>
-                        <Header />
+            ) : isAuthenticated 
+            ? ( 
+                    <HostHomeDataProvider>
                         <React.Fragment>
-                            <Routes />
+                            <Header />
+                            <React.Fragment>
+                                <Routes />
+                            </React.Fragment>
                         </React.Fragment>
-                    </React.Fragment>
-                </HostHomeDataProvider>
+                    </HostHomeDataProvider>
             ) : (
-                <LoginView />
+            <LoginView />
             )}
         </React.Fragment>
     )

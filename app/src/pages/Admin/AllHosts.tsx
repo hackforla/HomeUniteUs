@@ -17,20 +17,25 @@ const hostsFetcher = new Fetcher<Host>('hosts')
 // the complete model of the UI state for this
 //    component, and possibly its descendants
 interface AllHostsState {
-    hosts: Array<Host> | null
+
+    host: Array<Host> | null
+
     messageModalState: {
         open: boolean
         message: string
     }
+
     loaderState: {
         loading: boolean
         text: string
     }
+
     hostEditorState: {
         open: boolean
         host: Host | null
         onComplete: (host: Host) => void
     }
+
 }
 
 // syntactic sugar that lets us have the
@@ -81,6 +86,7 @@ const reducer = (
     action: AllHostsAction
 ): AllHostsState => {
     switch (action.type) {
+
         case AllHostsActionType.DisplayMessage:
             return {
                 ...state,
@@ -149,11 +155,13 @@ const reducer = (
 }
 
 export const AllHosts = () => {
+
     // 'state' contains all UI state, i.e. any dynamic values
     //     we need to present the correct UI
     // 'dispatch' is used to change the state, it receives an 'action'
     //     and uses the properties of the action to return the next state.
     const [state, dispatch] = React.useReducer(reducer, initialState)
+
 
     // In this routine, we will use dispatch to:
     //     - show/hide the loader
@@ -188,7 +196,10 @@ export const AllHosts = () => {
         dispatch({
             type: AllHostsActionType.BeginEditHost,
             payload: host,
-        })
+        })        
+
+        
+
     }
 
     const cancelEditHost = () => {
