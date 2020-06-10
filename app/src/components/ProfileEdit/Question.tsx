@@ -26,7 +26,7 @@ const Question = (props: Props) => {
             | React.ChangeEvent<HTMLTextAreaElement>
     ) {
         if (e.target.type === 'checkbox') {
-            if (!question.answer) question.answer = {};
+            if (!question.answer) question.answer = {}
             if ('checked' in e.target) {
                 question.answer[e.target.value] = e.target.checked
             }
