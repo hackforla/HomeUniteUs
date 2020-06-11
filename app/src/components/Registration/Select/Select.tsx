@@ -9,20 +9,15 @@ import {
     Select,
 } from '@material-ui/core'
 import { styles } from './styles'
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles, WithStyles } from '@material-ui/core'
 
-interface Classes {
-    formControl: string
-}
-
-interface Props {
+interface Props extends WithStyles<typeof styles> {
     value: string
     onChange: (event: object) => void
     id: string
     options: Array<string>
     label: string
     labelId: string
-    classes: Classes
 }
 
 const DropdownSelect = (props: Props) => {

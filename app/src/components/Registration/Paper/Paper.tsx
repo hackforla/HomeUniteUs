@@ -1,12 +1,9 @@
 import React from 'react'
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles, WithStyles } from '@material-ui/core/'
 import { styles } from './styles'
 import Paper from '@material-ui/core/Paper'
 
-interface Props {
-    classes: {
-        paper: string
-    }
+interface Props extends WithStyles<typeof styles> {
     elevation: number
 }
 

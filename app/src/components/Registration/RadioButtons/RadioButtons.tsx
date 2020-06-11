@@ -6,10 +6,10 @@ import {
     FormControl,
     FormLabel,
 } from '@material-ui/core'
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles, WithStyles } from '@material-ui/core/'
 import { styles } from './styles'
 
-interface Props {
+interface Props extends WithStyles<typeof styles> {
     name: string
     value: string
     label?: string
@@ -20,11 +20,11 @@ interface Props {
 
 //radiobuttons for single option answers
 const RadioButtons = (props: Props) => {
-    const { name, value, onChange, ariaLabel, label, options } = props
+    const { name, value, onChange, ariaLabel, label, options, classes } = props
 
     return (
         <>
-            <FormControl component="fieldset">
+            <FormControl component="fieldset" className={classes.radio}>
                 <FormLabel component="legend">{label}</FormLabel>
                 <RadioGroup
                     aria-label={ariaLabel}
