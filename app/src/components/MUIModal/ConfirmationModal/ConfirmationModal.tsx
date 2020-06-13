@@ -25,7 +25,7 @@ function ConfirmationModal(props: ConfirmationModalProps) {
     return (
         <MUIModal handleClose={onCancel} modalOpen={modalOpen}>
             <h2 id="transition-modal-title" style={{ color: 'red' }}>
-                Confirmation Modal
+                Confirmation Modal Example
             </h2>
             <p>{confirmationText}</p>
             <Button
