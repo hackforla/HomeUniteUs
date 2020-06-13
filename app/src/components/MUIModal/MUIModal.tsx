@@ -5,13 +5,13 @@ import Fade from '@material-ui/core/Fade'
 import { styles } from './style'
 import { withStyles, WithStyles } from '@material-ui/core/'
 
-interface Props extends WithStyles<typeof styles> {
+interface MuiModalProps extends WithStyles<typeof styles> {
     handleClose: () => void
     modalOpen: boolean
     children: any
 }
 
-const MUIModal = (props: Props) => {
+const MUIModal = (props: MuiModalProps) => {
     const { handleClose, modalOpen, classes } = props
 
     return (
