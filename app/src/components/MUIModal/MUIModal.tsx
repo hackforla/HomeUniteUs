@@ -5,14 +5,15 @@ import Fade from '@material-ui/core/Fade'
 import { styles } from './style'
 import { withStyles, WithStyles } from '@material-ui/core/'
 
-interface Props extends WithStyles<typeof styles> {
+interface MuiModalProps extends WithStyles<typeof styles> {
     handleClose: () => void
     modalOpen: boolean
+    disableBackdropClick: boolean
     children: any
 }
 
-const MUIModal = (props: Props) => {
-    const { handleClose, modalOpen, classes } = props
+const MUIModal = (props: MuiModalProps) => {
+    const { handleClose, modalOpen, classes, disableBackdropClick } = props
 
     return (
         <>
@@ -25,6 +26,7 @@ const MUIModal = (props: Props) => {
                 BackdropProps={{
                     timeout: 500,
                 }}
+                disableBackdropClick={disableBackdropClick}
             >
                 <Fade in={modalOpen}>
                     <div className={classes.paper}>{props.children}</div>

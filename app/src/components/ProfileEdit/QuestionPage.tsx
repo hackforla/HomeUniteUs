@@ -7,6 +7,8 @@ import { theme } from '../Registration/theme'
 
 import styled from 'styled-components'
 import { Box, Button, LinearProgress } from '@material-ui/core'
+import MessageModal from '../MUIModal/MessageModal/MessageModal'
+import ConfirmationModal from '../MUIModal/ConfirmationModal/ConfirmationModal'
 
 interface Props {
     questions: Array<QuestionType>
@@ -243,15 +245,14 @@ export const QuestionPage = (props: Props) => {
                     </StyledButton>
                 )}
             </div>
-            <MUIModal handleClose={handleClose} modalOpen={state.modalOpen}>
-                <h2 id="transition-modal-title" style={{ color: 'red' }}>
-                    Warning
-                </h2>
-                <p id="transition-modal-description">
-                    We're sorry but your answer disqualifies you from
-                    participating in this program
-                </p>
-            </MUIModal>
+            <MessageModal
+                modalHeadingText={'Warning'}
+                modalMessage={
+                    "We're sorry but your answer disqualifies you from participating in this program"
+                }
+                modalOpen={state.modalOpen}
+                onCancel={handleClose}
+            />
         </MuiThemeProvider>
     )
 }
