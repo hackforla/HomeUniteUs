@@ -30,15 +30,16 @@ const CheckboxInput = (props: Props) => {
                     {options.map((option: any) => {
                         return (
                             <FormControlLabel
+                                key={option.value}
+                                label={option.label}
                                 control={
                                     <Checkbox
-                                        checked={value && value[option.value]}
+                                        checked={value && !!value[option.value]}
                                         onChange={onChange}
                                         name={option.value}
                                         value={option.value}
                                     />
                                 }
-                                label={label}
                             />
                         )
                     })}

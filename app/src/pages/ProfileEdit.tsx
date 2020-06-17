@@ -31,7 +31,7 @@ const getQuestions = () => {
             group: 'Introductory Questions',
             order: -50,
             question:
-                'Do you have an extra bedroom or private space in their home?',
+                'Do you have an extra bedroom or private space in your home?',
             options: [
                 { label: 'Yes', value: 'yes' },
                 { label: 'No', value: 'no' },
@@ -174,22 +174,36 @@ const getQuestions = () => {
         },
         {
             id: '17',
-            type: 'radio',
+            type: 'checkbox',
             group: 'Host bio',
+            subgroup: 'Gender',
             order: 5,
             question: 'Gender identity',
             options: [
-                { label: 'option 1', value: '1' },
-                { label: 'option 2', value: '2' },
-                { label: 'option 3', value: '3' },
-                { label: 'option 4', value: '4' },
+                { label: 'Female', value: 'female' },
+                { label: 'Male', value: 'male' },
+                { label: 'Trans Man', value: 'trans-man' },
+                { label: 'Trans Woman', value: 'trans-woman' },
+                { label: 'Non Binary', value: 'non-binary' },
+                { label: 'Prefer not to identify', value: 'prefer-not' },
+                { label: 'Describe your gender', value: 'describe' },
             ],
+        },
+        {
+            id: '38',
+            type: 'text',
+            group: 'Host bio',
+            subgroup: 'Gender',
+            order: 6,
+            question: 'Describe your gender',
+            conditional_id: '17',
+            conditional_value: 'describe',
         },
         {
             id: '18',
             type: 'radio',
             group: 'Host bio',
-            order: 6,
+            order: 7,
             question:
                 'Do you have another family member to add?- opens duplicate screen of page 11 for a new family member if yes',
             options: [
