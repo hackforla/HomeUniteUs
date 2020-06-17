@@ -163,14 +163,14 @@ export const QuestionPage = (props: Props) => {
                                         textAlign: 'center',
                                         maxWidth: 100,
                                         position: 'absolute',
-                                        top: -8,
+                                        top: -11,
                                         left:
                                             getStepperProgress(question) * 100 +
                                             '%',
                                         transform: 'translateX(-50%)',
                                     }}
                                 >
-                                    <div>☺</div>
+                                    <div style={{ marginBottom: 6 }}>⭐</div>
                                     {question.group}
                                 </div>
                             )
