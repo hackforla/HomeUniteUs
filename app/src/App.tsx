@@ -42,8 +42,8 @@ export const App = () => {
             {isInitializing ? (
                 <div>Loading...</div>
             ) : (
-                /*isAuthenticated 
-            ?*/ <HostHomeDataProvider>
+                isAuthenticated 
+            ? <HostHomeDataProvider>
                     <React.Fragment>
                         <Header />
                         <React.Fragment>
@@ -51,8 +51,8 @@ export const App = () => {
                         </React.Fragment>
                     </React.Fragment>
                 </HostHomeDataProvider>
-                // ) : (
-                // <LoginView />
+                ) : (
+                <LoginView />
             )}
         </React.Fragment>
     )
