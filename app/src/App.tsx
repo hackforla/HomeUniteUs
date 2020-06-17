@@ -41,18 +41,18 @@ export const App = () => {
         <React.Fragment>
             {isInitializing ? (
                 <div>Loading...</div>
-            ) : (
-                isAuthenticated 
-            ? <HostHomeDataProvider>
-                    <React.Fragment>
-                        <Header />
+            ) : isAuthenticated 
+            ? ( 
+                    <HostHomeDataProvider>
                         <React.Fragment>
-                            <Routes />
+                            <Header />
+                            <React.Fragment>
+                                <Routes />
+                            </React.Fragment>
                         </React.Fragment>
-                    </React.Fragment>
-                </HostHomeDataProvider>
-                ) : (
-                <LoginView />
+                    </HostHomeDataProvider>
+            ) : (
+            <LoginView />
             )}
         </React.Fragment>
     )
