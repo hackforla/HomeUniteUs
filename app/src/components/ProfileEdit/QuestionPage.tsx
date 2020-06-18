@@ -22,7 +22,7 @@ const StyledButton = styled(Button)`
 `
 
 const QuestionContainer = styled.div`
-    min-height: 374px;
+    min-height: 415px;
 `
 
 export const QuestionPage = (props: Props) => {
@@ -66,7 +66,8 @@ export const QuestionPage = (props: Props) => {
     }
 
     // get group structure
-    let groups: [[QuestionType[]]] = [[[]]]
+    let groups: Array<Array<Array<QuestionType>>> = []
+    let stepper: Array<QuestionType> = []
     let groupI = 0
     let subgroupI = 0
     for (let i = 0; i < state.questions.length; i += 1) {
@@ -87,7 +88,18 @@ export const QuestionPage = (props: Props) => {
         }
         if (!groups[groupI]) groups[groupI] = [[]]
         if (!groups[groupI][subgroupI]) groups[groupI][subgroupI] = []
+        if (groups[groupI][subgroupI].length === 0) {
+            stepper.push(state.questions[i])
+        }
         groups[groupI][subgroupI].push(state.questions[i])
+    }
+
+    const getStepperProgress = (question?: QuestionType) => {
+        return (
+            stepper.indexOf(
+                question || groups[state.groupIndex][state.subgroupIndex][0]
+            ) / stepper.length
+        )
     }
 
     const setAnswer = (index: number, answer: any) => {
@@ -136,24 +148,41 @@ export const QuestionPage = (props: Props) => {
 
     return (
         <MuiThemeProvider theme={theme}>
-            <div>
-                {props.stepwise && (
-                    <>
-                        <LinearProgress
-                            variant="determinate"
-                            value={(state.groupIndex / groups.length) * 100}
-                        />
-                        <Box my={3}></Box>
+            <div style={{ position: 'relative' }}>
+                <div style={{ marginBottom: 80 }}>
+                    {props.stepwise && (
                         <LinearProgress
                             variant="determinate"
                             value={
-                                (state.subgroupIndex /
-                                    groups[state.groupIndex].length) *
-                                100
+                                state.submitPage
+                                    ? 100
+                                    : getStepperProgress() * 100
                             }
                         />
-                    </>
-                )}
+                    )}
+                    {stepper.map((question, i) => {
+                        return (
+                            (i === 0 ||
+                                question.group !== stepper[i - 1].group) && (
+                                <div
+                                    style={{
+                                        textAlign: 'center',
+                                        maxWidth: 100,
+                                        position: 'absolute',
+                                        top: -11,
+                                        left:
+                                            getStepperProgress(question) * 100 +
+                                            '%',
+                                        transform: 'translateX(-50%)',
+                                    }}
+                                >
+                                    <div style={{ marginBottom: 6 }}>⭐</div>
+                                    {question.group}
+                                </div>
+                            )
+                        )
+                    })}
+                </div>
                 <QuestionContainer>
                     <form
                         noValidate
