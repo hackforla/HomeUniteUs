@@ -43,7 +43,10 @@ export const QuestionPage = (props: Props) => {
     const [state, setState] = React.useState(initialState)
 
     const isNestedActive = (question: QuestionType) => {
-        if (question.conditional_id === undefined) {
+        if (
+            question.conditional_id === undefined ||
+            question.conditional_value === undefined
+        ) {
             return true
         }
         let parentQuestion
@@ -53,10 +56,13 @@ export const QuestionPage = (props: Props) => {
                 break
             }
         }
-        return (
-            !parentQuestion ||
-            parentQuestion.answer === question.conditional_value
-        )
+        if (!parentQuestion) return true
+        if (parentQuestion.type === 'checkbox') {
+            if (!parentQuestion.answer) return false
+            return parentQuestion.answer[question.conditional_value]
+        } else {
+            return parentQuestion.answer === question.conditional_value
+        }
     }
 
     // get group structure
