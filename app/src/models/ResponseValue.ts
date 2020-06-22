@@ -1,5 +1,5 @@
 export interface ResponseValue {
-    id: number
-    text: string
-    displayText?: string
+    questionId: number
+    hostId: number
+    responseValues: Array<number>
 }
