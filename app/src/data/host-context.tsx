@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { QuestionType } from '../models/QuestionType'
-//import { ResponseValue } from '../models/ResponseValue'
+import { ResponseValue } from '../models/ResponseValue'
 import { ApiWrapper } from './ApiWrapper'
 
 const HostDashboardContext = React.createContext({})
@@ -8,7 +8,7 @@ const hostsFetcher = new ApiWrapper()
 
 interface HostDashboardData {
     hostQuestions: Array<QuestionType>
-    // hostResponses: Array<ResponseValue>
+    hostResponses: Array<ResponseValue>
     loaderState: {
         loading: boolean
         message: string
@@ -53,6 +53,16 @@ function hostDashboardReducer(
                 },
             }
         }
+        case HostDashboardActionType.FinishFetchQuestions: {
+            return {
+                ...state,
+                loaderState: {
+                    loading: false,
+                    message: 'Finished loading',
+                },
+                hostQuestions: action.payload as Array<QuestionType>,
+            }
+        }
         default:
             throw new Error(`Unsupported action: ${JSON.stringify(action)}`)
     }
@@ -70,6 +80,7 @@ export function HostDashboardDataProvider(
 
     React.useEffect(() => {
         ;(async function () {
+            console.log('loadData: fetching...')
             try {
                 dispatch({
                     type: HostDashboardActionType.BeginFetchQuestions,

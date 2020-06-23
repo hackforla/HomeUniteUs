@@ -27,6 +27,8 @@ const QuestionContainer = styled.div`
 
 export const QuestionPage = (props: Props) => {
     const { data } = useHostDashboardData()
+    console.log('testing custom hook', data)
+
     // sort by order
     props.questions.sort((a, b) => {
         return (a.order || 0) - (b.order || 0)

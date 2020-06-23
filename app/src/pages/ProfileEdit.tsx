@@ -1,5 +1,6 @@
 import * as React from 'react'
 import QuestionPage from '../components/ProfileEdit/QuestionPage'
+import { HostDashboardDataProvider } from '../data/host-context'
 
 import styled from 'styled-components'
 
@@ -8,20 +9,6 @@ const Container = styled.div`
     padding: 0 15px;
     max-width: 1140px;
 `
-
-const getQuestionsAsync = async (org: string, section: string) => {
-    try {
-        const response = await fetch('/api/v1/questions')
-        if (response.status !== 200) {
-            throw new Error(
-                `fetching questions encountered: ${response.statusText}`
-            )
-        }
-        return await response.json()
-    } catch (e) {
-        throw new Error(`getQuestionsAsync: error: ${e}`)
-    }
-}
 
 const getQuestions = () => {
     return [
@@ -406,13 +393,15 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
 
 export const ProfileEditPage = () => {
     return (
-        <Container>
-            <h2>Hello! Answer these questions:</h2>
-            <QuestionPage
-                stepwise={true}
-                onSubmit={handleSubmit}
-                questions={getQuestions()}
-            ></QuestionPage>
-        </Container>
+        <HostDashboardDataProvider>
+            <Container>
+                <h2>Hello! Answer these questions:</h2>
+                <QuestionPage
+                    stepwise={true}
+                    onSubmit={handleSubmit}
+                    questions={getQuestions()}
+                ></QuestionPage>
+            </Container>
+        </HostDashboardDataProvider>
     )
 }
