@@ -4,7 +4,7 @@ import { QuestionType } from '../../models/QuestionType'
 import MUIModal from '../MUIModal/MUIModal'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import { theme } from '../Registration/theme'
-
+import { useHostDashboardData } from '../../data/host-context'
 import styled from 'styled-components'
 import { Box, Button, LinearProgress } from '@material-ui/core'
 import MessageModal from '../MUIModal/MessageModal/MessageModal'
@@ -26,6 +26,7 @@ const QuestionContainer = styled.div`
 `
 
 export const QuestionPage = (props: Props) => {
+    const { data } = useHostDashboardData()
     // sort by order
     props.questions.sort((a, b) => {
         return (a.order || 0) - (b.order || 0)

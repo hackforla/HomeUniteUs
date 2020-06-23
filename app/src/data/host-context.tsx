@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { QuestionType } from '../models/QuestionType'
-import { ResponseValue } from '../models/ResponseValue'
+//import { ResponseValue } from '../models/ResponseValue'
 import { ApiWrapper } from './ApiWrapper'
 
 const HostDashboardContext = React.createContext({})
@@ -8,7 +8,7 @@ const hostsFetcher = new ApiWrapper()
 
 interface HostDashboardData {
     hostQuestions: Array<QuestionType>
-    hostResponses: Array<ResponseValue>
+    // hostResponses: Array<ResponseValue>
     loaderState: {
         loading: boolean
         message: string
@@ -109,5 +109,6 @@ export function useHostDashboardData() {
 
     return {
         data,
+        dispatch,
     }
 }
