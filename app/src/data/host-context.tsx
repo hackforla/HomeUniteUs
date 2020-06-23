@@ -1,8 +1,10 @@
 import * as React from 'react'
 import { QuestionType } from '../models/QuestionType'
 import { ResponseValue } from '../models/ResponseValue'
+import { ApiWrapper } from './ApiWrapper'
 
 const HostDashboardContext = React.createContext({})
+const hostsFetcher = new ApiWrapper()
 
 interface HostDashboardData {
     hostQuestions: Array<QuestionType>
@@ -20,6 +22,7 @@ enum HostDashboardActionType {
     isLoading,
     BeginPostAnswer,
     FinishPostAnswer,
+    Error,
 }
 
 interface HostDashboardAction {
@@ -62,6 +65,31 @@ export function HostDashboardDataProvider(
         hostDashboardReducer,
         initialState
     )
+
+    //dispatch begin and finish get questions
+
+    React.useEffect(() => {
+        ;(async function () {
+            try {
+                dispatch({
+                    type: HostDashboardActionType.BeginFetchQuestions,
+                    payload: 'loading',
+                })
+                const questions = await hostsFetcher.getHostQuestions()
+
+                dispatch({
+                    type: HostDashboardActionType.FinishFetchQuestions,
+                    payload: questions,
+                })
+            } catch (e) {
+                dispatch({
+                    type: HostDashboardActionType.Error,
+                    payload: `System error: ${e}`,
+                })
+            }
+        })()
+    }, [])
+
     const value = React.useMemo(() => [state, dispatch], [state])
     return <HostDashboardContext.Provider value={value} {...props} />
 }
