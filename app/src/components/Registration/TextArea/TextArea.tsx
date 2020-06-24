@@ -1,10 +1,10 @@
 import * as React from 'react'
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles, WithStyles } from '@material-ui/core'
 import { styles } from './styles'
 
 import TextareaAutosize from '@material-ui/core/TextareaAutosize'
 
-interface Props {}
+interface Props extends WithStyles<typeof styles> {}
 const TextArea = (props: Props) => {
     return (
         <TextareaAutosize

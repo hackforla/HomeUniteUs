@@ -1,7 +1,8 @@
 import { createStyles } from '@material-ui/core'
 
-/*** createStyles is just the identity function; it doesn't "do anything" at runtime, 
- just helps guide type inference at compile time. ***/
+/*This function doesn't really "do anything" at runtime, it's just the identity function.
+Its only purpose is to defeat TypeScript's type widening when providing style rules to
+makeStyles / withStyles which are a function of the Theme*/
 
 export const styles = (theme: any) =>
     createStyles({

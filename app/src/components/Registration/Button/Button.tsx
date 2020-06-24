@@ -1,18 +1,14 @@
 import React from 'react'
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles, WithStyles } from '@material-ui/core/'
 import { styles } from './styles'
 
-interface Props {
+interface Props extends WithStyles<typeof styles> {
     id: string
     name: string
     value: string
     onClick: (event: object) => void
     label: string
-    classes: {
-        root: string
-    }
 }
 
 export default withStyles(styles)(function SimpleButton(props: Props) {

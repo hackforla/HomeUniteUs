@@ -4,15 +4,7 @@ import { useHostHomeData } from '../../data/data-context'
 import { ProgressPlugin } from 'webpack'
 import { QuestionType } from '../../models/QuestionType'
 import styled from 'styled-components'
-import {
-    FormControl,
-    FormControlLabel,
-    FormGroup,
-    RadioGroup,
-    Radio,
-    Checkbox,
-    TextField,
-} from '@material-ui/core'
+import * as Fields from '../Registration/index'
 
 interface Props {
     index: number
@@ -34,7 +26,7 @@ const Question = (props: Props) => {
             | React.ChangeEvent<HTMLTextAreaElement>
     ) {
         if (e.target.type === 'checkbox') {
-            if (!question.answer) question.answer = {};
+            if (!question.answer) question.answer = {}
             if ('checked' in e.target) {
                 question.answer[e.target.value] = e.target.checked
             }
@@ -49,68 +41,35 @@ const Question = (props: Props) => {
             <QuestionLabel>{question.question}</QuestionLabel>
             <div>
                 {question.type === 'radio' && (
-                    <FormControl component="fieldset">
-                        <RadioGroup
-                            aria-label={question.question}
-                            key={question.id}
-                            name={question.id}
-                            value={question.answer || ''}
-                            onChange={handleChange}
-                        >
-                            {question.options &&
-                                question.options.map((option: any) => (
-                                    <FormControlLabel
-                                        key={option.value}
-                                        value={option.value}
-                                        control={<Radio />}
-                                        label={option.label}
-                                    />
-                                ))}
-                        </RadioGroup>
-                    </FormControl>
-                )}
-                {question.type === 'checkbox' && (
-                    <FormControl component="fieldset">
-                        <FormGroup>
-                            {question.options &&
-                                question.options.map((option: any) => (
-                                    <FormControlLabel
-                                        key={option.value}
-                                        control={
-                                            <Checkbox
-                                                checked={
-                                                    question.answer && question.answer[
-                                                        option.value
-                                                    ]
-                                                }
-                                                name={option.value}
-                                                value={option.value}
-                                                onChange={handleChange}
-                                            />
-                                        }
-                                        label={option.label}
-                                    />
-                                ))}
-                        </FormGroup>
-                    </FormControl>
-                )}
-                {question.type === 'text' && (
-                    <TextField
-                        label=""
-                        variant="outlined"
+                    <Fields.RadioButtons
+                        ariaLabel={question.question}
+                        name={question.id}
                         value={question.answer || ''}
+                        options={question.options || []}
                         onChange={handleChange}
                     />
                 )}
-                {question.type === 'textarea' && (
-                    <TextField
-                        label=""
-                        variant="outlined"
+                {question.type === 'checkbox' && (
+                    <Fields.Checkbox
+                        value={question.answer || {}}
+                        options={question.options || []}
+                        onChange={handleChange}
+                    />
+                )}
+                {question.type === 'text' && (
+                    <Fields.TextInput
+                        name={question.id}
                         value={question.answer || ''}
                         onChange={handleChange}
-                        multiline
+                        autocomplete="off"
+                    />
+                )}
+                {question.type === 'textarea' && (
+                    <Fields.LargeTextInput
+                        name={question.id}
+                        value={question.answer || ''}
+                        onChange={handleChange}
                         rows={8}
-                        fullWidth
                     />
                 )}
             </div>

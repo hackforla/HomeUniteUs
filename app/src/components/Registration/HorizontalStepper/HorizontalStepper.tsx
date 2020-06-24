@@ -1,5 +1,5 @@
 import React from 'react'
-import { Theme, withStyles } from '@material-ui/core/styles'
+import { withStyles, WithStyles } from '@material-ui/core/'
 import { styles } from './styles'
 import Stepper from '@material-ui/core/Stepper'
 import Step from '@material-ui/core/Step'
@@ -10,13 +10,8 @@ import Typography from '@material-ui/core/Typography'
 //non-linear stepper --> user can step through any part of the flow
 //logic kept here so as not to pollute sandbox component
 
-interface Props {
-    classes: {
-        root: string
-        button: string
-        completed: string
-        instructions: string
-    }
+interface Props extends WithStyles<typeof styles> {
+    // add props excluding classes
 }
 
 function getSteps() {

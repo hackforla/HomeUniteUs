@@ -12,7 +12,8 @@
 				"<node_internals>/**"
 			],
 			"cwd": "${workspaceFolder}/app",
-			"program": "${workspaceFolder}/app/node_modules/webpack-dev-server/bin/webpack-dev-server.js"
+			"program": "${workspaceFolder}/app/node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+			"args": ["--mode", "development", "--open", "--hot", "--config", "webpack-local.config.js"],
 		}
 	]
 }

@@ -1,27 +1,27 @@
 import * as React from 'react'
 import TextField from '@material-ui/core/TextField'
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles, WithStyles } from '@material-ui/core/'
 import { styles } from './styles'
 
-interface Props {
+interface Props extends WithStyles<typeof styles> {
     name: string
-    value: string
-    onChange: (event: object) => void
-    placeholder: string
-    type: string
-    id: string
+    value?: string
+    label?: string
+    onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void
+    placeholder?: string
+    type?: string
     rows: number
 }
 
 const LargeTextInput = (props: Props) => {
-    const { name, value, onChange, placeholder, type, id, rows } = props
+    const { name, value, label, onChange, placeholder, type, rows } = props
 
     return (
         <>
             <TextField
-                id={id}
                 name={name}
                 value={value}
+                label={label}
                 onChange={onChange}
                 placeholder={placeholder}
                 type={type}

@@ -6,40 +6,39 @@ import {
     FormControl,
     FormLabel,
 } from '@material-ui/core'
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles, WithStyles } from '@material-ui/core/'
 import { styles } from './styles'
 
-interface Props {
-    id: string
+interface Props extends WithStyles<typeof styles> {
     name: string
     value: string
-    onChange: (event: object) => void
+    label?: string
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
     ariaLabel: string
-    formLabel: string
-    options: Array<string>
+    options: Array<any>
 }
 
 //radiobuttons for single option answers
 const RadioButtons = (props: Props) => {
-    const { id, name, value, onChange, ariaLabel, formLabel, options } = props
+    const { name, value, onChange, ariaLabel, label, options, classes } = props
 
     return (
         <>
-            <FormControl component="fieldset">
-                <FormLabel component="legend">{formLabel}</FormLabel>
+            <FormControl component="fieldset" className={classes.radio}>
+                <FormLabel component="legend">{label}</FormLabel>
                 <RadioGroup
-                    id={id}
                     aria-label={ariaLabel}
                     name={name}
                     value={value}
                     onChange={onChange}
                 >
-                    {options.map((buttonLabel: string) => {
+                    {options.map((option: any) => {
                         return (
                             <FormControlLabel
-                                value={buttonLabel}
+                                key={option.value}
+                                label={option.label}
                                 control={<Radio />}
-                                label={buttonLabel}
+                                value={option.value}
                             />
                         )
                     })}

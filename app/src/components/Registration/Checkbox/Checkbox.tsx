@@ -7,41 +7,39 @@ import {
     FormHelperText,
     Checkbox,
 } from '@material-ui/core'
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles, WithStyles } from '@material-ui/core'
 import { styles } from './styles'
 
-interface Props {
-    onChange: (event: object) => void
-    label: string
-    options: Array<string>
-    helperText: string
-    classes: {
-        checkbox: string
-    }
+interface Props extends WithStyles<typeof styles> {
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+    label?: string
+    options: Array<any>
+    value?: any
+    helperText?: string
 }
 
 //checkbox for multi-select
 const CheckboxInput = (props: Props) => {
-    const { onChange, label, options, helperText, classes } = props
-    let checked: boolean
+    const { onChange, label, options, value, helperText, classes } = props
 
     return (
         <>
             <FormControl className={classes.checkbox} component="fieldset">
                 <FormLabel component="legend">{label}</FormLabel>
                 <FormGroup>
-                    {options.map((checkLabel: string) => {
+                    {options.map((option: any) => {
                         return (
                             <FormControlLabel
+                                key={option.value}
+                                label={option.label}
                                 control={
                                     <Checkbox
-                                        checked={checked}
+                                        checked={value && !!value[option.value]}
                                         onChange={onChange}
-                                        name={checkLabel}
-                                        value={checkLabel}
+                                        name={option.value}
+                                        value={option.value}
                                     />
                                 }
-                                label={checkLabel}
                             />
                         )
                     })}

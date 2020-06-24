@@ -30,6 +30,9 @@ export const Header = () => {
                 <NavLink to={`/admin/hosts`}>ALL HOSTS</NavLink>
             </AppStyle.Holder>
             <AppStyle.Holder>
+                <NavLink to={`/profile`}>Profile</NavLink>
+            </AppStyle.Holder>
+            <AppStyle.Holder>
                 <span>Hello, {(user && user.name) || 'User'}</span>
             </AppStyle.Holder>
             <AppStyle.Holder>
