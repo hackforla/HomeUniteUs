@@ -25,6 +25,15 @@ const QuestionContainer = styled.div`
     min-height: 415px;
 `
 
+const IconContainer = styled.div`
+    text-align: center;
+    max-width: 100px;
+    position: absolute;
+    top: -11px;
+    left: 100%;
+    transform: translateX(-50%);
+`
+
 export const QuestionPage = (props: Props) => {
     // sort by order
     props.questions.sort((a, b) => {
@@ -67,7 +76,6 @@ export const QuestionPage = (props: Props) => {
 
     // get group structure
     let groups: Array<Array<Array<QuestionType>>> = []
-    let stepper: Array<QuestionType> = []
     let groupI = 0
     let subgroupI = 0
     for (let i = 0; i < state.questions.length; i += 1) {
@@ -88,17 +96,15 @@ export const QuestionPage = (props: Props) => {
         }
         if (!groups[groupI]) groups[groupI] = [[]]
         if (!groups[groupI][subgroupI]) groups[groupI][subgroupI] = []
-        if (groups[groupI][subgroupI].length === 0) {
-            stepper.push(state.questions[i])
-        }
         groups[groupI][subgroupI].push(state.questions[i])
     }
 
-    const getStepperProgress = (question?: QuestionType) => {
+    const getStepperProgress = () => {
+        const groupDistance = 1 / groups.length
+        const questionDistance = groupDistance / groups[state.groupIndex].length
         return (
-            stepper.indexOf(
-                question || groups[state.groupIndex][state.subgroupIndex][0]
-            ) / stepper.length
+            groupDistance * state.groupIndex +
+            questionDistance * state.subgroupIndex
         )
     }
 
@@ -160,28 +166,22 @@ export const QuestionPage = (props: Props) => {
                             }
                         />
                     )}
-                    {stepper.map((question, i) => {
+                    {groups.map((group, i) => {
                         return (
-                            (i === 0 ||
-                                question.group !== stepper[i - 1].group) && (
-                                <div
-                                    style={{
-                                        textAlign: 'center',
-                                        maxWidth: 100,
-                                        position: 'absolute',
-                                        top: -11,
-                                        left:
-                                            getStepperProgress(question) * 100 +
-                                            '%',
-                                        transform: 'translateX(-50%)',
-                                    }}
-                                >
-                                    <div style={{ marginBottom: 6 }}>⭐</div>
-                                    {question.group}
-                                </div>
-                            )
+                            <IconContainer
+                                key={i}
+                                style={{
+                                    left: (i / groups.length) * 100 + '%',
+                                }}
+                            >
+                                <div style={{ marginBottom: 6 }}>✔️</div>
+                                {group[0][0].group}
+                            </IconContainer>
                         )
                     })}
+                    <IconContainer key={groups.length}>
+                        <div style={{ marginBottom: 6 }}>✔️</div>
+                    </IconContainer>
                 </div>
                 <QuestionContainer>
                     <form
