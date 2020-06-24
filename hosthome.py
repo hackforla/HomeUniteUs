@@ -118,19 +118,20 @@ class MongoFacade:
         db = client[MONGO_DATABASE]
         collection = db[collection_name]
         item = collection.find_one({'id': id})
-        item['_id'] = str(item['_id']) # repeating this as above, but seems bad...
+        item['_id'] = str(item['_id'])
 
         self._log('get_collection', 'item = {}'.format(item))
         return item
-    ###########################################################attempt
-    def get_user_by_email(self, collection_name, email): #need to add param called email here
+
+
+    def get_user_by_email(self, collection_name, email):
         try:
             self._log('get_user_by_email', 'acquiring connection...')
             client = self._get_conn()
             db = client[MONGO_DATABASE]
             collection = db[collection_name]
 
-            user = collection.find_one({ 'email': email }) #email needs to be replace with request body
+            user = collection.find_one({ 'email': email })
             if user is None:
                 return None
             user['_id'] = str(user['_id'])
@@ -140,7 +141,6 @@ class MongoFacade:
             self._log("get_user_by_email", f"error {e}")
             raise e
 
-    #####################################################################
 
     def insert_to_collection(self, collection_name, item):
         client = self._get_conn()
@@ -199,6 +199,7 @@ class MongoFacade:
     def _log(self, method_name, message):
         app.logger.debug('MongoFacade:{}: {}'.format(method_name, message))
 
+
 class Repository:
 
     def __init__(self, collection_name):
@@ -229,11 +230,11 @@ class Repository:
             safe_item
         )
         return result
-    ########################################attempt
+
     def get_using_email(self, email): #pass in the request body here
         resp = self.mongo_facade.get_user_by_email(self.collection_name, email) ##add the request here
         return resp
-    #########################################
+
 
     def _log(self, method_name, message):
         app.logger.debug('Repository[{}]:{}: {}'.format(self.collection_name, method_name, message))
@@ -307,8 +308,6 @@ def favicon():
         'favicon.ico',
         mimetype='image/vnd.microsoft.icon'
     )
-
-
 
 
 
@@ -1079,6 +1078,54 @@ def get_all_data():
             'restrictions': restrictions,
             'matchResults': []
         }
+
+
+        js = json.dumps(data)
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+
+    except Exception as e:
+        data = {
+            'test'  : 'failed',
+
+            'error': str(e)
+        }
+
+        js = json.dumps(data)
+        resp = Response(js, status=500, mimetype='application/json')
+        return resp
+
+
+
+# TODO: Mark for deprecation! no need to dl the whole set for any view in the app
+
+@app.route('/api/v1/questions', methods=['GET'])
+def get_questions_v1():
+
+    try:
+        hostQuestions = hostQuestionsRepository.get()
+        responseValues = responseValuesRepository.get()
+
+        # Sample model from client proto
+        # {
+        #     id: '10',
+        #     type: 'radio',
+        #     group: 'Introductory Questions',
+        #     order: -50,
+        #     question: 'Do you have an extra bedroom or private space in their home?',
+        #     options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
+        # },
+
+        data = [{
+            'id': q['_id'],
+            'type': 'radio',
+            'group': 'MatchingQuestions',
+            'order': i,
+            'question': q['text'],
+            'options': [
+                opt['text'] for opt in responseValues if opt['id'] in q['responseValues']
+            ]
+        } for (i, q) in enumerate(hostQuestions)]
 
 
         js = json.dumps(data)
