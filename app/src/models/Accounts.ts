@@ -1,8 +1,10 @@
 export interface Accounts {
-  email: string
-  accountId: string
-  type: string
-} //the interface might change when accounts is created in mongo
+    email: string
+    accountId: string
+    type: string
+}
+
+//the interface might change when accounts is created in mongo
 
 //this is the data being sent to python route to check whether the user exists vvvv
 // email: "testing@yahoo.com"
