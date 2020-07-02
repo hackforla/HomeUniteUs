@@ -495,7 +495,8 @@ const getQuestions = () => {
             group: 'Home',
             subgroup: 'Substances',
             order: 35,
-            question: 'Do you or anyone in your household use other substances (prescriptions, etc.)?',
+            question:
+                'Do you or anyone in your household use other substances (prescriptions, etc.)?',
             options: [
                 { label: 'Yes', value: 'yes' },
                 { label: 'No', value: 'no' },
@@ -548,7 +549,8 @@ const getQuestions = () => {
             type: 'radio',
             group: 'Home',
             order: 40,
-            question: 'Are you willing to host youth who are in a relationship with one another?',
+            question:
+                'Are you willing to host youth who are in a relationship with one another?',
             options: [
                 { label: 'Yes', value: 'yes' },
                 { label: 'No', value: 'no' },
@@ -559,7 +561,8 @@ const getQuestions = () => {
             type: 'text',
             group: 'Home',
             order: 41,
-            question: 'Please upload an image of yourself (feel free to include any other family members!)',
+            question:
+                'Please upload an image of yourself (feel free to include any other family members!)',
         },
         {
             id: '54',
@@ -572,7 +575,8 @@ const getQuestions = () => {
             id: '55',
             type: 'text',
             group: 'Home',
-            subgroup: 'Please upload any additional images you feel will give guests a better idea of you and your home',
+            subgroup:
+                'Please upload any additional images you feel will give guests a better idea of you and your home',
             order: 43,
             question: 'Image upload',
         },
@@ -580,7 +584,8 @@ const getQuestions = () => {
             id: '56',
             type: 'text',
             group: 'Home',
-            subgroup: 'Please upload any additional images you feel will give guests a better idea of you and your home',
+            subgroup:
+                'Please upload any additional images you feel will give guests a better idea of you and your home',
             order: 44,
             question: 'Image upload',
         },
@@ -588,7 +593,8 @@ const getQuestions = () => {
             id: '57',
             type: 'text',
             group: 'Home',
-            subgroup: 'Please upload any additional images you feel will give guests a better idea of you and your home',
+            subgroup:
+                'Please upload any additional images you feel will give guests a better idea of you and your home',
             order: 45,
             question: 'Image upload',
         },
@@ -611,35 +617,40 @@ const getQuestions = () => {
             type: 'textarea',
             group: 'Personal',
             order: 48,
-            question: 'Describe any preferred or ideal characteristics you hope for in a guest',
+            question:
+                'Describe any preferred or ideal characteristics you hope for in a guest',
         },
         {
             id: '61',
             type: 'textarea',
             group: 'Personal',
             order: 49,
-            question: 'Please share why you are interested in hosting a young person experiencing homelessness',
+            question:
+                'Please share why you are interested in hosting a young person experiencing homelessness',
         },
         {
             id: '62',
             type: 'textarea',
             group: 'Personal',
             order: 50,
-            question: 'Please share any strengths, skills, or experience you have that you believe will make you a successful host',
+            question:
+                'Please share any strengths, skills, or experience you have that you believe will make you a successful host',
         },
         {
             id: '63',
             type: 'textarea',
             group: 'Personal',
             order: 51,
-            question: 'Please describe any challenges you foresee in your role as host',
+            question:
+                'Please describe any challenges you foresee in your role as host',
         },
         {
-            id: '64',   
+            id: '64',
             type: 'textarea',
             group: 'Personal',
             order: 52,
-            question: 'As a way of starting your host profile, please take a moment to write something to introduce yourself to potential guests. Feel free to talk about your passions and hobbies, your family, your home values, or anything else that feels important to you.',
+            question:
+                'As a way of starting your host profile, please take a moment to write something to introduce yourself to potential guests. Feel free to talk about your passions and hobbies, your family, your home values, or anything else that feels important to you.',
         },
     ]
 }
@@ -651,13 +662,15 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
 
 export const ProfileEditPage = () => {
     return (
-        <Container>
-            <h2>Hello! Answer these questions:</h2>
-            <QuestionPage
-                stepwise={true}
-                onSubmit={handleSubmit}
-                questions={getQuestions()}
-            ></QuestionPage>
-        </Container>
+        <HostDashboardDataProvider>
+            <Container>
+                <h2>Hello! Answer these questions:</h2>
+                <QuestionPage
+                    stepwise={true}
+                    onSubmit={handleSubmit}
+                    questions={getQuestions()}
+                ></QuestionPage>
+            </Container>
+        </HostDashboardDataProvider>
     )
 }
