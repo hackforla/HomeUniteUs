@@ -71,7 +71,6 @@ const themeStyle = {
         MuiOutlinedInput: {
             root: {
                 width: '650px',
-                margin: '8px',
             },
         },
     },
