@@ -1,8 +1,9 @@
 import { ApiConfig } from './config'
 import { Guest, Host } from '../models' //for some reason accounts wont import here?
 import { Accounts } from '../models/Accounts'
+import { QuestionType } from '../models/QuestionType'
 
-class ApiFetchError extends Error { }
+class ApiFetchError extends Error {}
 
 const getJson = async (uri: string) => {
     try {
@@ -41,17 +42,16 @@ const putJson = async (uri: string, data: string) => {
 const hasAccount = async (uri: string, data: any | undefined) => {
     try {
         const response = await fetch(uri, {
-            method: "POST",
+            method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            body: data
-        }) 
+            body: data,
+        })
         if (response.status !== 200) {
-            return { errorMessage: "User doesn't exist "}
+            return { errorMessage: "User doesn't exist " }
         }
         return await response.json()
-
     } catch (e) {
         throw new ApiFetchError(
             `error in hasAccount(): error fetching '${uri}': ${e}`
@@ -84,9 +84,11 @@ export class Fetcher<T> {
 
 export class ApiWrapper {
     private guestFetcher: Fetcher<Guest>
+    private hostQuestionsFetcher: Fetcher<QuestionType>
 
     public constructor() {
         this.guestFetcher = new Fetcher<Guest>('guests')
+        this.hostQuestionsFetcher = new Fetcher<QuestionType>('v1/questions')
     }
 
     // Guests
@@ -100,5 +102,10 @@ export class ApiWrapper {
 
     public async getUserAccount(data: any): Promise<any> {
         return await hasAccount(`${ApiConfig.UriPrefix}/checkEmail`, data)
+    }
+
+    // Hosts
+    public async getHostQuestions(): Promise<Array<QuestionType>> {
+        return await this.hostQuestionsFetcher.getAll()
     }
 }
