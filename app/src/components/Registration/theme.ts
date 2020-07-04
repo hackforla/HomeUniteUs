@@ -12,7 +12,7 @@ const themeStyle = {
             contrastText: '#FFFFFF',
         },
         secondary: {
-            main: '#999999',
+            main: '#000',
             contrastText: '#FFFFFF',
         },
         error: {
@@ -41,11 +41,11 @@ const themeStyle = {
     },
     typography: {
         fontFamily: [
+            'Roboto',
             'Josefin Sans',
             '-apple-system',
             'BlinkMacSystemFont',
             'Segoe UI',
-            'Roboto',
             'Oxygen',
             'Ubuntu',
             'Cantarell',
@@ -53,7 +53,7 @@ const themeStyle = {
             'Droid Sans',
             'Helvetica Neue',
             'sans-serif',
-        ].join(''),
+        ].join(', '),
     },
     shadows: ([] as unknown) as Theme['shadows'],
     // spacing: 16,

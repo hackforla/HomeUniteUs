@@ -25,14 +25,35 @@ const QuestionContainer = styled.div`
     min-height: 415px;
 `
 
-const IconContainer = styled.div`
-    text-align: center;
-    max-width: 100px;
-    position: absolute;
-    top: -11px;
-    left: 100%;
-    transform: translateX(-50%);
+const StyledLinearProgress = styled(LinearProgress)`
+    background: #efefef !important;
+    height: 12px !important;
 `
+
+const IconContainer = (props: {
+    active: boolean
+    group: string
+    left: string
+}) => {
+    const StyledDiv = styled.div`
+        text-align: center;
+        max-width: 100px;
+        position: absolute;
+        top: -11px;
+        transform: translateX(-50%);
+        font-size: 14px;
+    `
+    return (
+        <StyledDiv style={{ left: props.left }}>
+            <div style={{ marginTop: 7, marginBottom: 10 }}>
+                {props.active ? <span>🟡</span> : <span>⚪</span>}
+            </div>
+            <div style={{ color: props.active ? 'black' : '#999' }}>
+                {props.group}
+            </div>
+        </StyledDiv>
+    )
+}
 
 export const QuestionPage = (props: Props) => {
     const { data } = useHostDashboardData()
@@ -158,9 +179,9 @@ export const QuestionPage = (props: Props) => {
     return (
         <MuiThemeProvider theme={theme}>
             <div style={{ position: 'relative' }}>
-                <div style={{ marginBottom: 80 }}>
+                <div style={{ marginTop: 30, marginBottom: 80 }}>
                     {props.stepwise && (
-                        <LinearProgress
+                        <StyledLinearProgress
                             variant="determinate"
                             value={
                                 state.submitPage
@@ -173,18 +194,18 @@ export const QuestionPage = (props: Props) => {
                         return (
                             <IconContainer
                                 key={i}
-                                style={{
-                                    left: (i / groups.length) * 100 + '%',
-                                }}
-                            >
-                                <div style={{ marginBottom: 6 }}>✔️</div>
-                                {group[0][0].group}
-                            </IconContainer>
+                                active={state.groupIndex >= i}
+                                group={group[0][0].group || ''}
+                                left={(i / groups.length) * 100 + '%'}
+                            ></IconContainer>
                         )
                     })}
-                    <IconContainer key={groups.length}>
-                        <div style={{ marginBottom: 6 }}>✔️</div>
-                    </IconContainer>
+                    <IconContainer
+                        key={groups.length}
+                        active={state.submitPage}
+                        group="Complete"
+                        left="100%"
+                    ></IconContainer>
                 </div>
                 <QuestionContainer>
                     <form
