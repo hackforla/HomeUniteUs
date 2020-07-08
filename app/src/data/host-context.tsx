@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { QuestionType } from '../models/QuestionType'
 import { ResponseValue } from '../models/ResponseValue'
+import { HostResponse } from '../models/HostResponse'
 import { ApiWrapper } from './ApiWrapper'
 
 const HostDashboardContext = React.createContext({})
@@ -8,7 +9,7 @@ const hostsFetcher = new ApiWrapper()
 
 interface HostDashboardData {
     hostQuestions: Array<QuestionType>
-    hostResponses: Array<ResponseValue>
+    hostResponse: HostResponse | null
     loaderState: {
         loading: boolean
         message: string
@@ -20,19 +21,25 @@ enum HostDashboardActionType {
     FinishFetchQuestions,
     GetHostById,
     isLoading,
-    BeginPostAnswer,
-    FinishPostAnswer,
+    setHostResponse,
+    BeginPostResponse,
+    FinishPostResponse,
     Error,
 }
 
 interface HostDashboardAction {
     type: HostDashboardActionType
-    payload?: HostDashboardData | Array<QuestionType> | boolean | string
+    payload?:
+        | HostDashboardData
+        | Array<QuestionType>
+        | boolean
+        | string
+        | HostResponse
 }
 
 const initialState: HostDashboardData = {
     hostQuestions: [],
-    hostResponses: [],
+    hostResponse: null,
     loaderState: {
         loading: false,
         message: '',
@@ -57,10 +64,34 @@ function hostDashboardReducer(
             return {
                 ...state,
                 loaderState: {
+                    ...state.loaderState,
                     loading: false,
-                    message: 'Finished loading',
                 },
                 hostQuestions: action.payload as Array<QuestionType>,
+            }
+        }
+        case HostDashboardActionType.BeginPostResponse: {
+            return {
+                ...state,
+                loaderState: {
+                    loading: true,
+                    message: action.payload as string,
+                },
+            }
+        }
+        case HostDashboardActionType.FinishPostResponse: {
+            return {
+                ...state,
+                loaderState: {
+                    ...state.loaderState,
+                    loading: false,
+                },
+            }
+        }
+        case HostDashboardActionType.setHostResponse: {
+            return {
+                ...state,
+                hostResponse: action.payload as HostResponse,
             }
         }
         default:
@@ -114,6 +145,24 @@ export function useHostDashboardData() {
         )
     }
 
+    //function + state currently lives in component
+    const setResponse = (event: any) => {
+        //hard coded
+        const response = {
+            questionId: 1,
+            hostId: 1,
+            responseValues: [event.target.value],
+        }
+        return dispatch({
+            type: HostDashboardActionType.setHostResponse,
+            payload: response,
+        })
+    }
+
+    const postHostResponse = (hostResponse: HostResponse) => {
+        console.log(`postHostResponse: ${hostResponse} `)
+    }
+
     const [data, dispatch] = context as [
         HostDashboardData,
         React.Dispatch<HostDashboardAction>
@@ -122,5 +171,7 @@ export function useHostDashboardData() {
     return {
         data,
         dispatch,
+        setResponse,
+        postHostResponse,
     }
 }
