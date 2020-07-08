@@ -107,6 +107,7 @@ export function HostDashboardDataProvider(
 
 export function useHostDashboardData() {
     const context = React.useContext(HostDashboardContext)
+    console.log('this is context in a custom hook', context)
     if (!context) {
         throw new Error(
             'useHostDashboardData must be used within a HostDashboardProvider'
