@@ -4,10 +4,17 @@ function Upload() {
     const uploadedImg = useRef<HTMLImageElement>(null)
 
     const handleImgUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        var input: EventTarget | HTMLInputElement | null = e.target
+        var file: any | null = e.target.files
 
-        console.log(input, '<-----------------wha is this?? input or nah?')
-        const file = new File()
+        console.log(file, '<----------e.target.files')
+
+        let slicedFile: any | null = file?.item(0)?.name.split('.')[0]
+
+        const newFile = new File([slicedFile], file?.item(0)?.name, {
+            type: file?.item(0)?.type,
+        })
+
+        console.log(newFile, '<-------------------File()')
     }
 
     return (
