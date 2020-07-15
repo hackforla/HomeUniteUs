@@ -4,13 +4,15 @@ function Upload() {
     const uploadedImg = useRef<HTMLImageElement>(null)
 
     const handleImgUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files
-        const readingFile = new FileReader()
+        var input: EventTarget | HTMLInputElement | null = e.target
+
+        console.log(input, '<-----------------wha is this?? input or nah?')
+        const file = new File()
     }
 
     return (
         <>
-            <div>
+            <div style={{ border: '1px solid orange', height: '10%' }}>
                 <input
                     type="file"
                     accept="image/*"
@@ -19,13 +21,12 @@ function Upload() {
                 />
             </div>
 
-            <div>
+            <div style={{ border: '1px solid red', height: '10%' }}>
                 <img
                     ref={uploadedImg}
                     style={{
                         width: '100%',
                         height: '100%',
-                        position: 'absolute',
                     }}
                 />
             </div>

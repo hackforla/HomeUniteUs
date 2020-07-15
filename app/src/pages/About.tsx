@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { AboutStyle } from './style'
+import Upload from '../components/Upload/Upload'
 
 export const AboutPage = () => (
     <AboutStyle.AboutHolder>
@@ -45,5 +46,6 @@ export const AboutPage = () => (
                 </p>
             </AboutStyle.AboutText>
         </AboutStyle.TextBlock>
+        <Upload />
     </AboutStyle.AboutHolder>
 )
