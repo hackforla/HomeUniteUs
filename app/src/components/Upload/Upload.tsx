@@ -3,7 +3,7 @@ import React, { useRef } from 'react'
 function Upload() {
     const uploadedImg = useRef<HTMLImageElement>(null)
 
-    const handImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImgUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files
         const readingFile = new FileReader()
     }
@@ -15,7 +15,7 @@ function Upload() {
                     type="file"
                     accept="image/*"
                     multiple={false}
-                    onChange={handImageUpload}
+                    onChange={handleImgUpload}
                 />
             </div>
 
