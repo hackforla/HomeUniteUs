@@ -1,20 +1,20 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 
 function Upload() {
-    const uploadedImg = useRef<HTMLImageElement>(null)
+    const [selectedImage, setSelectedImage]: any = useState()
 
-    const handleImgUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        var file: any | null = e.target.files
+    // const imageSelectHandler = (event?: Event | undefined) => {
+    const imageSelectHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const target = event?.target as HTMLInputElement
+        const file: File = (target.files as FileList)[0]
+        setSelectedImage(file)
+    }
 
-        console.log(file, '<----------e.target.files')
-
-        let slicedFile: any | null = file?.item(0)?.name.split('.')[0]
-
-        const newFile = new File([slicedFile], file?.item(0)?.name, {
-            type: file?.item(0)?.type,
-        })
-
-        console.log(newFile, '<-------------------File()')
+    const fileUploadHandler = () => {
+        const fd = new FormData()
+        fd.append('image', selectedImage, selectedImage.name)
+        //then do a fetch call here to backend
+        console.log('upload image to db')
     }
 
     return (
@@ -24,18 +24,9 @@ function Upload() {
                     type="file"
                     accept="image/*"
                     multiple={false}
-                    onChange={handleImgUpload}
+                    onChange={imageSelectHandler}
                 />
-            </div>
-
-            <div style={{ border: '1px solid red', height: '10%' }}>
-                <img
-                    ref={uploadedImg}
-                    style={{
-                        width: '100%',
-                        height: '100%',
-                    }}
-                />
+                <button onClick={fileUploadHandler}>Upload</button>
             </div>
         </>
     )
