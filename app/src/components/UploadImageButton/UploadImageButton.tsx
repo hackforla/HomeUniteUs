@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 
-function Upload() {
+function UploadImageButton() {
     const [selectedImage, setSelectedImage]: any = useState()
 
     // const imageSelectHandler = (event?: Event | undefined) => {
@@ -32,4 +32,4 @@ function Upload() {
     )
 }
 
-export default Upload
+export default UploadImageButton
