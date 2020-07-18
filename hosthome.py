@@ -10,6 +10,7 @@ load_dotenv()
 
 from flask import (
     Flask,
+    flash,
     render_template,
     request,
     Response,
@@ -25,6 +26,11 @@ import pymongo
 
 
 from matching.basic_filter import BasicFilter
+
+from werkzeug.utils import secure_filename
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'psd'}
+
 
 
 dictConfig({
@@ -1108,10 +1114,43 @@ def get_all_match_results():
 #         resp = Response(js, status=500, mimetype='application/json')
 #         return resp
 
+#########################
+#image upload test route#
+#########################
+
+def allowed_file(filename):
+    if not "." in filename:
+        return False
+    
+    ext = filename.rsplit(".", 1)[1]
+
+    # Check if the extension is in ALLOWED_IMAGE_EXTENSIONS
+    if ext.lower() in ALLOWED_EXTENSIONS
+        return True
+    else:
+        return False
+
+
 @app.route('/uploadImage', methods=['POST'])
 def image_upload():
+    if 'image' not in request.files:
+        flash('no image file')
+        return Response(status=400, mimetype='application/json')
+    
     img = request.files["image"]
-    print(img,"<---------------the img")
+    
+    if img.filename == '':
+        flash('no image was selected')
+        return Response(status=400, mimetype='application/json')
+    
+    if img and allowed_file(img.filename):
+        img_name = secure_filename(img.filename)
+
+        print("image need to be saved somewhere now")
+    else:
+        print("That file extension is not allowed")
+        return redirect(request.url)
+
     data = {'mes': 'success'}
     return jsonify(data), 200
     
