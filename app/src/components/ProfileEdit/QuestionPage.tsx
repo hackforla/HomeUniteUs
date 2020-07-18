@@ -195,13 +195,6 @@ export const QuestionPage = (props: Props) => {
                         {!state.submitPage ? (
                             props.stepwise ? (
                                 <>
-                                    <h2 style={{ height: 24.8 }}>
-                                        {
-                                            groups[state.groupIndex][
-                                                state.subgroupIndex
-                                            ][0].group
-                                        }
-                                    </h2>
                                     <h3 style={{ height: 14.2 }}>
                                         {
                                             groups[state.groupIndex][
