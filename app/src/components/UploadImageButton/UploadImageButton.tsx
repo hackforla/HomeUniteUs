@@ -15,15 +15,19 @@ function UploadImageButton() {
         fd.append('image', selectedImage, selectedImage.name)
         //testing for now but will remove later
         try {
-            fetch('https://localhost:8080/uploadImage', {
-                method: 'POST',
-                body: JSON.stringify(fd),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
+            const uploadImg = await fetch(
+                'https://localhost:8080/uploadImage',
+                {
+                    method: 'POST',
+                    body: JSON.stringify(fd),
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            )
+            const uploadImgJson = await uploadImg.json()
             //then do a fetch call here to backend
-            console.log('upload image to db')
+            console.log(uploadImgJson, '<------------what is this?')
         } catch (err) {
             console.log(err)
         }

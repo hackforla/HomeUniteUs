@@ -1108,6 +1108,13 @@ def get_all_match_results():
 #         resp = Response(js, status=500, mimetype='application/json')
 #         return resp
 
+@app.route('/uploadImage', methods=['POST'])
+def image_upload():
+    print("does this hit? <----------")
+    file = request.get_json()
+    print(file, "<----------------file?")
+
+
 
 
 @app.route('/', defaults={'path': ''})
