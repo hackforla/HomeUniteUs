@@ -29,7 +29,7 @@ from matching.basic_filter import BasicFilter
 
 from werkzeug.utils import secure_filename
 
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'psd'}
+app.config["ALLOWED_IMAGE_EXTENSIONS"] = {'png', 'jpg', 'jpeg', 'psd'}
 
 
 
@@ -1125,7 +1125,7 @@ def allowed_file(filename):
     ext = filename.rsplit(".", 1)[1]
 
     # Check if the extension is in ALLOWED_IMAGE_EXTENSIONS
-    if ext.lower() in ALLOWED_EXTENSIONS
+    if ext.lower() in app.config["ALLOWED_IMAGE_EXTENSIONS"]
         return True
     else:
         return False
@@ -1145,6 +1145,7 @@ def image_upload():
     
     if img and allowed_file(img.filename):
         img_name = secure_filename(img.filename)
+        print(img_name, "<------------what is this?")
 
         print("image need to be saved somewhere now")
     else:
