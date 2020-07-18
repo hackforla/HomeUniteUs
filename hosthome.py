@@ -24,7 +24,7 @@ from bson import ObjectId
 import pymongo
 
 
-from matching.basic_filter import BasicFilter
+#from matching.basic_filter import BasicFilter
 
 
 dictConfig({
@@ -91,7 +91,7 @@ class MongoFacade:
             app.logger.debug("Server not available: {}".format(e))
             raise e
 
-    def get_collection(self, collection_name):
+    def get_collection(self, collection_name, sort_condition):
 
         self._log('get_collection', 'acquiring connection...')
 
@@ -99,7 +99,11 @@ class MongoFacade:
 
         db = client[MONGO_DATABASE]
         collection = db[collection_name]
-        cursor = collection.find()
+
+        if sort_condition:
+            cursor = collection.find().sort(sort_condition)
+        else:
+            cursor = collection.find()
         items = list(cursor)
 
         for item in items:
@@ -206,8 +210,8 @@ class Repository:
         self.mongo_facade = MongoFacade()
         self.collection_name = collection_name
 
-    def get(self):
-        items = self.mongo_facade.get_collection(self.collection_name)
+    def get(self, sort_condition=None):
+        items = self.mongo_facade.get_collection(self.collection_name, sort_condition)
         return items
 
     def add(self, item):
@@ -281,6 +285,8 @@ guestResponsesRepository = Repository('guestResponses')
 hostResponsesRepository = Repository('hostResponses')
 restrictionsRepository = Repository('restrictions')
 responseValuesRepository = Repository('responseValues')
+hostRegisterQuestionsRepository = Repository('hostRegisterQuestions')
+questionBankRepository = Repository('questionBank')
 
 
 # TODO: Tyler 5/21/2020: Somebody will need to fix this -- should be
@@ -298,7 +304,7 @@ repos['restrictions'] = restrictionsRepository
 repos['responseValues'] = responseValuesRepository
 
 
-matcher = BasicFilter(repos)
+#matcher = BasicFilter(repos)
 
 
 @app.route('/favicon.ico')
@@ -1096,6 +1102,50 @@ def get_all_data():
         return resp
 
 
+@app.route('/api/v1/hostRegisterQuestions', methods=['GET'])
+def get_host_register_questions():
+
+    try:
+        data = hostRegisterQuestionsRepository.get(sort_condition=[("order",pymongo.ASCENDING)])
+
+        # Sample model from client proto
+        # {
+        #     id: '10',
+        #     type: 'radio',
+        #     group: 'Introductory Questions',
+        #     order: -50,
+        #     question: 'Do you have an extra bedroom or private space in their home?',
+        #     options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
+        # },
+
+        #data = [{
+        #    'id': q['_id'],
+        #    'type': 'radio',
+        #    'group': 'MatchingQuestions',
+        #    'order': i,
+        #    'question': q['text'],
+        #    'options': [
+        #        opt['text'] for opt in responseValues if opt['id'] in q['responseValues']
+        #    ]
+        #} for (i, q) in enumerate(hostQuestions)]
+
+
+        js = json.dumps(data)
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+
+    except Exception as e:
+        data = {
+            'test'  : 'failed',
+
+            'error': str(e)
+        }
+
+        js = json.dumps(data)
+        resp = Response(js, status=500, mimetype='application/json')
+        return resp
+
+
 
 # TODO: Mark for deprecation! no need to dl the whole set for any view in the app
 
@@ -1150,7 +1200,8 @@ def get_all_match_results():
 
     try:
 
-        match_results = matcher.get_all_match_results()
+        #match_results = matcher.get_all_match_results()
+        match_results = []
 
         js = json.dumps(match_results)
         resp = Response(js, status=200, mimetype='application/json')

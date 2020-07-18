@@ -32,6 +32,15 @@ mongoimport -c=hostQuestions -d=hosthome --jsonArray --file=/var/tmp/hostQuestio
 echo "- inserting restrictions..."
 mongoimport -c=restrictions -d=hosthome --jsonArray --file=/var/tmp/restrictions.json
 
+echo "- inserting questionBank..."
+mongoimport -c=questionBank -d=hosthome --jsonArray --file=/var/tmp/questionsBank.json
+
+echo "- inserting questionBank..."
+mongoimport -c=hostQuestionsMeta -d=hosthome --jsonArray --file=/var/tmp/hostQuestionsMeta.json
+
+echo "- inserting questionBank..."
+mongoimport -c=hostRegisterQuestions -d=hosthome --jsonArray --file=/var/tmp/hostRegisterQuestions.json
+
 echo "starting hosthome.."
 
 
