@@ -10,11 +10,23 @@ function UploadImageButton() {
         setSelectedImage(file)
     }
 
-    const fileUploadHandler = () => {
+    const fileUploadHandler = async () => {
         const fd = new FormData()
         fd.append('image', selectedImage, selectedImage.name)
-        //then do a fetch call here to backend
-        console.log('upload image to db')
+        //testing for now but will remove later
+        try {
+            fetch('https://localhost:8080/uploadImage', {
+                method: 'POST',
+                body: JSON.stringify(fd),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            //then do a fetch call here to backend
+            console.log('upload image to db')
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     return (
