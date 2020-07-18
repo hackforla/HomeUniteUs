@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { AboutStyle } from './style'
+import UploadImageButton from '../components/UploadImageButton/UploadImageButton'
 
 export const AboutPage = () => (
     <AboutStyle.AboutHolder>
@@ -44,6 +45,7 @@ export const AboutPage = () => (
                     </AboutStyle.MailLink>
                 </p>
             </AboutStyle.AboutText>
+            <UploadImageButton />
         </AboutStyle.TextBlock>
     </AboutStyle.AboutHolder>
 )

@@ -1110,11 +1110,11 @@ def get_all_match_results():
 
 @app.route('/uploadImage', methods=['POST'])
 def image_upload():
-    print("does this hit? <----------")
-    file = request.get_json()
-    print(file, "<----------------file?")
-
-
+    img = request.files["image"]
+    print(img,"<---------------the img")
+    data = {'mes': 'success'}
+    return jsonify(data), 200
+    
 
 
 @app.route('/', defaults={'path': ''})
