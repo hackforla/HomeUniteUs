@@ -140,7 +140,7 @@ class MongoFacade:
             user = collection.find_one({ 'email': email }) #email needs to be replace with request body
             if user is None:
                 return None 
-            user['_id'] = str(user['_id'])
+            user['_id'] = str(user['_id']) #we dont need this line anymore, right?
             self._log('get_collections', 'items = {}'.format(user))
             return user
         except Exception as e:
@@ -202,6 +202,19 @@ class MongoFacade:
 
 
         return result.acknowledged
+    
+    def save_file(file, filename):
+        # why is file = <__main__.MongoFacade object at 0x0586FF10> <--------------filee????
+        # client = self._get_conn()
+        # if not client:
+        #     raise Exception('Mongo server not available')
+        
+        # db = client[MONGO_DATABASE]
+        # fs = gridfs.GridFS(db)
+        
+        print(file, "<--------------filee?")
+        print(filename, "<--------------filename")
+        return "done"
 
     def _log(self, method_name, message):
         app.logger.debug('MongoFacade:{}: {}'.format(method_name, message))
@@ -1144,7 +1157,10 @@ def image_upload():
     
     if img and allowed_file(img.filename):
         img_name = secure_filename(img.filename)
-        #img.save(os.path.join(<WHAT DO I PUT HERE>, img_name)) #do i use a servers like Cloudinary or something?
+        saveImg = MongoFacade()
+        saveImg.save_file(img) #takes two arguments, gotta look up image upload stuff again
+        # saveImg.save_file(img, img_name) #takes two arguments, gotta look up image upload stuff again
+        #img.save(os.path.join(<WHAT DO I PUT HERE>, img_name))
     else:
         print("That file extension is not allowed")
         return redirect(request.url)
