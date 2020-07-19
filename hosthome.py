@@ -90,7 +90,6 @@ class MongoFacade:
 
     def _get_conn(self):
         client = pymongo.MongoClient(self.url)
-        fs = gridfs.GridFS(client) #not sure where to put this...
         try:
             # The ismaster command is cheap and does not require auth.
             client.admin.command('ismaster')
@@ -237,11 +236,10 @@ class Repository:
             safe_item
         )
         return result
-    ########################################attempt
-    def get_using_email(self, email): #pass in the request body here
-        resp = self.mongo_facade.get_user_by_email(self.collection_name, email) ##add the request here
+
+    def get_using_email(self, email): 
+        resp = self.mongo_facade.get_user_by_email(self.collection_name, email) 
         return resp
-    #########################################
 
     def _log(self, method_name, message):
         app.logger.debug('Repository[{}]:{}: {}'.format(self.collection_name, method_name, message))
