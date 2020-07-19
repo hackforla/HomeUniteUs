@@ -24,6 +24,7 @@ from flask import (
 from bson import ObjectId
 import pymongo
 
+import gridfs
 
 from matching.basic_filter import BasicFilter
 
@@ -89,6 +90,7 @@ class MongoFacade:
 
     def _get_conn(self):
         client = pymongo.MongoClient(self.url)
+        fs = gridfs.GridFS(client) #not sure where to put this...
         try:
             # The ismaster command is cheap and does not require auth.
             client.admin.command('ismaster')
