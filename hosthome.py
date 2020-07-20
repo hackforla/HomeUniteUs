@@ -210,10 +210,13 @@ class MongoFacade:
         
         db = client[MONGO_DATABASE]
         fs = gridfs.GridFS(db)
-        fs.put()
+        # fs.put()
         print(img, "<------------img")
         print(img_name, "<------------img name")
         return "done"
+    
+    def load_file(self):
+        #to be continued
 
     def _log(self, method_name, message):
         app.logger.debug('MongoFacade:{}: {}'.format(method_name, message))
