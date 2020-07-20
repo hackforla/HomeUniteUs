@@ -203,17 +203,16 @@ class MongoFacade:
 
         return result.acknowledged
     
-    def save_file(file, filename):
-        # why is file = <__main__.MongoFacade object at 0x0586FF10> <--------------filee????
-        # client = self._get_conn()
-        # if not client:
-        #     raise Exception('Mongo server not available')
+    def save_file(self, img, img_name):
+        client = self._get_conn()
+        if not client:
+            raise Exception('Mongo server not available')
         
-        # db = client[MONGO_DATABASE]
-        # fs = gridfs.GridFS(db)
-        
-        print(file, "<--------------filee?")
-        print(filename, "<--------------filename")
+        db = client[MONGO_DATABASE]
+        fs = gridfs.GridFS(db)
+        fs.put()
+        print(img, "<------------img")
+        print(img_name, "<------------img name")
         return "done"
 
     def _log(self, method_name, message):
@@ -1158,8 +1157,8 @@ def image_upload():
     if img and allowed_file(img.filename):
         img_name = secure_filename(img.filename)
         saveImg = MongoFacade()
-        saveImg.save_file(img) #takes two arguments, gotta look up image upload stuff again
-        # saveImg.save_file(img, img_name) #takes two arguments, gotta look up image upload stuff again
+        saveImg.save_file(img, img_name)
+        #return jsonify(), 200
         #img.save(os.path.join(<WHAT DO I PUT HERE>, img_name))
     else:
         print("That file extension is not allowed")
