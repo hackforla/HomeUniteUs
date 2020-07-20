@@ -203,19 +203,20 @@ class MongoFacade:
 
         return result.acknowledged
     
-    def save_file(self, img, img_name):
+    def save_file(self, img_file, img_name):
         client = self._get_conn()
         if not client:
             raise Exception('Mongo server not available')
         
         db = client[MONGO_DATABASE]
         fs = gridfs.GridFS(db)
-        # fs.put()
-        print(img, "<------------img")
-        print(img_name, "<------------img name")
-        return "done"
+        img_id = fs.put(img_file, img_name = img_name) #got img id
+        if(img_id == ""):
+            return jsonify(message="image was not saved"), 400
+        # return jsonify({ "msg": "image stored successfully"}), 200
+        return jsonify(message="image stored successfully"), 200
     
-    def load_file(self):
+    # def load_file(self):
         #to be continued
 
     def _log(self, method_name, message):
@@ -1160,14 +1161,16 @@ def image_upload():
     if img and allowed_file(img.filename):
         img_name = secure_filename(img.filename)
         saveImg = MongoFacade()
-        saveImg.save_file(img, img_name)
-        #return jsonify(), 200
-        #img.save(os.path.join(<WHAT DO I PUT HERE>, img_name))
+        resp = saveImg.save_file(img, img_name)
+        print(resp, ",--------wjat the resp")
+        # if(resp.msg == 204):
+        #     print("hitting")
+        # print("resp is not hitting")
+        return jsonify(), 500
     else:
-        print("That file extension is not allowed")
-        return redirect(request.url)
+        return jsonify({"msg": "That File Extension is not Allowed"}), 500
 
-    data = {'mes': 'success'}
+    data = {'msg': 'success'}
     return jsonify(data), 200
     
 
