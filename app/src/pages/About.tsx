@@ -45,7 +45,6 @@ export const AboutPage = () => (
                     </AboutStyle.MailLink>
                 </p>
             </AboutStyle.AboutText>
-            <UploadImageButton />
         </AboutStyle.TextBlock>
     </AboutStyle.AboutHolder>
 )

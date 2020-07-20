@@ -211,10 +211,10 @@ class MongoFacade:
         db = client[MONGO_DATABASE]
         fs = gridfs.GridFS(db)
         img_id = fs.put(img_file, img_name = img_name) #got img id
-        if(img_id == ""):
-            return jsonify(message="image was not saved"), 400
-        # return jsonify({ "msg": "image stored successfully"}), 200
-        return jsonify(message="image stored successfully"), 200
+        if img_id is None:
+            return None
+        # next, store the img id in the user database somehow
+        return img_id
     
     # def load_file(self):
         #to be continued
@@ -1162,16 +1162,14 @@ def image_upload():
         img_name = secure_filename(img.filename)
         saveImg = MongoFacade()
         resp = saveImg.save_file(img, img_name)
-        print(resp, ",--------wjat the resp")
-        # if(resp.msg == 204):
-        #     print("hitting")
-        # print("resp is not hitting")
-        return jsonify(), 500
+        if resp is not None:
+            return Response(json.dumps({'msg': 'Image saved successfully', 'status': 200}),status=200, mimetype='application/json')
+        else:
+            return Response(status=500, mimetype='application/json')
     else:
-        return jsonify({"msg": "That File Extension is not Allowed"}), 500
+        return Response(status=500, mimetype='application/json')
 
-    data = {'msg': 'success'}
-    return jsonify(data), 200
+    return Response(status=200, mimetype='application/json')
     
 
 
