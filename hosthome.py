@@ -25,6 +25,7 @@ from bson import ObjectId
 import pymongo
 
 import gridfs
+import codecs
 
 from matching.basic_filter import BasicFilter
 
@@ -213,11 +214,20 @@ class MongoFacade:
         img_id = fs.put(img_file, img_name = img_name) #got img id
         if img_id is None:
             return None
+        # if fs.find_one(img_id) is None:
+        #     return "success??"
         # next, store the img id in the user database somehow
         return img_id
     
-    # def load_file(self):
-        #to be continued
+    def load_file(self): #need to pass userId
+        client = self._get_conn()
+        db = client[MONGO_DATABASE]
+        fs = gridfs.GridFS(db)
+        collection = db[collection_name] 
+        #user = collection.find_one() #get user by id and image id
+        #image = fs.get(user[]) #using the user id to find image id
+        #base64_data = codecs.encode(image.read(), "base64") #using codecs to retrieve image
+        #image = base64_data.decode("utf-8")
 
     def _log(self, method_name, message):
         app.logger.debug('MongoFacade:{}: {}'.format(method_name, message))
