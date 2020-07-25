@@ -10,6 +10,7 @@ load_dotenv()
 
 from flask import (
     Flask,
+    flash,
     render_template,
     request,
     Response,
@@ -23,8 +24,15 @@ from flask import (
 from bson import ObjectId
 import pymongo
 
+import gridfs
+import codecs
 
 from matching.basic_filter import BasicFilter
+
+from werkzeug.utils import secure_filename
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'psd'}
+
 
 
 dictConfig({
@@ -133,7 +141,7 @@ class MongoFacade:
             user = collection.find_one({ 'email': email }) #email needs to be replace with request body
             if user is None:
                 return None 
-            user['_id'] = str(user['_id'])
+            user['_id'] = str(user['_id']) #we dont need this line anymore, right?
             self._log('get_collections', 'items = {}'.format(user))
             return user
         except Exception as e:
@@ -195,6 +203,31 @@ class MongoFacade:
 
 
         return result.acknowledged
+    
+    def save_file(self, img_file, img_name):
+        client = self._get_conn()
+        if not client:
+            raise Exception('Mongo server not available')
+        
+        db = client[MONGO_DATABASE]
+        fs = gridfs.GridFS(db)
+        img_id = fs.put(img_file, img_name = img_name) #got img id
+        if img_id is None:
+            return None
+        # if fs.find_one(img_id) is None:
+        #     return "success??"
+        # next, store the img id in the user database somehow
+        return img_id
+    
+    def load_file(self): #need to pass userId
+        client = self._get_conn()
+        db = client[MONGO_DATABASE]
+        fs = gridfs.GridFS(db)
+        collection = db[collection_name] 
+        #user = collection.find_one() #get user by id and image id
+        #image = fs.get(user[]) #using the user id to find image id
+        #base64_data = codecs.encode(image.read(), "base64") #using codecs to retrieve image
+        #image = base64_data.decode("utf-8")
 
     def _log(self, method_name, message):
         app.logger.debug('MongoFacade:{}: {}'.format(method_name, message))
@@ -229,11 +262,10 @@ class Repository:
             safe_item
         )
         return result
-    ########################################attempt
-    def get_using_email(self, email): #pass in the request body here
-        resp = self.mongo_facade.get_user_by_email(self.collection_name, email) ##add the request here
+
+    def get_using_email(self, email): 
+        resp = self.mongo_facade.get_user_by_email(self.collection_name, email) 
         return resp
-    #########################################
 
     def _log(self, method_name, message):
         app.logger.debug('Repository[{}]:{}: {}'.format(self.collection_name, method_name, message))
@@ -1108,6 +1140,47 @@ def get_all_match_results():
 #         resp = Response(js, status=500, mimetype='application/json')
 #         return resp
 
+#########################
+#image upload test route#
+#########################
+
+def allowed_file(filename):
+    if not "." in filename:
+        return False
+    
+    ext = filename.rsplit(".", 1)[1]
+
+    if ext.lower() in ALLOWED_EXTENSIONS:
+        return True
+    else:
+        return False
+
+
+@app.route('/uploadImage', methods=['POST'])
+def image_upload():
+    if 'image' not in request.files:
+        flash('no image file')
+        return Response(status=400, mimetype='application/json')
+    
+    img = request.files["image"]
+    
+    if img.filename == '':
+        flash('no image was selected')
+        return Response(status=400, mimetype='application/json')
+    
+    if img and allowed_file(img.filename):
+        img_name = secure_filename(img.filename)
+        saveImg = MongoFacade()
+        resp = saveImg.save_file(img, img_name)
+        if resp is not None:
+            return Response(json.dumps({'msg': 'Image saved successfully', 'status': 200}),status=200, mimetype='application/json')
+        else:
+            return Response(status=500, mimetype='application/json')
+    else:
+        return Response(status=500, mimetype='application/json')
+
+    return Response(status=200, mimetype='application/json')
+    
 
 
 @app.route('/', defaults={'path': ''})
