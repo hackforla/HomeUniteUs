@@ -4,12 +4,6 @@ import { HostDashboardDataProvider } from '../data/host-context'
 
 import styled from 'styled-components'
 
-const Container = styled.div`
-    margin: 30px auto;
-    padding: 0 15px;
-    max-width: 1140px;
-`
-
 const getQuestions = () => {
     return [
         {
@@ -663,14 +657,11 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
 export const ProfileEditPage = () => {
     return (
         <HostDashboardDataProvider>
-            <Container>
-                <h2>Hello! Answer these questions:</h2>
-                <QuestionPage
-                    stepwise={true}
-                    onSubmit={handleSubmit}
-                    questions={getQuestions()}
-                ></QuestionPage>
-            </Container>
+            <QuestionPage
+                stepwise={true}
+                onSubmit={handleSubmit}
+                questions={getQuestions()}
+            ></QuestionPage>
         </HostDashboardDataProvider>
     )
 }
