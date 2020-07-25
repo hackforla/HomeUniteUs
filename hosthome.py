@@ -127,6 +127,20 @@ class MongoFacade:
         self._log('get_collection', 'item = {}'.format(item))
         return item
 
+    def get_element_by_id2(self, collection_name, id):
+
+        self._log('get_element_by_id', 'acquiring connection...')
+
+        client = self._get_conn()
+
+        db = client[MONGO_DATABASE]
+        collection = db[collection_name]
+        item = collection.find_one({'_id': id})
+
+        item['_id'] = str(item['_id'])
+
+        self._log('get_collection', 'item = {}'.format(item))
+        return item
 
     def get_user_by_email(self, collection_name, email):
         try:
@@ -213,6 +227,10 @@ class Repository:
     def get(self, sort_condition=None):
         items = self.mongo_facade.get_collection(self.collection_name, sort_condition)
         return items
+
+    def get_by_id(self, id):
+        item = self.mongo_facade.get_element_by_id2(self.collection_name, id)
+        return item
 
     def add(self, item):
         result = self.mongo_facade.insert_to_collection(self.collection_name, item)
@@ -1102,11 +1120,53 @@ def get_all_data():
         return resp
 
 
+
+def _populate_children(question):
+
+    children = question['children']
+
+    if question['_id'] == '5f0e62f5769aab8c53ac04ff':
+        return question
+
+    if not children:
+        return question
+    else:
+        for key, childs in children.items():
+            populated_children = []
+
+            ####PREPARE FOR UGLINESS!
+            ####will fix this - stupid data modeling dumbness
+            ####have child values as list sometimes and as id...
+
+            if type(childs) is str:
+                child_question = hostRegisterQuestionsRepository.get_by_id(childs)
+                child_question = _populate_children(child_question)
+                populated_children.append(child_question)
+                question['children'][key] = populated_children
+
+            elif type(childs) is list:
+
+                for child in childs:
+                    if type(child) is list:
+                        continue
+                    child_question = hostRegisterQuestionsRepository.get_by_id(child)
+                    child_question = _populate_children(child_question)
+                    populated_children.append(child_question)
+
+                question['children'][key] = populated_children
+            else:
+                app.logger.debug(f'No clue why type is {type(childs)}')
+
+        return question
+
+
 @app.route('/api/v1/hostRegisterQuestions', methods=['GET'])
 def get_host_register_questions():
 
     try:
-        data = hostRegisterQuestionsRepository.get(sort_condition=[("order",pymongo.ASCENDING)])
+        response = hostRegisterQuestionsRepository.get(sort_condition=[("order",pymongo.ASCENDING)])
+
+        data = [_populate_children(question) for question in response]
 
         # Sample model from client proto
         # {
@@ -1129,7 +1189,6 @@ def get_host_register_questions():
         #    ]
         #} for (i, q) in enumerate(hostQuestions)]
 
-
         js = json.dumps(data)
         resp = Response(js, status=200, mimetype='application/json')
         return resp
@@ -1145,6 +1204,75 @@ def get_host_register_questions():
         resp = Response(js, status=500, mimetype='application/json')
         return resp
 
+
+@app.route('/api/v1/hostRegisterQuestions/<question_id>', methods=['GET','PUT','DELETE'])
+def get_host_register_question_by_id(question_id):
+
+    if request.method == 'GET':
+
+        try:
+            data = hostRegisterQuestionsRepository.get_by_id(question_id)
+            js = json.dumps(data)
+            resp = Response(js, status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+            data = {
+                'test'  : 'failed',
+
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+            return resp
+
+    elif request.method == 'PUT':
+
+        try:
+            responseData = hostRegisterQuestionsRepository.update(question_id, request.json)
+            app.logger.debug('responseData = {}'.format(responseData))
+            resp = Response(json.dumps({'error': None, 'data': None}),
+                            status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    elif request.method == 'DELETE':
+
+        try:
+
+            responseData = hostRegisterQuestionsRepository.delete(question_id)
+            app.logger.debug('responseData = {}'.format(responseData))
+            resp = Response(json.dumps({'error': None, 'data': None}),
+                            status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    else:
+
+        app.logger.debug(f'what is {request.method} even doing here.')
+
+        pass
 
 
 # TODO: Mark for deprecation! no need to dl the whole set for any view in the app
