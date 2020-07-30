@@ -41,7 +41,7 @@ const HostFormDetails: React.FC = () => {
                     onSubmit={handleSubmit}
                     validationSchema={validationSchema}
                 >
-                    {({ dirty, isValid }) => {
+                    {({ dirty, isValid, values }) => {
                         return (
                             <Form>
                                 <div>
@@ -49,10 +49,21 @@ const HostFormDetails: React.FC = () => {
                                     <Field
                                         autoComplete="off"
                                         name="firstName"
-                                        as={TextInput}
+                                        as={TextField}
                                     />
-                                    <ErrorMessage name="firstName" />
+                                    <ErrorMessage name="firstName">
+                                        {(msg) => (
+                                            <div
+                                                style={{
+                                                    color: 'red',
+                                                }}
+                                            >
+                                                {msg}
+                                            </div>
+                                        )}
+                                    </ErrorMessage>
                                 </div>
+
                                 <div>
                                     <label>Middle Name</label>
                                     <Field
@@ -62,6 +73,7 @@ const HostFormDetails: React.FC = () => {
                                     />
                                     <ErrorMessage name="middleName" />
                                 </div>
+
                                 <div>
                                     <label>Last Name</label>
                                     <Field
@@ -69,7 +81,17 @@ const HostFormDetails: React.FC = () => {
                                         name="lastName"
                                         as={TextInput}
                                     />
-                                    <ErrorMessage name="lastName" />
+                                    <ErrorMessage name="lastName">
+                                        {(msg) => (
+                                            <div
+                                                style={{
+                                                    color: 'red',
+                                                }}
+                                            >
+                                                {msg}
+                                            </div>
+                                        )}
+                                    </ErrorMessage>
                                 </div>
                                 <button
                                     type="submit"
@@ -77,6 +99,7 @@ const HostFormDetails: React.FC = () => {
                                 >
                                     Submit
                                 </button>
+                                <pre>{JSON.stringify(values, null, 2)}</pre>
                             </Form>
                         )
                     }}

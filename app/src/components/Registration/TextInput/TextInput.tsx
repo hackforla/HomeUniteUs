@@ -7,7 +7,7 @@ interface Props extends WithStyles<typeof styles> {
     name: string
     value?: string
     label?: string
-    onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void
+    onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void
     placeholder?: string
     type?: string
     autocomplete?: string
@@ -27,9 +27,9 @@ const TextInput = (props: Props) => {
         <>
             <TextField
                 name={name}
-                value={value}
+                // value={value}
                 label={label}
-                onChange={onChange}
+                // onChange={onChange}
                 placeholder={placeholder}
                 type={type}
                 variant={'outlined'}
