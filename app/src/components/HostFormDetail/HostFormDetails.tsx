@@ -190,9 +190,16 @@ const HostFormDetails: React.FC = () => {
                                         marginBottom: '1rem',
                                     }}
                                 />
-                                <div>
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'space-evenly',
+                                    }}
+                                >
                                     <Button>
-                                        <p>U+276E</p> Back
+                                        <p>
+                                            <i className="arrow left"></i>Back
+                                        </p>
                                     </Button>
 
                                     <Button variant="contained" color="primary">
@@ -208,7 +215,6 @@ const HostFormDetails: React.FC = () => {
                                         Save and Continue
                                     </Button>
                                 </div>
-                                {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
                             </Form>
                         )
                     }}
