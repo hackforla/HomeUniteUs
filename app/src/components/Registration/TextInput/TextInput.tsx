@@ -27,9 +27,9 @@ const TextInput = (props: Props) => {
         <>
             <TextField
                 name={name}
-                // value={value}
+                value={value}
                 label={label}
-                // onChange={onChange}
+                onChange={onChange}
                 placeholder={placeholder}
                 type={type}
                 variant={'outlined'}

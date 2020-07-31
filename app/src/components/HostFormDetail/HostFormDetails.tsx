@@ -1,6 +1,6 @@
 import React from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import { Container, TextField } from '@material-ui/core'
+import { Container, TextField, Divider, Button } from '@material-ui/core'
 import * as Yup from 'yup'
 import { TextInput } from '../Registration'
 
@@ -35,7 +35,7 @@ const HostFormDetails: React.FC = () => {
     return (
         <>
             <Container maxWidth="md">
-                <h1>Please enter Name and Date of Birth:</h1>
+                <h1>Please enter your Name and Date of Birth:</h1>
                 <Formik
                     initialValues={initialValues}
                     onSubmit={handleSubmit}
@@ -43,19 +43,42 @@ const HostFormDetails: React.FC = () => {
                 >
                     {({ dirty, isValid, values }) => {
                         return (
-                            <Form>
-                                <div>
-                                    <label>First Name</label>
+                            <Form
+                                style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    // alignItems: 'center',
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        // alignItems: 'center',
+                                        width: '33rem',
+                                    }}
+                                >
+                                    <label
+                                        style={{
+                                            marginBottom: '0.7rem',
+                                            fontSize: '18px',
+                                        }}
+                                    >
+                                        First Name
+                                    </label>
                                     <Field
                                         autoComplete="off"
                                         name="firstName"
-                                        as={TextField}
+                                        variant="outlined"
+                                        as={TextField} //error doesnt show when using arshia mui textInput
+                                        style={{ marginBottom: '1.5rem' }}
                                     />
                                     <ErrorMessage name="firstName">
                                         {(msg) => (
                                             <div
                                                 style={{
                                                     color: 'red',
+                                                    marginBottom: '1rem',
                                                 }}
                                             >
                                                 {msg}
@@ -64,28 +87,60 @@ const HostFormDetails: React.FC = () => {
                                     </ErrorMessage>
                                 </div>
 
-                                <div>
-                                    <label>Middle Name</label>
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        // alignItems: 'center',
+                                        width: '33rem',
+                                    }}
+                                >
+                                    <label
+                                        style={{
+                                            marginBottom: '0.7rem',
+                                            fontSize: '18px',
+                                        }}
+                                    >
+                                        Middle Name
+                                    </label>
                                     <Field
                                         autoComplete="off"
                                         name="middleName"
-                                        as={TextInput}
+                                        variant="outlined"
+                                        as={TextField}
+                                        style={{ marginBottom: '1.5rem' }}
                                     />
-                                    <ErrorMessage name="middleName" />
                                 </div>
 
-                                <div>
-                                    <label>Last Name</label>
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        // alignItems: 'center',
+                                        width: '33rem',
+                                    }}
+                                >
+                                    <label
+                                        style={{
+                                            marginBottom: '0.7rem',
+                                            fontSize: '18px',
+                                        }}
+                                    >
+                                        Last Name
+                                    </label>
                                     <Field
                                         autoComplete="off"
                                         name="lastName"
-                                        as={TextInput}
+                                        variant="outlined"
+                                        as={TextField}
+                                        style={{ marginBottom: '1.5rem' }}
                                     />
                                     <ErrorMessage name="lastName">
                                         {(msg) => (
                                             <div
                                                 style={{
                                                     color: 'red',
+                                                    marginBottom: '1rem',
                                                 }}
                                             >
                                                 {msg}
@@ -93,13 +148,67 @@ const HostFormDetails: React.FC = () => {
                                         )}
                                     </ErrorMessage>
                                 </div>
-                                <button
-                                    type="submit"
-                                    disabled={!dirty || !isValid}
+
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        // alignItems: 'center',
+                                        width: '33rem',
+                                    }}
                                 >
-                                    Submit
-                                </button>
-                                <pre>{JSON.stringify(values, null, 2)}</pre>
+                                    <label
+                                        style={{
+                                            marginBottom: '0.7rem',
+                                            fontSize: '18px',
+                                        }}
+                                    >
+                                        MM/DD/YYYY
+                                    </label>
+                                    <Field
+                                        autoComplete="off"
+                                        name="dateofBirth"
+                                        variant="outlined"
+                                        as={TextField}
+                                        style={{ marginBottom: '1.5rem' }}
+                                    />
+                                    <ErrorMessage name="dateofBirth">
+                                        {(msg) => (
+                                            <div
+                                                style={{
+                                                    color: 'red',
+                                                    marginBottom: '1rem',
+                                                }}
+                                            >
+                                                {msg}
+                                            </div>
+                                        )}
+                                    </ErrorMessage>
+                                </div>
+                                <Divider
+                                    style={{
+                                        marginBottom: '1rem',
+                                    }}
+                                />
+                                <div>
+                                    <Button>
+                                        <p>U+276E</p> Back
+                                    </Button>
+
+                                    <Button variant="contained" color="primary">
+                                        Skip for Now
+                                    </Button>
+
+                                    <Button
+                                        type="submit"
+                                        disabled={!dirty || !isValid}
+                                        variant="contained"
+                                        color="primary"
+                                    >
+                                        Save and Continue
+                                    </Button>
+                                </div>
+                                {/* <pre>{JSON.stringify(values, null, 2)}</pre> */}
                             </Form>
                         )
                     }}
