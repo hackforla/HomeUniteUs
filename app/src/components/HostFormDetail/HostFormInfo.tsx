@@ -28,7 +28,7 @@ const validationSchema = Yup.object().shape({
         .max(new Date(), 'Birth cannot be in the future'),
 })
 
-const HostFormDetails: React.FC = () => {
+const HostFormInfo: React.FC = () => {
     const handleSubmit = (values: FormValues): void => {
         alert(JSON.stringify(values))
     }
@@ -224,4 +224,4 @@ const HostFormDetails: React.FC = () => {
     )
 }
 
-export default HostFormDetails
+export default HostFormInfo

@@ -18,7 +18,7 @@ export const Header = () => {
                 </a>
             </AppStyle.FlexGrowHolder>
             <AppStyle.Holder>
-                <NavLink to={`/hostDetailsForm`}>HostDetailsForm</NavLink>
+                <NavLink to={`/hostformaddress`}>Address Contact</NavLink>
             </AppStyle.Holder>
             <AppStyle.Holder>
                 <NavLink to={`/demo`}>DEMO</NavLink>
