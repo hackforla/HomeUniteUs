@@ -15,7 +15,7 @@ import {
 import { AllHosts } from './pages/Admin/AllHosts'
 import ProfileSelection from './pages/ProfileSelection/ProfileSelection'
 import FourOhFour from './pages/FourOhFour'
-import HostFormAddress from './components/HostFormDetail/HostFormAddress'
+import HostFormAddress from './components/HostFormDetail/HostFormContact'
 
 export default function Routes() {
     return (

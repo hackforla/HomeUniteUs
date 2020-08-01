@@ -2,31 +2,33 @@ import React from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { Container, TextField, Divider, Button } from '@material-ui/core'
 import * as Yup from 'yup'
-import { TextInput } from '../Registration'
+import { TextInput } from '../Registration/TextInput'
 
 interface FormValues {
-    address: string
-    address2?: string
-    city: string
-    state: string
-    zipcode: number
+    email: string
+    phoneNumber: number
+    cellNumber: number
 }
 
 const initialValues: FormValues = {
-    address: '',
-    address2: '',
-    city: '',
-    state: '',
-    zipcode: 0,
+    email: '',
+    phoneNumber: NaN,
+    cellNumber: NaN,
 }
 
-const validationSchema = Yup.object().shape({
-    address: Yup.string().min(2, 'Too Short!').required('Required'),
-    address2: Yup.string(),
-    city: Yup.string().min(1, 'Too Short!').required('Required'),
-    state: Yup.string().min(2, 'Too Short!').required('Required'),
-    zipcode: Yup.number().min(2, 'Too Short!').required('Required'),
-})
+const validationSchema = Yup.object()
+    .shape({
+        email: Yup.string()
+            .email('Not a valid Email input')
+            .required('Required'),
+        phoneNumber: Yup.number().min(10, 'Too Short!'),
+        cellNumber: Yup.number().min(10, 'Too Short!').required('Required'),
+    })
+    .test(
+        'at least one number',
+        'you must provide at least one number',
+        (value) => !!(value.cellNumber || value.phoneNumber)
+    )
 
 const HostFormAddress: React.FC = () => {
     const handleSubmit = (values: FormValues): void => {
@@ -35,7 +37,7 @@ const HostFormAddress: React.FC = () => {
     return (
         <>
             <Container maxWidth="md">
-                <h1>Please enter your Address here:</h1>
+                <h1>Please provide your Contact Information:</h1>
                 <Formik
                     initialValues={initialValues}
                     onSubmit={handleSubmit}
@@ -62,16 +64,16 @@ const HostFormAddress: React.FC = () => {
                                             fontSize: '18px',
                                         }}
                                     >
-                                        Street Address
+                                        Email Address
                                     </label>
                                     <Field
                                         autoComplete="off"
-                                        name="address"
+                                        name="email"
                                         variant="outlined"
                                         as={TextField} //error doesnt show when using arshia mui textInput
                                         style={{ marginBottom: '1.5rem' }}
                                     />
-                                    <ErrorMessage name="address">
+                                    <ErrorMessage name="email">
                                         {(msg) => (
                                             <div
                                                 style={{
@@ -98,121 +100,16 @@ const HostFormAddress: React.FC = () => {
                                             fontSize: '18px',
                                         }}
                                     >
-                                        Street Address 2
+                                        Home Phone Number
                                     </label>
                                     <Field
                                         autoComplete="off"
-                                        name="address2"
+                                        name="phoneNumber"
                                         variant="outlined"
                                         as={TextField}
                                         style={{ marginBottom: '1.5rem' }}
                                     />
-                                </div>
-
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        width: '33rem',
-                                        justifyContent: 'space-between',
-                                    }}
-                                >
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                        }}
-                                    >
-                                        <label
-                                            style={{
-                                                marginBottom: '0.7rem',
-                                                fontSize: '18px',
-                                            }}
-                                        >
-                                            City
-                                        </label>
-                                        <Field
-                                            autoComplete="off"
-                                            name="city"
-                                            variant="outlined"
-                                            as={TextField}
-                                            style={{ marginBottom: '1.5rem' }}
-                                        />
-                                        <ErrorMessage name="city">
-                                            {(msg) => (
-                                                <div
-                                                    style={{
-                                                        color: 'red',
-                                                        marginBottom: '1rem',
-                                                    }}
-                                                >
-                                                    {msg}
-                                                </div>
-                                            )}
-                                        </ErrorMessage>
-                                    </div>
-
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                        }}
-                                    >
-                                        <label
-                                            style={{
-                                                marginBottom: '0.7rem',
-                                                fontSize: '18px',
-                                            }}
-                                        >
-                                            State
-                                        </label>
-                                        <Field
-                                            autoComplete="off"
-                                            name="state"
-                                            variant="outlined"
-                                            as={TextField}
-                                            style={{
-                                                marginBottom: '1.5rem',
-                                            }}
-                                        />
-                                        <ErrorMessage name="state">
-                                            {(msg) => (
-                                                <div
-                                                    style={{
-                                                        color: 'red',
-                                                        marginBottom: '1rem',
-                                                    }}
-                                                >
-                                                    {msg}
-                                                </div>
-                                            )}
-                                        </ErrorMessage>
-                                    </div>
-                                </div>
-
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        width: '13rem',
-                                    }}
-                                >
-                                    <label
-                                        style={{
-                                            marginBottom: '0.7rem',
-                                            fontSize: '18px',
-                                        }}
-                                    >
-                                        Zip Code
-                                    </label>
-                                    <Field
-                                        autoComplete="off"
-                                        name="zipcode"
-                                        variant="outlined"
-                                        as={TextField}
-                                        style={{ marginBottom: '1.5rem' }}
-                                    />
-                                    <ErrorMessage name="zipcode">
+                                    <ErrorMessage name="phoneNumber">
                                         {(msg) => (
                                             <div
                                                 style={{
@@ -225,6 +122,43 @@ const HostFormAddress: React.FC = () => {
                                         )}
                                     </ErrorMessage>
                                 </div>
+
+                                <div
+                                    style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        width: '33rem',
+                                    }}
+                                >
+                                    <label
+                                        style={{
+                                            marginBottom: '0.7rem',
+                                            fontSize: '18px',
+                                        }}
+                                    >
+                                        Cell Phone Number
+                                    </label>
+                                    <Field
+                                        autoComplete="off"
+                                        name="cellNumber"
+                                        variant="outlined"
+                                        as={TextField}
+                                        style={{ marginBottom: '1.5rem' }}
+                                    />
+                                    <ErrorMessage name="cellNumber">
+                                        {(msg) => (
+                                            <div
+                                                style={{
+                                                    color: 'red',
+                                                    marginBottom: '1rem',
+                                                }}
+                                            >
+                                                {msg}
+                                            </div>
+                                        )}
+                                    </ErrorMessage>
+                                </div>
+
                                 <Divider
                                     style={{
                                         marginBottom: '1rem',
