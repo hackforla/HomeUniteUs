@@ -1,8 +1,8 @@
 import React from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import { Container, TextField, Divider, Button } from '@material-ui/core'
+import { Container, TextField, Divider, Button, Paper } from '@material-ui/core'
 import * as Yup from 'yup'
-import { TextInput } from '../Registration/TextInput'
+// import { TextInput } from '../Registration/TextInput'
 
 interface FormValues {
     email: string
@@ -157,6 +157,24 @@ const HostFormAddress: React.FC = () => {
                                             </div>
                                         )}
                                     </ErrorMessage>
+                                </div>
+
+                                <div
+                                    style={{
+                                        border: '1px solid orange',
+                                        width: '14rem',
+                                    }}
+                                >
+                                    <h5>Reorder best forms of Contact</h5>
+                                    <div
+                                        style={{
+                                            height: '100%',
+                                        }}
+                                    >
+                                        <Paper>
+                                            <h3>hello</h3>
+                                        </Paper>
+                                    </div>
                                 </div>
 
                                 <Divider
