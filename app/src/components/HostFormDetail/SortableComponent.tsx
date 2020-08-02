@@ -4,7 +4,7 @@ import arrayMove from 'array-move'
 import { Card } from '@material-ui/core'
 
 const SortableItem = SortableElement((props: any) => (
-    <div style={{ border: '1px solid red' }}>
+    <div>
         <Card>{props.value}</Card>
     </div>
 ))
@@ -29,7 +29,15 @@ function SortableComponent() {
         'SMS',
         'Phone Call',
     ])
-    return <SortableList items={contactOrder} />
+
+    const onSortEnd = (props: any) => {
+        // setState(({items}) => ({
+        //   items: arrayMove(items, oldIndex, newIndex),
+        // }));
+        setContactOrder(arrayMove(contactOrder, props.oldIndex, props.newIndex))
+    }
+
+    return <SortableList items={contactOrder} onSortEnd={onSortEnd} />
 }
 
 export default SortableComponent
