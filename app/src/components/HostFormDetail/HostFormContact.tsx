@@ -1,7 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import { Container, TextField, Divider, Button, Paper } from '@material-ui/core'
+import {
+    Container,
+    TextField,
+    Divider,
+    Button,
+    Paper,
+    Typography,
+} from '@material-ui/core'
 import * as Yup from 'yup'
+import SortableComponent from './SortableComponent'
+
 // import { TextInput } from '../Registration/TextInput'
 
 interface FormValues {
@@ -31,13 +40,21 @@ const validationSchema = Yup.object()
     )
 
 const HostFormAddress: React.FC = () => {
+    const [contactOrder, setContactOrder] = useState([
+        'Email',
+        'SMS',
+        'Phone Call',
+    ])
+
     const handleSubmit = (values: FormValues): void => {
         alert(JSON.stringify(values))
     }
     return (
         <>
             <Container maxWidth="md">
-                <h1>Please provide your Contact Information:</h1>
+                <Typography variant="h4">
+                    Please provide your Contact Information:
+                </Typography>
                 <Formik
                     initialValues={initialValues}
                     onSubmit={handleSubmit}
@@ -161,20 +178,13 @@ const HostFormAddress: React.FC = () => {
 
                                 <div
                                     style={{
-                                        border: '1px solid orange',
-                                        width: '14rem',
+                                        width: '17.6rem',
                                     }}
                                 >
-                                    <h5>Reorder best forms of Contact</h5>
-                                    <div
-                                        style={{
-                                            height: '100%',
-                                        }}
-                                    >
-                                        <Paper>
-                                            <h3>hello</h3>
-                                        </Paper>
-                                    </div>
+                                    <Typography variant="h6">
+                                        Reorder best forms of Contact
+                                    </Typography>
+                                    <SortableComponent />
                                 </div>
 
                                 <Divider
