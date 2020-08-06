@@ -7,7 +7,7 @@ interface Props extends WithStyles<typeof styles> {
     name: string
     value?: string
     label?: string
-    onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void
+    onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void
     placeholder?: string
     type?: string
     autocomplete?: string
