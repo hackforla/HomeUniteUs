@@ -2,7 +2,6 @@
 import * as React from 'react'
 import { Route, Switch, NavLink, useParams, useHistory } from 'react-router-dom'
 import * as AppStyle from './AppStyle'
-import logo from './img/masterSpyLogo3.png'
 import Routes from './Routes'
 import { HostHomeDataProvider } from './data/data-context'
 import { Guest } from './models'
