@@ -2,13 +2,13 @@ import * as React from 'react'
 import { useParams, useHistory } from 'react-router'
 import { useHostHomeData } from '../../data/data-context'
 import { ProgressPlugin } from 'webpack'
-import { QuestionType } from '../../models/QuestionType'
+import { MatchingQuestionType } from '../../models/MatchingQuestionType'
 import styled from 'styled-components'
 import * as Fields from '../Registration/index'
 
 interface Props {
     index: number
-    question: QuestionType
+    question: MatchingQuestionType
     setAnswer: (index: number, value: any) => void
 }
 
@@ -17,7 +17,7 @@ const QuestionLabel = styled.label`
     display: block;
 `
 
-const Question = (props: Props) => {
+const MatchingQuestion = (props: Props) => {
     const { question } = props
 
     function handleChange(
@@ -77,4 +77,4 @@ const Question = (props: Props) => {
     )
 }
 
-export default Question
+export default MatchingQuestion
