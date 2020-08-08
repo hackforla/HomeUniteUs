@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { QuestionType } from '../models/QuestionType'
-import { ResponseValue } from '../models/ResponseValue'
 import { HostResponse } from '../models/HostResponse'
 import { ApiWrapper } from './ApiWrapper'
 
@@ -161,6 +160,11 @@ export function useHostDashboardData() {
 
     const postHostResponse = (hostResponse: HostResponse) => {
         console.log(`postHostResponse: ${hostResponse} `)
+        try {
+            //dispatch begin
+            //await post
+            //dispatch end
+        } catch (e) {}
     }
 
     const [data, dispatch] = context as [
