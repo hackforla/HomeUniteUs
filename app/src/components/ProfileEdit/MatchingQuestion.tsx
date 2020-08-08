@@ -4,7 +4,7 @@ import { useHostHomeData } from '../../data/data-context'
 import { ProgressPlugin } from 'webpack'
 import { MatchingQuestionType } from '../../models/MatchingQuestionType'
 import styled from 'styled-components'
-import * as Fields from '../Registration/index'
+import * as Fields from '../Registration'
 
 interface Props {
     index: number

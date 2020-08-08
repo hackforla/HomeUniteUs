@@ -86,7 +86,9 @@ export const QuestionPage = (props: Props) => {
 
     const [state, setState] = React.useState(initialState)
 
-    const isNestedActive = (question: ShowstopperQuestionType|MatchingQuestionType) => {
+    const isNestedActive = (
+        question: ShowstopperQuestionType | MatchingQuestionType
+    ) => {
         if (
             !('conditional_id' in question) ||
             !('conditional_value' in question) ||
@@ -95,7 +97,10 @@ export const QuestionPage = (props: Props) => {
         ) {
             return true
         }
-        let parentQuestion : ShowstopperQuestionType|MatchingQuestionType|undefined
+        let parentQuestion:
+            | ShowstopperQuestionType
+            | MatchingQuestionType
+            | undefined
         for (let i = 0; i < state.questions.length; i += 1) {
             if (state.questions[i].id === question.conditional_id) {
                 parentQuestion = state.questions[i]
@@ -103,7 +108,7 @@ export const QuestionPage = (props: Props) => {
             }
         }
         if (!parentQuestion) return true
-        if (('type' in parentQuestion) && parentQuestion.type === 'checkbox') {
+        if ('type' in parentQuestion && parentQuestion.type === 'checkbox') {
             if (!parentQuestion.answer) return false
             return parentQuestion.answer[question.conditional_value]
         } else {
@@ -112,7 +117,9 @@ export const QuestionPage = (props: Props) => {
     }
 
     // get group structure
-    let groups: Array<Array<Array<ShowstopperQuestionType|MatchingQuestionType>>> = []
+    let groups: Array<Array<
+        Array<ShowstopperQuestionType | MatchingQuestionType>
+    >> = []
     let groupI = 0
     let subgroupI = 0
     for (let i = 0; i < state.questions.length; i += 1) {
@@ -209,7 +216,9 @@ export const QuestionPage = (props: Props) => {
                                 key={i + 1}
                                 active={state.groupIndex >= i}
                                 group={group[0][0].group || ''}
-                                left={((i + 1) / (groups.length + 1)) * 100 + '%'}
+                                left={
+                                    ((i + 1) / (groups.length + 1)) * 100 + '%'
+                                }
                             ></IconContainer>
                         )
                     })}
@@ -234,45 +243,62 @@ export const QuestionPage = (props: Props) => {
 
                                         {groups[state.groupIndex][
                                             state.subgroupIndex
-                                        ].map((question: ShowstopperQuestionType|MatchingQuestionType) => {
-                                            const index = state.questions.indexOf(
-                                                question
-                                            )
-                                            return ('type' in question) ?
-                                                (<MatchingQuestion
-                                                    key={index}
-                                                    index={index}
-                                                    question={question}
-                                                    setAnswer={setAnswer}
-                                                ></MatchingQuestion>) :
-                                                (<ShowstopperQuestion
-                                                    key={index}
-                                                    index={index}
-                                                    question={question}
-                                                    setAnswer={setAnswer}
-                                                ></ShowstopperQuestion>)
-                                        })}
+                                        ].map(
+                                            (
+                                                question:
+                                                    | ShowstopperQuestionType
+                                                    | MatchingQuestionType
+                                            ) => {
+                                                const index = state.questions.indexOf(
+                                                    question
+                                                )
+                                                return 'type' in question ? (
+                                                    <MatchingQuestion
+                                                        key={index}
+                                                        index={index}
+                                                        question={question}
+                                                        setAnswer={setAnswer}
+                                                    ></MatchingQuestion>
+                                                ) : (
+                                                    <ShowstopperQuestion
+                                                        key={index}
+                                                        index={index}
+                                                        question={question}
+                                                        setAnswer={setAnswer}
+                                                    ></ShowstopperQuestion>
+                                                )
+                                            }
+                                        )}
                                     </>
                                 ) : (
                                     state.questions.map(
-                                        (question: ShowstopperQuestionType|MatchingQuestionType, i) =>
+                                        (
+                                            question:
+                                                | ShowstopperQuestionType
+                                                | MatchingQuestionType,
+                                            i
+                                        ) =>
                                             isNestedActive(question) && (
                                                 <Box my={5}>
-                                                {
-                                                ('type' in question) ?
-                                                    (<MatchingQuestion
-                                                        key={i}
-                                                        index={i}
-                                                        question={question}
-                                                        setAnswer={setAnswer}
-                                                    ></MatchingQuestion>) :
-                                                    (<ShowstopperQuestion
-                                                        key={i}
-                                                        index={i}
-                                                        question={question}
-                                                        setAnswer={setAnswer}
-                                                    ></ShowstopperQuestion>)
-                                                }
+                                                    {'type' in question ? (
+                                                        <MatchingQuestion
+                                                            key={i}
+                                                            index={i}
+                                                            question={question}
+                                                            setAnswer={
+                                                                setAnswer
+                                                            }
+                                                        ></MatchingQuestion>
+                                                    ) : (
+                                                        <ShowstopperQuestion
+                                                            key={i}
+                                                            index={i}
+                                                            question={question}
+                                                            setAnswer={
+                                                                setAnswer
+                                                            }
+                                                        ></ShowstopperQuestion>
+                                                    )}
                                                 </Box>
                                             )
                                     )

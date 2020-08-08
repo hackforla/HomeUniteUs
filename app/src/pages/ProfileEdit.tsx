@@ -4,6 +4,30 @@ import { HostDashboardDataProvider } from '../data/host-context'
 
 import styled from 'styled-components'
 
+/*
+
+    TODO: Divide this component
+        - the reusable portion, <QuestionPage />, and the user-type-specific portion,
+            <HostDashBoardProvider /> vs <GuestDashBoardProvider />
+            ...cleanest approach would have three layers
+
+            ///// TOP LEVEL: This component routed to from top Router
+            /////   this can contain the progress bar UI
+            <HostRegistration>
+                <HostDashBoardProvider>
+                     //// SUB ROUTER
+                     <Switch>
+                          ///// within each of these componenets, access the correct context via hook
+                          ///// <Routes /> for BIO/CONTACT form
+                          ///// <Routes /> for Qualifying questions by ID
+                          ///// <Routes /> for Matching questions by ID
+                     </Switch>
+                </HostDashBoardProvider>
+            </HostRegistration>
+    
+
+*/
+
 const getShowstopperQuestions = () => {
     return [
         {

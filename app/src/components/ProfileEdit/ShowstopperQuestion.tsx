@@ -4,7 +4,7 @@ import { useHostHomeData } from '../../data/data-context'
 import { ProgressPlugin } from 'webpack'
 import { ShowstopperQuestionType } from '../../models/ShowstopperQuestionType'
 import styled from 'styled-components'
-import * as Fields from '../Registration/index'
+import * as Fields from '../Registration'
 
 interface Props {
     index: number
@@ -20,9 +20,7 @@ const QuestionLabel = styled.label`
 const ShowstopperQuestion = (props: Props) => {
     const { question } = props
 
-    function handleChange(
-        e: React.ChangeEvent<HTMLInputElement>
-    ) {
+    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         props.setAnswer(props.index, e.target.value)
     }
 
@@ -35,8 +33,8 @@ const ShowstopperQuestion = (props: Props) => {
                     name={question.id}
                     value={question.answer || ''}
                     options={[
-                        {label: 'Yes', value: 'yes'},
-                        {label: 'No', value: 'no'}
+                        { label: 'Yes', value: 'yes' },
+                        { label: 'No', value: 'no' },
                     ]}
                     onChange={handleChange}
                 />
