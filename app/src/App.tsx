@@ -26,7 +26,7 @@ export const LoginView = () => {
     return (
         <AppStyle.AuthHolder>
             <AppStyle.AuthButton href="" onClick={onLoginClick}>
-                Login to Host Homes
+                Login to Home Unite Us
             </AppStyle.AuthButton>
         </AppStyle.AuthHolder>
     )
@@ -40,18 +40,17 @@ export const App = () => {
         <React.Fragment>
             {isInitializing ? (
                 <div>Loading...</div>
-            ) : isAuthenticated 
-            ? ( 
-                    <HostHomeDataProvider>
+            ) : isAuthenticated ? (
+                <HostHomeDataProvider>
+                    <React.Fragment>
+                        <Header />
                         <React.Fragment>
-                            <Header />
-                            <React.Fragment>
-                                <Routes />
-                            </React.Fragment>
+                            <Routes />
                         </React.Fragment>
-                    </HostHomeDataProvider>
+                    </React.Fragment>
+                </HostHomeDataProvider>
             ) : (
-            <LoginView />
+                <LoginView />
             )}
         </React.Fragment>
     )
