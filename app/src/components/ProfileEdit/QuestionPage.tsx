@@ -35,7 +35,7 @@ const IconContainer = styled.div`
 `
 
 export const QuestionPage = (props: Props) => {
-    const { data } = useHostDashboardData()
+    const { data, postHostResponse } = useHostDashboardData()
     console.log('testing custom hook', data)
 
     // sort by order
@@ -137,7 +137,7 @@ export const QuestionPage = (props: Props) => {
         }
     }
 
-    const clickForward = () => {
+    const clickForward = async () => {
         if (state.subgroupIndex < groups[state.groupIndex].length - 1) {
             setState({ ...state, subgroupIndex: state.subgroupIndex + 1 })
         } else if (state.groupIndex < groups.length - 1) {
@@ -148,6 +148,18 @@ export const QuestionPage = (props: Props) => {
             })
         } else {
             setState({ ...state, submitPage: true })
+        }
+
+        // if answer is set
+        try {
+            let testResponse = {
+                questionId: 1,
+                hostId: 1,
+                responseValues: [1],
+            }
+            await postHostResponse(testResponse)
+        } catch (e) {
+            console.log('failed to  post answer')
         }
     }
 

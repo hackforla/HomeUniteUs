@@ -20,7 +20,6 @@ enum HostDashboardActionType {
     FinishFetchQuestions,
     GetHostById,
     isLoading,
-    setHostResponse,
     BeginPostResponse,
     FinishPostResponse,
     Error,
@@ -87,12 +86,7 @@ function hostDashboardReducer(
                 },
             }
         }
-        case HostDashboardActionType.setHostResponse: {
-            return {
-                ...state,
-                hostResponse: action.payload as HostResponse,
-            }
-        }
+
         default:
             throw new Error(`Unsupported action: ${JSON.stringify(action)}`)
     }
@@ -114,7 +108,7 @@ export function HostDashboardDataProvider(
             try {
                 dispatch({
                     type: HostDashboardActionType.BeginFetchQuestions,
-                    payload: 'loading',
+                    payload: 'Retrieving host questions...',
                 })
                 const questions = await hostsFetcher.getHostQuestions()
 
@@ -144,20 +138,6 @@ export function useHostDashboardData() {
         )
     }
 
-    //function + state currently lives in component
-    const setResponse = (event: any) => {
-        //hard coded
-        const response = {
-            questionId: 1,
-            hostId: 1,
-            responseValues: [event.target.value],
-        }
-        return dispatch({
-            type: HostDashboardActionType.setHostResponse,
-            payload: response,
-        })
-    }
-
     const postHostResponse = (hostResponse: HostResponse) => {
         console.log(`postHostResponse: ${hostResponse} `)
         try {
@@ -175,7 +155,6 @@ export function useHostDashboardData() {
     return {
         data,
         dispatch,
-        setResponse,
         postHostResponse,
     }
 }

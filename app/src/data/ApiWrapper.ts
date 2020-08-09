@@ -2,6 +2,7 @@ import { ApiConfig } from './config'
 import { Guest, Host } from '../models' //for some reason accounts wont import here?
 import { Accounts } from '../models/Accounts'
 import { QuestionType } from '../models/QuestionType'
+import { ResponseValue } from '../models/ResponseValue'
 
 class ApiFetchError extends Error {}
 
@@ -74,7 +75,8 @@ export class Fetcher<T> {
         return (await getJson(`${this.endpoint}/${id}`)) as T
     }
 
-    public async putById(id: string, item: T): Promise<string> {
+    // item type T
+    public async putById(id: string, item: object): Promise<string> {
         return (await putJson(
             `${this.endpoint}/${id}`,
             JSON.stringify(item)
@@ -85,10 +87,12 @@ export class Fetcher<T> {
 export class ApiWrapper {
     private guestFetcher: Fetcher<Guest>
     private hostQuestionsFetcher: Fetcher<QuestionType>
+    private hostQuestionsPost: Fetcher<string>
 
     public constructor() {
         this.guestFetcher = new Fetcher<Guest>('guests')
         this.hostQuestionsFetcher = new Fetcher<QuestionType>('v1/questions')
+        this.hostQuestionsPost = new Fetcher<string>('hosts')
     }
 
     // Guests
@@ -107,5 +111,12 @@ export class ApiWrapper {
     // Hosts
     public async getHostQuestions(): Promise<Array<QuestionType>> {
         return await this.hostQuestionsFetcher.getAll()
+    }
+
+    public async postHostQuestion(
+        id: string,
+        item: ResponseValue
+    ): Promise<string> {
+        return await this.hostQuestionsPost.putById(id, item)
     }
 }
