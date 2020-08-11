@@ -1,14 +1,16 @@
 import React, { useRef, useState } from 'react'
-import { Button } from '@material-ui/core'
+import { Button, Box, Paper } from '@material-ui/core'
 // import Button from '../Registration/Button/Button'
 
 function UploadImageButton() {
     const [selectedImage, setSelectedImage]: any = useState()
+    const img: any = useRef('empty')
 
     const imageSelectHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         const target = event?.target as HTMLInputElement
         const file: File = (target.files as FileList)[0] //this only selects the first one, gotta change it
         // setSelectedImage(file) //old way
+        img.current.innerText = file.name
     }
 
     // const fileUploadHandler = async () => {
@@ -27,7 +29,19 @@ function UploadImageButton() {
 
     return (
         <>
-            <div style={{ border: '1px solid orange', height: '10%' }}>
+            <Box
+                boxShadow={3}
+                display="flex"
+                justifyContent="center"
+                alignContent="center"
+                alignItems="center"
+                width={1 / 2}
+            >
+                <div>Div one</div>
+
+                <div>Div two</div>
+            </Box>
+            {/* <div style={{ border: '1px solid orange' }}>
                 <Button variant="contained" color="primary" component="label">
                     Browse
                     <input
@@ -38,13 +52,17 @@ function UploadImageButton() {
                         style={{ display: 'none' }}
                     />
                 </Button>
-                {/* <button onClick={fileUploadHandler}>Upload</button> */}
-            </div>
+                <p ref={img}></p>
+            </div> */}
         </>
     )
 }
 
 export default UploadImageButton
+
+{
+    /* <button onClick={fileUploadHandler}>Upload</button> */
+} //might put back when needed
 
 {
     /* <input
