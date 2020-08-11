@@ -33,8 +33,6 @@ function UploadImageButton() {
                 boxShadow={3}
                 display="flex"
                 justifyContent="center"
-                alignContent="center"
-                alignItems="center"
                 width={1 / 2}
             >
                 <div>Div one</div>
