@@ -18,6 +18,7 @@ import FourOhFour from './pages/FourOhFour'
 import HostFormAddress from './components/HostFormDetail/HostFormContact'
 import { GuestRegistration } from './pages/GuestRegistration/GuestRegistration'
 import { HostRegistration } from './pages/HostRegistration/HostRegistration'
+import ImageUploadComponent from './components/UploadImage/ImageUploadComponent'
 
 export default function Routes() {
     return (
@@ -40,6 +41,7 @@ export default function Routes() {
                 component={ProfileSelection}
             />
             <Route path="/hostformaddress" component={HostFormAddress} />
+            <Route path="/uploadImage" component={ImageUploadComponent} />
             {/*testing ^^^*/}
             <Route path="/guest/register" component={GuestRegistration} />
             <Route path="/host/register" component={HostRegistration} />

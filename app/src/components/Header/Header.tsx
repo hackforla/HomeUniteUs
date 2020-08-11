@@ -39,6 +39,9 @@ export const Header = () => {
             </AppStyle.Holder> 
             */}
             <AppStyle.Holder>
+                <NavLink to={`/uploadImage`}>Image Upload</NavLink>
+            </AppStyle.Holder>
+            <AppStyle.Holder>
                 <NavLink to={`/profileselection`}>Register</NavLink>
             </AppStyle.Holder>
             <AppStyle.Holder>
