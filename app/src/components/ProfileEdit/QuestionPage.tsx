@@ -150,7 +150,6 @@ export const QuestionPage = (props: Props) => {
             setState({ ...state, submitPage: true })
         }
 
-        // if answer is set
         try {
             let testResponse = {
                 questionId: 1,
