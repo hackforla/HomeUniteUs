@@ -54,7 +54,7 @@ const HostFormAddress: React.FC = () => {
     return (
         <>
             <Container maxWidth="md">
-                <Typography variant="h4">
+                <Typography variant="h5">
                     Please provide your Contact Information:
                 </Typography>
                 <br />
