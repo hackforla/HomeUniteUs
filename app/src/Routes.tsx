@@ -15,8 +15,9 @@ import {
 import { AllHosts } from './pages/Admin/AllHosts'
 import ProfileSelection from './pages/ProfileSelection/ProfileSelection'
 import FourOhFour from './pages/FourOhFour'
-import HostFormAddress from './components/HostFormDetail/HostFormContact'
-import HostFormInfo from './components/HostFormDetail/HostFormInfo'
+// import HostFormAddress from './components/HostFormDetail/HostFormContact' //delete
+import HostFormAddress from './components/HostFormDetail/HostFormAddress' //delete
+// import HostFormInfo from './components/HostFormDetail/HostFormInfo' //delete
 import { GuestRegistration } from './pages/GuestRegistration/GuestRegistration'
 import { HostRegistration } from './pages/HostRegistration/HostRegistration'
 import ImageUploadComponent from './components/UploadImage/ImageUploadComponent'
@@ -41,7 +42,7 @@ export default function Routes() {
                 path="/profileselection"
                 component={ProfileSelection}
             />
-            <Route path="/hostformaddress" component={HostFormInfo} />
+            <Route path="/hostformaddress" component={HostFormAddress} />
             <Route path="/uploadImage" component={ImageUploadComponent} />
             {/*testing ^^^*/}
             <Route path="/guest/register" component={GuestRegistration} />

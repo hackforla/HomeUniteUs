@@ -194,21 +194,41 @@ const HostFormAddress: React.FC = () => {
                                 <Divider
                                     style={{
                                         marginBottom: '1rem',
+                                        width: '44.6vw',
                                     }}
                                 />
                                 <div
                                     style={{
                                         display: 'flex',
-                                        justifyContent: 'space-evenly',
-                                        marginBottom: '1.5rem',
+                                        justifyContent: 'flex-start',
                                     }}
                                 >
-                                    <Button style={{ verticalAlign: 'middle' }}>
-                                        <ArrowBackIosIcon /> Back
+                                    <Button>
+                                        <span
+                                            style={{
+                                                padding:
+                                                    '0.4rem 1.3rem 0.4rem 1.3rem',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                            }}
+                                        >
+                                            <ArrowBackIosIcon /> Back
+                                        </span>
                                     </Button>
 
-                                    <Button variant="contained" color="primary">
-                                        Skip for Now
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        style={{ margin: '0 3rem 0 7rem' }}
+                                    >
+                                        <span
+                                            style={{
+                                                padding:
+                                                    '0.4rem 1.3rem 0.4rem 1.3rem',
+                                            }}
+                                        >
+                                            Skip for Now
+                                        </span>
                                     </Button>
 
                                     <Button
@@ -217,7 +237,14 @@ const HostFormAddress: React.FC = () => {
                                         variant="contained"
                                         color="primary"
                                     >
-                                        Save and Continue
+                                        <span
+                                            style={{
+                                                padding:
+                                                    '0.4rem 1.3rem 0.4rem 1.3rem',
+                                            }}
+                                        >
+                                            Save and Continue
+                                        </span>
                                     </Button>
                                 </div>
                             </Form>

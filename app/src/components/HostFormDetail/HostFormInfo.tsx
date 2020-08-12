@@ -199,6 +199,7 @@ const HostFormInfo: React.FC = () => {
                                 <Divider
                                     style={{
                                         marginBottom: '1rem',
+                                        width: '44.6vw',
                                     }}
                                 />
                                 <div
@@ -223,7 +224,7 @@ const HostFormInfo: React.FC = () => {
                                     <Button
                                         variant="contained"
                                         color="primary"
-                                        style={{ margin: '0 3rem 0 5rem' }}
+                                        style={{ margin: '0 3rem 0 7rem' }}
                                     >
                                         <span
                                             style={{
