@@ -255,7 +255,7 @@ const HostFormAddress: React.FC = () => {
                                         Save and Continue
                                     </Button>
                                 </div>
-                                <pre>{JSON.stringify(values)}</pre>
+                                {/* <pre>{JSON.stringify(values)}</pre> */}
                             </Form>
                         )
                     }}

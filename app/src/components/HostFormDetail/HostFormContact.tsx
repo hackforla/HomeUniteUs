@@ -10,8 +10,10 @@ import {
 } from '@material-ui/core'
 import * as Yup from 'yup'
 import SortableComponent from './SortableComponent'
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 
-// import { TextInput } from '../Registration/TextInput'
+import TextInput from '../Registration/TextInput/TextInput'
+import Btn from '../Registration/Button/Button'
 
 interface FormValues {
     email: string
@@ -55,6 +57,7 @@ const HostFormAddress: React.FC = () => {
                 <Typography variant="h4">
                     Please provide your Contact Information:
                 </Typography>
+                <br />
                 <Formik
                     initialValues={initialValues}
                     onSubmit={handleSubmit}
@@ -87,7 +90,8 @@ const HostFormAddress: React.FC = () => {
                                         autoComplete="off"
                                         name="email"
                                         variant="outlined"
-                                        as={TextField} //error doesnt show when using arshia mui textInput
+                                        as={TextField}
+                                        // as={TextInput} //error doesnt show when using arshia mui textInput
                                         style={{ marginBottom: '1.5rem' }}
                                     />
                                     <ErrorMessage name="email">
@@ -196,12 +200,11 @@ const HostFormAddress: React.FC = () => {
                                     style={{
                                         display: 'flex',
                                         justifyContent: 'space-evenly',
+                                        marginBottom: '1.5rem',
                                     }}
                                 >
-                                    <Button>
-                                        <p>
-                                            <i className="arrow left"></i>Back
-                                        </p>
+                                    <Button style={{ verticalAlign: 'middle' }}>
+                                        <ArrowBackIosIcon /> Back
                                     </Button>
 
                                     <Button variant="contained" color="primary">
@@ -217,7 +220,6 @@ const HostFormAddress: React.FC = () => {
                                         Save and Continue
                                     </Button>
                                 </div>
-                                <pre>{JSON.stringify(values)}</pre>
                             </Form>
                         )
                     }}

@@ -5,21 +5,14 @@ import { Container, Typography, Box } from '@material-ui/core'
 
 function ImageUploadComponent() {
     return (
-        <Container maxWidth="md">
-            <Box
-                border={3}
-                borderColor="primary.main"
-                borderRadius={16}
-                display="flex"
-                flexDirection="column"
-                justifyContent="center"
-            >
+        <Container maxWidth="lg">
+            <Box display="flex" flexDirection="column" justifyContent="center">
                 <div>
-                    <Typography variant="h4">
-                        Please Upload a Photo of your Home
+                    <Typography variant="h5">
+                        Please Upload a Photo of your Home:
                     </Typography>
                 </div>
-                <div style={{ textAlign: 'center' }}>
+                <div>
                     <UploadImageButton />
                 </div>
             </Box>
