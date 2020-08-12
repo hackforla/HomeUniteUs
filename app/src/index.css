@@ -1,9 +1,7 @@
-@import url('https://fonts.googleapis.com/css?family=Josefin+Sans:400,700&display=swap');
-
 body {
     margin: 0;
-    font-family: 'Josefin Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-        'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+    font-family: 'Roboto', 'Josefin Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+        'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
         'Helvetica Neue', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

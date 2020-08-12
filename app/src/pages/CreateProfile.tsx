@@ -102,7 +102,6 @@ const initialState: CreateProfileState = {
 }
 
 export const CreateProfile = () => {
-    
     const { user } = useAuth0()
 
     const [state, dispatch] = React.useReducer(reducer, initialState)

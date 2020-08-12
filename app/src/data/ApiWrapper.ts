@@ -1,7 +1,7 @@
 import { ApiConfig } from './config'
 import { Guest, Host } from '../models' //for some reason accounts wont import here?
 import { Accounts } from '../models/Accounts'
-import { QuestionType } from '../models/QuestionType'
+// import { QuestionType } from '../models/QuestionType'
 import { ResponseValue } from '../models/ResponseValue'
 
 class ApiFetchError extends Error {}

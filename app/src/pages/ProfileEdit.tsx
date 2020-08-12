@@ -4,130 +4,99 @@ import { HostDashboardDataProvider } from '../data/host-context'
 
 import styled from 'styled-components'
 
-const Container = styled.div`
-    margin: 30px auto;
-    padding: 0 15px;
-    max-width: 1140px;
-`
+/*
 
-const getQuestions = () => {
+    TODO: Divide this component
+        - the reusable portion, <QuestionPage />, and the user-type-specific portion,
+            <HostDashBoardProvider /> vs <GuestDashBoardProvider />
+            ...cleanest approach would have three layers
+
+            ///// TOP LEVEL: This component routed to from top Router
+            /////   this can contain the progress bar UI
+            <HostRegistration>
+                <HostDashBoardProvider>
+                     //// SUB ROUTER
+                     <Switch>
+                          ///// within each of these componenets, access the correct context via hook
+                          ///// <Routes /> for BIO/CONTACT form
+                          ///// <Routes /> for Qualifying questions by ID
+                          ///// <Routes /> for Matching questions by ID
+                     </Switch>
+                </HostDashBoardProvider>
+            </HostRegistration>
+    
+
+*/
+
+const getShowstopperQuestions = () => {
     return [
         {
             id: '10',
-            type: 'radio',
             group: 'Qualifying',
             order: -50,
             question:
                 'Do you have an extra bedroom or private space in your home?',
-            options: [
-                { label: 'Yes', value: 'yes' },
-                { label: 'No', value: 'no' },
-            ],
-            showstopper: 'no',
         },
         {
             id: '11',
-            type: 'radio',
             group: 'Qualifying',
             order: -49,
             question:
                 'Are you able to provide Guest with access to a kitchen in which to prepare meals, store food and access to shared or private bathroom?',
-            options: [
-                { label: 'Yes', value: 'yes' },
-                { label: 'No', value: 'no' },
-            ],
-            showstopper: 'no',
         },
         {
             id: '12',
-            type: 'radio',
             group: 'Qualifying',
             order: -48,
             question: 'Do you have homeowners/renters insurance?',
-            options: [
-                { label: 'Yes', value: 'yes' },
-                { label: 'No', value: 'no' },
-            ],
-            showstopper: 'no',
         },
         {
             id: '13',
-            type: 'radio',
             group: 'Qualifying',
             order: -47,
             question:
                 'Do you live on the westside of Los Angeles or within reasonable distance to public transportation?',
-            options: [
-                { label: 'Yes', value: 'yes' },
-                { label: 'No', value: 'no' },
-            ],
-            showstopper: 'no',
         },
         {
             id: '14',
-            type: 'radio',
             group: 'Qualifying',
             order: -46,
             question:
                 'Are you able and willing to pass a LiveScan background clearance check?',
-            options: [
-                { label: 'Yes', value: 'yes' },
-                { label: 'No', value: 'no' },
-            ],
-            showstopper: 'no',
         },
         {
             id: '15',
-            type: 'radio',
             group: 'Qualifying',
             order: -45,
             question:
                 'Do you agree to complete this application, undergo and interview and a home inspection?',
-            options: [
-                { label: 'Yes', value: 'yes' },
-                { label: 'No', value: 'no' },
-            ],
-            showstopper: 'no',
         },
         {
             id: '1',
-            type: 'radio',
             group: 'Qualifying',
             order: -45,
             question:
                 'Do you agree to attend a 3-hour SPY Volunteer Orientation and a 1-day Host Home Orientation Training?',
-            options: [
-                { label: 'Yes', value: 'yes' },
-                { label: 'No', value: 'no' },
-            ],
-            showstopper: 'no',
         },
         {
             id: '2',
-            type: 'radio',
             group: 'Qualifying',
             order: -45,
             question:
                 'Do you commit to attending monthly meetings with SPY staff and other hosts?',
-            options: [
-                { label: 'Yes', value: 'yes' },
-                { label: 'No', value: 'no' },
-            ],
-            showstopper: 'no',
         },
         {
             id: '3',
-            type: 'radio',
             group: 'Qualifying',
             order: -45,
             question:
                 'Do you commit to providing a welcoming, safe, non-judgmental environment and to supporting the self-determined goals of youth Guest?',
-            options: [
-                { label: 'Yes', value: 'yes' },
-                { label: 'No', value: 'no' },
-            ],
-            showstopper: 'no',
         },
+    ]
+}
+
+const getMatchingQuestions = () => {
+    return [
         {
             id: '7',
             type: 'text',
@@ -663,14 +632,12 @@ const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
 export const ProfileEditPage = () => {
     return (
         <HostDashboardDataProvider>
-            <Container>
-                <h2>Hello! Answer these questions:</h2>
-                <QuestionPage
-                    stepwise={true}
-                    onSubmit={handleSubmit}
-                    questions={getQuestions()}
-                ></QuestionPage>
-            </Container>
+            <QuestionPage
+                stepwise={true}
+                onSubmit={handleSubmit}
+                showstopperQuestions={getShowstopperQuestions()}
+                matchingQuestions={getMatchingQuestions()}
+            ></QuestionPage>
         </HostDashboardDataProvider>
     )
 }

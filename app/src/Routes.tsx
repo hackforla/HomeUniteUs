@@ -15,6 +15,9 @@ import {
 import { AllHosts } from './pages/Admin/AllHosts'
 import ProfileSelection from './pages/ProfileSelection/ProfileSelection'
 import FourOhFour from './pages/FourOhFour'
+import HostFormAddress from './components/HostFormDetail/HostFormContact'
+import { GuestRegistration } from './pages/GuestRegistration/GuestRegistration'
+import { HostRegistration } from './pages/HostRegistration/HostRegistration'
 
 export default function Routes() {
     return (
@@ -36,6 +39,10 @@ export default function Routes() {
                 path="/profileselection"
                 component={ProfileSelection}
             />
+            <Route path="/hostformaddress" component={HostFormAddress} />
+            {/*testing ^^^*/}
+            <Route path="/guest/register" component={GuestRegistration} />
+            <Route path="/host/register" component={HostRegistration} />
             <FourOhFour />
         </Switch>
     )

@@ -10,6 +10,7 @@ load_dotenv()
 
 from flask import (
     Flask,
+    flash,
     render_template,
     request,
     Response,
@@ -23,8 +24,15 @@ from flask import (
 from bson import ObjectId
 import pymongo
 
+import gridfs
+import codecs
 
-from matching.basic_filter import BasicFilter
+#from matching.basic_filter import BasicFilter
+
+from werkzeug.utils import secure_filename
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'psd'}
+
 
 
 dictConfig({
@@ -91,7 +99,7 @@ class MongoFacade:
             app.logger.debug("Server not available: {}".format(e))
             raise e
 
-    def get_collection(self, collection_name):
+    def get_collection(self, collection_name, sort_condition):
 
         self._log('get_collection', 'acquiring connection...')
 
@@ -99,7 +107,11 @@ class MongoFacade:
 
         db = client[MONGO_DATABASE]
         collection = db[collection_name]
-        cursor = collection.find()
+
+        if sort_condition:
+            cursor = collection.find().sort(sort_condition)
+        else:
+            cursor = collection.find()
         items = list(cursor)
 
         for item in items:
@@ -118,29 +130,43 @@ class MongoFacade:
         db = client[MONGO_DATABASE]
         collection = db[collection_name]
         item = collection.find_one({'id': id})
-        item['_id'] = str(item['_id']) # repeating this as above, but seems bad...
+        item['_id'] = str(item['_id'])
 
         self._log('get_collection', 'item = {}'.format(item))
         return item
-    ###########################################################attempt
-    def get_user_by_email(self, collection_name, email): #need to add param called email here
-        try: 
+
+    def get_element_by_id2(self, collection_name, id):
+
+        self._log('get_element_by_id', 'acquiring connection...')
+
+        client = self._get_conn()
+
+        db = client[MONGO_DATABASE]
+        collection = db[collection_name]
+        item = collection.find_one({'_id': id})
+
+        item['_id'] = str(item['_id'])
+
+        self._log('get_collection', 'item = {}'.format(item))
+        return item
+
+    def get_user_by_email(self, collection_name, email):
+        try:
             self._log('get_user_by_email', 'acquiring connection...')
             client = self._get_conn()
             db = client[MONGO_DATABASE]
             collection = db[collection_name]
-            
-            user = collection.find_one({ 'email': email }) #email needs to be replace with request body
+
+            user = collection.find_one({ 'email': email })
             if user is None:
                 return None 
-            user['_id'] = str(user['_id'])
+            user['_id'] = str(user['_id']) #we dont need this line anymore, right?
             self._log('get_collections', 'items = {}'.format(user))
             return user
         except Exception as e:
             self._log("get_user_by_email", f"error {e}")
             raise e
 
-    #####################################################################
 
     def insert_to_collection(self, collection_name, item):
         client = self._get_conn()
@@ -195,9 +221,35 @@ class MongoFacade:
 
 
         return result.acknowledged
+    
+    def save_file(self, img_file, img_name):
+        client = self._get_conn()
+        if not client:
+            raise Exception('Mongo server not available')
+        
+        db = client[MONGO_DATABASE]
+        fs = gridfs.GridFS(db)
+        img_id = fs.put(img_file, img_name = img_name) #got img id
+        if img_id is None:
+            return None
+        # if fs.find_one(img_id) is None:
+        #     return "success??"
+        # next, store the img id in the user database somehow
+        return img_id
+    
+    def load_file(self): #need to pass userId
+        client = self._get_conn()
+        db = client[MONGO_DATABASE]
+        fs = gridfs.GridFS(db)
+        collection = db[collection_name] 
+        #user = collection.find_one() #get user by id and image id
+        #image = fs.get(user[]) #using the user id to find image id
+        #base64_data = codecs.encode(image.read(), "base64") #using codecs to retrieve image
+        #image = base64_data.decode("utf-8")
 
     def _log(self, method_name, message):
         app.logger.debug('MongoFacade:{}: {}'.format(method_name, message))
+
 
 class Repository:
 
@@ -205,9 +257,13 @@ class Repository:
         self.mongo_facade = MongoFacade()
         self.collection_name = collection_name
 
-    def get(self):
-        items = self.mongo_facade.get_collection(self.collection_name)
+    def get(self, sort_condition=None):
+        items = self.mongo_facade.get_collection(self.collection_name, sort_condition)
         return items
+
+    def get_by_id(self, id):
+        item = self.mongo_facade.get_element_by_id2(self.collection_name, id)
+        return item
 
     def add(self, item):
         result = self.mongo_facade.insert_to_collection(self.collection_name, item)
@@ -229,11 +285,11 @@ class Repository:
             safe_item
         )
         return result
-    ########################################attempt
+
     def get_using_email(self, email): #pass in the request body here
         resp = self.mongo_facade.get_user_by_email(self.collection_name, email) ##add the request here
         return resp
-    #########################################
+
 
     def _log(self, method_name, message):
         app.logger.debug('Repository[{}]:{}: {}'.format(self.collection_name, method_name, message))
@@ -280,6 +336,8 @@ guestResponsesRepository = Repository('guestResponses')
 hostResponsesRepository = Repository('hostResponses')
 restrictionsRepository = Repository('restrictions')
 responseValuesRepository = Repository('responseValues')
+hostRegisterQuestionsRepository = Repository('hostRegisterQuestions')
+questionBankRepository = Repository('questionBank')
 
 
 # TODO: Tyler 5/21/2020: Somebody will need to fix this -- should be
@@ -297,7 +355,7 @@ repos['restrictions'] = restrictionsRepository
 repos['responseValues'] = responseValuesRepository
 
 
-matcher = BasicFilter(repos)
+#matcher = BasicFilter(repos)
 
 
 @app.route('/favicon.ico')
@@ -307,8 +365,6 @@ def favicon():
         'favicon.ico',
         mimetype='image/vnd.microsoft.icon'
     )
-
-
 
 
 
@@ -495,14 +551,14 @@ def check_by_email():
         accounts = accountsRepository.get_using_email(req['email']) #pass the req in here when ready
         if accounts is None:
             return Response(json.dumps({'error': None, 'status': 400}),status=400, mimetype='application/json')
-        return Response(status=200, mimetype='application/json') 
-           
+        return Response(status=200, mimetype='application/json')
+
     except Exception as e:
         data = {
             'error': str(e)
         }
-        
-        js = json.dumps(data)    
+
+        js = json.dumps(data)
         resp = Response(js, status=500, mimetype='application/json')
 
         return resp
@@ -718,18 +774,19 @@ def get_guestQuestion_by_id(id: int):
 
 
 
-@app.route('/api/guests/<int:id>/responses', methods=['GET','POST'])
-def get_guest_responses(id: int):
+@app.route('/api/guests/<int:guest_id>/responses', methods=['GET','POST'])
+def get_guest_responses(guest_id: int):
 
     app.logger.warning('get_guest_responses: request.method = {}'.format(request.method))
-    app.logger.warning(f'guest_by_id: id = {id} ({type(id)})')
+    app.logger.warning(f'guest_by_id: id = {guest_id} ({type(guest_id)})')
 
     if request.method == 'GET':
 
         try:
 
             guestResponses = guestResponsesRepository.get()
-            guestResponses = [response for response in guestResponses if response['guestId']==id]
+            guestResponses = [response for response in guestResponses\
+                    if response['guestId']==guest_id]
             js = json.dumps(guestResponses)
             resp = Response(js, status=200, mimetype='application/json')
             return resp
@@ -859,36 +916,173 @@ def get_guest_response_by_id(guest_id: int, question_id: int):
 
         app.logger.debug(f'what is {request.method} even doing here.')
 
-# @app.route('/api/guests', methods=['POST'])
-# def add_guest():
-#     global guest
-#     guests = request.get_json()
-#     guest.update(guests)
-#     return {"guests": guests, }
+
+@app.route('/api/hosts/<int:host_id>/responses', methods=['GET','POST'])
+def get_host_responses(host_id: int):
+
+    app.logger.warning('get_host_responses: request.method = {}'.format(request.method))
+    app.logger.warning(f'host_by_id: id = {host_id} ({type(host_id)})')
+
+    if request.method == 'GET':
+
+        try:
+
+            hostResponses = hostResponsesRepository.get()
+            hostResponses = [response for response in hostResponses\
+                    if response['hostId']==host_id]
+            js = json.dumps(hostResponses)
+            resp = Response(js, status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    elif request.method == 'POST':
+
+        try:
+
+            host_response = request.json
+            responseData = hostResponsesRepository.add(host_response)
+            app.logger.debug('responseData = {}'.format(responseData))
+            resp = Response({'error': None,'data': None},
+                             status=200, mimetype='application/json')
+
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    else:
+
+        app.logger.debug(f'what is {request.method} even doing here.')
 
 
-# @app.route('/api/guests/{id}', methods=['PUT'])
-# def update_guest(id: int):
-#     global guest
-#     guests = request.get_json()
-#     try:
-#         guest[str(id)] = guests
-#     except Exception as e:
-#         raise e
-#     return {"guest": guest[str(id)], "status": guests.status_code}
+@app.route('/api/hosts/<int:host_id>/responses/<int:question_id>', methods=['GET','PUT','DELETE'])
+def get_host_response_by_id(host_id: int, question_id: int):
+
+    app.logger.warning('get_host_response_by_id: request.method = {}'.format(request.method))
+
+    if request.method == 'GET':
+
+        try:
+
+            hostResponses = hostResponsesRepository.get()
+            hostResponses = [response['responseValues'] for response in hostResponses\
+                                if response['hostId']==host_id and response['questionId']==question_id]
+            js = json.dumps(hostResponses[0])
+            resp = Response(js, status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    elif request.method == 'PUT':
+
+        try:
+
+            hostResponses = hostResponsesRepository.get()
+            response_id = [response['responseValues'] for response in hostResponses\
+                                 if response['hostId']==host_id and\
+                                    response['questionId']==question_id][0]
+
+            #this is really shaky, need to know what's being passed back
+            #needs host_id and question_id
+            responseData = hostResponsesRepository.update(response_id, request.json)
+            app.logger.debug('responseData = {}'.format(responseData))
+            resp = Response(json.dumps({'error': None, 'data': None}),
+                            status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
 
 
-# @app.route('/api/guests/{id}', methods=['DELETE'])
-# def delete_guest(id: int):
-#     global guest
-#     guests = request.get_json()
-#     guest_id = guests[str(id)]
-#     del guest[guest_id]
-#     if guest[guest_id] is None:
-#         success = "deleted!"
-#     else:
-#         success = "no"
-#     return {"success": success, "status": guests.status_code}
+    elif request.method == 'DELETE':
+
+        try:
+            hostResponses = hostResponsesRepository.get()
+            response_id = [response['responseValues'] for response in hostResponses\
+                                  if response['hostId']==host_id and\
+                                     response['questionId']==question_id][0]
+
+            responseData = hostResponsesRepository.delete(host_id)
+            app.logger.debug('responseData = {}'.format(responseData))
+            resp = Response(json.dumps({'error': None, 'data': None}),
+                            status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+
+    else:
+
+        app.logger.debug(f'what is {request.method} even doing here.')
+
+
+@app.route('/api/restrictions', methods=['GET'])
+def get_all_restrictions():
+
+    app.logger.warning('all_restrictions: request.method = {}'.format(request.method))
+
+    try:
+
+        restrictions = restrictionsRepository.get()
+        js = json.dumps(restrictions)
+        resp = Response(js, status=200, mimetype='application/json')
+
+        return resp
+
+    except Exception as e:
+
+        data = {
+            'error': str(e)
+        }
+
+        js = json.dumps(data)
+        resp = Response(js, status=500, mimetype='application/json')
+
+        return resp
 
 
 @app.route('/api/responseValues', methods=['GET'])
@@ -901,7 +1095,7 @@ def get_all_response_values():
         return resp
 
     except Exception as e:
-        
+
         data = {
             'error': str(e)
         }
@@ -960,6 +1154,160 @@ def get_all_data():
 
 
 
+def _populate_children(question):
+
+    children = question['children']
+
+    if question['_id'] == '5f0e62f5769aab8c53ac04ff':
+        return question
+
+    if not children:
+        return question
+    else:
+        for key, childs in children.items():
+            populated_children = []
+
+            ####PREPARE FOR UGLINESS!
+            ####will fix this - stupid data modeling dumbness
+            ####have child values as list sometimes and as id...
+
+            if type(childs) is str:
+                child_question = hostRegisterQuestionsRepository.get_by_id(childs)
+                child_question = _populate_children(child_question)
+                populated_children.append(child_question)
+                question['children'][key] = populated_children
+
+            elif type(childs) is list:
+
+                for child in childs:
+                    if type(child) is list:
+                        continue
+                    child_question = hostRegisterQuestionsRepository.get_by_id(child)
+                    child_question = _populate_children(child_question)
+                    populated_children.append(child_question)
+
+                question['children'][key] = populated_children
+            else:
+                app.logger.debug(f'No clue why type is {type(childs)}')
+
+        return question
+
+
+@app.route('/api/v1/hostRegisterQuestions', methods=['GET'])
+def get_host_register_questions():
+
+    try:
+        response = hostRegisterQuestionsRepository.get(sort_condition=[("order",pymongo.ASCENDING)])
+
+        data = [_populate_children(question) for question in response]
+
+        # Sample model from client proto
+        # {
+        #     id: '10',
+        #     type: 'radio',
+        #     group: 'Introductory Questions',
+        #     order: -50,
+        #     question: 'Do you have an extra bedroom or private space in their home?',
+        #     options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
+        # },
+
+        #data = [{
+        #    'id': q['_id'],
+        #    'type': 'radio',
+        #    'group': 'MatchingQuestions',
+        #    'order': i,
+        #    'question': q['text'],
+        #    'options': [
+        #        opt['text'] for opt in responseValues if opt['id'] in q['responseValues']
+        #    ]
+        #} for (i, q) in enumerate(hostQuestions)]
+
+        js = json.dumps(data)
+        resp = Response(js, status=200, mimetype='application/json')
+        return resp
+
+    except Exception as e:
+        data = {
+            'test'  : 'failed',
+
+            'error': str(e)
+        }
+
+        js = json.dumps(data)
+        resp = Response(js, status=500, mimetype='application/json')
+        return resp
+
+
+@app.route('/api/v1/hostRegisterQuestions/<question_id>', methods=['GET','PUT','DELETE'])
+def get_host_register_question_by_id(question_id):
+
+    if request.method == 'GET':
+
+        try:
+            data = hostRegisterQuestionsRepository.get_by_id(question_id)
+            js = json.dumps(data)
+            resp = Response(js, status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+            data = {
+                'test'  : 'failed',
+
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+            return resp
+
+    elif request.method == 'PUT':
+
+        try:
+            responseData = hostRegisterQuestionsRepository.update(question_id, request.json)
+            app.logger.debug('responseData = {}'.format(responseData))
+            resp = Response(json.dumps({'error': None, 'data': None}),
+                            status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    elif request.method == 'DELETE':
+
+        try:
+
+            responseData = hostRegisterQuestionsRepository.delete(question_id)
+            app.logger.debug('responseData = {}'.format(responseData))
+            resp = Response(json.dumps({'error': None, 'data': None}),
+                            status=200, mimetype='application/json')
+            return resp
+
+        except Exception as e:
+
+            data = {
+                'error': str(e)
+            }
+
+            js = json.dumps(data)
+            resp = Response(js, status=500, mimetype='application/json')
+
+            return resp
+
+    else:
+
+        app.logger.debug(f'what is {request.method} even doing here.')
+
+        pass
+
+
 # TODO: Mark for deprecation! no need to dl the whole set for any view in the app
 
 @app.route('/api/v1/questions', methods=['GET'])
@@ -1013,7 +1361,8 @@ def get_all_match_results():
 
     try:
 
-        match_results = matcher.get_all_match_results()
+        #match_results = matcher.get_all_match_results()
+        match_results = []
 
         js = json.dumps(match_results)
         resp = Response(js, status=200, mimetype='application/json')
@@ -1108,6 +1457,47 @@ def get_all_match_results():
 #         resp = Response(js, status=500, mimetype='application/json')
 #         return resp
 
+#########################
+#image upload test route#
+#########################
+
+def allowed_file(filename):
+    if not "." in filename:
+        return False
+    
+    ext = filename.rsplit(".", 1)[1]
+
+    if ext.lower() in ALLOWED_EXTENSIONS:
+        return True
+    else:
+        return False
+
+
+@app.route('/uploadImage', methods=['POST'])
+def image_upload():
+    if 'image' not in request.files:
+        flash('no image file')
+        return Response(status=400, mimetype='application/json')
+    
+    img = request.files["image"]
+    
+    if img.filename == '':
+        flash('no image was selected')
+        return Response(status=400, mimetype='application/json')
+    
+    if img and allowed_file(img.filename):
+        img_name = secure_filename(img.filename)
+        saveImg = MongoFacade()
+        resp = saveImg.save_file(img, img_name)
+        if resp is not None:
+            return Response(json.dumps({'msg': 'Image saved successfully', 'status': 200}),status=200, mimetype='application/json')
+        else:
+            return Response(status=500, mimetype='application/json')
+    else:
+        return Response(status=500, mimetype='application/json')
+
+    return Response(status=200, mimetype='application/json')
+    
 
 
 @app.route('/', defaults={'path': ''})
