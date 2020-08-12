@@ -2,7 +2,6 @@
 import * as React from 'react'
 import { Route, Switch, NavLink, useParams, useHistory } from 'react-router-dom'
 import * as AppStyle from './AppStyle'
-import logo from './img/masterSpyLogo3.png'
 import Routes from './Routes'
 import { HostHomeDataProvider } from './data/data-context'
 import { Guest } from './models'
@@ -27,7 +26,7 @@ export const LoginView = () => {
     return (
         <AppStyle.AuthHolder>
             <AppStyle.AuthButton href="" onClick={onLoginClick}>
-                Login to Host Homes
+                Login to Home Unite Us
             </AppStyle.AuthButton>
         </AppStyle.AuthHolder>
     )
@@ -41,18 +40,17 @@ export const App = () => {
         <React.Fragment>
             {isInitializing ? (
                 <div>Loading...</div>
-            ) : isAuthenticated 
-            ? ( 
-                    <HostHomeDataProvider>
+            ) : isAuthenticated ? (
+                <HostHomeDataProvider>
+                    <React.Fragment>
+                        <Header />
                         <React.Fragment>
-                            <Header />
-                            <React.Fragment>
-                                <Routes />
-                            </React.Fragment>
+                            <Routes />
                         </React.Fragment>
-                    </HostHomeDataProvider>
+                    </React.Fragment>
+                </HostHomeDataProvider>
             ) : (
-            <LoginView />
+                <LoginView />
             )}
         </React.Fragment>
     )

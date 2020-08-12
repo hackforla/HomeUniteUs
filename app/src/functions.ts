@@ -1,3 +1,5 @@
+// TODO: Deprecated and marked for removal
+
 const dataFunc = {
     async guestsGet() {
         try {
