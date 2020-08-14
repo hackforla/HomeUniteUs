@@ -25,7 +25,7 @@ export const Header = () => {
                 <NavLink to={`/hostinfo`}>host info</NavLink>
             </AppStyle.Holder>
             <AppStyle.Holder>
-                <NavLink to={`/hostformaddress`}>Address</NavLink>
+                <NavLink to={`/hostformlang`}>Lang</NavLink>
             </AppStyle.Holder>
             {/* 
             <AppStyle.Holder>

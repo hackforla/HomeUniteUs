@@ -22,8 +22,8 @@ import HostFormAddress from './components/HostFormDetail/HostFormAddress' //dele
 import { GuestRegistration } from './pages/GuestRegistration/GuestRegistration'
 import { HostRegistration } from './pages/HostRegistration/HostRegistration'
 import ImageUploadComponent from './components/UploadImage/ImageUploadComponent'
-import HostFormInfo from './components/HostFormDetail/HostFormInfo'
 import HostFormGender from './components/HostFormDetail/HostFormGender'
+import HostFormLang from './components/HostFormDetail/HostFormLang'
 
 export default function Routes() {
     return (
@@ -45,9 +45,11 @@ export default function Routes() {
                 path="/profileselection"
                 component={ProfileSelection}
             />
+            {/* testing vvv */}
             <Route path="/hostinfo" component={HostFormGender} />
             <Route path="/hostformaddress" component={HostFormAddress} />
             <Route path="/uploadImage" component={ImageUploadComponent} />
+            <Route path="/hostformlang" component={HostFormLang} />
             {/*testing ^^^*/}
             <Route path="/guest/register" component={GuestRegistration} />
             <Route path="/host/register" component={HostRegistration} />
