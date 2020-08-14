@@ -196,7 +196,6 @@ const HostFormAddress: React.FC = () => {
                                         display: 'flex',
                                         flexDirection: 'column',
                                         width: '13rem',
-                                        marginBottom: '5rem',
                                     }}
                                 >
                                     <label
@@ -283,7 +282,6 @@ const HostFormAddress: React.FC = () => {
                                         </span>
                                     </Button>
                                 </div>
-                                {/* <pre>{JSON.stringify(values)}</pre> */}
                             </Form>
                         )
                     }}

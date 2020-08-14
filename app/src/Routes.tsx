@@ -17,11 +17,13 @@ import ProfileSelection from './pages/ProfileSelection/ProfileSelection'
 import FourOhFour from './pages/FourOhFour'
 // import HostFormAddress from './components/HostFormDetail/HostFormContact' //delete
 // import HostFormAddress from './components/HostFormDetail/HostFormAddress' //delete
-import HostFormAddress from './components/HostFormDetail/HostFormGender' //delete
+import HostFormAddress from './components/HostFormDetail/HostFormAddress' //delete
 // import HostFormInfo from './components/HostFormDetail/HostFormInfo' //delete
 import { GuestRegistration } from './pages/GuestRegistration/GuestRegistration'
 import { HostRegistration } from './pages/HostRegistration/HostRegistration'
 import ImageUploadComponent from './components/UploadImage/ImageUploadComponent'
+import HostFormInfo from './components/HostFormDetail/HostFormInfo'
+import HostFormGender from './components/HostFormDetail/HostFormGender'
 
 export default function Routes() {
     return (
@@ -43,6 +45,7 @@ export default function Routes() {
                 path="/profileselection"
                 component={ProfileSelection}
             />
+            <Route path="/hostinfo" component={HostFormGender} />
             <Route path="/hostformaddress" component={HostFormAddress} />
             <Route path="/uploadImage" component={ImageUploadComponent} />
             {/*testing ^^^*/}

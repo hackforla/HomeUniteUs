@@ -21,9 +21,11 @@ export const Header = () => {
                 <NavLink to={`/about`}>ABOUT</NavLink>
             </AppStyle.Holder>
             {/* Tyler 8/8/2020: Moving away from proof-of-concept to prototype */}
-
             <AppStyle.Holder>
-                <NavLink to={`/hostformaddress`}>Address Contact</NavLink>
+                <NavLink to={`/hostinfo`}>host info</NavLink>
+            </AppStyle.Holder>
+            <AppStyle.Holder>
+                <NavLink to={`/hostformaddress`}>Address</NavLink>
             </AppStyle.Holder>
             {/* 
             <AppStyle.Holder>

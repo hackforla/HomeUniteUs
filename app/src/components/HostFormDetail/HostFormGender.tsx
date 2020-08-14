@@ -197,17 +197,25 @@ const HostFormGender: React.FC = () => {
                                     <label>Describe your Gender</label>
                                 </div>
                                 {/* need to fix this later */}
-                                <div>
+                                <div
+                                    style={{
+                                        marginBottom: '1.5rem',
+                                        marginLeft: '2.5rem',
+                                    }}
+                                >
                                     <Field
                                         autoComplete="off"
                                         name="describeTextField"
                                         variant="outlined"
                                         as={TextField}
-                                        style={{ marginBottom: '1.5rem' }}
                                         disabled={
+                                            values.describe ? false : true
+                                        }
+                                        value={
                                             values.describe
-                                                ? false
-                                                : values.describeTextField
+                                                ? values.describeTextField
+                                                : (values.describeTextField =
+                                                      '')
                                         }
                                     />
                                 </div>
