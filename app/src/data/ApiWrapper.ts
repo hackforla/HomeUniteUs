@@ -3,9 +3,11 @@ import { Guest, Host } from '../models' //for some reason accounts wont import h
 import { Accounts } from '../models/Accounts'
 import { ShowstopperQuestionType } from '../models/ShowstopperQuestionType'
 import { MatchingQuestionType } from '../models/MatchingQuestionType'
-import { ResponseValue } from '../models/ResponseValue'
+import { HostResponse } from '../models/HostResponse'
 
 class ApiFetchError extends Error {}
+
+/* we're purists about HTTP: https://restfulapi.net/rest-put-vs-post/ */
 
 const getJson = async (uri: string) => {
     try {
@@ -76,25 +78,13 @@ export class Fetcher<T> {
         return (await getJson(`${this.endpoint}/${id}`)) as T
     }
 
-   // id
+    // by id : string or integer
     public async putById(id: string, item: object): Promise<string> {
         return (await putJson(
             `${this.endpoint}/${id}`,
             JSON.stringify(item)
         )) as string
     }
-
-     // type: contactForm, photoUpload, etc
-    public async putByType(type: string, item: object): Promise<string> {
-        return (await putJson(
-            `${this.endpoint}/${type}`,
-            JSON.stringify(item)
-        )) as string
-    }
-
-
-    `/api/hosts/contactForm`
-    `/api/hosts/uploadPhoto`
 
     public async postResponse(item: object): Promise<string> {
         return (await postJson(
@@ -106,13 +96,21 @@ export class Fetcher<T> {
 
 export class ApiWrapper {
     private guestFetcher: Fetcher<Guest>
-    private hostQuestionsFetcher: Fetcher<QuestionType>
+    private hostShowstopperQuestionsFetcher: Fetcher<ShowstopperQuestionType>
+    private hostMatchingQuestionsFetcher: Fetcher<MatchingQuestionType>
+    private hostInformationPost: Fetcher<string>
     private hostQuestionsPost: Fetcher<string>
 
-    public constructor() {
+    public constructor(id?: number | string) {
         this.guestFetcher = new Fetcher<Guest>('guests')
-        this.hostQuestionsFetcher = new Fetcher<QuestionType>('v1/questions')
-        this.hostQuestionsPost = new Fetcher<string>('hosts')
+        this.hostShowstopperQuestionsFetcher = new Fetcher<
+            ShowstopperQuestionType
+        >(`v1/hostRegisterQuestions`)
+        this.hostMatchingQuestionsFetcher = new Fetcher<MatchingQuestionType>(
+            `v1/hostRegisterQuestions`
+        )
+        this.hostInformationPost = new Fetcher<string>('host/')
+        this.hostQuestionsPost = new Fetcher<string>(`host/questions/${id}`)
     }
 
     // Guests
@@ -125,13 +123,31 @@ export class ApiWrapper {
     }
 
     // Hosts
-    public async getHostQuestions(): Promise<Array<QuestionType>> {
-        return await this.hostQuestionsFetcher.getAll()
+    public async getShowstopperHostQuestions(): Promise<
+        Array<ShowstopperQuestionType>
+    > {
+        return await this.hostShowstopperQuestionsFetcher.getAll()
     }
 
-    public async postHostQuestion(
+    public async getMatchingHostQuestions(): Promise<
+        Array<MatchingQuestionType>
+    > {
+        return await this.hostMatchingQuestionsFetcher.getAll()
+    }
+
+    /*POST vs PUT: per our design
+    -create and POST the client profile (empty to start)
+    -every 'submit' thereafter is a series of updates to the profile up to and including the final submit page*/
+
+    //id here is 'contact-info'
+    public async putHostInformation(id: string, item: object): Promise<string> {
+        return await this.hostInformationPost.putById(id, item)
+    }
+
+    //id here is questionID
+    public async putHostSelectResponse(
         id: string,
-        item: ResponseValue
+        item: HostResponse
     ): Promise<string> {
         return await this.hostQuestionsPost.putById(id, item)
     }

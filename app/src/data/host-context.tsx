@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { QuestionType } from '../models/QuestionType'
+import { MatchingQuestionType } from '../models/MatchingQuestionType'
 import { HostResponse } from '../models/HostResponse'
 import { ApiWrapper } from './ApiWrapper'
 
@@ -7,7 +7,7 @@ const HostDashboardContext = React.createContext({})
 const hostsFetcher = new ApiWrapper()
 
 interface HostDashboardData {
-    hostQuestions: Array<QuestionType>
+    hostQuestions: Array<MatchingQuestionType>
     hostResponse: HostResponse | null
     loaderState: {
         loading: boolean
@@ -29,7 +29,7 @@ interface HostDashboardAction {
     type: HostDashboardActionType
     payload?:
         | HostDashboardData
-        | Array<QuestionType>
+        | Array<MatchingQuestionType>
         | boolean
         | string
         | HostResponse
@@ -65,7 +65,7 @@ function hostDashboardReducer(
                     ...state.loaderState,
                     loading: false,
                 },
-                hostQuestions: action.payload as Array<QuestionType>,
+                hostQuestions: action.payload as Array<MatchingQuestionType>,
             }
         }
         case HostDashboardActionType.BeginPostResponse: {
@@ -110,7 +110,7 @@ export function HostDashboardDataProvider(
                     type: HostDashboardActionType.BeginFetchQuestions,
                     payload: 'Retrieving host questions...',
                 })
-                const questions = await hostsFetcher.getHostQuestions()
+                const questions = await hostsFetcher.getMatchingHostQuestions()
 
                 dispatch({
                     type: HostDashboardActionType.FinishFetchQuestions,
@@ -751,11 +751,7 @@ export function useHostDashboardData() {
     return {
         data,
         dispatch,
-<<<<<<< HEAD
-        postHostResponse,
-=======
         getShowstopperQuestions,
         getMatchingQuestions,
->>>>>>> 2b105a3dd2871390c6ecb45f8939beadd856b1ee
     }
 }
