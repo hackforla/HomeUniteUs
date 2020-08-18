@@ -12,6 +12,7 @@ function UploadImageButton() {
         const target = event?.target as HTMLInputElement
         const file: any = target.files as FileList
         console.log(file, '<-----------------files??')
+        console.log(file[0].name, '<-----------------files??')
         setSelectedImage([...selectedImage, file])
 
         // const file: File = (target.files as FileList)[0] //this only selects the first one, gotta change it
@@ -33,17 +34,48 @@ function UploadImageButton() {
     //     }
     // }
 
+    let test = !selectedImage ? (
+        <>
+            <h1>Hello world</h1>
+        </>
+    ) : (
+        <>
+            <div
+                style={{
+                    background: '#E6E6E6',
+                    opacity: '0.3',
+                    width: '589px',
+                    height: '340px',
+                }}
+            ></div>
+            <Button
+                variant="contained"
+                component="label"
+                style={{
+                    position: 'absolute',
+                    background: '#55B1EB',
+                    color: '#fff',
+                }}
+            >
+                Browse
+                <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={imageSelectHandler}
+                    style={{ display: 'none' }}
+                />
+            </Button>
+        </>
+    )
+
+    let name = selectedImage?.map((img: any) =>
+        console.log(img[0].name, '<-----each image?')
+    )
+
     return (
         <>
-            <Box
-                // boxShadow={3}
-                // display="flex"
-                // justifyContent="center"
-                width="75%"
-                margin="0 auto"
-                // border={3}
-                mt={5}
-            >
+            <Box width="75%" margin="0 auto" mt={5}>
                 <Container
                     style={{
                         textAlign: 'center',
@@ -67,32 +99,8 @@ function UploadImageButton() {
                         }}
                         maxWidth="sm"
                     >
-                        <div
-                            style={{
-                                background: '#E6E6E6',
-                                opacity: '0.3',
-                                width: '589px',
-                                height: '340px',
-                            }}
-                        ></div>
-                        <Button
-                            variant="contained"
-                            component="label"
-                            style={{
-                                position: 'absolute',
-                                background: '#55B1EB',
-                                color: '#fff',
-                            }}
-                        >
-                            Browse
-                            <input
-                                type="file"
-                                accept="image/*"
-                                multiple
-                                onChange={imageSelectHandler}
-                                style={{ display: 'none' }}
-                            />
-                        </Button>
+                        {test}
+                        {name}
                     </Container>
                     <Divider
                         style={{
@@ -120,7 +128,6 @@ function UploadImageButton() {
 
                         <Button
                             variant="contained"
-                            // color="#55B1EB"
                             style={{
                                 margin: '0 3rem 0 7rem',
                                 background: '#55B1EB',
@@ -140,7 +147,6 @@ function UploadImageButton() {
                             type="submit"
                             // disabled={!dirty || !isValid}
                             variant="contained"
-                            // color="#55B1EB"
                             style={{ background: '#55B1EB', color: '#fff' }}
                         >
                             <span
