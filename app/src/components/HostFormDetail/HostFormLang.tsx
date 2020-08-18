@@ -4,8 +4,9 @@ import NoSsr from '@material-ui/core/NoSsr'
 import CheckIcon from '@material-ui/icons/Check'
 import CloseIcon from '@material-ui/icons/Close'
 import styled from 'styled-components'
-import { Typography, Container } from '@material-ui/core'
+import { Typography, Container, Divider, Button } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 
 const Label = styled('label')`
     padding: 0 0 4px;
@@ -157,7 +158,7 @@ function HostFormLang() {
     return (
         <Container maxWidth="md">
             <NoSsr>
-                <div>
+                <div style={{ marginBottom: '2rem' }}>
                     <div {...getRootProps()}>
                         <Typography variant="h5" {...getInputLabelProps()}>
                             What Language(s) do you Speak at Home?
@@ -203,6 +204,64 @@ function HostFormLang() {
                     ) : null}
                 </div>
             </NoSsr>
+            <Divider
+                style={{
+                    marginBottom: '1rem',
+                    width: '44.6vw',
+                }}
+            />
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'flex-start',
+                }}
+            >
+                <Button style={{ color: '#55B1EB' }}>
+                    <span
+                        style={{
+                            padding: '0.4rem 1.3rem 0.4rem 1.3rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <ArrowBackIosIcon /> Back
+                    </span>
+                </Button>
+
+                <Button
+                    variant="contained"
+                    // color="#55B1EB"
+                    style={{
+                        margin: '0 3rem 0 7rem',
+                        background: '#55B1EB',
+                        color: '#fff',
+                    }}
+                >
+                    <span
+                        style={{
+                            padding: '0.4rem 1.3rem 0.4rem 1.3rem',
+                        }}
+                    >
+                        Skip for Now
+                    </span>
+                </Button>
+
+                <Button
+                    type="submit"
+                    // disabled={!dirty || !isValid}
+                    variant="contained"
+                    // color="#55B1EB"
+                    style={{ background: '#55B1EB', color: '#fff' }}
+                >
+                    <span
+                        style={{
+                            padding: '0.4rem 1.3rem 0.4rem 1.3rem',
+                        }}
+                    >
+                        Save and Continue
+                    </span>
+                </Button>
+            </div>
         </Container>
     )
 }
