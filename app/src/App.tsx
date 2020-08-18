@@ -13,45 +13,45 @@ import { Accounts } from './models/Accounts'
 import { Header } from './components/Header/Header'
 
 export const LoginView = () => {
-    const { loginWithPopup } = useAuth0()
+  const { loginWithPopup } = useAuth0()
 
-    const onLoginClick: React.EventHandler<React.SyntheticEvent<
-        HTMLAnchorElement
-    >> = async (e: React.SyntheticEvent<HTMLAnchorElement>) => {
-        e.preventDefault()
+  const onLoginClick: React.EventHandler<React.SyntheticEvent<
+    HTMLAnchorElement
+  >> = async (e: React.SyntheticEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
 
-        await loginWithPopup()
-    }
+    await loginWithPopup()
+  }
 
-    return (
-        <AppStyle.AuthHolder>
-            <AppStyle.AuthButton href="" onClick={onLoginClick}>
-                Login to Home Unite Us
-            </AppStyle.AuthButton>
-        </AppStyle.AuthHolder>
-    )
+  return (
+    <AppStyle.AuthHolder>
+      <AppStyle.AuthButton href="" onClick={onLoginClick}>
+        Login to Home Unite Us
+      </AppStyle.AuthButton>
+    </AppStyle.AuthHolder>
+  )
 }
 
 export const App = () => {
-    const history = useHistory()
-    const { isInitializing, isAuthenticated, user, logout } = useAuth0()
+  const history = useHistory()
+  const { isInitializing, isAuthenticated, user, logout } = useAuth0()
 
-    return (
-        <React.Fragment>
-            {isInitializing ? (
-                <div>Loading...</div>
-            ) : isAuthenticated ? (
-                <HostHomeDataProvider>
-                    <React.Fragment>
-                        <Header />
-                        <React.Fragment>
-                            <Routes />
-                        </React.Fragment>
-                    </React.Fragment>
-                </HostHomeDataProvider>
-            ) : (
-                <LoginView />
-            )}
-        </React.Fragment>
-    )
+  return (
+    <React.Fragment>
+      {isInitializing ? (
+        <div>Loading...</div>
+      ) : isAuthenticated ? (
+        <HostHomeDataProvider>
+          <React.Fragment>
+            <Header />
+            <React.Fragment>
+              <Routes />
+            </React.Fragment>
+          </React.Fragment>
+        </HostHomeDataProvider>
+      ) : (
+        <LoginView />
+      )}
+    </React.Fragment>
+  )
 }

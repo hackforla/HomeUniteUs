@@ -4,14 +4,14 @@ import { styles } from './styles'
 import Paper from '@material-ui/core/Paper'
 
 interface Props extends WithStyles<typeof styles> {
-    elevation: number
+  elevation: number
 }
 
 export default withStyles(styles)(function SimplePaper(props: Props) {
-    const { classes, elevation } = props
-    return (
-        <div>
-            <Paper className={classes.paper} elevation={elevation} />
-        </div>
-    )
+  const { classes, elevation } = props
+  return (
+    <div>
+      <Paper className={classes.paper} elevation={elevation} />
+    </div>
+  )
 })

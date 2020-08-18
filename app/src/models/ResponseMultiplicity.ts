@@ -1,4 +1,4 @@
 export enum ResponseMultiplicity {
-    ONE,
-    MANY,
+  ONE,
+  MANY,
 }

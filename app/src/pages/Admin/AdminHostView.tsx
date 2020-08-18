@@ -4,5 +4,5 @@
 import * as React from 'react'
 
 export const AdminHostView = () => {
-    return <div></div>
+  return <div></div>
 }

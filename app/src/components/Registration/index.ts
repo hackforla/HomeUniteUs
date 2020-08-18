@@ -10,14 +10,14 @@ import Card from './Card/Card'
 import Stepper from './HorizontalStepper/HorizontalStepper'
 
 export {
-    Checkbox,
-    Select,
-    RadioButtons,
-    LargeTextInput,
-    TextInput,
-    TextArea,
-    Button,
-    Paper,
-    Card,
-    Stepper,
+  Checkbox,
+  Select,
+  RadioButtons,
+  LargeTextInput,
+  TextInput,
+  TextArea,
+  Button,
+  Paper,
+  Card,
+  Stepper,
 }

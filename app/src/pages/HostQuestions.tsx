@@ -1,11 +1,11 @@
-import * as React from "react"
-import QuestionField from "../components/ProfileEdit/Question"
+import * as React from 'react'
+import QuestionField from '../components/ProfileEdit/Question'
 
-import styled from "styled-components"
-import { Button, LinearProgress } from '@material-ui/core';
-import { QuestionType } from "../models/QuestionType"
-import { Fetcher } from "../data/ApiWrapper";
-import { HostQuestion, ResponseValue } from "../models";
+import styled from 'styled-components'
+import { Button, LinearProgress } from '@material-ui/core'
+import { QuestionType } from '../models/QuestionType'
+import { Fetcher } from '../data/ApiWrapper'
+import { HostQuestion, ResponseValue } from '../models'
 
 const Container = styled.div`
   margin: 30px auto;
@@ -18,34 +18,31 @@ const StyledButton = styled(Button)`
   margin: 5px !important;
 `
 
-interface HostQuestionsPageProps {
-
-}
+interface HostQuestionsPageProps {}
 
 const initialState = {
   questions: new Array<QuestionResponse>(),
-  questionIndex: 0
-};
-
+  questionIndex: 0,
+}
 
 interface QuestionLabelProps {
-  label: string;
-  value: string;
+  label: string
+  value: string
 }
 interface QuestionResponse {
-  id: string;
-  question: string;
-  type: string;
-  options: Array<QuestionLabelProps>;
-  answer: string;
-};
+  id: string
+  question: string
+  type: string
+  options: Array<QuestionLabelProps>
+  answer: string
+}
 
 // {
 //   id: '1',
 //   question: 'How would you describe your home?',
 //   type: 'radio',
 //   options: [
-//     {label: 'Owned Single-Unit', value: 'single'}, 
+//     {label: 'Owned Single-Unit', value: 'single'},
 //     {label: 'Owned Multi-Unit', value: 'multi'},
 //     {label: 'Owned House', value: 'house'}
 //   ],
@@ -53,13 +50,12 @@ interface QuestionResponse {
 // }
 
 export const HostQuestionsPage = () => {
-  const [state, setState] = React.useState(initialState);
+  const [state, setState] = React.useState(initialState)
 
-  const fetcher = new Fetcher<HostQuestion>('hostQuestions');
-  const rvFetcher = new Fetcher<ResponseValue>('responseValues');
+  const fetcher = new Fetcher<HostQuestion>('hostQuestions')
+  const rvFetcher = new Fetcher<ResponseValue>('responseValues')
 
   React.useEffect(() => {
-
     rvFetcher.getAll().then((rvs: Array<ResponseValue>) => {
       fetcher.getAll().then((questions: Array<HostQuestion>) => {
         setState({
@@ -72,52 +68,47 @@ export const HostQuestionsPage = () => {
               id: `${index}`,
               options: q.responseValues.map((rvId: number) => {
                 try {
-                  const rv = rvs.filter(v => v.id === rvId)[0];
+                  const rv = rvs.filter((v) => v.id === rvId)[0]
                   return {
                     label: rv.text,
-                    value: rv.text
+                    value: rv.text,
                   }
-                }
-                catch(e) {
+                } catch (e) {
                   return {
                     label: `error for rvId ${rvId}: ${e}`,
-                    value: 'error'
-
-                  };
+                    value: 'error',
+                  }
                 }
-              })
+              }),
             }
-          })
+          }),
         })
-      });
-
+      })
     })
-
-  }, []);
+  }, [])
 
   function setAnswer(id: string, answer: any) {
     setState({
       ...state,
-      questions: state.questions.map(q => {
+      questions: state.questions.map((q) => {
         if (q.id === id) {
-          return { ...q, answer };
+          return { ...q, answer }
         } else {
-          return q;
+          return q
         }
-      })
-    });
+      }),
+    })
   }
 
   function setQuestionIndex(index: number) {
     setState({
       ...state,
-      questionIndex: index
-    });
+      questionIndex: index,
+    })
   }
 
   return (
     <Container>
-
       {/* this can be relaced with the QuestionPage component */}
 
       {/* <LinearProgress variant="determinate" value={state.questionIndex / state.questions.length * 100} />
@@ -129,6 +120,5 @@ export const HostQuestionsPage = () => {
     </Container>
   )
 }
-
 
 export default HostQuestionsPage
