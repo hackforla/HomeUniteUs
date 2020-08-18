@@ -99,7 +99,6 @@ const Listbox = styled('ul')`
     z-index: 1;
 
     ::-webkit-scrollbar {
-        width: 10rem;
         scrollbar-width: thin;
     }
 
