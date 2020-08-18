@@ -1,64 +1,221 @@
 import React from 'react'
-import {
-    TextField,
-    MenuItem,
-    Container,
-    Divider,
-    InputLabel,
-    Select,
-    Checkbox,
-    Typography,
-} from '@material-ui/core'
-import Autocomplete from '@material-ui/lab/Autocomplete'
-import CheckBoxIcon from '@material-ui/icons/CheckBox'
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
+import useAutocomplete from '@material-ui/lab/useAutocomplete'
+import NoSsr from '@material-ui/core/NoSsr'
+import CheckIcon from '@material-ui/icons/Check'
+import CloseIcon from '@material-ui/icons/Close'
+import styled from 'styled-components'
+import { Typography, Container } from '@material-ui/core'
+import SearchIcon from '@material-ui/icons/Search'
 
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />
-const checkedIcon = <CheckBoxIcon fontSize="small" />
+const Label = styled('label')`
+    padding: 0 0 4px;
+    line-height: 1.5;
+    display: block;
+`
+
+const InputWrapper = styled('div')`
+    width: 440px;
+    border: 1px solid black;
+    background-color: #fff;
+    border-radius: 4px;
+    padding: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+
+    &:hover {
+        border-color: #40a9ff;
+    }
+
+    &.focused {
+        border-color: #40a9ff;
+        box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2);
+    }
+
+    & input {
+        font-size: 20px;
+        height: 30px;
+        box-sizing: border-box;
+        padding: 4px 6px;
+        width: 0;
+        min-width: 30px;
+        flex-grow: 1;
+        border: 0;
+        margin: 0;
+        outline: 0;
+    }
+`
+
+const Tag = styled(({ label, onDelete, ...props }) => (
+    <div
+        {...props}
+        style={{ background: '#55B1EB', color: 'white', borderRadius: '4px' }}
+    >
+        <span>{label}</span>
+        <CloseIcon onClick={onDelete} />
+    </div>
+))`
+    display: flex;
+    align-items: center;
+    height: 24px;
+    margin: 2px;
+    line-height: 22px;
+    background-color: #fafafa;
+    border: 1px solid #e8e8e8;
+    border-radius: 2px;
+    box-sizing: content-box;
+    padding: 0 4px 0 10px;
+    outline: 0;
+    overflow: hidden;
+
+    &:focus {
+        border-color: #40a9ff;
+        background-color: #e6f7ff;
+    }
+
+    & span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    & svg {
+        font-size: 12px;
+        cursor: pointer;
+        padding: 4px;
+    }
+`
+
+const Listbox = styled('ul')`
+    width: 440px;
+    margin: 2px 0 0;
+    padding: 1rem;
+    position: absolute;
+    list-style: none;
+    background-color: #fff;
+    overflow: auto;
+    max-height: 250px;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    z-index: 1;
+
+    ::-webkit-scrollbar {
+        width: 10rem;
+        scrollbar-width: thin;
+    }
+
+    & li {
+        padding: 5px 12px;
+        display: flex;
+
+        & span {
+            flex-grow: 1;
+        }
+
+        & svg {
+            color: transparent;
+        }
+    }
+
+    & li[aria-selected='true'] {
+        background-color: #e6e6e6;
+        font-weight: 600;
+
+        & svg {
+            color: #1890ff;
+        }
+    }
+
+    & li[data-focus='true'] {
+        background-color: #e6f7ff;
+        cursor: pointer;
+
+        & svg {
+            color: #000;
+        }
+    }
+`
 
 function HostFormLang() {
+    const {
+        getRootProps,
+        getInputLabelProps,
+        getInputProps,
+        getTagProps,
+        getListboxProps,
+        getOptionProps,
+        groupedOptions,
+        value,
+        focused,
+        setAnchorEl,
+    } = useAutocomplete({
+        id: 'customized-hook-demo',
+        defaultValue: [languages[0]],
+        multiple: true,
+        options: languages,
+        getOptionLabel: (option) => option.language,
+    })
+
     return (
-        <div>
-            <Container maxWidth="md">
-                <Typography variant="h5">
-                    What Languages do you speak in the Home?
-                </Typography>
-                <br />
-                <Autocomplete
-                    multiple
-                    options={languages}
-                    disableCloseOnSelect
-                    getOptionLabel={(option) => option.language}
-                    renderOption={(option, { selected }) => (
-                        <>
-                            <Checkbox
-                                icon={icon}
-                                checkedIcon={checkedIcon}
-                                style={{ marginRight: 8 }}
-                                checked={selected}
-                            />
-                            {option.language}
-                        </>
-                    )}
-                    style={{ width: 500 }}
-                    renderInput={(params) => (
-                        <>
-                            <TextField
-                                {...params}
-                                variant="outlined"
-                                label="Select Language(s)"
-                            />
-                        </>
-                    )}
-                />
-            </Container>
-        </div>
+        <Container maxWidth="md">
+            <NoSsr>
+                <div>
+                    <div {...getRootProps()}>
+                        <Typography variant="h5" {...getInputLabelProps()}>
+                            What Language(s) do you Speak at Home?
+                        </Typography>
+                        <label
+                            style={{ color: 'grey', marginBottom: '0.5rem' }}
+                        >
+                            Select Additional Language(s)
+                        </label>
+                        <br />
+                        <InputWrapper
+                            ref={setAnchorEl}
+                            className={focused ? 'focused' : ''}
+                        >
+                            {value.map(
+                                (option: LanguageType, index: number) => (
+                                    <Tag
+                                        label={option.language}
+                                        {...getTagProps({ index })}
+                                    />
+                                )
+                            )}
+                            <input {...getInputProps()} />
+                        </InputWrapper>
+                        <br />
+                        <InputWrapper
+                            ref={setAnchorEl}
+                            className={focused ? 'focused' : ''}
+                        >
+                            <SearchIcon />
+                            <input {...getInputProps()} />
+                        </InputWrapper>
+                    </div>
+                    {groupedOptions.length > 0 ? (
+                        <Listbox {...getListboxProps()}>
+                            {groupedOptions.map((option, index) => (
+                                <li {...getOptionProps({ option, index })}>
+                                    <span>{option.language}</span>
+                                    <CheckIcon fontSize="small" />
+                                </li>
+                            ))}
+                        </Listbox>
+                    ) : null}
+                </div>
+            </NoSsr>
+        </Container>
     )
 }
 
 export default HostFormLang
 
+interface LanguageType {
+    language: string
+}
+
 const languages = [
+    { language: 'English' },
     { language: 'Afrikaans' },
     { language: 'Albanian' },
     { language: 'Arabic' },
@@ -73,7 +230,6 @@ const languages = [
     { language: 'Czech' },
     { language: 'Danish' },
     { language: 'Dutch' },
-    { language: 'English' },
     { language: 'Estonian' },
     { language: 'Fiji' },
     { language: 'Finnish' },
@@ -92,81 +248,43 @@ const languages = [
     { language: 'Japanese' },
     { language: 'Javanese' },
     { language: 'Korean' },
+    { language: 'Latin' },
+    { language: 'Latvian' },
+    { language: 'Lithuanian' },
+    { language: 'Macedonian' },
+    { language: 'Malay' },
+    { language: 'Malayalam' },
+    { language: 'Maltese' },
+    { language: 'Maori' },
+    { language: 'Marathi' },
+    { language: 'Mongolian' },
+    { language: 'Nepali' },
+    { language: 'Norwegian' },
+    { language: 'Persian' },
+    { language: 'Polish' },
+    { language: 'Portuguese' },
+    { language: 'Punjabi' },
+    { language: 'Quechua' },
+    { language: 'Romanian' },
+    { language: 'Russian' },
+    { language: 'Samoan' },
+    { language: 'Serbian' },
+    { language: 'Slovak' },
+    { language: 'Slovenian' },
+    { language: 'Spanish' },
+    { language: 'Swahili' },
+    { language: 'Swedish' },
+    { language: 'Tamil' },
+    { language: 'Tatar' },
+    { language: 'Telugu' },
+    { language: 'Thai' },
+    { language: 'Tibetan' },
+    { language: 'Tonga' },
+    { language: 'Turkish' },
+    { language: 'Ukrainian' },
+    { language: 'Urdu' },
+    { language: 'Uzbek' },
+    { language: 'Vietnamese' },
+    { language: 'Welsh' },
+    { language: 'Xhosa' },
 ]
-
-{
-    /* <select data-placeholder="Choose a Language...">
-  Afrikaans
-  Albanian
-  Arabic
-  Armenian
-  Basque
-  Bengali
-  Bulgarian
-  Catalan
-  Cambodian
-  Chinese (Mandarin)
-  Croatian
-  Czech
-  Danish
-  Dutch
-  English
-  Estonian
-  Fiji
-  Finnish
-  French
-  Georgian
-  German
-  Greek
-  Gujarati
-  Hebrew
-  Hindi
-  Hungarian
-  Icelandic
-  Indonesian
-  Irish
-  Italian
-  Japanese
-  Javanese
-  Korean //i stopped here
-  < value="LA">Latin</>
-  < value="LV">Latvian</>
-  < value="LT">Lithuanian</>
-  < value="MK">Macedonian</>
-  < value="MS">Malay</>
-  < value="ML">Malayalam</>
-  < value="MT">Maltese</>
-  < value="MI">Maori</>
-  < value="MR">Marathi</>
-  < value="MN">Mongolian</>
-  < value="NE">Nepali</>
-  < value="NO">Norwegian</>
-  < value="FA">Persian</>
-  < value="PL">Polish</>
-  < value="PT">Portuguese</>
-  < value="PA">Punjabi</>
-  < value="QU">Quechua</>
-  < value="RO">Romanian</>
-  < value="RU">Russian</>
-  < value="SM">Samoan</>
-  < value="SR">Serbian</>
-  < value="SK">Slovak</>
-  < value="SL">Slovenian</>
-  < value="ES">Spanish</>
-  < value="SW">Swahili</>
-  < value="SV">Swedish </>
-  < value="TA">Tamil</>
-  < value="TT">Tatar</>
-  < value="TE">Telugu</>
-  < value="TH">Thai</>
-  < value="BO">Tibetan</>
-  < value="TO">Tonga</>
-  < value="TR">Turkish</>
-  < value="UK">Ukrainian</>
-  < value="UR">Urdu</>
-  < value="UZ">Uzbek</>
-  < value="VI">Vietnamese</>
-  < value="CY">Welsh</>
-  < value="XH">Xhosa</>
-</select> */
-}
