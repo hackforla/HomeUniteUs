@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, CSSProperties } from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import {
     Container,
@@ -60,6 +60,13 @@ const validationSchema = Yup.object()
             )
     )
 
+const fieldContainerStyles: CSSProperties = {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    fontSize: '18px',
+}
+
 const HostFormGender: React.FC = () => {
     const handleSubmit = (values: FormValues): void => {
         alert(JSON.stringify(values))
@@ -84,14 +91,7 @@ const HostFormGender: React.FC = () => {
                                     flexDirection: 'column',
                                 }}
                             >
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        fontSize: '18px',
-                                    }}
-                                >
+                                <div style={fieldContainerStyles}>
                                     <Field
                                         autoComplete="off"
                                         name="woman"
@@ -100,14 +100,7 @@ const HostFormGender: React.FC = () => {
                                     />
                                     <label>Woman</label>
                                 </div>
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        fontSize: '18px',
-                                    }}
-                                >
+                                <div style={fieldContainerStyles}>
                                     <Field
                                         autoComplete="off"
                                         name="man"
@@ -116,14 +109,7 @@ const HostFormGender: React.FC = () => {
                                     />
                                     <label>Man</label>
                                 </div>
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        fontSize: '18px',
-                                    }}
-                                >
+                                <div style={fieldContainerStyles}>
                                     <Field
                                         autoComplete="off"
                                         name="transMan"
@@ -132,14 +118,7 @@ const HostFormGender: React.FC = () => {
                                     />
                                     <label>Trans Man</label>
                                 </div>
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        fontSize: '18px',
-                                    }}
-                                >
+                                <div style={fieldContainerStyles}>
                                     <Field
                                         autoComplete="off"
                                         name="transWoman"
@@ -148,14 +127,7 @@ const HostFormGender: React.FC = () => {
                                     />
                                     <label>Trans Woman</label>
                                 </div>
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        fontSize: '18px',
-                                    }}
-                                >
+                                <div style={fieldContainerStyles}>
                                     <Field
                                         autoComplete="off"
                                         name="nonBinary"
@@ -164,14 +136,7 @@ const HostFormGender: React.FC = () => {
                                     />
                                     <label>Non Binary</label>
                                 </div>
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        fontSize: '18px',
-                                    }}
-                                >
+                                <div style={fieldContainerStyles}>
                                     <Field
                                         autoComplete="off"
                                         name="notToIdentify"
@@ -180,14 +145,7 @@ const HostFormGender: React.FC = () => {
                                     />
                                     <label>Prefer not to Identify</label>
                                 </div>
-                                <div
-                                    style={{
-                                        display: 'flex',
-                                        flexDirection: 'row',
-                                        alignItems: 'center',
-                                        fontSize: '18px',
-                                    }}
-                                >
+                                <div style={fieldContainerStyles}>
                                     <Field
                                         autoComplete="off"
                                         name="describe"
