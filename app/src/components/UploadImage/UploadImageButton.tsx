@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react'
-import { Button, Box, Paper, Container } from '@material-ui/core'
-// import Button from '../Registration/Button/Button'
+import React, { useState } from 'react'
+import { Button, Box, Container, Divider } from '@material-ui/core'
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 
 function UploadImageButton() {
     // const [selectedImage, setSelectedImage]: any = useState() //original
@@ -53,8 +53,10 @@ function UploadImageButton() {
                 >
                     <Container
                         style={{
+                            borderWidth: '2px',
                             borderStyle: 'dashed',
-                            borderColor: 'grey',
+                            borderColor: '#D9D9D9',
+                            borderRadius: '4px',
                             height: '100%',
                             display: 'flex' /* establish flex container */,
                             flexDirection:
@@ -65,10 +67,22 @@ function UploadImageButton() {
                         }}
                         maxWidth="sm"
                     >
+                        <div
+                            style={{
+                                background: '#E6E6E6',
+                                opacity: '0.3',
+                                width: '589px',
+                                height: '340px',
+                            }}
+                        ></div>
                         <Button
                             variant="contained"
-                            color="primary"
                             component="label"
+                            style={{
+                                position: 'absolute',
+                                background: '#55B1EB',
+                                color: '#fff',
+                            }}
                         >
                             Browse
                             <input
@@ -80,6 +94,64 @@ function UploadImageButton() {
                             />
                         </Button>
                     </Container>
+                    <Divider
+                        style={{
+                            margin: '1.5rem auto',
+                            width: '44.6vw',
+                        }}
+                    />
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        <Button style={{ color: '#55B1EB' }}>
+                            <span
+                                style={{
+                                    padding: '0.4rem 1.3rem 0.4rem 1.3rem',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <ArrowBackIosIcon /> Back
+                            </span>
+                        </Button>
+
+                        <Button
+                            variant="contained"
+                            // color="#55B1EB"
+                            style={{
+                                margin: '0 3rem 0 7rem',
+                                background: '#55B1EB',
+                                color: '#fff',
+                            }}
+                        >
+                            <span
+                                style={{
+                                    padding: '0.4rem 1.3rem 0.4rem 1.3rem',
+                                }}
+                            >
+                                Skip for Now
+                            </span>
+                        </Button>
+
+                        <Button
+                            type="submit"
+                            // disabled={!dirty || !isValid}
+                            variant="contained"
+                            // color="#55B1EB"
+                            style={{ background: '#55B1EB', color: '#fff' }}
+                        >
+                            <span
+                                style={{
+                                    padding: '0.4rem 1.3rem 0.4rem 1.3rem',
+                                }}
+                            >
+                                Save and Continue
+                            </span>
+                        </Button>
+                    </div>
                 </Container>
             </Box>
         </>
