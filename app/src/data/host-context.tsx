@@ -17,11 +17,6 @@ interface HostDashboardData {
   }
 }
 
-interface QuestionsResponse {
-  showstopper: Array<ShowstopperQuestionType>
-  matching: Array<MatchingQuestionType>
-}
-
 enum HostDashboardActionType {
   BeginFetchQuestions,
   FinishFetchQuestions,
@@ -75,12 +70,10 @@ function hostDashboardReducer(
           ...state.loaderState,
           loading: false,
         },
-        showstopperQuestions: action.payload.showstopper as Array<
+        showstopperQuestions: action.payload[0] as Array<
           ShowstopperQuestionType
         >,
-        matchingQuestions: action.payload.matching as Array<
-          MatchingQuestionType
-        >,
+        matchingQuestions: action.payload[1] as Array<MatchingQuestionType>,
       }
     }
     case HostDashboardActionType.BeginPostResponse: {
@@ -112,8 +105,6 @@ export function HostDashboardDataProvider(
 ): JSX.Element {
   const [state, dispatch] = React.useReducer(hostDashboardReducer, initialState)
 
-  //dispatch begin and finish get questions
-
   React.useEffect(() => {
     ;(async function () {
       console.log('loadData: fetching...')
@@ -122,17 +113,16 @@ export function HostDashboardDataProvider(
           type: HostDashboardActionType.BeginFetchQuestions,
           payload: 'Retrieving host questions...',
         })
-        const showstopperQuestions = await hostsFetcher.getShowstopperHostQuestions()
-        const matchingQuestions = await hostsFetcher.getMatchingHostQuestions()
-        const hostQuestions = {
-          showstopper: showstopperQuestions,
-          matching: matchingQuestions,
-        }
 
-        dispatch({
-          type: HostDashboardActionType.FinishFetchQuestions,
-          payload: hostQuestions,
-        })
+        Promise.all([
+          await hostsFetcher.getHostShowstopperQuestions(),
+          await hostsFetcher.getHostMatchingQuestions(),
+        ]).then((hostQuestions) =>
+          dispatch({
+            type: HostDashboardActionType.FinishFetchQuestions,
+            payload: hostQuestions,
+          })
+        )
       } catch (e) {
         dispatch({
           type: HostDashboardActionType.Error,

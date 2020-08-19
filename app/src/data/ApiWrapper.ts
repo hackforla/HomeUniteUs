@@ -114,13 +114,13 @@ export class ApiWrapper {
   }
 
   // Hosts
-  public async getShowstopperHostQuestions(): Promise<
+  public async getHostShowstopperQuestions(): Promise<
     Array<ShowstopperQuestionType>
   > {
     return await this.hostShowstopperQuestionsFetcher.getAll()
   }
 
-  public async getMatchingHostQuestions(): Promise<
+  public async getHostMatchingQuestions(): Promise<
     Array<MatchingQuestionType>
   > {
     return await this.hostMatchingQuestionsFetcher.getAll()
