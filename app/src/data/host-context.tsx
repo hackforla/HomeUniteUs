@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { MatchingQuestionType } from '../models/MatchingQuestionType'
+import { ShowstopperQuestionType } from '../models/ShowstopperQuestionType'
 import { HostResponse } from '../models/HostResponse'
 import { ApiWrapper } from './ApiWrapper'
 
@@ -7,12 +8,18 @@ const HostDashboardContext = React.createContext({})
 const hostsFetcher = new ApiWrapper()
 
 interface HostDashboardData {
-  hostQuestions: Array<MatchingQuestionType>
+  showstopperQuestions: Array<ShowstopperQuestionType>
+  matchingQuestions: Array<MatchingQuestionType>
   hostResponse: HostResponse | null
   loaderState: {
     loading: boolean
     message: string
   }
+}
+
+interface QuestionsResponse {
+  showstopper: Array<ShowstopperQuestionType>
+  matching: Array<MatchingQuestionType>
 }
 
 enum HostDashboardActionType {
@@ -29,14 +36,17 @@ interface HostDashboardAction {
   type: HostDashboardActionType
   payload?:
     | HostDashboardData
+    | Array<ShowstopperQuestionType>
     | Array<MatchingQuestionType>
     | boolean
     | string
     | HostResponse
+    | any
 }
 
 const initialState: HostDashboardData = {
-  hostQuestions: [],
+  showstopperQuestions: [],
+  matchingQuestions: [],
   hostResponse: null,
   loaderState: {
     loading: false,
@@ -65,7 +75,12 @@ function hostDashboardReducer(
           ...state.loaderState,
           loading: false,
         },
-        hostQuestions: action.payload as Array<MatchingQuestionType>,
+        showstopperQuestions: action.payload.showstopper as Array<
+          ShowstopperQuestionType
+        >,
+        matchingQuestions: action.payload.matching as Array<
+          MatchingQuestionType
+        >,
       }
     }
     case HostDashboardActionType.BeginPostResponse: {
@@ -107,11 +122,16 @@ export function HostDashboardDataProvider(
           type: HostDashboardActionType.BeginFetchQuestions,
           payload: 'Retrieving host questions...',
         })
-        const questions = await hostsFetcher.getMatchingHostQuestions()
+        const showstopperQuestions = await hostsFetcher.getShowstopperHostQuestions()
+        const matchingQuestions = await hostsFetcher.getMatchingHostQuestions()
+        const hostQuestions = {
+          showstopper: showstopperQuestions,
+          matching: matchingQuestions,
+        }
 
         dispatch({
           type: HostDashboardActionType.FinishFetchQuestions,
-          payload: questions,
+          payload: hostQuestions,
         })
       } catch (e) {
         dispatch({
