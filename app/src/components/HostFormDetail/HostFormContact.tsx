@@ -44,6 +44,8 @@ const HostFormAddress: React.FC = () => {
     'Phone Call',
   ])
 
+  const formType = 'contact-form'
+
   const handleSubmit = (values: FormValues): void => {
     alert(JSON.stringify(values))
   }

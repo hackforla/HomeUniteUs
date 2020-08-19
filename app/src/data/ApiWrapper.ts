@@ -73,7 +73,7 @@ export class Fetcher<T> {
   }
 
   // by id : string or integer
-  public async putById(id: string, item: object): Promise<string> {
+  public async putById(id: number | string, item: object): Promise<string> {
     return (await putJson(
       `${this.endpoint}/${id}`,
       JSON.stringify(item)
@@ -89,7 +89,7 @@ export class ApiWrapper {
   private guestFetcher: Fetcher<Guest>
   private hostShowstopperQuestionsFetcher: Fetcher<ShowstopperQuestionType>
   private hostMatchingQuestionsFetcher: Fetcher<MatchingQuestionType>
-  private hostInformationPost: Fetcher<string>
+  private hostInformationFormPost: Fetcher<string>
   private hostQuestionsPost: Fetcher<string>
 
   public constructor(id?: number | string) {
@@ -100,7 +100,8 @@ export class ApiWrapper {
     this.hostMatchingQuestionsFetcher = new Fetcher<MatchingQuestionType>(
       `hostQuestions`
     )
-    this.hostInformationPost = new Fetcher<string>('host/')
+
+    this.hostInformationFormPost = new Fetcher<string>('host/')
     this.hostQuestionsPost = new Fetcher<string>(`host/questions/${id}`)
   }
 
@@ -126,18 +127,21 @@ export class ApiWrapper {
     return await this.hostMatchingQuestionsFetcher.getAll()
   }
 
-  /*POST vs PUT: per our design
+  /*POST vs PUT: 
     -create and POST the client profile (empty to start)
     -every 'submit' thereafter is a series of updates to the profile up to and including the final submit page*/
 
-  //id here is 'contact-info'
-  public async postHostInformation(id: string, item: object): Promise<string> {
-    return await this.hostInformationPost.putById(id, item)
+  //id here is 'contact-info' if we want to use this more generally vs unique methods for each form post
+  public async postHostInformation(
+    id: number | string,
+    item: object
+  ): Promise<string> {
+    return await this.hostInformationFormPost.putById(id, item)
   }
 
   //id here is questionID
   public async putHostSelectResponse(
-    id: string,
+    id: number | string,
     item: HostResponse
   ): Promise<string> {
     return await this.hostQuestionsPost.putById(id, item)

@@ -119,17 +119,10 @@ export function HostDashboardDataProvider(
           await hostsFetcher.getHostMatchingQuestions(),
         ])
 
-        console.log('host questions promise.all', hostQuestions)
-
-        // Promise.all([
-        //   await hostsFetcher.getHostShowstopperQuestions(),
-        //   await hostsFetcher.getHostMatchingQuestions(),
-        // ]).then((hostQuestions) =>
-        //   dispatch({
-        //     type: HostDashboardActionType.FinishFetchQuestions,
-        //     payload: hostQuestions,
-        //   })
-        // )
+        dispatch({
+          type: HostDashboardActionType.FinishFetchQuestions,
+          payload: hostQuestions,
+        })
       } catch (e) {
         dispatch({
           type: HostDashboardActionType.Error,
@@ -747,13 +740,32 @@ export function useHostDashboardData() {
     )
   }
 
-  const postHostResponse = (hostResponse: HostResponse) => {
+  const postHostResponse = async (
+    id: number | string,
+    hostResponse: HostResponse
+  ) => {
     console.log(`postHostResponse: ${hostResponse} `)
     try {
-      //dispatch begin
-      //await post
-      //dispatch end
-    } catch (e) {}
+      dispatch({
+        type: HostDashboardActionType.BeginPostResponse,
+        payload: 'Posting host response...',
+      })
+
+      const postResponse = await hostsFetcher.putHostSelectResponse(
+        id,
+        hostResponse
+      )
+
+      dispatch({
+        type: HostDashboardActionType.FinishPostResponse,
+        payload: 'Finished host response...',
+      })
+    } catch (e) {
+      dispatch({
+        type: HostDashboardActionType.Error,
+        payload: `System error: ${e}`,
+      })
+    }
   }
 
   const [data, dispatch] = context as [
@@ -764,8 +776,6 @@ export function useHostDashboardData() {
   return {
     data,
     dispatch,
-    getShowstopperQuestions,
-    getMatchingQuestions,
     postHostResponse,
   }
 }

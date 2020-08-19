@@ -66,12 +66,7 @@ const IconContainer = (props: {
 }
 
 export const QuestionPage = (props: Props) => {
-  const {
-    data,
-    getShowstopperQuestions,
-    getMatchingQuestions,
-    postHostResponse,
-  } = useHostDashboardData()
+  const { data, postHostResponse } = useHostDashboardData()
   console.log('testing custom hook', data)
 
   // sort by order
@@ -201,7 +196,7 @@ export const QuestionPage = (props: Props) => {
         hostId: 1,
         responseValues: [1],
       }
-      await postHostResponse(testResponse)
+      await postHostResponse(state.groupIndex, testResponse)
     } catch (e) {
       console.log('failed to  post answer')
     }
