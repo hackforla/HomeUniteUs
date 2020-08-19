@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useHostDashboardData } from '../../data/host-context'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import {
   Container,
@@ -12,6 +13,8 @@ import * as Yup from 'yup'
 import SortableComponent from './SortableComponent'
 
 // import { TextInput } from '../Registration/TextInput'
+
+//this component is not yet wrapped in the HostProvider
 
 interface FormValues {
   email: string
@@ -38,16 +41,20 @@ const validationSchema = Yup.object()
   )
 
 const HostFormAddress: React.FC = () => {
+  const { putHostResponse } = useHostDashboardData()
+
+  const [formType, setFormType] = useState('contact-info')
   const [contactOrder, setContactOrder] = useState([
     'Email',
     'SMS',
     'Phone Call',
   ])
 
-  const formType = 'contact-form'
-
   const handleSubmit = (values: FormValues): void => {
     alert(JSON.stringify(values))
+
+    // from host context - endpoint does not exist
+    // putHostResponse(formType, values)
   }
 
   return (

@@ -740,7 +740,7 @@ export function useHostDashboardData() {
     )
   }
 
-  const postHostResponse = async (
+  const putHostResponse = async (
     id: number | string,
     hostResponse: HostResponse
   ) => {
@@ -751,10 +751,7 @@ export function useHostDashboardData() {
         payload: 'Posting host response...',
       })
 
-      const postResponse = await hostsFetcher.putHostSelectResponse(
-        id,
-        hostResponse
-      )
+      await hostsFetcher.putHostRegistrationResponse(id, hostResponse)
 
       dispatch({
         type: HostDashboardActionType.FinishPostResponse,
@@ -776,6 +773,6 @@ export function useHostDashboardData() {
   return {
     data,
     dispatch,
-    postHostResponse,
+    putHostResponse,
   }
 }

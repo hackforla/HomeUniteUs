@@ -132,15 +132,14 @@ export class ApiWrapper {
     -every 'submit' thereafter is a series of updates to the profile up to and including the final submit page*/
 
   //id here is 'contact-info' if we want to use this more generally vs unique methods for each form post
-  public async postHostInformation(
-    id: number | string,
-    item: object
-  ): Promise<string> {
-    return await this.hostInformationFormPost.putById(id, item)
-  }
+  //   public async postHostInformation(
+  //     id: number | string,
+  //     item: object
+  //   ): Promise<string> {
+  //     return await this.hostInformationFormPost.putById(id, item)
+  //   }
 
-  //id here is questionID
-  public async putHostSelectResponse(
+  public async putHostRegistrationResponse(
     id: number | string,
     item: HostResponse
   ): Promise<string> {
