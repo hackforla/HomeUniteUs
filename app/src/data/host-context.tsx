@@ -114,15 +114,22 @@ export function HostDashboardDataProvider(
           payload: 'Retrieving host questions...',
         })
 
-        Promise.all([
-          await hostsFetcher.getHostShowstopperQuestions(),
+        const hostQuestions = await Promise.all([
+          hostsFetcher.getHostShowstopperQuestions(),
           await hostsFetcher.getHostMatchingQuestions(),
-        ]).then((hostQuestions) =>
-          dispatch({
-            type: HostDashboardActionType.FinishFetchQuestions,
-            payload: hostQuestions,
-          })
-        )
+        ])
+
+        console.log('host questions promise.all', hostQuestions)
+
+        // Promise.all([
+        //   await hostsFetcher.getHostShowstopperQuestions(),
+        //   await hostsFetcher.getHostMatchingQuestions(),
+        // ]).then((hostQuestions) =>
+        //   dispatch({
+        //     type: HostDashboardActionType.FinishFetchQuestions,
+        //     payload: hostQuestions,
+        //   })
+        // )
       } catch (e) {
         dispatch({
           type: HostDashboardActionType.Error,
