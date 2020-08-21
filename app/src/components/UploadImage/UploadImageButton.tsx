@@ -2,6 +2,20 @@ import React, { useState, CSSProperties } from 'react'
 import { Button, Box, Container, Divider } from '@material-ui/core'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 
+const ContainerStyles: CSSProperties = {
+    borderWidth: '2px',
+    borderStyle: 'dashed',
+    borderColor: '#D9D9D9',
+    borderRadius: '4px',
+    height: '8rem',
+    width: '10rem',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '0',
+}
+
 function UploadImageButton() {
     // const [selectedImage, setSelectedImage]: any = useState() //original
     const [selectedImage, setSelectedImage]: any = useState([])
@@ -11,7 +25,6 @@ function UploadImageButton() {
     const imageSelectHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         const target = event?.target as HTMLInputElement
         const file: any = (target.files as FileList)[0]
-        console.log(file, '<-----------------files??')
         let reader = new FileReader()
         let url = reader.readAsDataURL(file)
         reader.onloadend = () => {
@@ -40,23 +53,8 @@ function UploadImageButton() {
 
     let moreImage =
         selectedImage.length > 0 ? (
-            <Box mt={2} display="flex" justifyContent="space-evenly">
-                <div
-                    style={{
-                        borderWidth: '2px',
-                        borderStyle: 'dashed',
-                        borderColor: '#D9D9D9',
-                        borderRadius: '4px',
-                        height: '10rem',
-                        width: '10rem',
-                        display: 'flex' /* establish flex container */,
-                        flexDirection: 'column' /* make main axis vertical */,
-                        justifyContent:
-                            'center' /* center items vertically, in this case */,
-                        alignItems: 'center',
-                        padding: '0',
-                    }}
-                >
+            <Box mt={2} mx={8} display="flex" justifyContent="space-evenly">
+                <div style={ContainerStyles}>
                     <Button
                         variant="contained"
                         component="label"
@@ -77,22 +75,7 @@ function UploadImageButton() {
                     </Button>
                 </div>
 
-                <div
-                    style={{
-                        borderWidth: '2px',
-                        borderStyle: 'dashed',
-                        borderColor: '#D9D9D9',
-                        borderRadius: '4px',
-                        height: '10rem',
-                        width: '10rem',
-                        display: 'flex' /* establish flex container */,
-                        flexDirection: 'column' /* make main axis vertical */,
-                        justifyContent:
-                            'center' /* center items vertically, in this case */,
-                        alignItems: 'center',
-                        padding: '0',
-                    }}
-                >
+                <div style={ContainerStyles}>
                     <Button
                         variant="contained"
                         component="label"
@@ -113,22 +96,7 @@ function UploadImageButton() {
                     </Button>
                 </div>
 
-                <div
-                    style={{
-                        borderWidth: '2px',
-                        borderStyle: 'dashed',
-                        borderColor: '#D9D9D9',
-                        borderRadius: '4px',
-                        height: '10rem',
-                        width: '10rem',
-                        display: 'flex' /* establish flex container */,
-                        flexDirection: 'column' /* make main axis vertical */,
-                        justifyContent:
-                            'center' /* center items vertically, in this case */,
-                        alignItems: 'center',
-                        padding: '0',
-                    }}
-                >
+                <div style={ContainerStyles}>
                     <Button
                         variant="contained"
                         component="label"
