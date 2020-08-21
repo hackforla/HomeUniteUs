@@ -17,10 +17,7 @@ const ContainerStyles: CSSProperties = {
 }
 
 function UploadImageButton() {
-    // const [selectedImage, setSelectedImage]: any = useState() //original
     const [selectedImage, setSelectedImage]: any = useState([])
-
-    // const img: any = useRef('empty')
 
     const imageSelectHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         const target = event?.target as HTMLInputElement
@@ -30,11 +27,6 @@ function UploadImageButton() {
         reader.onloadend = () => {
             setSelectedImage([...selectedImage, reader.result])
         }
-        // setSelectedImage([...selectedImage, file])
-
-        // const file: File = (target.files as FileList)[0] //this only selects the first one, gotta change it
-        // setSelectedImage(file) //old way
-        // img.current.innerText = file.name
     }
 
     // const fileUploadHandler = async () => {
@@ -55,66 +47,96 @@ function UploadImageButton() {
         selectedImage.length > 0 ? (
             <Box mt={2} mx={8} display="flex" justifyContent="space-evenly">
                 <div style={ContainerStyles}>
-                    <Button
-                        variant="contained"
-                        component="label"
-                        style={{
-                            position: 'absolute',
-                            background: '#55B1EB',
-                            color: '#fff',
-                        }}
-                    >
-                        Browse
-                        <input
-                            type="file"
-                            accept="image/*"
-                            multiple
-                            onChange={imageSelectHandler}
-                            style={{ display: 'none' }}
-                        />
-                    </Button>
+                    {selectedImage[1] ? (
+                        <div style={{ width: '100%', height: '100%' }}>
+                            <img
+                                src={selectedImage[1]}
+                                width="100%"
+                                height="100%"
+                            />
+                        </div>
+                    ) : (
+                        <Button
+                            variant="contained"
+                            component="label"
+                            style={{
+                                position: 'absolute',
+                                background: '#55B1EB',
+                                color: '#fff',
+                            }}
+                        >
+                            Browse
+                            <input
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                onChange={imageSelectHandler}
+                                style={{ display: 'none' }}
+                            />
+                        </Button>
+                    )}
                 </div>
 
                 <div style={ContainerStyles}>
-                    <Button
-                        variant="contained"
-                        component="label"
-                        style={{
-                            position: 'absolute',
-                            background: '#55B1EB',
-                            color: '#fff',
-                        }}
-                    >
-                        Browse
-                        <input
-                            type="file"
-                            accept="image/*"
-                            multiple
-                            onChange={imageSelectHandler}
-                            style={{ display: 'none' }}
-                        />
-                    </Button>
+                    {selectedImage[2] ? (
+                        <div style={{ width: '100%', height: '100%' }}>
+                            <img
+                                src={selectedImage[1]}
+                                width="100%"
+                                height="100%"
+                            />
+                        </div>
+                    ) : (
+                        <Button
+                            variant="contained"
+                            component="label"
+                            style={{
+                                position: 'absolute',
+                                background: '#55B1EB',
+                                color: '#fff',
+                            }}
+                        >
+                            Browse
+                            <input
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                onChange={imageSelectHandler}
+                                style={{ display: 'none' }}
+                            />
+                        </Button>
+                    )}
                 </div>
 
                 <div style={ContainerStyles}>
-                    <Button
-                        variant="contained"
-                        component="label"
-                        style={{
-                            position: 'absolute',
-                            background: '#55B1EB',
-                            color: '#fff',
-                        }}
-                    >
-                        Browse
-                        <input
-                            type="file"
-                            accept="image/*"
-                            multiple
-                            onChange={imageSelectHandler}
-                            style={{ display: 'none' }}
-                        />
-                    </Button>
+                    {selectedImage[3] ? (
+                        <div style={{ width: '100%', height: '100%' }}>
+                            <img
+                                src={selectedImage[1]}
+                                width="100%"
+                                height="100%"
+                            />
+                        </div>
+                    ) : (
+                        <Button
+                            variant="contained"
+                            component="label"
+                            style={{
+                                position: 'absolute',
+                                background: '#55B1EB',
+                                color: '#fff',
+                            }}
+                        >
+                            Browse
+                            <input
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                onChange={imageSelectHandler}
+                                style={{ display: 'none' }}
+                            />
+                        </Button>
+                    )}
                 </div>
             </Box>
         ) : (
@@ -124,7 +146,7 @@ function UploadImageButton() {
     let displayImageOrBrowseBtn =
         selectedImage.length > 0 ? (
             <div style={{ height: '100%', width: '100%' }}>
-                <img src={selectedImage} width="100%" height="100%" />
+                <img src={selectedImage[0]} width="100%" height="100%" />
             </div>
         ) : (
             <>
@@ -156,7 +178,6 @@ function UploadImageButton() {
                 </Button>
             </>
         )
-
     return (
         <>
             <Box width="75%" margin="0 auto" mt={5}>
@@ -174,11 +195,9 @@ function UploadImageButton() {
                             borderColor: '#D9D9D9',
                             borderRadius: '4px',
                             height: '100%',
-                            display: 'flex' /* establish flex container */,
-                            flexDirection:
-                                'column' /* make main axis vertical */,
-                            justifyContent:
-                                'center' /* center items vertically, in this case */,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
                             alignItems: 'center',
                             padding: '0',
                         }}
@@ -230,7 +249,7 @@ function UploadImageButton() {
 
                         <Button
                             type="submit"
-                            // disabled={!dirty || !isValid}
+                            disabled={selectedImage.length == 0 ? true : false}
                             variant="contained"
                             style={{ background: '#55B1EB', color: '#fff' }}
                         >
@@ -250,22 +269,3 @@ function UploadImageButton() {
 }
 
 export default UploadImageButton
-
-{
-    /* <button onClick={fileUploadHandler}>Upload</button> */
-} //might put back when needed
-
-{
-    /* <input
-accept="image/*"
-className={classes.input}
-id="contained-button-file"
-multiple
-type="file"
-/>
-<label htmlFor="contained-button-file">
-<Button variant="contained" color="primary" component="span">
-  Upload
-</Button>
-</label> */
-}
