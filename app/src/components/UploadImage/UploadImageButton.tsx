@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, CSSProperties } from 'react'
 import { Button, Box, Container, Divider } from '@material-ui/core'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 
@@ -10,10 +10,14 @@ function UploadImageButton() {
 
     const imageSelectHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         const target = event?.target as HTMLInputElement
-        const file: any = target.files as FileList
+        const file: any = (target.files as FileList)[0]
         console.log(file, '<-----------------files??')
-        console.log(file[0].name, '<-----------------files??')
-        setSelectedImage([...selectedImage, file])
+        let reader = new FileReader()
+        let url = reader.readAsDataURL(file)
+        reader.onloadend = () => {
+            setSelectedImage([...selectedImage, reader.result])
+        }
+        // setSelectedImage([...selectedImage, file])
 
         // const file: File = (target.files as FileList)[0] //this only selects the first one, gotta change it
         // setSelectedImage(file) //old way
@@ -34,44 +38,156 @@ function UploadImageButton() {
     //     }
     // }
 
-    let test = !selectedImage ? (
-        <>
-            <h1>Hello world</h1>
-        </>
-    ) : (
-        <>
-            <div
-                style={{
-                    background: '#E6E6E6',
-                    opacity: '0.3',
-                    width: '589px',
-                    height: '340px',
-                }}
-            ></div>
-            <Button
-                variant="contained"
-                component="label"
-                style={{
-                    position: 'absolute',
-                    background: '#55B1EB',
-                    color: '#fff',
-                }}
-            >
-                Browse
-                <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={imageSelectHandler}
-                    style={{ display: 'none' }}
-                />
-            </Button>
-        </>
-    )
+    let moreImage =
+        selectedImage.length > 0 ? (
+            <Box mt={2} display="flex" justifyContent="space-evenly">
+                <div
+                    style={{
+                        borderWidth: '2px',
+                        borderStyle: 'dashed',
+                        borderColor: '#D9D9D9',
+                        borderRadius: '4px',
+                        height: '10rem',
+                        width: '10rem',
+                        display: 'flex' /* establish flex container */,
+                        flexDirection: 'column' /* make main axis vertical */,
+                        justifyContent:
+                            'center' /* center items vertically, in this case */,
+                        alignItems: 'center',
+                        padding: '0',
+                    }}
+                >
+                    <Button
+                        variant="contained"
+                        component="label"
+                        style={{
+                            position: 'absolute',
+                            background: '#55B1EB',
+                            color: '#fff',
+                        }}
+                    >
+                        Browse
+                        <input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            onChange={imageSelectHandler}
+                            style={{ display: 'none' }}
+                        />
+                    </Button>
+                </div>
 
-    let name = selectedImage?.map((img: any) =>
-        console.log(img[0].name, '<-----each image?')
-    )
+                <div
+                    style={{
+                        borderWidth: '2px',
+                        borderStyle: 'dashed',
+                        borderColor: '#D9D9D9',
+                        borderRadius: '4px',
+                        height: '10rem',
+                        width: '10rem',
+                        display: 'flex' /* establish flex container */,
+                        flexDirection: 'column' /* make main axis vertical */,
+                        justifyContent:
+                            'center' /* center items vertically, in this case */,
+                        alignItems: 'center',
+                        padding: '0',
+                    }}
+                >
+                    <Button
+                        variant="contained"
+                        component="label"
+                        style={{
+                            position: 'absolute',
+                            background: '#55B1EB',
+                            color: '#fff',
+                        }}
+                    >
+                        Browse
+                        <input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            onChange={imageSelectHandler}
+                            style={{ display: 'none' }}
+                        />
+                    </Button>
+                </div>
+
+                <div
+                    style={{
+                        borderWidth: '2px',
+                        borderStyle: 'dashed',
+                        borderColor: '#D9D9D9',
+                        borderRadius: '4px',
+                        height: '10rem',
+                        width: '10rem',
+                        display: 'flex' /* establish flex container */,
+                        flexDirection: 'column' /* make main axis vertical */,
+                        justifyContent:
+                            'center' /* center items vertically, in this case */,
+                        alignItems: 'center',
+                        padding: '0',
+                    }}
+                >
+                    <Button
+                        variant="contained"
+                        component="label"
+                        style={{
+                            position: 'absolute',
+                            background: '#55B1EB',
+                            color: '#fff',
+                        }}
+                    >
+                        Browse
+                        <input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            onChange={imageSelectHandler}
+                            style={{ display: 'none' }}
+                        />
+                    </Button>
+                </div>
+            </Box>
+        ) : (
+            ''
+        )
+
+    let displayImageOrBrowseBtn =
+        selectedImage.length > 0 ? (
+            <div style={{ height: '100%', width: '100%' }}>
+                <img src={selectedImage} width="100%" height="100%" />
+            </div>
+        ) : (
+            <>
+                <div
+                    style={{
+                        background: '#E6E6E6',
+                        opacity: '0.3',
+                        width: '589px',
+                        height: '340px',
+                    }}
+                ></div>
+                <Button
+                    variant="contained"
+                    component="label"
+                    style={{
+                        position: 'absolute',
+                        background: '#55B1EB',
+                        color: '#fff',
+                    }}
+                >
+                    Browse
+                    <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={imageSelectHandler}
+                        style={{ display: 'none' }}
+                    />
+                </Button>
+            </>
+        )
 
     return (
         <>
@@ -96,12 +212,13 @@ function UploadImageButton() {
                             justifyContent:
                                 'center' /* center items vertically, in this case */,
                             alignItems: 'center',
+                            padding: '0',
                         }}
                         maxWidth="sm"
                     >
-                        {test}
-                        {name}
+                        {displayImageOrBrowseBtn}
                     </Container>
+                    {moreImage}
                     <Divider
                         style={{
                             margin: '1.5rem auto',
