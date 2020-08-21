@@ -1,6 +1,7 @@
 import React, { useState, CSSProperties } from 'react'
 import { Button, Box, Container, Divider } from '@material-ui/core'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
+import Fab from '@material-ui/core/Fab'
 
 const ContainerStyles: CSSProperties = {
     borderWidth: '2px',
@@ -65,7 +66,7 @@ function UploadImageButton() {
                                 color: '#fff',
                             }}
                         >
-                            Browse
+                            Add more Images
                             <input
                                 type="file"
                                 accept="image/*"
@@ -81,7 +82,7 @@ function UploadImageButton() {
                     {selectedImage[2] ? (
                         <div style={{ width: '100%', height: '100%' }}>
                             <img
-                                src={selectedImage[1]}
+                                src={selectedImage[2]}
                                 width="100%"
                                 height="100%"
                             />
@@ -96,7 +97,7 @@ function UploadImageButton() {
                                 color: '#fff',
                             }}
                         >
-                            Browse
+                            Add more Image
                             <input
                                 type="file"
                                 accept="image/*"
@@ -112,7 +113,7 @@ function UploadImageButton() {
                     {selectedImage[3] ? (
                         <div style={{ width: '100%', height: '100%' }}>
                             <img
-                                src={selectedImage[1]}
+                                src={selectedImage[3]}
                                 width="100%"
                                 height="100%"
                             />
@@ -127,7 +128,7 @@ function UploadImageButton() {
                                 color: '#fff',
                             }}
                         >
-                            Browse
+                            Add more Image
                             <input
                                 type="file"
                                 accept="image/*"
@@ -178,6 +179,8 @@ function UploadImageButton() {
                 </Button>
             </>
         )
+
+    console.log(selectedImage, '<---------------------------')
     return (
         <>
             <Box width="75%" margin="0 auto" mt={5}>
