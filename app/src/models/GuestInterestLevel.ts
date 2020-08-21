@@ -1,5 +1,5 @@
 export enum GuestInterestLevel {
-  Interested,
-  NotInterested,
-  Unknown,
+    Interested,
+    NotInterested,
+    Unknown,
 }

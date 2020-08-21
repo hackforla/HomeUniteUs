@@ -5,23 +5,23 @@ import { useAuth0 } from '../../react-auth0-spa'
 import { NavLink } from 'react-router-dom'
 
 export const Header = () => {
-  const { user, logout } = useAuth0()
+    const { user, logout } = useAuth0()
 
-  const logoutClick = () => {
-    logout()
-  }
-  return (
-    <AppStyle.FlexHolder>
-      <AppStyle.FlexGrowHolder>
-        <a href="http://www.safeplaceforyouth.org/" target="_blank">
-          <AppStyle.Image src={logo} alt="Logo" />
-        </a>
-      </AppStyle.FlexGrowHolder>
-      <AppStyle.Holder>
-        <NavLink to={`/about`}>ABOUT</NavLink>
-      </AppStyle.Holder>
-      {/* Tyler 8/8/2020: Moving away from proof-of-concept to prototype */}
-      {/* 
+    const logoutClick = () => {
+        logout()
+    }
+    return (
+        <AppStyle.FlexHolder>
+            <AppStyle.FlexGrowHolder>
+                <a href="http://www.safeplaceforyouth.org/" target="_blank">
+                    <AppStyle.Image src={logo} alt="Logo" />
+                </a>
+            </AppStyle.FlexGrowHolder>
+            <AppStyle.Holder>
+                <NavLink to={`/about`}>ABOUT</NavLink>
+            </AppStyle.Holder>
+            {/* Tyler 8/8/2020: Moving away from proof-of-concept to prototype */}
+            {/* 
             <AppStyle.Holder>
                 <NavLink to={`/hostformaddress`}>Address Contact</NavLink>
             </AppStyle.Holder>
@@ -38,15 +38,15 @@ export const Header = () => {
                 <NavLink to={`/profile`}>Profile</NavLink>
             </AppStyle.Holder> 
             */}
-      <AppStyle.Holder>
-        <NavLink to={`/profileselection`}>Register</NavLink>
-      </AppStyle.Holder>
-      <AppStyle.Holder>
-        <span>Hello, {(user && user.name) || 'User'}</span>
-      </AppStyle.Holder>
-      <AppStyle.Holder>
-        <span onClick={logoutClick}>Logout</span>
-      </AppStyle.Holder>
-    </AppStyle.FlexHolder>
-  )
+            <AppStyle.Holder>
+                <NavLink to={`/profileselection`}>Register</NavLink>
+            </AppStyle.Holder>
+            <AppStyle.Holder>
+                <span>Hello, {(user && user.name) || 'User'}</span>
+            </AppStyle.Holder>
+            <AppStyle.Holder>
+                <span onClick={logoutClick}>Logout</span>
+            </AppStyle.Holder>
+        </AppStyle.FlexHolder>
+    )
 }

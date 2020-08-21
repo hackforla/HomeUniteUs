@@ -8,33 +8,33 @@ import { Fetcher } from '../data/ApiWrapper'
 import { HostQuestion, ResponseValue } from '../models'
 
 const Container = styled.div`
-  margin: 30px auto;
-  padding: 0 15px;
-  max-width: 1140px;
+    margin: 30px auto;
+    padding: 0 15px;
+    max-width: 1140px;
 `
 
 const StyledButton = styled(Button)`
-  font-size: 16px;
-  margin: 5px !important;
+    font-size: 16px;
+    margin: 5px !important;
 `
 
 interface HostQuestionsPageProps {}
 
 const initialState = {
-  questions: new Array<QuestionResponse>(),
-  questionIndex: 0,
+    questions: new Array<QuestionResponse>(),
+    questionIndex: 0,
 }
 
 interface QuestionLabelProps {
-  label: string
-  value: string
+    label: string
+    value: string
 }
 interface QuestionResponse {
-  id: string
-  question: string
-  type: string
-  options: Array<QuestionLabelProps>
-  answer: string
+    id: string
+    question: string
+    type: string
+    options: Array<QuestionLabelProps>
+    answer: string
 }
 
 // {
@@ -50,75 +50,77 @@ interface QuestionResponse {
 // }
 
 export const HostQuestionsPage = () => {
-  const [state, setState] = React.useState(initialState)
+    const [state, setState] = React.useState(initialState)
 
-  const fetcher = new Fetcher<HostQuestion>('hostQuestions')
-  const rvFetcher = new Fetcher<ResponseValue>('responseValues')
+    const fetcher = new Fetcher<HostQuestion>('hostQuestions')
+    const rvFetcher = new Fetcher<ResponseValue>('responseValues')
 
-  React.useEffect(() => {
-    rvFetcher.getAll().then((rvs: Array<ResponseValue>) => {
-      fetcher.getAll().then((questions: Array<HostQuestion>) => {
-        setState({
-          ...state,
-          questions: questions.map((q, index) => {
-            return {
-              type: 'radio',
-              question: q.text,
-              answer: '',
-              id: `${index}`,
-              options: q.responseValues.map((rvId: number) => {
-                try {
-                  const rv = rvs.filter((v) => v.id === rvId)[0]
-                  return {
-                    label: rv.text,
-                    value: rv.text,
-                  }
-                } catch (e) {
-                  return {
-                    label: `error for rvId ${rvId}: ${e}`,
-                    value: 'error',
-                  }
-                }
-              }),
-            }
-          }),
+    React.useEffect(() => {
+        rvFetcher.getAll().then((rvs: Array<ResponseValue>) => {
+            fetcher.getAll().then((questions: Array<HostQuestion>) => {
+                setState({
+                    ...state,
+                    questions: questions.map((q, index) => {
+                        return {
+                            type: 'radio',
+                            question: q.text,
+                            answer: '',
+                            id: `${index}`,
+                            options: q.responseValues.map((rvId: number) => {
+                                try {
+                                    const rv = rvs.filter(
+                                        (v) => v.id === rvId
+                                    )[0]
+                                    return {
+                                        label: rv.text,
+                                        value: rv.text,
+                                    }
+                                } catch (e) {
+                                    return {
+                                        label: `error for rvId ${rvId}: ${e}`,
+                                        value: 'error',
+                                    }
+                                }
+                            }),
+                        }
+                    }),
+                })
+            })
         })
-      })
-    })
-  }, [])
+    }, [])
 
-  function setAnswer(id: string, answer: any) {
-    setState({
-      ...state,
-      questions: state.questions.map((q) => {
-        if (q.id === id) {
-          return { ...q, answer }
-        } else {
-          return q
-        }
-      }),
-    })
-  }
+    function setAnswer(id: string, answer: any) {
+        setState({
+            ...state,
+            questions: state.questions.map((q) => {
+                if (q.id === id) {
+                    return { ...q, answer }
+                } else {
+                    return q
+                }
+            }),
+        })
+    }
 
-  function setQuestionIndex(index: number) {
-    setState({
-      ...state,
-      questionIndex: index,
-    })
-  }
+    function setQuestionIndex(index: number) {
+        setState({
+            ...state,
+            questionIndex: index,
+        })
+    }
 
-  return (
-    <Container>
-      {/* this can be relaced with the QuestionPage component */}
+    return (
+        <Container>
+            {/* this can be relaced with the QuestionPage component */}
 
-      {/* <LinearProgress variant="determinate" value={state.questionIndex / state.questions.length * 100} />
+            {/* <LinearProgress variant="determinate" value={state.questionIndex / state.questions.length * 100} />
       <form noValidate autoComplete="off">
         <QuestionField question={state.questions[state.questionIndex]} setAnswer={setAnswer}></QuestionField>
       </form>
       <StyledButton variant="contained" color="primary" onClick={() => state.questionIndex > 0 && setQuestionIndex(state.questionIndex - 1)}>Back</StyledButton>
       <StyledButton variant="contained" color="primary" onClick={() => state.questionIndex < state.questions.length - 1 && setQuestionIndex(state.questionIndex + 1)}>Forward</StyledButton> */}
-    </Container>
-  )
+        </Container>
+    )
 }
 
 export default HostQuestionsPage

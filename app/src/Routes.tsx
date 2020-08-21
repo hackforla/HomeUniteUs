@@ -8,9 +8,9 @@ import { AdminView } from './pages/AdminView'
 import { Demo } from './pages/Demo'
 import { AboutPage } from './pages/About'
 import {
-  CreateProfile,
-  CreateHostProfile,
-  CreateGuestProfile,
+    CreateProfile,
+    CreateHostProfile,
+    CreateGuestProfile,
 } from './pages/CreateProfile'
 import { AllHosts } from './pages/Admin/AllHosts'
 import ProfileSelection from './pages/ProfileSelection/ProfileSelection'
@@ -20,26 +20,30 @@ import { GuestRegistration } from './pages/GuestRegistration/GuestRegistration'
 import { HostRegistration } from './pages/HostRegistration/HostRegistration'
 
 export default function Routes() {
-  return (
-    <Switch>
-      <Route exact path="/" component={AboutPage} />
-      <Route exact path="/demo" component={Demo} />
-      <Route path="/about" component={AboutPage} />
-      <Route path="/profile" component={ProfileEditPage} />
-      <Route path="/admin/guests" component={AdminView} />
-      <Route path="/admin/guest/:id" component={AdminGuestView} />
-      <Route
-        path="/guests/:guestId/matches/:hostId"
-        component={HostProfilePage}
-      />
-      <Route path="/guests/:id" component={GuestProfilePage} />
-      <Route path="/admin/hosts" component={AllHosts} />
-      <Route exact path="/profileselection" component={ProfileSelection} />
-      <Route path="/hostformaddress" component={HostFormAddress} />
-      {/*testing ^^^*/}
-      <Route path="/guest/register" component={GuestRegistration} />
-      <Route path="/host/register" component={HostRegistration} />
-      <FourOhFour />
-    </Switch>
-  )
+    return (
+        <Switch>
+            <Route exact path="/" component={AboutPage} />
+            <Route exact path="/demo" component={Demo} />
+            <Route path="/about" component={AboutPage} />
+            <Route path="/profile" component={ProfileEditPage} />
+            <Route path="/admin/guests" component={AdminView} />
+            <Route path="/admin/guest/:id" component={AdminGuestView} />
+            <Route
+                path="/guests/:guestId/matches/:hostId"
+                component={HostProfilePage}
+            />
+            <Route path="/guests/:id" component={GuestProfilePage} />
+            <Route path="/admin/hosts" component={AllHosts} />
+            <Route
+                exact
+                path="/profileselection"
+                component={ProfileSelection}
+            />
+            <Route path="/hostformaddress" component={HostFormAddress} />
+            {/*testing ^^^*/}
+            <Route path="/guest/register" component={GuestRegistration} />
+            <Route path="/host/register" component={HostRegistration} />
+            <FourOhFour />
+        </Switch>
+    )
 }

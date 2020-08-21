@@ -1,5 +1,5 @@
 export interface Housemate {
-  name: string
-  age: number
-  relationship: string
+    name: string
+    age: number
+    relationship: string
 }

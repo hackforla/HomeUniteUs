@@ -5,10 +5,10 @@ Its only purpose is to defeat TypeScript's type widening when providing style ru
 makeStyles / withStyles which are a function of the Theme*/
 
 export const styles = (theme: any) =>
-  createStyles({
-    checkbox: {
-      color: theme.palette.primary.secondary, //<-- an example to showcase themeing
-    },
-  })
+    createStyles({
+        checkbox: {
+            color: theme.palette.primary.secondary, //<-- an example to showcase themeing
+        },
+    })
 
 //a prop can be used on the component to conditionally render the correct style

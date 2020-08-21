@@ -10,137 +10,148 @@ class ApiFetchError extends Error {}
 /* purists about HTTP: https://restfulapi.net/rest-put-vs-post/ */
 
 const getJson = async (uri: string) => {
-  try {
-    const response = await fetch(uri)
-    if (response.status !== 200) {
-      throw new Error(response.statusText)
+    try {
+        const response = await fetch(uri)
+        if (response.status !== 200) {
+            throw new Error(response.statusText)
+        }
+        return await response.json()
+    } catch (e) {
+        throw new ApiFetchError(
+            `error in getJson(): error fetching '${uri}': ${e}`
+        )
     }
-    return await response.json()
-  } catch (e) {
-    throw new ApiFetchError(`error in getJson(): error fetching '${uri}': ${e}`)
-  }
 }
 
 const postJson = async (uri: string, data: string) => {
-  try {
-    const response = await fetch(uri, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: data,
-    })
-    if (response.status !== 200) {
-      throw new Error(response.statusText)
+    try {
+        const response = await fetch(uri, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: data,
+        })
+        if (response.status !== 200) {
+            throw new Error(response.statusText)
+        }
+        return await response.json()
+    } catch (e) {
+        throw new ApiFetchError(
+            `error in getJson(): error fetching '${uri}': ${e}`
+        )
     }
-    return await response.json()
-  } catch (e) {
-    throw new ApiFetchError(`error in getJson(): error fetching '${uri}': ${e}`)
-  }
 }
 
 const putJson = async (uri: string, data: string) => {
-  try {
-    const response = await fetch(uri, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: data,
-    })
-    if (response.status !== 200) {
-      throw new Error(response.statusText)
+    try {
+        const response = await fetch(uri, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: data,
+        })
+        if (response.status !== 200) {
+            throw new Error(response.statusText)
+        }
+        return await response.json()
+    } catch (e) {
+        throw new ApiFetchError(
+            `error in getJson(): error fetching '${uri}': ${e}`
+        )
     }
-    return await response.json()
-  } catch (e) {
-    throw new ApiFetchError(`error in getJson(): error fetching '${uri}': ${e}`)
-  }
 }
 
 export class Fetcher<T> {
-  private endpoint: string
+    private endpoint: string
 
-  public constructor(resourceName: string) {
-    this.endpoint = `${ApiConfig.UriPrefix}/${resourceName}`
-  }
+    public constructor(resourceName: string) {
+        this.endpoint = `${ApiConfig.UriPrefix}/${resourceName}`
+    }
 
-  public async getAll(): Promise<Array<T>> {
-    return (await getJson(this.endpoint)) as Array<T>
-  }
+    public async getAll(): Promise<Array<T>> {
+        return (await getJson(this.endpoint)) as Array<T>
+    }
 
-  public async getById(id: string): Promise<T> {
-    return (await getJson(`${this.endpoint}/${id}`)) as T
-  }
+    public async getById(id: string): Promise<T> {
+        return (await getJson(`${this.endpoint}/${id}`)) as T
+    }
 
-  // by id : string or integer
-  public async putById(id: number | string, item: object): Promise<string> {
-    return (await putJson(
-      `${this.endpoint}/${id}`,
-      JSON.stringify(item)
-    )) as string
-  }
+    // by id : string or integer
+    public async putById(id: number | string, item: object): Promise<string> {
+        return (await putJson(
+            `${this.endpoint}/${id}`,
+            JSON.stringify(item)
+        )) as string
+    }
 
-  public async postResponse(item: object): Promise<string> {
-    return (await postJson(`${this.endpoint}`, JSON.stringify(item))) as string
-  }
+    public async postResponse(item: object): Promise<string> {
+        return (await postJson(
+            `${this.endpoint}`,
+            JSON.stringify(item)
+        )) as string
+    }
 }
 
 export class ApiWrapper {
-  private guestFetcher: Fetcher<Guest>
-  private hostShowstopperQuestionsFetcher: Fetcher<ShowstopperQuestionType>
-  private hostMatchingQuestionsFetcher: Fetcher<MatchingQuestionType>
-  private hostInformationForm: Fetcher<string>
-  private hostQuestionsPost: Fetcher<string>
+    private guestFetcher: Fetcher<Guest>
+    private hostShowstopperQuestionsFetcher: Fetcher<ShowstopperQuestionType>
+    private hostMatchingQuestionsFetcher: Fetcher<MatchingQuestionType>
+    private hostInformationForm: Fetcher<string>
+    private hostQuestionsPost: Fetcher<string>
 
-  public constructor(id?: number | string) {
-    this.guestFetcher = new Fetcher<Guest>('guests')
-    this.hostShowstopperQuestionsFetcher = new Fetcher<ShowstopperQuestionType>(
-      `/api/v1/hostRegisterQuestions/${id}`
-    )
-    this.hostMatchingQuestionsFetcher = new Fetcher<MatchingQuestionType>(
-      `/api/v1/hostRegisterQuestions/${id}`
-    )
+    public constructor(id?: number | string) {
+        this.guestFetcher = new Fetcher<Guest>('guests')
+        this.hostShowstopperQuestionsFetcher = new Fetcher<
+            ShowstopperQuestionType
+        >(`/api/v1/hostRegisterQuestions/${id}`)
+        this.hostMatchingQuestionsFetcher = new Fetcher<MatchingQuestionType>(
+            `/api/v1/hostRegisterQuestions/${id}`
+        )
 
-    this.hostInformationForm = new Fetcher<string>(`host/registration/${id}`)
-    this.hostQuestionsPost = new Fetcher<string>(`host/questions/${id}`)
-  }
+        this.hostInformationForm = new Fetcher<string>(
+            `host/registration/${id}`
+        )
+        this.hostQuestionsPost = new Fetcher<string>(`host/questions/${id}`)
+    }
 
-  // Guests
-  public async getAllGuests(): Promise<Array<Guest>> {
-    return await this.guestFetcher.getAll()
-  }
+    // Guests
+    public async getAllGuests(): Promise<Array<Guest>> {
+        return await this.guestFetcher.getAll()
+    }
 
-  public async getGuestById(id: string): Promise<Guest> {
-    return await this.guestFetcher.getById(id)
-  }
+    public async getGuestById(id: string): Promise<Guest> {
+        return await this.guestFetcher.getById(id)
+    }
 
-  // Hosts
-  public async getHostShowstopperQuestions(): Promise<
-    Array<ShowstopperQuestionType>
-  > {
-    return await this.hostShowstopperQuestionsFetcher.getAll()
-  }
+    // Hosts
+    public async getHostShowstopperQuestions(): Promise<
+        Array<ShowstopperQuestionType>
+    > {
+        return await this.hostShowstopperQuestionsFetcher.getAll()
+    }
 
-  public async getHostMatchingQuestions(): Promise<
-    Array<MatchingQuestionType>
-  > {
-    return await this.hostMatchingQuestionsFetcher.getAll()
-  }
+    public async getHostMatchingQuestions(): Promise<
+        Array<MatchingQuestionType>
+    > {
+        return await this.hostMatchingQuestionsFetcher.getAll()
+    }
 
-  /*POST vs PUT: 
+    /*POST vs PUT: 
     -create and POST the client profile (empty to start)
     -every 'submit' thereafter is a series of updates to the profile up to and including the final submit page*/
 
-  //id here is 'contact', 'address', 'info' if we want to use this more generally vs unique methods for each form post
-  public async putHostInformation(id: string, item: object): Promise<string> {
-    return await this.hostInformationForm.putById(id, item)
-  }
+    //id here is 'contact', 'address', 'info' if we want to use this more generally vs unique methods for each form post
+    public async putHostInformation(id: string, item: object): Promise<string> {
+        return await this.hostInformationForm.putById(id, item)
+    }
 
-  //id here is the question ID
-  public async putHostRegistrationResponse(
-    id: number | string,
-    item: HostResponse
-  ): Promise<string> {
-    return await this.hostQuestionsPost.putById(id, item)
-  }
+    //id here is the question ID
+    public async putHostRegistrationResponse(
+        id: number | string,
+        item: HostResponse
+    ): Promise<string> {
+        return await this.hostQuestionsPost.putById(id, item)
+    }
 }
