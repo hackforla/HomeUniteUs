@@ -152,15 +152,17 @@ export const QuestionPage = (props: Props) => {
   }
 
   const setAnswer = (index: number, answer: any) => {
-    let state2 = { ...state }
-    state2.questions[index].answer = answer
+    let newState = { ...state }
+
+    //set on state directly vs via the questions object in the questions array
+    newState.questions[index].answer = answer
 
     if (answer === 'no') {
-      state2 = { ...state, modalOpen: true, disableSubmit: true }
+      newState = { ...state, modalOpen: true, disableSubmit: true }
     } else {
-      state2 = { ...state, disableSubmit: false }
+      newState = { ...state, disableSubmit: false }
     }
-    setState(state2)
+    setState(newState)
   }
 
   const clickBack = () => {
@@ -192,6 +194,7 @@ export const QuestionPage = (props: Props) => {
 
     try {
       //dummy set state modeled as the HostResponse type
+      //responseValues value should be result of setAnswer on state
       let testResponse = {
         questionId: 1,
         hostId: 1,

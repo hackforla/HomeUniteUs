@@ -764,7 +764,7 @@ export function useHostDashboardData() {
     }
   }
 
-  const putHostForm = async (id: number | string, hostResponse: object) => {
+  const putHostForm = async (id: string, hostResponse: object) => {
     console.log(`postHostResponse: ${hostResponse} `)
     try {
       dispatch({

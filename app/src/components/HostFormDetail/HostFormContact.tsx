@@ -43,7 +43,9 @@ const validationSchema = Yup.object()
 const HostFormAddress: React.FC = () => {
   const { putHostForm } = useHostDashboardData()
 
+  //is there a better way to capture this (router location?)
   const formID = { id: 'contact' }
+
   const [contactOrder, setContactOrder] = useState([
     'Email',
     'SMS',
