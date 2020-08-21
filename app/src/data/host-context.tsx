@@ -33,7 +33,6 @@ interface HostDashboardAction {
     | HostDashboardData
     | Array<ShowstopperQuestionType>
     | Array<MatchingQuestionType>
-    | boolean
     | string
     | HostResponse
     | any
@@ -765,6 +764,28 @@ export function useHostDashboardData() {
     }
   }
 
+  const putHostForm = async (id: number | string, hostResponse: object) => {
+    console.log(`postHostResponse: ${hostResponse} `)
+    try {
+      dispatch({
+        type: HostDashboardActionType.BeginPostResponse,
+        payload: 'Posting host response...',
+      })
+
+      await hostsFetcher.putHostInformation(id, hostResponse)
+
+      dispatch({
+        type: HostDashboardActionType.FinishPostResponse,
+        payload: 'Finished host response...',
+      })
+    } catch (e) {
+      dispatch({
+        type: HostDashboardActionType.Error,
+        payload: `System error: ${e}`,
+      })
+    }
+  }
+
   const [data, dispatch] = context as [
     HostDashboardData,
     React.Dispatch<HostDashboardAction>
@@ -774,5 +795,6 @@ export function useHostDashboardData() {
     data,
     dispatch,
     putHostResponse,
+    putHostForm,
   }
 }

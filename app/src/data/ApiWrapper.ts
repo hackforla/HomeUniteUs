@@ -89,7 +89,7 @@ export class ApiWrapper {
   private guestFetcher: Fetcher<Guest>
   private hostShowstopperQuestionsFetcher: Fetcher<ShowstopperQuestionType>
   private hostMatchingQuestionsFetcher: Fetcher<MatchingQuestionType>
-  private hostInformationFormPost: Fetcher<string>
+  private hostInformationForm: Fetcher<string>
   private hostQuestionsPost: Fetcher<string>
 
   public constructor(id?: number | string) {
@@ -101,7 +101,7 @@ export class ApiWrapper {
       `hostQuestions`
     )
 
-    this.hostInformationFormPost = new Fetcher<string>('host/')
+    this.hostInformationForm = new Fetcher<string>('host/')
     this.hostQuestionsPost = new Fetcher<string>(`host/questions/${id}`)
   }
 
@@ -132,12 +132,12 @@ export class ApiWrapper {
     -every 'submit' thereafter is a series of updates to the profile up to and including the final submit page*/
 
   //id here is 'contact-info' if we want to use this more generally vs unique methods for each form post
-  //   public async postHostInformation(
-  //     id: number | string,
-  //     item: object
-  //   ): Promise<string> {
-  //     return await this.hostInformationFormPost.putById(id, item)
-  //   }
+  public async putHostInformation(
+    id: number | string,
+    item: object
+  ): Promise<string> {
+    return await this.hostInformationForm.putById(id, item)
+  }
 
   public async putHostRegistrationResponse(
     id: number | string,

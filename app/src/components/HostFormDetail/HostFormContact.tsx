@@ -41,9 +41,9 @@ const validationSchema = Yup.object()
   )
 
 const HostFormAddress: React.FC = () => {
-  const { putHostResponse } = useHostDashboardData()
+  const { putHostForm } = useHostDashboardData()
 
-  const [formType, setFormType] = useState('contact-info')
+  const formID = { id: 'contact' }
   const [contactOrder, setContactOrder] = useState([
     'Email',
     'SMS',
@@ -54,7 +54,7 @@ const HostFormAddress: React.FC = () => {
     alert(JSON.stringify(values))
 
     // from host context - endpoint does not exist
-    // putHostResponse(formType, values)
+    // putHostFOrm(formID.id, values)
   }
 
   return (

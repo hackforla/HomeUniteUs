@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHostDashboardData } from '../../data/host-context'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { Container, TextField, Divider, Button } from '@material-ui/core'
 import * as Yup from 'yup'
@@ -29,8 +30,11 @@ const validationSchema = Yup.object().shape({
 })
 
 const HostFormInfo: React.FC = () => {
+  const formID = { id: 'info' }
   const handleSubmit = (values: FormValues): void => {
     alert(JSON.stringify(values))
+    // from host context - endpoint does not exist
+    // putHostFOrm(formID.id, values)
   }
   return (
     <>
