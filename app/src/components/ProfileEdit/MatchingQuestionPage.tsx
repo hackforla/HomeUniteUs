@@ -11,8 +11,9 @@ import styled from 'styled-components'
 import { Box, Button, LinearProgress } from '@material-ui/core'
 import MessageModal from '../MUIModal/MessageModal/MessageModal'
 import ConfirmationModal from '../MUIModal/ConfirmationModal/ConfirmationModal'
+import { useParams } from 'react-router'
 
-interface Props {
+interface MatchingQuestionPageProps {
     showstopperQuestions: Array<ShowstopperQuestionType>
     matchingQuestions: Array<MatchingQuestionType>
     stepwise: boolean
@@ -65,7 +66,7 @@ const IconContainer = (props: {
     )
 }
 
-export const QuestionPage = (props: Props) => {
+export const MatchingQuestionPage = (props: MatchingQuestionPageProps) => {
     // const { data } = useHostDashboardData()
     // console.log('testing custom hook', data)
 
@@ -146,8 +147,8 @@ export const QuestionPage = (props: Props) => {
         if (!groups[groupI][subgroupI]) groups[groupI][subgroupI] = []
         groups[groupI][subgroupI].push(state.questions[i])
     }
-
     const getStepperProgress = () => {
+        // some math
         const groupDistance = 1 / (groups.length + 1)
         const questionDistance = groupDistance / groups[state.groupIndex].length
         return (
@@ -370,4 +371,4 @@ export const QuestionPage = (props: Props) => {
     )
 }
 
-export default QuestionPage
+export default MatchingQuestionPage

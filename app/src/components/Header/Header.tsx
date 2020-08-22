@@ -18,13 +18,18 @@ export const Header = () => {
                 </a>
             </AppStyle.FlexGrowHolder>
             <AppStyle.Holder>
-                <NavLink to={`/hostformaddress`}>Address Contact</NavLink>
+                <NavLink to={`/about`}>ABOUT</NavLink>
             </AppStyle.Holder>
+            {/* Tyler 8/8/2020: Moving away from proof-of-concept to prototype */}
+            {/* <AppStyle.Holder>
+                <NavLink to={`/hostinfo`}>host info</NavLink>
+            </AppStyle.Holder> */}
+            {/* <AppStyle.Holder>
+                <NavLink to={`/hostformlang`}>Lang</NavLink>
+            </AppStyle.Holder> */}
+            {/* 
             <AppStyle.Holder>
                 <NavLink to={`/demo`}>DEMO</NavLink>
-            </AppStyle.Holder>
-            <AppStyle.Holder>
-                <NavLink to={`/about`}>ABOUT</NavLink>
             </AppStyle.Holder>
             <AppStyle.Holder>
                 <NavLink to={`/admin/guests`}>ADMIN</NavLink>
@@ -34,6 +39,13 @@ export const Header = () => {
             </AppStyle.Holder>
             <AppStyle.Holder>
                 <NavLink to={`/profile`}>Profile</NavLink>
+            </AppStyle.Holder> 
+            */}
+            {/* <AppStyle.Holder>
+                <NavLink to={`/uploadImage`}>Image Upload</NavLink>
+            </AppStyle.Holder> */}
+            <AppStyle.Holder>
+                <NavLink to={`/profileselection`}>Register</NavLink>
             </AppStyle.Holder>
             <AppStyle.Holder>
                 <span>Hello, {(user && user.name) || 'User'}</span>

@@ -15,7 +15,15 @@ import {
 import { AllHosts } from './pages/Admin/AllHosts'
 import ProfileSelection from './pages/ProfileSelection/ProfileSelection'
 import FourOhFour from './pages/FourOhFour'
-import HostFormAddress from './components/HostFormDetail/HostFormContact'
+// import HostFormAddress from './components/HostFormDetail/HostFormContact' //delete
+// import HostFormAddress from './components/HostFormDetail/HostFormAddress' //delete
+import HostFormAddress from './components/HostFormDetail/HostFormAddress' //delete
+// import HostFormInfo from './components/HostFormDetail/HostFormInfo' //delete
+import { GuestRegistration } from './pages/GuestRegistration/GuestRegistration'
+import { HostRegistration } from './pages/HostRegistration/HostRegistration'
+import ImageUploadComponent from './components/UploadImage/ImageUploadComponent'
+import HostFormGender from './components/HostFormDetail/HostFormGender'
+import HostFormLang from './components/HostFormDetail/HostFormLang'
 
 export default function Routes() {
     return (
@@ -37,8 +45,12 @@ export default function Routes() {
                 path="/profileselection"
                 component={ProfileSelection}
             />
-            <Route path="/hostformaddress" component={HostFormAddress} />{' '}
-            {/*testing ^^^*/}
+            <Route path="/hostinfo" component={HostFormGender} />
+            <Route path="/hostformaddress" component={HostFormAddress} />
+            <Route path="/uploadImage" component={ImageUploadComponent} />
+            <Route path="/hostformlang" component={HostFormLang} />
+            <Route path="/guest/register" component={GuestRegistration} />
+            <Route path="/host/register" component={HostRegistration} />
             <FourOhFour />
         </Switch>
     )
