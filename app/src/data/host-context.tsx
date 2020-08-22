@@ -35,7 +35,7 @@ interface HostDashboardAction {
         | Array<MatchingQuestionType>
         | string
         | HostResponse
-        | any // how to resolve this any type?
+        | any // how to resolve this any type on get questions payload?
 }
 
 const initialState: HostDashboardData = {

@@ -203,7 +203,7 @@ export const QuestionPage = (props: Props) => {
             }
             await putHostResponse(state.groupIndex, testResponse)
         } catch (e) {
-            console.log('failed to  post answer')
+            console.log(`failed to  post ${e}`)
         }
     }
 
