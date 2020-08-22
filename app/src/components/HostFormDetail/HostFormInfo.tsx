@@ -1,9 +1,16 @@
 import React from 'react'
 import { useHostDashboardData } from '../../data/host-context'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import { Container, TextField, Divider, Button } from '@material-ui/core'
+import {
+    Container,
+    TextField,
+    Divider,
+    Button,
+    Typography,
+} from '@material-ui/core'
 import * as Yup from 'yup'
 import { TextInput } from '../Registration'
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 
 interface FormValues {
     firstName: string
@@ -39,7 +46,10 @@ const HostFormInfo: React.FC = () => {
     return (
         <>
             <Container maxWidth="md">
-                <h1>Please enter your Name and Date of Birth:</h1>
+                <Typography variant="h5">
+                    Please enter your Name and Date of Birth:
+                </Typography>
+                <br />
                 <Formik
                     initialValues={initialValues}
                     onSubmit={handleSubmit}
@@ -157,8 +167,8 @@ const HostFormInfo: React.FC = () => {
                                     style={{
                                         display: 'flex',
                                         flexDirection: 'column',
-                                        // alignItems: 'center',
                                         width: '33rem',
+                                        marginBottom: '5rem',
                                     }}
                                 >
                                     <label
@@ -189,25 +199,45 @@ const HostFormInfo: React.FC = () => {
                                         )}
                                     </ErrorMessage>
                                 </div>
+
                                 <Divider
                                     style={{
                                         marginBottom: '1rem',
+                                        width: '44.6vw',
                                     }}
                                 />
                                 <div
                                     style={{
                                         display: 'flex',
-                                        justifyContent: 'space-evenly',
+                                        justifyContent: 'flex-start',
                                     }}
                                 >
                                     <Button>
-                                        <p>
-                                            <i className="arrow left"></i>Back
-                                        </p>
+                                        <span
+                                            style={{
+                                                padding:
+                                                    '0.4rem 1.3rem 0.4rem 1.3rem',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                            }}
+                                        >
+                                            <ArrowBackIosIcon /> Back
+                                        </span>
                                     </Button>
 
-                                    <Button variant="contained" color="primary">
-                                        Skip for Now
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        style={{ margin: '0 3rem 0 7rem' }}
+                                    >
+                                        <span
+                                            style={{
+                                                padding:
+                                                    '0.4rem 1.3rem 0.4rem 1.3rem',
+                                            }}
+                                        >
+                                            Skip for Now
+                                        </span>
                                     </Button>
 
                                     <Button
@@ -216,7 +246,14 @@ const HostFormInfo: React.FC = () => {
                                         variant="contained"
                                         color="primary"
                                     >
-                                        Save and Continue
+                                        <span
+                                            style={{
+                                                padding:
+                                                    '0.4rem 1.3rem 0.4rem 1.3rem',
+                                            }}
+                                        >
+                                            Save and Continue
+                                        </span>
                                     </Button>
                                 </div>
                             </Form>
