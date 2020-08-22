@@ -1,14 +1,14 @@
 import React, { useState, CSSProperties } from 'react'
 import { Button, Box, Container, Divider } from '@material-ui/core'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
-import Fab from '@material-ui/core/Fab'
+import DeleteIcon from '@material-ui/icons/Delete'
 
 const ContainerStyles: CSSProperties = {
     borderWidth: '2px',
     borderStyle: 'dashed',
     borderColor: '#D9D9D9',
     borderRadius: '4px',
-    height: '8rem',
+    height: '7rem',
     width: '10rem',
     display: 'flex',
     flexDirection: 'column',
@@ -17,14 +17,14 @@ const ContainerStyles: CSSProperties = {
     padding: '0',
 }
 
-function UploadImageButton() {
-    const [selectedImage, setSelectedImage]: any = useState([])
+const UploadImageButton: () => JSX.Element = () => {
+    const [selectedImage, setSelectedImage]: any = useState<string[] | []>([])
 
     const imageSelectHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         const target = event?.target as HTMLInputElement
         const file: any = (target.files as FileList)[0]
-        let reader = new FileReader()
-        let url = reader.readAsDataURL(file)
+        let reader: FileReader = new FileReader()
+        let url: void = reader.readAsDataURL(file)
         reader.onloadend = () => {
             setSelectedImage([...selectedImage, reader.result])
         }
@@ -44,9 +44,13 @@ function UploadImageButton() {
     //     }
     // }
 
-    let moreImage =
+    let addMoreImages: string | JSX.Element =
         selectedImage.length > 0 ? (
-            <Box mt={2} mx={8} display="flex" justifyContent="space-evenly">
+            <Box
+                display="flex"
+                justifyContent="space-evenly"
+                style={{ margin: '2rem 5.125rem 0 5.125rem' }}
+            >
                 <div style={ContainerStyles}>
                     {selectedImage[1] ? (
                         <div style={{ width: '100%', height: '100%' }}>
@@ -144,9 +148,27 @@ function UploadImageButton() {
             ''
         )
 
-    let displayImageOrBrowseBtn =
+    let displayImageOrBrowseBtn: JSX.Element =
         selectedImage.length > 0 ? (
-            <div style={{ height: '100%', width: '100%' }}>
+            <div
+                style={{ height: '100%', width: '100%', position: 'relative' }}
+            >
+                <span
+                    style={{
+                        position: 'absolute',
+                        top: '2px',
+                        left: '2px',
+                        zIndex: 'auto',
+                        cursor: 'pointer',
+                        border: '4px solid red',
+                        borderRadius: '50%',
+                        color: 'red',
+                        background: 'white',
+                    }}
+                    onClick={() => console.log('Clicked on remove')}
+                >
+                    <DeleteIcon />
+                </span>
                 <img src={selectedImage[0]} width="100%" height="100%" />
             </div>
         ) : (
@@ -180,7 +202,6 @@ function UploadImageButton() {
             </>
         )
 
-    console.log(selectedImage, '<---------------------------')
     return (
         <>
             <Box width="75%" margin="0 auto" mt={5}>
@@ -208,7 +229,7 @@ function UploadImageButton() {
                     >
                         {displayImageOrBrowseBtn}
                     </Container>
-                    {moreImage}
+                    {addMoreImages}
                     <Divider
                         style={{
                             margin: '1.5rem auto',
