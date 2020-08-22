@@ -45,10 +45,7 @@ const validationSchema = Yup.object()
     )
 
 const HostFormAddress: React.FC = () => {
-    const { putHostForm } = useHostDashboardData()
-
-    //is there a better way to capture this (router location?)
-    const formID = { id: 'contact' }
+    const { putContactInfo } = useHostDashboardData()
 
     const [contactOrder, setContactOrder] = useState([
         'Email',
@@ -56,11 +53,13 @@ const HostFormAddress: React.FC = () => {
         'Phone Call',
     ])
 
-    const handleSubmit = (values: FormValues): void => {
+    const handleSubmit = async (values: FormValues) => {
         alert(JSON.stringify(values))
-
-        // from host context - endpoint does not exist
-        // putHostFOrm(formID.id, values)
+        try {
+            await putContactInfo(values)
+        } catch (e) {
+            console.log(`Error posting ${e}`)
+        }
     }
 
     return (

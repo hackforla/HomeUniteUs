@@ -35,7 +35,7 @@ interface HostDashboardAction {
         | Array<MatchingQuestionType>
         | string
         | HostResponse
-        | any
+        | any // how to resolve this any type?
 }
 
 const initialState: HostDashboardData = {
@@ -745,6 +745,7 @@ export function useHostDashboardData() {
         )
     }
 
+    // showstopper & matching
     const putHostResponse = async (
         id: number | string,
         hostResponse: HostResponse
@@ -770,15 +771,104 @@ export function useHostDashboardData() {
         }
     }
 
-    const putHostForm = async (id: string, hostResponse: object) => {
+    // form detail
+    const putPersonalInfo = async (hostResponse: object) => {
         console.log(`postHostResponse: ${hostResponse} `)
         try {
             dispatch({
                 type: HostDashboardActionType.BeginPostResponse,
-                payload: 'Posting host response...',
+                payload: 'Posting host info details...',
             })
 
-            await hostsFetcher.putHostInformation(id, hostResponse)
+            await hostsFetcher.putHostInformation(hostResponse)
+
+            dispatch({
+                type: HostDashboardActionType.FinishPostResponse,
+                payload: 'Finished host response...',
+            })
+        } catch (e) {
+            dispatch({
+                type: HostDashboardActionType.Error,
+                payload: `System error: ${e}`,
+            })
+        }
+    }
+
+    const putContactInfo = async (hostResponse: object) => {
+        console.log(`postHostResponse: ${hostResponse} `)
+        try {
+            dispatch({
+                type: HostDashboardActionType.BeginPostResponse,
+                payload: 'Posting host info details...',
+            })
+
+            await hostsFetcher.putHostContact(hostResponse)
+
+            dispatch({
+                type: HostDashboardActionType.FinishPostResponse,
+                payload: 'Finished host response...',
+            })
+        } catch (e) {
+            dispatch({
+                type: HostDashboardActionType.Error,
+                payload: `System error: ${e}`,
+            })
+        }
+    }
+
+    const putAddressInfo = async (hostResponse: object) => {
+        console.log(`postHostResponse: ${hostResponse} `)
+        try {
+            dispatch({
+                type: HostDashboardActionType.BeginPostResponse,
+                payload: 'Posting host info details...',
+            })
+
+            await hostsFetcher.putHostAddress(hostResponse)
+
+            dispatch({
+                type: HostDashboardActionType.FinishPostResponse,
+                payload: 'Finished host response...',
+            })
+        } catch (e) {
+            dispatch({
+                type: HostDashboardActionType.Error,
+                payload: `System error: ${e}`,
+            })
+        }
+    }
+
+    const putGenderInfo = async (hostResponse: object) => {
+        console.log(`postHostResponse: ${hostResponse} `)
+        try {
+            dispatch({
+                type: HostDashboardActionType.BeginPostResponse,
+                payload: 'Posting host info details...',
+            })
+
+            await hostsFetcher.putHostGender(hostResponse)
+
+            dispatch({
+                type: HostDashboardActionType.FinishPostResponse,
+                payload: 'Finished host response...',
+            })
+        } catch (e) {
+            dispatch({
+                type: HostDashboardActionType.Error,
+                payload: `System error: ${e}`,
+            })
+        }
+    }
+
+    const putLanguageInfo = async (hostResponse: object) => {
+        console.log(`postHostResponse: ${hostResponse} `)
+        try {
+            dispatch({
+                type: HostDashboardActionType.BeginPostResponse,
+                payload: 'Posting host info details...',
+            })
+
+            await hostsFetcher.putHostLanguage(hostResponse)
 
             dispatch({
                 type: HostDashboardActionType.FinishPostResponse,
@@ -800,7 +890,13 @@ export function useHostDashboardData() {
     return {
         data,
         dispatch,
+        getShowstopperQuestions,
+        getMatchingQuestions,
         putHostResponse,
-        putHostForm,
+        putPersonalInfo,
+        putContactInfo,
+        putAddressInfo,
+        putGenderInfo,
+        putLanguageInfo,
     }
 }

@@ -37,11 +37,15 @@ const validationSchema = Yup.object().shape({
 })
 
 const HostFormInfo: React.FC = () => {
-    const formID = { id: 'info' }
-    const handleSubmit = (values: FormValues): void => {
+    const { putPersonalInfo } = useHostDashboardData()
+    const handleSubmit = async (values: FormValues) => {
         alert(JSON.stringify(values))
-        // from host context - endpoint does not exist
-        // putHostFOrm(formID.id, values)
+
+        try {
+            await putPersonalInfo(values)
+        } catch (e) {
+            console.log(`Error posting ${e}`)
+        }
     }
     return (
         <>
