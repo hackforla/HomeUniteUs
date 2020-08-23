@@ -1,7 +1,8 @@
 import React, { useState, CSSProperties } from 'react'
-import { Button, Box, Container, Divider } from '@material-ui/core'
+import { Button, Box, Container, Divider, Typography } from '@material-ui/core'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import DeleteIcon from '@material-ui/icons/Delete'
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
 
 const ContainerStyles: CSSProperties = {
     borderWidth: '2px',
@@ -44,6 +45,39 @@ const UploadImageButton: () => JSX.Element = () => {
     //     }
     // }
 
+    const addMoreButtons = () => {
+        return (
+            <>
+                <Button
+                    component="label"
+                    style={{
+                        position: 'absolute',
+                        color: '#55B1EB',
+                        backgroundColor: 'transparent',
+                    }}
+                >
+                    <div
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <AddCircleOutlineIcon />
+                        <Typography>Add more Images</Typography>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            onChange={imageSelectHandler}
+                            style={{ display: 'none' }}
+                        />
+                    </div>
+                </Button>
+            </>
+        )
+    }
+
     let addMoreImages: string | JSX.Element =
         selectedImage.length > 0 ? (
             <Box
@@ -61,24 +95,7 @@ const UploadImageButton: () => JSX.Element = () => {
                             />
                         </div>
                     ) : (
-                        <Button
-                            variant="contained"
-                            component="label"
-                            style={{
-                                position: 'absolute',
-                                background: '#55B1EB',
-                                color: '#fff',
-                            }}
-                        >
-                            Add more Images
-                            <input
-                                type="file"
-                                accept="image/*"
-                                multiple
-                                onChange={imageSelectHandler}
-                                style={{ display: 'none' }}
-                            />
-                        </Button>
+                        addMoreButtons()
                     )}
                 </div>
 
@@ -92,24 +109,7 @@ const UploadImageButton: () => JSX.Element = () => {
                             />
                         </div>
                     ) : (
-                        <Button
-                            variant="contained"
-                            component="label"
-                            style={{
-                                position: 'absolute',
-                                background: '#55B1EB',
-                                color: '#fff',
-                            }}
-                        >
-                            Add more Image
-                            <input
-                                type="file"
-                                accept="image/*"
-                                multiple
-                                onChange={imageSelectHandler}
-                                style={{ display: 'none' }}
-                            />
-                        </Button>
+                        addMoreButtons()
                     )}
                 </div>
 
@@ -123,24 +123,7 @@ const UploadImageButton: () => JSX.Element = () => {
                             />
                         </div>
                     ) : (
-                        <Button
-                            variant="contained"
-                            component="label"
-                            style={{
-                                position: 'absolute',
-                                background: '#55B1EB',
-                                color: '#fff',
-                            }}
-                        >
-                            Add more Image
-                            <input
-                                type="file"
-                                accept="image/*"
-                                multiple
-                                onChange={imageSelectHandler}
-                                style={{ display: 'none' }}
-                            />
-                        </Button>
+                        addMoreButtons()
                     )}
                 </div>
             </Box>
@@ -160,14 +143,16 @@ const UploadImageButton: () => JSX.Element = () => {
                         left: '2px',
                         zIndex: 'auto',
                         cursor: 'pointer',
-                        border: '4px solid red',
+                        border: '4px solid white',
                         borderRadius: '50%',
-                        color: 'red',
-                        background: 'white',
+                        color: 'white',
+                        background: '#55B1EB',
+                        height: '20px',
+                        width: '23px',
                     }}
-                    onClick={() => console.log('Clicked on remove')}
+                    onClick={() => (selectedImage[0] = '')}
                 >
-                    <DeleteIcon />
+                    <DeleteIcon fontSize="small" />
                 </span>
                 <img src={selectedImage[0]} width="100%" height="100%" />
             </div>
