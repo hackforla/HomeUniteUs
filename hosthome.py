@@ -1,13 +1,8 @@
-import os
-import sys
-import json
-import logging
-from logging.config import dictConfig
-from urllib.parse import quote_plus
-
-from dotenv import load_dotenv
-load_dotenv()
-
+from werkzeug.utils import secure_filename
+import codecs
+import gridfs
+import pymongo
+from bson import ObjectId
 from flask import (
     Flask,
     flash,
@@ -21,18 +16,21 @@ from flask import (
     url_for,
     send_from_directory
 )
-from bson import ObjectId
-import pymongo
+import os
+import sys
+import json
+import logging
+from logging.config import dictConfig
+from urllib.parse import quote_plus
 
-import gridfs
-import codecs
+from dotenv import load_dotenv
+load_dotenv()
+
 
 #from matching.basic_filter import BasicFilter
 
-from werkzeug.utils import secure_filename
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'psd'}
-
 
 
 dictConfig({
@@ -120,7 +118,6 @@ class MongoFacade:
         self._log('get_collection', 'items = {}'.format(items))
         return items
 
-
     def get_element_by_id(self, collection_name, id):
 
         self._log('get_element_by_id', 'acquiring connection...')
@@ -157,16 +154,16 @@ class MongoFacade:
             db = client[MONGO_DATABASE]
             collection = db[collection_name]
 
-            user = collection.find_one({ 'email': email })
+            user = collection.find_one({'email': email})
             if user is None:
-                return None 
-            user['_id'] = str(user['_id']) #we dont need this line anymore, right?
+                return None
+            # we dont need this line anymore, right?
+            user['_id'] = str(user['_id'])
             self._log('get_collections', 'items = {}'.format(user))
             return user
         except Exception as e:
             self._log("get_user_by_email", f"error {e}")
             raise e
-
 
     def insert_to_collection(self, collection_name, item):
         client = self._get_conn()
@@ -187,64 +184,74 @@ class MongoFacade:
         db = client[MONGO_DATABASE]
         collection = db[collection_name]
 
-        result = collection.delete_one({'id':id})
-        self._log('delete_from_collection', 'result.raw_result = {}'.format(result.raw_result))
+        result = collection.delete_one({'id': id})
+        self._log('delete_from_collection',
+                  'result.raw_result = {}'.format(result.raw_result))
 
         return result
 
     def update_in_collection(self, collection_name, id, item):
 
-        app.logger.warning('MongoFacade:update_in_collection(): id = {} ({})'.format(id, type(id)))
-        app.logger.warning('MongoFacade:update_in_collection(): item = {}'.format(item))
-        app.logger.warning('MongoFacade:update_in_collection(): collection_name = {}'.format(collection_name))
+        app.logger.warning(
+            'MongoFacade:update_in_collection(): id = {} ({})'.format(id, type(id)))
+        app.logger.warning(
+            'MongoFacade:update_in_collection(): item = {}'.format(item))
+        app.logger.warning(
+            'MongoFacade:update_in_collection(): collection_name = {}'.format(collection_name))
 
         client = self._get_conn()
 
         if not client:
-            app.logger.error('MongoFacade:update_in_collection(): Mongo server not available')
+            app.logger.error(
+                'MongoFacade:update_in_collection(): Mongo server not available')
             raise Exception('Mongo server not available')
 
-        app.logger.warning(f'MongoFacade:update_in_collection(): getting DB {MONGO_DATABASE}...')
+        app.logger.warning(
+            f'MongoFacade:update_in_collection(): getting DB {MONGO_DATABASE}...')
         db = client[MONGO_DATABASE]
 
-        app.logger.warning(f'MongoFacade:update_in_collection(): getting collection {collection_name}...')
+        app.logger.warning(
+            f'MongoFacade:update_in_collection(): getting collection {collection_name}...')
         collection = db[collection_name]
 
-        app.logger.warning(f'MongoFacade:update_in_collection(): updating item in collection...')
-        result = collection.update_one( { 'id': id }, {'$set': item })
+        app.logger.warning(
+            f'MongoFacade:update_in_collection(): updating item in collection...')
+        result = collection.update_one({'id': id}, {'$set': item})
 
-
-        app.logger.warning(f'MongoFacade:update_in_collection(): - result.acknowledged: {result.acknowledged}')
-        app.logger.warning(f'MongoFacade:update_in_collection(): - result.matched_count: {result.matched_count}')
-        app.logger.warning(f'MongoFacade:update_in_collection(): - result.matched_count: {result.modified_count}')
-        app.logger.warning(f'MongoFacade:update_in_collection(): - result.raw_result: {result.raw_result}')
-
+        app.logger.warning(
+            f'MongoFacade:update_in_collection(): - result.acknowledged: {result.acknowledged}')
+        app.logger.warning(
+            f'MongoFacade:update_in_collection(): - result.matched_count: {result.matched_count}')
+        app.logger.warning(
+            f'MongoFacade:update_in_collection(): - result.matched_count: {result.modified_count}')
+        app.logger.warning(
+            f'MongoFacade:update_in_collection(): - result.raw_result: {result.raw_result}')
 
         return result.acknowledged
-    
+
     def save_file(self, img_file, img_name):
         client = self._get_conn()
         if not client:
             raise Exception('Mongo server not available')
-        
+
         db = client[MONGO_DATABASE]
         fs = gridfs.GridFS(db)
-        img_id = fs.put(img_file, img_name = img_name) #got img id
+        img_id = fs.put(img_file, img_name=img_name)  # got img id
         if img_id is None:
             return None
         # if fs.find_one(img_id) is None:
         #     return "success??"
         # next, store the img id in the user database somehow
         return img_id
-    
-    def load_file(self): #need to pass userId
+
+    def load_file(self):  # need to pass userId
         client = self._get_conn()
         db = client[MONGO_DATABASE]
         fs = gridfs.GridFS(db)
-        collection = db[collection_name] 
-        #user = collection.find_one() #get user by id and image id
-        #image = fs.get(user[]) #using the user id to find image id
-        #base64_data = codecs.encode(image.read(), "base64") #using codecs to retrieve image
+        collection = db[collection_name]
+        # user = collection.find_one() #get user by id and image id
+        # image = fs.get(user[]) #using the user id to find image id
+        # base64_data = codecs.encode(image.read(), "base64") #using codecs to retrieve image
         #image = base64_data.decode("utf-8")
 
     def _log(self, method_name, message):
@@ -258,7 +265,8 @@ class Repository:
         self.collection_name = collection_name
 
     def get(self, sort_condition=None):
-        items = self.mongo_facade.get_collection(self.collection_name, sort_condition)
+        items = self.mongo_facade.get_collection(
+            self.collection_name, sort_condition)
         return items
 
     def get_by_id(self, id):
@@ -266,19 +274,22 @@ class Repository:
         return item
 
     def add(self, item):
-        result = self.mongo_facade.insert_to_collection(self.collection_name, item)
+        result = self.mongo_facade.insert_to_collection(
+            self.collection_name, item)
         return result
 
     def delete(self, id):
-        result = self.mongo_facade.delete_from_collection(self.collection_name, id)
+        result = self.mongo_facade.delete_from_collection(
+            self.collection_name, id)
         return result
 
     def update(self, id, item):
         app.logger.warning('Repository:update: id = {}'.format(id))
         app.logger.warning('Repository:update: item = {}'.format(item))
-        safe_item = { x: item[x] for x in dict(item).keys() if x != '_id' }
+        safe_item = {x: item[x] for x in dict(item).keys() if x != '_id'}
 
-        app.logger.warning('Repository:update: safe_item = {}'.format(json.dumps(safe_item, indent=4)))
+        app.logger.warning('Repository:update: safe_item = {}'.format(
+            json.dumps(safe_item, indent=4)))
         result = self.mongo_facade.update_in_collection(
             self.collection_name,
             id,
@@ -286,13 +297,14 @@ class Repository:
         )
         return result
 
-    def get_using_email(self, email): #pass in the request body here
-        resp = self.mongo_facade.get_user_by_email(self.collection_name, email) ##add the request here
+    def get_using_email(self, email):  # pass in the request body here
+        resp = self.mongo_facade.get_user_by_email(
+            self.collection_name, email)  # add the request here
         return resp
 
-
     def _log(self, method_name, message):
-        app.logger.debug('Repository[{}]:{}: {}'.format(self.collection_name, method_name, message))
+        app.logger.debug('Repository[{}]:{}: {}'.format(
+            self.collection_name, method_name, message))
 
 # Tyler 4/6/2020
 # ... removing in-memory implementation, switching to mongodb
@@ -367,7 +379,6 @@ def favicon():
     )
 
 
-
 ###############
 ## Hosts API ##
 ###############
@@ -375,14 +386,15 @@ def favicon():
 @app.route('/api/hosts/<int:id>', methods=['GET', 'PUT', 'DELETE'])
 def host_by_id(id: int):
 
-    app.logger.warning('host_by_id: request.method = {}'.format(request.method))
+    app.logger.warning(
+        'host_by_id: request.method = {}'.format(request.method))
     app.logger.warning(f'host_by_id: id = {id} ({type(id)})')
 
     if request.method == 'GET':
 
         try:
 
-            host = hostRepository.mongo_facade.get_element_by_id('hosts',id)
+            host = hostRepository.mongo_facade.get_element_by_id('hosts', id)
             js = json.dumps(host)
             resp = Response(js, status=200, mimetype='application/json')
             return resp
@@ -448,7 +460,8 @@ def host_by_id(id: int):
 @app.route('/api/hosts', methods=['GET', 'POST'])
 def get_all_hosts():
 
-    app.logger.warning('get_all_hosts: request.method = {}'.format(request.method))
+    app.logger.warning(
+        'get_all_hosts: request.method = {}'.format(request.method))
 
     if request.method == 'GET':
 
@@ -477,8 +490,8 @@ def get_all_hosts():
             host = request.json
             responseData = hostRepository.add(host)
             app.logger.debug('responseData = {}'.format(responseData))
-            resp = Response({'error': None,'data': None},
-                             status=200, mimetype='application/json')
+            resp = Response({'error': None, 'data': None},
+                            status=200, mimetype='application/json')
             return resp
 
         except Exception as e:
@@ -500,7 +513,8 @@ def get_all_hosts():
 @app.route('/api/hostQuestions', methods=['GET'])
 def get_all_hostQuestions():
 
-    app.logger.warning('get_all_hostQuestions: request.method = {}'.format(request.method))
+    app.logger.warning(
+        'get_all_hostQuestions: request.method = {}'.format(request.method))
 
     try:
 
@@ -524,11 +538,13 @@ def get_all_hostQuestions():
 @app.route('/api/hostQuestions/<int:id>', methods=['GET'])
 def get_hostQuestion_by_id(id: int):
 
-    app.logger.warning('get_hostQuestion_by_id: request.method = {}'.format(request.method))
+    app.logger.warning(
+        'get_hostQuestion_by_id: request.method = {}'.format(request.method))
 
     try:
 
-        hostQuestion = hostQuestionsRepository.mongo_facade.get_element_by_id('hostQuestions', id)
+        hostQuestion = hostQuestionsRepository.mongo_facade.get_element_by_id(
+            'hostQuestions', id)
         js = json.dumps(hostQuestion)
         resp = Response(js, status=200, mimetype='application/json')
         return resp
@@ -544,13 +560,15 @@ def get_hostQuestion_by_id(id: int):
 
         return resp
 
+
 @app.route('/api/checkEmail', methods=["POST"])
 def check_by_email():
     try:
-        req = request.get_json() #get req from front end
-        accounts = accountsRepository.get_using_email(req['email']) #pass the req in here when ready
+        req = request.get_json()  # get req from front end
+        accounts = accountsRepository.get_using_email(
+            req['email'])  # pass the req in here when ready
         if accounts is None:
-            return Response(json.dumps({'error': None, 'status': 400}),status=400, mimetype='application/json')
+            return Response(json.dumps({'error': None, 'status': 400}), status=400, mimetype='application/json')
         return Response(status=200, mimetype='application/json')
 
     except Exception as e:
@@ -593,16 +611,14 @@ def check_by_email():
 #     return {"hosts": hosts, }
 
 
-
-
-
 ################
 ## Guests API ##
 ################
 @app.route('/api/guests', methods=['GET', 'POST'])
 def get_all_guests():
 
-    app.logger.warning('get_all_guests: request.method = {}'.format(request.method))
+    app.logger.warning(
+        'get_all_guests: request.method = {}'.format(request.method))
 
     if request.method == 'GET':
 
@@ -631,8 +647,8 @@ def get_all_guests():
             guest = request.json
             responseData = guestRepository.add(guest)
             app.logger.debug('responseData = {}'.format(responseData))
-            resp = Response({'error': None,'data': None},
-                             status=200, mimetype='application/json')
+            resp = Response({'error': None, 'data': None},
+                            status=200, mimetype='application/json')
             return resp
 
         except Exception as e:
@@ -651,18 +667,19 @@ def get_all_guests():
         app.logger.debug(f'what is {request.method} even doing here.')
 
 
-
 @app.route('/api/guests/<int:id>', methods=['GET', 'PUT', 'DELETE'])
 def guest_by_id(id: int):
 
-    app.logger.warning('guest_by_id: request.method = {}'.format(request.method))
+    app.logger.warning(
+        'guest_by_id: request.method = {}'.format(request.method))
     app.logger.warning(f'guest_by_id: id = {id} ({type(id)})')
 
     if request.method == 'GET':
 
         try:
 
-            guest = guestRepository.mongo_facade.get_element_by_id('guests',id)
+            guest = guestRepository.mongo_facade.get_element_by_id(
+                'guests', id)
             js = json.dumps(guest)
             resp = Response(js, status=200, mimetype='application/json')
             return resp
@@ -728,7 +745,8 @@ def guest_by_id(id: int):
 @app.route('/api/guestQuestions', methods=['GET'])
 def get_all_guestQuestions():
 
-    app.logger.warning('get_all_guestQuestions: request.method = {}'.format(request.method))
+    app.logger.warning(
+        'get_all_guestQuestions: request.method = {}'.format(request.method))
 
     try:
 
@@ -752,11 +770,13 @@ def get_all_guestQuestions():
 @app.route('/api/guestQuestions/<int:id>', methods=['GET'])
 def get_guestQuestion_by_id(id: int):
 
-    app.logger.warning('get_guestQuestion_by_id: request.method = {}'.format(request.method))
+    app.logger.warning(
+        'get_guestQuestion_by_id: request.method = {}'.format(request.method))
 
     try:
 
-        guestQuestion = guestQuestionsRepository.mongo_facade.get_element_by_id('guestQuestions', id)
+        guestQuestion = guestQuestionsRepository.mongo_facade.get_element_by_id(
+            'guestQuestions', id)
         js = json.dumps(guestQuestion)
         resp = Response(js, status=200, mimetype='application/json')
         return resp
@@ -773,11 +793,11 @@ def get_guestQuestion_by_id(id: int):
         return resp
 
 
-
-@app.route('/api/guests/<int:guest_id>/responses', methods=['GET','POST'])
+@app.route('/api/guests/<int:guest_id>/responses', methods=['GET', 'POST'])
 def get_guest_responses(guest_id: int):
 
-    app.logger.warning('get_guest_responses: request.method = {}'.format(request.method))
+    app.logger.warning(
+        'get_guest_responses: request.method = {}'.format(request.method))
     app.logger.warning(f'guest_by_id: id = {guest_id} ({type(guest_id)})')
 
     if request.method == 'GET':
@@ -785,8 +805,8 @@ def get_guest_responses(guest_id: int):
         try:
 
             guestResponses = guestResponsesRepository.get()
-            guestResponses = [response for response in guestResponses\
-                    if response['guestId']==guest_id]
+            guestResponses = [response for response in guestResponses
+                              if response['guestId'] == guest_id]
             js = json.dumps(guestResponses)
             resp = Response(js, status=200, mimetype='application/json')
             return resp
@@ -809,8 +829,8 @@ def get_guest_responses(guest_id: int):
             guest_response = request.json
             responseData = guestResponsesRepository.add(guest_response)
             app.logger.debug('responseData = {}'.format(responseData))
-            resp = Response({'error': None,'data': None},
-                             status=200, mimetype='application/json')
+            resp = Response({'error': None, 'data': None},
+                            status=200, mimetype='application/json')
 
             return resp
 
@@ -830,18 +850,19 @@ def get_guest_responses(guest_id: int):
         app.logger.debug(f'what is {request.method} even doing here.')
 
 
-@app.route('/api/guests/<int:guest_id>/responses/<int:question_id>', methods=['GET','PUT','DELETE'])
+@app.route('/api/guests/<int:guest_id>/responses/<int:question_id>', methods=['GET', 'PUT', 'DELETE'])
 def get_guest_response_by_id(guest_id: int, question_id: int):
 
-    app.logger.warning('get_guest_response_by_id: request.method = {}'.format(request.method))
+    app.logger.warning(
+        'get_guest_response_by_id: request.method = {}'.format(request.method))
 
     if request.method == 'GET':
 
         try:
 
             guestResponses = guestResponsesRepository.get()
-            guestResponses = [response['responseValues'] for response in guestResponses\
-                                if response['guestId']==guest_id and response['questionId']==question_id]
+            guestResponses = [response['responseValues'] for response in guestResponses
+                              if response['guestId'] == guest_id and response['questionId'] == question_id]
             js = json.dumps(guestResponses[0])
             resp = Response(js, status=200, mimetype='application/json')
             return resp
@@ -862,13 +883,14 @@ def get_guest_response_by_id(guest_id: int, question_id: int):
         try:
 
             guestResponses = guestResponsesRepository.get()
-            response_id = [response['responseValues'] for response in guestResponses\
-                                 if response['guestId']==guest_id and\
-                                    response['questionId']==question_id][0]
+            response_id = [response['responseValues'] for response in guestResponses
+                           if response['guestId'] == guest_id and
+                           response['questionId'] == question_id][0]
 
-            #this is really shaky, need to know what's being passed back
-            #needs guest_id and question_id
-            responseData = guestResponsesRepository.update(response_id, request.json)
+            # this is really shaky, need to know what's being passed back
+            # needs guest_id and question_id
+            responseData = guestResponsesRepository.update(
+                response_id, request.json)
             app.logger.debug('responseData = {}'.format(responseData))
             resp = Response(json.dumps({'error': None, 'data': None}),
                             status=200, mimetype='application/json')
@@ -885,14 +907,13 @@ def get_guest_response_by_id(guest_id: int, question_id: int):
 
             return resp
 
-
     elif request.method == 'DELETE':
 
         try:
             guestResponses = guestResponsesRepository.get()
-            response_id = [response['responseValues'] for response in guestResponses\
-                                  if response['guestId']==guest_id and\
-                                     response['questionId']==question_id][0]
+            response_id = [response['responseValues'] for response in guestResponses
+                           if response['guestId'] == guest_id and
+                           response['questionId'] == question_id][0]
 
             responseData = guestResponsesRepository.delete(guest_id)
             app.logger.debug('responseData = {}'.format(responseData))
@@ -911,16 +932,16 @@ def get_guest_response_by_id(guest_id: int, question_id: int):
 
             return resp
 
-
     else:
 
         app.logger.debug(f'what is {request.method} even doing here.')
 
 
-@app.route('/api/hosts/<int:host_id>/responses', methods=['GET','POST'])
+@app.route('/api/hosts/<int:host_id>/responses', methods=['GET', 'POST'])
 def get_host_responses(host_id: int):
 
-    app.logger.warning('get_host_responses: request.method = {}'.format(request.method))
+    app.logger.warning(
+        'get_host_responses: request.method = {}'.format(request.method))
     app.logger.warning(f'host_by_id: id = {host_id} ({type(host_id)})')
 
     if request.method == 'GET':
@@ -928,8 +949,8 @@ def get_host_responses(host_id: int):
         try:
 
             hostResponses = hostResponsesRepository.get()
-            hostResponses = [response for response in hostResponses\
-                    if response['hostId']==host_id]
+            hostResponses = [response for response in hostResponses
+                             if response['hostId'] == host_id]
             js = json.dumps(hostResponses)
             resp = Response(js, status=200, mimetype='application/json')
             return resp
@@ -952,8 +973,8 @@ def get_host_responses(host_id: int):
             host_response = request.json
             responseData = hostResponsesRepository.add(host_response)
             app.logger.debug('responseData = {}'.format(responseData))
-            resp = Response({'error': None,'data': None},
-                             status=200, mimetype='application/json')
+            resp = Response({'error': None, 'data': None},
+                            status=200, mimetype='application/json')
 
             return resp
 
@@ -973,18 +994,19 @@ def get_host_responses(host_id: int):
         app.logger.debug(f'what is {request.method} even doing here.')
 
 
-@app.route('/api/hosts/<int:host_id>/responses/<int:question_id>', methods=['GET','PUT','DELETE'])
+@app.route('/api/hosts/<int:host_id>/responses/<int:question_id>', methods=['GET', 'PUT', 'DELETE'])
 def get_host_response_by_id(host_id: int, question_id: int):
 
-    app.logger.warning('get_host_response_by_id: request.method = {}'.format(request.method))
+    app.logger.warning(
+        'get_host_response_by_id: request.method = {}'.format(request.method))
 
     if request.method == 'GET':
 
         try:
 
             hostResponses = hostResponsesRepository.get()
-            hostResponses = [response['responseValues'] for response in hostResponses\
-                                if response['hostId']==host_id and response['questionId']==question_id]
+            hostResponses = [response['responseValues'] for response in hostResponses
+                             if response['hostId'] == host_id and response['questionId'] == question_id]
             js = json.dumps(hostResponses[0])
             resp = Response(js, status=200, mimetype='application/json')
             return resp
@@ -1005,13 +1027,14 @@ def get_host_response_by_id(host_id: int, question_id: int):
         try:
 
             hostResponses = hostResponsesRepository.get()
-            response_id = [response['responseValues'] for response in hostResponses\
-                                 if response['hostId']==host_id and\
-                                    response['questionId']==question_id][0]
+            response_id = [response['responseValues'] for response in hostResponses
+                           if response['hostId'] == host_id and
+                           response['questionId'] == question_id][0]
 
-            #this is really shaky, need to know what's being passed back
-            #needs host_id and question_id
-            responseData = hostResponsesRepository.update(response_id, request.json)
+            # this is really shaky, need to know what's being passed back
+            # needs host_id and question_id
+            responseData = hostResponsesRepository.update(
+                response_id, request.json)
             app.logger.debug('responseData = {}'.format(responseData))
             resp = Response(json.dumps({'error': None, 'data': None}),
                             status=200, mimetype='application/json')
@@ -1028,14 +1051,13 @@ def get_host_response_by_id(host_id: int, question_id: int):
 
             return resp
 
-
     elif request.method == 'DELETE':
 
         try:
             hostResponses = hostResponsesRepository.get()
-            response_id = [response['responseValues'] for response in hostResponses\
-                                  if response['hostId']==host_id and\
-                                     response['questionId']==question_id][0]
+            response_id = [response['responseValues'] for response in hostResponses
+                           if response['hostId'] == host_id and
+                           response['questionId'] == question_id][0]
 
             responseData = hostResponsesRepository.delete(host_id)
             app.logger.debug('responseData = {}'.format(responseData))
@@ -1054,7 +1076,6 @@ def get_host_response_by_id(host_id: int, question_id: int):
 
             return resp
 
-
     else:
 
         app.logger.debug(f'what is {request.method} even doing here.')
@@ -1063,7 +1084,8 @@ def get_host_response_by_id(host_id: int, question_id: int):
 @app.route('/api/restrictions', methods=['GET'])
 def get_all_restrictions():
 
-    app.logger.warning('all_restrictions: request.method = {}'.format(request.method))
+    app.logger.warning(
+        'all_restrictions: request.method = {}'.format(request.method))
 
     try:
 
@@ -1105,9 +1127,6 @@ def get_all_response_values():
         return resp
 
 
-
-
-
 # TODO: Mark for deprecation! no need to dl the whole set for any view in the app
 
 @app.route('/api/dataset', methods=['GET'])
@@ -1136,14 +1155,13 @@ def get_all_data():
             'matchResults': []
         }
 
-
         js = json.dumps(data)
         resp = Response(js, status=200, mimetype='application/json')
         return resp
 
     except Exception as e:
         data = {
-            'test'  : 'failed',
+            'test': 'failed',
 
             'error': str(e)
         }
@@ -1151,7 +1169,6 @@ def get_all_data():
         js = json.dumps(data)
         resp = Response(js, status=500, mimetype='application/json')
         return resp
-
 
 
 def _populate_children(question):
@@ -1167,12 +1184,13 @@ def _populate_children(question):
         for key, childs in children.items():
             populated_children = []
 
-            ####PREPARE FOR UGLINESS!
-            ####will fix this - stupid data modeling dumbness
-            ####have child values as list sometimes and as id...
+            # PREPARE FOR UGLINESS!
+            # will fix this - stupid data modeling dumbness
+            # have child values as list sometimes and as id...
 
             if type(childs) is str:
-                child_question = hostRegisterQuestionsRepository.get_by_id(childs)
+                child_question = hostRegisterQuestionsRepository.get_by_id(
+                    childs)
                 child_question = _populate_children(child_question)
                 populated_children.append(child_question)
                 question['children'][key] = populated_children
@@ -1182,7 +1200,8 @@ def _populate_children(question):
                 for child in childs:
                     if type(child) is list:
                         continue
-                    child_question = hostRegisterQuestionsRepository.get_by_id(child)
+                    child_question = hostRegisterQuestionsRepository.get_by_id(
+                        child)
                     child_question = _populate_children(child_question)
                     populated_children.append(child_question)
 
@@ -1197,7 +1216,8 @@ def _populate_children(question):
 def get_host_register_questions():
 
     try:
-        response = hostRegisterQuestionsRepository.get(sort_condition=[("order",pymongo.ASCENDING)])
+        response = hostRegisterQuestionsRepository.get(
+            sort_condition=[("order", pymongo.ASCENDING)])
 
         data = [_populate_children(question) for question in response]
 
@@ -1211,7 +1231,7 @@ def get_host_register_questions():
         #     options: [{label: 'Yes', value: 'yes'}, {label: 'No', value: 'no'}],
         # },
 
-        #data = [{
+        # data = [{
         #    'id': q['_id'],
         #    'type': 'radio',
         #    'group': 'MatchingQuestions',
@@ -1220,7 +1240,7 @@ def get_host_register_questions():
         #    'options': [
         #        opt['text'] for opt in responseValues if opt['id'] in q['responseValues']
         #    ]
-        #} for (i, q) in enumerate(hostQuestions)]
+        # } for (i, q) in enumerate(hostQuestions)]
 
         js = json.dumps(data)
         resp = Response(js, status=200, mimetype='application/json')
@@ -1228,7 +1248,7 @@ def get_host_register_questions():
 
     except Exception as e:
         data = {
-            'test'  : 'failed',
+            'test': 'failed',
 
             'error': str(e)
         }
@@ -1238,7 +1258,7 @@ def get_host_register_questions():
         return resp
 
 
-@app.route('/api/v1/hostRegisterQuestions/<question_id>', methods=['GET','PUT','DELETE'])
+@app.route('/api/v1/hostRegisterQuestions/<question_id>', methods=['GET', 'PUT', 'DELETE'])
 def get_host_register_question_by_id(question_id):
 
     if request.method == 'GET':
@@ -1251,7 +1271,7 @@ def get_host_register_question_by_id(question_id):
 
         except Exception as e:
             data = {
-                'test'  : 'failed',
+                'test': 'failed',
 
                 'error': str(e)
             }
@@ -1263,7 +1283,8 @@ def get_host_register_question_by_id(question_id):
     elif request.method == 'PUT':
 
         try:
-            responseData = hostRegisterQuestionsRepository.update(question_id, request.json)
+            responseData = hostRegisterQuestionsRepository.update(
+                question_id, request.json)
             app.logger.debug('responseData = {}'.format(responseData))
             resp = Response(json.dumps({'error': None, 'data': None}),
                             status=200, mimetype='application/json')
@@ -1338,14 +1359,13 @@ def get_questions_v1():
             ]
         } for (i, q) in enumerate(hostQuestions)]
 
-
         js = json.dumps(data)
         resp = Response(js, status=200, mimetype='application/json')
         return resp
 
     except Exception as e:
         data = {
-            'test'  : 'failed',
+            'test': 'failed',
 
             'error': str(e)
         }
@@ -1353,7 +1373,6 @@ def get_questions_v1():
         js = json.dumps(data)
         resp = Response(js, status=500, mimetype='application/json')
         return resp
-
 
 
 @app.route('/api/matchResults', methods=['GET'])
@@ -1372,13 +1391,1073 @@ def get_all_match_results():
     except Exception as e:
 
         data = {
-            'test'  : 'failed',
+            'test': 'failed',
             'error': str(e)
         }
 
         js = json.dumps(data)
         resp = Response(js, status=500, mimetype='application/json')
         return resp
+
+
+@app.route('/api/v1/questions/host/matching', methods=['GET'])
+def get_host_matching_questions():
+    return jsonify([
+        {
+            id: '7',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Full name',
+            order: 1,
+            question: 'First Name',
+        },
+        {
+            id: '8',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Full name',
+            order: 2,
+            question: 'Middle Name',
+        },
+        {
+            id: '9',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Full name',
+            order: 3,
+            question: 'Last Name',
+        },
+        {
+            id: '16',
+            type: 'text',
+            group: 'Bio',
+            order: 4,
+            question: 'Date of birth',
+        },
+        {
+            id: '17',
+            type: 'checkbox',
+            group: 'Bio',
+            subgroup: 'Gender',
+            order: 5,
+            question: 'What gender(s) do you most identify with?',
+            options: [
+                {label: 'Female', value: 'female'},
+                {label: 'Male', value: 'male'},
+                {label: 'Trans Man', value: 'trans-man'},
+                {label: 'Trans Woman', value: 'trans-woman'},
+                {label: 'Non Binary', value: 'non-binary'},
+                {label: 'Prefer not to identify', value: 'prefer-not'},
+                {label: 'Describe your gender', value: 'describe'},
+            ],
+        },
+        {
+            id: '38',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Gender',
+            order: 6,
+            question: 'Describe your gender',
+            conditional_id: '17',
+            conditional_value: 'describe',
+        },
+        {
+            id: '18',
+            type: 'radio',
+            group: 'Bio',
+            order: 7,
+            question:
+                'Do you have another family member to add?- opens duplicate screen of page 11 for a new family member if yes',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+        },
+        {
+            id: '19',
+            type: 'text',
+            group: 'Bio',
+            order: 8,
+            question: 'Contact email',
+        },
+        {
+            id: '20',
+            type: 'text',
+            group: 'Bio',
+            order: 9,
+            question: 'Contact phone',
+        },
+        {
+            id: '21',
+            type: 'radio',
+            group: 'Bio',
+            order: 10,
+            question: 'Prefered contact method',
+            options: [
+                {label: 'Email', value: 'email'},
+                {label: 'SMS', value: 'sms'},
+                {label: 'Call', value: 'call'},
+            ],
+        },
+        {
+            id: '22',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Contact Address',
+            order: 10,
+            question: 'Street',
+        },
+        {
+            id: '23',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Contact Address',
+            order: 11,
+            question: 'City',
+        },
+        {
+            id: '24',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Contact Address',
+            order: 12,
+            question: 'Zip',
+        },
+        {
+            id: '25',
+            type: 'radio',
+            group: 'Bio',
+            order: 13,
+            question:
+                'Is your contact address the same as your residential address?- opens duplicate screen of question 15 if no',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+        },
+        {
+            id: '26',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Residential Address',
+            order: 14,
+            question: 'Street',
+            conditional_id: '25',
+            conditional_value: 'no',
+        },
+        {
+            id: '27',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Residential Address',
+            order: 15,
+            question: 'City',
+            conditional_id: '25',
+            conditional_value: 'no',
+        },
+        {
+            id: '28',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Residential Address',
+            order: 16,
+            question: 'Zip',
+            conditional_id: '25',
+            conditional_value: 'no',
+        },
+        {
+            id: '29',
+            type: 'radio',
+            group: 'Bio',
+            order: 17,
+            question: 'Housing Type',
+            options: [
+                {label: 'Owned', value: 'owned'},
+                {label: 'Rented', value: 'rented'},
+            ],
+        },
+        {
+            id: '30',
+            type: 'radio',
+            group: 'Bio',
+            subgroup: 'Housing Type',
+            order: 18,
+            question: 'Housing Type',
+            options: [
+                {label: 'Single family house', value: 'single'},
+                {label: 'Multi-unit', value: 'multi'},
+                {label: 'Mobile home', value: 'mobile'},
+                {label: 'Apartment', value: 'apartment'},
+            ],
+        },
+        {
+            id: '31',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Housing Type',
+            order: 19,
+            question: 'Other',
+        },
+        {
+            id: '32',
+            type: 'radio',
+            group: 'Bio',
+            order: 20,
+            question:
+                'Are you interested in being a temporary (1-10 days) or full time host (3-6 months)?',
+            options: [
+                {label: 'Temporary', value: 'temporary'},
+                {label: 'Full time', value: 'full'},
+            ],
+        },
+        {
+            id: '33',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Job',
+            order: 21,
+            question: 'Place of Employment',
+        },
+        {
+            id: '34',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Job',
+            order: 22,
+            question: 'Job Title',
+        },
+        {
+            id: '35',
+            type: 'radio',
+            group: 'Home',
+            subgroup: 'Pet',
+            order: 23,
+            question: 'Do you have pets?',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+        },
+        {
+            id: '36',
+            type: 'radio',
+            group: 'Home',
+            subgroup: 'Pet',
+            order: 24,
+            question: 'What kind of pets?',
+            options: [
+                {label: 'Dog', value: 'dog'},
+                {label: 'Cat', value: 'cat'},
+                {label: 'Tortoise', value: 'tortoise'},
+                {label: 'Other', value: 'other'},
+            ],
+            conditional_id: '35',
+            conditional_value: 'yes',
+        },
+        {
+            id: '37',
+            type: 'text',
+            group: 'Home',
+            subgroup: 'Pet',
+            order: 25,
+            question: 'Other kind of pet',
+            conditional_id: '36',
+            conditional_value: 'other',
+        },
+        {
+            id: '39',
+            type: 'radio',
+            group: 'Home',
+            subgroup: 'Guest Pet',
+            order: 26,
+            question: 'Are you willing to host a youth with a pet?',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+        },
+        {
+            id: '40',
+            type: 'radio',
+            group: 'Home',
+            subgroup: 'Guest Pet',
+            order: 27,
+            question: 'What type of pet?',
+            options: [
+                {label: 'Dog', value: 'dog'},
+                {label: 'Cat', value: 'cat'},
+                {label: 'Tortoise', value: 'tortoise'},
+                {label: 'Other', value: 'other'},
+            ],
+            conditional_id: '39',
+            conditional_value: 'yes',
+        },
+        {
+            id: '41',
+            type: 'text',
+            group: 'Home',
+            subgroup: 'Guest Pet',
+            order: 28,
+            question: 'Other kind of pet',
+            conditional_id: '40',
+            conditional_value: 'other',
+        },
+        {
+            id: '42',
+            type: 'radio',
+            group: 'Home',
+            subgroup: 'Smoking',
+            order: 29,
+            question: 'Do you or anyone in your houshold smoke?',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+        },
+        {
+            id: '43',
+            type: 'radio',
+            group: 'Home',
+            subgroup: 'Smoking',
+            order: 30,
+            question: 'Is smoking allowed inside your home?',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+            conditional_id: '42',
+            conditional_value: 'yes',
+        },
+        {
+            id: '44',
+            type: 'radio',
+            group: 'Home',
+            subgroup: 'Drinking',
+            order: 31,
+            question: 'Do you or anyone in your household drink alcohol?',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+        },
+        {
+            id: '45',
+            type: 'radio',
+            group: 'Home',
+            subgroup: 'Drinking',
+            order: 33,
+            question: 'Do you have concerns about your drinking?',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+            conditional_id: '44',
+            conditional_value: 'yes',
+        },
+        {
+            id: '46',
+            type: 'text',
+            group: 'Home',
+            subgroup: 'Drinking',
+            order: 34,
+            question: 'Please explain why you are concerned',
+            conditional_id: '45',
+            conditional_value: 'yes',
+        },
+        {
+            id: '47',
+            type: 'radio',
+            group: 'Home',
+            subgroup: 'Substances',
+            order: 35,
+            question:
+                'Do you or anyone in your household use other substances (prescriptions, etc.)?',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+        },
+        {
+            id: '48',
+            type: 'radio',
+            group: 'Home',
+            subgroup: 'Substances',
+            order: 36,
+            question: 'Do you have concerns about your substance use?',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+            conditional_id: '47',
+            conditional_value: 'yes',
+        },
+        {
+            id: '49',
+            type: 'text',
+            group: 'Home',
+            subgroup: 'Substances',
+            order: 37,
+            question: 'Please explain why you are concerned',
+            conditional_id: '48',
+            conditional_value: 'yes',
+        },
+        {
+            id: '50',
+            type: 'text',
+            group: 'Home',
+            order: 38,
+            question: 'How many youth are you able to host at one time?',
+        },
+        {
+            id: '51',
+            type: 'radio',
+            group: 'Home',
+            order: 39,
+            question: 'Are you willing to host a parenting youth?',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+        },
+        {
+            id: '52',
+            type: 'radio',
+            group: 'Home',
+            order: 40,
+            question:
+                'Are you willing to host youth who are in a relationship with one another?',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+        },
+        {
+            id: '53',
+            type: 'text',
+            group: 'Home',
+            order: 41,
+            question:
+                'Please upload an image of yourself (feel free to include any other family members!)',
+        },
+        {
+            id: '54',
+            type: 'text',
+            group: 'Home',
+            order: 42,
+            question: 'Please upload an image of your home',
+        },
+        {
+            id: '55',
+            type: 'text',
+            group: 'Home',
+            subgroup:
+                'Please upload any additional images you feel will give guests a better idea of you and your home',
+            order: 43,
+            question: 'Image upload',
+        },
+        {
+            id: '56',
+            type: 'text',
+            group: 'Home',
+            subgroup:
+                'Please upload any additional images you feel will give guests a better idea of you and your home',
+            order: 44,
+            question: 'Image upload',
+        },
+        {
+            id: '57',
+            type: 'text',
+            group: 'Home',
+            subgroup:
+                'Please upload any additional images you feel will give guests a better idea of you and your home',
+            order: 45,
+            question: 'Image upload',
+        },
+        {
+            id: '58',
+            type: 'textarea',
+            group: 'Personal',
+            order: 46,
+            question: 'What are your passions, interests, and hobbies?',
+        },
+        {
+            id: '59',
+            type: 'text',
+            group: 'Personal',
+            order: 47,
+            question: 'What languages do you speak at home',
+        },
+        {
+            id: '60',
+            type: 'textarea',
+            group: 'Personal',
+            order: 48,
+            question:
+                'Describe any preferred or ideal characteristics you hope for in a guest',
+        },
+        {
+            id: '61',
+            type: 'textarea',
+            group: 'Personal',
+            order: 49,
+            question:
+                'Please share why you are interested in hosting a young person experiencing homelessness',
+        },
+        {
+            id: '62',
+            type: 'textarea',
+            group: 'Personal',
+            order: 50,
+            question:
+                'Please share any strengths, skills, or experience you have that you believe will make you a successful host',
+        },
+        {
+            id: '63',
+            type: 'textarea',
+            group: 'Personal',
+            order: 51,
+            question:
+                'Please describe any challenges you foresee in your role as host',
+        },
+        {
+            id: '64',
+            type: 'textarea',
+            group: 'Personal',
+            order: 52,
+            question:
+                'As a way of starting your host profile, please take a moment to write something to introduce yourself to potential guests. Feel free to talk about your passions and hobbies, your family, your home values, or anything else that feels important to you.',
+        },
+    ])
+
+
+@app.route('/api/v1/questions/host/qualifying', methods=['GET'])
+def get_host_qualifying_questions():
+    return jsonify([
+        {
+            id: '7',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Full name',
+            order: 1,
+            question: 'First Name',
+        },
+        {
+            id: '8',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Full name',
+            order: 2,
+            question: 'Middle Name',
+        },
+        {
+            id: '9',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Full name',
+            order: 3,
+            question: 'Last Name',
+        },
+        {
+            id: '16',
+            type: 'text',
+            group: 'Bio',
+            order: 4,
+            question: 'Date of birth',
+        },
+        {
+            id: '17',
+            type: 'checkbox',
+            group: 'Bio',
+            subgroup: 'Gender',
+            order: 5,
+            question: 'What gender(s) do you most identify with?',
+            options: [
+                {label: 'Female', value: 'female'},
+                {label: 'Male', value: 'male'},
+                {label: 'Trans Man', value: 'trans-man'},
+                {label: 'Trans Woman', value: 'trans-woman'},
+                {label: 'Non Binary', value: 'non-binary'},
+                {label: 'Prefer not to identify', value: 'prefer-not'},
+                {label: 'Describe your gender', value: 'describe'},
+            ],
+        },
+        {
+            id: '38',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Gender',
+            order: 6,
+            question: 'Describe your gender',
+            conditional_id: '17',
+            conditional_value: 'describe',
+        },
+        {
+            id: '18',
+            type: 'radio',
+            group: 'Bio',
+            order: 7,
+            question:
+                'Do you have another family member to add?- opens duplicate screen of page 11 for a new family member if yes',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+        },
+        {
+            id: '19',
+            type: 'text',
+            group: 'Bio',
+            order: 8,
+            question: 'Contact email',
+        },
+        {
+            id: '20',
+            type: 'text',
+            group: 'Bio',
+            order: 9,
+            question: 'Contact phone',
+        },
+        {
+            id: '21',
+            type: 'radio',
+            group: 'Bio',
+            order: 10,
+            question: 'Prefered contact method',
+            options: [
+                {label: 'Email', value: 'email'},
+                {label: 'SMS', value: 'sms'},
+                {label: 'Call', value: 'call'},
+            ],
+        },
+        {
+            id: '22',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Contact Address',
+            order: 10,
+            question: 'Street',
+        },
+        {
+            id: '23',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Contact Address',
+            order: 11,
+            question: 'City',
+        },
+        {
+            id: '24',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Contact Address',
+            order: 12,
+            question: 'Zip',
+        },
+        {
+            id: '25',
+            type: 'radio',
+            group: 'Bio',
+            order: 13,
+            question:
+                'Is your contact address the same as your residential address?- opens duplicate screen of question 15 if no',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+        },
+        {
+            id: '26',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Residential Address',
+            order: 14,
+            question: 'Street',
+            conditional_id: '25',
+            conditional_value: 'no',
+        },
+        {
+            id: '27',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Residential Address',
+            order: 15,
+            question: 'City',
+            conditional_id: '25',
+            conditional_value: 'no',
+        },
+        {
+            id: '28',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Residential Address',
+            order: 16,
+            question: 'Zip',
+            conditional_id: '25',
+            conditional_value: 'no',
+        },
+        {
+            id: '29',
+            type: 'radio',
+            group: 'Bio',
+            order: 17,
+            question: 'Housing Type',
+            options: [
+                {label: 'Owned', value: 'owned'},
+                {label: 'Rented', value: 'rented'},
+            ],
+        },
+        {
+            id: '30',
+            type: 'radio',
+            group: 'Bio',
+            subgroup: 'Housing Type',
+            order: 18,
+            question: 'Housing Type',
+            options: [
+                {label: 'Single family house', value: 'single'},
+                {label: 'Multi-unit', value: 'multi'},
+                {label: 'Mobile home', value: 'mobile'},
+                {label: 'Apartment', value: 'apartment'},
+            ],
+        },
+        {
+            id: '31',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Housing Type',
+            order: 19,
+            question: 'Other',
+        },
+        {
+            id: '32',
+            type: 'radio',
+            group: 'Bio',
+            order: 20,
+            question:
+                'Are you interested in being a temporary (1-10 days) or full time host (3-6 months)?',
+            options: [
+                {label: 'Temporary', value: 'temporary'},
+                {label: 'Full time', value: 'full'},
+            ],
+        },
+        {
+            id: '33',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Job',
+            order: 21,
+            question: 'Place of Employment',
+        },
+        {
+            id: '34',
+            type: 'text',
+            group: 'Bio',
+            subgroup: 'Job',
+            order: 22,
+            question: 'Job Title',
+        },
+        {
+            id: '35',
+            type: 'radio',
+            group: 'Home',
+            subgroup: 'Pet',
+            order: 23,
+            question: 'Do you have pets?',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+        },
+        {
+            id: '36',
+            type: 'radio',
+            group: 'Home',
+            subgroup: 'Pet',
+            order: 24,
+            question: 'What kind of pets?',
+            options: [
+                {label: 'Dog', value: 'dog'},
+                {label: 'Cat', value: 'cat'},
+                {label: 'Tortoise', value: 'tortoise'},
+                {label: 'Other', value: 'other'},
+            ],
+            conditional_id: '35',
+            conditional_value: 'yes',
+        },
+        {
+            id: '37',
+            type: 'text',
+            group: 'Home',
+            subgroup: 'Pet',
+            order: 25,
+            question: 'Other kind of pet',
+            conditional_id: '36',
+            conditional_value: 'other',
+        },
+        {
+            id: '39',
+            type: 'radio',
+            group: 'Home',
+            subgroup: 'Guest Pet',
+            order: 26,
+            question: 'Are you willing to host a youth with a pet?',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+        },
+        {
+            id: '40',
+            type: 'radio',
+            group: 'Home',
+            subgroup: 'Guest Pet',
+            order: 27,
+            question: 'What type of pet?',
+            options: [
+                {label: 'Dog', value: 'dog'},
+                {label: 'Cat', value: 'cat'},
+                {label: 'Tortoise', value: 'tortoise'},
+                {label: 'Other', value: 'other'},
+            ],
+            conditional_id: '39',
+            conditional_value: 'yes',
+        },
+        {
+            id: '41',
+            type: 'text',
+            group: 'Home',
+            subgroup: 'Guest Pet',
+            order: 28,
+            question: 'Other kind of pet',
+            conditional_id: '40',
+            conditional_value: 'other',
+        },
+        {
+            id: '42',
+            type: 'radio',
+            group: 'Home',
+            subgroup: 'Smoking',
+            order: 29,
+            question: 'Do you or anyone in your houshold smoke?',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+        },
+        {
+            id: '43',
+            type: 'radio',
+            group: 'Home',
+            subgroup: 'Smoking',
+            order: 30,
+            question: 'Is smoking allowed inside your home?',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+            conditional_id: '42',
+            conditional_value: 'yes',
+        },
+        {
+            id: '44',
+            type: 'radio',
+            group: 'Home',
+            subgroup: 'Drinking',
+            order: 31,
+            question: 'Do you or anyone in your household drink alcohol?',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+        },
+        {
+            id: '45',
+            type: 'radio',
+            group: 'Home',
+            subgroup: 'Drinking',
+            order: 33,
+            question: 'Do you have concerns about your drinking?',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+            conditional_id: '44',
+            conditional_value: 'yes',
+        },
+        {
+            id: '46',
+            type: 'text',
+            group: 'Home',
+            subgroup: 'Drinking',
+            order: 34,
+            question: 'Please explain why you are concerned',
+            conditional_id: '45',
+            conditional_value: 'yes',
+        },
+        {
+            id: '47',
+            type: 'radio',
+            group: 'Home',
+            subgroup: 'Substances',
+            order: 35,
+            question:
+                'Do you or anyone in your household use other substances (prescriptions, etc.)?',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+        },
+        {
+            id: '48',
+            type: 'radio',
+            group: 'Home',
+            subgroup: 'Substances',
+            order: 36,
+            question: 'Do you have concerns about your substance use?',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+            conditional_id: '47',
+            conditional_value: 'yes',
+        },
+        {
+            id: '49',
+            type: 'text',
+            group: 'Home',
+            subgroup: 'Substances',
+            order: 37,
+            question: 'Please explain why you are concerned',
+            conditional_id: '48',
+            conditional_value: 'yes',
+        },
+        {
+            id: '50',
+            type: 'text',
+            group: 'Home',
+            order: 38,
+            question: 'How many youth are you able to host at one time?',
+        },
+        {
+            id: '51',
+            type: 'radio',
+            group: 'Home',
+            order: 39,
+            question: 'Are you willing to host a parenting youth?',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+        },
+        {
+            id: '52',
+            type: 'radio',
+            group: 'Home',
+            order: 40,
+            question:
+                'Are you willing to host youth who are in a relationship with one another?',
+            options: [
+                {label: 'Yes', value: 'yes'},
+                {label: 'No', value: 'no'},
+            ],
+        },
+        {
+            id: '53',
+            type: 'text',
+            group: 'Home',
+            order: 41,
+            question:
+                'Please upload an image of yourself (feel free to include any other family members!)',
+        },
+        {
+            id: '54',
+            type: 'text',
+            group: 'Home',
+            order: 42,
+            question: 'Please upload an image of your home',
+        },
+        {
+            id: '55',
+            type: 'text',
+            group: 'Home',
+            subgroup:
+                'Please upload any additional images you feel will give guests a better idea of you and your home',
+            order: 43,
+            question: 'Image upload',
+        },
+        {
+            id: '56',
+            type: 'text',
+            group: 'Home',
+            subgroup:
+                'Please upload any additional images you feel will give guests a better idea of you and your home',
+            order: 44,
+            question: 'Image upload',
+        },
+        {
+            id: '57',
+            type: 'text',
+            group: 'Home',
+            subgroup:
+                'Please upload any additional images you feel will give guests a better idea of you and your home',
+            order: 45,
+            question: 'Image upload',
+        },
+        {
+            id: '58',
+            type: 'textarea',
+            group: 'Personal',
+            order: 46,
+            question: 'What are your passions, interests, and hobbies?',
+        },
+        {
+            id: '59',
+            type: 'text',
+            group: 'Personal',
+            order: 47,
+            question: 'What languages do you speak at home',
+        },
+        {
+            id: '60',
+            type: 'textarea',
+            group: 'Personal',
+            order: 48,
+            question:
+                'Describe any preferred or ideal characteristics you hope for in a guest',
+        },
+        {
+            id: '61',
+            type: 'textarea',
+            group: 'Personal',
+            order: 49,
+            question:
+                'Please share why you are interested in hosting a young person experiencing homelessness',
+        },
+        {
+            id: '62',
+            type: 'textarea',
+            group: 'Personal',
+            order: 50,
+            question:
+                'Please share any strengths, skills, or experience you have that you believe will make you a successful host',
+        },
+        {
+            id: '63',
+            type: 'textarea',
+            group: 'Personal',
+            order: 51,
+            question:
+                'Please describe any challenges you foresee in your role as host',
+        },
+        {
+            id: '64',
+            type: 'textarea',
+            group: 'Personal',
+            order: 52,
+            question:
+                'As a way of starting your host profile, please take a moment to write something to introduce yourself to potential guests. Feel free to talk about your passions and hobbies, your family, your home values, or anything else that feels important to you.',
+        },
+    ])
 
 
 # TODO: Better error handling for items not found in db
@@ -1464,7 +2543,7 @@ def get_all_match_results():
 def allowed_file(filename):
     if not "." in filename:
         return False
-    
+
     ext = filename.rsplit(".", 1)[1]
 
     if ext.lower() in ALLOWED_EXTENSIONS:
@@ -1478,35 +2557,36 @@ def image_upload():
     if 'image' not in request.files:
         flash('no image file')
         return Response(status=400, mimetype='application/json')
-    
+
     img = request.files["image"]
-    
+
     if img.filename == '':
         flash('no image was selected')
         return Response(status=400, mimetype='application/json')
-    
+
     if img and allowed_file(img.filename):
         img_name = secure_filename(img.filename)
         saveImg = MongoFacade()
         resp = saveImg.save_file(img, img_name)
         if resp is not None:
-            return Response(json.dumps({'msg': 'Image saved successfully', 'status': 200}),status=200, mimetype='application/json')
+            return Response(json.dumps({'msg': 'Image saved successfully', 'status': 200}), status=200, mimetype='application/json')
         else:
             return Response(status=500, mimetype='application/json')
     else:
         return Response(status=500, mimetype='application/json')
 
     return Response(status=200, mimetype='application/json')
-    
 
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def index(path):
-    app.logger.debug("quote_plus(os.getenv('DB_USER')) = {}".format(os.getenv('DB_USER')) )
-    app.logger.debug("quote_plus(os.getenv('DB_PWD')) = {}".format(os.getenv('DB_PWD')) )
-    app.logger.debug("os.getenv('DB_HOST') = {}".format(os.getenv('DB_HOST')) )
-    app.logger.debug("os.getenv('DB_PORT') = {}".format(os.getenv('DB_PORT')) )
+    app.logger.debug(
+        "quote_plus(os.getenv('DB_USER')) = {}".format(os.getenv('DB_USER')))
+    app.logger.debug(
+        "quote_plus(os.getenv('DB_PWD')) = {}".format(os.getenv('DB_PWD')))
+    app.logger.debug("os.getenv('DB_HOST') = {}".format(os.getenv('DB_HOST')))
+    app.logger.debug("os.getenv('DB_PORT') = {}".format(os.getenv('DB_PORT')))
     app.logger.warning('path = {}'.format(path))
     return app.send_static_file("index.html")
 

@@ -12,7 +12,7 @@ import { Box, Button, LinearProgress } from '@material-ui/core'
 import MessageModal from '../MUIModal/MessageModal/MessageModal'
 import ConfirmationModal from '../MUIModal/ConfirmationModal/ConfirmationModal'
 
-interface Props {
+interface ShowstopperQuestionPageProps {
     showstopperQuestions: Array<ShowstopperQuestionType>
     matchingQuestions: Array<MatchingQuestionType>
     stepwise: boolean
@@ -65,9 +65,11 @@ const IconContainer = (props: {
     )
 }
 
-export const QuestionPage = (props: Props) => {
-    const { data, putHostResponse } = useHostDashboardData()
-    console.log('testing custom hook', data)
+export const ShowstopperQuestionPage = (
+    props: ShowstopperQuestionPageProps
+) => {
+    // const { data } = useHostDashboardData()
+    // console.log('testing custom hook', data)
 
     // sort by order
     let questions = props.showstopperQuestions.concat(props.matchingQuestions)
@@ -157,17 +159,15 @@ export const QuestionPage = (props: Props) => {
     }
 
     const setAnswer = (index: number, answer: any) => {
-        let newState = { ...state }
-
-        //set on state directly vs via the questions object in the questions array
-        newState.questions[index].answer = answer
+        let state2 = { ...state }
+        state2.questions[index].answer = answer
 
         if (answer === 'no') {
-            newState = { ...state, modalOpen: true, disableSubmit: true }
+            state2 = { ...state, modalOpen: true, disableSubmit: true }
         } else {
-            newState = { ...state, disableSubmit: false }
+            state2 = { ...state, disableSubmit: false }
         }
-        setState(newState)
+        setState(state2)
     }
 
     const clickBack = () => {
@@ -184,7 +184,7 @@ export const QuestionPage = (props: Props) => {
         }
     }
 
-    const clickForward = async () => {
+    const clickForward = () => {
         if (state.subgroupIndex < groups[state.groupIndex].length - 1) {
             setState({ ...state, subgroupIndex: state.subgroupIndex + 1 })
         } else if (state.groupIndex < groups.length - 1) {
@@ -195,19 +195,6 @@ export const QuestionPage = (props: Props) => {
             })
         } else {
             setState({ ...state, submitPage: true })
-        }
-
-        try {
-            //dummy set state modeled as the HostResponse type
-            //responseValues value should be result of setAnswer on state
-            // let testResponse = {
-            //     questionId: 1,
-            //     hostId: 1,
-            //     responseValues: [1],
-            // }
-            // await putHostResponse(state.groupIndex, testResponse)
-        } catch (e) {
-            console.log(`failed to  post ${e}`)
         }
     }
 
@@ -385,4 +372,4 @@ export const QuestionPage = (props: Props) => {
     )
 }
 
-export default QuestionPage
+export default ShowstopperQuestionPage

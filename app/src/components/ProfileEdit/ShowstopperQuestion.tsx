@@ -28,6 +28,11 @@ const ShowstopperQuestion = (props: Props) => {
         <div>
             <QuestionLabel>{question.question}</QuestionLabel>
             <div>
+                {/* 
+                    TODO: Pending back-end implementation,
+                        use nullable boolean, int ID, or at least const strings 
+                        defined elsewhere 
+                */}
                 <Fields.RadioButtons
                     ariaLabel={question.question}
                     name={question.id}
