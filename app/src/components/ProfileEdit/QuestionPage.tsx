@@ -196,12 +196,12 @@ export const QuestionPage = (props: Props) => {
         try {
             //dummy set state modeled as the HostResponse type
             //responseValues value should be result of setAnswer on state
-            let testResponse = {
-                questionId: 1,
-                hostId: 1,
-                responseValues: [1],
-            }
-            await putHostResponse(state.groupIndex, testResponse)
+            // let testResponse = {
+            //     questionId: 1,
+            //     hostId: 1,
+            //     responseValues: [1],
+            // }
+            // await putHostResponse(state.groupIndex, testResponse)
         } catch (e) {
             console.log(`failed to  post ${e}`)
         }
