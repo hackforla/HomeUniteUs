@@ -108,9 +108,9 @@ export class ApiWrapper {
         this.guestFetcher = new Fetcher<Guest>('guests')
         this.hostShowstopperQuestionsFetcher = new Fetcher<
             ShowstopperQuestionType
-        >(`/api/v1/hostRegisterQuestions/${id}`)
+        >(`/api/v1/questions/host/qualifying`)
         this.hostMatchingQuestionsFetcher = new Fetcher<MatchingQuestionType>(
-            `/api/v1/hostRegisterQuestions/${id}`
+            `/api/v1/questions/host/matching`
         )
 
         this.hostInformationForm = new Fetcher<string>(`host/registration/info`)
@@ -120,7 +120,9 @@ export class ApiWrapper {
             `host/registration/language`
         )
         this.hostGenderForm = new Fetcher<string>(`host/registration/language`)
-        this.hostQuestionsResponse = new Fetcher<string>(`host/questions/${id}`)
+        this.hostQuestionsResponse = new Fetcher<string>(
+            `/api/v1/hostRegisterQuestions/${id}`
+        )
     }
 
     // Guests

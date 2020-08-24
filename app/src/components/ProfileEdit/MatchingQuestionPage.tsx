@@ -67,7 +67,7 @@ const IconContainer = (props: {
 }
 
 export const MatchingQuestionPage = (props: MatchingQuestionPageProps) => {
-    // const { data } = useHostDashboardData()
+    // const { data, putHostReponse } = useHostDashboardData()
     // console.log('testing custom hook', data)
 
     // sort by order
@@ -184,6 +184,15 @@ export const MatchingQuestionPage = (props: MatchingQuestionPageProps) => {
     }
 
     const clickForward = () => {
+        //dummy set state modeled as the HostResponse type
+        //responseValues value should be result of setAnswer on state
+        // let testResponse = {
+        //     questionId: 1,
+        //     hostId: 1,
+        //     responseValues: [1],
+        // }
+        // await putHostResponse(state.groupIndex, testResponse)
+
         if (state.subgroupIndex < groups[state.groupIndex].length - 1) {
             setState({ ...state, subgroupIndex: state.subgroupIndex + 1 })
         } else if (state.groupIndex < groups.length - 1) {
