@@ -52,7 +52,63 @@ export const HostQuestionsPage = () => {
             />
 
             <Route
-                path={`${path}/info/:sectionName`}
+                path={`${path}/bio/info`}
+                render={() => {
+                    return (
+                        <QuestionPage
+                            stepwise={true}
+                            onSubmit={handleSubmit}
+                            showstopperQuestions={getShowstopperQuestions()}
+                            matchingQuestions={getMatchingQuestions()}
+                        />
+                    )
+                }}
+            />
+
+            <Route
+                path={`${path}/bio/address`}
+                render={() => {
+                    return (
+                        <QuestionPage
+                            stepwise={true}
+                            onSubmit={handleSubmit}
+                            showstopperQuestions={getShowstopperQuestions()}
+                            matchingQuestions={getMatchingQuestions()}
+                        />
+                    )
+                }}
+            />
+
+            <Route
+                path={`${path}/bio/language`}
+                render={() => {
+                    return (
+                        <QuestionPage
+                            stepwise={true}
+                            onSubmit={handleSubmit}
+                            showstopperQuestions={getShowstopperQuestions()}
+                            matchingQuestions={getMatchingQuestions()}
+                        />
+                    )
+                }}
+            />
+
+            <Route
+                path={`${path}/bio/gender`}
+                render={() => {
+                    return (
+                        <QuestionPage
+                            stepwise={true}
+                            onSubmit={handleSubmit}
+                            showstopperQuestions={getShowstopperQuestions()}
+                            matchingQuestions={getMatchingQuestions()}
+                        />
+                    )
+                }}
+            />
+
+            <Route
+                path={`${path}/contact`}
                 render={() => {
                     return (
                         <QuestionPage
@@ -72,7 +128,6 @@ export const HostQuestionsPage = () => {
                         <MatchingQuestionPage
                             stepwise={true}
                             onSubmit={handleSubmit}
-                            showstopperQuestions={getShowstopperQuestions()}
                             matchingQuestions={getMatchingQuestions()}
                         />
                     )

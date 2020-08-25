@@ -14,7 +14,7 @@ import ConfirmationModal from '../MUIModal/ConfirmationModal/ConfirmationModal'
 import { useParams } from 'react-router'
 
 interface MatchingQuestionPageProps {
-    showstopperQuestions: Array<ShowstopperQuestionType>
+    // showstopperQuestions: Array<ShowstopperQuestionType>
     matchingQuestions: Array<MatchingQuestionType>
     stepwise: boolean
     onSubmit: React.EventHandler<React.FormEvent<HTMLFormElement>>
@@ -71,8 +71,7 @@ export const MatchingQuestionPage = (props: MatchingQuestionPageProps) => {
     // console.log('testing custom hook', data)
 
     // sort by order
-    let questions = props.showstopperQuestions.concat(props.matchingQuestions)
-    questions.sort((a, b) => {
+    let questions = props.matchingQuestions.sort((a, b) => {
         return (a.order || 0) - (b.order || 0)
     })
 
@@ -120,9 +119,7 @@ export const MatchingQuestionPage = (props: MatchingQuestionPageProps) => {
     }
 
     // get group structure
-    let groups: Array<Array<
-        Array<ShowstopperQuestionType | MatchingQuestionType>
-    >> = []
+    let groups: Array<Array<Array<MatchingQuestionType>>> = []
     let groupI = 0
     let subgroupI = 0
     // TODO: use constant-time lookup via Object or Map instead of linear-time search
@@ -257,60 +254,33 @@ export const MatchingQuestionPage = (props: MatchingQuestionPageProps) => {
                                             state.subgroupIndex
                                         ].map(
                                             (
-                                                question:
-                                                    | ShowstopperQuestionType
-                                                    | MatchingQuestionType
+                                                question: MatchingQuestionType
                                             ) => {
                                                 const index = state.questions.indexOf(
                                                     question
                                                 )
-                                                return 'type' in question ? (
+                                                return (
                                                     <MatchingQuestion
                                                         key={index}
                                                         index={index}
                                                         question={question}
                                                         setAnswer={setAnswer}
-                                                    ></MatchingQuestion>
-                                                ) : (
-                                                    <ShowstopperQuestion
-                                                        key={index}
-                                                        index={index}
-                                                        question={question}
-                                                        setAnswer={setAnswer}
-                                                    ></ShowstopperQuestion>
+                                                    />
                                                 )
                                             }
                                         )}
                                     </>
                                 ) : (
                                     state.questions.map(
-                                        (
-                                            question:
-                                                | ShowstopperQuestionType
-                                                | MatchingQuestionType,
-                                            i
-                                        ) =>
+                                        (question: MatchingQuestionType, i) =>
                                             isNestedActive(question) && (
                                                 <Box my={5}>
-                                                    {'type' in question ? (
-                                                        <MatchingQuestion
-                                                            key={i}
-                                                            index={i}
-                                                            question={question}
-                                                            setAnswer={
-                                                                setAnswer
-                                                            }
-                                                        ></MatchingQuestion>
-                                                    ) : (
-                                                        <ShowstopperQuestion
-                                                            key={i}
-                                                            index={i}
-                                                            question={question}
-                                                            setAnswer={
-                                                                setAnswer
-                                                            }
-                                                        ></ShowstopperQuestion>
-                                                    )}
+                                                    <MatchingQuestion
+                                                        key={i}
+                                                        index={i}
+                                                        question={question}
+                                                        setAnswer={setAnswer}
+                                                    />
                                                 </Box>
                                             )
                                     )
