@@ -31,6 +31,7 @@ const UploadImageButton: () => JSX.Element = () => {
         }
     }
 
+    //TODO when api wrapper has fileupload callback
     // const fileUploadHandler = async () => {
     //     try {
     //         const fd = new FormData()
@@ -85,47 +86,23 @@ const UploadImageButton: () => JSX.Element = () => {
                 justifyContent="space-evenly"
                 style={{ margin: '2rem 5.125rem 0 5.125rem' }}
             >
-                <div style={ContainerStyles}>
-                    {selectedImage[1] ? (
-                        <div style={{ width: '100%', height: '100%' }}>
-                            <img
-                                src={selectedImage[1]}
-                                width="100%"
-                                height="100%"
-                            />
+                {[1, 2, 3].map((i) => {
+                    return (
+                        <div style={ContainerStyles}>
+                            {selectedImage[i] ? (
+                                <div style={{ width: '100%', height: '100%' }}>
+                                    <img
+                                        src={selectedImage[i]}
+                                        width="100%"
+                                        height="100%"
+                                    />
+                                </div>
+                            ) : (
+                                addMoreButtons()
+                            )}
                         </div>
-                    ) : (
-                        addMoreButtons()
-                    )}
-                </div>
-
-                <div style={ContainerStyles}>
-                    {selectedImage[2] ? (
-                        <div style={{ width: '100%', height: '100%' }}>
-                            <img
-                                src={selectedImage[2]}
-                                width="100%"
-                                height="100%"
-                            />
-                        </div>
-                    ) : (
-                        addMoreButtons()
-                    )}
-                </div>
-
-                <div style={ContainerStyles}>
-                    {selectedImage[3] ? (
-                        <div style={{ width: '100%', height: '100%' }}>
-                            <img
-                                src={selectedImage[3]}
-                                width="100%"
-                                height="100%"
-                            />
-                        </div>
-                    ) : (
-                        addMoreButtons()
-                    )}
-                </div>
+                    )
+                })}
             </Box>
         ) : (
             ''
@@ -150,7 +127,11 @@ const UploadImageButton: () => JSX.Element = () => {
                         height: '20px',
                         width: '23px',
                     }}
-                    onClick={() => (selectedImage[0] = '')}
+                    onClick={() => {
+                        setSelectedImage(
+                            [...selectedImage].filter((image, i) => i !== 0)
+                        )
+                    }}
                 >
                     <DeleteIcon fontSize="small" />
                 </span>
