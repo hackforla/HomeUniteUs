@@ -1,4 +1,5 @@
 import React, { useState, CSSProperties } from 'react'
+import { useHostDashboardData } from '../../data/host-context'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import {
     Container,
@@ -68,8 +69,15 @@ const fieldContainerStyles: CSSProperties = {
 }
 
 const HostFormGender: React.FC = () => {
-    const handleSubmit = (values: FormValues): void => {
+    const { putGenderInfo } = useHostDashboardData()
+    const handleSubmit = async (values: FormValues) => {
         alert(JSON.stringify(values))
+
+        try {
+            await putGenderInfo(values)
+        } catch (e) {
+            console.log(`Error posting ${e}`)
+        }
     }
     return (
         <>

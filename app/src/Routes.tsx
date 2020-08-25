@@ -45,12 +45,10 @@ export default function Routes() {
                 path="/profileselection"
                 component={ProfileSelection}
             />
-            {/* testing vvv */}
             <Route path="/hostinfo" component={HostFormGender} />
             <Route path="/hostformaddress" component={HostFormAddress} />
             <Route path="/uploadImage" component={ImageUploadComponent} />
             <Route path="/hostformlang" component={HostFormLang} />
-            {/*testing ^^^*/}
             <Route path="/guest/register" component={GuestRegistration} />
             <Route path="/host/register" component={HostRegistration} />
             <FourOhFour />

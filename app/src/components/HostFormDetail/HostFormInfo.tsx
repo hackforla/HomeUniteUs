@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHostDashboardData } from '../../data/host-context'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import {
     Container,
@@ -36,8 +37,15 @@ const validationSchema = Yup.object().shape({
 })
 
 const HostFormInfo: React.FC = () => {
-    const handleSubmit = (values: FormValues): void => {
+    const { putPersonalInfo } = useHostDashboardData()
+    const handleSubmit = async (values: FormValues) => {
         alert(JSON.stringify(values))
+
+        try {
+            await putPersonalInfo(values)
+        } catch (e) {
+            console.log(`Error posting ${e}`)
+        }
     }
     return (
         <>

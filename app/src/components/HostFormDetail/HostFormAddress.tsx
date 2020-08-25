@@ -1,4 +1,5 @@
 import React from 'react'
+import { useHostDashboardData } from '../../data/host-context'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import { Container, TextField, Divider, Button } from '@material-ui/core'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
@@ -30,8 +31,16 @@ const validationSchema = Yup.object().shape({
 })
 
 const HostFormAddress: React.FC = () => {
-    const handleSubmit = (values: FormValues): void => {
+    const { putAddressInfo } = useHostDashboardData()
+
+    const handleSubmit = async (values: FormValues) => {
         alert(JSON.stringify(values))
+
+        try {
+            await putAddressInfo(values)
+        } catch (e) {
+            console.log(`Error posting ${e}`)
+        }
     }
     return (
         <>

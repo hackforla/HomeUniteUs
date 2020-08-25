@@ -1,14 +1,16 @@
 import * as React from 'react'
-import { QuestionType } from '../models/QuestionType'
-import { ResponseValue } from '../models/ResponseValue'
+import { MatchingQuestionType } from '../models/MatchingQuestionType'
+import { ShowstopperQuestionType } from '../models/ShowstopperQuestionType'
+import { HostResponse } from '../models/HostResponse'
 import { ApiWrapper } from './ApiWrapper'
 
 const HostDashboardContext = React.createContext({})
 const hostsFetcher = new ApiWrapper()
 
 interface HostDashboardData {
-    hostQuestions: Array<QuestionType>
-    hostResponses: Array<ResponseValue>
+    showstopperQuestions: Array<ShowstopperQuestionType>
+    matchingQuestions: Array<MatchingQuestionType>
+    hostResponse: HostResponse | null
     loaderState: {
         loading: boolean
         message: string
@@ -20,19 +22,26 @@ enum HostDashboardActionType {
     FinishFetchQuestions,
     GetHostById,
     isLoading,
-    BeginPostAnswer,
-    FinishPostAnswer,
+    BeginPostResponse,
+    FinishPostResponse,
     Error,
 }
 
 interface HostDashboardAction {
     type: HostDashboardActionType
-    payload?: HostDashboardData | Array<QuestionType> | boolean | string
+    payload?:
+        | HostDashboardData
+        | Array<ShowstopperQuestionType>
+        | Array<MatchingQuestionType>
+        | string
+        | HostResponse
+        | any // how to resolve this any type on get questions payload?
 }
 
 const initialState: HostDashboardData = {
-    hostQuestions: [],
-    hostResponses: [],
+    showstopperQuestions: [],
+    matchingQuestions: [],
+    hostResponse: null,
     loaderState: {
         loading: false,
         message: '',
@@ -57,12 +66,36 @@ function hostDashboardReducer(
             return {
                 ...state,
                 loaderState: {
+                    ...state.loaderState,
                     loading: false,
-                    message: 'Finished loading',
                 },
-                hostQuestions: action.payload as Array<QuestionType>,
+                showstopperQuestions: action.payload[0] as Array<
+                    ShowstopperQuestionType
+                >,
+                matchingQuestions: action.payload[1] as Array<
+                    MatchingQuestionType
+                >,
             }
         }
+        case HostDashboardActionType.BeginPostResponse: {
+            return {
+                ...state,
+                loaderState: {
+                    loading: true,
+                    message: action.payload as string,
+                },
+            }
+        }
+        case HostDashboardActionType.FinishPostResponse: {
+            return {
+                ...state,
+                loaderState: {
+                    ...state.loaderState,
+                    loading: false,
+                },
+            }
+        }
+
         default:
             throw new Error(`Unsupported action: ${JSON.stringify(action)}`)
     }
@@ -76,21 +109,23 @@ export function HostDashboardDataProvider(
         initialState
     )
 
-    //dispatch begin and finish get questions
-
     React.useEffect(() => {
         ;(async function () {
             console.log('loadData: fetching...')
             try {
                 dispatch({
                     type: HostDashboardActionType.BeginFetchQuestions,
-                    payload: 'loading',
+                    payload: 'Retrieving host questions...',
                 })
-                const questions = await hostsFetcher.getHostQuestions()
+
+                const hostQuestions = await Promise.all([
+                    hostsFetcher.getHostShowstopperQuestions(),
+                    await hostsFetcher.getHostMatchingQuestions(),
+                ])
 
                 dispatch({
                     type: HostDashboardActionType.FinishFetchQuestions,
-                    payload: questions,
+                    payload: hostQuestions,
                 })
             } catch (e) {
                 dispatch({
@@ -703,10 +738,148 @@ const getMatchingQuestions = () => {
 
 export function useHostDashboardData() {
     const context = React.useContext(HostDashboardContext)
+    console.log('this is context in a custom hook', context)
     if (!context) {
         throw new Error(
             'useHostDashboardData must be used within a HostDashboardProvider'
         )
+    }
+
+    // showstopper & matching
+    const putHostResponse = async (
+        id: number | string,
+        hostResponse: HostResponse
+    ) => {
+        console.log(`postHostResponse: ${hostResponse} `)
+        try {
+            dispatch({
+                type: HostDashboardActionType.BeginPostResponse,
+                payload: 'Posting host response...',
+            })
+
+            await hostsFetcher.putHostRegistrationResponse(id, hostResponse)
+
+            dispatch({
+                type: HostDashboardActionType.FinishPostResponse,
+                payload: 'Finished host response...',
+            })
+        } catch (e) {
+            dispatch({
+                type: HostDashboardActionType.Error,
+                payload: `System error: ${e}`,
+            })
+        }
+    }
+
+    // form detail
+    const putPersonalInfo = async (hostResponse: object) => {
+        console.log(`postHostResponse: ${hostResponse} `)
+        try {
+            dispatch({
+                type: HostDashboardActionType.BeginPostResponse,
+                payload: 'Posting host info details...',
+            })
+
+            await hostsFetcher.putHostInformation(hostResponse)
+
+            dispatch({
+                type: HostDashboardActionType.FinishPostResponse,
+                payload: 'Finished host response...',
+            })
+        } catch (e) {
+            dispatch({
+                type: HostDashboardActionType.Error,
+                payload: `System error: ${e}`,
+            })
+        }
+    }
+
+    const putContactInfo = async (hostResponse: object) => {
+        console.log(`postHostResponse: ${hostResponse} `)
+        try {
+            dispatch({
+                type: HostDashboardActionType.BeginPostResponse,
+                payload: 'Posting host info details...',
+            })
+
+            await hostsFetcher.putHostContact(hostResponse)
+
+            dispatch({
+                type: HostDashboardActionType.FinishPostResponse,
+                payload: 'Finished host response...',
+            })
+        } catch (e) {
+            dispatch({
+                type: HostDashboardActionType.Error,
+                payload: `System error: ${e}`,
+            })
+        }
+    }
+
+    const putAddressInfo = async (hostResponse: object) => {
+        console.log(`postHostResponse: ${hostResponse} `)
+        try {
+            dispatch({
+                type: HostDashboardActionType.BeginPostResponse,
+                payload: 'Posting host info details...',
+            })
+
+            await hostsFetcher.putHostAddress(hostResponse)
+
+            dispatch({
+                type: HostDashboardActionType.FinishPostResponse,
+                payload: 'Finished host response...',
+            })
+        } catch (e) {
+            dispatch({
+                type: HostDashboardActionType.Error,
+                payload: `System error: ${e}`,
+            })
+        }
+    }
+
+    const putGenderInfo = async (hostResponse: object) => {
+        console.log(`postHostResponse: ${hostResponse} `)
+        try {
+            dispatch({
+                type: HostDashboardActionType.BeginPostResponse,
+                payload: 'Posting host info details...',
+            })
+
+            await hostsFetcher.putHostGender(hostResponse)
+
+            dispatch({
+                type: HostDashboardActionType.FinishPostResponse,
+                payload: 'Finished host response...',
+            })
+        } catch (e) {
+            dispatch({
+                type: HostDashboardActionType.Error,
+                payload: `System error: ${e}`,
+            })
+        }
+    }
+
+    const putLanguageInfo = async (hostResponse: object) => {
+        console.log(`postHostResponse: ${hostResponse} `)
+        try {
+            dispatch({
+                type: HostDashboardActionType.BeginPostResponse,
+                payload: 'Posting host info details...',
+            })
+
+            await hostsFetcher.putHostLanguage(hostResponse)
+
+            dispatch({
+                type: HostDashboardActionType.FinishPostResponse,
+                payload: 'Finished host response...',
+            })
+        } catch (e) {
+            dispatch({
+                type: HostDashboardActionType.Error,
+                payload: `System error: ${e}`,
+            })
+        }
     }
 
     const [data, dispatch] = context as [
@@ -719,5 +892,11 @@ export function useHostDashboardData() {
         dispatch,
         getShowstopperQuestions,
         getMatchingQuestions,
+        putHostResponse,
+        putPersonalInfo,
+        putContactInfo,
+        putAddressInfo,
+        putGenderInfo,
+        putLanguageInfo,
     }
 }

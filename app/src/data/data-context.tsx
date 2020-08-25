@@ -644,7 +644,7 @@ export function useHostHomeData() {
             type: HostHomeActionType.MarkAsInterested,
             payload: matchPair,
         })
-        
+
     const markAsNotInterested = (matchPair: MatchPair) =>
         dispatch({
             type: HostHomeActionType.MarkAsNotInterested,

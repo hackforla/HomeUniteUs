@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useHostDashboardData } from '../../data/host-context'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import {
     Container,
@@ -14,6 +15,8 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 
 import TextInput from '../Registration/TextInput/TextInput'
 import Btn from '../Registration/Button/Button'
+
+//this component is not yet wrapped in the HostProvider
 
 interface FormValues {
     email: string
@@ -42,15 +45,23 @@ const validationSchema = Yup.object()
     )
 
 const HostFormAddress: React.FC = () => {
+    const { putContactInfo } = useHostDashboardData()
+
     const [contactOrder, setContactOrder] = useState([
         'Email',
         'SMS',
         'Phone Call',
     ])
 
-    const handleSubmit = (values: FormValues): void => {
+    const handleSubmit = async (values: FormValues) => {
         alert(JSON.stringify(values))
+        try {
+            await putContactInfo(values)
+        } catch (e) {
+            console.log(`Error posting ${e}`)
+        }
     }
+
     return (
         <>
             <Container maxWidth="md">
