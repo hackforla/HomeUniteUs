@@ -120,8 +120,19 @@ export function HostDashboardDataProvider(
 
                 const hostQuestions = await Promise.all([
                     hostsFetcher.getHostShowstopperQuestions(),
-                    await hostsFetcher.getHostMatchingQuestions(),
+                    hostsFetcher.getHostMatchingQuestions(),
                 ])
+
+                //set on state
+                const showstopperQuestionsMap = new Map()
+                hostQuestions[0].map((question) => {
+                    showstopperQuestionsMap.set(question.id, question)
+                })
+
+                const matchingQuestionsMap = new Map()
+                hostQuestions[1].map((question) => {
+                    matchingQuestionsMap.set(question.id, question)
+                })
 
                 dispatch({
                     type: HostDashboardActionType.FinishFetchQuestions,
@@ -882,6 +893,16 @@ export function useHostDashboardData() {
         }
     }
 
+    const getShowstopperQuestionById = (id: number) => {
+        //dispatch
+        //return showstopperQuestionMap[id]
+    }
+
+    const getMatchingQuestionById = (id: number) => {
+        //dispatch
+        //return matchingQuestionMap[id]
+    }
+
     const [data, dispatch] = context as [
         HostDashboardData,
         React.Dispatch<HostDashboardAction>
@@ -892,6 +913,8 @@ export function useHostDashboardData() {
         dispatch,
         getShowstopperQuestions,
         getMatchingQuestions,
+        getShowstopperQuestionById,
+        getMatchingQuestionById,
         putHostResponse,
         putPersonalInfo,
         putContactInfo,
