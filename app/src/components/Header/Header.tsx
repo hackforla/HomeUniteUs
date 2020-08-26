@@ -21,10 +21,13 @@ export const Header = () => {
                 <NavLink to={`/about`}>ABOUT</NavLink>
             </AppStyle.Holder>
             {/* Tyler 8/8/2020: Moving away from proof-of-concept to prototype */}
+            {/* <AppStyle.Holder>
+                <NavLink to={`/hostinfo`}>host info</NavLink>
+            </AppStyle.Holder> */}
+            {/* <AppStyle.Holder>
+                <NavLink to={`/hostformlang`}>Lang</NavLink>
+            </AppStyle.Holder> */}
             {/* 
-            <AppStyle.Holder>
-                <NavLink to={`/hostformaddress`}>Address Contact</NavLink>
-            </AppStyle.Holder>
             <AppStyle.Holder>
                 <NavLink to={`/demo`}>DEMO</NavLink>
             </AppStyle.Holder>
@@ -38,6 +41,9 @@ export const Header = () => {
                 <NavLink to={`/profile`}>Profile</NavLink>
             </AppStyle.Holder> 
             */}
+            {/* <AppStyle.Holder>
+                <NavLink to={`/uploadImage`}>Image Upload</NavLink>
+            </AppStyle.Holder> */}
             <AppStyle.Holder>
                 <NavLink to={`/profileselection`}>Register</NavLink>
             </AppStyle.Holder>

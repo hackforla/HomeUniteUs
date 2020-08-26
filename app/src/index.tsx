@@ -36,8 +36,8 @@ window.addEventListener('load', function () {
         // Clears auth0 query string parameters from url
         const targetUrl =
             redirectResult &&
-                redirectResult.appState &&
-                redirectResult.appState.targetUrl
+            redirectResult.appState &&
+            redirectResult.appState.targetUrl
                 ? redirectResult.appState.targetUrl
                 : window.location.pathname
 

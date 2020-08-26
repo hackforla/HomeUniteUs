@@ -7,7 +7,7 @@ interface Props extends WithStyles<typeof styles> {
     id: string
     name: string
     value: string
-    onClick: (event: object) => void
+    onClick?: (event: object) => void
     label: string
 }
 
