@@ -46,7 +46,7 @@ const UploadImageButton: () => JSX.Element = () => {
     //     }
     // }
 
-    const addMoreButtons = () => {
+    const AddMoreButtons: () => JSX.Element = () => {
         return (
             <>
                 <Button
@@ -98,7 +98,7 @@ const UploadImageButton: () => JSX.Element = () => {
                                     />
                                 </div>
                             ) : (
-                                addMoreButtons()
+                                <AddMoreButtons />
                             )}
                         </div>
                     )
