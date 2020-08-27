@@ -3,6 +3,7 @@ import { Button, Box, Container, Divider, Typography } from '@material-ui/core'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import DeleteIcon from '@material-ui/icons/Delete'
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
+import styled, { StyledComponent } from 'styled-components'
 
 const ContainerStyles: CSSProperties = {
     borderWidth: '2px',
@@ -17,6 +18,82 @@ const ContainerStyles: CSSProperties = {
     alignItems: 'center',
     padding: '0',
 }
+
+const ImgDiv: CSSProperties = {
+    width: '100%',
+    height: '100%',
+}
+
+const DisplayImg: CSSProperties = {
+    height: '100%',
+    width: '100%',
+    position: 'relative',
+}
+
+const DisplaySpan: CSSProperties = {
+    position: 'absolute',
+    left: '2px',
+    top: '2px',
+    cursor: 'pointer',
+    zIndex: 'auto',
+    borderRadius: '50%',
+    border: '4px solid white',
+    background: '#55B1EB',
+    color: 'white',
+    width: '23px',
+    height: '20px',
+}
+
+const DisplayDiv: CSSProperties = {
+    background: '#E6E6E6',
+    opacity: '0.3',
+    width: '589px',
+    height: '340px',
+}
+
+const Div: StyledComponent<'div', any, {}, never> = styled.div`
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+`
+
+const AddMoreBtn: StyledComponent<
+    ({ ...other }: any) => JSX.Element,
+    any,
+    {},
+    never
+> = styled(({ ...other }) => <Button component="label" {...other} />)`
+    color: #55b1eb !important;
+    position: absolute;
+    backgroundcolor: transparent;
+`
+
+const Boxes: StyledComponent<
+    ({ ...other }: any) => JSX.Element,
+    any,
+    {},
+    never
+> = styled(({ ...other }) => <Box {...other} />)`
+    margin: 2rem 5.125rem 0 5.125rem;
+`
+
+// const BrowseBtn: StyledComponent<
+//     ({ style, ...other }: any) => JSX.Element,
+//     any,
+//     {},
+//     never
+// > = styled(({ style, ...other }) => (
+//     <Button
+//         variant="contained"
+//         component="label"
+//         {...other}
+//         classes={{ style: 'style' }}
+//     />
+// ))`
+//     position: absolute;
+//     background: #55b1eb;
+//     color: #fff;
+// `
 
 const UploadImageButton: () => JSX.Element = () => {
     const [selectedImage, setSelectedImage]: any = useState<string[] | []>([])
@@ -49,21 +126,8 @@ const UploadImageButton: () => JSX.Element = () => {
     const AddMoreButtons: () => JSX.Element = () => {
         return (
             <>
-                <Button
-                    component="label"
-                    style={{
-                        position: 'absolute',
-                        color: '#55B1EB',
-                        backgroundColor: 'transparent',
-                    }}
-                >
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                        }}
-                    >
+                <AddMoreBtn>
+                    <Div>
                         <AddCircleOutlineIcon />
                         <Typography>Add more Images</Typography>
                         <input
@@ -73,24 +137,20 @@ const UploadImageButton: () => JSX.Element = () => {
                             onChange={imageSelectHandler}
                             style={{ display: 'none' }}
                         />
-                    </div>
-                </Button>
+                    </Div>
+                </AddMoreBtn>
             </>
         )
     }
 
     let addMoreImages: string | JSX.Element =
         selectedImage.length > 0 ? (
-            <Box
-                display="flex"
-                justifyContent="space-evenly"
-                style={{ margin: '2rem 5.125rem 0 5.125rem' }}
-            >
+            <Boxes display="flex" justifyContent="space-evenly">
                 {[1, 2, 3].map((i) => {
                     return (
                         <div style={ContainerStyles}>
                             {selectedImage[i] ? (
-                                <div style={{ width: '100%', height: '100%' }}>
+                                <div style={ImgDiv}>
                                     <img
                                         src={selectedImage[i]}
                                         width="100%"
@@ -103,30 +163,16 @@ const UploadImageButton: () => JSX.Element = () => {
                         </div>
                     )
                 })}
-            </Box>
+            </Boxes>
         ) : (
             ''
         )
 
     let displayImageOrBrowseBtn: JSX.Element =
         selectedImage.length > 0 ? (
-            <div
-                style={{ height: '100%', width: '100%', position: 'relative' }}
-            >
+            <div style={DisplayImg}>
                 <span
-                    style={{
-                        position: 'absolute',
-                        top: '2px',
-                        left: '2px',
-                        zIndex: 'auto',
-                        cursor: 'pointer',
-                        border: '4px solid white',
-                        borderRadius: '50%',
-                        color: 'white',
-                        background: '#55B1EB',
-                        height: '20px',
-                        width: '23px',
-                    }}
+                    style={DisplaySpan}
                     onClick={() => {
                         setSelectedImage(
                             [...selectedImage].filter((image, i) => i !== 0)
@@ -139,20 +185,13 @@ const UploadImageButton: () => JSX.Element = () => {
             </div>
         ) : (
             <>
-                <div
-                    style={{
-                        background: '#E6E6E6',
-                        opacity: '0.3',
-                        width: '589px',
-                        height: '340px',
-                    }}
-                ></div>
+                <div style={DisplayDiv} />
                 <Button
                     variant="contained"
                     component="label"
                     style={{
                         position: 'absolute',
-                        background: '#55B1EB',
+                        background: '#55b1eb',
                         color: '#fff',
                     }}
                 >
