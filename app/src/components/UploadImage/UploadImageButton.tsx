@@ -51,10 +51,29 @@ const DisplayDiv: CSSProperties = {
     height: '340px',
 }
 
-const Div: StyledComponent<'div', any, {}, never> = styled.div`
+const ContainerDiv: CSSProperties = {
+    borderWidth: '2px',
+    borderStyle: 'dashed',
+    borderColor: '#D9D9D9',
+    borderRadius: '4px',
+    height: '100%',
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'center',
     alignItems: 'center',
+    padding: '0',
+}
+
+const Span: CSSProperties = {
+    padding: '0.4rem 1.3rem 0.4rem 1.3rem',
+    display: 'flex',
+    alignItems: 'center',
+}
+
+const Div: StyledComponent<'div', any, {}, never> = styled.div`
+    display: 'flex' !important;
+    flexdirection: 'column' !important;
+    alignitems: 'center' !important;
 `
 
 const AddMoreBtn: StyledComponent<
@@ -64,8 +83,8 @@ const AddMoreBtn: StyledComponent<
     never
 > = styled(({ ...other }) => <Button component="label" {...other} />)`
     color: #55b1eb !important;
-    position: absolute;
-    backgroundcolor: transparent;
+    position: absolute !important;
+    backgroundcolor: transparent !important;
 `
 
 const Boxes: StyledComponent<
@@ -74,26 +93,26 @@ const Boxes: StyledComponent<
     {},
     never
 > = styled(({ ...other }) => <Box {...other} />)`
-    margin: 2rem 5.125rem 0 5.125rem;
+    margin: 2rem 5.125rem 0 5.125rem !important;
 `
 
-// const BrowseBtn: StyledComponent<
-//     ({ style, ...other }: any) => JSX.Element,
-//     any,
-//     {},
-//     never
-// > = styled(({ style, ...other }) => (
-//     <Button
-//         variant="contained"
-//         component="label"
-//         {...other}
-//         classes={{ style: 'style' }}
-//     />
-// ))`
-//     position: absolute;
-//     background: #55b1eb;
-//     color: #fff;
-// `
+const BrowseBtn: StyledComponent<
+    ({ style, ...other }: any) => JSX.Element,
+    any,
+    {},
+    never
+> = styled(({ style, ...other }) => (
+    <Button
+        variant="contained"
+        component="label"
+        {...other}
+        classes={{ style: 'style' }}
+    />
+))`
+    position: absolute !important;
+    background: #55b1eb !important;
+    color: #fff !important;
+`
 
 const UploadImageButton: () => JSX.Element = () => {
     const [selectedImage, setSelectedImage]: any = useState<string[] | []>([])
@@ -186,15 +205,7 @@ const UploadImageButton: () => JSX.Element = () => {
         ) : (
             <>
                 <div style={DisplayDiv} />
-                <Button
-                    variant="contained"
-                    component="label"
-                    style={{
-                        position: 'absolute',
-                        background: '#55b1eb',
-                        color: '#fff',
-                    }}
-                >
+                <BrowseBtn>
                     Browse
                     <input
                         type="file"
@@ -203,7 +214,7 @@ const UploadImageButton: () => JSX.Element = () => {
                         onChange={imageSelectHandler}
                         style={{ display: 'none' }}
                     />
-                </Button>
+                </BrowseBtn>
             </>
         )
 
@@ -217,21 +228,7 @@ const UploadImageButton: () => JSX.Element = () => {
                     }}
                     maxWidth="md"
                 >
-                    <Container
-                        style={{
-                            borderWidth: '2px',
-                            borderStyle: 'dashed',
-                            borderColor: '#D9D9D9',
-                            borderRadius: '4px',
-                            height: '100%',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            padding: '0',
-                        }}
-                        maxWidth="sm"
-                    >
+                    <Container style={ContainerDiv} maxWidth="sm">
                         {displayImageOrBrowseBtn}
                     </Container>
                     {addMoreImages}
@@ -248,13 +245,7 @@ const UploadImageButton: () => JSX.Element = () => {
                         }}
                     >
                         <Button style={{ color: '#55B1EB' }}>
-                            <span
-                                style={{
-                                    padding: '0.4rem 1.3rem 0.4rem 1.3rem',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                }}
-                            >
+                            <span style={Span}>
                                 <ArrowBackIosIcon /> Back
                             </span>
                         </Button>
