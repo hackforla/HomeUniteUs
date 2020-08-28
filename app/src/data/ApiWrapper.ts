@@ -119,7 +119,7 @@ export class ApiWrapper {
         this.hostLanguageForm = new Fetcher<string>(
             `host/registration/language`
         )
-        this.hostGenderForm = new Fetcher<string>(`host/registration/language`)
+        this.hostGenderForm = new Fetcher<string>(`host/registration/gender`)
         this.hostQuestionsResponse = new Fetcher<string>(
             `/api/v1/hostRegisterQuestions/${id}`
         )
