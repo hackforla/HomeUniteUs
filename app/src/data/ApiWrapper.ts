@@ -108,9 +108,9 @@ export class ApiWrapper {
         this.guestFetcher = new Fetcher<Guest>('guests')
         this.hostShowstopperQuestionsFetcher = new Fetcher<
             ShowstopperQuestionType
-        >(`/api/v1/questions/host/qualifying`)
+        >(`v1/questions/host/qualifying`)
         this.hostMatchingQuestionsFetcher = new Fetcher<MatchingQuestionType>(
-            `/api/v1/questions/host/matching`
+            `v1/questions/host/matching`
         )
 
         this.hostInformationForm = new Fetcher<string>(`host/registration/info`)
@@ -171,6 +171,11 @@ export class ApiWrapper {
         return await this.hostGenderForm.putResponse(item)
     }
 
+    // TODO: point this call to the appropriate API route /matching or /qualifying
+    //    because they will be kept in separate collections. add an extra param
+    //    to this call for string interpolation or define a dedicated function for each
+    //    HostResponse may not be appropriate as currently defined,
+    //        Matching PUT body: { "email": string, "response": Response ID(s) or a string }
     //question ID
     public async putHostRegistrationResponse(
         id: number | string,

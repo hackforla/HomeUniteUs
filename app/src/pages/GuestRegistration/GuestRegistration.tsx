@@ -6,6 +6,7 @@ export const GuestRegistration = () => {
     return (
         <div>
             <h1>Guest Registration for user: {(user as Auth0User).email}</h1>
+            <h1>Under Construction</h1>
         </div>
     )
 }

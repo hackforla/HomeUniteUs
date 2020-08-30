@@ -22,7 +22,7 @@ import json
 import logging
 from logging.config import dictConfig
 from urllib.parse import quote_plus
-
+import pprint
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -265,6 +265,40 @@ class MongoFacade:
 
         result = collection.update_one(
             {id_field_name: id_field_value}, {'$set': {field_name: field_data_clean}})
+
+        return result.acknowledged
+
+    def add_field_to_record_child(self, collection_name, id_field_name, id_field_value, child_name, field_name, field_data):
+        client = self._get_conn()
+
+        if not client:
+            app.logger.error(
+                'MongoFacade:update_in_collection(): Mongo server not available')
+            raise Exception('Mongo server not available')
+
+        db = client[MONGO_DATABASE]
+        collection = db[collection_name]
+
+        result = collection.find_one({id_field_name: id_field_value})
+        if not result:
+            raise Exception(
+                f'No account with {id_field_name}: {id_field_value}')
+
+        print(
+            f'add_field_to_record_child: record for {id_field_name}: {id_field_value}')
+        pprint.pprint(result)
+
+        if child_name in result:
+            new_child = list(result[child_name])
+        else:
+            new_child = []
+
+        new_child.append({
+            field_name: field_data
+        })
+
+        result = collection.update_one(
+            {id_field_name: id_field_value}, {'$set': {child_name: new_child}})
 
         return result.acknowledged
 
@@ -1176,7 +1210,6 @@ def get_all_data():
     except Exception as e:
         data = {
             'test': 'failed',
-
             'error': str(e)
         }
 
@@ -1473,7 +1506,33 @@ def image_upload():
 """
 
 
-@app.route('/host/registration', methods=['POST'])
+@app.route('/api/account/type', methods=['POST'])
+def get_user_type():
+    """Returns user type"""
+
+    try:
+
+        data = request.json
+        if 'email' not in data:
+            raise Exception('Email must be included in POST request body')
+
+        app.logger.debug(f'get_user_type(): data: {data}')
+        mf = MongoFacade()
+
+        if mf.item_in_collection('hosts', 'email', data['email']):
+            return Response(json.dumps({'type': 'host'}), status=200, mimetype='application/json')
+        elif mf.item_in_collection('guests', 'email', data['email']):
+            return Response(json.dumps({'type': 'host'}), status=200, mimetype='application/json')
+        else:
+            return Response(json.dumps({'type': 'none'}), status=200, mimetype='application/json')
+
+    except Exception as e:
+        app.logger.error(f'get_user_type: error : {str(e)}')
+
+        return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
+
+
+@app.route('/api/host/registration', methods=['POST'])
 def add_new_host():
     """Add a host"""
 
@@ -1499,7 +1558,7 @@ def add_new_host():
         return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
 
 
-@app.route('/host/registration/info', methods=['PUT'])
+@app.route('/api/host/registration/info', methods=['PUT'])
 def add_host_info():
     """Add the general info for a host"""
 
@@ -1516,7 +1575,27 @@ def add_host_info():
         return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
 
 
-@app.route('/host/registration/contact', methods=['PUT'])
+# Tyler 8/30/2020
+# TODO: should we use a generic route like this ot support all bio fields?
+# @app.route('/api/host/registration/bio/<field_name>', methods=['PUT'])
+# def add_host_bio_field(field_name):
+#     """Adds a field to a host record"""
+
+#     try:
+
+#         data = request.json
+#         app.logger.debug(f'add_host_contact(): data: {data}')
+#         mf = MongoFacade()
+#         mf.add_field_to_record(
+#             'hosts', 'email', data['email'], field_name, data)
+#         return Response(status=200, mimetype='application/json')
+
+#     except Exception as e:
+#         app.logger.error(f'add_host_contact: error adding data: {str(e)}')
+#         return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
+
+
+@app.route('/api/host/registration/contact', methods=['PUT'])
 def add_host_contact():
     """Add the contact info for a host"""
 
@@ -1534,7 +1613,7 @@ def add_host_contact():
         return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
 
 
-@app.route('/host/registration/address', methods=['PUT'])
+@app.route('/api/host/registration/address', methods=['PUT'])
 def add_host_address():
     """Add the address info for a host"""
 
@@ -1552,7 +1631,7 @@ def add_host_address():
         return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
 
 
-@app.route('/host/registration/language', methods=['PUT'])
+@app.route('/api/host/registration/language', methods=['PUT'])
 def add_host_language():
     """Add the language info for a host"""
 
@@ -1570,7 +1649,7 @@ def add_host_language():
         return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
 
 
-@app.route('/host/registration/gender', methods=['PUT'])
+@app.route('/api/host/registration/gender', methods=['PUT'])
 def add_host_gender():
     """Add the gender info for a host"""
 
@@ -1585,6 +1664,45 @@ def add_host_gender():
 
     except Exception as e:
         app.logger.error(f'add_host_gender: error adding data: {str(e)}')
+        return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
+
+
+@app.route('/api/host/registration/matching/<questionId>', methods=['PUT'])
+def add_host_matching_response(questionId):
+    """Add the a response to a host matching question"""
+
+    try:
+
+        data = request.json
+        app.logger.debug(f'add_host_matching_response(): data: {data}')
+        mf = MongoFacade()
+        mf.add_field_to_record_child(
+            'hosts', 'email', data['email'], 'matchingResponses', questionId, data['response'])
+
+        return Response(status=200, mimetype='application/json')
+
+    except Exception as e:
+        app.logger.error(
+            f'add_host_matching_response: error adding data: {str(e)}')
+        return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
+
+
+@app.route('/api/host/registration/qualifying/<questionId>', methods=['PUT'])
+def add_host_qualifying_response(questionId):
+    """Add the a response to a host qualifying question"""
+
+    try:
+        data = request.json
+        app.logger.debug(f'add_host_qualifying_response(): data: {data}')
+        mf = MongoFacade()
+        mf.add_field_to_record_child(
+            'hosts', 'email', data['email'], 'qualifyingResponses', questionId, data['response'])
+
+        return Response(status=200, mimetype='application/json')
+
+    except Exception as e:
+        app.logger.error(
+            f'add_host_qualifying_response: error adding data: {str(e)}')
         return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
 
 
