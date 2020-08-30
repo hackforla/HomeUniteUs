@@ -198,7 +198,7 @@ const HostFormGender: React.FC = () => {
                                         justifyContent: 'flex-start',
                                     }}
                                 >
-                                    <Button>
+                                    <Button style={{ color: '#55B1EB' }}>
                                         <span
                                             style={{
                                                 padding:
@@ -214,7 +214,11 @@ const HostFormGender: React.FC = () => {
                                     <Button
                                         variant="contained"
                                         color="primary"
-                                        style={{ margin: '0 3rem 0 7rem' }}
+                                        style={{
+                                            margin: '0 3rem 0 7rem',
+                                            background: '#55B1EB',
+                                            color: '#fff',
+                                        }}
                                     >
                                         <span
                                             style={{
@@ -230,7 +234,11 @@ const HostFormGender: React.FC = () => {
                                         type="submit"
                                         disabled={!dirty || !isValid}
                                         variant="contained"
-                                        color="primary"
+                                        // color="primary"
+                                        style={{
+                                            background: '#55B1EB',
+                                            color: '#fff',
+                                        }}
                                     >
                                         <span
                                             style={{

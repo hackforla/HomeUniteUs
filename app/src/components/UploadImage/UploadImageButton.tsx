@@ -1,24 +1,133 @@
-import React, { useRef, useState } from 'react'
-import { Button, Box, Paper, Container } from '@material-ui/core'
-// import Button from '../Registration/Button/Button'
+import React, { useState, CSSProperties } from 'react'
+import { Button, Box, Container, Divider, Typography } from '@material-ui/core'
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
+import DeleteIcon from '@material-ui/icons/Delete'
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
+import styled, { StyledComponent } from 'styled-components'
 
-function UploadImageButton() {
-    // const [selectedImage, setSelectedImage]: any = useState() //original
-    const [selectedImage, setSelectedImage]: any = useState([])
+const ContainerStyles: CSSProperties = {
+    borderWidth: '2px',
+    borderStyle: 'dashed',
+    borderColor: '#D9D9D9',
+    borderRadius: '4px',
+    height: '7rem',
+    width: '10rem',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '0',
+}
 
-    // const img: any = useRef('empty')
+const ImgDiv: CSSProperties = {
+    width: '100%',
+    height: '100%',
+}
+
+const DisplayImg: CSSProperties = {
+    height: '100%',
+    width: '100%',
+    position: 'relative',
+}
+
+const DisplaySpan: CSSProperties = {
+    position: 'absolute',
+    left: '2px',
+    top: '2px',
+    cursor: 'pointer',
+    zIndex: 'auto',
+    borderRadius: '50%',
+    border: '4px solid white',
+    background: '#55B1EB',
+    color: 'white',
+    width: '23px',
+    height: '20px',
+}
+
+const DisplayDiv: CSSProperties = {
+    background: '#E6E6E6',
+    opacity: '0.3',
+    width: '589px',
+    height: '340px',
+}
+
+const ContainerDiv: CSSProperties = {
+    borderWidth: '2px',
+    borderStyle: 'dashed',
+    borderColor: '#D9D9D9',
+    borderRadius: '4px',
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '0',
+}
+
+const Span: CSSProperties = {
+    padding: '0.4rem 1.3rem 0.4rem 1.3rem',
+    display: 'flex',
+    alignItems: 'center',
+}
+
+const Div: StyledComponent<'div', any, {}, never> = styled.div`
+    display: 'flex' !important;
+    flexdirection: 'column' !important;
+    alignitems: 'center' !important;
+`
+
+const AddMoreBtn: StyledComponent<
+    ({ ...other }: any) => JSX.Element,
+    any,
+    {},
+    never
+> = styled(({ ...other }) => <Button component="label" {...other} />)`
+    color: #55b1eb !important;
+    position: absolute !important;
+    backgroundcolor: transparent !important;
+`
+
+const Boxes: StyledComponent<
+    ({ ...other }: any) => JSX.Element,
+    any,
+    {},
+    never
+> = styled(({ ...other }) => <Box {...other} />)`
+    margin: 2rem 5.125rem 0 5.125rem !important;
+`
+
+const BrowseBtn: StyledComponent<
+    ({ style, ...other }: any) => JSX.Element,
+    any,
+    {},
+    never
+> = styled(({ style, ...other }) => (
+    <Button
+        variant="contained"
+        component="label"
+        {...other}
+        classes={{ style: 'style' }}
+    />
+))`
+    position: absolute !important;
+    background: #55b1eb !important;
+    color: #fff !important;
+`
+
+const UploadImageButton: () => JSX.Element = () => {
+    const [selectedImage, setSelectedImage]: any = useState<string[] | []>([])
 
     const imageSelectHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         const target = event?.target as HTMLInputElement
-        const file: any = target.files as FileList
-        console.log(file, '<-----------------files??')
-        setSelectedImage([...selectedImage, file])
-
-        // const file: File = (target.files as FileList)[0] //this only selects the first one, gotta change it
-        // setSelectedImage(file) //old way
-        // img.current.innerText = file.name
+        const file: any = (target.files as FileList)[0]
+        let reader: FileReader = new FileReader()
+        let url: void = reader.readAsDataURL(file)
+        reader.onloadend = () => {
+            setSelectedImage([...selectedImage, reader.result])
+        }
     }
 
+    //TODO when api wrapper has fileupload callback
     // const fileUploadHandler = async () => {
     //     try {
     //         const fd = new FormData()
@@ -33,17 +142,85 @@ function UploadImageButton() {
     //     }
     // }
 
+    const AddMoreButtons: () => JSX.Element = () => {
+        return (
+            <>
+                <AddMoreBtn>
+                    <Div>
+                        <AddCircleOutlineIcon />
+                        <Typography>Add more Images</Typography>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            multiple
+                            onChange={imageSelectHandler}
+                            style={{ display: 'none' }}
+                        />
+                    </Div>
+                </AddMoreBtn>
+            </>
+        )
+    }
+
+    let addMoreImages: string | JSX.Element =
+        selectedImage.length > 0 ? (
+            <Boxes display="flex" justifyContent="space-evenly">
+                {[1, 2, 3].map((i) => {
+                    return (
+                        <div style={ContainerStyles}>
+                            {selectedImage[i] ? (
+                                <div style={ImgDiv}>
+                                    <img
+                                        src={selectedImage[i]}
+                                        width="100%"
+                                        height="100%"
+                                    />
+                                </div>
+                            ) : (
+                                <AddMoreButtons />
+                            )}
+                        </div>
+                    )
+                })}
+            </Boxes>
+        ) : (
+            ''
+        )
+
+    let displayImageOrBrowseBtn: JSX.Element =
+        selectedImage.length > 0 ? (
+            <div style={DisplayImg}>
+                <span
+                    style={DisplaySpan}
+                    onClick={() => {
+                        setSelectedImage(
+                            [...selectedImage].filter((image, i) => i !== 0)
+                        )
+                    }}
+                >
+                    <DeleteIcon fontSize="small" />
+                </span>
+                <img src={selectedImage[0]} width="100%" height="100%" />
+            </div>
+        ) : (
+            <>
+                <div style={DisplayDiv} />
+                <BrowseBtn>
+                    Browse
+                    <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={imageSelectHandler}
+                        style={{ display: 'none' }}
+                    />
+                </BrowseBtn>
+            </>
+        )
+
     return (
         <>
-            <Box
-                // boxShadow={3}
-                // display="flex"
-                // justifyContent="center"
-                width="75%"
-                margin="0 auto"
-                // border={3}
-                mt={5}
-            >
+            <Box width="75%" margin="0 auto" mt={5}>
                 <Container
                     style={{
                         textAlign: 'center',
@@ -51,35 +228,60 @@ function UploadImageButton() {
                     }}
                     maxWidth="md"
                 >
-                    <Container
+                    <Container style={ContainerDiv} maxWidth="sm">
+                        {displayImageOrBrowseBtn}
+                    </Container>
+                    {addMoreImages}
+                    <Divider
                         style={{
-                            borderStyle: 'dashed',
-                            borderColor: 'grey',
-                            height: '100%',
-                            display: 'flex' /* establish flex container */,
-                            flexDirection:
-                                'column' /* make main axis vertical */,
-                            justifyContent:
-                                'center' /* center items vertically, in this case */,
-                            alignItems: 'center',
+                            margin: '1.5rem auto',
+                            width: '44.6vw',
                         }}
-                        maxWidth="sm"
+                    />
+                    <div
+                        style={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                        }}
                     >
+                        <Button style={{ color: '#55B1EB' }}>
+                            <span style={Span}>
+                                <ArrowBackIosIcon /> Back
+                            </span>
+                        </Button>
+
                         <Button
                             variant="contained"
-                            color="primary"
-                            component="label"
+                            style={{
+                                margin: '0 3rem 0 7rem',
+                                background: '#55B1EB',
+                                color: '#fff',
+                            }}
                         >
-                            Browse
-                            <input
-                                type="file"
-                                accept="image/*"
-                                multiple
-                                onChange={imageSelectHandler}
-                                style={{ display: 'none' }}
-                            />
+                            <span
+                                style={{
+                                    padding: '0.4rem 1.3rem 0.4rem 1.3rem',
+                                }}
+                            >
+                                Skip for Now
+                            </span>
                         </Button>
-                    </Container>
+
+                        <Button
+                            type="submit"
+                            disabled={selectedImage.length == 0 ? true : false}
+                            variant="contained"
+                            style={{ background: '#55B1EB', color: '#fff' }}
+                        >
+                            <span
+                                style={{
+                                    padding: '0.4rem 1.3rem 0.4rem 1.3rem',
+                                }}
+                            >
+                                Save and Continue
+                            </span>
+                        </Button>
+                    </div>
                 </Container>
             </Box>
         </>
@@ -87,22 +289,3 @@ function UploadImageButton() {
 }
 
 export default UploadImageButton
-
-{
-    /* <button onClick={fileUploadHandler}>Upload</button> */
-} //might put back when needed
-
-{
-    /* <input
-accept="image/*"
-className={classes.input}
-id="contained-button-file"
-multiple
-type="file"
-/>
-<label htmlFor="contained-button-file">
-<Button variant="contained" color="primary" component="span">
-  Upload
-</Button>
-</label> */
-}
