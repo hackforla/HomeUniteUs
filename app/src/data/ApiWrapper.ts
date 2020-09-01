@@ -103,8 +103,10 @@ export class ApiWrapper {
     private hostLanguageForm: Fetcher<string>
     private hostGenderForm: Fetcher<string>
     private hostQuestionsResponse: Fetcher<string>
+    private hostShowstopperResponse: Fetcher<string>
+    private hostMatchingResponse: Fetcher<string>
 
-    public constructor(id?: number | string) {
+    public constructor(id?: number | string, email?: string) {
         this.guestFetcher = new Fetcher<Guest>('guests')
         this.hostShowstopperQuestionsFetcher = new Fetcher<
             ShowstopperQuestionType
@@ -122,6 +124,12 @@ export class ApiWrapper {
         this.hostGenderForm = new Fetcher<string>(`host/registration/language`)
         this.hostQuestionsResponse = new Fetcher<string>(
             `/api/v1/hostRegisterQuestions/${id}`
+        )
+        this.hostShowstopperResponse = new Fetcher<string>(
+            `/api/v1/hostRegisterQuestions/${email}`
+        )
+        this.hostMatchingResponse = new Fetcher<string>(
+            `/api/v1/hostRegisterQuestions/${email}`
         )
     }
 
@@ -177,5 +185,19 @@ export class ApiWrapper {
         item: HostResponse
     ): Promise<string> {
         return await this.hostQuestionsResponse.putById(id, item)
+    }
+
+    public async putShowstopperQuestionResponse(
+        email: string,
+        item: HostResponse
+    ): Promise<string> {
+        return await this.hostShowstopperResponse.putById(email, item)
+    }
+
+    public async putMatchingQuestionResponse(
+        email: string,
+        item: HostResponse
+    ): Promise<string> {
+        return await this.hostMatchingResponse.putById(email, item)
     }
 }
