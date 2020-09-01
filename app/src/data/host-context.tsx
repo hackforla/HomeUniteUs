@@ -763,7 +763,7 @@ export function useHostDashboardData() {
     }
 
     // showstopper & matching
-    const putHostResponse = async (
+    const putShowstopperResponse = async (
         id: number | string,
         hostResponse: HostResponse
     ) => {
@@ -771,14 +771,39 @@ export function useHostDashboardData() {
         try {
             dispatch({
                 type: HostDashboardActionType.BeginPostResponse,
-                payload: 'Posting host response...',
+                payload: 'Posting host qualifying response...',
             })
 
             await hostsFetcher.putHostRegistrationResponse(id, hostResponse)
 
             dispatch({
                 type: HostDashboardActionType.FinishPostResponse,
-                payload: 'Finished host response...',
+                payload: 'Finished host qualifying response...',
+            })
+        } catch (e) {
+            dispatch({
+                type: HostDashboardActionType.Error,
+                payload: `System error: ${e}`,
+            })
+        }
+    }
+
+    const putMatchingResponse = async (
+        id: number | string,
+        hostResponse: HostResponse
+    ) => {
+        console.log(`postHostResponse: ${hostResponse} `)
+        try {
+            dispatch({
+                type: HostDashboardActionType.BeginPostResponse,
+                payload: 'Posting host matching response...',
+            })
+
+            await hostsFetcher.putHostRegistrationResponse(id, hostResponse)
+
+            dispatch({
+                type: HostDashboardActionType.FinishPostResponse,
+                payload: 'Finished host matching response...',
             })
         } catch (e) {
             dispatch({
@@ -921,7 +946,8 @@ export function useHostDashboardData() {
         getMatchingQuestions,
         getShowstopperQuestionById,
         getMatchingQuestionById,
-        putHostResponse,
+        putShowstopperResponse,
+        putMatchingResponse,
         putPersonalInfo,
         putContactInfo,
         putAddressInfo,

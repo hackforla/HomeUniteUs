@@ -67,7 +67,7 @@ const IconContainer = (props: {
 }
 
 export const MatchingQuestionPage = (props: MatchingQuestionPageProps) => {
-    // const { data, putHostReponse } = useHostDashboardData()
+    const { data, putMatchingResponse } = useHostDashboardData()
     // console.log('testing custom hook', data)
 
     // sort by order
@@ -191,7 +191,7 @@ export const MatchingQuestionPage = (props: MatchingQuestionPageProps) => {
         //     hostId: 1,
         //     responseValues: [1],
         // }
-        // await putHostResponse(state.groupIndex, testResponse)
+        // await putMatchingResponse(state.groupIndex, testResponse)
 
         if (state.subgroupIndex < groups[state.groupIndex].length - 1) {
             setState({ ...state, subgroupIndex: state.subgroupIndex + 1 })
