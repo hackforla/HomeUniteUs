@@ -124,21 +124,21 @@ export function HostDashboardDataProvider(
                 ])
 
                 //set on state
-                const showstopperQuestionsMap = new Map<
-                    string,
-                    MatchingQuestionType
-                >()
-                hostQuestions[0].map((question: MatchingQuestionType) => {
-                    return showstopperQuestionsMap.set(question.id, question)
-                })
+                // const showstopperQuestionsMap = new Map<
+                //     string,
+                //     MatchingQuestionType
+                // >()
+                // hostQuestions[0].map((question: MatchingQuestionType) => {
+                //     return showstopperQuestionsMap.set(question.id, question)
+                // })
 
-                const matchingQuestionsMap = new Map<
-                    string,
-                    ShowstopperQuestionType
-                >()
-                hostQuestions[1].map((question: ShowstopperQuestionType) => {
-                    return matchingQuestionsMap.set(question.id, question)
-                })
+                // const matchingQuestionsMap = new Map<
+                //     string,
+                //     ShowstopperQuestionType
+                // >()
+                // hostQuestions[1].map((question: ShowstopperQuestionType) => {
+                //     return matchingQuestionsMap.set(question.id, question)
+                // })
 
                 dispatch({
                     type: HostDashboardActionType.FinishFetchQuestions,

@@ -1,11 +1,12 @@
+/* v1 model */
 export interface HostResponse {
-    email: string
-    response: string | Array<number> | number
+    questionId: number
+    hostId: number
+    responseValues: Array<number>
 }
 
-/* v1 model */
+/*v2 model */
 // export interface HostResponse {
-//     questionId: number
-//     hostId: number
-//     responseValues: Array<number>
+//     email: string
+//     responseValues: string | Array<number> | number
 // }
