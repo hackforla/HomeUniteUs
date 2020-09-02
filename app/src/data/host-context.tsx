@@ -774,7 +774,7 @@ export function useHostDashboardData() {
                 payload: 'Posting host qualifying response...',
             })
 
-            await hostsFetcher.putHostRegistrationResponse(id, hostResponse)
+            await hostsFetcher.putShowstopperQuestionResponse(id, hostResponse)
 
             dispatch({
                 type: HostDashboardActionType.FinishPostResponse,
@@ -799,7 +799,7 @@ export function useHostDashboardData() {
                 payload: 'Posting host matching response...',
             })
 
-            await hostsFetcher.putHostRegistrationResponse(id, hostResponse)
+            await hostsFetcher.putMatchingQuestionResponse(id, hostResponse)
 
             dispatch({
                 type: HostDashboardActionType.FinishPostResponse,
