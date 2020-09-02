@@ -13,6 +13,7 @@ import {
     Header,
 } from './style'
 import { ModuleLogger, LogLevel } from '../../utils/Logger'
+import { useAuth0, Auth0User } from '../../react-auth0-spa'
 
 enum ProfileType {
     Host,
@@ -57,6 +58,8 @@ function ProfileSelection() {
     // const [host, setHost] = useState(false)
     // const [guest, setGuest] = useState(false)
 
+    const { user } = useAuth0()
+
     const [state, dispatch] = useReducer(reducer, initialState)
 
     const logger = new ModuleLogger('ProfileSelection', LogLevel.Debug)
@@ -85,16 +88,34 @@ function ProfileSelection() {
         })
     }
 
-    const submit = () => {
+    const submit = async () => {
         if (state.profileType === ProfileType.None) {
             throw new Error(
                 `No profile type selected. This should be disabled.`
             )
         }
-        const urlPrefix =
-            state.profileType === ProfileType.Guest ? '/guest' : '/host'
+        const profileType =
+            state.profileType === ProfileType.Guest ? 'guest' : 'host'
 
-        history.push(`${urlPrefix}/register`)
+        try {
+            const response = await fetch(`/api/${profileType}/registration`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: (user as Auth0User).email,
+                }),
+            })
+
+            if (response.status !== 200) {
+                throw new Error(response.statusText)
+            }
+
+            history.push(`/${profileType}/register`)
+        } catch (e) {
+            console.log(`Error registering host: ${e}`)
+        }
     }
 
     // const handleClick = (e: any) => {

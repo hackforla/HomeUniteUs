@@ -6,7 +6,7 @@ import Routes from './Routes'
 import { HostHomeDataProvider } from './data/data-context'
 import { Guest } from './models'
 import { AppConfig } from './data/config'
-import { useAuth0 } from './react-auth0-spa'
+import { useAuth0, Auth0User } from './react-auth0-spa'
 import { ApiWrapper } from './data/ApiWrapper'
 import { Host } from './models/Host'
 import { Accounts } from './models/Accounts'
@@ -32,9 +32,57 @@ export const LoginView = () => {
     )
 }
 
+interface AccountTypeResponse {
+    type: string
+}
+
 export const App = () => {
     const history = useHistory()
     const { isInitializing, isAuthenticated, user, logout } = useAuth0()
+
+    React.useEffect(() => {
+        console.log(`App: user just changed to ${JSON.stringify(user)}`)
+        if (user) {
+            fetch('/api/account/type', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: (user as Auth0User).email,
+                }),
+            })
+                .then((response: Response) => {
+                    if (response.status !== 200) {
+                        throw new Error(
+                            `Error checking for account: ${response.statusText}`
+                        )
+                    } else {
+                        return response.json()
+                    }
+                })
+                .then((accountInfo: AccountTypeResponse) => {
+                    console.log(`accountInfo: ${JSON.stringify(accountInfo)}`)
+                    switch (accountInfo.type) {
+                        case 'host':
+                            //TODO: fetch host registration status and route
+                            break
+                        case 'guest':
+                            //TODO: fetch guest registration status and route
+                            break
+                        case 'none':
+                            history.push('/profileselection')
+                            break
+                        default:
+                            throw new Error(
+                                `Bad account type response: ${JSON.stringify(
+                                    accountInfo
+                                )}`
+                            )
+                    }
+                })
+        }
+    }, [user])
 
     return (
         <React.Fragment>
