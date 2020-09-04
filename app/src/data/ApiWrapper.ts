@@ -102,7 +102,6 @@ export class ApiWrapper {
     private hostAddressForm: Fetcher<string>
     private hostLanguageForm: Fetcher<string>
     private hostGenderForm: Fetcher<string>
-    private hostQuestionsResponse: Fetcher<string>
     private hostShowstopperResponse: Fetcher<string>
     private hostMatchingResponse: Fetcher<string>
 
@@ -122,14 +121,12 @@ export class ApiWrapper {
             `host/registration/language`
         )
         this.hostGenderForm = new Fetcher<string>(`host/registration/gender`)
-        this.hostQuestionsResponse = new Fetcher<string>(
-            `/api/v1/hostRegisterQuestions/${id}`
-        )
+
         this.hostShowstopperResponse = new Fetcher<string>(
-            `/api/host/registration/qualifying/${id}`
+            `/host/registration/qualifying/${id}`
         )
         this.hostMatchingResponse = new Fetcher<string>(
-            `/api/host/registration/matching/${id}`
+            `/host/registration/matching/${id}`
         )
     }
 
@@ -185,12 +182,6 @@ export class ApiWrapper {
     //    HostResponse may not be appropriate as currently defined,
     //        Matching PUT body: { "email": string, "response": Response ID(s) or a string }
     //question ID
-    public async putHostRegistrationResponse(
-        id: number | string,
-        item: HostResponse
-    ): Promise<string> {
-        return await this.hostQuestionsResponse.putById(id, item)
-    }
 
     public async putShowstopperQuestionResponse(
         id: number | string,
