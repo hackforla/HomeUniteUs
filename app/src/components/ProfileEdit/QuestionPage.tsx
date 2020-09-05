@@ -66,7 +66,7 @@ const IconContainer = (props: {
 }
 
 export const QuestionPage = (props: Props) => {
-    const { data, putHostResponse } = useHostDashboardData()
+    const { data } = useHostDashboardData()
     console.log('testing custom hook', data)
 
     // sort by order

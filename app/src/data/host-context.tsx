@@ -120,8 +120,25 @@ export function HostDashboardDataProvider(
 
                 const hostQuestions = await Promise.all([
                     hostsFetcher.getHostShowstopperQuestions(),
-                    await hostsFetcher.getHostMatchingQuestions(),
+                    hostsFetcher.getHostMatchingQuestions(),
                 ])
+
+                //set on state
+                // const showstopperQuestionsMap = new Map<
+                //     string,
+                //     MatchingQuestionType
+                // >()
+                // hostQuestions[0].map((question: MatchingQuestionType) => {
+                //     return showstopperQuestionsMap.set(question.id, question)
+                // })
+
+                // const matchingQuestionsMap = new Map<
+                //     string,
+                //     ShowstopperQuestionType
+                // >()
+                // hostQuestions[1].map((question: ShowstopperQuestionType) => {
+                //     return matchingQuestionsMap.set(question.id, question)
+                // })
 
                 dispatch({
                     type: HostDashboardActionType.FinishFetchQuestions,
@@ -746,7 +763,7 @@ export function useHostDashboardData() {
     }
 
     // showstopper & matching
-    const putHostResponse = async (
+    const putShowstopperResponse = async (
         id: number | string,
         hostResponse: HostResponse
     ) => {
@@ -754,14 +771,39 @@ export function useHostDashboardData() {
         try {
             dispatch({
                 type: HostDashboardActionType.BeginPostResponse,
-                payload: 'Posting host response...',
+                payload: 'Posting host qualifying response...',
             })
 
-            await hostsFetcher.putHostRegistrationResponse(id, hostResponse)
+            await hostsFetcher.putShowstopperQuestionResponse(id, hostResponse)
 
             dispatch({
                 type: HostDashboardActionType.FinishPostResponse,
-                payload: 'Finished host response...',
+                payload: 'Finished host qualifying response...',
+            })
+        } catch (e) {
+            dispatch({
+                type: HostDashboardActionType.Error,
+                payload: `System error: ${e}`,
+            })
+        }
+    }
+
+    const putMatchingResponse = async (
+        id: number | string,
+        hostResponse: HostResponse
+    ) => {
+        console.log(`postHostResponse: ${hostResponse} `)
+        try {
+            dispatch({
+                type: HostDashboardActionType.BeginPostResponse,
+                payload: 'Posting host matching response...',
+            })
+
+            await hostsFetcher.putMatchingQuestionResponse(id, hostResponse)
+
+            dispatch({
+                type: HostDashboardActionType.FinishPostResponse,
+                payload: 'Finished host matching response...',
             })
         } catch (e) {
             dispatch({
@@ -882,6 +924,16 @@ export function useHostDashboardData() {
         }
     }
 
+    const getShowstopperQuestionById = (id: number) => {
+        //dispatch
+        //return showstopperQuestionMap[id]
+    }
+
+    const getMatchingQuestionById = (id: number) => {
+        //dispatch
+        //return matchingQuestionMap[id]
+    }
+
     const [data, dispatch] = context as [
         HostDashboardData,
         React.Dispatch<HostDashboardAction>
@@ -892,7 +944,10 @@ export function useHostDashboardData() {
         dispatch,
         getShowstopperQuestions,
         getMatchingQuestions,
-        putHostResponse,
+        getShowstopperQuestionById,
+        getMatchingQuestionById,
+        putShowstopperResponse,
+        putMatchingResponse,
         putPersonalInfo,
         putContactInfo,
         putAddressInfo,
