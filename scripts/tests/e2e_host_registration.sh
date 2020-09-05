@@ -65,3 +65,8 @@ curl http://localhost:8080/api/host/registration/qualifying/12 \
   -H "Content-Type: application/json" \
   -d '{"email": "'$HOST_EMAIL'", "response": 56 }'
 
+curl http://localhost:8080/api/host \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"email": "'$HOST_EMAIL'"}'
+

@@ -24,6 +24,7 @@ import { HostRegistration } from './pages/HostRegistration/HostRegistration'
 import ImageUploadComponent from './components/UploadImage/ImageUploadComponent'
 import HostFormGender from './components/HostFormDetail/HostFormGender'
 import HostFormLang from './components/HostFormDetail/HostFormLang'
+import { HostDashboard } from './pages/HostDashboard'
 
 export default function Routes() {
     return (
@@ -51,6 +52,7 @@ export default function Routes() {
             <Route path="/hostformlang" component={HostFormLang} />
             <Route path="/guest/register" component={GuestRegistration} />
             <Route path="/host/register" component={HostRegistration} />
+            <Route path="/host/dashboard" component={HostDashboard} />
             <FourOhFour />
         </Switch>
     )

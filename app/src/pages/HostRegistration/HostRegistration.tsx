@@ -41,12 +41,18 @@ export const HostQuestionsPage = () => {
                 path={`${path}/qualifying/:questionId`}
                 render={() => {
                     return (
-                        <ShowstopperQuestionPage
+                        <QuestionPage
                             stepwise={true}
                             onSubmit={handleSubmit}
                             showstopperQuestions={getShowstopperQuestions()}
                             matchingQuestions={getMatchingQuestions()}
                         />
+                        // <ShowstopperQuestionPage
+                        //     stepwise={true}
+                        //     onSubmit={handleSubmit}
+                        //     showstopperQuestions={getShowstopperQuestions()}
+                        //     matchingQuestions={getMatchingQuestions()}
+                        // />
                     )
                 }}
             />
@@ -69,12 +75,18 @@ export const HostQuestionsPage = () => {
                 path={`${path}/matching/:questionId`}
                 render={() => {
                     return (
-                        <MatchingQuestionPage
+                        <QuestionPage
                             stepwise={true}
                             onSubmit={handleSubmit}
                             showstopperQuestions={getShowstopperQuestions()}
                             matchingQuestions={getMatchingQuestions()}
                         />
+                        // <MatchingQuestionPage
+                        //     stepwise={true}
+                        //     onSubmit={handleSubmit}
+                        //     showstopperQuestions={getShowstopperQuestions()}
+                        //     matchingQuestions={getMatchingQuestions()}
+                        // />
                     )
                 }}
             />

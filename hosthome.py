@@ -431,131 +431,133 @@ def favicon():
 ## Hosts API ##
 ###############
 
-@app.route('/api/hosts/<int:id>', methods=['GET', 'PUT', 'DELETE'])
-def host_by_id(id: int):
 
-    app.logger.warning(
-        'host_by_id: request.method = {}'.format(request.method))
-    app.logger.warning(f'host_by_id: id = {id} ({type(id)})')
+# Tyler 9/1/2020: Deprecated proof-of-concept version
+# @app.route('/api/hosts/<int:id>', methods=['GET', 'PUT', 'DELETE'])
+# def host_by_id(id: int):
 
-    if request.method == 'GET':
+#     app.logger.warning(
+#         'host_by_id: request.method = {}'.format(request.method))
+#     app.logger.warning(f'host_by_id: id = {id} ({type(id)})')
 
-        try:
+#     if request.method == 'GET':
 
-            host = hostRepository.mongo_facade.get_element_by_id('hosts', id)
-            js = json.dumps(host)
-            resp = Response(js, status=200, mimetype='application/json')
-            return resp
+#         try:
 
-        except Exception as e:
+#             host = hostRepository.mongo_facade.get_element_by_id('hosts', id)
+#             js = json.dumps(host)
+#             resp = Response(js, status=200, mimetype='application/json')
+#             return resp
 
-            data = {
-                'error': str(e)
-            }
+#         except Exception as e:
 
-            js = json.dumps(data)
-            resp = Response(js, status=500, mimetype='application/json')
+#             data = {
+#                 'error': str(e)
+#             }
 
-            return resp
+#             js = json.dumps(data)
+#             resp = Response(js, status=500, mimetype='application/json')
 
-    elif request.method == 'PUT':
+#             return resp
 
-        try:
+#     elif request.method == 'PUT':
 
-            responseData = hostRepository.update(id, request.json)
-            app.logger.debug('responseData = {}'.format(responseData))
-            resp = Response(json.dumps({'error': None, 'data': None}),
-                            status=200, mimetype='application/json')
-            return resp
+#         try:
 
-        except Exception as e:
+#             responseData = hostRepository.update(id, request.json)
+#             app.logger.debug('responseData = {}'.format(responseData))
+#             resp = Response(json.dumps({'error': None, 'data': None}),
+#                             status=200, mimetype='application/json')
+#             return resp
 
-            data = {
-                'error': str(e)
-            }
+#         except Exception as e:
 
-            js = json.dumps(data)
-            resp = Response(js, status=500, mimetype='application/json')
+#             data = {
+#                 'error': str(e)
+#             }
 
-            return resp
+#             js = json.dumps(data)
+#             resp = Response(js, status=500, mimetype='application/json')
 
-    elif request.method == 'DELETE':
+#             return resp
 
-        try:
+#     elif request.method == 'DELETE':
 
-            responseData = hostRepository.delete(id)
-            app.logger.debug('responseData = {}'.format(responseData))
-            resp = Response(json.dumps({'error': None, 'data': None}),
-                            status=200, mimetype='application/json')
-            return resp
+#         try:
 
-        except Exception as e:
+#             responseData = hostRepository.delete(id)
+#             app.logger.debug('responseData = {}'.format(responseData))
+#             resp = Response(json.dumps({'error': None, 'data': None}),
+#                             status=200, mimetype='application/json')
+#             return resp
 
-            data = {
-                'error': str(e)
-            }
+#         except Exception as e:
 
-            js = json.dumps(data)
-            resp = Response(js, status=500, mimetype='application/json')
+#             data = {
+#                 'error': str(e)
+#             }
 
-            return resp
+#             js = json.dumps(data)
+#             resp = Response(js, status=500, mimetype='application/json')
 
-    else:
+#             return resp
 
-        app.logger.debug(f'what is {request.method} even doing here.')
+#     else:
+
+#         app.logger.debug(f'what is {request.method} even doing here.')
 
 
-@app.route('/api/hosts', methods=['GET', 'POST'])
-def get_all_hosts():
+# @app.route('/api/hosts', methods=['GET', 'POST'])
+# def get_all_hosts():
 
-    app.logger.warning(
-        'get_all_hosts: request.method = {}'.format(request.method))
+#     app.logger.warning(
+#         'get_all_hosts: request.method = {}'.format(request.method))
 
-    if request.method == 'GET':
+#     if request.method == 'GET':
 
-        try:
+#         try:
 
-            hosts = hostRepository.get()
-            js = json.dumps(hosts)
-            resp = Response(js, status=200, mimetype='application/json')
-            return resp
+#             hosts = hostRepository.get()
+#             js = json.dumps(hosts)
+#             resp = Response(js, status=200, mimetype='application/json')
+#             return resp
 
-        except Exception as e:
+#         except Exception as e:
 
-            data = {
-                'error': str(e)
-            }
+#             data = {
+#                 'error': str(e)
+#             }
 
-            js = json.dumps(data)
-            resp = Response(js, status=500, mimetype='application/json')
+#             js = json.dumps(data)
+#             resp = Response(js, status=500, mimetype='application/json')
 
-            return resp
+#             return resp
 
-    elif request.method == 'POST':
+#     elif request.method == 'POST':
 
-        try:
+#         try:
 
-            host = request.json
-            responseData = hostRepository.add(host)
-            app.logger.debug('responseData = {}'.format(responseData))
-            resp = Response({'error': None, 'data': None},
-                            status=200, mimetype='application/json')
-            return resp
+#             host = request.json
+#             responseData = hostRepository.add(host)
+#             app.logger.debug('responseData = {}'.format(responseData))
+#             resp = Response({'error': None, 'data': None},
+#                             status=200, mimetype='application/json')
+#             return resp
 
-        except Exception as e:
+#         except Exception as e:
 
-            data = {
-                'error': str(e)
-            }
+#             data = {
+#                 'error': str(e)
+#             }
 
-            js = json.dumps(data)
-            resp = Response(js, status=500, mimetype='application/json')
+#             js = json.dumps(data)
+#             resp = Response(js, status=500, mimetype='application/json')
 
-            return resp
+#             return resp
 
-    else:
+#     else:
 
-        app.logger.debug(f'what is {request.method} even doing here.')
+#         app.logger.debug(f'what is {request.method} even doing here.')
 
 
 @app.route('/api/hostQuestions', methods=['GET'])
@@ -1447,14 +1449,14 @@ def get_all_match_results():
         return resp
 
 
-@app.route('/api/v1/questions/host/matching', methods=['GET'])
-def get_host_matching_questions():
-    pass
+# @app.route('/api/v1/questions/host/matching', methods=['GET'])
+# def get_host_matching_questions():
+#     pass
 
 
-@app.route('/api/v1/questions/host/qualifying', methods=['GET'])
-def get_host_qualifying_questions():
-    pass
+# @app.route('/api/v1/questions/host/qualifying', methods=['GET'])
+# def get_host_qualifying_questions():
+#     pass
 
 
 #########################
@@ -1525,6 +1527,32 @@ def get_user_type():
             return Response(json.dumps({'type': 'host'}), status=200, mimetype='application/json')
         else:
             return Response(json.dumps({'type': 'none'}), status=200, mimetype='application/json')
+
+    except Exception as e:
+        app.logger.error(f'get_user_type: error : {str(e)}')
+
+        return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
+
+
+@app.route('/api/host', methods=['POST'])
+def get_host_by_email():
+    """Returns user type"""
+
+    try:
+
+        data = request.json
+        if 'email' not in data:
+            raise Exception('Email must be included in POST request body')
+
+        app.logger.debug(f'get_user_type(): data: {data}')
+        mf = MongoFacade()
+
+        if not mf.item_in_collection('hosts', 'email', data['email']):
+            return Response(f'No host with email: {data["email"]}', status=400, mimetype='text/plain')
+
+        host = mf.get_user_by_email('hosts', data['email'])
+
+        return Response(json.dumps(host), status=200, mimetype='application/json')
 
     except Exception as e:
         app.logger.error(f'get_user_type: error : {str(e)}')
@@ -1703,6 +1731,57 @@ def add_host_qualifying_response(questionId):
     except Exception as e:
         app.logger.error(
             f'add_host_qualifying_response: error adding data: {str(e)}')
+        return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
+
+
+@app.route('/api/host/registration/qualifying', methods=['GET'])
+def get_host_qualifying_questions():
+    """Get all host qualifying questions"""
+
+    try:
+
+        mf = MongoFacade()
+        questions = mf.get_collection('qualifyingQuestions', None)
+
+        return jsonify(questions)
+
+    except Exception as e:
+        app.logger.error(
+            f'get_host_qualifying_questions: error getting data: {str(e)}')
+        return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
+
+
+@app.route('/api/host/registration/matching', methods=['GET'])
+def get_host_matching_questions():
+    """Get all host matching questions"""
+
+    try:
+
+        mf = MongoFacade()
+        questions = mf.get_collection('matchingQuestions', None)
+
+        return jsonify(questions)
+
+    except Exception as e:
+        app.logger.error(
+            f'get_host_matching_questions: error getting data: {str(e)}')
+        return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
+
+
+@app.route('/api/host/registration/info', methods=['GET'])
+def get_host_info_questions():
+    """Get all host info questions"""
+
+    try:
+
+        mf = MongoFacade()
+        questions = mf.get_collection('infoQuestions', None)
+
+        return jsonify(questions)
+
+    except Exception as e:
+        app.logger.error(
+            f'get_host_matching_questions: error getting data: {str(e)}')
         return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
 
 

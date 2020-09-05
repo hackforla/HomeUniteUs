@@ -82,7 +82,7 @@ export const QuestionPage = (props: Props) => {
         submitPage: false,
         modalOpen: false,
         disableSubmit: false,
-    }
+    }01
 
     const [state, setState] = React.useState(initialState)
 

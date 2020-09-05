@@ -1,0 +1,56 @@
+[
+  {
+    "id": "10",
+    "group": "Qualifying",
+    "order": -50,
+    "question": "Do you have an extra bedroom or private space in your home?"
+  },
+  {
+    "id": "11",
+    "group": "Qualifying",
+    "order": -49,
+    "question": "Are you able to provide Guest with access to a kitchen in which to prepare meals, store food and access to shared or private bathroom?"
+  },
+  {
+    "id": "12",
+    "group": "Qualifying",
+    "order": -48,
+    "question": "Do you have homeowners/renters insurance?"
+  },
+  {
+    "id": "13",
+    "group": "Qualifying",
+    "order": -47,
+    "question": "Do you live on the westside of Los Angeles or within reasonable distance to public transportation?"
+  },
+  {
+    "id": "14",
+    "group": "Qualifying",
+    "order": -46,
+    "question": "Are you able and willing to pass a LiveScan background clearance check?"
+  },
+  {
+    "id": "15",
+    "group": "Qualifying",
+    "order": -45,
+    "question": "Do you agree to complete this application, undergo and interview and a home inspection?"
+  },
+  {
+    "id": "1",
+    "group": "Qualifying",
+    "order": -45,
+    "question": "Do you agree to attend a 3-hour SPY Volunteer Orientation and a 1-day Host Home Orientation Training?"
+  },
+  {
+    "id": "2",
+    "group": "Qualifying",
+    "order": -45,
+    "question": "Do you commit to attending monthly meetings with SPY staff and other hosts?"
+  },
+  {
+    "id": "3",
+    "group": "Qualifying",
+    "order": -45,
+    "question": "Do you commit to providing a welcoming, safe, non-judgmental environment and to supporting the self-determined goals of youth Guest?"
+  }
+]
