@@ -66,7 +66,7 @@ const IconContainer = (props: {
 }
 
 export const QuestionPage = (props: Props) => {
-    const { data, putHostResponse } = useHostDashboardData()
+    const { data } = useHostDashboardData()
     console.log('testing custom hook', data)
 
     // sort by order
@@ -82,7 +82,7 @@ export const QuestionPage = (props: Props) => {
         submitPage: false,
         modalOpen: false,
         disableSubmit: false,
-    }01
+    }
 
     const [state, setState] = React.useState(initialState)
 
