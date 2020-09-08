@@ -15,9 +15,9 @@
 
 collection_names=( \
     qualifyingQuestions \
+    matchingQuestions \
+    infoQuestions \
 )
-    # matchingQuestions \
-    # infoQuestions \
 
 for c in "${collection_names[@]}"; do
     echo "- importing data for collection: $c"

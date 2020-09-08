@@ -112,7 +112,7 @@ function ProfileSelection() {
                 throw new Error(response.statusText)
             }
 
-            history.push(`/${profileType}/register`)
+            history.push(`/${profileType}/dashboard`)
         } catch (e) {
             console.log(`Error registering host: ${e}`)
         }

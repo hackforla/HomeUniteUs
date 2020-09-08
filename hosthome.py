@@ -14,9 +14,11 @@ from flask import (
     jsonify,
     session,
     url_for,
-    send_from_directory
+    send_from_directory,
+    send_file
 )
 import os
+import io
 import sys
 import json
 import logging
@@ -219,14 +221,19 @@ class MongoFacade:
         result = collection.update_one({'id': id}, {'$set': item})
         return result.acknowledged
 
-    def save_file(self, img_file, img_name):
+    def save_file(self, img_file, img_name, img_subject, email, file_type):
         client = self._get_conn()
         if not client:
             raise Exception('Mongo server not available')
 
         db = client[MONGO_DATABASE]
         fs = gridfs.GridFS(db)
-        img_id = fs.put(img_file, img_name=img_name)  # got img id
+        img_id = fs.put(
+            img_file,
+            filename=img_name,
+            contentType=file_type,
+            subject=img_subject,
+            email=email)  # got img id
         if img_id is None:
             return None
         # if fs.find_one(img_id) is None:
@@ -234,11 +241,28 @@ class MongoFacade:
         # next, store the img id in the user database somehow
         return img_id
 
-    def load_file(self):  # need to pass userId
+    def load_file(self, fileId):  # need to pass userId
         client = self._get_conn()
         db = client[MONGO_DATABASE]
         fs = gridfs.GridFS(db)
-        collection = db[collection_name]
+        record = fs.get(ObjectId(fileId))
+        app.logger.debug(f'MongoFacade:load_file: record = {record}')
+        for key in dir(record):
+            if callable(getattr(record, key)):
+                continue
+            app.logger.debug(f'- {key}: {getattr(record, key)}')
+        return record
+
+    # need to pass userId
+    def get_files_for_user_with_subject(self, email, subject):
+        client = self._get_conn()
+        db = client[MONGO_DATABASE]
+        fs = gridfs.GridFS(db)
+        records = fs.find({"email": email, "subject": subject})
+        items = list(records)
+        # for item in items:
+        #     item['_id'] = str(item['_id'])
+        return items
         # user = collection.find_one() #get user by id and image id
         # image = fs.get(user[]) #using the user id to find image id
         # base64_data = codecs.encode(image.read(), "base64") #using codecs to retrieve image
@@ -288,14 +312,19 @@ class MongoFacade:
             f'add_field_to_record_child: record for {id_field_name}: {id_field_value}')
         pprint.pprint(result)
 
-        if child_name in result:
-            new_child = list(result[child_name])
-        else:
-            new_child = []
+        # if child_name in result:
+        #     new_child = list(result[child_name])
+        # else:
+        #     new_child = []
+        # new_child.append({
+        #     field_name: field_data
+        # })
 
-        new_child.append({
-            field_name: field_data
-        })
+        if child_name in result:
+            new_child = dict(result[child_name])
+        else:
+            new_child = dict()
+        new_child[field_name] = field_data
 
         result = collection.update_one(
             {id_field_name: id_field_value}, {'$set': {child_name: new_child}})
@@ -1475,14 +1504,22 @@ def allowed_file(filename):
         return False
 
 
-@app.route('/uploadImage', methods=['POST'])
+@app.route('/api/uploadImage', methods=['POST'])
 def image_upload():
     if 'image' not in request.files:
         flash('no image file')
         return Response(status=400, mimetype='application/json')
 
+    app.logger.debug(f'image_upload(): request.form: {request.form}')
+    email = request.form['email']
+    subject = request.form['subject']
     img = request.files["image"]
 
+    file_type = img.content_type
+
+    app.logger.debug(f'image_upload(): img.content_type: {img.content_type}')
+    app.logger.debug(f'image_upload(): img.mimetype: {img.mimetype}')
+    app.logger.debug(f'image_upload(): img.filename: {img.filename}')
     if img.filename == '':
         flash('no image was selected')
         return Response(status=400, mimetype='application/json')
@@ -1490,7 +1527,7 @@ def image_upload():
     if img and allowed_file(img.filename):
         img_name = secure_filename(img.filename)
         saveImg = MongoFacade()
-        resp = saveImg.save_file(img, img_name)
+        resp = saveImg.save_file(img, img_name, subject, email, file_type)
         if resp is not None:
             return Response(json.dumps({'msg': 'Image saved successfully', 'status': 200}), status=200, mimetype='application/json')
         else:
@@ -1499,6 +1536,72 @@ def image_upload():
         return Response(status=500, mimetype='application/json')
 
     return Response(status=200, mimetype='application/json')
+
+
+@app.route('/api/host/images/<subject>', methods=['POST'])
+def get_images(subject):
+    try:
+        email = request.json['email']
+        app.logger.debug(
+            f'get_images: looking for {subject} photos for {email}')
+        mongo = MongoFacade()
+        records = mongo.get_files_for_user_with_subject(email, subject)
+
+        result = []
+        app.logger.debug(f'get_images: records')
+        for r in records:
+            app.logger.debug(f'get_images: - r: {r}')
+            result.append({
+                'id': str(r._id),
+                'filename': r.filename
+            })
+
+        return jsonify(result)
+
+        # return Response(result, status=200, mimetype='application/json')
+    except Exception as e:
+        app.logger.error(f'get_images: error: {e}')
+        return Response({'error': e}, status=500, mimetype='application/json')
+
+
+@app.route('/api/host/images/download/<file_id>', methods=['GET'])
+def image_download(file_id):
+
+    app.logger.debug(f'image_download: file_id = {file_id}')
+
+    try:
+        mongo = MongoFacade()
+        img = mongo.load_file(file_id)
+        app.logger.debug(f'image_download: img.filename = {img.filename}')
+        app.logger.debug(
+            f'image_download: img.content_type = {img.content_type}')
+        return send_file(
+            io.BytesIO(img.read()),
+            mimetype=img.content_type,
+            as_attachment=True,
+            attachment_filename=img.filename
+        )
+    except Exception as e:
+        return Response(f'Error: {e}', status=500, mimetype='text/plain')
+# 5f57271622830a20c4c5b87f
+
+
+# @app.route('/api/host/images/home', methods=['POST'])
+# def host_home_images():
+
+#     email = request.json['email']
+
+#     try:
+#         mongo = MongoFacade()
+#         img = mongo.load_file(email)
+#         return send_file(
+#             io.BytesIO(img),
+#             mimetype='image/jpeg',
+#             as_attachment=True,
+#             attachment_filename='%s.jpg' % pid
+#         )
+#     except Exception as e:
+#         return Response(f'Error: {e}', status=500, mimetype='text/plain')
 
 
 """
@@ -1634,7 +1737,7 @@ def add_host_contact():
         mf = MongoFacade()
         mf.add_field_to_record(
             'hosts', 'email', data['email'], 'contact', data)
-        return Response(status=200, mimetype='application/json')
+        return Response(json.dumps({}), status=200, mimetype='application/json')
 
     except Exception as e:
         app.logger.error(f'add_host_contact: error adding data: {str(e)}')
@@ -1652,7 +1755,7 @@ def add_host_address():
         mf = MongoFacade()
         mf.add_field_to_record(
             'hosts', 'email', data['email'], 'address', data)
-        return Response(status=200, mimetype='application/json')
+        return Response(json.dumps({}), status=200, mimetype='application/json')
 
     except Exception as e:
         app.logger.error(f'add_host_address: error adding data: {str(e)}')
@@ -1670,7 +1773,7 @@ def add_host_language():
         mf = MongoFacade()
         mf.add_field_to_record(
             'hosts', 'email', data['email'], 'language', data)
-        return Response(status=200, mimetype='application/json')
+        return Response(json.dumps({}), status=200, mimetype='application/json')
 
     except Exception as e:
         app.logger.error(f'add_host_language: error adding data: {str(e)}')
@@ -1688,7 +1791,7 @@ def add_host_gender():
         mf = MongoFacade()
         mf.add_field_to_record(
             'hosts', 'email', data['email'], 'gender', data)
-        return Response(status=200, mimetype='application/json')
+        return Response(json.dumps({}), status=200, mimetype='application/json')
 
     except Exception as e:
         app.logger.error(f'add_host_gender: error adding data: {str(e)}')
@@ -1707,7 +1810,7 @@ def add_host_matching_response(questionId):
         mf.add_field_to_record_child(
             'hosts', 'email', data['email'], 'matchingResponses', questionId, data['response'])
 
-        return Response(status=200, mimetype='application/json')
+        return Response(json.dumps({}), status=200, mimetype='application/json')
 
     except Exception as e:
         app.logger.error(
@@ -1726,7 +1829,7 @@ def add_host_qualifying_response(questionId):
         mf.add_field_to_record_child(
             'hosts', 'email', data['email'], 'qualifyingResponses', questionId, data['response'])
 
-        return Response(status=200, mimetype='application/json')
+        return Response(json.dumps({}), status=200, mimetype='application/json')
 
     except Exception as e:
         app.logger.error(
@@ -1734,6 +1837,7 @@ def add_host_qualifying_response(questionId):
         return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
 
 
+@app.route('/api/v1/questions/host/qualifying', methods=['GET'])
 @app.route('/api/host/registration/qualifying', methods=['GET'])
 def get_host_qualifying_questions():
     """Get all host qualifying questions"""
@@ -1751,6 +1855,7 @@ def get_host_qualifying_questions():
         return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
 
 
+@app.route('/api/v1/questions/host/matching', methods=['GET'])
 @app.route('/api/host/registration/matching', methods=['GET'])
 def get_host_matching_questions():
     """Get all host matching questions"""

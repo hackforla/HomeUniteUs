@@ -70,3 +70,8 @@ curl http://localhost:8080/api/host \
   -H "Content-Type: application/json" \
   -d '{"email": "'$HOST_EMAIL'"}'
 
+curl http://localhost:8080/api/host/images/home \
+  -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"email": "'$HOST_EMAIL'"}'
+

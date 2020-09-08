@@ -5,6 +5,15 @@ import { Container, TextField, Divider, Button } from '@material-ui/core'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import * as Yup from 'yup'
 import { TextInput } from '../Registration'
+import { useAuth0, Auth0User } from '../../react-auth0-spa'
+
+interface HostAddressDetails {
+    address?: string
+    address2?: string
+    city?: string
+    state?: string
+    zipcode?: number
+}
 
 interface FormValues {
     address: string
@@ -12,14 +21,6 @@ interface FormValues {
     city: string
     state: string
     zipcode: number
-}
-
-const initialValues: FormValues = {
-    address: '',
-    address2: '',
-    city: '',
-    state: '',
-    zipcode: 0,
 }
 
 const validationSchema = Yup.object().shape({
@@ -30,14 +31,34 @@ const validationSchema = Yup.object().shape({
     zipcode: Yup.number().min(2, 'Too Short!').required('Required'),
 })
 
-const HostFormAddress: React.FC = () => {
+interface HostFormAddressProps {
+    addressDetails: HostAddressDetails
+    onSubmitComplete?: () => void
+}
+
+const HostFormAddress: React.FC<HostFormAddressProps> = (
+    props: HostFormAddressProps
+) => {
     const { putAddressInfo } = useHostDashboardData()
+    const { user } = useAuth0()
+
+    const initialValues: FormValues = {
+        address: props.addressDetails.address || '',
+        address2: props.addressDetails.address2 || '',
+        city: props.addressDetails.city || '',
+        state: props.addressDetails.state || '',
+        zipcode: props.addressDetails.zipcode || 0,
+    }
 
     const handleSubmit = async (values: FormValues) => {
-        alert(JSON.stringify(values))
+        const payload = { ...values, email: (user as Auth0User).email }
+        // alert(JSON.stringify(payload))
 
         try {
-            await putAddressInfo(values)
+            await putAddressInfo(payload)
+            if (props.onSubmitComplete !== undefined) {
+                props.onSubmitComplete()
+            }
         } catch (e) {
             console.log(`Error posting ${e}`)
         }

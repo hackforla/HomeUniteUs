@@ -8,6 +8,7 @@ import styled from 'styled-components'
 import { Typography, Container, Divider, Button } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
+import { HostLanguages, LanguageType } from '../../models/v2'
 
 const Label = styled('label')`
     padding: 0 0 4px;
@@ -136,7 +137,12 @@ const Listbox = styled('ul')`
     }
 `
 
-function HostFormLang() {
+interface HostFormLangProps {
+    onSubmit?: (languages: HostLanguages) => void
+    languages?: HostLanguages
+}
+
+function HostFormLang(props: HostFormLangProps) {
     const { putLanguageInfo } = useHostDashboardData()
     const {
         getRootProps,
@@ -151,11 +157,17 @@ function HostFormLang() {
         setAnchorEl,
     } = useAutocomplete({
         id: 'customized-hook-demo',
-        defaultValue: [languages[0]],
+        defaultValue: props.languages || [languages[0]],
         multiple: true,
         options: languages,
         getOptionLabel: (option) => option.language,
     })
+
+    const submitLanguages = () => {
+        if (props.onSubmit) {
+            props.onSubmit(value)
+        }
+    }
 
     return (
         <Container maxWidth="md">
@@ -249,10 +261,8 @@ function HostFormLang() {
                 </Button>
 
                 <Button
-                    type="submit"
-                    // disabled={!dirty || !isValid}
+                    onClick={submitLanguages}
                     variant="contained"
-                    // color="#55B1EB"
                     style={{ background: '#55B1EB', color: '#fff' }}
                 >
                     <span
@@ -269,10 +279,6 @@ function HostFormLang() {
 }
 
 export default HostFormLang
-
-interface LanguageType {
-    language: string
-}
 
 const languages = [
     { language: 'English' },

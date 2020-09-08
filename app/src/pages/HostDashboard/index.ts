@@ -1,1 +1,1 @@
-export { HostDashboard } from './HostDashboard'
+export { HostDashboard, HostDashboardContainer } from './HostDashboard'

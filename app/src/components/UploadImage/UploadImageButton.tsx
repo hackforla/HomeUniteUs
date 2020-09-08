@@ -1,9 +1,10 @@
-import React, { useState, CSSProperties } from 'react'
+import React, { useState, CSSProperties, useEffect } from 'react'
 import { Button, Box, Container, Divider, Typography } from '@material-ui/core'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import DeleteIcon from '@material-ui/icons/Delete'
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
 import styled, { StyledComponent } from 'styled-components'
+import { Photo } from '../../models/v2'
 
 const ContainerStyles: CSSProperties = {
     borderWidth: '2px',
@@ -102,20 +103,24 @@ const BrowseBtn: StyledComponent<
     {},
     never
 > = styled(({ style, ...other }) => (
-    <Button
-        variant="contained"
-        component="label"
-        {...other}
-        classes={{ style: 'style' }}
-    />
+    <Button variant="contained" component="label" {...other} classes={{}} />
 ))`
     position: absolute !important;
     background: #55b1eb !important;
     color: #fff !important;
 `
 
-const UploadImageButton: () => JSX.Element = () => {
+interface UploadImageButtonProps {
+    uploadAll?: (images: Array<File>) => void
+    images?: Array<Photo>
+}
+
+const UploadImageButton: (props: UploadImageButtonProps) => JSX.Element = (
+    props: UploadImageButtonProps
+) => {
     const [selectedImage, setSelectedImage]: any = useState<string[] | []>([])
+
+    const [imageFiles, setImageFiles] = useState(new Array<File>())
 
     const imageSelectHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         const target = event?.target as HTMLInputElement
@@ -124,8 +129,50 @@ const UploadImageButton: () => JSX.Element = () => {
         let url: void = reader.readAsDataURL(file)
         reader.onloadend = () => {
             setSelectedImage([...selectedImage, reader.result])
+            setImageFiles([...imageFiles, file])
         }
     }
+
+    useEffect(() => {
+        const promises = new Array<Promise<Response>>()
+        props.images?.forEach((p: Photo) => {
+            console.log(
+                `UploadImageButton: promising to fetch photo: ${JSON.stringify(
+                    p
+                )}`
+            )
+            promises.push(fetch(`/api/host/images/download/${p.id}`))
+        })
+        Promise.all(promises)
+            .then((responses: Response[]) => {
+                const blobPromises = new Array<Promise<Blob>>()
+                responses.forEach((r: Response) => {
+                    blobPromises.push(r.blob())
+                })
+                return Promise.all(blobPromises)
+            })
+            .then((blobs: Array<Blob>) => {
+                const images = new Array<any>()
+
+                const readFile = (index: number) => {
+                    console.log(`readFile(${index})`)
+                    let reader: FileReader = new FileReader()
+                    let url: void = reader.readAsDataURL(blobs[index])
+                    reader.onloadend = () => {
+                        images.push(reader.result)
+                        if (index < blobs.length - 1) {
+                            readFile(index + 1)
+                        } else {
+                            console.log(
+                                `adding ${images.length} new images to state`
+                            )
+                            setSelectedImage([...selectedImage, ...images])
+                        }
+                    }
+                }
+                readFile(0)
+            })
+    }, [props.images])
 
     //TODO when api wrapper has fileupload callback
     // const fileUploadHandler = async () => {
@@ -167,7 +214,7 @@ const UploadImageButton: () => JSX.Element = () => {
             <Boxes display="flex" justifyContent="space-evenly">
                 {[1, 2, 3].map((i) => {
                     return (
-                        <div style={ContainerStyles}>
+                        <div style={ContainerStyles} key={i}>
                             {selectedImage[i] ? (
                                 <div style={ImgDiv}>
                                     <img
@@ -196,6 +243,9 @@ const UploadImageButton: () => JSX.Element = () => {
                         setSelectedImage(
                             [...selectedImage].filter((image, i) => i !== 0)
                         )
+                        setImageFiles(
+                            [...imageFiles].filter((image, i) => i !== 0)
+                        )
                     }}
                 >
                     <DeleteIcon fontSize="small" />
@@ -217,6 +267,12 @@ const UploadImageButton: () => JSX.Element = () => {
                 </BrowseBtn>
             </>
         )
+
+    const uploadAll = () => {
+        if (props.uploadAll) {
+            props.uploadAll(imageFiles)
+        }
+    }
 
     return (
         <>
@@ -268,10 +324,10 @@ const UploadImageButton: () => JSX.Element = () => {
                         </Button>
 
                         <Button
-                            type="submit"
                             disabled={selectedImage.length == 0 ? true : false}
                             variant="contained"
                             style={{ background: '#55B1EB', color: '#fff' }}
+                            onClick={uploadAll}
                         >
                             <span
                                 style={{

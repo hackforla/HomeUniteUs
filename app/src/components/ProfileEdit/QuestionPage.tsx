@@ -12,7 +12,7 @@ import { Box, Button, LinearProgress } from '@material-ui/core'
 import MessageModal from '../MUIModal/MessageModal/MessageModal'
 import ConfirmationModal from '../MUIModal/ConfirmationModal/ConfirmationModal'
 
-interface Props {
+interface QuestionPageProps {
     showstopperQuestions: Array<ShowstopperQuestionType>
     matchingQuestions: Array<MatchingQuestionType>
     stepwise: boolean
@@ -65,7 +65,7 @@ const IconContainer = (props: {
     )
 }
 
-export const QuestionPage = (props: Props) => {
+export const QuestionPage = (props: QuestionPageProps) => {
     const { data } = useHostDashboardData()
     console.log('testing custom hook', data)
 
