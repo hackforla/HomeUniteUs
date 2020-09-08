@@ -1096,10 +1096,18 @@ export const HostDashboard = () => {
                         <Table>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell>Order</TableCell>
-                                    <TableCell>Question</TableCell>
-                                    <TableCell>Response</TableCell>
-                                    <TableCell>Edit</TableCell>
+                                    <TableCell>
+                                        <h4>Order</h4>
+                                    </TableCell>
+                                    <TableCell>
+                                        <h4>Question</h4>
+                                    </TableCell>
+                                    <TableCell>
+                                        <h4>Response</h4>
+                                    </TableCell>
+                                    <TableCell>
+                                        <h4>Edit</h4>
+                                    </TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>

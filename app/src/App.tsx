@@ -65,7 +65,7 @@ export const App = () => {
                     console.log(`accountInfo: ${JSON.stringify(accountInfo)}`)
                     switch (accountInfo.type) {
                         case 'host':
-                            //TODO: fetch host registration status and route
+                            history.push('/host/dashboard')
                             break
                         case 'guest':
                             //TODO: fetch guest registration status and route
