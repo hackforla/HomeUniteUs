@@ -627,6 +627,9 @@ const getMatchingQuestions = () => {
 const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
     console.log(e.target)
+
+    // call API wrapper to post
+    //history.push() ??
 }
 
 export const ProfileEditPage = () => {

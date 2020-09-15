@@ -28,62 +28,17 @@ import HostFormAddress from '../../components/HostFormDetail/HostFormAddress'
 import { ApiWrapper } from '../../data/ApiWrapper'
 import ImageUploadComponent from '../../components/UploadImage/ImageUploadComponent'
 import { theme } from '../../components/Registration/theme'
-import { Photo, PhotoCollection, HostLanguages } from '../../models/v2'
-
-type QuestionType =
-    | 'Qualifying'
-    | 'Info'
-    | 'Matching'
-    | 'Bio'
-    | 'Personal'
-    | 'info'
-
-interface GenericQuestion {
-    id: string
-    group: QuestionType
-    question: string
-    order: number
-}
-
-interface QualifyingQuestion extends GenericQuestion {
-    options: Array<ResponseOption>
-}
-
-interface ResponseOption {
-    text: string
-    id: string
-    value: string
-    label: string
-}
-
-interface MatchingQuestion extends GenericQuestion {
-    subgroup: string
-    options: Array<ResponseOption>
-    type: string
-}
-
-interface InfoQuestion extends GenericQuestion {
-    options: Array<ResponseOption>
-    type: string
-}
-
-type Question = InfoQuestion | MatchingQuestion | QualifyingQuestion
-
-interface GenericQuestionResponseSet {
-    [index: string]: string | number | Array<string>
-}
-
-export interface Host {
-    _id: string
-    email: string
-    info: any
-    contact: any
-    address: any
-    language: any
-    gender: any
-    matchingResponses: any
-    qualifyingResponses: any
-}
+import {
+    Photo,
+    PhotoCollection,
+    HostLanguages,
+    Question,
+    Host,
+    MatchingQuestion,
+    InfoQuestion,
+    QualifyingQuestion,
+    ResponseOption,
+} from '../../models/v2'
 
 export const HostDashboardContainer = () => {
     return (
@@ -542,7 +497,7 @@ export const HostDashboard = () => {
                                 : `Bad Matching Response ID: ${key}`
                         )
                     } else {
-                        responsesById.set(key, host.matchingResponses[key])
+                        responsesById.set(key, `${host.matchingResponses[key]}`)
                     }
                 }
             }

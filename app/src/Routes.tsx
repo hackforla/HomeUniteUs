@@ -25,6 +25,10 @@ import ImageUploadComponent from './components/UploadImage/ImageUploadComponent'
 import HostFormGender from './components/HostFormDetail/HostFormGender'
 import HostFormLang from './components/HostFormDetail/HostFormLang'
 import { HostDashboard, HostDashboardContainer } from './pages/HostDashboard'
+import {
+    AdminDashboard,
+    AdminDashboardContainer,
+} from './pages/AdminDashboard/AdminDashboard'
 
 export default function Routes() {
     return (
@@ -53,6 +57,10 @@ export default function Routes() {
             <Route path="/guest/register" component={GuestRegistration} />
             <Route path="/host/register" component={HostRegistration} />
             <Route path="/host/dashboard" component={HostDashboardContainer} />
+            <Route
+                path="/admin/dashboard"
+                component={AdminDashboardContainer}
+            />
             <FourOhFour />
         </Switch>
     )

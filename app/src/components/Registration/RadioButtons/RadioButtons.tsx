@@ -52,14 +52,6 @@ const RadioButtons = (props: Props) => {
                                     control={<Radio />}
                                     value={option.id}
                                     checked={(() => {
-                                        console.log(
-                                            `comparing value(${
-                                                option.id
-                                            }) === option(${option.id}) --> ${
-                                                value.toString().trim() ===
-                                                option.id.toString().trim()
-                                            }`
-                                        )
                                         return (
                                             value.toString().trim() ===
                                             option.id.toString().trim()

@@ -4,6 +4,13 @@ import { Accounts } from '../models/Accounts'
 import { ShowstopperQuestionType } from '../models/ShowstopperQuestionType'
 import { MatchingQuestionType } from '../models/MatchingQuestionType'
 import { HostResponse } from '../models/HostResponse'
+import {
+    MatchingQuestion,
+    QualifyingQuestion,
+    Question,
+    QuestionType,
+    ResponseOption,
+} from '../models/v2'
 
 class ApiFetchError extends Error {}
 
@@ -93,10 +100,12 @@ export class Fetcher<T> {
     }
 }
 
+type UserType = 'guest' | 'host'
+
 export class ApiWrapper {
     private guestFetcher: Fetcher<Guest>
-    private hostShowstopperQuestionsFetcher: Fetcher<ShowstopperQuestionType>
-    private hostMatchingQuestionsFetcher: Fetcher<MatchingQuestionType>
+    private hostShowstopperQuestionsFetcher: Fetcher<QualifyingQuestion>
+    private hostMatchingQuestionsFetcher: Fetcher<MatchingQuestion>
     private hostInformationForm: Fetcher<string>
     private hostContactForm: Fetcher<string>
     private hostAddressForm: Fetcher<string>
@@ -107,11 +116,11 @@ export class ApiWrapper {
 
     public constructor(id?: number | string) {
         this.guestFetcher = new Fetcher<Guest>('guests')
-        this.hostShowstopperQuestionsFetcher = new Fetcher<
-            ShowstopperQuestionType
-        >(`v1/questions/host/qualifying`)
-        this.hostMatchingQuestionsFetcher = new Fetcher<MatchingQuestionType>(
-            `v1/questions/host/matching`
+        this.hostShowstopperQuestionsFetcher = new Fetcher<QualifyingQuestion>(
+            `host/registration/qualifying`
+        )
+        this.hostMatchingQuestionsFetcher = new Fetcher<MatchingQuestion>(
+            `host/registration/matching`
         )
 
         this.hostInformationForm = new Fetcher<string>(`host/registration/info`)
@@ -123,10 +132,10 @@ export class ApiWrapper {
         this.hostGenderForm = new Fetcher<string>(`host/registration/gender`)
 
         this.hostShowstopperResponse = new Fetcher<string>(
-            `/host/registration/qualifying/${id}`
+            `host/registration/qualifying/${id}`
         )
         this.hostMatchingResponse = new Fetcher<string>(
-            `/host/registration/matching/${id}`
+            `host/registration/matching/${id}`
         )
     }
 
@@ -141,14 +150,12 @@ export class ApiWrapper {
 
     // Hosts
     public async getHostShowstopperQuestions(): Promise<
-        Array<ShowstopperQuestionType>
+        Array<QualifyingQuestion>
     > {
         return await this.hostShowstopperQuestionsFetcher.getAll()
     }
 
-    public async getHostMatchingQuestions(): Promise<
-        Array<MatchingQuestionType>
-    > {
+    public async getHostMatchingQuestions(): Promise<Array<MatchingQuestion>> {
         return await this.hostMatchingQuestionsFetcher.getAll()
     }
 
@@ -195,5 +202,109 @@ export class ApiWrapper {
         item: HostResponse
     ): Promise<string> {
         return await this.hostMatchingResponse.putById(id, item)
+    }
+
+    public async addResponseOption(
+        userType: UserType,
+        questionId: string,
+        responseOption: ResponseOption
+    ) {
+        try {
+            const response = await fetch(
+                `/api/questions/${userType}/registration/matching/${questionId}/options`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(responseOption),
+                }
+            )
+            if (response.status !== 200) {
+                throw new Error(
+                    `bad response from server: ${response.statusText}`
+                )
+            }
+            return await response.text()
+        } catch (e) {
+            throw new Error(`addResponseOption: error: ${e}`)
+        }
+    }
+
+    public async deleteQuestion(
+        userType: UserType,
+        questionType: QuestionType,
+        questionId: string
+    ) {
+        try {
+            const response = await fetch(
+                `/api/questions/${userType}/registration/${questionType}/${questionId}`,
+                {
+                    method: 'DELETE',
+                }
+            )
+            if (response.status !== 200) {
+                throw new Error(
+                    `bad response from server: ${response.statusText}`
+                )
+            }
+            return await response.text()
+        } catch (e) {
+            throw new Error(`deleteQuestion: error: ${e}`)
+        }
+    }
+    public async updateQuestion(
+        userType: UserType,
+        questionType: QuestionType,
+        question: Question
+    ) {
+        try {
+            const response = await fetch(
+                `/api/questions/${userType}/registration/${questionType.toLowerCase()}/${
+                    question._id
+                }`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(question),
+                }
+            )
+            if (response.status !== 200) {
+                throw new Error(
+                    `bad response from server: ${response.statusText}`
+                )
+            }
+            return await response.text()
+        } catch (e) {
+            throw new Error(`updateQuestion: error: ${e}`)
+        }
+    }
+    public async updateResponseOption(
+        userType: UserType,
+        questionId: string,
+        responseOption: ResponseOption
+    ) {
+        try {
+            const response = await fetch(
+                `/api/questions/${userType}/registration/matching/${questionId}/options/${responseOption.id}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(responseOption),
+                }
+            )
+            if (response.status !== 200) {
+                throw new Error(
+                    `bad response from server: ${response.statusText}`
+                )
+            }
+            return await response.text()
+        } catch (e) {
+            throw new Error(`updateQuestion: error: ${e}`)
+        }
     }
 }

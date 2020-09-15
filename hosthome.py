@@ -29,7 +29,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-#from matching.basic_filter import BasicFilter
+# from matching.basic_filter import BasicFilter
 
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'psd'}
@@ -201,7 +201,7 @@ class MongoFacade:
         db = client[MONGO_DATABASE]
         collection = db[collection_name]
 
-        result = collection.delete_one({'id': id})
+        result = collection.delete_one({'_id': ObjectId(id)})
         self._log('delete_from_collection',
                   'result.raw_result = {}'.format(result.raw_result))
 
@@ -218,7 +218,7 @@ class MongoFacade:
 
         db = client[MONGO_DATABASE]
         collection = db[collection_name]
-        result = collection.update_one({'id': id}, {'$set': item})
+        result = collection.update_one({'_id': ObjectId(id)}, {'$set': item})
         return result.acknowledged
 
     def save_file(self, img_file, img_name, img_subject, email, file_type):
@@ -266,7 +266,7 @@ class MongoFacade:
         # user = collection.find_one() #get user by id and image id
         # image = fs.get(user[]) #using the user id to find image id
         # base64_data = codecs.encode(image.read(), "base64") #using codecs to retrieve image
-        #image = base64_data.decode("utf-8")
+        # image = base64_data.decode("utf-8")
 
     def add_field_to_record(self, collection_name, id_field_name, id_field_value, field_name, field_data):
         client = self._get_conn()
@@ -330,6 +330,88 @@ class MongoFacade:
             {id_field_name: id_field_value}, {'$set': {child_name: new_child}})
 
         return result.acknowledged
+
+    def add_to_child_collection(self, collection_name, record_id, child_collection_name, data):
+        try:
+
+            client = self._get_conn()
+
+            if not client:
+                app.logger.error(
+                    'MongoFacade:add_to_child_collection(): Mongo server not available')
+                raise Exception('Mongo server not available')
+
+            app.logger.debug('MongoFacade:add_to_child_collection():')
+            app.logger.debug(f'- collection_name: {collection_name}')
+            app.logger.debug(f'- record_id: {record_id}')
+            app.logger.debug(
+                f'- child_collection_name: {child_collection_name}')
+            app.logger.debug(f'- data: {data}')
+
+            db = client[MONGO_DATABASE]
+            collection = db[collection_name]
+
+            result = collection.find_one({'_id': ObjectId(record_id)})
+
+            if child_collection_name in result:
+                new_child = list(result[child_collection_name])
+            else:
+                new_child = list()
+
+            new_child.append(data)
+
+            app.logger.debug(
+                f'MongoFacade:add_to_child_collection(): about to set field {child_collection_name} to "{new_child}"')
+
+            result = collection.update_one(
+                {'_id': ObjectId(record_id)}, {'$set': {child_collection_name: new_child}})
+
+            return result.acknowledged
+
+        except Exception as e:
+            app.logger.error(
+                f'MongoFacade:add_to_child_collection(): error: {e}')
+
+    def update_in_child_collection(self, collection_name, record_id, child_collection_name, child_record_id, data):
+        try:
+
+            client = self._get_conn()
+
+            if not client:
+                app.logger.error(
+                    'MongoFacade:update_in_child_collection(): Mongo server not available')
+                raise Exception('Mongo server not available')
+
+            app.logger.debug('MongoFacade:update_in_child_collection():')
+            app.logger.debug(f'- collection_name: {collection_name}')
+            app.logger.debug(f'- record_id: {record_id}')
+            app.logger.debug(
+                f'- child_collection_name: {child_collection_name}')
+            app.logger.debug(f'- data: {data}')
+
+            db = client[MONGO_DATABASE]
+            collection = db[collection_name]
+
+            result = collection.find_one({'_id': ObjectId(record_id)})
+
+            new_child = list()
+            for child_record in list(result[child_collection_name]):
+                if child_record['id'] == child_record_id:
+                    new_child.append(data)
+                else:
+                    new_child.append(child_record)
+
+            app.logger.debug(
+                f'MongoFacade:update_in_child_collection(): about to set field {child_collection_name} to "{new_child}"')
+
+            result = collection.update_one(
+                {'_id': ObjectId(record_id)}, {'$set': {child_collection_name: new_child}})
+
+            return result.acknowledged
+
+        except Exception as e:
+            app.logger.error(
+                f'MongoFacade:update_in_child_collection(): error: {e}')
 
     def _log(self, method_name, message):
         app.logger.debug('MongoFacade:{}: {}'.format(method_name, message))
@@ -444,7 +526,7 @@ repos['restrictions'] = restrictionsRepository
 repos['responseValues'] = responseValuesRepository
 
 
-#matcher = BasicFilter(repos)
+# matcher = BasicFilter(repos)
 
 
 @app.route('/favicon.ico')
@@ -1458,7 +1540,7 @@ def get_all_match_results():
 
     try:
 
-        #match_results = matcher.get_all_match_results()
+        # match_results = matcher.get_all_match_results()
         match_results = []
 
         js = json.dumps(match_results)
@@ -1837,6 +1919,26 @@ def add_host_qualifying_response(questionId):
         return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
 
 
+@app.route('/api/questions/<user_type>/registration/matching/<question_id>/options', methods=['POST'])
+def add_response_option(user_type, question_id):
+    """Add a response option to a matching question"""
+
+    try:
+        data = request.json
+        app.logger.debug(f'add_response_option(): data: {data}')
+        mf = MongoFacade()
+
+        mf.add_to_child_collection(
+            'matchingQuestions', question_id, 'options', data)
+
+        return Response(json.dumps({}), status=200, mimetype='application/json')
+
+    except Exception as e:
+        app.logger.error(
+            f'add_response_option: error adding data: {str(e)}')
+        return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
+
+
 @app.route('/api/v1/questions/host/qualifying', methods=['GET'])
 @app.route('/api/host/registration/qualifying', methods=['GET'])
 def get_host_qualifying_questions():
@@ -1890,8 +1992,114 @@ def get_host_info_questions():
         return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
 
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
+@app.route('/api/questions/<user_type>/registration/<question_type>/<question_id>', methods=['DELETE'])
+def delete_question(user_type, question_type, question_id):
+    """Delete a question"""
+
+    try:
+        app.logger.debug(f'delete_question():')
+        app.logger.debug(f'- user_type= {user_type}')
+        app.logger.debug(f'- question_type= {question_type}')
+        app.logger.debug(f'- question_id= {question_id}')
+
+        mf = MongoFacade()
+
+        mf.delete_from_collection(
+            f'{question_type.lower()}Questions', question_id)
+
+        return Response(json.dumps({}), status=200, mimetype='application/json')
+
+    except Exception as e:
+        app.logger.error(
+            f'delete_question: error deleting data: {str(e)}')
+        return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
+
+
+@app.route('/api/questions/<user_type>/registration/<question_type>', methods=['POST'])
+def add_question(user_type, question_type):
+    """Add a question"""
+
+    try:
+
+        data = request.json
+
+        app.logger.debug(f'add_question():')
+        app.logger.debug(f'- user_type= {user_type}')
+        app.logger.debug(f'- question_type= {question_type}')
+        app.logger.debug(f'- data= {data}')
+
+        mf = MongoFacade()
+
+        mf.insert_to_collection(
+            f'{question_type.lower()}Questions', data)
+
+        return Response(json.dumps({}), status=200, mimetype='application/json')
+
+    except Exception as e:
+        app.logger.error(
+            f'add_question: error adding data: {str(e)}')
+        return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
+
+
+@app.route('/api/questions/<user_type>/registration/<question_type>/<question_id>', methods=['PUT'])
+def update_question(user_type, question_type, question_id):
+    """Update a question"""
+
+    try:
+
+        data = request.json
+
+        app.logger.debug(f'add_question():')
+        app.logger.debug(f'- user_type= {user_type}')
+        app.logger.debug(f'- question_type= {question_type}')
+        app.logger.debug(f'- data= {data}')
+
+        question = {}
+        for k, v in dict(data).items():
+            if k != '_id':
+                question[k] = v
+        mf = MongoFacade()
+
+        mf.update_in_collection(
+            f'{question_type.lower()}Questions', question_id, question)
+
+        return Response(json.dumps({}), status=200, mimetype='application/json')
+
+    except Exception as e:
+        app.logger.error(
+            f'add_question: error adding data: {str(e)}')
+        return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
+
+
+@app.route('/api/questions/<user_type>/registration/<question_type>/<question_id>/options/<response_option_id>', methods=['PUT'])
+def update_response_option(user_type, question_type, question_id, response_option_id):
+    """Update a response options"""
+    try:
+
+        data = request.json
+
+        app.logger.debug(f'update_response_option():')
+        app.logger.debug(f'- user_type= {user_type}')
+        app.logger.debug(f'- question_type= {question_type}')
+        app.logger.debug(f'- question_id= {question_id}')
+        app.logger.debug(f'- response_option_id= {response_option_id}')
+        app.logger.debug(f'- data= {data}')
+
+        mf = MongoFacade()
+
+        mf.update_in_child_collection(
+            f'{question_type.lower()}Questions', question_id, 'options', data)
+
+        return Response(json.dumps({}), status=200, mimetype='application/json')
+
+    except Exception as e:
+        app.logger.error(
+            f'update_response_option: error adding data: {str(e)}')
+        return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
+
+
+@ app.route('/', defaults={'path': ''})
+@ app.route('/<path:path>')
 def index(path):
     app.logger.debug(
         "quote_plus(os.getenv('DB_USER')) = {}".format(os.getenv('DB_USER')))
