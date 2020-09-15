@@ -13,7 +13,6 @@ This project is part of a larger initative at Hack for LA around creating a shar
 ### Technology used
 
 - [Docker](https://docs.docker.com/)
-<!-- - [Terraform](https://www.terraform.io/docs/index.html) -->
 - [Nginx](https://nginx.org/en/docs/)
 - [AWS](https://docs.aws.amazon.com/)
 - [MongoDB](https://docs.mongodb.com/)
@@ -21,12 +20,13 @@ This project is part of a larger initative at Hack for LA around creating a shar
 - [Styled Components](https://styled-components.com/docs)
 - [Material UI](https://material-ui.com/)
 - [Flask](https://flask.palletsprojects.com/en/1.1.x/)
+<!-- - [Terraform](https://www.terraform.io/docs/index.html) -->
 
 # How to contribute
 
 - Review the [Getting Started guide on the Hack for LA website](https://github.com/hackforla/getting-started)
-- Review the documents in the [host-home shared drive](https://drive.google.com/drive/u/0/folders/1ahxiD9rIsBtx0yAPlPcPaGw8zGrfHHm9).
-- Join the [#host-home slack channel](https://hackforla.slack.com/archives/CRWUG7X0C).
+- Review the documents in the [home-unite-us shared drive](https://drive.google.com/drive/u/0/folders/1ahxiD9rIsBtx0yAPlPcPaGw8zGrfHHm9).
+- Join the [#home-unite-us slack channel](https://hackforla.slack.com/archives/CRWUG7X0C).
 - Visit our [project boards](https://github.com/hackforla/HomeUniteUs/projects) and see issues in the prioritized backlog.
 
 ## Installation instructions
