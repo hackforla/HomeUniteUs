@@ -106,6 +106,8 @@ export class ApiWrapper {
     private guestFetcher: Fetcher<Guest>
     private hostShowstopperQuestionsFetcher: Fetcher<QualifyingQuestion>
     private hostMatchingQuestionsFetcher: Fetcher<MatchingQuestion>
+    private guestShowstopperQuestionsFetcher: Fetcher<QualifyingQuestion>
+    private guestMatchingQuestionsFetcher: Fetcher<MatchingQuestion>
     private hostInformationForm: Fetcher<string>
     private hostContactForm: Fetcher<string>
     private hostAddressForm: Fetcher<string>
@@ -121,6 +123,12 @@ export class ApiWrapper {
         )
         this.hostMatchingQuestionsFetcher = new Fetcher<MatchingQuestion>(
             `host/registration/matching`
+        )
+        this.guestShowstopperQuestionsFetcher = new Fetcher<QualifyingQuestion>(
+            `guest/registration/qualifying`
+        )
+        this.guestMatchingQuestionsFetcher = new Fetcher<MatchingQuestion>(
+            `guest/registration/matching`
         )
 
         this.hostInformationForm = new Fetcher<string>(`host/registration/info`)
@@ -157,6 +165,17 @@ export class ApiWrapper {
 
     public async getHostMatchingQuestions(): Promise<Array<MatchingQuestion>> {
         return await this.hostMatchingQuestionsFetcher.getAll()
+    }
+
+    // Guests
+    public async getGuestShowstopperQuestions(): Promise<
+        Array<QualifyingQuestion>
+    > {
+        return await this.guestShowstopperQuestionsFetcher.getAll()
+    }
+
+    public async getGuestMatchingQuestions(): Promise<Array<MatchingQuestion>> {
+        return await this.guestMatchingQuestionsFetcher.getAll()
     }
 
     /*POST vs PUT: 

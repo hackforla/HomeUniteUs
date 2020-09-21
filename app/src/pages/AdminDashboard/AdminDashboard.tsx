@@ -15,7 +15,7 @@ import {
     TextField,
 } from '@material-ui/core'
 import { CSSProperties } from '@material-ui/core/styles/withStyles'
-import { Add, Check, Delete, Edit } from '@material-ui/icons'
+import { Add, AddBoxRounded, Check, Delete, Edit } from '@material-ui/icons'
 import * as React from 'react'
 import ConfirmationModal from '../../components/MUIModal/ConfirmationModal/ConfirmationModal'
 import MUIModal from '../../components/MUIModal/MUIModal'
@@ -40,7 +40,7 @@ export const AdminDashboardContainer = () => {
         </>
     )
 }
-type MenuOption = 'GuestQuestions' | 'HostQuestions'
+type MenuOption = 'GuestQuestions' | 'HostQuestions' | 'Restrictions'
 interface AdminDashboardState {
     selectedMenuOption: MenuOption
     questionModal: {
@@ -205,6 +205,120 @@ const reducer = (
     }
 }
 
+export interface MatchingQuestionManagerProps {
+    matchingQuestions: Array<MatchingQuestion>
+    addQuestion: () => void
+    editQuestion: (q: MatchingQuestion) => void
+    deleteQuestion: (q: MatchingQuestion) => void
+}
+
+export const MatchingQuestionManager = (
+    props: MatchingQuestionManagerProps
+) => {
+    return (
+        <>
+            <TableContainer>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell style={{ fontSize: '1.3rem' }}>
+                                Display Text
+                            </TableCell>
+                            <TableCell
+                                style={{ fontSize: '1.3rem' }}
+                                align="right"
+                            >
+                                Type
+                            </TableCell>
+                            <TableCell
+                                style={{ fontSize: '1.3rem' }}
+                                align="right"
+                            >
+                                Options
+                            </TableCell>
+                            <TableCell
+                                style={{ fontSize: '1.3rem' }}
+                                align="right"
+                            >
+                                Edit
+                            </TableCell>
+                            <TableCell
+                                style={{ fontSize: '1.3rem' }}
+                                align="right"
+                            >
+                                Delete
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {props.matchingQuestions.map(
+                            (q: MatchingQuestion, i: number) => {
+                                // console.log(
+                                //     `AdminDashboard: rendering matching question: ${JSON.stringify(
+                                //         q
+                                //     )}`
+                                // )
+                                return (
+                                    <TableRow key={`matching-question-${i}`}>
+                                        <TableCell>{q.question}</TableCell>
+                                        <TableCell align="right">
+                                            {q.type}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {q.options
+                                                ? q.options.map(
+                                                      (
+                                                          o: ResponseOption,
+                                                          optionIndex: number
+                                                      ) =>
+                                                          optionIndex <
+                                                          q.options.length - 1
+                                                              ? `${o.label}, `
+                                                              : `${o.label}`
+                                                  )
+                                                : 'N/A'}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <IconButton
+                                                color="primary"
+                                                onClick={() =>
+                                                    props.editQuestion(q)
+                                                }
+                                            >
+                                                <Edit />
+                                            </IconButton>
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            <IconButton
+                                                color="secondary"
+                                                onClick={() =>
+                                                    props.deleteQuestion(q)
+                                                }
+                                            >
+                                                <Delete />
+                                            </IconButton>
+                                        </TableCell>
+                                    </TableRow>
+                                )
+                            }
+                        )}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+            <div style={{ textAlign: 'center' }}>
+                <IconButton
+                    color="secondary"
+                    onClick={() => {
+                        props.addQuestion()
+                    }}
+                >
+                    <AddBoxRounded />
+                </IconButton>
+            </div>
+        </>
+    )
+}
+
 export const AdminDashboard = () => {
     const {
         data,
@@ -315,6 +429,22 @@ export const AdminDashboard = () => {
             text: '',
         })
     }
+    const addQuestion = () => {
+        const nextId =
+            data.matchingQuestions.reduce<number>(
+                (max: number, cur: MatchingQuestion) => {
+                    const idAsInt = parseInt(cur.id)
+                    return max < idAsInt ? idAsInt : max
+                },
+                0
+            ) + 1
+        editResponseOption({
+            id: `new_${nextId}`,
+            label: '',
+            value: '',
+            text: '',
+        })
+    }
 
     const cancelDelete = () => {
         dispatch({
@@ -371,102 +501,19 @@ export const AdminDashboard = () => {
                     >
                         <Tab label="Host Questions" value={'HostQuestions'} />
                         <Tab label="Guest Questions" value={'GuestQuestions'} />
+                        <Tab label="Restrictions" value={'Restrictions'} />
                     </Tabs>
                 </AppBar>
-                <TableContainer>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell style={{ fontSize: '1.3rem' }}>
-                                    Display Text
-                                </TableCell>
-                                <TableCell
-                                    style={{ fontSize: '1.3rem' }}
-                                    align="right"
-                                >
-                                    Type
-                                </TableCell>
-                                <TableCell
-                                    style={{ fontSize: '1.3rem' }}
-                                    align="right"
-                                >
-                                    Options
-                                </TableCell>
-                                <TableCell
-                                    style={{ fontSize: '1.3rem' }}
-                                    align="right"
-                                >
-                                    Edit
-                                </TableCell>
-                                <TableCell
-                                    style={{ fontSize: '1.3rem' }}
-                                    align="right"
-                                >
-                                    Delete
-                                </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {data.matchingQuestions.map(
-                                (q: MatchingQuestion, i: number) => {
-                                    // console.log(
-                                    //     `AdminDashboard: rendering matching question: ${JSON.stringify(
-                                    //         q
-                                    //     )}`
-                                    // )
-                                    return (
-                                        <TableRow
-                                            key={`matching-question-${i}`}
-                                        >
-                                            <TableCell>{q.question}</TableCell>
-                                            <TableCell align="right">
-                                                {q.type}
-                                            </TableCell>
-                                            <TableCell align="right">
-                                                {q.options
-                                                    ? q.options.map(
-                                                          (
-                                                              o: ResponseOption,
-                                                              optionIndex: number
-                                                          ) =>
-                                                              optionIndex <
-                                                              q.options.length -
-                                                                  1
-                                                                  ? `${o.label}, `
-                                                                  : `${o.label}`
-                                                      )
-                                                    : 'N/A'}
-                                            </TableCell>
-                                            <TableCell align="right">
-                                                <IconButton
-                                                    color="primary"
-                                                    onClick={() =>
-                                                        editQuestion(q)
-                                                    }
-                                                >
-                                                    <Edit />
-                                                </IconButton>
-                                            </TableCell>
-                                            <TableCell align="right">
-                                                <IconButton
-                                                    color="secondary"
-                                                    onClick={() =>
-                                                        promptDeleteQuestion(q)
-                                                    }
-                                                >
-                                                    <Delete />
-                                                </IconButton>
-                                            </TableCell>
-                                        </TableRow>
-                                    )
-                                }
-                            )}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <Box style={{ backgroundColor: 'blue' }} textAlign="center">
-                    <Button>Download as JSON</Button>
-                </Box>
+                {state.selectedMenuOption === 'HostQuestions' && (
+                    <>
+                        <MatchingQuestionManager
+                            matchingQuestions={data.matchingQuestions}
+                            editQuestion={editQuestion}
+                            deleteQuestion={promptDeleteQuestion}
+                            addQuestion={() => {}}
+                        />
+                    </>
+                )}
             </Container>
             <MUIModal
                 disableBackdropClick={false}
