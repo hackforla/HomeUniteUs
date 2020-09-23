@@ -37,10 +37,7 @@ const ShowstopperQuestion = (props: Props) => {
                     ariaLabel={question.question}
                     name={question.id}
                     value={question.answer || ''}
-                    options={[
-                        { label: 'Yes', value: 'yes' },
-                        { label: 'No', value: 'no' },
-                    ]}
+                    options={question.options || []}
                     onChange={handleChange}
                 />
             </div>
