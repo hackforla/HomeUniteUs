@@ -14,9 +14,11 @@ from flask import (
     jsonify,
     session,
     url_for,
-    send_from_directory
+    send_from_directory,
+    send_file
 )
 import os
+import io
 import sys
 import json
 import logging
@@ -27,7 +29,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-#from matching.basic_filter import BasicFilter
+# from matching.basic_filter import BasicFilter
 
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'psd'}
@@ -199,7 +201,7 @@ class MongoFacade:
         db = client[MONGO_DATABASE]
         collection = db[collection_name]
 
-        result = collection.delete_one({'id': id})
+        result = collection.delete_one({'_id': ObjectId(id)})
         self._log('delete_from_collection',
                   'result.raw_result = {}'.format(result.raw_result))
 
@@ -216,17 +218,22 @@ class MongoFacade:
 
         db = client[MONGO_DATABASE]
         collection = db[collection_name]
-        result = collection.update_one({'id': id}, {'$set': item})
+        result = collection.update_one({'_id': ObjectId(id)}, {'$set': item})
         return result.acknowledged
 
-    def save_file(self, img_file, img_name):
+    def save_file(self, img_file, img_name, img_subject, email, file_type):
         client = self._get_conn()
         if not client:
             raise Exception('Mongo server not available')
 
         db = client[MONGO_DATABASE]
         fs = gridfs.GridFS(db)
-        img_id = fs.put(img_file, img_name=img_name)  # got img id
+        img_id = fs.put(
+            img_file,
+            filename=img_name,
+            contentType=file_type,
+            subject=img_subject,
+            email=email)  # got img id
         if img_id is None:
             return None
         # if fs.find_one(img_id) is None:
@@ -234,15 +241,32 @@ class MongoFacade:
         # next, store the img id in the user database somehow
         return img_id
 
-    def load_file(self):  # need to pass userId
+    def load_file(self, fileId):  # need to pass userId
         client = self._get_conn()
         db = client[MONGO_DATABASE]
         fs = gridfs.GridFS(db)
-        collection = db[collection_name]
+        record = fs.get(ObjectId(fileId))
+        app.logger.debug(f'MongoFacade:load_file: record = {record}')
+        for key in dir(record):
+            if callable(getattr(record, key)):
+                continue
+            app.logger.debug(f'- {key}: {getattr(record, key)}')
+        return record
+
+    # need to pass userId
+    def get_files_for_user_with_subject(self, email, subject):
+        client = self._get_conn()
+        db = client[MONGO_DATABASE]
+        fs = gridfs.GridFS(db)
+        records = fs.find({"email": email, "subject": subject})
+        items = list(records)
+        # for item in items:
+        #     item['_id'] = str(item['_id'])
+        return items
         # user = collection.find_one() #get user by id and image id
         # image = fs.get(user[]) #using the user id to find image id
         # base64_data = codecs.encode(image.read(), "base64") #using codecs to retrieve image
-        #image = base64_data.decode("utf-8")
+        # image = base64_data.decode("utf-8")
 
     def add_field_to_record(self, collection_name, id_field_name, id_field_value, field_name, field_data):
         client = self._get_conn()
@@ -288,19 +312,106 @@ class MongoFacade:
             f'add_field_to_record_child: record for {id_field_name}: {id_field_value}')
         pprint.pprint(result)
 
-        if child_name in result:
-            new_child = list(result[child_name])
-        else:
-            new_child = []
+        # if child_name in result:
+        #     new_child = list(result[child_name])
+        # else:
+        #     new_child = []
+        # new_child.append({
+        #     field_name: field_data
+        # })
 
-        new_child.append({
-            field_name: field_data
-        })
+        if child_name in result:
+            new_child = dict(result[child_name])
+        else:
+            new_child = dict()
+        new_child[field_name] = field_data
 
         result = collection.update_one(
             {id_field_name: id_field_value}, {'$set': {child_name: new_child}})
 
         return result.acknowledged
+
+    def add_to_child_collection(self, collection_name, record_id, child_collection_name, data):
+        try:
+
+            client = self._get_conn()
+
+            if not client:
+                app.logger.error(
+                    'MongoFacade:add_to_child_collection(): Mongo server not available')
+                raise Exception('Mongo server not available')
+
+            app.logger.debug('MongoFacade:add_to_child_collection():')
+            app.logger.debug(f'- collection_name: {collection_name}')
+            app.logger.debug(f'- record_id: {record_id}')
+            app.logger.debug(
+                f'- child_collection_name: {child_collection_name}')
+            app.logger.debug(f'- data: {data}')
+
+            db = client[MONGO_DATABASE]
+            collection = db[collection_name]
+
+            result = collection.find_one({'_id': ObjectId(record_id)})
+
+            if child_collection_name in result:
+                new_child = list(result[child_collection_name])
+            else:
+                new_child = list()
+
+            new_child.append(data)
+
+            app.logger.debug(
+                f'MongoFacade:add_to_child_collection(): about to set field {child_collection_name} to "{new_child}"')
+
+            result = collection.update_one(
+                {'_id': ObjectId(record_id)}, {'$set': {child_collection_name: new_child}})
+
+            return result.acknowledged
+
+        except Exception as e:
+            app.logger.error(
+                f'MongoFacade:add_to_child_collection(): error: {e}')
+
+    def update_in_child_collection(self, collection_name, record_id, child_collection_name, child_record_id, data):
+        try:
+
+            client = self._get_conn()
+
+            if not client:
+                app.logger.error(
+                    'MongoFacade:update_in_child_collection(): Mongo server not available')
+                raise Exception('Mongo server not available')
+
+            app.logger.debug('MongoFacade:update_in_child_collection():')
+            app.logger.debug(f'- collection_name: {collection_name}')
+            app.logger.debug(f'- record_id: {record_id}')
+            app.logger.debug(
+                f'- child_collection_name: {child_collection_name}')
+            app.logger.debug(f'- data: {data}')
+
+            db = client[MONGO_DATABASE]
+            collection = db[collection_name]
+
+            result = collection.find_one({'_id': ObjectId(record_id)})
+
+            new_child = list()
+            for child_record in list(result[child_collection_name]):
+                if child_record['id'] == child_record_id:
+                    new_child.append(data)
+                else:
+                    new_child.append(child_record)
+
+            app.logger.debug(
+                f'MongoFacade:update_in_child_collection(): about to set field {child_collection_name} to "{new_child}"')
+
+            result = collection.update_one(
+                {'_id': ObjectId(record_id)}, {'$set': {child_collection_name: new_child}})
+
+            return result.acknowledged
+
+        except Exception as e:
+            app.logger.error(
+                f'MongoFacade:update_in_child_collection(): error: {e}')
 
     def _log(self, method_name, message):
         app.logger.debug('MongoFacade:{}: {}'.format(method_name, message))
@@ -415,7 +526,7 @@ repos['restrictions'] = restrictionsRepository
 repos['responseValues'] = responseValuesRepository
 
 
-#matcher = BasicFilter(repos)
+# matcher = BasicFilter(repos)
 
 
 @app.route('/favicon.ico')
@@ -431,131 +542,133 @@ def favicon():
 ## Hosts API ##
 ###############
 
-@app.route('/api/hosts/<int:id>', methods=['GET', 'PUT', 'DELETE'])
-def host_by_id(id: int):
 
-    app.logger.warning(
-        'host_by_id: request.method = {}'.format(request.method))
-    app.logger.warning(f'host_by_id: id = {id} ({type(id)})')
+# Tyler 9/1/2020: Deprecated proof-of-concept version
+# @app.route('/api/hosts/<int:id>', methods=['GET', 'PUT', 'DELETE'])
+# def host_by_id(id: int):
 
-    if request.method == 'GET':
+#     app.logger.warning(
+#         'host_by_id: request.method = {}'.format(request.method))
+#     app.logger.warning(f'host_by_id: id = {id} ({type(id)})')
 
-        try:
+#     if request.method == 'GET':
 
-            host = hostRepository.mongo_facade.get_element_by_id('hosts', id)
-            js = json.dumps(host)
-            resp = Response(js, status=200, mimetype='application/json')
-            return resp
+#         try:
 
-        except Exception as e:
+#             host = hostRepository.mongo_facade.get_element_by_id('hosts', id)
+#             js = json.dumps(host)
+#             resp = Response(js, status=200, mimetype='application/json')
+#             return resp
 
-            data = {
-                'error': str(e)
-            }
+#         except Exception as e:
 
-            js = json.dumps(data)
-            resp = Response(js, status=500, mimetype='application/json')
+#             data = {
+#                 'error': str(e)
+#             }
 
-            return resp
+#             js = json.dumps(data)
+#             resp = Response(js, status=500, mimetype='application/json')
 
-    elif request.method == 'PUT':
+#             return resp
 
-        try:
+#     elif request.method == 'PUT':
 
-            responseData = hostRepository.update(id, request.json)
-            app.logger.debug('responseData = {}'.format(responseData))
-            resp = Response(json.dumps({'error': None, 'data': None}),
-                            status=200, mimetype='application/json')
-            return resp
+#         try:
 
-        except Exception as e:
+#             responseData = hostRepository.update(id, request.json)
+#             app.logger.debug('responseData = {}'.format(responseData))
+#             resp = Response(json.dumps({'error': None, 'data': None}),
+#                             status=200, mimetype='application/json')
+#             return resp
 
-            data = {
-                'error': str(e)
-            }
+#         except Exception as e:
 
-            js = json.dumps(data)
-            resp = Response(js, status=500, mimetype='application/json')
+#             data = {
+#                 'error': str(e)
+#             }
 
-            return resp
+#             js = json.dumps(data)
+#             resp = Response(js, status=500, mimetype='application/json')
 
-    elif request.method == 'DELETE':
+#             return resp
 
-        try:
+#     elif request.method == 'DELETE':
 
-            responseData = hostRepository.delete(id)
-            app.logger.debug('responseData = {}'.format(responseData))
-            resp = Response(json.dumps({'error': None, 'data': None}),
-                            status=200, mimetype='application/json')
-            return resp
+#         try:
 
-        except Exception as e:
+#             responseData = hostRepository.delete(id)
+#             app.logger.debug('responseData = {}'.format(responseData))
+#             resp = Response(json.dumps({'error': None, 'data': None}),
+#                             status=200, mimetype='application/json')
+#             return resp
 
-            data = {
-                'error': str(e)
-            }
+#         except Exception as e:
 
-            js = json.dumps(data)
-            resp = Response(js, status=500, mimetype='application/json')
+#             data = {
+#                 'error': str(e)
+#             }
 
-            return resp
+#             js = json.dumps(data)
+#             resp = Response(js, status=500, mimetype='application/json')
 
-    else:
+#             return resp
 
-        app.logger.debug(f'what is {request.method} even doing here.')
+#     else:
+
+#         app.logger.debug(f'what is {request.method} even doing here.')
 
 
-@app.route('/api/hosts', methods=['GET', 'POST'])
-def get_all_hosts():
+# @app.route('/api/hosts', methods=['GET', 'POST'])
+# def get_all_hosts():
 
-    app.logger.warning(
-        'get_all_hosts: request.method = {}'.format(request.method))
+#     app.logger.warning(
+#         'get_all_hosts: request.method = {}'.format(request.method))
 
-    if request.method == 'GET':
+#     if request.method == 'GET':
 
-        try:
+#         try:
 
-            hosts = hostRepository.get()
-            js = json.dumps(hosts)
-            resp = Response(js, status=200, mimetype='application/json')
-            return resp
+#             hosts = hostRepository.get()
+#             js = json.dumps(hosts)
+#             resp = Response(js, status=200, mimetype='application/json')
+#             return resp
 
-        except Exception as e:
+#         except Exception as e:
 
-            data = {
-                'error': str(e)
-            }
+#             data = {
+#                 'error': str(e)
+#             }
 
-            js = json.dumps(data)
-            resp = Response(js, status=500, mimetype='application/json')
+#             js = json.dumps(data)
+#             resp = Response(js, status=500, mimetype='application/json')
 
-            return resp
+#             return resp
 
-    elif request.method == 'POST':
+#     elif request.method == 'POST':
 
-        try:
+#         try:
 
-            host = request.json
-            responseData = hostRepository.add(host)
-            app.logger.debug('responseData = {}'.format(responseData))
-            resp = Response({'error': None, 'data': None},
-                            status=200, mimetype='application/json')
-            return resp
+#             host = request.json
+#             responseData = hostRepository.add(host)
+#             app.logger.debug('responseData = {}'.format(responseData))
+#             resp = Response({'error': None, 'data': None},
+#                             status=200, mimetype='application/json')
+#             return resp
 
-        except Exception as e:
+#         except Exception as e:
 
-            data = {
-                'error': str(e)
-            }
+#             data = {
+#                 'error': str(e)
+#             }
 
-            js = json.dumps(data)
-            resp = Response(js, status=500, mimetype='application/json')
+#             js = json.dumps(data)
+#             resp = Response(js, status=500, mimetype='application/json')
 
-            return resp
+#             return resp
 
-    else:
+#     else:
 
-        app.logger.debug(f'what is {request.method} even doing here.')
+#         app.logger.debug(f'what is {request.method} even doing here.')
 
 
 @app.route('/api/hostQuestions', methods=['GET'])
@@ -1427,7 +1540,7 @@ def get_all_match_results():
 
     try:
 
-        #match_results = matcher.get_all_match_results()
+        # match_results = matcher.get_all_match_results()
         match_results = []
 
         js = json.dumps(match_results)
@@ -1447,14 +1560,14 @@ def get_all_match_results():
         return resp
 
 
-@app.route('/api/v1/questions/host/matching', methods=['GET'])
-def get_host_matching_questions():
-    pass
+# @app.route('/api/v1/questions/host/matching', methods=['GET'])
+# def get_host_matching_questions():
+#     pass
 
 
-@app.route('/api/v1/questions/host/qualifying', methods=['GET'])
-def get_host_qualifying_questions():
-    pass
+# @app.route('/api/v1/questions/host/qualifying', methods=['GET'])
+# def get_host_qualifying_questions():
+#     pass
 
 
 #########################
@@ -1473,14 +1586,22 @@ def allowed_file(filename):
         return False
 
 
-@app.route('/uploadImage', methods=['POST'])
+@app.route('/api/uploadImage', methods=['POST'])
 def image_upload():
     if 'image' not in request.files:
         flash('no image file')
         return Response(status=400, mimetype='application/json')
 
+    app.logger.debug(f'image_upload(): request.form: {request.form}')
+    email = request.form['email']
+    subject = request.form['subject']
     img = request.files["image"]
 
+    file_type = img.content_type
+
+    app.logger.debug(f'image_upload(): img.content_type: {img.content_type}')
+    app.logger.debug(f'image_upload(): img.mimetype: {img.mimetype}')
+    app.logger.debug(f'image_upload(): img.filename: {img.filename}')
     if img.filename == '':
         flash('no image was selected')
         return Response(status=400, mimetype='application/json')
@@ -1488,7 +1609,7 @@ def image_upload():
     if img and allowed_file(img.filename):
         img_name = secure_filename(img.filename)
         saveImg = MongoFacade()
-        resp = saveImg.save_file(img, img_name)
+        resp = saveImg.save_file(img, img_name, subject, email, file_type)
         if resp is not None:
             return Response(json.dumps({'msg': 'Image saved successfully', 'status': 200}), status=200, mimetype='application/json')
         else:
@@ -1497,6 +1618,72 @@ def image_upload():
         return Response(status=500, mimetype='application/json')
 
     return Response(status=200, mimetype='application/json')
+
+
+@app.route('/api/host/images/<subject>', methods=['POST'])
+def get_images(subject):
+    try:
+        email = request.json['email']
+        app.logger.debug(
+            f'get_images: looking for {subject} photos for {email}')
+        mongo = MongoFacade()
+        records = mongo.get_files_for_user_with_subject(email, subject)
+
+        result = []
+        app.logger.debug(f'get_images: records')
+        for r in records:
+            app.logger.debug(f'get_images: - r: {r}')
+            result.append({
+                'id': str(r._id),
+                'filename': r.filename
+            })
+
+        return jsonify(result)
+
+        # return Response(result, status=200, mimetype='application/json')
+    except Exception as e:
+        app.logger.error(f'get_images: error: {e}')
+        return Response({'error': e}, status=500, mimetype='application/json')
+
+
+@app.route('/api/host/images/download/<file_id>', methods=['GET'])
+def image_download(file_id):
+
+    app.logger.debug(f'image_download: file_id = {file_id}')
+
+    try:
+        mongo = MongoFacade()
+        img = mongo.load_file(file_id)
+        app.logger.debug(f'image_download: img.filename = {img.filename}')
+        app.logger.debug(
+            f'image_download: img.content_type = {img.content_type}')
+        return send_file(
+            io.BytesIO(img.read()),
+            mimetype=img.content_type,
+            as_attachment=True,
+            attachment_filename=img.filename
+        )
+    except Exception as e:
+        return Response(f'Error: {e}', status=500, mimetype='text/plain')
+# 5f57271622830a20c4c5b87f
+
+
+# @app.route('/api/host/images/home', methods=['POST'])
+# def host_home_images():
+
+#     email = request.json['email']
+
+#     try:
+#         mongo = MongoFacade()
+#         img = mongo.load_file(email)
+#         return send_file(
+#             io.BytesIO(img),
+#             mimetype='image/jpeg',
+#             as_attachment=True,
+#             attachment_filename='%s.jpg' % pid
+#         )
+#     except Exception as e:
+#         return Response(f'Error: {e}', status=500, mimetype='text/plain')
 
 
 """
@@ -1525,6 +1712,32 @@ def get_user_type():
             return Response(json.dumps({'type': 'host'}), status=200, mimetype='application/json')
         else:
             return Response(json.dumps({'type': 'none'}), status=200, mimetype='application/json')
+
+    except Exception as e:
+        app.logger.error(f'get_user_type: error : {str(e)}')
+
+        return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
+
+
+@app.route('/api/host', methods=['POST'])
+def get_host_by_email():
+    """Returns user type"""
+
+    try:
+
+        data = request.json
+        if 'email' not in data:
+            raise Exception('Email must be included in POST request body')
+
+        app.logger.debug(f'get_user_type(): data: {data}')
+        mf = MongoFacade()
+
+        if not mf.item_in_collection('hosts', 'email', data['email']):
+            return Response(f'No host with email: {data["email"]}', status=400, mimetype='text/plain')
+
+        host = mf.get_user_by_email('hosts', data['email'])
+
+        return Response(json.dumps(host), status=200, mimetype='application/json')
 
     except Exception as e:
         app.logger.error(f'get_user_type: error : {str(e)}')
@@ -1606,7 +1819,7 @@ def add_host_contact():
         mf = MongoFacade()
         mf.add_field_to_record(
             'hosts', 'email', data['email'], 'contact', data)
-        return Response(status=200, mimetype='application/json')
+        return Response(json.dumps({}), status=200, mimetype='application/json')
 
     except Exception as e:
         app.logger.error(f'add_host_contact: error adding data: {str(e)}')
@@ -1624,7 +1837,7 @@ def add_host_address():
         mf = MongoFacade()
         mf.add_field_to_record(
             'hosts', 'email', data['email'], 'address', data)
-        return Response(status=200, mimetype='application/json')
+        return Response(json.dumps({}), status=200, mimetype='application/json')
 
     except Exception as e:
         app.logger.error(f'add_host_address: error adding data: {str(e)}')
@@ -1642,7 +1855,7 @@ def add_host_language():
         mf = MongoFacade()
         mf.add_field_to_record(
             'hosts', 'email', data['email'], 'language', data)
-        return Response(status=200, mimetype='application/json')
+        return Response(json.dumps({}), status=200, mimetype='application/json')
 
     except Exception as e:
         app.logger.error(f'add_host_language: error adding data: {str(e)}')
@@ -1660,7 +1873,7 @@ def add_host_gender():
         mf = MongoFacade()
         mf.add_field_to_record(
             'hosts', 'email', data['email'], 'gender', data)
-        return Response(status=200, mimetype='application/json')
+        return Response(json.dumps({}), status=200, mimetype='application/json')
 
     except Exception as e:
         app.logger.error(f'add_host_gender: error adding data: {str(e)}')
@@ -1679,7 +1892,7 @@ def add_host_matching_response(questionId):
         mf.add_field_to_record_child(
             'hosts', 'email', data['email'], 'matchingResponses', questionId, data['response'])
 
-        return Response(status=200, mimetype='application/json')
+        return Response(json.dumps({}), status=200, mimetype='application/json')
 
     except Exception as e:
         app.logger.error(
@@ -1698,7 +1911,7 @@ def add_host_qualifying_response(questionId):
         mf.add_field_to_record_child(
             'hosts', 'email', data['email'], 'qualifyingResponses', questionId, data['response'])
 
-        return Response(status=200, mimetype='application/json')
+        return Response(json.dumps({}), status=200, mimetype='application/json')
 
     except Exception as e:
         app.logger.error(
@@ -1706,8 +1919,187 @@ def add_host_qualifying_response(questionId):
         return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
 
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
+@app.route('/api/questions/<user_type>/registration/matching/<question_id>/options', methods=['POST'])
+def add_response_option(user_type, question_id):
+    """Add a response option to a matching question"""
+
+    try:
+        data = request.json
+        app.logger.debug(f'add_response_option(): data: {data}')
+        mf = MongoFacade()
+
+        mf.add_to_child_collection(
+            'matchingQuestions', question_id, 'options', data)
+
+        return Response(json.dumps({}), status=200, mimetype='application/json')
+
+    except Exception as e:
+        app.logger.error(
+            f'add_response_option: error adding data: {str(e)}')
+        return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
+
+
+@app.route('/api/v1/questions/host/qualifying', methods=['GET'])
+@app.route('/api/host/registration/qualifying', methods=['GET'])
+def get_host_qualifying_questions():
+    """Get all host qualifying questions"""
+
+    try:
+
+        mf = MongoFacade()
+        questions = mf.get_collection('qualifyingQuestions', None)
+
+        return jsonify(questions)
+
+    except Exception as e:
+        app.logger.error(
+            f'get_host_qualifying_questions: error getting data: {str(e)}')
+        return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
+
+
+@app.route('/api/v1/questions/host/matching', methods=['GET'])
+@app.route('/api/host/registration/matching', methods=['GET'])
+def get_host_matching_questions():
+    """Get all host matching questions"""
+
+    try:
+
+        mf = MongoFacade()
+        questions = mf.get_collection('matchingQuestions', None)
+
+        return jsonify(questions)
+
+    except Exception as e:
+        app.logger.error(
+            f'get_host_matching_questions: error getting data: {str(e)}')
+        return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
+
+
+@app.route('/api/host/registration/info', methods=['GET'])
+def get_host_info_questions():
+    """Get all host info questions"""
+
+    try:
+
+        mf = MongoFacade()
+        questions = mf.get_collection('infoQuestions', None)
+
+        return jsonify(questions)
+
+    except Exception as e:
+        app.logger.error(
+            f'get_host_matching_questions: error getting data: {str(e)}')
+        return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
+
+
+@app.route('/api/questions/<user_type>/registration/<question_type>/<question_id>', methods=['DELETE'])
+def delete_question(user_type, question_type, question_id):
+    """Delete a question"""
+
+    try:
+        app.logger.debug(f'delete_question():')
+        app.logger.debug(f'- user_type= {user_type}')
+        app.logger.debug(f'- question_type= {question_type}')
+        app.logger.debug(f'- question_id= {question_id}')
+
+        mf = MongoFacade()
+
+        mf.delete_from_collection(
+            f'{question_type.lower()}Questions', question_id)
+
+        return Response(json.dumps({}), status=200, mimetype='application/json')
+
+    except Exception as e:
+        app.logger.error(
+            f'delete_question: error deleting data: {str(e)}')
+        return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
+
+
+@app.route('/api/questions/<user_type>/registration/<question_type>', methods=['POST'])
+def add_question(user_type, question_type):
+    """Add a question"""
+
+    try:
+
+        data = request.json
+
+        app.logger.debug(f'add_question():')
+        app.logger.debug(f'- user_type= {user_type}')
+        app.logger.debug(f'- question_type= {question_type}')
+        app.logger.debug(f'- data= {data}')
+
+        mf = MongoFacade()
+
+        mf.insert_to_collection(
+            f'{question_type.lower()}Questions', data)
+
+        return Response(json.dumps({}), status=200, mimetype='application/json')
+
+    except Exception as e:
+        app.logger.error(
+            f'add_question: error adding data: {str(e)}')
+        return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
+
+
+@app.route('/api/questions/<user_type>/registration/<question_type>/<question_id>', methods=['PUT'])
+def update_question(user_type, question_type, question_id):
+    """Update a question"""
+
+    try:
+
+        data = request.json
+
+        app.logger.debug(f'add_question():')
+        app.logger.debug(f'- user_type= {user_type}')
+        app.logger.debug(f'- question_type= {question_type}')
+        app.logger.debug(f'- data= {data}')
+
+        question = {}
+        for k, v in dict(data).items():
+            if k != '_id':
+                question[k] = v
+        mf = MongoFacade()
+
+        mf.update_in_collection(
+            f'{question_type.lower()}Questions', question_id, question)
+
+        return Response(json.dumps({}), status=200, mimetype='application/json')
+
+    except Exception as e:
+        app.logger.error(
+            f'add_question: error adding data: {str(e)}')
+        return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
+
+
+@app.route('/api/questions/<user_type>/registration/<question_type>/<question_id>/options/<response_option_id>', methods=['PUT'])
+def update_response_option(user_type, question_type, question_id, response_option_id):
+    """Update a response options"""
+    try:
+
+        data = request.json
+
+        app.logger.debug(f'update_response_option():')
+        app.logger.debug(f'- user_type= {user_type}')
+        app.logger.debug(f'- question_type= {question_type}')
+        app.logger.debug(f'- question_id= {question_id}')
+        app.logger.debug(f'- response_option_id= {response_option_id}')
+        app.logger.debug(f'- data= {data}')
+
+        mf = MongoFacade()
+
+        mf.update_in_child_collection(
+            f'{question_type.lower()}Questions', question_id, 'options', data)
+
+        return Response(json.dumps({}), status=200, mimetype='application/json')
+
+    except Exception as e:
+        app.logger.error(
+            f'update_response_option: error adding data: {str(e)}')
+        return Response(json.dumps({'error': str(e)}), status=500, mimetype='application/json')
+
+
+@ app.route('/', defaults={'path': ''})
+@ app.route('/<path:path>')
 def index(path):
     app.logger.debug(
         "quote_plus(os.getenv('DB_USER')) = {}".format(os.getenv('DB_USER')))

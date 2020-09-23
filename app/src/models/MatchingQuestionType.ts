@@ -1,7 +1,7 @@
 export interface MatchingQuestionType {
     id: string
     question: string
-    type: string
+    type?: string
     options?: Array<any>
     answer?: any
     group?: string

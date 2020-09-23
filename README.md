@@ -1,10 +1,10 @@
-# Host Home
+# Home Unite Us
 
-We're working with community non-profits who have a Host Home initiative to develop a workflow management tool to make the process scaleable (across all providers), reduce institutional bias, and effectively capture data.
+We're working with community non-profits who have a host home initiative to develop a workflow management tool to make the process scaleable (across all providers), reduce institutional bias, and effectively capture data.
 
-Host Home programs are centered around housing young people, 18 - 25 years old. Their approach focuses on low-cost, community-driven intervention by matching a willing host with a guest or group of guests, providing a stable housing environment for youths who are experiencing homelessness and seeking stable housing.
+Host home programs are centered around housing young people, 18 - 25 years old. Their approach focuses on low-cost, community-driven intervention by matching a willing host with a guest or group of guests, providing a stable housing environment for youths who are experiencing homelessness and seeking stable housing.
 
-Come visit us at https://hosthome.lacommunity.site/
+Come visit us at https://homeunite.us/
 
 ### Project context
 
@@ -13,19 +13,21 @@ This project is part of a larger initative at Hack for LA around creating a shar
 ### Technology used
 
 - [Docker](https://docs.docker.com/)
-- [Terraform](https://www.terraform.io/docs/index.html)
 - [Nginx](https://nginx.org/en/docs/)
 - [AWS](https://docs.aws.amazon.com/)
 - [MongoDB](https://docs.mongodb.com/)
 - [React](https://reactjs.org/docs/getting-started.html)
 - [Styled Components](https://styled-components.com/docs)
+- [Material UI](https://material-ui.com/)
+- [Flask](https://flask.palletsprojects.com/en/1.1.x/)
+<!-- - [Terraform](https://www.terraform.io/docs/index.html) -->
 
 # How to contribute
 
 - Review the [Getting Started guide on the Hack for LA website](https://github.com/hackforla/getting-started)
-- Review the documents in the [host-home shared drive](https://drive.google.com/drive/u/0/folders/1ahxiD9rIsBtx0yAPlPcPaGw8zGrfHHm9).
-- Join the [#host-home slack channel](https://hackforla.slack.com/archives/CRWUG7X0C).
-- Visit our [project boards](https://github.com/hackforla/host-home-poc/projects) and see issues in the prioritized backlog.
+- Review the documents in the [home-unite-us shared drive](https://drive.google.com/drive/u/0/folders/1ahxiD9rIsBtx0yAPlPcPaGw8zGrfHHm9).
+- Join the [#home-unite-us slack channel](https://hackforla.slack.com/archives/CRWUG7X0C).
+- Visit our [project boards](https://github.com/hackforla/HomeUniteUs/projects) and see issues in the prioritized backlog.
 
 ## Installation instructions
 
@@ -69,7 +71,7 @@ _this readme file sourced from [Jessica Sand](http://jessicasand.com/other-stuff
 ### Flask, Mongo and NPM
 
 1. Ensure npm, mongodb and python3 are installed. Get the code:
-   `git clone git@github.com/hackforla/host-home`
+   `git clone git@github.com/hackforla/HomeUniteUs`
 
 2) Run server
 
@@ -79,11 +81,8 @@ _this readme file sourced from [Jessica Sand](http://jessicasand.com/other-stuff
 
    - check that data was seeded correctly by printing first three guest objects: `mongoexport -d=hosthome -c=guests --jsonArray --pretty --limit=3`
 
-1)
-
-
-    1. (Optional) Configure a conda or virtualenv project
-    2. `pip install -r requirements.txt`
+1) 1. (Optional) Configure a conda or virtualenv project
+   2. `pip install -r requirements.txt`
 
 4. `python hosthome.py` to start server running
 

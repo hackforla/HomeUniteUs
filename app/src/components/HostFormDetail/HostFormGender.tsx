@@ -1,4 +1,4 @@
-import React, { useState, CSSProperties } from 'react'
+import React, { useState, CSSProperties, useEffect } from 'react'
 import { useHostDashboardData } from '../../data/host-context'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import {
@@ -12,6 +12,18 @@ import {
 import * as Yup from 'yup'
 import SortableComponent from './SortableComponent'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
+import { useAuth0, Auth0User } from '../../react-auth0-spa'
+
+interface HostGenderDetails {
+    woman?: boolean
+    man?: boolean
+    transMan?: boolean
+    transWoman?: boolean
+    nonBinary?: boolean
+    notToIdentify?: boolean
+    describe?: boolean
+    describeTextField?: string
+}
 
 interface FormValues {
     woman: boolean
@@ -22,17 +34,6 @@ interface FormValues {
     notToIdentify: boolean
     describe: boolean
     describeTextField: string
-}
-
-const initialValues: FormValues = {
-    woman: false,
-    man: false,
-    transMan: false,
-    transWoman: false,
-    nonBinary: false,
-    notToIdentify: false,
-    describe: false,
-    describeTextField: '',
 }
 
 const validationSchema = Yup.object()
@@ -68,17 +69,49 @@ const fieldContainerStyles: CSSProperties = {
     fontSize: '18px',
 }
 
-const HostFormGender: React.FC = () => {
+interface HostFormGenderProps {
+    genderDetails: HostGenderDetails
+    onSubmitComplete?: () => void
+}
+
+const HostFormGender: React.FC<HostFormGenderProps> = (
+    props: HostFormGenderProps
+) => {
     const { putGenderInfo } = useHostDashboardData()
+    const { user } = useAuth0()
+
+    const initialValues: FormValues = {
+        woman: props.genderDetails.woman || false,
+        man: props.genderDetails.man || false,
+        transMan: props.genderDetails.transMan || false,
+        transWoman: props.genderDetails.transWoman || false,
+        nonBinary: props.genderDetails.nonBinary || false,
+        notToIdentify: props.genderDetails.notToIdentify || false,
+        describe: props.genderDetails.describe || false,
+        describeTextField: props.genderDetails.describeTextField || '',
+    }
+
     const handleSubmit = async (values: FormValues) => {
-        alert(JSON.stringify(values))
+        const payload = { ...values, email: (user as Auth0User).email }
+        // alert(JSON.stringify(payload))
 
         try {
-            await putGenderInfo(values)
+            await putGenderInfo(payload)
+            if (props.onSubmitComplete) {
+                props.onSubmitComplete()
+            }
         } catch (e) {
             console.log(`Error posting ${e}`)
         }
     }
+
+    useEffect(() => {
+        console.log(
+            `HostFormGender: props.genderDetails changed: ${JSON.stringify(
+                props.genderDetails
+            )}`
+        )
+    }, [props.genderDetails])
     return (
         <>
             <Container maxWidth="md">
@@ -103,8 +136,10 @@ const HostFormGender: React.FC = () => {
                                     <Field
                                         autoComplete="off"
                                         name="woman"
+                                        value="woman"
                                         variant="outlined"
                                         as={Checkbox}
+                                        checked={!!values['woman']}
                                     />
                                     <label>Woman</label>
                                 </div>
@@ -112,8 +147,10 @@ const HostFormGender: React.FC = () => {
                                     <Field
                                         autoComplete="off"
                                         name="man"
+                                        value="man"
                                         variant="outlined"
                                         as={Checkbox}
+                                        checked={!!values['man']}
                                     />
                                     <label>Man</label>
                                 </div>
@@ -121,8 +158,10 @@ const HostFormGender: React.FC = () => {
                                     <Field
                                         autoComplete="off"
                                         name="transMan"
+                                        value="transMan"
                                         variant="outlined"
                                         as={Checkbox}
+                                        checked={!!values['transMan']}
                                     />
                                     <label>Trans Man</label>
                                 </div>
@@ -130,8 +169,10 @@ const HostFormGender: React.FC = () => {
                                     <Field
                                         autoComplete="off"
                                         name="transWoman"
+                                        value="transWoman"
                                         variant="outlined"
                                         as={Checkbox}
+                                        checked={!!values['transWoman']}
                                     />
                                     <label>Trans Woman</label>
                                 </div>
@@ -139,8 +180,10 @@ const HostFormGender: React.FC = () => {
                                     <Field
                                         autoComplete="off"
                                         name="nonBinary"
+                                        value="nonBinary"
                                         variant="outlined"
                                         as={Checkbox}
+                                        checked={!!values['nonBinary']}
                                     />
                                     <label>Non Binary</label>
                                 </div>
@@ -148,8 +191,10 @@ const HostFormGender: React.FC = () => {
                                     <Field
                                         autoComplete="off"
                                         name="notToIdentify"
+                                        value="notToIdentify"
                                         variant="outlined"
                                         as={Checkbox}
+                                        checked={!!values['notToIdentify']}
                                     />
                                     <label>Prefer not to Identify</label>
                                 </div>

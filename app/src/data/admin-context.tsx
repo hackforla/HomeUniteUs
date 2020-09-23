@@ -9,12 +9,14 @@ import {
 import { HostResponse } from '../models/HostResponse'
 import { ApiWrapper } from './ApiWrapper'
 
-const HostDashboardContext = React.createContext({})
+const AdminDashboardContext = React.createContext({})
 const apiClient = new ApiWrapper()
 
-interface HostDashboardData {
-    showstopperQuestions: Array<QualifyingQuestion>
-    matchingQuestions: Array<MatchingQuestion>
+interface AdminDashboardData {
+    guestShowstopperQuestions: Array<QualifyingQuestion>
+    guestMatchingQuestions: Array<MatchingQuestion>
+    hostShowstopperQuestions: Array<QualifyingQuestion>
+    hostMatchingQuestions: Array<MatchingQuestion>
     hostResponse: HostResponse | null
     loaderState: {
         loading: boolean
@@ -23,7 +25,7 @@ interface HostDashboardData {
     host?: Host
 }
 
-enum HostDashboardActionType {
+enum AdminDashboardActionType {
     BeginFetchQuestions,
     FinishFetchQuestions,
     GetHostById,
@@ -33,10 +35,10 @@ enum HostDashboardActionType {
     Error,
 }
 
-interface HostDashboardAction {
-    type: HostDashboardActionType
+interface AdminDashboardAction {
+    type: AdminDashboardActionType
     payload?:
-        | HostDashboardData
+        | AdminDashboardData
         | Array<QualifyingQuestion>
         | Array<MatchingQuestion>
         | string
@@ -44,9 +46,11 @@ interface HostDashboardAction {
         | any // how to resolve this any type on get questions payload?
 }
 
-const initialState: HostDashboardData = {
-    showstopperQuestions: [],
-    matchingQuestions: [],
+const initialState: AdminDashboardData = {
+    hostShowstopperQuestions: [],
+    hostMatchingQuestions: [],
+    guestShowstopperQuestions: [],
+    guestMatchingQuestions: [],
     hostResponse: null,
     loaderState: {
         loading: false,
@@ -54,12 +58,12 @@ const initialState: HostDashboardData = {
     },
 }
 
-function hostDashboardReducer(
-    state: HostDashboardData,
-    action: HostDashboardAction
-): HostDashboardData {
+function adminDashboardReducer(
+    state: AdminDashboardData,
+    action: AdminDashboardAction
+): AdminDashboardData {
     switch (action.type) {
-        case HostDashboardActionType.BeginFetchQuestions: {
+        case AdminDashboardActionType.BeginFetchQuestions: {
             return {
                 ...state,
                 loaderState: {
@@ -68,20 +72,28 @@ function hostDashboardReducer(
                 },
             }
         }
-        case HostDashboardActionType.FinishFetchQuestions: {
+        case AdminDashboardActionType.FinishFetchQuestions: {
             return {
                 ...state,
                 loaderState: {
                     ...state.loaderState,
                     loading: false,
                 },
-                showstopperQuestions: action.payload[0] as Array<
+                hostShowstopperQuestions: action.payload[0] as Array<
                     QualifyingQuestion
                 >,
-                matchingQuestions: action.payload[1] as Array<MatchingQuestion>,
+                hostMatchingQuestions: action.payload[1] as Array<
+                    MatchingQuestion
+                >,
+                guestShowstopperQuestions: action.payload[2] as Array<
+                    QualifyingQuestion
+                >,
+                guestMatchingQuestions: action.payload[3] as Array<
+                    MatchingQuestion
+                >,
             }
         }
-        case HostDashboardActionType.BeginPostResponse: {
+        case AdminDashboardActionType.BeginPostResponse: {
             return {
                 ...state,
                 loaderState: {
@@ -90,7 +102,7 @@ function hostDashboardReducer(
                 },
             }
         }
-        case HostDashboardActionType.FinishPostResponse: {
+        case AdminDashboardActionType.FinishPostResponse: {
             return {
                 ...state,
                 loaderState: {
@@ -105,11 +117,11 @@ function hostDashboardReducer(
     }
 }
 
-export function HostDashboardDataProvider(
+export function AdminDashboardDataProvider(
     props: React.PropsWithChildren<{}>
 ): JSX.Element {
     const [state, dispatch] = React.useReducer(
-        hostDashboardReducer,
+        adminDashboardReducer,
         initialState
     )
 
@@ -118,13 +130,18 @@ export function HostDashboardDataProvider(
             console.log('loadData: fetching...')
             try {
                 dispatch({
-                    type: HostDashboardActionType.BeginFetchQuestions,
+                    type: AdminDashboardActionType.BeginFetchQuestions,
                     payload: 'Retrieving host questions...',
                 })
 
                 const hostQuestions = await Promise.all([
                     apiClient.getHostShowstopperQuestions(),
                     apiClient.getHostMatchingQuestions(),
+                ])
+
+                const guestQuestions = await Promise.all([
+                    apiClient.getGuestShowstopperQuestions(),
+                    apiClient.getGuestMatchingQuestions(),
                 ])
 
                 //set on state
@@ -145,12 +162,12 @@ export function HostDashboardDataProvider(
                 // })
 
                 dispatch({
-                    type: HostDashboardActionType.FinishFetchQuestions,
+                    type: AdminDashboardActionType.FinishFetchQuestions,
                     payload: hostQuestions,
                 })
             } catch (e) {
                 dispatch({
-                    type: HostDashboardActionType.Error,
+                    type: AdminDashboardActionType.Error,
                     payload: `System error: ${e}`,
                 })
             }
@@ -159,19 +176,19 @@ export function HostDashboardDataProvider(
 
     const value = React.useMemo(() => [state, dispatch], [state])
     console.log(
-        `HostDashboardDataProvider: Setting context value as: ${JSON.stringify(
+        `AdminDashboardDataProvider: Setting context value as: ${JSON.stringify(
             value
         )}`
     )
-    return <HostDashboardContext.Provider value={value} {...props} />
+    return <AdminDashboardContext.Provider value={value} {...props} />
 }
 
-export function useHostDashboardData() {
-    const context = React.useContext(HostDashboardContext)
+export function useAdminDashboardData() {
+    const context = React.useContext(AdminDashboardContext)
     console.log('this is context in a custom hook', context)
     if (!context) {
         throw new Error(
-            'useHostDashboardData must be used within a HostDashboardProvider'
+            'useAdminDashboardData must be used within a AdminDashboardProvider'
         )
     }
 
@@ -183,19 +200,19 @@ export function useHostDashboardData() {
         console.log(`postHostResponse: ${hostResponse} `)
         try {
             dispatch({
-                type: HostDashboardActionType.BeginPostResponse,
+                type: AdminDashboardActionType.BeginPostResponse,
                 payload: 'Posting host qualifying response...',
             })
 
             await apiClient.putShowstopperQuestionResponse(id, hostResponse)
 
             dispatch({
-                type: HostDashboardActionType.FinishPostResponse,
+                type: AdminDashboardActionType.FinishPostResponse,
                 payload: 'Finished host qualifying response...',
             })
         } catch (e) {
             dispatch({
-                type: HostDashboardActionType.Error,
+                type: AdminDashboardActionType.Error,
                 payload: `System error: ${e}`,
             })
         }
@@ -208,19 +225,19 @@ export function useHostDashboardData() {
         console.log(`postHostResponse: ${hostResponse} `)
         try {
             dispatch({
-                type: HostDashboardActionType.BeginPostResponse,
+                type: AdminDashboardActionType.BeginPostResponse,
                 payload: 'Posting host matching response...',
             })
 
             await apiClient.putMatchingQuestionResponse(id, hostResponse)
 
             dispatch({
-                type: HostDashboardActionType.FinishPostResponse,
+                type: AdminDashboardActionType.FinishPostResponse,
                 payload: 'Finished host matching response...',
             })
         } catch (e) {
             dispatch({
-                type: HostDashboardActionType.Error,
+                type: AdminDashboardActionType.Error,
                 payload: `System error: ${e}`,
             })
         }
@@ -231,19 +248,19 @@ export function useHostDashboardData() {
         console.log(`postHostResponse: ${hostResponse} `)
         try {
             dispatch({
-                type: HostDashboardActionType.BeginPostResponse,
+                type: AdminDashboardActionType.BeginPostResponse,
                 payload: 'Posting host info details...',
             })
 
             await apiClient.putHostInformation(hostResponse)
 
             dispatch({
-                type: HostDashboardActionType.FinishPostResponse,
+                type: AdminDashboardActionType.FinishPostResponse,
                 payload: 'Finished host response...',
             })
         } catch (e) {
             dispatch({
-                type: HostDashboardActionType.Error,
+                type: AdminDashboardActionType.Error,
                 payload: `System error: ${e}`,
             })
         }
@@ -253,19 +270,19 @@ export function useHostDashboardData() {
         console.log(`postHostResponse: ${hostResponse} `)
         try {
             dispatch({
-                type: HostDashboardActionType.BeginPostResponse,
+                type: AdminDashboardActionType.BeginPostResponse,
                 payload: 'Posting host info details...',
             })
 
             await apiClient.putHostContact(hostResponse)
 
             dispatch({
-                type: HostDashboardActionType.FinishPostResponse,
+                type: AdminDashboardActionType.FinishPostResponse,
                 payload: 'Finished host response...',
             })
         } catch (e) {
             dispatch({
-                type: HostDashboardActionType.Error,
+                type: AdminDashboardActionType.Error,
                 payload: `System error: ${e}`,
             })
         }
@@ -275,19 +292,19 @@ export function useHostDashboardData() {
         console.log(`postHostResponse: ${hostResponse} `)
         try {
             dispatch({
-                type: HostDashboardActionType.BeginPostResponse,
+                type: AdminDashboardActionType.BeginPostResponse,
                 payload: 'Posting host info details...',
             })
 
             await apiClient.putHostAddress(hostResponse)
 
             dispatch({
-                type: HostDashboardActionType.FinishPostResponse,
+                type: AdminDashboardActionType.FinishPostResponse,
                 payload: 'Finished host response...',
             })
         } catch (e) {
             dispatch({
-                type: HostDashboardActionType.Error,
+                type: AdminDashboardActionType.Error,
                 payload: `System error: ${e}`,
             })
         }
@@ -297,19 +314,19 @@ export function useHostDashboardData() {
         console.log(`postHostResponse: ${hostResponse} `)
         try {
             dispatch({
-                type: HostDashboardActionType.BeginPostResponse,
+                type: AdminDashboardActionType.BeginPostResponse,
                 payload: 'Posting host info details...',
             })
 
             await apiClient.putHostGender(hostResponse)
 
             dispatch({
-                type: HostDashboardActionType.FinishPostResponse,
+                type: AdminDashboardActionType.FinishPostResponse,
                 payload: 'Finished host response...',
             })
         } catch (e) {
             dispatch({
-                type: HostDashboardActionType.Error,
+                type: AdminDashboardActionType.Error,
                 payload: `System error: ${e}`,
             })
         }
@@ -319,19 +336,19 @@ export function useHostDashboardData() {
         console.log(`postHostResponse: ${hostResponse} `)
         try {
             dispatch({
-                type: HostDashboardActionType.BeginPostResponse,
+                type: AdminDashboardActionType.BeginPostResponse,
                 payload: 'Posting host info details...',
             })
 
             await apiClient.putHostLanguage(hostResponse)
 
             dispatch({
-                type: HostDashboardActionType.FinishPostResponse,
+                type: AdminDashboardActionType.FinishPostResponse,
                 payload: 'Finished host response...',
             })
         } catch (e) {
             dispatch({
-                type: HostDashboardActionType.Error,
+                type: AdminDashboardActionType.Error,
                 payload: `System error: ${e}`,
             })
         }
@@ -340,7 +357,7 @@ export function useHostDashboardData() {
     const refreshQuestions = async () => {
         try {
             dispatch({
-                type: HostDashboardActionType.BeginFetchQuestions,
+                type: AdminDashboardActionType.BeginFetchQuestions,
                 payload: 'Retrieving host questions...',
             })
 
@@ -367,12 +384,12 @@ export function useHostDashboardData() {
             // })
 
             dispatch({
-                type: HostDashboardActionType.FinishFetchQuestions,
+                type: AdminDashboardActionType.FinishFetchQuestions,
                 payload: hostQuestions,
             })
         } catch (e) {
             dispatch({
-                type: HostDashboardActionType.Error,
+                type: AdminDashboardActionType.Error,
                 payload: `System error: ${e}`,
             })
         }
@@ -384,7 +401,7 @@ export function useHostDashboardData() {
     ) => {
         try {
             dispatch({
-                type: HostDashboardActionType.BeginFetchQuestions,
+                type: AdminDashboardActionType.BeginFetchQuestions,
                 payload: 'Adding response option...',
             })
             await apiClient.addResponseOption(
@@ -395,7 +412,7 @@ export function useHostDashboardData() {
             await refreshQuestions()
         } catch (e) {
             dispatch({
-                type: HostDashboardActionType.Error,
+                type: AdminDashboardActionType.Error,
                 payload: `System error: ${e}`,
             })
         }
@@ -412,22 +429,22 @@ export function useHostDashboardData() {
     }
     console.log(`about to destructure context`)
     const [data, dispatch] = context as [
-        HostDashboardData,
-        React.Dispatch<HostDashboardAction>
+        AdminDashboardData,
+        React.Dispatch<AdminDashboardAction>
     ]
     console.log(`about to destructure context`)
 
     const deleteMatchingQuestion = async (questionId: string) => {
         try {
             dispatch({
-                type: HostDashboardActionType.BeginFetchQuestions,
+                type: AdminDashboardActionType.BeginFetchQuestions,
                 payload: 'Deleting question',
             })
             await apiClient.deleteQuestion('host', 'Matching', questionId)
             await refreshQuestions()
         } catch (e) {
             dispatch({
-                type: HostDashboardActionType.Error,
+                type: AdminDashboardActionType.Error,
                 payload: `System error: ${e}`,
             })
         }
@@ -436,14 +453,14 @@ export function useHostDashboardData() {
     const updateMatchingQuestion = async (question: MatchingQuestion) => {
         try {
             dispatch({
-                type: HostDashboardActionType.BeginFetchQuestions,
+                type: AdminDashboardActionType.BeginFetchQuestions,
                 payload: 'Updating question',
             })
             await apiClient.updateQuestion('host', 'Matching', question)
             await refreshQuestions()
         } catch (e) {
             dispatch({
-                type: HostDashboardActionType.Error,
+                type: AdminDashboardActionType.Error,
                 payload: `System error: ${e}`,
             })
         }
@@ -455,7 +472,7 @@ export function useHostDashboardData() {
     ) => {
         try {
             dispatch({
-                type: HostDashboardActionType.BeginFetchQuestions,
+                type: AdminDashboardActionType.BeginFetchQuestions,
                 payload: 'Updating question',
             })
             await apiClient.updateResponseOption(
@@ -466,7 +483,7 @@ export function useHostDashboardData() {
             await refreshQuestions()
         } catch (e) {
             dispatch({
-                type: HostDashboardActionType.Error,
+                type: AdminDashboardActionType.Error,
                 payload: `System error: ${e}`,
             })
         }

@@ -13,14 +13,21 @@ interface Props extends WithStyles<typeof styles> {
     name: string
     value: string
     label?: string
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+    onChange: (
+        event: React.ChangeEvent<HTMLInputElement>,
+        value?: string
+    ) => void
     ariaLabel: string
-    options: Array<any>
+    options: Array<{ id: string; label?: string; text?: string }>
 }
 
 //radiobuttons for single option answers
 const RadioButtons = (props: Props) => {
     const { name, value, onChange, ariaLabel, label, options, classes } = props
+
+    React.useEffect(() => {
+        console.log(`RadioButtons: value changed to ${value}`)
+    }, [value])
 
     return (
         <>
@@ -32,16 +39,28 @@ const RadioButtons = (props: Props) => {
                     value={value}
                     onChange={onChange}
                 >
-                    {options.map((option: any) => {
-                        return (
-                            <FormControlLabel
-                                key={option.value}
-                                label={option.label}
-                                control={<Radio />}
-                                value={option.value}
-                            />
-                        )
-                    })}
+                    {options.map(
+                        (option: {
+                            id: string
+                            label?: string
+                            text?: string
+                        }) => {
+                            return (
+                                <FormControlLabel
+                                    key={option.id}
+                                    label={option.label || option.text}
+                                    control={<Radio />}
+                                    value={option.id}
+                                    checked={(() => {
+                                        return (
+                                            value.toString().trim() ===
+                                            option.id.toString().trim()
+                                        )
+                                    })()}
+                                />
+                            )
+                        }
+                    )}
                 </RadioGroup>
             </FormControl>
         </>

@@ -15,19 +15,20 @@ import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 
 import TextInput from '../Registration/TextInput/TextInput'
 import Btn from '../Registration/Button/Button'
+import { Auth0User, useAuth0 } from '../../react-auth0-spa'
 
 //this component is not yet wrapped in the HostProvider
 
-interface FormValues {
-    email: string
-    phoneNumber: number
-    cellNumber: number
+interface HostContactDetails {
+    email?: string
+    phoneNumber?: string
+    cellNumber?: string
 }
 
-const initialValues: FormValues = {
-    email: '',
-    phoneNumber: NaN,
-    cellNumber: NaN,
+interface FormValues {
+    email: string
+    phoneNumber: string
+    cellNumber: string
 }
 
 const validationSchema = Yup.object()
@@ -35,8 +36,8 @@ const validationSchema = Yup.object()
         email: Yup.string()
             .email('Not a valid Email input')
             .required('Required'),
-        phoneNumber: Yup.number().min(10, 'Too Short!'),
-        cellNumber: Yup.number().min(10, 'Too Short!').required('Required'),
+        phoneNumber: Yup.string().length(10, 'Too Short!'),
+        cellNumber: Yup.string().length(10, 'Too Short!').required('Required'),
     })
     .test(
         'at least one number',
@@ -44,8 +45,16 @@ const validationSchema = Yup.object()
         (value) => !!(value.cellNumber || value.phoneNumber)
     )
 
-const HostFormAddress: React.FC = () => {
+interface HostFormContactProps {
+    contactDetails: HostContactDetails
+    onSubmitComplete?: () => void
+}
+
+const HostFormContact: React.FC<HostFormContactProps> = (
+    props: HostFormContactProps
+) => {
     const { putContactInfo } = useHostDashboardData()
+    const { user } = useAuth0()
 
     const [contactOrder, setContactOrder] = useState([
         'Email',
@@ -53,10 +62,20 @@ const HostFormAddress: React.FC = () => {
         'Phone Call',
     ])
 
+    const initialValues: FormValues = {
+        email: props.contactDetails.email || '',
+        phoneNumber: props.contactDetails.phoneNumber || '',
+        cellNumber: props.contactDetails.cellNumber || '',
+    }
+
     const handleSubmit = async (values: FormValues) => {
-        alert(JSON.stringify(values))
+        const payload = { ...values, email: (user as Auth0User).email }
+        // alert(JSON.stringify(payload))
         try {
-            await putContactInfo(values)
+            await putContactInfo(payload)
+            if (props.onSubmitComplete) {
+                props.onSubmitComplete()
+            }
         } catch (e) {
             console.log(`Error posting ${e}`)
         }
@@ -267,4 +286,4 @@ const HostFormAddress: React.FC = () => {
     )
 }
 
-export default HostFormAddress
+export default HostFormContact

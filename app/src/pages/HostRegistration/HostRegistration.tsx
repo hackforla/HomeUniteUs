@@ -27,26 +27,59 @@ export const DefaultRegComp = () => {
     return <div>Host Registration Default Component</div>
 }
 
-export const HostQuestionsPage = () => {
-    const {
-        getShowstopperQuestions,
-        getMatchingQuestions,
-    } = useHostDashboardData()
+export const ProgressBarTemp = () => {
+    return <></>
+}
+export interface QuestionPanelProps {
+    onResponseChanged: (response: string) => void
+}
+export const QuestionPanel = (props: QuestionPanelProps) => {
+    return <></>
+}
+export interface ControlPanelProps {
+    onSubmit: () => void
+}
+export const ControlPanel = (props: ControlPanelProps) => {
+    return <></>
+}
 
+export const QuestionPageTemp = () => {
+    const submit = () => {}
+    const changeResponse = () => {}
+    return (
+        <>
+            <ProgressBarTemp />
+            <QuestionPanel onResponseChanged={changeResponse} />
+            <ControlPanel onSubmit={submit} />
+        </>
+    )
+}
+
+export const HostQuestionsPage = () => {
     let { path } = useRouteMatch()
 
     return (
         <Switch>
             <Route
                 path={`${path}/qualifying/:questionId`}
+                component={QuestionPageTemp}
+            />
+            {/* <Route
+                path={`${path}/qualifying/:questionId`}
                 render={() => {
                     return (
-                        <ShowstopperQuestionPage
+                        <QuestionPage
                             stepwise={true}
                             onSubmit={handleSubmit}
                             showstopperQuestions={getShowstopperQuestions()}
                             matchingQuestions={getMatchingQuestions()}
                         />
+                        // <ShowstopperQuestionPage
+                        //     stepwise={true}
+                        //     onSubmit={handleSubmit}
+                        //     showstopperQuestions={getShowstopperQuestions()}
+                        //     matchingQuestions={getMatchingQuestions()}
+                        // />
                     )
                 }}
             />
@@ -69,15 +102,21 @@ export const HostQuestionsPage = () => {
                 path={`${path}/matching/:questionId`}
                 render={() => {
                     return (
-                        <MatchingQuestionPage
+                        <QuestionPage
                             stepwise={true}
                             onSubmit={handleSubmit}
                             showstopperQuestions={getShowstopperQuestions()}
                             matchingQuestions={getMatchingQuestions()}
                         />
+                        // <MatchingQuestionPage
+                        //     stepwise={true}
+                        //     onSubmit={handleSubmit}
+                        //     showstopperQuestions={getShowstopperQuestions()}
+                        //     matchingQuestions={getMatchingQuestions()}
+                        // />
                     )
                 }}
-            />
+            /> */}
 
             <Route exact path={`${path}`} component={DefaultRegComp} />
         </Switch>

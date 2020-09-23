@@ -11,19 +11,20 @@ import {
 import * as Yup from 'yup'
 import { TextInput } from '../Registration'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
+import { useAuth0, Auth0User } from '../../react-auth0-spa'
 
-interface FormValues {
+export interface HostInfoDetails {
+    firstName?: string
+    middleName?: string
+    lastName?: string
+    dateofBirth?: Date
+}
+
+export interface HostInfoFormValues {
     firstName: string
     middleName?: string
     lastName: string
     dateofBirth: Date
-}
-
-const initialValues: FormValues = {
-    firstName: '',
-    middleName: '',
-    lastName: '',
-    dateofBirth: new Date(),
 }
 
 const validationSchema = Yup.object().shape({
@@ -36,13 +37,33 @@ const validationSchema = Yup.object().shape({
         .max(new Date(), 'Birth cannot be in the future'),
 })
 
-const HostFormInfo: React.FC = () => {
+interface HostFormInfoProps {
+    infoDetails: HostInfoDetails
+    onSubmitComplete?: (values: HostInfoDetails) => void
+}
+
+const HostFormInfo: React.FC<HostFormInfoProps> = (
+    props: HostFormInfoProps
+) => {
     const { putPersonalInfo } = useHostDashboardData()
-    const handleSubmit = async (values: FormValues) => {
-        alert(JSON.stringify(values))
+    const { user } = useAuth0()
+
+    const initialValues: HostInfoFormValues = {
+        firstName: props.infoDetails.firstName || '',
+        middleName: props.infoDetails.middleName || '',
+        lastName: props.infoDetails.lastName || '',
+        dateofBirth: props.infoDetails.dateofBirth || new Date(),
+    }
+
+    const handleSubmit = async (values: HostInfoFormValues) => {
+        const payload = { ...values, email: (user as Auth0User).email }
+        // alert(JSON.stringify(payload))
 
         try {
-            await putPersonalInfo(values)
+            await putPersonalInfo(payload)
+            if (props.onSubmitComplete) {
+                props.onSubmitComplete(payload)
+            }
         } catch (e) {
             console.log(`Error posting ${e}`)
         }
