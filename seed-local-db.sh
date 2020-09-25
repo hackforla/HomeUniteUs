@@ -20,6 +20,11 @@ collection_names=( \
 )
 
 for c in "${collection_names[@]}"; do
-    echo "- importing data for collection: $c"
+    echo "============================================"
+    echo "=== $c ==="
+    echo "============================================"
+    echo "- deleting collection"
+    mongo --eval "db.$c.remove({});" hosthome
+    echo "- importing data"
     mongoimport -c=$c -d=hosthome --jsonArray --file=data/$c.json
 done;

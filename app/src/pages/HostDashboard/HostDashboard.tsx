@@ -201,9 +201,7 @@ const reducer = (
 
 export const HostDashboard = () => {
     const { data } = useHostDashboardData()
-
     const wrapper = new ApiWrapper()
-
     const [state, dispatch] = React.useReducer(reducer, initialState)
 
     React.useEffect(() => {
@@ -1010,7 +1008,7 @@ export const HostDashboard = () => {
         }
         return (
             <TableRow key={index}>
-                <TableCell>{index + 1}</TableCell>
+                <TableCell>{q.order}</TableCell>
                 <TableCell>{`${q.question[0].toUpperCase()}${q.question.slice(
                     1
                 )}`}</TableCell>
@@ -1043,6 +1041,9 @@ export const HostDashboard = () => {
         )
     }
 
+    const sortQuestionsByOrder = (a: Question, b: Question) =>
+        parseInt(a.order) < parseInt(b.order) ? -1 : a.order < b.order ? -1 : 1
+
     return (
         <>
             <MuiThemeProvider theme={theme}>
@@ -1066,7 +1067,9 @@ export const HostDashboard = () => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {state.questions.map(mapQuestiontoTableRow)}
+                                {state.questions
+                                    .sort(sortQuestionsByOrder)
+                                    .map(mapQuestiontoTableRow)}
                             </TableBody>
                         </Table>
                     </TableContainer>
