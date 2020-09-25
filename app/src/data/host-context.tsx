@@ -337,6 +337,74 @@ export function useHostDashboardData() {
         }
     }
 
+    //TODO: Hassen
+    //Support Image upload, a good example are the functions above.
+    // Getting host response and sending it to APIWrapper
+    // const putMultiplePictureInfo = async (hostResponse: Array<File>) => {
+    //     console.log(`PostHostResponse ${hostResponse}`)
+    //     try {
+    //         dispatch({
+    //             type: HostDashboardActionType.BeginPostResponse,
+    //             payload: 'Posting host picture info',
+    //         })
+
+    //         await apiClient.putHostPictures(hostResponse)
+
+    //         dispatch({
+    //             type: HostDashboardActionType.FinishPostResponse,
+    //             payload: 'Finished host picture Response',
+    //         })
+    //     } catch (e) {
+    //         dispatch({
+    //             type: HostDashboardActionType.Error,
+    //             payload: `System error: ${e}`,
+    //         })
+    //     }
+    // }
+
+    const putSinglePictureInfo = async (
+        hostResponse: File,
+        email: string,
+        subject: string
+    ) => {
+        console.log(`PostHostResponse ${hostResponse}`)
+        try {
+            dispatch({
+                type: HostDashboardActionType.BeginPostResponse,
+                payload: 'Posting host picture info',
+            })
+
+            await apiClient.putHostPictures(hostResponse, email, subject)
+
+            dispatch({
+                type: HostDashboardActionType.FinishPostResponse,
+                payload: 'Finished host picture Response',
+            })
+        } catch (e) {
+            dispatch({
+                type: HostDashboardActionType.Error,
+                payload: `System error: ${e}`,
+            })
+        }
+    }
+
+    //TODO: Hassen
+    //retrieve host picturs?
+    // const getPictureInfo = async () => {
+    //     try {
+    //         dispatch({
+    //             type: HostDashboardActionType.BeginFetchQuestions,
+    //             payload: 'Retrieving host pictures',
+    //         })
+    //         const hostPictures = await Promise.all(apiClient.getHostPictures())
+    //     } catch (e) {
+    //         dispatch({
+    //             type: HostDashboardActionType.Error,
+    //             payload: `System error: ${e}`,
+    //         })
+    //     }
+    // }
+
     const refreshQuestions = async () => {
         try {
             dispatch({
@@ -488,5 +556,7 @@ export function useHostDashboardData() {
         updateHostResponseOption,
         deleteMatchingQuestion,
         updateMatchingQuestion,
+        // putMultiplePictureInfo,
+        putSinglePictureInfo,
     }
 }

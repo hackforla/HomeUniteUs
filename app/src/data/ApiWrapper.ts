@@ -6,6 +6,7 @@ import { MatchingQuestionType } from '../models/MatchingQuestionType'
 import { HostResponse } from '../models/HostResponse'
 import {
     MatchingQuestion,
+    Photo,
     QualifyingQuestion,
     Question,
     QuestionType,
@@ -137,6 +138,7 @@ export class ApiWrapper {
         this.hostLanguageForm = new Fetcher<string>(
             `host/registration/language`
         )
+
         this.hostGenderForm = new Fetcher<string>(`host/registration/gender`)
 
         this.hostShowstopperResponse = new Fetcher<string>(
@@ -196,6 +198,61 @@ export class ApiWrapper {
 
     public async putHostLanguage(item: object): Promise<string> {
         return await this.hostLanguageForm.putResponse(item)
+    }
+
+    // TODO: Hassen
+    // put image wrapper here, follow the function examples above
+    //everything is any for testing purposes but will change for the future
+    public async putHostPictures(
+        image: File,
+        email: string,
+        subject: string
+    ): Promise<any> {
+        //return await this.hostPictureForm.putResponse(images)
+        try {
+            const payload = new FormData()
+            payload.append('email', email)
+            payload.append('subject', subject)
+            payload.append('image', image)
+            const response = await fetch('/api/uploadImage', {
+                method: 'POST',
+                body: payload,
+            })
+            if (response.status !== 200) {
+                throw new Error(`file ApiWrapper: ${response.statusText}`)
+            }
+        } catch (e) {
+            throw new Error(`getHostPictures got an ${e}`)
+        }
+    }
+
+    //TODO: hassen
+    // get images?
+    public async getHostPictures(
+        hostEmail: string,
+        subject: string
+    ): Promise<Array<Photo>> {
+        try {
+            const response: Response = await fetch(
+                `/api/host/images/${subject}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: hostEmail,
+                    }),
+                }
+            )
+            if (response.status !== 200) {
+                throw new Error(`file ApiWrapper: ${response.statusText}`)
+            }
+            const responseJson = await response.json()
+            return responseJson
+        } catch (e) {
+            throw new Error(`getHostPictures got an ${e}`)
+        }
     }
 
     public async putHostGender(item: object): Promise<string> {
