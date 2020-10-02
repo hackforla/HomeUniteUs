@@ -284,16 +284,22 @@ export class ApiWrapper {
     //delete host picture(s)
     //do i delete image by the image id? or do i use formData
     public async deleteHostPicture(
-        hostEmail: string,
-        subject: string
+        // hostEmail: string,
+        // subject: string
+        imageId: number
     ): Promise<any> {
         try {
-            const resp: Response = await fetch(`/api/host/image/${subject}`, {
+            const resp: Response = await fetch(`/api/host/image/${imageId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             })
+            if (resp.status !== 200) {
+                throw new Error(`file ApiWrapper: ${resp.statusText}`)
+            }
+            const responseJson = await resp.json()
+            return responseJson
         } catch (e) {
             throw new Error(`deleteHostPicture got an ${e}`)
         }
