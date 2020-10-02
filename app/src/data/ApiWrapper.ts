@@ -208,12 +208,37 @@ export class ApiWrapper {
         email: string,
         subject: string
     ): Promise<any> {
-        //return await this.hostPictureForm.putResponse(images)
         try {
             const payload = new FormData()
             payload.append('email', email)
             payload.append('subject', subject)
             payload.append('image', image)
+            const response = await fetch('/api/uploadImage', {
+                method: 'POST',
+                body: payload,
+            })
+            if (response.status !== 200) {
+                throw new Error(`file ApiWrapper: ${response.statusText}`)
+            }
+        } catch (e) {
+            throw new Error(`getHostPictures got an ${e}`)
+        }
+    }
+
+    public async putMultiHostPictures(
+        images: Array<File>,
+        email: string,
+        subject: string
+    ): Promise<any> {
+        //return await this.hostPictureForm.putResponse(images)
+        try {
+            const payload = new FormData()
+            payload.append('email', email)
+            payload.append('subject', subject)
+            for (let image in images) {
+                //i think this might work
+                payload.append('image', image)
+            }
             const response = await fetch('/api/uploadImage', {
                 method: 'POST',
                 body: payload,
@@ -252,6 +277,25 @@ export class ApiWrapper {
             return responseJson
         } catch (e) {
             throw new Error(`getHostPictures got an ${e}`)
+        }
+    }
+
+    //TODO: hassen
+    //delete host picture(s)
+    //do i delete image by the image id? or do i use formData
+    public async deleteHostPicture(
+        hostEmail: string,
+        subject: string
+    ): Promise<any> {
+        try {
+            const resp: Response = await fetch(`/api/host/image/${subject}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+        } catch (e) {
+            throw new Error(`deleteHostPicture got an ${e}`)
         }
     }
 
