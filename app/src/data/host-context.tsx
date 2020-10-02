@@ -315,6 +315,8 @@ export function useHostDashboardData() {
         }
     }
 
+    //TODO Hassen
+    // Support single image upload
     const putLanguageInfo = async (hostResponse: object) => {
         console.log(`postHostResponse: ${hostResponse} `)
         try {
@@ -338,29 +340,32 @@ export function useHostDashboardData() {
     }
 
     //TODO: Hassen
-    //Support Image upload, a good example are the functions above.
-    // Getting host response and sending it to APIWrapper
-    // const putMultiplePictureInfo = async (hostResponse: Array<File>) => {
-    //     console.log(`PostHostResponse ${hostResponse}`)
-    //     try {
-    //         dispatch({
-    //             type: HostDashboardActionType.BeginPostResponse,
-    //             payload: 'Posting host picture info',
-    //         })
+    // Support multi image upload
+    const putMultiplePictureInfo = async (
+        hostResponse: Array<File>,
+        email: string,
+        subject: string
+    ) => {
+        console.log(`PostHostResponse ${hostResponse}`)
+        try {
+            dispatch({
+                type: HostDashboardActionType.BeginPostResponse,
+                payload: 'Posting host picture info',
+            })
 
-    //         await apiClient.putHostPictures(hostResponse)
+            await apiClient.putMultiHostPictures(hostResponse, email, subject)
 
-    //         dispatch({
-    //             type: HostDashboardActionType.FinishPostResponse,
-    //             payload: 'Finished host picture Response',
-    //         })
-    //     } catch (e) {
-    //         dispatch({
-    //             type: HostDashboardActionType.Error,
-    //             payload: `System error: ${e}`,
-    //         })
-    //     }
-    // }
+            dispatch({
+                type: HostDashboardActionType.FinishPostResponse,
+                payload: 'Finished host picture Response',
+            })
+        } catch (e) {
+            dispatch({
+                type: HostDashboardActionType.Error,
+                payload: `System error: ${e}`,
+            })
+        }
+    }
 
     const putSinglePictureInfo = async (
         hostResponse: File,
@@ -556,7 +561,7 @@ export function useHostDashboardData() {
         updateHostResponseOption,
         deleteMatchingQuestion,
         updateMatchingQuestion,
-        // putMultiplePictureInfo,
+        putMultiplePictureInfo,
         putSinglePictureInfo,
     }
 }
