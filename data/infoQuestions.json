@@ -1,44 +1,359 @@
 [
-  {
-    "id": "58",
-    "group": "info",
-    "order": 1,
-    "question": "bio"
-  },
-  {
-    "id": "59",
-    "group": "info",
-    "order": 2,
-    "question": "address"
-  },
-  {
-    "id": "60",
-    "group": "info",
-    "order": 3,
-    "question": "language"
-  },
-  {
-    "id": "61",
-    "group": "info",
-    "order": 4,
-    "question": "gender"
-  },
-  {
-    "id": "62",
-    "group": "info",
-    "order": 5,
-    "question": "contact"
-  },
-  {
-    "id": "63",
-    "group": "info",
-    "order": 41,
-    "question": "homephoto"
-  },
-  {
-    "id": "64",
-    "group": "info",
-    "order": 42,
-    "question": "hostphoto"
-  }
+    {
+        "id": "7",
+        "type": "text",
+        "group": "Bio",
+        "subgroup": "Full name",
+        "order": 10,
+        "question": "First Name"
+    },
+    {
+        "id": "8",
+        "type": "text",
+        "group": "Bio",
+        "subgroup": "Full name",
+        "order": 11,
+        "question": "Middle Name"
+    },
+    {
+        "id": "9",
+        "type": "text",
+        "group": "Bio",
+        "subgroup": "Full name",
+        "order": 12,
+        "question": "Last Name"
+    },
+    {
+        "id": "16",
+        "type": "text",
+        "group": "Bio",
+        "order": 13,
+        "question": "Date of birth"
+    },
+    {
+        "id": "17",
+        "type": "checkbox",
+        "group": "Bio",
+        "subgroup": "Gender",
+        "order": 14,
+        "question": "What gender(s) do you most identify with?",
+        "options": [
+            {
+                "label": "Female",
+                "value": "female",
+                "id": 1
+            },
+            {
+                "label": "Male",
+                "value": "male",
+                "id": 2
+            },
+            {
+                "label": "Trans Man",
+                "value": "trans-man",
+                "id": 3
+            },
+            {
+                "label": "Trans Woman",
+                "value": "trans-woman",
+                "id": 4
+            },
+            {
+                "label": "Non Binary",
+                "value": "non-binary",
+                "id": 5
+            },
+            {
+                "label": "Prefer not to identify",
+                "value": "prefer-not",
+                "id": 6
+            },
+            {
+                "label": "Describe your gender",
+                "value": "describe",
+                "id": 7
+            }
+        ]
+    },
+    {
+        "id": "18",
+        "type": "radio",
+        "group": "Bio",
+        "order": 15,
+        "question": "Do you have another family member to add?- opens duplicate screen of page 11 for a new family member if yes",
+        "options": [
+            {
+                "label": "Yes",
+                "value": "yes",
+                "id": 8
+            },
+            {
+                "label": "No",
+                "value": "no",
+                "id": 9
+            }
+        ]
+    },
+    {
+        "id": "19",
+        "type": "text",
+        "group": "Bio",
+        "order": 16,
+        "question": "Contact email"
+    },
+    {
+        "id": "20",
+        "type": "text",
+        "group": "Bio",
+        "order": 17,
+        "question": "Contact phone"
+    },
+    {
+        "id": "21",
+        "type": "radio",
+        "group": "Bio",
+        "order": 18,
+        "question": "Prefered contact method",
+        "options": [
+            {
+                "label": "Email",
+                "value": "email",
+                "id": 10
+            },
+            {
+                "label": "SMS",
+                "value": "sms",
+                "id": 11
+            },
+            {
+                "label": "Call",
+                "value": "call",
+                "id": 12
+            }
+        ]
+    },
+    {
+        "id": "22",
+        "type": "text",
+        "group": "Bio",
+        "subgroup": "Contact Address",
+        "order": 19,
+        "question": "Street"
+    },
+    {
+        "id": "23",
+        "type": "text",
+        "group": "Bio",
+        "subgroup": "Contact Address",
+        "order": 20,
+        "question": "City"
+    },
+    {
+        "id": "24",
+        "type": "text",
+        "group": "Bio",
+        "subgroup": "Contact Address",
+        "order": 21,
+        "question": "Zip"
+    },
+    {
+        "id": "25",
+        "type": "radio",
+        "group": "Bio",
+        "order": 22,
+        "question": "Is your contact address the same as your residential address?- opens duplicate screen of question 15 if no",
+        "options": [
+            {
+                "label": "Yes",
+                "value": "yes",
+                "id": 13
+            },
+            {
+                "label": "No",
+                "value": "no",
+                "id": 14
+            }
+        ]
+    },
+    {
+        "id": "29",
+        "type": "radio",
+        "group": "Bio",
+        "order": 23,
+        "question": "Housing Type",
+        "options": [
+            {
+                "label": "Owned",
+                "value": "owned",
+                "id": 15
+            },
+            {
+                "label": "Rented",
+                "value": "rented",
+                "id": 16
+            }
+        ]
+    },
+    {
+        "id": "30",
+        "type": "radio",
+        "group": "Bio",
+        "subgroup": "Housing Type",
+        "order": 24,
+        "question": "Housing Type",
+        "options": [
+            {
+                "label": "Single family house",
+                "value": "single",
+                "id": 17
+            },
+            {
+                "label": "Multi-unit",
+                "value": "multi",
+                "id": 18
+            },
+            {
+                "label": "Mobile home",
+                "value": "mobile",
+                "id": 19
+            },
+            {
+                "label": "Apartment",
+                "value": "apartment",
+                "id": 20
+            }
+        ]
+    },
+    {
+        "id": "31",
+        "type": "text",
+        "group": "Bio",
+        "subgroup": "Housing Type",
+        "order": 25,
+        "question": "Other"
+    },
+    {
+        "id": "32",
+        "type": "radio",
+        "group": "Bio",
+        "order": 26,
+        "question": "Are you interested in being a temporary (1-10 days) or full time host (3-6 months)?",
+        "options": [
+            {
+                "label": "Temporary",
+                "value": "temporary",
+                "id": 21
+            },
+            {
+                "label": "Full time",
+                "value": "full",
+                "id": 22
+            }
+        ]
+    },
+    {
+        "id": "33",
+        "type": "text",
+        "group": "Bio",
+        "subgroup": "Job",
+        "order": 27,
+        "question": "Place of Employment"
+    },
+    {
+        "id": "34",
+        "type": "text",
+        "group": "Bio",
+        "subgroup": "Job",
+        "order": 28,
+        "question": "Job Title"
+    },
+    {
+        "id": "58",
+        "type": "textarea",
+        "group": "Personal",
+        "order": 42,
+        "question": "What are your passions, interests, and hobbies?"
+    },
+    {
+        "id": "59",
+        "type": "text",
+        "group": "Personal",
+        "order": 43,
+        "question": "What languages do you speak at home"
+    },
+    {
+        "id": "60",
+        "type": "textarea",
+        "group": "Personal",
+        "order": 44,
+        "question": "Describe any preferred or ideal characteristics you hope for in a guest"
+    },
+    {
+        "id": "61",
+        "type": "textarea",
+        "group": "Personal",
+        "order": 45,
+        "question": "Please share why you are interested in hosting a young person experiencing homelessness"
+    },
+    {
+        "id": "62",
+        "type": "textarea",
+        "group": "Personal",
+        "order": 46,
+        "question": "Please share any strengths, skills, or experience you have that you believe will make you a successful host"
+    },
+    {
+        "id": "63",
+        "type": "textarea",
+        "group": "Personal",
+        "order": 47,
+        "question": "Please describe any challenges you foresee in your role as host"
+    },
+    {
+        "id": "64",
+        "type": "textarea",
+        "group": "Personal",
+        "order": 48,
+        "question": "As a way of starting your host profile, please take a moment to write something to introduce yourself to potential guests. Feel free to talk about your passions and hobbies, your family, your home values, or anything else that feels important to you."
+    },
+    {
+        "id": "38",
+        "type": "text",
+        "group": "Bio",
+        "subgroup": "Gender",
+        "order": "14a",
+        "question": "Describe your gender",
+        "conditional_id": "17",
+        "conditional_value": "describe"
+    },
+    {
+        "id": "26",
+        "type": "text",
+        "group": "Bio",
+        "subgroup": "Residential Address",
+        "order": "22a",
+        "question": "Street",
+        "conditional_id": "25",
+        "conditional_value": "no"
+    },
+    {
+        "id": "27",
+        "type": "text",
+        "group": "Bio",
+        "subgroup": "Residential Address",
+        "order": "22b",
+        "question": "City",
+        "conditional_id": "25",
+        "conditional_value": "no"
+    },
+    {
+        "id": "28",
+        "type": "text",
+        "group": "Bio",
+        "subgroup": "Residential Address",
+        "order": "22c",
+        "question": "Zip",
+        "conditional_id": "25",
+        "conditional_value": "no"
+    }
 ]

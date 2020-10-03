@@ -11,7 +11,7 @@ export interface GenericQuestion {
     id: string
     group: QuestionType
     question: string
-    order: number
+    order: string
 }
 
 export interface QualifyingQuestion extends GenericQuestion {
