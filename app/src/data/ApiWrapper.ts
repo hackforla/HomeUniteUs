@@ -201,8 +201,6 @@ export class ApiWrapper {
     }
 
     // TODO: Hassen
-    // put image wrapper here, follow the function examples above
-    //everything is any for testing purposes but will change for the future
     public async putHostPictures(
         image: File,
         email: string,
@@ -230,7 +228,6 @@ export class ApiWrapper {
         email: string,
         subject: string
     ): Promise<any> {
-        //return await this.hostPictureForm.putResponse(images)
         try {
             const payload = new FormData()
             payload.append('email', email)
@@ -251,8 +248,23 @@ export class ApiWrapper {
         }
     }
 
+    public async downloadPhoto(imageId: string) {
+        try {
+            const response: Response = await fetch(
+                `/api/host/images/download/${imageId}`
+            )
+            if (response.status !== 200) {
+                throw new Error(
+                    `fetch failed in downloadPhoto function: ${response.statusText}`
+                )
+            }
+            return await response.blob()
+        } catch (e) {
+            throw new Error(`downloadPhoto failed for: ${imageId}, ${e}`)
+        }
+    }
+
     //TODO: hassen
-    // get images?
     public async getHostPictures(
         hostEmail: string,
         subject: string
@@ -281,19 +293,19 @@ export class ApiWrapper {
     }
 
     //TODO: hassen
-    //delete host picture(s)
-    //do i delete image by the image id? or do i use formData
     public async deleteHostPicture(
-        // hostEmail: string,
-        // subject: string
+        hostEmail: string,
         imageId: number
-    ): Promise<any> {
+    ): Promise<void> {
         try {
             const resp: Response = await fetch(`/api/host/image/${imageId}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
+                body: JSON.stringify({
+                    email: hostEmail,
+                }),
             })
             if (resp.status !== 200) {
                 throw new Error(`file ApiWrapper: ${resp.statusText}`)

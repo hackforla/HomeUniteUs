@@ -24,7 +24,6 @@ function ImageUploadComponent(props: ImageUploadComponentProps) {
         try {
             images.forEach((image: File) => {
                 putSinglePictureInfo(image, email, 'home')
-                // putMultiplePictureInfo(images, email, 'home')
             })
         } catch (e) {
             console.log(e)
