@@ -205,7 +205,7 @@ export class ApiWrapper {
         image: File,
         email: string,
         subject: string
-    ): Promise<any> {
+    ): Promise<void> {
         try {
             const payload = new FormData()
             payload.append('email', email)
@@ -227,7 +227,7 @@ export class ApiWrapper {
         images: Array<File>,
         email: string,
         subject: string
-    ): Promise<any> {
+    ): Promise<void> {
         try {
             const payload = new FormData()
             payload.append('email', email)
