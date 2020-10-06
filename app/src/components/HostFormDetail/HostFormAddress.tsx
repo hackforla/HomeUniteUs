@@ -99,7 +99,7 @@ const HostFormAddress: React.FC<HostFormAddressProps> = (
                                         autoComplete="off"
                                         name="address"
                                         variant="outlined"
-                                        as={TextField} //error doesnt show when using arshia mui textInput
+                                        as={TextField}
                                         style={{ marginBottom: '1.5rem' }}
                                     />
                                     <ErrorMessage name="address">

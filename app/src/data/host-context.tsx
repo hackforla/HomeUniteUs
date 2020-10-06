@@ -24,8 +24,8 @@ interface HostDashboardData {
 }
 
 enum HostDashboardActionType {
-    BeginFetchQuestions,
-    FinishFetchQuestions,
+    BeginFetch,
+    FinishFetch,
     GetHostById,
     isLoading,
     BeginPostResponse,
@@ -59,7 +59,7 @@ function hostDashboardReducer(
     action: HostDashboardAction
 ): HostDashboardData {
     switch (action.type) {
-        case HostDashboardActionType.BeginFetchQuestions: {
+        case HostDashboardActionType.BeginFetch: {
             return {
                 ...state,
                 loaderState: {
@@ -68,7 +68,7 @@ function hostDashboardReducer(
                 },
             }
         }
-        case HostDashboardActionType.FinishFetchQuestions: {
+        case HostDashboardActionType.FinishFetch: {
             return {
                 ...state,
                 loaderState: {
@@ -118,7 +118,7 @@ export function HostDashboardDataProvider(
             console.log('loadData: fetching...')
             try {
                 dispatch({
-                    type: HostDashboardActionType.BeginFetchQuestions,
+                    type: HostDashboardActionType.BeginFetch,
                     payload: 'Retrieving host questions...',
                 })
 
@@ -145,7 +145,7 @@ export function HostDashboardDataProvider(
                 // })
 
                 dispatch({
-                    type: HostDashboardActionType.FinishFetchQuestions,
+                    type: HostDashboardActionType.FinishFetch,
                     payload: hostQuestions,
                 })
             } catch (e) {
@@ -315,6 +315,7 @@ export function useHostDashboardData() {
         }
     }
 
+    //TODO Hassen
     const putLanguageInfo = async (hostResponse: object) => {
         console.log(`postHostResponse: ${hostResponse} `)
         try {
@@ -337,10 +338,83 @@ export function useHostDashboardData() {
         }
     }
 
+    //TODO: Hassen
+    const putMultiplePictureInfo = async (
+        hostResponse: Array<File>,
+        email: string,
+        subject: string
+    ) => {
+        console.log(`PostHostResponse ${hostResponse}`)
+        try {
+            dispatch({
+                type: HostDashboardActionType.BeginPostResponse,
+                payload: 'Posting host picture info',
+            })
+
+            await apiClient.putMultiHostPictures(hostResponse, email, subject)
+
+            dispatch({
+                type: HostDashboardActionType.FinishPostResponse,
+                payload: 'Finished host picture Response',
+            })
+        } catch (e) {
+            dispatch({
+                type: HostDashboardActionType.Error,
+                payload: `System error: ${e}`,
+            })
+        }
+    }
+
+    const putSinglePictureInfo = async (
+        hostResponse: File,
+        email: string,
+        subject: string
+    ) => {
+        console.log(`PostHostResponse ${hostResponse}`)
+        try {
+            dispatch({
+                type: HostDashboardActionType.BeginPostResponse,
+                payload: 'Posting host picture info',
+            })
+
+            await apiClient.putHostPictures(hostResponse, email, subject)
+
+            dispatch({
+                type: HostDashboardActionType.FinishPostResponse,
+                payload: 'Finished host picture Response',
+            })
+        } catch (e) {
+            dispatch({
+                type: HostDashboardActionType.Error,
+                payload: `System error: ${e}`,
+            })
+        }
+    }
+
+    //TODO: Hassen
+    const getPictureInfo = async (email: string, subject: string) => {
+        try {
+            dispatch({
+                type: HostDashboardActionType.BeginFetch,
+                payload: 'Retrieving host pictures',
+            })
+            const hostPictures = await apiClient.getHostPictures(email, subject)
+            dispatch({
+                type: HostDashboardActionType.FinishFetch,
+            })
+            return hostPictures
+        } catch (e) {
+            dispatch({
+                type: HostDashboardActionType.Error,
+                payload: `System error: ${e}`,
+            })
+        }
+    }
+
     const refreshQuestions = async () => {
         try {
             dispatch({
-                type: HostDashboardActionType.BeginFetchQuestions,
+                type: HostDashboardActionType.BeginFetch,
                 payload: 'Retrieving host questions...',
             })
 
@@ -367,7 +441,7 @@ export function useHostDashboardData() {
             // })
 
             dispatch({
-                type: HostDashboardActionType.FinishFetchQuestions,
+                type: HostDashboardActionType.FinishFetch,
                 payload: hostQuestions,
             })
         } catch (e) {
@@ -384,7 +458,7 @@ export function useHostDashboardData() {
     ) => {
         try {
             dispatch({
-                type: HostDashboardActionType.BeginFetchQuestions,
+                type: HostDashboardActionType.BeginFetch,
                 payload: 'Adding response option...',
             })
             await apiClient.addResponseOption(
@@ -420,7 +494,7 @@ export function useHostDashboardData() {
     const deleteMatchingQuestion = async (questionId: string) => {
         try {
             dispatch({
-                type: HostDashboardActionType.BeginFetchQuestions,
+                type: HostDashboardActionType.BeginFetch,
                 payload: 'Deleting question',
             })
             await apiClient.deleteQuestion('host', 'Matching', questionId)
@@ -436,7 +510,7 @@ export function useHostDashboardData() {
     const updateMatchingQuestion = async (question: MatchingQuestion) => {
         try {
             dispatch({
-                type: HostDashboardActionType.BeginFetchQuestions,
+                type: HostDashboardActionType.BeginFetch,
                 payload: 'Updating question',
             })
             await apiClient.updateQuestion('host', 'Matching', question)
@@ -455,7 +529,7 @@ export function useHostDashboardData() {
     ) => {
         try {
             dispatch({
-                type: HostDashboardActionType.BeginFetchQuestions,
+                type: HostDashboardActionType.BeginFetch,
                 payload: 'Updating question',
             })
             await apiClient.updateResponseOption(
@@ -488,5 +562,8 @@ export function useHostDashboardData() {
         updateHostResponseOption,
         deleteMatchingQuestion,
         updateMatchingQuestion,
+        putMultiplePictureInfo,
+        putSinglePictureInfo,
+        getPictureInfo,
     }
 }
