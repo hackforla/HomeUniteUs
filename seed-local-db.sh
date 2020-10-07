@@ -26,5 +26,5 @@ for c in "${collection_names[@]}"; do
     echo "- deleting collection"
     mongo --eval "db.$c.remove({});" hosthome
     echo "- importing data"
-    mongoimport -c=$c -d=hosthome --jsonArray --file=data/$c.json
+    mongoimport -c=$c -d=hosthome --jsonArray --file=data/seed/$c.json
 done;

@@ -5,9 +5,10 @@ import {
     useHostDashboardData,
 } from '../../data/host-context'
 import QuestionPage from '../../components/ProfileEdit/QuestionPage'
-import { Switch, Route, useRouteMatch } from 'react-router'
+import { Switch, Route, useRouteMatch, useParams } from 'react-router'
 import MatchingQuestionPage from '../../components/ProfileEdit/MatchingQuestionPage'
 import ShowstopperQuestionPage from '../../components/ProfileEdit/ShowstopperQuestionPage'
+import { Question } from '../../models/v2'
 
 const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault()
@@ -31,10 +32,25 @@ export const ProgressBarTemp = () => {
     return <></>
 }
 export interface QuestionPanelProps {
+    question: Question
     onResponseChanged: (response: string) => void
 }
 export const QuestionPanel = (props: QuestionPanelProps) => {
-    return <></>
+    // get question from context
+    // if info question then
+    const { questionType, questionId } = useParams()
+    return (
+        <>
+            {() => {
+                switch (questionType) {
+                    case 'matching':
+                        return <div />
+                    default:
+                        throw new Error()
+                }
+            }}
+        </>
+    )
 }
 export interface ControlPanelProps {
     onSubmit: () => void
@@ -45,7 +61,11 @@ export const ControlPanel = (props: ControlPanelProps) => {
 
 export const QuestionPageTemp = () => {
     const submit = () => {}
-    const changeResponse = () => {}
+
+    const changeResponse = () => {
+        // get conditional qs
+    }
+
     return (
         <>
             <ProgressBarTemp />
@@ -60,11 +80,17 @@ export const HostQuestionsPage = () => {
 
     return (
         <Switch>
-            <Route
+            {/* <Route
                 path={`${path}/qualifying/:questionId`}
                 component={QuestionPageTemp}
+            /> */}
+            <Route
+                path={`${path}/:questionType/:questionId`}
+                component={QuestionPageTemp}
             />
-            {/* <Route
+            {/* 
+
+            <Route
                 path={`${path}/qualifying/:questionId`}
                 render={() => {
                     return (
