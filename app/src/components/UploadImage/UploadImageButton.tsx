@@ -5,6 +5,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
 import styled, { StyledComponent } from 'styled-components'
 import { Photo } from '../../models/v2'
+import { useHostDashboardData } from '../../data/host-context'
 
 const ContainerStyles: CSSProperties = {
     borderWidth: '2px',
@@ -118,6 +119,9 @@ interface UploadImageButtonProps {
 const UploadImageButton: (props: UploadImageButtonProps) => JSX.Element = (
     props: UploadImageButtonProps
 ) => {
+    //custom hook here
+    // const { putPictureInfo } = useHostDashboardData()
+
     const [selectedImage, setSelectedImage]: any = useState<string[] | []>([])
 
     const [imageFiles, setImageFiles] = useState(new Array<File>())

@@ -6,6 +6,7 @@ import { MatchingQuestionType } from '../models/MatchingQuestionType'
 import { HostResponse } from '../models/HostResponse'
 import {
     MatchingQuestion,
+    Photo,
     QualifyingQuestion,
     Question,
     QuestionType,
@@ -137,6 +138,7 @@ export class ApiWrapper {
         this.hostLanguageForm = new Fetcher<string>(
             `host/registration/language`
         )
+
         this.hostGenderForm = new Fetcher<string>(`host/registration/gender`)
 
         this.hostShowstopperResponse = new Fetcher<string>(
@@ -196,6 +198,123 @@ export class ApiWrapper {
 
     public async putHostLanguage(item: object): Promise<string> {
         return await this.hostLanguageForm.putResponse(item)
+    }
+
+    // TODO: Hassen
+    public async putHostPictures(
+        image: File,
+        email: string,
+        subject: string
+    ): Promise<void> {
+        try {
+            const payload = new FormData()
+            payload.append('email', email)
+            payload.append('subject', subject)
+            payload.append('image', image)
+            const response = await fetch('/api/uploadImage', {
+                method: 'POST',
+                body: payload,
+            })
+            if (response.status !== 200) {
+                throw new Error(`file ApiWrapper: ${response.statusText}`)
+            }
+        } catch (e) {
+            throw new Error(`getHostPictures got an ${e}`)
+        }
+    }
+
+    public async putMultiHostPictures(
+        images: Array<File>,
+        email: string,
+        subject: string
+    ): Promise<void> {
+        try {
+            const payload = new FormData()
+            payload.append('email', email)
+            payload.append('subject', subject)
+            for (let image in images) {
+                //i think this might work
+                payload.append('image', image)
+            }
+            const response = await fetch('/api/uploadImage', {
+                method: 'POST',
+                body: payload,
+            })
+            if (response.status !== 200) {
+                throw new Error(`file ApiWrapper: ${response.statusText}`)
+            }
+        } catch (e) {
+            throw new Error(`getHostPictures got an ${e}`)
+        }
+    }
+
+    public async downloadPhoto(imageId: string) {
+        try {
+            const response: Response = await fetch(
+                `/api/host/images/download/${imageId}`
+            )
+            if (response.status !== 200) {
+                throw new Error(
+                    `fetch failed in downloadPhoto function: ${response.statusText}`
+                )
+            }
+            return await response.blob()
+        } catch (e) {
+            throw new Error(`downloadPhoto failed for: ${imageId}, ${e}`)
+        }
+    }
+
+    //TODO: hassen
+    public async getHostPictures(
+        hostEmail: string,
+        subject: string
+    ): Promise<Array<Photo>> {
+        try {
+            const response: Response = await fetch(
+                `/api/host/images/${subject}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: hostEmail,
+                    }),
+                }
+            )
+            if (response.status !== 200) {
+                throw new Error(`file ApiWrapper: ${response.statusText}`)
+            }
+            const responseJson = await response.json()
+            return responseJson
+        } catch (e) {
+            throw new Error(`getHostPictures got an ${e}`)
+        }
+    }
+
+    //TODO: hassen
+    public async deleteHostPicture(
+        hostEmail: string,
+        imageId: number
+    ): Promise<void> {
+        try {
+            const resp: Response = await fetch(`/api/host/image/${imageId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+                body: JSON.stringify({
+                    email: hostEmail,
+                }),
+            })
+            if (resp.status !== 200) {
+                throw new Error(`file ApiWrapper: ${resp.statusText}`)
+            }
+            const responseJson = await resp.json()
+            return responseJson
+        } catch (e) {
+            throw new Error(`deleteHostPicture got an ${e}`)
+        }
     }
 
     public async putHostGender(item: object): Promise<string> {
