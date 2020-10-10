@@ -8,15 +8,17 @@
             {
                 "label": "Yes",
                 "value": "yes",
-                "id": 51
+                "id": 29
             },
             {
                 "label": "No",
                 "value": "no",
-                "id": 52
+                "id": 30
             }
         ],
-        "org": "spy"
+        "org": "spy",
+        "isActive": true,
+        "questionType": "qualifying"
     },
     {
         "id": "11",
@@ -27,15 +29,17 @@
             {
                 "label": "Yes",
                 "value": "yes",
-                "id": 53
+                "id": 31
             },
             {
                 "label": "No",
                 "value": "no",
-                "id": 54
+                "id": 32
             }
         ],
-        "org": "spy"
+        "org": "spy",
+        "isActive": true,
+        "questionType": "qualifying"
     },
     {
         "id": "12",
@@ -46,15 +50,17 @@
             {
                 "label": "Yes",
                 "value": "yes",
-                "id": 55
+                "id": 33
             },
             {
                 "label": "No",
                 "value": "no",
-                "id": 56
+                "id": 34
             }
         ],
-        "org": "spy"
+        "org": "spy",
+        "isActive": true,
+        "questionType": "qualifying"
     },
     {
         "id": "13",
@@ -65,15 +71,17 @@
             {
                 "label": "Yes",
                 "value": "yes",
-                "id": 57
+                "id": 35
             },
             {
                 "label": "No",
                 "value": "no",
-                "id": 58
+                "id": 36
             }
         ],
-        "org": "spy"
+        "org": "spy",
+        "isActive": true,
+        "questionType": "qualifying"
     },
     {
         "id": "14",
@@ -84,15 +92,17 @@
             {
                 "label": "Yes",
                 "value": "yes",
-                "id": 59
+                "id": 37
             },
             {
                 "label": "No",
                 "value": "no",
-                "id": 60
+                "id": 38
             }
         ],
-        "org": "spy"
+        "org": "spy",
+        "isActive": true,
+        "questionType": "qualifying"
     },
     {
         "id": "15",
@@ -103,15 +113,17 @@
             {
                 "label": "Yes",
                 "value": "yes",
-                "id": 61
+                "id": 39
             },
             {
                 "label": "No",
                 "value": "no",
-                "id": 62
+                "id": 40
             }
         ],
-        "org": "spy"
+        "org": "spy",
+        "isActive": true,
+        "questionType": "qualifying"
     },
     {
         "id": "1",
@@ -122,15 +134,17 @@
             {
                 "label": "Yes",
                 "value": "yes",
-                "id": 63
+                "id": 41
             },
             {
                 "label": "No",
                 "value": "no",
-                "id": 64
+                "id": 42
             }
         ],
-        "org": "spy"
+        "org": "spy",
+        "isActive": true,
+        "questionType": "qualifying"
     },
     {
         "id": "2",
@@ -141,15 +155,17 @@
             {
                 "label": "Yes",
                 "value": "yes",
-                "id": 65
+                "id": 43
             },
             {
                 "label": "No",
                 "value": "no",
-                "id": 66
+                "id": 44
             }
         ],
-        "org": "spy"
+        "org": "spy",
+        "isActive": true,
+        "questionType": "qualifying"
     },
     {
         "id": "3",
@@ -160,14 +176,16 @@
             {
                 "label": "Yes",
                 "value": "yes",
-                "id": 67
+                "id": 45
             },
             {
                 "label": "No",
                 "value": "no",
-                "id": 68
+                "id": 46
             }
         ],
-        "org": "spy"
+        "org": "spy",
+        "isActive": true,
+        "questionType": "qualifying"
     }
 ]
