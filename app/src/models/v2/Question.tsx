@@ -1,15 +1,10 @@
-export type QuestionType =
-    | 'Qualifying'
-    | 'Info'
-    | 'Matching'
-    | 'Bio'
-    | 'Personal'
-    | 'info'
+export type QuestionType = 'qualifying' | 'matching' | 'info'
 
 export interface GenericQuestion {
     _id: string
     id: string
-    group: QuestionType
+    questionType: QuestionType
+    group: string
     question: string
     order: string
 }

@@ -618,8 +618,8 @@ export const HostDashboard = () => {
         if (!state.questionModal.question.group) {
             return <div>No question selected</div>
         }
-        switch (state.questionModal.question.group) {
-            case 'Qualifying':
+        switch (state.questionModal.question.questionType) {
+            case 'qualifying':
                 const qq = state.questionModal.question as QualifyingQuestion
                 return (
                     <div>
@@ -884,7 +884,8 @@ export const HostDashboard = () => {
                         })
 
                         if (
-                            state.questionModal.question.group === 'Qualifying'
+                            state.questionModal.question.questionType ===
+                            'qualifying'
                         ) {
                             try {
                                 console.log(

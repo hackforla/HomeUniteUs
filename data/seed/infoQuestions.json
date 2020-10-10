@@ -2,388 +2,75 @@
     {
         "id": "7",
         "type": "text",
+        "questionType": "info",
         "group": "Bio",
-        "subgroup": "Full name",
+        "subgroup": "Personal Details",
         "order": 10,
-        "question": "First Name",
-        "org": "spy"
-    },
-    {
-        "id": "8",
-        "type": "text",
-        "group": "Bio",
-        "subgroup": "Full name",
-        "order": 11,
-        "question": "Middle Name",
-        "org": "spy"
-    },
-    {
-        "id": "9",
-        "type": "text",
-        "group": "Bio",
-        "subgroup": "Full name",
-        "order": 12,
-        "question": "Last Name",
-        "org": "spy"
-    },
-    {
-        "id": "16",
-        "type": "text",
-        "group": "Bio",
-        "order": 13,
-        "question": "Date of birth",
-        "org": "spy"
+        "question": "bio",
+        "org": "spy",
+        "isActive": true
     },
     {
         "id": "17",
         "type": "checkbox",
+        "questionType": "info",
         "group": "Bio",
         "subgroup": "Gender",
-        "order": 14,
-        "question": "What gender(s) do you most identify with?",
-        "options": [
-            {
-                "label": "Female",
-                "value": "female",
-                "id": 1
-            },
-            {
-                "label": "Male",
-                "value": "male",
-                "id": 2
-            },
-            {
-                "label": "Trans Man",
-                "value": "trans-man",
-                "id": 3
-            },
-            {
-                "label": "Trans Woman",
-                "value": "trans-woman",
-                "id": 4
-            },
-            {
-                "label": "Non Binary",
-                "value": "non-binary",
-                "id": 5
-            },
-            {
-                "label": "Prefer not to identify",
-                "value": "prefer-not",
-                "id": 6
-            },
-            {
-                "label": "Describe your gender",
-                "value": "describe",
-                "id": 7
-            }
-        ],
-        "org": "spy"
-    },
-    {
-        "id": "18",
-        "type": "radio",
-        "group": "Bio",
-        "order": 15,
-        "question": "Do you have another family member to add?- opens duplicate screen of page 11 for a new family member if yes",
-        "options": [
-            {
-                "label": "Yes",
-                "value": "yes",
-                "id": 8
-            },
-            {
-                "label": "No",
-                "value": "no",
-                "id": 9
-            }
-        ],
-        "org": "spy"
-    },
-    {
-        "id": "19",
-        "type": "text",
-        "group": "Bio",
-        "order": 16,
-        "question": "Contact email",
-        "org": "spy"
-    },
-    {
-        "id": "20",
-        "type": "text",
-        "group": "Bio",
-        "order": 17,
-        "question": "Contact phone",
-        "org": "spy"
-    },
-    {
-        "id": "21",
-        "type": "radio",
-        "group": "Bio",
-        "order": 18,
-        "question": "Prefered contact method",
-        "options": [
-            {
-                "label": "Email",
-                "value": "email",
-                "id": 10
-            },
-            {
-                "label": "SMS",
-                "value": "sms",
-                "id": 11
-            },
-            {
-                "label": "Call",
-                "value": "call",
-                "id": 12
-            }
-        ],
-        "org": "spy"
+        "order": 11,
+        "question": "gender",
+        "org": "spy",
+        "isActive": true
     },
     {
         "id": "22",
         "type": "text",
+        "questionType": "info",
         "group": "Bio",
-        "subgroup": "Contact Address",
-        "order": 19,
-        "question": "Street",
-        "org": "spy"
-    },
-    {
-        "id": "23",
-        "type": "text",
-        "group": "Bio",
-        "subgroup": "Contact Address",
-        "order": 20,
-        "question": "City",
-        "org": "spy"
-    },
-    {
-        "id": "24",
-        "type": "text",
-        "group": "Bio",
-        "subgroup": "Contact Address",
-        "order": 21,
-        "question": "Zip",
-        "org": "spy"
-    },
-    {
-        "id": "25",
-        "type": "radio",
-        "group": "Bio",
-        "order": 22,
-        "question": "Is your contact address the same as your residential address?- opens duplicate screen of question 15 if no",
-        "options": [
-            {
-                "label": "Yes",
-                "value": "yes",
-                "id": 13
-            },
-            {
-                "label": "No",
-                "value": "no",
-                "id": 14
-            }
-        ],
-        "org": "spy"
-    },
-    {
-        "id": "29",
-        "type": "radio",
-        "group": "Bio",
-        "order": 23,
-        "question": "Housing Type",
-        "options": [
-            {
-                "label": "Owned",
-                "value": "owned",
-                "id": 15
-            },
-            {
-                "label": "Rented",
-                "value": "rented",
-                "id": 16
-            }
-        ],
-        "org": "spy"
-    },
-    {
-        "id": "30",
-        "type": "radio",
-        "group": "Bio",
-        "subgroup": "Housing Type",
-        "order": 24,
-        "question": "Housing Type",
-        "options": [
-            {
-                "label": "Single family house",
-                "value": "single",
-                "id": 17
-            },
-            {
-                "label": "Multi-unit",
-                "value": "multi",
-                "id": 18
-            },
-            {
-                "label": "Mobile home",
-                "value": "mobile",
-                "id": 19
-            },
-            {
-                "label": "Apartment",
-                "value": "apartment",
-                "id": 20
-            }
-        ],
-        "org": "spy"
-    },
-    {
-        "id": "31",
-        "type": "text",
-        "group": "Bio",
-        "subgroup": "Housing Type",
-        "order": 25,
-        "question": "Other",
-        "org": "spy"
-    },
-    {
-        "id": "32",
-        "type": "radio",
-        "group": "Bio",
-        "order": 26,
-        "question": "Are you interested in being a temporary (1-10 days) or full time host (3-6 months)?",
-        "options": [
-            {
-                "label": "Temporary",
-                "value": "temporary",
-                "id": 21
-            },
-            {
-                "label": "Full time",
-                "value": "full",
-                "id": 22
-            }
-        ],
-        "org": "spy"
-    },
-    {
-        "id": "33",
-        "type": "text",
-        "group": "Bio",
-        "subgroup": "Job",
-        "order": 27,
-        "question": "Place of Employment",
-        "org": "spy"
-    },
-    {
-        "id": "34",
-        "type": "text",
-        "group": "Bio",
-        "subgroup": "Job",
-        "order": 28,
-        "question": "Job Title",
-        "org": "spy"
-    },
-    {
-        "id": "58",
-        "type": "textarea",
-        "group": "Personal",
-        "order": 42,
-        "question": "What are your passions, interests, and hobbies?",
-        "org": "spy"
-    },
-    {
-        "id": "59",
-        "type": "text",
-        "group": "Personal",
-        "order": 43,
-        "question": "What languages do you speak at home",
-        "org": "spy"
-    },
-    {
-        "id": "60",
-        "type": "textarea",
-        "group": "Personal",
-        "order": 44,
-        "question": "Describe any preferred or ideal characteristics you hope for in a guest",
-        "org": "spy"
-    },
-    {
-        "id": "61",
-        "type": "textarea",
-        "group": "Personal",
-        "order": 45,
-        "question": "Please share why you are interested in hosting a young person experiencing homelessness",
-        "org": "spy"
-    },
-    {
-        "id": "62",
-        "type": "textarea",
-        "group": "Personal",
-        "order": 46,
-        "question": "Please share any strengths, skills, or experience you have that you believe will make you a successful host",
-        "org": "spy"
-    },
-    {
-        "id": "63",
-        "type": "textarea",
-        "group": "Personal",
-        "order": 47,
-        "question": "Please describe any challenges you foresee in your role as host",
-        "org": "spy"
-    },
-    {
-        "id": "64",
-        "type": "textarea",
-        "group": "Personal",
-        "order": 48,
-        "question": "As a way of starting your host profile, please take a moment to write something to introduce yourself to potential guests. Feel free to talk about your passions and hobbies, your family, your home values, or anything else that feels important to you.",
-        "org": "spy"
-    },
-    {
-        "id": "38",
-        "type": "text",
-        "group": "Bio",
-        "subgroup": "Gender",
-        "order": "14a",
-        "question": "Describe your gender",
-        "conditional_id": "17",
-        "conditional_value": "describe",
-        "org": "spy"
+        "subgroup": "Contact",
+        "order": 12,
+        "question": "contact",
+        "org": "spy",
+        "isActive": true
     },
     {
         "id": "26",
         "type": "text",
+        "questionType": "info",
         "group": "Bio",
-        "subgroup": "Residential Address",
-        "order": "22a",
-        "question": "Street",
-        "conditional_id": "25",
-        "conditional_value": "no",
-        "org": "spy"
+        "subgroup": "Residence",
+        "order": 13,
+        "question": "address",
+        "org": "spy",
+        "isActive": true
     },
     {
-        "id": "27",
+        "id": "53",
         "type": "text",
-        "group": "Bio",
-        "subgroup": "Residential Address",
-        "order": "22b",
-        "question": "City",
-        "conditional_id": "25",
-        "conditional_value": "no",
-        "org": "spy"
+        "group": "info",
+        "order": 22,
+        "question": "hostphoto",
+        "org": "spy",
+        "isActive": true,
+        "questionType": "info"
     },
     {
-        "id": "28",
+        "id": "54",
         "type": "text",
-        "group": "Bio",
-        "subgroup": "Residential Address",
-        "order": "22c",
-        "question": "Zip",
-        "conditional_id": "25",
-        "conditional_value": "no",
-        "org": "spy"
+        "group": "info",
+        "order": 23,
+        "question": "homephoto",
+        "org": "spy",
+        "isActive": true,
+        "questionType": "info"
+    },
+    {
+        "id": "59",
+        "type": "text",
+        "group": "info",
+        "order": 25,
+        "question": "language",
+        "org": "spy",
+        "isActive": true,
+        "questionType": "info"
     }
 ]
