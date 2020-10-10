@@ -1,3 +1,7 @@
+from data.repositories import Repository
+from data.mongo import MongoFacade
+from blueprints.questions import questions_api
+from blueprints.images import images_api
 from werkzeug.utils import secure_filename
 import codecs
 import gridfs
@@ -27,7 +31,6 @@ from urllib.parse import quote_plus
 import pprint
 from dotenv import load_dotenv
 load_dotenv()
-
 
 # from matching.basic_filter import BasicFilter
 
@@ -59,6 +62,22 @@ app = Flask(
 )
 
 
+"""
+    BEGIN
+"""
+
+
+# V3
+app.register_blueprint(
+    questions_api, url_prefix='/api/<org>/<user_type>/registration/<question_type>')
+app.register_blueprint(
+    images_api, url_prefix='/api/<org>/<user_type>/<user_id>/images/<image_subject>')
+
+"""
+    END
+"""
+
+
 # connect to gunicorn logger if not running directly
 if __name__ != '__main__':
     gunicorn_logger = logging.getLogger('gunicorn.error')
@@ -70,445 +89,23 @@ DEBUG = True
 MONGO_DATABASE = 'hosthome'
 
 
-class MongoFacade:
-
-    def __init__(self):
-
-        if DEBUG:
-
-            self.url = 'mongodb://{}:{}'.format(
-                os.getenv('DB_HOST'),
-                os.getenv('DB_PORT')
-            )
-
-        else:
-            self.url = 'mongodb://{}:{}@{}:{}'.format(
-                quote_plus(os.getenv('DB_USER')),
-                quote_plus(os.getenv('DB_PWD')),
-                os.getenv('DB_HOST'),
-                os.getenv('DB_PORT')
-            )
-
-    def _get_conn(self):
-        client = pymongo.MongoClient(self.url)
-        try:
-            # The ismaster command is cheap and does not require auth.
-            client.admin.command('ismaster')
-            return client
-        except Exception as e:
-            app.logger.debug("Server not available: {}".format(e))
-            raise e
-
-    def get_collection(self, collection_name, sort_condition):
-
-        self._log('get_collection', 'acquiring connection...')
-
-        client = self._get_conn()
-
-        db = client[MONGO_DATABASE]
-        collection = db[collection_name]
-
-        if sort_condition:
-            cursor = collection.find().sort(sort_condition)
-        else:
-            cursor = collection.find()
-        items = list(cursor)
-
-        for item in items:
-            item['_id'] = str(item['_id'])
-
-        self._log('get_collection', 'items = {}'.format(items))
-        return items
-
-    def get_element_by_id(self, collection_name, id):
-
-        self._log('get_element_by_id', 'acquiring connection...')
-
-        client = self._get_conn()
-
-        db = client[MONGO_DATABASE]
-        collection = db[collection_name]
-        item = collection.find_one({'id': id})
-        item['_id'] = str(item['_id'])
-
-        self._log('get_collection', 'item = {}'.format(item))
-        return item
-
-    def get_element_by_id2(self, collection_name, id):
-
-        self._log('get_element_by_id', 'acquiring connection...')
-
-        client = self._get_conn()
-
-        db = client[MONGO_DATABASE]
-        collection = db[collection_name]
-        item = collection.find_one({'_id': id})
-
-        item['_id'] = str(item['_id'])
-
-        self._log('get_collection', 'item = {}'.format(item))
-        return item
-
-    def item_in_collection(self, collection_name, field_name, field_value):
-        client = self._get_conn()
-
-        if not client:
-            app.logger.error(
-                'MongoFacade:item_in_collection(): Mongo server not available')
-            raise Exception('Mongo server not available')
-
-        db = client[MONGO_DATABASE]
-        collection = db[collection_name]
-        result = collection.find_one({field_name: field_value})
-        if not result:
-            return False
-        return True
-
-    def get_user_by_email(self, collection_name, email):
-        try:
-            self._log('get_user_by_email', 'acquiring connection...')
-            client = self._get_conn()
-            db = client[MONGO_DATABASE]
-            collection = db[collection_name]
-
-            user = collection.find_one({'email': email})
-            if user is None:
-                return None
-            # we dont need this line anymore, right?
-            user['_id'] = str(user['_id'])
-            self._log('get_collections', 'items = {}'.format(user))
-            return user
-        except Exception as e:
-            self._log("get_user_by_email", f"error {e}")
-            raise e
-
-    def insert_to_collection(self, collection_name, item):
-        client = self._get_conn()
-
-        db = client[MONGO_DATABASE]
-        collection = db[collection_name]
-
-        result = collection.insert_one(item).inserted_id
-
-        return result
-
-    def delete_from_collection(self, collection_name, id):
-        client = self._get_conn()
-
-        if not client:
-            raise Exception('Mongo server not available')
-
-        db = client[MONGO_DATABASE]
-        collection = db[collection_name]
-
-        result = collection.delete_one({'_id': ObjectId(id)})
-        self._log('delete_from_collection',
-                  'result.raw_result = {}'.format(result.raw_result))
-
-        return result
-
-    def update_in_collection(self, collection_name, id, item):
-
-        client = self._get_conn()
-
-        if not client:
-            app.logger.error(
-                'MongoFacade:update_in_collection(): Mongo server not available')
-            raise Exception('Mongo server not available')
-
-        db = client[MONGO_DATABASE]
-        collection = db[collection_name]
-        result = collection.update_one({'_id': ObjectId(id)}, {'$set': item})
-        return result.acknowledged
-
-    def save_file(self, img_file, img_name, img_subject, email, file_type):
-        client = self._get_conn()
-        if not client:
-            raise Exception('Mongo server not available')
-
-        db = client[MONGO_DATABASE]
-        fs = gridfs.GridFS(db)
-        img_id = fs.put(
-            img_file,
-            filename=img_name,
-            contentType=file_type,
-            subject=img_subject,
-            email=email)  # got img id
-        if img_id is None:
-            return None
-        # if fs.find_one(img_id) is None:
-        #     return "success??"
-        # next, store the img id in the user database somehow
-        return img_id
-
-    def load_file(self, fileId):  # need to pass userId
-        client = self._get_conn()
-        db = client[MONGO_DATABASE]
-        fs = gridfs.GridFS(db)
-        record = fs.get(ObjectId(fileId))
-        app.logger.debug(f'MongoFacade:load_file: record = {record}')
-        for key in dir(record):
-            if callable(getattr(record, key)):
-                continue
-            app.logger.debug(f'- {key}: {getattr(record, key)}')
-        return record
-
-    # need to pass userId
-    def get_files_for_user_with_subject(self, email, subject):
-        client = self._get_conn()
-        db = client[MONGO_DATABASE]
-        fs = gridfs.GridFS(db)
-        records = fs.find({"email": email, "subject": subject})
-        items = list(records)
-        # for item in items:
-        #     item['_id'] = str(item['_id'])
-        return items
-        # user = collection.find_one() #get user by id and image id
-        # image = fs.get(user[]) #using the user id to find image id
-        # base64_data = codecs.encode(image.read(), "base64") #using codecs to retrieve image
-        # image = base64_data.decode("utf-8")
-
-    def add_field_to_record(self, collection_name, id_field_name, id_field_value, field_name, field_data):
-        client = self._get_conn()
-
-        if not client:
-            app.logger.error(
-                'MongoFacade:update_in_collection(): Mongo server not available')
-            raise Exception('Mongo server not available')
-
-        field_data_clean = {
-            x: field_data[x] for x in field_data.keys() if x != id_field_name}
-        # field_data_clean = {}
-        # for field_key in field_data.keys():
-        #     app.logger.debug()
-        #     if field_key != id_field_name:
-        #         field_data_clean[field_key] = field_data[]
-
-        db = client[MONGO_DATABASE]
-        collection = db[collection_name]
-
-        result = collection.update_one(
-            {id_field_name: id_field_value}, {'$set': {field_name: field_data_clean}})
-
-        return result.acknowledged
-
-    def add_field_to_record_child(self, collection_name, id_field_name, id_field_value, child_name, field_name, field_data):
-        client = self._get_conn()
-
-        if not client:
-            app.logger.error(
-                'MongoFacade:update_in_collection(): Mongo server not available')
-            raise Exception('Mongo server not available')
-
-        db = client[MONGO_DATABASE]
-        collection = db[collection_name]
-
-        result = collection.find_one({id_field_name: id_field_value})
-        if not result:
-            raise Exception(
-                f'No account with {id_field_name}: {id_field_value}')
-
-        print(
-            f'add_field_to_record_child: record for {id_field_name}: {id_field_value}')
-        pprint.pprint(result)
-
-        # if child_name in result:
-        #     new_child = list(result[child_name])
-        # else:
-        #     new_child = []
-        # new_child.append({
-        #     field_name: field_data
-        # })
-
-        if child_name in result:
-            new_child = dict(result[child_name])
-        else:
-            new_child = dict()
-        new_child[field_name] = field_data
-
-        result = collection.update_one(
-            {id_field_name: id_field_value}, {'$set': {child_name: new_child}})
-
-        return result.acknowledged
-
-    def add_to_child_collection(self, collection_name, record_id, child_collection_name, data):
-        try:
-
-            client = self._get_conn()
-
-            if not client:
-                app.logger.error(
-                    'MongoFacade:add_to_child_collection(): Mongo server not available')
-                raise Exception('Mongo server not available')
-
-            app.logger.debug('MongoFacade:add_to_child_collection():')
-            app.logger.debug(f'- collection_name: {collection_name}')
-            app.logger.debug(f'- record_id: {record_id}')
-            app.logger.debug(
-                f'- child_collection_name: {child_collection_name}')
-            app.logger.debug(f'- data: {data}')
-
-            db = client[MONGO_DATABASE]
-            collection = db[collection_name]
-
-            result = collection.find_one({'_id': ObjectId(record_id)})
-
-            if child_collection_name in result:
-                new_child = list(result[child_collection_name])
-            else:
-                new_child = list()
-
-            new_child.append(data)
-
-            app.logger.debug(
-                f'MongoFacade:add_to_child_collection(): about to set field {child_collection_name} to "{new_child}"')
-
-            result = collection.update_one(
-                {'_id': ObjectId(record_id)}, {'$set': {child_collection_name: new_child}})
-
-            return result.acknowledged
-
-        except Exception as e:
-            app.logger.error(
-                f'MongoFacade:add_to_child_collection(): error: {e}')
-
-    def update_in_child_collection(self, collection_name, record_id, child_collection_name, child_record_id, data):
-        try:
-
-            client = self._get_conn()
-
-            if not client:
-                app.logger.error(
-                    'MongoFacade:update_in_child_collection(): Mongo server not available')
-                raise Exception('Mongo server not available')
-
-            app.logger.debug('MongoFacade:update_in_child_collection():')
-            app.logger.debug(f'- collection_name: {collection_name}')
-            app.logger.debug(f'- record_id: {record_id}')
-            app.logger.debug(
-                f'- child_collection_name: {child_collection_name}')
-            app.logger.debug(f'- data: {data}')
-
-            db = client[MONGO_DATABASE]
-            collection = db[collection_name]
-
-            result = collection.find_one({'_id': ObjectId(record_id)})
-
-            new_child = list()
-            for child_record in list(result[child_collection_name]):
-                if child_record['id'] == child_record_id:
-                    new_child.append(data)
-                else:
-                    new_child.append(child_record)
-
-            app.logger.debug(
-                f'MongoFacade:update_in_child_collection(): about to set field {child_collection_name} to "{new_child}"')
-
-            result = collection.update_one(
-                {'_id': ObjectId(record_id)}, {'$set': {child_collection_name: new_child}})
-
-            return result.acknowledged
-
-        except Exception as e:
-            app.logger.error(
-                f'MongoFacade:update_in_child_collection(): error: {e}')
-
-    def _log(self, method_name, message):
-        app.logger.debug('MongoFacade:{}: {}'.format(method_name, message))
-
-
-class Repository:
-
-    def __init__(self, collection_name):
-        self.mongo_facade = MongoFacade()
-        self.collection_name = collection_name
-
-    def get(self, sort_condition=None):
-        items = self.mongo_facade.get_collection(
-            self.collection_name, sort_condition)
-        return items
-
-    def get_by_id(self, id):
-        item = self.mongo_facade.get_element_by_id2(self.collection_name, id)
-        return item
-
-    def add(self, item):
-        result = self.mongo_facade.insert_to_collection(
-            self.collection_name, item)
-        return result
-
-    def delete(self, id):
-        result = self.mongo_facade.delete_from_collection(
-            self.collection_name, id)
-        return result
-
-    def update(self, id, item):
-        app.logger.warning('Repository:update: id = {}'.format(id))
-        app.logger.warning('Repository:update: item = {}'.format(item))
-        safe_item = {x: item[x] for x in dict(item).keys() if x != '_id'}
-
-        app.logger.warning('Repository:update: safe_item = {}'.format(
-            json.dumps(safe_item, indent=4)))
-        result = self.mongo_facade.update_in_collection(
-            self.collection_name,
-            id,
-            safe_item
-        )
-        return result
-
-    def get_using_email(self, email):  # pass in the request body here
-        resp = self.mongo_facade.get_user_by_email(
-            self.collection_name, email)  # add the request here
-        return resp
-
-    def _log(self, method_name, message):
-        app.logger.debug('Repository[{}]:{}: {}'.format(
-            self.collection_name, method_name, message))
-
-# Tyler 4/6/2020
-# ... removing in-memory implementation, switching to mongodb
-
-# class GuestRepository:
-
-#     def __init__(self):
-#         self.guests = dict()
-
-#     def __getitem__(self, guest_id):
-#         return self.guests[guest_id]
-
-#     def __setitem__(self, guest_id, guest):
-#         self.guests[guest_id] = guest
-
-#     def update(self, guest):
-#         self.guests[guest.id] = guest
-
-
-# class HostRepository:
-
-#     def __init__(self):
-#         self.hosts = dict()
-
-#     def __getitem__(self, host_id):
-#         return self.hosts[host_id]
-
-#     def __setitem__(self, host_id, host):
-#         self.hosts[host_id] = host
-
-#     def update(self, host):
-#         self.hosts[host.id] = host
-
-
-hostRepository = Repository('hosts')
-accountsRepository = Repository('accounts')
-guestRepository = Repository('guests')
-guestQuestionsRepository = Repository('guestQuestions')
-hostQuestionsRepository = Repository('hostQuestions')
-guestResponsesRepository = Repository('guestResponses')
-hostResponsesRepository = Repository('hostResponses')
-restrictionsRepository = Repository('restrictions')
-responseValuesRepository = Repository('responseValues')
-hostRegisterQuestionsRepository = Repository('hostRegisterQuestions')
-questionBankRepository = Repository('questionBank')
+DB_NAME = 'hosthome'
+
+
+def create_repo(x): return Repository(x, app.logger, DB_NAME)
+
+
+hostRepository = create_repo('hosts')
+accountsRepository = create_repo('accounts')
+guestRepository = create_repo('guests')
+guestQuestionsRepository = create_repo('guestQuestions')
+hostQuestionsRepository = create_repo('hostQuestions')
+guestResponsesRepository = create_repo('guestResponses')
+hostResponsesRepository = create_repo('hostResponses')
+restrictionsRepository = create_repo('restrictions')
+responseValuesRepository = create_repo('responseValues')
+hostRegisterQuestionsRepository = create_repo('hostRegisterQuestions')
+questionBankRepository = create_repo('questionBank')
 
 
 # TODO: Tyler 5/21/2020: Somebody will need to fix this -- should be
@@ -538,217 +135,16 @@ def favicon():
     )
 
 
-###############
-## Hosts API ##
-###############
-
-
-# Tyler 9/1/2020: Deprecated proof-of-concept version
-# @app.route('/api/hosts/<int:id>', methods=['GET', 'PUT', 'DELETE'])
-# def host_by_id(id: int):
+# @app.route('/api/hostQuestions', methods=['GET'])
+# def get_all_hostQuestions():
 
 #     app.logger.warning(
-#         'host_by_id: request.method = {}'.format(request.method))
-#     app.logger.warning(f'host_by_id: id = {id} ({type(id)})')
+#         'get_all_hostQuestions: request.method = {}'.format(request.method))
 
-#     if request.method == 'GET':
-
-#         try:
-
-#             host = hostRepository.mongo_facade.get_element_by_id('hosts', id)
-#             js = json.dumps(host)
-#             resp = Response(js, status=200, mimetype='application/json')
-#             return resp
-
-#         except Exception as e:
-
-#             data = {
-#                 'error': str(e)
-#             }
-
-#             js = json.dumps(data)
-#             resp = Response(js, status=500, mimetype='application/json')
-
-#             return resp
-
-#     elif request.method == 'PUT':
-
-#         try:
-
-#             responseData = hostRepository.update(id, request.json)
-#             app.logger.debug('responseData = {}'.format(responseData))
-#             resp = Response(json.dumps({'error': None, 'data': None}),
-#                             status=200, mimetype='application/json')
-#             return resp
-
-#         except Exception as e:
-
-#             data = {
-#                 'error': str(e)
-#             }
-
-#             js = json.dumps(data)
-#             resp = Response(js, status=500, mimetype='application/json')
-
-#             return resp
-
-#     elif request.method == 'DELETE':
-
-#         try:
-
-#             responseData = hostRepository.delete(id)
-#             app.logger.debug('responseData = {}'.format(responseData))
-#             resp = Response(json.dumps({'error': None, 'data': None}),
-#                             status=200, mimetype='application/json')
-#             return resp
-
-#         except Exception as e:
-
-#             data = {
-#                 'error': str(e)
-#             }
-
-#             js = json.dumps(data)
-#             resp = Response(js, status=500, mimetype='application/json')
-
-#             return resp
-
-#     else:
-
-#         app.logger.debug(f'what is {request.method} even doing here.')
-
-
-# @app.route('/api/hosts', methods=['GET', 'POST'])
-# def get_all_hosts():
-
-#     app.logger.warning(
-#         'get_all_hosts: request.method = {}'.format(request.method))
-
-#     if request.method == 'GET':
-
-#         try:
-
-#             hosts = hostRepository.get()
-#             js = json.dumps(hosts)
-#             resp = Response(js, status=200, mimetype='application/json')
-#             return resp
-
-#         except Exception as e:
-
-#             data = {
-#                 'error': str(e)
-#             }
-
-#             js = json.dumps(data)
-#             resp = Response(js, status=500, mimetype='application/json')
-
-#             return resp
-
-#     elif request.method == 'POST':
-
-#         try:
-
-#             host = request.json
-#             responseData = hostRepository.add(host)
-#             app.logger.debug('responseData = {}'.format(responseData))
-#             resp = Response({'error': None, 'data': None},
-#                             status=200, mimetype='application/json')
-#             return resp
-
-#         except Exception as e:
-
-#             data = {
-#                 'error': str(e)
-#             }
-
-#             js = json.dumps(data)
-#             resp = Response(js, status=500, mimetype='application/json')
-
-#             return resp
-
-#     else:
-
-#         app.logger.debug(f'what is {request.method} even doing here.')
-
-
-@app.route('/api/hostQuestions', methods=['GET'])
-def get_all_hostQuestions():
-
-    app.logger.warning(
-        'get_all_hostQuestions: request.method = {}'.format(request.method))
-
-    try:
-
-        hostQuestions = hostQuestionsRepository.get()
-        js = json.dumps(hostQuestions)
-        resp = Response(js, status=200, mimetype='application/json')
-        return resp
-
-    except Exception as e:
-
-        data = {
-            'error': str(e)
-        }
-
-        js = json.dumps(data)
-        resp = Response(js, status=500, mimetype='application/json')
-
-        return resp
-
-
-@app.route('/api/hostQuestions/<int:id>', methods=['GET'])
-def get_hostQuestion_by_id(id: int):
-
-    app.logger.warning(
-        'get_hostQuestion_by_id: request.method = {}'.format(request.method))
-
-    try:
-
-        hostQuestion = hostQuestionsRepository.mongo_facade.get_element_by_id(
-            'hostQuestions', id)
-        js = json.dumps(hostQuestion)
-        resp = Response(js, status=200, mimetype='application/json')
-        return resp
-
-    except Exception as e:
-
-        data = {
-            'error': str(e)
-        }
-
-        js = json.dumps(data)
-        resp = Response(js, status=500, mimetype='application/json')
-
-        return resp
-
-
-@app.route('/api/checkEmail', methods=["POST"])
-def check_by_email():
-    try:
-        req = request.get_json()  # get req from front end
-        accounts = accountsRepository.get_using_email(
-            req['email'])  # pass the req in here when ready
-        if accounts is None:
-            return Response(json.dumps({'error': None, 'status': 400}), status=400, mimetype='application/json')
-        return Response(status=200, mimetype='application/json')
-
-    except Exception as e:
-        data = {
-            'error': str(e)
-        }
-
-        js = json.dumps(data)
-        resp = Response(js, status=500, mimetype='application/json')
-
-        return resp
-
-# @app.route('/api/hosts/{id}', methods=['PUT'])
-# def update_host(id: int):
 #     try:
 
-#         responseData = hostRepository.update(id, request.json)
-#         app.logger.debug('responseData = {}'.format(responseData))
-#         js = json.dumps(responseData)
+#         hostQuestions = hostQuestionsRepository.get()
+#         js = json.dumps(hostQuestions)
 #         resp = Response(js, status=200, mimetype='application/json')
 #         return resp
 
@@ -764,17 +160,57 @@ def check_by_email():
 #         return resp
 
 
-# @app.route('/api/hosts', methods=['POST'])
-# def add_host():
-#     global host
-#     hosts = request.get_json()
-#     host.update(hosts)
-#     return {"hosts": hosts, }
+# @app.route('/api/hostQuestions/<int:id>', methods=['GET'])
+# def get_hostQuestion_by_id(id: int):
 
+#     app.logger.warning(
+#         'get_hostQuestion_by_id: request.method = {}'.format(request.method))
+
+#     try:
+
+#         hostQuestion = hostQuestionsRepository.mongo_facade.get_element_by_id(
+#             'hostQuestions', id)
+#         js = json.dumps(hostQuestion)
+#         resp = Response(js, status=200, mimetype='application/json')
+#         return resp
+
+#     except Exception as e:
+
+#         data = {
+#             'error': str(e)
+#         }
+
+#         js = json.dumps(data)
+#         resp = Response(js, status=500, mimetype='application/json')
+
+#         return resp
+
+
+# @app.route('/api/checkEmail', methods=["POST"])
+# def check_by_email():
+#     try:
+#         req = request.get_json()  # get req from front end
+#         accounts = accountsRepository.get_using_email(
+#             req['email'])  # pass the req in here when ready
+#         if accounts is None:
+#             return Response(json.dumps({'error': None, 'status': 400}), status=400, mimetype='application/json')
+#         return Response(status=200, mimetype='application/json')
+
+#     except Exception as e:
+#         data = {
+#             'error': str(e)
+#         }
+
+#         js = json.dumps(data)
+#         resp = Response(js, status=500, mimetype='application/json')
+
+#         return resp
 
 ################
 ## Guests API ##
 ################
+
+
 @app.route('/api/guests', methods=['GET', 'POST'])
 def get_all_guests():
 
@@ -1608,7 +1044,7 @@ def image_upload():
 
     if img and allowed_file(img.filename):
         img_name = secure_filename(img.filename)
-        saveImg = MongoFacade()
+        saveImg = MongoFacade(app.logger, DB_NAME)
         resp = saveImg.save_file(img, img_name, subject, email, file_type)
         if resp is not None:
             return Response(json.dumps({'msg': 'Image saved successfully', 'status': 200}), status=200, mimetype='application/json')
@@ -1623,15 +1059,21 @@ def image_upload():
 @app.route('/api/host/images/<subject>', methods=['POST'])
 def get_images(subject):
     try:
+
         email = request.json['email']
+
         app.logger.debug(
             f'get_images: looking for {subject} photos for {email}')
-        mongo = MongoFacade()
+
+        mongo = MongoFacade(app.logger, DB_NAME)
+
         records = mongo.get_files_for_user_with_subject(email, subject)
 
         result = []
         app.logger.debug(f'get_images: records')
+
         for r in records:
+
             app.logger.debug(f'get_images: - r: {r}')
             result.append({
                 'id': str(r._id),
@@ -1652,7 +1094,7 @@ def image_download(file_id):
     app.logger.debug(f'image_download: file_id = {file_id}')
 
     try:
-        mongo = MongoFacade()
+        mongo = MongoFacade(app.logger, DB_NAME)
         img = mongo.load_file(file_id)
         app.logger.debug(f'image_download: img.filename = {img.filename}')
         app.logger.debug(
@@ -1674,7 +1116,7 @@ def image_download(file_id):
 #     email = request.json['email']
 
 #     try:
-#         mongo = MongoFacade()
+#         mongo = MongoFacade(app.logger, DB_NAME)
 #         img = mongo.load_file(email)
 #         return send_file(
 #             io.BytesIO(img),
@@ -1704,7 +1146,7 @@ def get_user_type():
             raise Exception('Email must be included in POST request body')
 
         app.logger.debug(f'get_user_type(): data: {data}')
-        mf = MongoFacade()
+        mf = MongoFacade(app.logger, DB_NAME)
 
         if mf.item_in_collection('hosts', 'email', data['email']):
             return Response(json.dumps({'type': 'host'}), status=200, mimetype='application/json')
@@ -1730,7 +1172,7 @@ def get_host_by_email():
             raise Exception('Email must be included in POST request body')
 
         app.logger.debug(f'get_user_type(): data: {data}')
-        mf = MongoFacade()
+        mf = MongoFacade(app.logger, DB_NAME)
 
         if not mf.item_in_collection('hosts', 'email', data['email']):
             return Response(f'No host with email: {data["email"]}', status=400, mimetype='text/plain')
@@ -1756,7 +1198,7 @@ def add_new_host():
             raise Exception('Email must be included in POST request body')
 
         app.logger.debug(f'add_new_host(): data: {data}')
-        mf = MongoFacade()
+        mf = MongoFacade(app.logger, DB_NAME)
 
         if mf.item_in_collection('hosts', 'email', data['email']):
             return Response(f'Existing account with email: {data["email"]}', status=400, mimetype='text/plain')
@@ -1779,7 +1221,7 @@ def add_host_info():
 
         data = request.json
         app.logger.debug(f'add_host_info(): data: {data}')
-        mf = MongoFacade()
+        mf = MongoFacade(app.logger, DB_NAME)
         mf.add_field_to_record('hosts', 'email', data['email'], 'info', data)
         return Response(status=200, mimetype='application/json')
 
@@ -1798,7 +1240,7 @@ def add_host_info():
 
 #         data = request.json
 #         app.logger.debug(f'add_host_contact(): data: {data}')
-#         mf = MongoFacade()
+#         mf = MongoFacade(app.logger, DB_NAME)
 #         mf.add_field_to_record(
 #             'hosts', 'email', data['email'], field_name, data)
 #         return Response(status=200, mimetype='application/json')
@@ -1816,7 +1258,7 @@ def add_host_contact():
 
         data = request.json
         app.logger.debug(f'add_host_contact(): data: {data}')
-        mf = MongoFacade()
+        mf = MongoFacade(app.logger, DB_NAME)
         mf.add_field_to_record(
             'hosts', 'email', data['email'], 'contact', data)
         return Response(json.dumps({}), status=200, mimetype='application/json')
@@ -1834,7 +1276,7 @@ def add_host_address():
 
         data = request.json
         app.logger.debug(f'add_host_address(): data: {data}')
-        mf = MongoFacade()
+        mf = MongoFacade(app.logger, DB_NAME)
         mf.add_field_to_record(
             'hosts', 'email', data['email'], 'address', data)
         return Response(json.dumps({}), status=200, mimetype='application/json')
@@ -1852,7 +1294,7 @@ def add_host_language():
 
         data = request.json
         app.logger.debug(f'add_host_language(): data: {data}')
-        mf = MongoFacade()
+        mf = MongoFacade(app.logger, DB_NAME)
         mf.add_field_to_record(
             'hosts', 'email', data['email'], 'language', data)
         return Response(json.dumps({}), status=200, mimetype='application/json')
@@ -1870,7 +1312,7 @@ def add_host_gender():
 
         data = request.json
         app.logger.debug(f'add_host_gender(): data: {data}')
-        mf = MongoFacade()
+        mf = MongoFacade(app.logger, DB_NAME)
         mf.add_field_to_record(
             'hosts', 'email', data['email'], 'gender', data)
         return Response(json.dumps({}), status=200, mimetype='application/json')
@@ -1888,7 +1330,7 @@ def add_host_matching_response(questionId):
 
         data = request.json
         app.logger.debug(f'add_host_matching_response(): data: {data}')
-        mf = MongoFacade()
+        mf = MongoFacade(app.logger, DB_NAME)
         mf.add_field_to_record_child(
             'hosts', 'email', data['email'], 'matchingResponses', questionId, data['response'])
 
@@ -1907,7 +1349,7 @@ def add_host_qualifying_response(questionId):
     try:
         data = request.json
         app.logger.debug(f'add_host_qualifying_response(): data: {data}')
-        mf = MongoFacade()
+        mf = MongoFacade(app.logger, DB_NAME)
         mf.add_field_to_record_child(
             'hosts', 'email', data['email'], 'qualifyingResponses', questionId, data['response'])
 
@@ -1926,7 +1368,7 @@ def add_response_option(user_type, question_id):
     try:
         data = request.json
         app.logger.debug(f'add_response_option(): data: {data}')
-        mf = MongoFacade()
+        mf = MongoFacade(app.logger, DB_NAME)
 
         mf.add_to_child_collection(
             'matchingQuestions', question_id, 'options', data)
@@ -1946,7 +1388,7 @@ def get_host_qualifying_questions():
 
     try:
 
-        mf = MongoFacade()
+        mf = MongoFacade(app.logger, DB_NAME)
         questions = mf.get_collection('qualifyingQuestions', None)
 
         return jsonify(questions)
@@ -1964,7 +1406,7 @@ def get_host_matching_questions():
 
     try:
 
-        mf = MongoFacade()
+        mf = MongoFacade(app.logger, DB_NAME)
         questions = mf.get_collection('matchingQuestions', None)
 
         return jsonify(questions)
@@ -1981,7 +1423,7 @@ def get_host_info_questions():
 
     try:
 
-        mf = MongoFacade()
+        mf = MongoFacade(app.logger, DB_NAME)
         questions = mf.get_collection('infoQuestions', None)
 
         return jsonify(questions)
@@ -2002,7 +1444,7 @@ def delete_question(user_type, question_type, question_id):
         app.logger.debug(f'- question_type= {question_type}')
         app.logger.debug(f'- question_id= {question_id}')
 
-        mf = MongoFacade()
+        mf = MongoFacade(app.logger, DB_NAME)
 
         mf.delete_from_collection(
             f'{question_type.lower()}Questions', question_id)
@@ -2028,7 +1470,7 @@ def add_question(user_type, question_type):
         app.logger.debug(f'- question_type= {question_type}')
         app.logger.debug(f'- data= {data}')
 
-        mf = MongoFacade()
+        mf = MongoFacade(app.logger, DB_NAME)
 
         mf.insert_to_collection(
             f'{question_type.lower()}Questions', data)
@@ -2058,7 +1500,7 @@ def update_question(user_type, question_type, question_id):
         for k, v in dict(data).items():
             if k != '_id':
                 question[k] = v
-        mf = MongoFacade()
+        mf = MongoFacade(app.logger, DB_NAME)
 
         mf.update_in_collection(
             f'{question_type.lower()}Questions', question_id, question)
@@ -2085,7 +1527,7 @@ def update_response_option(user_type, question_type, question_id, response_optio
         app.logger.debug(f'- response_option_id= {response_option_id}')
         app.logger.debug(f'- data= {data}')
 
-        mf = MongoFacade()
+        mf = MongoFacade(app.logger, DB_NAME)
 
         mf.update_in_child_collection(
             f'{question_type.lower()}Questions', question_id, 'options', data)
