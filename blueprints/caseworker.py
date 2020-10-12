@@ -2,7 +2,7 @@ import json
 from flask import Blueprint, render_template, abort, jsonify, current_app, request, Response
 from jinja2 import TemplateNotFound #this is not needed
 import pymongo
-from bson import ObjectId
+from bson import ObjectId #this is not needed 
 from config.constants import DB_NAME
 
 caseworker_api = Blueprint('caseworker_api', __name__,
@@ -89,11 +89,7 @@ def delete_caseworker(orgname, caseworker_id):
   try:
     client = pymongo.MongoClient()
     db = client[DB_NAME]
-    collection_name = f'{caseworker_id}' #caseworker_id?
-    collection = db[collection_name]
-    result = collection.delete_one({ '_id': ObjectId(caseworker_id)})
-
-    return jsonify({ 'deleted': result}) #what should show here?
+    # collection_name = f'{caseworker_id}' #caseworker_id?
     
   except Exception as e:
     return jsonify(error=str(e)), 404
