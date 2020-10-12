@@ -19,8 +19,8 @@ def get_all_caseworkers(orgname): # not sure if this is correct?
     client = pymongo.MongoClient()
     db = client[DB_NAME]
 
-    collection_name = f'{}' # is the collection name caseWorkers?
-    collection = db[collection_name]
+    # collection_name = f'{}' # is the collection name caseWorkers?
+    collection = db[caseWorkers] # i think this would work...
 
   except Exception as e:
     return jsonify(error=str(e)), 404
