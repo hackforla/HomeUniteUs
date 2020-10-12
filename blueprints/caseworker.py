@@ -9,7 +9,10 @@ caseworker_api = Blueprint('caseworker_api', __name__,
                           template_folder='templates')
 
 @caseworker_api.route('/api/<orgname>/caseworkers', methods=['GET'])
-def get_all_caseworkers(org): 
+def get_all_caseworkers():
+
+  # current_app.logger.debug(f'get_all_caseworkers: org={org}')
+
   try:
 
   except Exception as e:
@@ -18,6 +21,9 @@ def get_all_caseworkers(org):
 
 @caseworker_api.route('/api/<orgname>/caseworkers/<caseworker_id>', methods=['GET'])
 def get_caseworkers(org): 
+
+  current_app.logger.debug(f'get_caseworkers: org={org}')
+
   try:
     
   except Exception as e:
@@ -26,6 +32,9 @@ def get_caseworkers(org):
 
 @caseworker_api.route('/api/<orgname>/caseworkers', methods=['POST'])
 def add_caseworker(org, caseworker_id): 
+  
+  current_app.logger.debug(f'add_caseworkers: org={org}, caseworker_id={caseworker_id}')
+
   try:
     
   except Exception as e:
@@ -34,6 +43,9 @@ def add_caseworker(org, caseworker_id):
 
 @caseworker_api.route('/api/<orgname>/caseworkers/<caseworker_id>', methods=['PUT'])
 def update_caseworker(org, caseworker_id): 
+  
+  current_app.logger.debug(f'update_caseworkers: org={org}, caseworker_id={caseworker_id}')
+
   try:
     
   except Exception as e:
@@ -41,7 +53,10 @@ def update_caseworker(org, caseworker_id):
   # update a caseworker by id
 
 @caseworker_api.route('/api/<orgname>/caseworkers/<caseworker_id>', methods=['PUT'])
-def uodate_caseworker(org, caseworker_id): 
+def delete_caseworker(org, caseworker_id): 
+
+  current_app.logger.debug(f'delete_caseworkers: org={org}, caseworker_id={caseworker_id}')
+
   try:
     
   except Exception as e:
