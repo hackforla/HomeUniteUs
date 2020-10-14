@@ -2,6 +2,7 @@ from data.repositories import Repository
 from data.mongo import MongoFacade
 from blueprints.questions import questions_api
 from blueprints.images import images_api
+from blueprints.caseworker import caseworker_api
 from werkzeug.utils import secure_filename
 import codecs
 import gridfs
@@ -72,6 +73,8 @@ app.register_blueprint(
     questions_api, url_prefix='/api/<org>/<user_type>/registration/<question_type>')
 app.register_blueprint(
     images_api, url_prefix='/api/<org>/<user_type>/<user_id>/images/<image_subject>')
+app.register_blueprint(
+    caseworker_api, url_prefix='/api/<orgname>/caseworkers')
 
 """
     END
