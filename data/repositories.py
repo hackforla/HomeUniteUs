@@ -73,18 +73,33 @@ class Case_Repository:
             return jsonify(error=str(e)), 404 
 
     def update_case(self, resp):
+        try:
+            status_id = response['status_id']
+            case_id = response['case_id']
+
+            found_case = self.collection_name.find({ "_id": ObjectId(case_id)})
+
+            if not found_case: 
+                return jsonify("Case does not exist"), 404
+
+            case = self.collection_name.update_one({ "_id": ObjectId(case_id)}, { "$set": { "status_id": status_id }})
+            
+            return jsonify("Update case status successfully", case), 200
+ 
+        except Exception as e:
+            return jsonify(error=str(e)), 404
     
     def reassign_case(self, resp):
         try:
             case_id = response['case_id']
             caseworker_id = response['caseworker_id']
 
-            found_case = collection.find({ "_id": ObjectId(case_id)}) 
+            found_case = self.collection_name.find({ "_id": ObjectId(case_id)}) 
 
             if not found_case: #if case does not exists
                 return jsonify("Case does not exist"), 404
 
-            case = collection.update_one({ "_id": ObjectId(case_id) }, { "$set": { "caseworker_id": caseworker_id }}) #find the case and update caseworker
+            case = self.collection_name.update_one({ "_id": ObjectId(case_id) }, { "$set": { "caseworker_id": caseworker_id }}) #find the case and update caseworker
 
             return jsonify("Reassigned case successfully", case), 200
         except Exception as e:

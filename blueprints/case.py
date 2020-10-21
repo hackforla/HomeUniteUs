@@ -10,11 +10,8 @@ case_api = Blueprint('case_api', __name__,
 
 client = pymongo.MongoClient()    
 db = client[DB_NAME]
-collection = db['case'] #case collection name?
-
+collection = db['case'] ####case collection name?
 case_repository = Case_Repository(collection, db)
-
-#gonna move the implementation to repo class after I finish
 
 @case_api.route('/create_case', methods=['POST'])
 def create_case():
@@ -30,11 +27,19 @@ def create_case():
   except Exception as e:
     return jsonify(error=str(e)), 404 
 
-#unfinished
 @case_api.route('/update_case_status', methods=['POST'])
 def update_case_status():
 
   try:
+    response = request.json
+
+    if not response:
+      return jsonify("bad request, nothing in response in update_case_status"), 400
+    
+    if not response['case_id'] or not response['status_id']:
+      return jsonify("Both fields must be filled"), 400
+    
+    case_repository.update_case(response)
 
   except Exception as e:
     return jsonify(error=str(e)), 404
@@ -47,7 +52,7 @@ def reassign_case():
     response = request.json
 
     if not response:
-      return jsonify(error=str(e)), 400 #bad request
+      return jsonify("bad request, nothing in response in reassign case method"), 400 #bad request
     
     if not response['caseworker_id'] or not response['case_id']: #if one of them is not  
       return jsonify("Require both caseworker and case id"), 400 #bad request
