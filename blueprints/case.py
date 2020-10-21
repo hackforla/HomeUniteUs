@@ -1,7 +1,7 @@
 import json
 from flask import Blueprint, render_template, abort, jsonify, current_app, request, Response
 import pymongo
-from bson import ObjectId #this is not needed 
+from bson import ObjectId 
 from config.constants import DB_NAME
 
 case_api = Blueprint('case_api', __name__,
@@ -14,13 +14,14 @@ collection = db[cases] #cases collection?
 @case_api.route('/create_case', methods=['POST'])
 def create_case():
   
-  current_app.logger.debug(f'create_case: caseworker_id={caseworker_id}, guest_id={guest_id}')
-
   try:
     response = request.json
     
     if not response:
       return jsonify(error=str(e)), 204 #no content
+    
+    if not response['caseworker_id'] or not response['guest_id']: #if one of them is not  
+      return jsonify("Require both caseworker and guest id"), 400 
 
     caseworker_id = response['caseworker_id']
     guest_id = response['guest_id']
@@ -30,3 +31,36 @@ def create_case():
 
   except Exception as e:
     return jsonify(error=str(e)), 404 
+
+#unfinished
+@case_api.route('/update_case_status', methods=['POST'])
+def update_case_status():
+
+  try:
+
+  except Exception as e:
+    return jsonify(error=str(e)), 404
+
+
+@case_api.route('/reassign_case', methods=['GET'])
+def reassign_case():
+  
+  try:
+    response = request.json
+
+    if not response:
+      return jsonify(error=str(e)), 204 #no content
+
+    if not response['caseworker_id'] or not response['case_id']: #if one of them is not  
+      return jsonify("Require both caseworker and case id"), 400 
+
+    case_id = response['case_id']
+    caseworker_id = response['caseworker_id']
+
+    case = collection.update_one({ "_id": ObjectId(case_id) }, { "$set": { "caseworker_id": caseworker_id }}) #find the case and update caseworker
+
+    if not case:
+      return jsonify("Case does not exists"), 404 #not found
+
+  except Exception as e:
+    return jsonify(error=str(e)), 404
