@@ -9,10 +9,14 @@ case_api = Blueprint('case_api', __name__,
 
 client = pymongo.MongoClient()    
 db = client[DB_NAME]
-collection = db[cases] #cases collection?
+collection = db['case'] #case collection name?
+
+#gonna move the implementation to repo class after I finish
 
 @case_api.route('/create_case', methods=['POST'])
 def create_case():
+
+   # i think there should be a default status_id when new creating a case
   
   try:
     response = request.json
@@ -42,7 +46,7 @@ def update_case_status():
     return jsonify(error=str(e)), 404
 
 
-@case_api.route('/reassign_case', methods=['GET'])
+@case_api.route('/reassign_case', methods=['POST'])
 def reassign_case():
   
   try:

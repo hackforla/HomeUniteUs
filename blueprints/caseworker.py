@@ -8,6 +8,10 @@ from config.constants import DB_NAME
 caseworker_api = Blueprint('caseworker_api', __name__,
                           template_folder='templates')
 
+client = pymongo.MongoClient()
+db = client[DB_NAME]
+collection = db['caseWorkers']
+
 # UNFINISHED
 # need to fix -> collection_name = f'{<what goes here>}'
 @caseworker_api.route('/', methods=['GET'])
@@ -16,11 +20,6 @@ def get_all_caseworkers(orgname): # not sure if this is correct?
   current_app.logger.debug(f'get_all_caseworkers: orgname={orgname}')
 
   try:
-    client = pymongo.MongoClient()
-    db = client[DB_NAME]
-
-    # collection_name = f'{}' # is the collection name caseWorkers?
-    collection = db[caseWorkers] # i think this would work...
 
   except Exception as e:
     return jsonify(error=str(e)), 404
@@ -34,8 +33,6 @@ def get_caseworkers(orgname, caseworker_id): # not sure if this is correct?
   current_app.logger.debug(f'get_caseworkers: orgname={orgname}, caseworker_id={caseworker_id}')
 
   try:
-    client = pymongo.MongoClient()
-    db = client[DB_NAME]
     
   except Exception as e:
     return jsonify(error=str(e)), 404
@@ -49,13 +46,7 @@ def add_caseworker(orgname):
   current_app.logger.debug(f'add_caseworkers: orgname={orgname}')
 
   try:
-    data = request.json 
-
-    client = pymongo.MongoClient()
-    db = client[DB_NAME]
-
-    collection_name = f'{}'
-    collection = db[collection_name]
+    data = request.json #get the response?
     
   except Exception as e:
     return jsonify(error=str(e)), 404
