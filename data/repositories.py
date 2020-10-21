@@ -54,3 +54,11 @@ class Repository:
     def _log(self, method_name, message):
         self.logger.debug('Repository[{}]:{}: {}'.format(
             self.collection_name, method_name, message))
+
+
+class Case_Repository:
+    def __init__(self, collection_name, logger, db_name):
+    self.logger = logger
+    self.mongo_facade = MongoFacade(
+        logger, db_name, debug_mode=True)
+    self.collection_name = collection_name

@@ -29,8 +29,9 @@ def create_case():
 
     caseworker_id = response['caseworker_id']
     guest_id = response['guest_id']
+    status_id = response['status_id']
 
-    case = collection.insert({ "caseworker_id": caseworker_id, "guest_id": guest_id }) #save to db
+    case = collection.insert({ "caseworker_id": caseworker_id, "guest_id": guest_id, "status_id": status_id }) #save to db
     return jsonify("Case created successfully", case), 201 #status code = "created"
 
   except Exception as e:
@@ -53,18 +54,22 @@ def reassign_case():
     response = request.json
 
     if not response:
-      return jsonify(error=str(e)), 204 #no content
+      return jsonify(error=str(e)), 400 #bad request
 
     if not response['caseworker_id'] or not response['case_id']: #if one of them is not  
-      return jsonify("Require both caseworker and case id"), 400 
+      return jsonify("Require both caseworker and case id"), 400 #bad request
 
     case_id = response['case_id']
     caseworker_id = response['caseworker_id']
 
+    found_case = collection.find({ "_id": ObjectId(case_id)}) 
+
+    if not found_case: #if case does not exists
+      return jsonify("Case does not exist"), 204
+
     case = collection.update_one({ "_id": ObjectId(case_id) }, { "$set": { "caseworker_id": caseworker_id }}) #find the case and update caseworker
 
-    if not case:
-      return jsonify("Case does not exists"), 404 #not found
+    return jsonify("Reassigned case successfully", case), 200 #not found
 
   except Exception as e:
     return jsonify(error=str(e)), 404
