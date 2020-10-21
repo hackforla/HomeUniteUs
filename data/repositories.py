@@ -57,8 +57,37 @@ class Repository:
 
 
 class Case_Repository:
-    def __init__(self, collection_name, logger, db_name):
-    self.logger = logger
-    self.mongo_facade = MongoFacade(
-        logger, db_name, debug_mode=True)
-    self.collection_name = collection_name
+    def __init__(self, collection_name, db_name):  
+        self.db_name = db_name      
+        self.collection_name = collection_name
+
+    def new_case(self, resp):
+        try:
+            caseworker_id = resp['caseworker_id']
+            guest_id = resp['guest_id']
+            status_id = resp['status_id']
+
+            case = self.collection_name.insert({ "caseworker_id": caseworker_id, "guest_id": guest_id, "status_id": status_id }) #save to db
+            return jsonify("Case created successfully", case), 201 #status code = "created"
+        except Exception as e:
+            return jsonify(error=str(e)), 404 
+
+    def update_case(self, resp):
+    
+    def reassign_case(self, resp):
+        try:
+            case_id = response['case_id']
+            caseworker_id = response['caseworker_id']
+
+            found_case = collection.find({ "_id": ObjectId(case_id)}) 
+
+            if not found_case: #if case does not exists
+                return jsonify("Case does not exist"), 404
+
+            case = collection.update_one({ "_id": ObjectId(case_id) }, { "$set": { "caseworker_id": caseworker_id }}) #find the case and update caseworker
+
+            return jsonify("Reassigned case successfully", case), 200
+        except Exception as e:
+            return jsonify(error=str(e)), 404
+        
+
