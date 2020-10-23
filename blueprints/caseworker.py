@@ -20,6 +20,11 @@ def get_all_caseworkers(orgname): # not sure if this is correct?
   current_app.logger.debug(f'get_all_caseworkers: orgname={orgname}')
 
   try:
+    org = collection.find(orgname) 
+    # caseworker = [model_to_dict(worker) for worker in org.find()] # Im guessing here
+    # print(caseworker)
+    data = org.find() #
+    return jsonify(data=data, status={"code": 200, "message": "Success"})
 
   except Exception as e:
     return jsonify(error=str(e)), 404
@@ -39,7 +44,7 @@ def get_caseworkers(orgname, caseworker_id): # not sure if this is correct?
   # return all caseworkers for organization
 
 # UNFINISHED
-# Need to fix routes
+# NE
 # need to fix -> collection_name = f'{<what goes here>}'
 @caseworker_api.route('/', methods=['POST'])
 def add_caseworker(): 
