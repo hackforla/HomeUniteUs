@@ -63,12 +63,10 @@ class Case_Repository:
 
     def new_case(self, resp):
         try:
-            caseworker_id = resp['caseworker_id']
-            guest_id = resp['guest_id']
-            status_id = resp['status_id']
-
-            case = self.collection_name.insert({ "caseworker_id": caseworker_id, "guest_id": guest_id, "status_id": status_id }) #save to db
+            case = self.collection_name.create(**res) #save to db, **spread operator in python
+            
             return jsonify("Case created successfully", case), 201 #status code = "created"
+        
         except Exception as e:
             return jsonify(error=str(e)), 404 
 

@@ -39,14 +39,16 @@ def get_caseworkers(orgname, caseworker_id): # not sure if this is correct?
   # return all caseworkers for organization
 
 # UNFINISHED
+# Need to fix routes
 # need to fix -> collection_name = f'{<what goes here>}'
 @caseworker_api.route('/', methods=['POST'])
-def add_caseworker(orgname): 
+def add_caseworker(): 
   
   current_app.logger.debug(f'add_caseworkers: orgname={orgname}')
 
   try:
     data = request.json #get the response?
+    data['orgname'] 
     
   except Exception as e:
     return jsonify(error=str(e)), 404
