@@ -26,8 +26,7 @@ def create_case():
     if not response['caseworker_id'] or not response['guest_id'] or not response['status_id']: #if one of them is not  
       return jsonify("Require both caseworker and guest id"), 400 
     data = case_repository.new_case(response)
-    print(data.status, '<--------wtf is data?')
-    print(data.status == 200, '<--------wtf is data?')
+    return jsonify(status=200, msg="SUCCESS!")
   except Exception as e:
     # return jsonify(error=str(e)), 404 
     return jsonify(status=400, msg="error happening here") #testing 

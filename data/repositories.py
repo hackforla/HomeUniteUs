@@ -64,7 +64,7 @@ class Case_Repository:
     def new_case(self, resp):
         try:
             case = self.collection_name.insert_one(resp) #insert to db
-            return jsonify(status={"code": 200, "message": "success"})
+            return make_response(jsonify(case), 200)
         except Exception as e:
             return jsonify(error=str(e)), 404 
 
