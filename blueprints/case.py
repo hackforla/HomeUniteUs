@@ -19,17 +19,16 @@ case_repository = Case_Repository(collection, db)
 @case_api.route('/create_case', methods=['POST'])
 def create_case():
   try:
-    print("hittting first")
     response = request.json
     if not response:
       return jsonify(error=str(e)), 204 #no content
     if not response['caseworker_id'] or not response['guest_id'] or not response['status_id']: #if one of them is not  
       return jsonify("Require both caseworker and guest id"), 400 
     data = case_repository.new_case(response)
-    return jsonify(status=200, msg="SUCCESS!")
+    
+    return jsonify(status=200, msg="Successfully created case")
   except Exception as e:
-    # return jsonify(error=str(e)), 404 
-    return jsonify(status=400, msg="error happening here") #testing 
+    return jsonify(error=str(e)), 404 
 
 @case_api.route('/update_case_status', methods=['POST'])
 def update_case_status():
@@ -42,8 +41,9 @@ def update_case_status():
     
     if not response['case_id'] or not response['status_id']:
       return jsonify("Both fields must be filled"), 400
+    data = case_repository.update_case(response)
     
-    case_repository.update_case(response)
+    return jsonify(status=200, msg="Updated the status of the Case")
 
   except Exception as e:
     return jsonify(error=str(e)), 404

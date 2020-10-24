@@ -70,17 +70,22 @@ class Case_Repository:
 
     def update_case(self, resp):
         try:
-            status_id = response['status_id']
-            case_id = response['case_id']
+            print("<-----hitting ")
+            status_id = resp['status_id']
+            case_id = resp['case_id']
 
-            found_case = self.collection_name.find({ "_id": ObjectId(case_id)})
+            print(status_id, ",------the status id")
+            print(case_id, ",------the case id")
+
+            found_case = self.collection_name.find({ "_id": case_id})
+            print(found_case, "<------------found the case!!!")
 
             if not found_case: 
                 return jsonify("Case does not exist"), 404
 
-            case = self.collection_name.update_one({ "_id": ObjectId(case_id)}, { "$set": { "status_id": status_id }})
-            
-            return jsonify("Update case status successfully", case), 200
+            case = self.collection_name.find_one_and_update({ "_id": case_id}, { "$set": { "status_id": status_id }})
+
+            return make_response(jsonify(case), 200)
  
         except Exception as e:
             return jsonify(error=str(e)), 404
