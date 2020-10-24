@@ -3,7 +3,10 @@ from flask import Blueprint, render_template, abort, jsonify, current_app, reque
 import pymongo
 from bson import ObjectId 
 from config.constants import DB_NAME
-from ...data.repositories import Case_Repository #importing data?
+# from ..data.repositories import Case_Repository #importing data?
+import sys
+sys.path.append('.')
+from data.repositories import Case_Repository
 
 case_api = Blueprint('case_api', __name__,
                           template_folder='templates')
@@ -15,17 +18,18 @@ case_repository = Case_Repository(collection, db)
 
 @case_api.route('/create_case', methods=['POST'])
 def create_case():
-
   try:
+    print("hittting first")
     response = request.json
     if not response:
       return jsonify(error=str(e)), 204 #no content
     if not response['caseworker_id'] or not response['guest_id'] or not response['status_id']: #if one of them is not  
       return jsonify("Require both caseworker and guest id"), 400 
-    case_repository.new_case(response)
-
+    data = case_repository.new_case(response)
+    return jsonify(data={data}, status=200)
   except Exception as e:
-    return jsonify(error=str(e)), 404 
+    # return jsonify(error=str(e)), 404 
+    return jsonify(status=400, msg="error happening here") 
 
 @case_api.route('/update_case_status', methods=['POST'])
 def update_case_status():

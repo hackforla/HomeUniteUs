@@ -38,7 +38,7 @@ def get_caseworkers(orgname, caseworker_id): # not sure if this is correct?
   current_app.logger.debug(f'get_caseworkers: orgname={orgname}, caseworker_id={caseworker_id}')
 
   try:
-    
+    print("Testing route")
   except Exception as e:
     return jsonify(error=str(e)), 404
   # return all caseworkers for organization
@@ -70,7 +70,7 @@ def update_caseworker(orgname, caseworker_id):
     client = pymongo.MongoClient()
     db = client[DB_NAME]
 
-    collection_name = f'{}' # I guess find the orgname collection? 
+    # collection_name = f'{}' # I guess find the orgname collection? 
     collection = db[collection_name]
     
   except Exception as e:

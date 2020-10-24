@@ -1,5 +1,5 @@
 import json
-
+from flask import jsonify, make_response
 from data.mongo import MongoFacade
 
 import gridfs
@@ -63,10 +63,9 @@ class Case_Repository:
 
     def new_case(self, resp):
         try:
-            case = self.collection_name.create(**res) #save to db, **spread operator in python
-            
-            return jsonify("Case created successfully", case), 201 #status code = "created"
-        
+            case = self.collection_name.insert_one(resp) #insert to db
+            print(case, "<--------------the case is??")
+            # return case
         except Exception as e:
             return jsonify(error=str(e)), 404 
 
