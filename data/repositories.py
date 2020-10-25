@@ -2,7 +2,6 @@ import json
 from flask import jsonify, make_response
 from bson.objectid import ObjectId
 from data.mongo import MongoFacade
-import pprint
 
 import gridfs
 
@@ -66,8 +65,7 @@ class Case_Repository:
     def new_case(self, resp):
         try:
             case = self.collection_name.insert_one(resp) #insert to db
-            if case is None:
-                return jsonify("Case did not create"), 404
+            
             return make_response(jsonify(case), 200)
         except Exception as e:
             return jsonify(error=str(e)), 404 
@@ -90,8 +88,8 @@ class Case_Repository:
             case_id = resp['case_id']
             caseworker_id = resp['caseworker_id']
 
-            case = self.collection_name.find_one_and_update({ "_id": ObjectId(case_id) }, { "$set": { "caseworker_id": caseworker_id }}) #find the case and update caseworker
-            if case is None: #if case does not exists
+            case = self.collection_name.find_one_and_update({ "_id": ObjectId(case_id) }, { "$set": { "caseworker_id": caseworker_id }}) 
+            if case is None: 
                 return jsonify("Case does not exist"), 404
 
             return jsonify("Reassigned case successfully", case), 200
