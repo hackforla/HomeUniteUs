@@ -83,9 +83,7 @@ class Case_Repository:
 
             case = self.collection_name.update_one({ "_id": case_id }, { '$set': { "status_id": status_id }})
 
-            print(case, ",--------------------------the new case?")
             found_case = self.collection_name.find({ "_id": ObjectId(case_id) })
-            print(found_case, "<---------------Updated the case?")
 
             return make_response(jsonify(case), 200)
  
