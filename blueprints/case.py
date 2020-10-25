@@ -34,14 +34,15 @@ def create_case():
 def update_case_status():
 
   try:
-    response = request.json
+    response = request.get_json()
 
     if not response:
       return jsonify("bad request, nothing in response in update_case_status"), 400
-    
+
     if not response['case_id'] or not response['status_id']:
       return jsonify("Both fields must be filled"), 400
-    data = case_repository.update_case(response)
+
+    case_repository.update_case(response)
     
     return jsonify(status=200, msg="Updated the status of the Case")
 

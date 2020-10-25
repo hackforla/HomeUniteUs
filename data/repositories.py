@@ -1,6 +1,7 @@
 import json
 from flask import jsonify, make_response
 from data.mongo import MongoFacade
+import pprint
 
 import gridfs
 
@@ -70,20 +71,21 @@ class Case_Repository:
 
     def update_case(self, resp):
         try:
-            print("<-----hitting ")
             status_id = resp['status_id']
             case_id = resp['case_id']
 
-            print(status_id, ",------the status id")
-            print(case_id, ",------the case id")
+            found_case = self.collection_name.find({ "_id": ObjectId(case_id)}) # not being found
 
-            found_case = self.collection_name.find({ "_id": case_id})
-            print(found_case, "<------------found the case!!!")
+            pprint.pprint(found_case, width=1)
 
             if not found_case: 
                 return jsonify("Case does not exist"), 404
 
-            case = self.collection_name.find_one_and_update({ "_id": case_id}, { "$set": { "status_id": status_id }})
+            case = self.collection_name.update_one({ "_id": case_id }, { '$set': { "status_id": status_id }})
+
+            print(case, ",--------------------------the new case?")
+            found_case = self.collection_name.find({ "_id": ObjectId(case_id) })
+            print(found_case, "<---------------Updated the case?")
 
             return make_response(jsonify(case), 200)
  
