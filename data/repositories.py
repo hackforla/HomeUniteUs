@@ -1,5 +1,6 @@
 import json
 from flask import jsonify, make_response
+from bson.objectid import ObjectId
 from data.mongo import MongoFacade
 import pprint
 
@@ -65,42 +66,33 @@ class Case_Repository:
     def new_case(self, resp):
         try:
             case = self.collection_name.insert_one(resp) #insert to db
+            if case is None:
+                return jsonify("Case did not create"), 404
             return make_response(jsonify(case), 200)
         except Exception as e:
             return jsonify(error=str(e)), 404 
 
-    def update_case(self, resp):
+    def update_case_status(self, resp):
         try:
             status_id = resp['status_id']
             case_id = resp['case_id']
 
-            found_case = self.collection_name.find({ "_id": ObjectId(case_id)}) # not being found
-
-            pprint.pprint(found_case, width=1)
-
-            if not found_case: 
+            case = self.collection_name.find_one_and_update({ "_id": ObjectId(case_id) }, { '$set': { "status_id": status_id }})
+            if case is None: 
                 return jsonify("Case does not exist"), 404
 
-            case = self.collection_name.update_one({ "_id": case_id }, { '$set': { "status_id": status_id }})
-
-            found_case = self.collection_name.find({ "_id": ObjectId(case_id) })
-
             return make_response(jsonify(case), 200)
- 
         except Exception as e:
             return jsonify(error=str(e)), 404
     
     def reassign_case(self, resp):
         try:
-            case_id = response['case_id']
-            caseworker_id = response['caseworker_id']
+            case_id = resp['case_id']
+            caseworker_id = resp['caseworker_id']
 
-            found_case = self.collection_name.find({ "_id": ObjectId(case_id)}) 
-
-            if not found_case: #if case does not exists
+            case = self.collection_name.find_one_and_update({ "_id": ObjectId(case_id) }, { "$set": { "caseworker_id": caseworker_id }}) #find the case and update caseworker
+            if case is None: #if case does not exists
                 return jsonify("Case does not exist"), 404
-
-            case = self.collection_name.update_one({ "_id": ObjectId(case_id) }, { "$set": { "caseworker_id": caseworker_id }}) #find the case and update caseworker
 
             return jsonify("Reassigned case successfully", case), 200
         except Exception as e:

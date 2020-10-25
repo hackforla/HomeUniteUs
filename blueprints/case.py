@@ -20,7 +20,7 @@ case_repository = Case_Repository(collection, db)
 def create_case():
   try:
     response = request.json
-    if not response:
+    if response is None:
       return jsonify(error=str(e)), 204 #no content
     if not response['caseworker_id'] or not response['guest_id'] or not response['status_id']: #if one of them is not  
       return jsonify("Require both caseworker and guest id"), 400 
@@ -34,15 +34,15 @@ def create_case():
 def update_case_status():
 
   try:
-    response = request.get_json()
+    response = request.json
 
-    if not response:
+    if response is None:
       return jsonify("bad request, nothing in response in update_case_status"), 400
 
     if not response['case_id'] or not response['status_id']:
       return jsonify("Both fields must be filled"), 400
 
-    case_repository.update_case(response)
+    data = case_repository.update_case_status(response)
     
     return jsonify(status=200, msg="Updated the status of the Case")
 
@@ -62,7 +62,8 @@ def reassign_case():
     if not response['caseworker_id'] or not response['case_id']: #if one of them is not  
       return jsonify("Require both caseworker and case id"), 400 #bad request
 
-    case_repository.reassign_case(response)
+    data = case_repository.reassign_case(response)
 
+    return jsonify(status=200, msg="Reassigned the case successfully")
   except Exception as e:
     return jsonify(error=str(e)), 404
