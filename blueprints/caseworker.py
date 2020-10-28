@@ -2,25 +2,23 @@ import json
 from flask import Blueprint, render_template, abort, jsonify, current_app, request, Response
 from jinja2 import TemplateNotFound #this is not needed
 import pymongo
-from bson import ObjectId #this is not needed 
+from bson import ObjectId  
 from config.constants import DB_NAME
 
 caseworker_api = Blueprint('caseworker_api', __name__,
                           template_folder='templates')
 
-# UNFINISHED
-# need to fix -> collection_name = f'{<what goes here>}'
+client = pymongo.MongoClient()    
+db = client[DB_NAME]
+collection = db['caseWorkers'] 
+
 @caseworker_api.route('/', methods=['GET'])
-def get_all_caseworkers(orgname): # not sure if this is correct?
+def get_all_caseworkers(orgname): # not sure if this is correct? also should it be orgname or orgId??
 
   current_app.logger.debug(f'get_all_caseworkers: orgname={orgname}')
 
   try:
-    client = pymongo.MongoClient()
-    db = client[DB_NAME]
-
-    # collection_name = f'{}' # is the collection name caseWorkers?
-    collection = db[caseWorkers] # i think this would work...
+    collection.find_one({ "_id": ObjectId(orgname) }, { "caseworker": })
 
   except Exception as e:
     return jsonify(error=str(e)), 404
@@ -49,13 +47,8 @@ def add_caseworker(orgname):
   current_app.logger.debug(f'add_caseworkers: orgname={orgname}')
 
   try:
-    data = request.json 
-
-    client = pymongo.MongoClient()
-    db = client[DB_NAME]
-
-    collection_name = f'{}'
-    collection = db[collection_name]
+    data = request.json
+    print(data)
     
   except Exception as e:
     return jsonify(error=str(e)), 404
