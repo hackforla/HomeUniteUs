@@ -2,7 +2,7 @@ import json
 from flask import Blueprint, render_template, abort, jsonify, current_app, request, Response
 from jinja2 import TemplateNotFound #this is not needed
 import pymongo
-from bson import ObjectId  
+from bson.objectid import ObjectId
 from config.constants import DB_NAME
 
 caseworker_api = Blueprint('caseworker_api', __name__,
@@ -68,21 +68,25 @@ def add_caseworker(orgname):
   except Exception as e:
     return jsonify(error=str(e)), 404
 
-# UNFINISHED
-# not sure how to update the caseworker 
 @caseworker_api.route('/<caseworker_id>', methods=['PUT'])
 def update_caseworker(orgname, caseworker_id): 
   
   current_app.logger.debug(f'update_caseworkers: orgname={orgname}, caseworker_id={caseworker_id}')
 
   try:
-    print("hello world")    
+    update_response = request.json
 
+    found_data = collection.find_one({ "_id": ObjectId(caseworker_id) }) 
+
+    if found_data is None:
+      return jsonify(status=404, msg="caseworker does not exist")
+
+    collection.find_one_and_update({ "_id": ObjectId(caseworker_id), "orgname": orgname }, { "$set": { **update_response }})
+    
+    jsonify(status=200, msg="Caseworker updated successfully")
   except Exception as e:
     return jsonify(error=str(e)), 404
-  # update a caseworker by id
 
-# UNFINISHED
 @caseworker_api.route('/<caseworker_id>', methods=['DELETE'])
 def delete_caseworker(orgname, caseworker_id): 
 
@@ -93,4 +97,3 @@ def delete_caseworker(orgname, caseworker_id):
     
   except Exception as e:
     return jsonify(error=str(e)), 404
-  # delete a caseworker by id
