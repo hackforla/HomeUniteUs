@@ -94,7 +94,17 @@ def delete_caseworker(orgname, caseworker_id):
   current_app.logger.debug(f'delete_caseworkers: orgname={orgname}, caseworker_id={caseworker_id}')
 
   try:
-    print("hello world")
+    case_worker = collection.find_one({ "_id": ObjectId(caseworker_id) })
+    
+    if case_worker is None:
+      return jsonify(status=400, msg="Casworker not found/doesn't exist")
+    
+    if case_worker['org'] != orgname:
+      return jsonify(status=400, msg="Casworker doesnt work for this organization")
+
+    deleting_caseworker = collection.delete_one({ "_id": ObjectId(caseworker_id) })
+
+    return jsonify(data=delete_caseworker, status=400, msg="deleting caseworker was successful")
     
   except Exception as e:
     return jsonify(error=str(e)), 404
