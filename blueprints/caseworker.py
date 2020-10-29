@@ -27,28 +27,30 @@ def get_all_caseworkers(orgname): # not sure if this is correct? also should it 
 
   except Exception as e:
     return jsonify(error=str(e)), 404
-  # return all caseworkers for organization
 
-# UNFINISHED
-# need to fix -> collection_name = f'{<what goes here>}'
 @caseworker_api.route('<caseworker_id>', methods=['GET'])
 def get_caseworker(orgname, caseworker_id): # not sure if this is correct?
 
   current_app.logger.debug(f'get_caseworker: orgname={orgname}, caseworker_id={caseworker_id}')
 
   try:
-    client = pymongo.MongoClient()
-    db = client[DB_NAME]
-
-    case_worker = collection.find_one({ "_id": caseworker_id, "org": orgname })
-
+    cursor = collection.find_one({ "_id": ObjectId(caseworker_id) })
     
+    print(cursor, ",-----------------wah is this?")
+
+    if cursor is None:
+      return jsonify(status=400, msg="Casworker not found/doesn't exist")
+    
+    print("<--------------------after cursor was found?")
+
+    for case_worker in cursor:
+      case_worker["_id"] = str(case_worker["_id"])
+      data.append(case_worker)
+        
+    return jsonify(status=200, msg="found caseworker", data={data})
   except Exception as e:
     return jsonify(error=str(e)), 404
-  # return all caseworkers for organization
 
-# UNFINISHED
-# need to fix -> collection_name = f'{<what goes here>}'
 @caseworker_api.route('/', methods=['POST'])
 def add_caseworker(orgname): 
   
@@ -56,12 +58,12 @@ def add_caseworker(orgname):
 
   try:
     data = request.json
-    print(data,",------------------the data?")
+
     if not data:
       return jsonify(status=404, msg="data is empty")
 
     data["org"] = orgname
-    print(collection, "<----------what is the collection")
+
     collection.insert_one(data)
 
     return jsonify(status=200, msg="Added caseworker succesfully")    
@@ -73,14 +75,13 @@ def update_caseworker(orgname, caseworker_id):
   
   current_app.logger.debug(f'update_caseworkers: orgname={orgname}, caseworker_id={caseworker_id}')
 
-  #TODO !
   try:
     update_response = request.json
 
     found_data = collection.find_one({ "_id": ObjectId(caseworker_id) })
 
     if found_data is None:
-      return jsonify(status=404, msg="caseworker does not exist")
+      return jsonify(status=404, msg="Casworker not found/doesn't exist")
 
     collection.find_one_and_update({ "_id": ObjectId(caseworker_id) }, { "$set": { **update_response }})
     
@@ -104,7 +105,6 @@ def delete_caseworker(orgname, caseworker_id):
 
     deleting_caseworker = collection.delete_one({ "_id": ObjectId(caseworker_id) })
 
-    return jsonify(data=delete_caseworker, status=400, msg="deleting caseworker was successful")
-    
+    return jsonify(data=deleting_caseworker, status=400, msg="deleting caseworker was successful")
   except Exception as e:
     return jsonify(error=str(e)), 404
