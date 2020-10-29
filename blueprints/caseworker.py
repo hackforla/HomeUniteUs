@@ -73,10 +73,23 @@ def update_caseworker(orgname, caseworker_id):
   
   current_app.logger.debug(f'update_caseworkers: orgname={orgname}, caseworker_id={caseworker_id}')
 
+  #TODO !
   try:
     update_response = request.json
 
-    found_data = collection.find_one({ "_id": ObjectId(caseworker_id) }) 
+    found_data = collection.find_one({ "$and" [
+        { "_id": ObjectId(caseworker_id) },
+        { "orgname": orgname }
+      ]
+    }) 
+
+#EXAMPLE!
+#     db.customers.find({
+#   $and: [
+#     {"address.country": "Germany"},
+#     {"last_login": "2020-01-22"}
+#   ]
+# })
 
     if found_data is None:
       return jsonify(status=404, msg="caseworker does not exist")
