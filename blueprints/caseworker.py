@@ -18,7 +18,12 @@ def get_all_caseworkers(orgname): # not sure if this is correct? also should it 
   current_app.logger.debug(f'get_all_caseworkers: orgname={orgname}')
 
   try:
-    collection.find_one({ "_id": ObjectId(orgname) }, { "caseworker": })
+    case_workers = collection.find({ "org": orgname })
+
+    if len(case_workers) <= 0:
+      return jsonify(status=400, msg="No casworkers")
+
+    return jsonify()
 
   except Exception as e:
     return jsonify(error=str(e)), 404
@@ -27,13 +32,16 @@ def get_all_caseworkers(orgname): # not sure if this is correct? also should it 
 # UNFINISHED
 # need to fix -> collection_name = f'{<what goes here>}'
 @caseworker_api.route('<caseworker_id>', methods=['GET'])
-def get_caseworkers(orgname, caseworker_id): # not sure if this is correct?
+def get_caseworker(orgname, caseworker_id): # not sure if this is correct?
 
-  current_app.logger.debug(f'get_caseworkers: orgname={orgname}, caseworker_id={caseworker_id}')
+  current_app.logger.debug(f'get_caseworker: orgname={orgname}, caseworker_id={caseworker_id}')
 
   try:
     client = pymongo.MongoClient()
     db = client[DB_NAME]
+
+    case_worker = collection.find_one({ "_id": caseworker_id, "org": orgname })
+
     
   except Exception as e:
     return jsonify(error=str(e)), 404
@@ -48,11 +56,17 @@ def add_caseworker(orgname):
 
   try:
     data = request.json
-    print(data)
-    
+    print(data,",------------------the data?")
+    if not data:
+      return jsonify(status=404, msg="data is empty")
+
+    data["org"] = orgname
+    print(collection, "<----------what is the collection")
+    collection.insert_one(data)
+
+    return jsonify(status=200, msg="Added caseworker succesfully")    
   except Exception as e:
     return jsonify(error=str(e)), 404
-  # add a new caseworker to an organization
 
 # UNFINISHED
 # not sure how to update the caseworker 
@@ -62,27 +76,20 @@ def update_caseworker(orgname, caseworker_id):
   current_app.logger.debug(f'update_caseworkers: orgname={orgname}, caseworker_id={caseworker_id}')
 
   try:
-    client = pymongo.MongoClient()
-    db = client[DB_NAME]
+    print("hello world")    
 
-    collection_name = f'{}' # I guess find the orgname collection? 
-    collection = db[collection_name]
-    
   except Exception as e:
     return jsonify(error=str(e)), 404
   # update a caseworker by id
 
 # UNFINISHED
-# need to fix -> collection_name = f'{<what goes here>}'
-@caseworker_api.route('/<caseworker_id>', methods=['PUT'])
+@caseworker_api.route('/<caseworker_id>', methods=['DELETE'])
 def delete_caseworker(orgname, caseworker_id): 
 
   current_app.logger.debug(f'delete_caseworkers: orgname={orgname}, caseworker_id={caseworker_id}')
 
   try:
-    client = pymongo.MongoClient()
-    db = client[DB_NAME]
-    # collection_name = f'{caseworker_id}' #caseworker_id?
+    print("hello world")
     
   except Exception as e:
     return jsonify(error=str(e)), 404
