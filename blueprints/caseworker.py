@@ -77,26 +77,14 @@ def update_caseworker(orgname, caseworker_id):
   try:
     update_response = request.json
 
-    found_data = collection.find_one({ "$and" [
-        { "_id": ObjectId(caseworker_id) },
-        { "orgname": orgname }
-      ]
-    }) 
-
-#EXAMPLE!
-#     db.customers.find({
-#   $and: [
-#     {"address.country": "Germany"},
-#     {"last_login": "2020-01-22"}
-#   ]
-# })
+    found_data = collection.find_one({ "_id": ObjectId(caseworker_id) })
 
     if found_data is None:
       return jsonify(status=404, msg="caseworker does not exist")
 
-    collection.find_one_and_update({ "_id": ObjectId(caseworker_id), "orgname": orgname }, { "$set": { **update_response }})
+    collection.find_one_and_update({ "_id": ObjectId(caseworker_id) }, { "$set": { **update_response }})
     
-    jsonify(status=200, msg="Caseworker updated successfully")
+    return jsonify(status=200, msg="Caseworker updated successfully")
   except Exception as e:
     return jsonify(error=str(e)), 404
 
