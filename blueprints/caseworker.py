@@ -34,20 +34,17 @@ def get_caseworker(orgname, caseworker_id): # not sure if this is correct?
   current_app.logger.debug(f'get_caseworker: orgname={orgname}, caseworker_id={caseworker_id}')
 
   try:
-    cursor = collection.find_one({ "_id": ObjectId(caseworker_id) })
+    cursor = collection.find({ "_id": ObjectId(caseworker_id) })
     
-    print(cursor, ",-----------------wah is this?")
-
     if cursor is None:
-      return jsonify(status=400, msg="Casworker not found/doesn't exist")
+      return jsonify(status=400, msg="Caseworker not found/doesn't exist")
     
-    print("<--------------------after cursor was found?")
+    case_worker = list(cursor)
 
-    for case_worker in cursor:
-      case_worker["_id"] = str(case_worker["_id"])
-      data.append(case_worker)
-        
-    return jsonify(status=200, msg="found caseworker", data={data})
+    for cw in case_worker:
+      cw["_id"] = str(cw['_id'])
+    
+    return jsonify(case_worker)
   except Exception as e:
     return jsonify(error=str(e)), 404
 
