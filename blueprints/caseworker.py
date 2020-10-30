@@ -13,7 +13,7 @@ db = client[DB_NAME]
 collection = db['caseWorkers'] 
 
 @caseworker_api.route('/', methods=['GET'])
-def get_all_caseworkers(orgname): # not sure if this is correct? also should it be orgname or orgId??
+def get_all_caseworkers(orgname): 
 
   current_app.logger.debug(f'get_all_caseworkers: orgname={orgname}')
 
@@ -21,8 +21,6 @@ def get_all_caseworkers(orgname): # not sure if this is correct? also should it 
     cursor = collection.find({ "org": orgname })
     
     case_workers = list(cursor)
-
-    print(case_workers, ",----------all of them?")
 
     if len(case_workers) <= 0:
       return jsonify(status=400, msg="No casworkers")
@@ -36,7 +34,7 @@ def get_all_caseworkers(orgname): # not sure if this is correct? also should it 
     return jsonify(error=str(e)), 404
 
 @caseworker_api.route('<caseworker_id>', methods=['GET'])
-def get_caseworker(orgname, caseworker_id): # not sure if this is correct?
+def get_caseworker(orgname, caseworker_id): 
 
   current_app.logger.debug(f'get_caseworker: orgname={orgname}, caseworker_id={caseworker_id}')
 
