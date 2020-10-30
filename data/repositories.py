@@ -1,5 +1,6 @@
 import json
-
+from flask import jsonify, make_response
+from bson.objectid import ObjectId
 from data.mongo import MongoFacade
 
 import gridfs
@@ -54,3 +55,45 @@ class Repository:
     def _log(self, method_name, message):
         self.logger.debug('Repository[{}]:{}: {}'.format(
             self.collection_name, method_name, message))
+
+
+class Case_Repository:
+    def __init__(self, collection_name, db_name):  
+        self.db_name = db_name      
+        self.collection_name = collection_name
+
+    def new_case(self, resp):
+        try:
+            case = self.collection_name.insert_one(resp) #insert to db
+            
+            return make_response(jsonify(case), 200)
+        except Exception as e:
+            return jsonify(error=str(e)), 404 
+
+    def update_case_status(self, resp):
+        try:
+            status_id = resp['status_id']
+            case_id = resp['case_id']
+
+            case = self.collection_name.find_one_and_update({ "_id": ObjectId(case_id) }, { '$set': { "status_id": status_id }})
+            if case is None: 
+                return jsonify("Case does not exist"), 404
+
+            return make_response(jsonify(case), 200)
+        except Exception as e:
+            return jsonify(error=str(e)), 404
+    
+    def reassign_case(self, resp):
+        try:
+            case_id = resp['case_id']
+            caseworker_id = resp['caseworker_id']
+
+            case = self.collection_name.find_one_and_update({ "_id": ObjectId(case_id) }, { "$set": { "caseworker_id": caseworker_id }}) 
+            if case is None: 
+                return jsonify("Case does not exist"), 404
+
+            return jsonify("Reassigned case successfully", case), 200
+        except Exception as e:
+            return jsonify(error=str(e)), 404
+        
+

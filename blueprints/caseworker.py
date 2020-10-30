@@ -29,7 +29,6 @@ def get_all_caseworkers(orgname):
       cw["_id"] = str(cw['_id'])
 
     return jsonify(case_workers)
-
   except Exception as e:
     return jsonify(error=str(e)), 404
 
@@ -54,7 +53,7 @@ def get_caseworker(orgname, caseworker_id):
     return jsonify(error=str(e)), 404
 
 @caseworker_api.route('/', methods=['POST'])
-def add_caseworker(orgname): 
+def add_caseworker(): 
   
   current_app.logger.debug(f'add_caseworkers: orgname={orgname}')
 
@@ -71,6 +70,7 @@ def add_caseworker(orgname):
     collection.insert_one(data)
 
     return jsonify(status=200, msg="Added caseworker succesfully")    
+
   except Exception as e:
     return jsonify(error=str(e)), 404
 
