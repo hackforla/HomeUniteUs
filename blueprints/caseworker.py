@@ -18,12 +18,19 @@ def get_all_caseworkers(orgname): # not sure if this is correct? also should it 
   current_app.logger.debug(f'get_all_caseworkers: orgname={orgname}')
 
   try:
-    case_workers = collection.find({ "org": orgname })
+    cursor = collection.find({ "org": orgname })
+    
+    case_workers = list(cursor)
+
+    print(case_workers, ",----------all of them?")
 
     if len(case_workers) <= 0:
       return jsonify(status=400, msg="No casworkers")
+    
+    for cw in case_workers:
+      cw["_id"] = str(cw['_id'])
 
-    return jsonify()
+    return jsonify(case_workers)
 
   except Exception as e:
     return jsonify(error=str(e)), 404
@@ -52,6 +59,8 @@ def get_caseworker(orgname, caseworker_id): # not sure if this is correct?
 def add_caseworker(orgname): 
   
   current_app.logger.debug(f'add_caseworkers: orgname={orgname}')
+
+  print("Hitting the add case worker request")
 
   try:
     data = request.json
