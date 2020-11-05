@@ -51,7 +51,7 @@ const initialState: Case = {
   },
 }
 
-const caseworkerDashboardReducer = (state: Case, action: CaseworkerAction): Case => {
+const CaseworkerDashboardReducer = (state: Case, action: CaseworkerAction): Case => {
   switch(action.type){
     case CaseWorkerDashboardActionType.BeginFetchingCases: {
       return {
@@ -67,8 +67,19 @@ const caseworkerDashboardReducer = (state: Case, action: CaseworkerAction): Case
   }
 }
 
-export function CaseworkerDashboardDataProvider(props: React.PropsWithChildren<{}>): JSX.Element {
-  const [start, dispatch] = React.useReducer(caseworkerDashboardReducer, initialState)
+export function CaseworkerDashboardDataProvider(props: React.PropsWithChildren<{}>): void /*JSX.Element*/ {
+  const [state, dispatch] = React.useReducer(CaseworkerDashboardReducer, initialState)
+  
+  //TODO: Need a Lifecycle method to fetch Cases on React.useEffect(() => {}, [])
 
-  return <CaseworkerDashboardContext.Provider value={value} {...props} />
+  // return <CaseworkerDashboardContext.Provider value={value} {...props} /> 
+}
+
+// Create a hook to use the APIContext, this is a Kent C. Dodds pattern
+export function useCaseworkerDashboard(){
+  const context = React.useContext(CaseworkerDashboardContext)
+  if (context === undefined) {
+    throw new Error("Context must be used within a Provider");
+  }
+  return context
 }
