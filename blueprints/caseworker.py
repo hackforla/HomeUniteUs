@@ -2,93 +2,113 @@ import json
 from flask import Blueprint, render_template, abort, jsonify, current_app, request, Response
 from jinja2 import TemplateNotFound #this is not needed
 import pymongo
-from bson import ObjectId #this is not needed 
+from bson.objectid import ObjectId
 from config.constants import DB_NAME
 
 caseworker_api = Blueprint('caseworker_api', __name__,
                           template_folder='templates')
 
-client = pymongo.MongoClient()
+client = pymongo.MongoClient()    
 db = client[DB_NAME]
-collection = db['caseWorkers']
+collection = db['caseWorkers'] 
 
-# UNFINISHED
-# need to fix -> collection_name = f'{<what goes here>}'
 @caseworker_api.route('/', methods=['GET'])
-def get_all_caseworkers(orgname): # not sure if this is correct?
+def get_all_caseworkers(orgname): 
 
   current_app.logger.debug(f'get_all_caseworkers: orgname={orgname}')
 
   try:
-    org = collection.find(orgname) 
-    # caseworker = [model_to_dict(worker) for worker in org.find()] # Im guessing here
-    # print(caseworker)
-    data = org.find() #
-    return jsonify(data=data, status={"code": 200, "message": "Success"})
+    cursor = collection.find({ "org": orgname })
+    
+    case_workers = list(cursor)
 
+    if len(case_workers) <= 0:
+      return jsonify(status=400, msg="No casworkers")
+    
+    for cw in case_workers:
+      cw["_id"] = str(cw['_id'])
+
+    return jsonify(case_workers)
   except Exception as e:
     return jsonify(error=str(e)), 404
-  # return all caseworkers for organization
 
-# UNFINISHED
-# need to fix -> collection_name = f'{<what goes here>}'
 @caseworker_api.route('<caseworker_id>', methods=['GET'])
-def get_caseworkers(orgname, caseworker_id): # not sure if this is correct?
+def get_caseworker(orgname, caseworker_id): 
 
-  current_app.logger.debug(f'get_caseworkers: orgname={orgname}, caseworker_id={caseworker_id}')
+  current_app.logger.debug(f'get_caseworker: orgname={orgname}, caseworker_id={caseworker_id}')
 
   try:
-    print("Testing route")
+    cursor = collection.find({ "_id": ObjectId(caseworker_id) })
+    
+    if cursor is None:
+      return jsonify(status=400, msg="Caseworker not found/doesn't exist")
+    
+    case_worker = list(cursor)
+
+    for cw in case_worker:
+      cw["_id"] = str(cw['_id'])
+    
+    return jsonify(case_worker)
   except Exception as e:
     return jsonify(error=str(e)), 404
-  # return all caseworkers for organization
 
-# UNFINISHED
-# NE
-# need to fix -> collection_name = f'{<what goes here>}'
 @caseworker_api.route('/', methods=['POST'])
 def add_caseworker(): 
   
   current_app.logger.debug(f'add_caseworkers: orgname={orgname}')
 
+  print("Hitting the add case worker request")
+
   try:
-    data = request.json #get the response?
-    data['orgname'] 
-    
+    data = request.json
+
+    if not data:
+      return jsonify(status=404, msg="data is empty")
+
+    data["org"] = orgname
+
+    collection.insert_one(data)
+
+    return jsonify(status=200, msg="Added caseworker succesfully")    
+
   except Exception as e:
     return jsonify(error=str(e)), 404
-  # add a new caseworker to an organization
 
-# UNFINISHED
-# not sure how to update the caseworker 
 @caseworker_api.route('/<caseworker_id>', methods=['PUT'])
 def update_caseworker(orgname, caseworker_id): 
   
   current_app.logger.debug(f'update_caseworkers: orgname={orgname}, caseworker_id={caseworker_id}')
 
   try:
-    client = pymongo.MongoClient()
-    db = client[DB_NAME]
+    update_response = request.json
 
-    # collection_name = f'{}' # I guess find the orgname collection? 
-    collection = db[collection_name]
+    found_data = collection.find_one({ "_id": ObjectId(caseworker_id) })
+
+    if found_data is None:
+      return jsonify(status=404, msg="Casworker not found/doesn't exist")
+
+    collection.find_one_and_update({ "_id": ObjectId(caseworker_id) }, { "$set": { **update_response }})
     
+    return jsonify(status=200, msg="Caseworker updated successfully")
   except Exception as e:
     return jsonify(error=str(e)), 404
-  # update a caseworker by id
 
-# UNFINISHED
-# need to fix -> collection_name = f'{<what goes here>}'
-@caseworker_api.route('/<caseworker_id>', methods=['PUT'])
+@caseworker_api.route('/<caseworker_id>', methods=['DELETE'])
 def delete_caseworker(orgname, caseworker_id): 
 
   current_app.logger.debug(f'delete_caseworkers: orgname={orgname}, caseworker_id={caseworker_id}')
 
   try:
-    client = pymongo.MongoClient()
-    db = client[DB_NAME]
-    # collection_name = f'{caseworker_id}' #caseworker_id?
+    case_worker = collection.find_one({ "_id": ObjectId(caseworker_id) })
     
+    if case_worker is None:
+      return jsonify(status=400, msg="Casworker not found/doesn't exist")
+    
+    if case_worker['org'] != orgname:
+      return jsonify(status=400, msg="Casworker doesnt work for this organization")
+
+    deleting_caseworker = collection.delete_one({ "_id": ObjectId(caseworker_id) })
+
+    return jsonify(data=deleting_caseworker, status=400, msg="deleting caseworker was successful")
   except Exception as e:
     return jsonify(error=str(e)), 404
-  # delete a caseworker by id
