@@ -1,14 +1,22 @@
 import * as React from 'react'
 import { Host } from '../models/v2'
+import { Guest } from '../models'
+import { useAuth0 } from '../react-auth0-spa'
 
-const CaseworkerDashboardContext = React.createContext({})
+// we gotta find caseworker id
+//  
+
+const CaseworkerDashboardContext = React.createContext({
+  state: {} as CaseworkerDashboardState,
+  dispatch: (() => {}) as any 
+})
 
 interface Case {
   hostGroup: Array<Host>;
-  // guestGroup: Array<Guest>; //there is no guest in ../models/v2
+  guestGroup: Array<Guest>; 
   caseWorkerId: string;
   id: string;
-  status: Status; // we don't have this type yet either
+  status: Status; 
   loaderState: {
     loading: boolean
     message: string
@@ -17,41 +25,42 @@ interface Case {
 
 interface Status {
   id: string;
-  displayName: string; // values like "Pending Match", "Ready to Move In" etc
+  displayName: string; 
 }
 
 enum CaseWorkerDashboardActionType {
   BeginFetchingCases,
   FinishFetchingCases,
-  isLoading,
   Error,
 }
 
 interface CaseworkerAction {
   type: CaseWorkerDashboardActionType
   payload?:
-      | Case
-      | Array<Host>
-      // | Array<Guest>
+      | Array<Case>
       | string
       | any
 }
 
-const initialState: Case = {
-  hostGroup: [],
-  caseWorkerId: "",
-  id: "",
-  status: {
-    id: "",
-    displayName: ""
-  },
+interface CaseworkerDashboardState {
+  cases: Array<Case>,
+  loaderState: {
+    loading: boolean,
+    message: string
+  }
+  caseworkerId: string
+}
+
+const initialState: CaseworkerDashboardState = {
+  cases: [],
+  caseworkerId: "",
   loaderState: {
       loading: false,
       message: '',
   },
 }
 
-const CaseworkerDashboardReducer = (state: Case, action: CaseworkerAction): Case => {
+const CaseworkerDashboardReducer = (state: CaseworkerDashboardState, action: CaseworkerAction): CaseworkerDashboardState => {
   switch(action.type){
     case CaseWorkerDashboardActionType.BeginFetchingCases: {
       return {
@@ -62,22 +71,52 @@ const CaseworkerDashboardReducer = (state: Case, action: CaseworkerAction): Case
         }
       }
     }
+    case CaseWorkerDashboardActionType.FinishFetchingCases: {
+      return {
+        ...state,
+        cases: action.payload as Array<Case>,
+        loaderState: {
+          ...state.loaderState,
+          loading: false,
+        }
+      }
+    }
     default:
       throw new Error(`Unsupported action: ${JSON.stringify(action)}`)
   }
 }
 
-export function CaseworkerDashboardDataProvider(props: React.PropsWithChildren<{}>): void /*JSX.Element*/ {
+export function CaseworkerDashboardDataProvider(props: React.PropsWithChildren<{}>): JSX.Element {
   const [state, dispatch] = React.useReducer(CaseworkerDashboardReducer, initialState)
-  
-  //TODO: Need a Lifecycle method to fetch Cases on React.useEffect(() => {}, [])
+  const { user } = useAuth0()
 
-  // return <CaseworkerDashboardContext.Provider value={value} {...props} /> 
+  const fetchingCases = async () => {
+    try{ 
+      dispatch({ type: CaseWorkerDashboardActionType.BeginFetchingCases, payload: "Loading Cases..." })
+
+      const response: Response = await fetch('/api/placholder', { // TODO: Hassen placeholder for now
+        method: "POST",
+        body: JSON.stringify({user})
+      })
+      if(response.status !== 200){
+        return response.statusText
+      }
+      const userWithCases = await response.json()
+      dispatch({ type: CaseWorkerDashboardActionType.FinishFetchingCases, payload: userWithCases })
+    } catch(e){
+      console.log(e)
+    }
+  }
+  
+  React.useEffect(() => {
+    fetchingCases()
+  }, [])
+
+  return <CaseworkerDashboardContext.Provider value={{state, dispatch}} {...props} /> 
 }
 
-// Create a hook to use the APIContext, this is a Kent C. Dodds pattern
 export function useCaseworkerDashboard(){
-  const context = React.useContext(CaseworkerDashboardContext)
+  const context = React.useContext(CaseworkerDashboardContext) 
   if (context === undefined) {
     throw new Error("Context must be used within a Provider");
   }
