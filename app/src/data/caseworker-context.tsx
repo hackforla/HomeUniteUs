@@ -12,15 +12,11 @@ const CaseworkerDashboardContext = React.createContext({
 })
 
 interface Case {
-  hostGroup: Array<Host>;
-  guestGroup: Array<Guest>; 
+  // hostGroup?: Array<Host>;
+  guestGroup?: Array<Guest>; 
   caseWorkerId: string;
   id: string;
   status: Status; 
-  loaderState: {
-    loading: boolean
-    message: string
-  }
 };
 
 interface Status {
@@ -94,17 +90,20 @@ export function CaseworkerDashboardDataProvider(props: React.PropsWithChildren<{
     try{ 
       dispatch({ type: CaseWorkerDashboardActionType.BeginFetchingCases, payload: "Loading Cases..." })
 
-      const response: Response = await fetch('/api/placholder', { // TODO: Hassen placeholder for now
+      const response: Response = await fetch('/api/case/get_cases', { // TODO: Hassen placeholder for now
         method: "POST",
-        body: JSON.stringify({user})
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({caseworker_id: "5f9b0e52123b4b14c8eb828f"}) //testing here
       })
       if(response.status !== 200){
         return response.statusText
       }
-      const userWithCases = await response.json()
-      dispatch({ type: CaseWorkerDashboardActionType.FinishFetchingCases, payload: userWithCases })
+      const caseworkerWithCases = await response.json()
+      dispatch({ type: CaseWorkerDashboardActionType.FinishFetchingCases, payload: caseworkerWithCases })
     } catch(e){
-      console.log(e)
+      console.log(e, "<---------------error in context")
     }
   }
   

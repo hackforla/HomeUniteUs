@@ -1,6 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, Typography } from '@material-ui/core';
+import { Container, TableBody, Typography } from '@material-ui/core';
 import Paper from "@material-ui/core/Paper";
 import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
@@ -28,9 +28,18 @@ export const CaseworkerDashboardContainer = () => {
   )
 }
 
-function CaseworkerDashboard({}: Props) {
+export function CaseworkerDashboard({}: Props) {
   const { state, dispatch } = useCaseworkerDashboard()
   const classes = useStyles();
+
+  const displayCases: any = () => {
+    {console.log(state?.cases?.data, "<------------is it in state tho?")}
+    return state.cases.data.map(case => {
+      return (
+      <h1>{case._id}</h1>
+      )
+    })
+  }
 
   return (
     <Container maxWidth={false}>
@@ -51,6 +60,10 @@ function CaseworkerDashboard({}: Props) {
             </TableRow>
           </TableHead>
 
+          <TableBody>
+            {displayCases()}
+        </TableBody>
+
           </Table>
         </TableContainer>
       </Container>
@@ -58,4 +71,3 @@ function CaseworkerDashboard({}: Props) {
   )
 }
 
-export default CaseworkerDashboard

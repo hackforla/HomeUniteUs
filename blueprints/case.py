@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, abort, jsonify, current_app, reque
 import pymongo
 from bson import ObjectId 
 from config.constants import DB_NAME
+from bson.json_util import dumps
 import sys
 sys.path.append('.') # I DO NOT THING THIS IS A GOOD IDEA ON PRODUCTION CODE
 from data.repositories import Case_Repository
@@ -14,6 +15,25 @@ client = pymongo.MongoClient()
 db = client[DB_NAME]
 collection = db['case'] 
 case_repository = Case_Repository(collection, db)
+
+@case_api.route('/get_cases', methods=['POST'])
+def get_case():
+  try: 
+    response = request.get_json()
+
+    if response is None:
+      return jsonify("Response is empty"), 404
+
+    if not response['caseworker_id']:
+      return jsonify("Need a caseworker ID"), 400
+    
+    data = case_repository.get_case(response)
+    if data is None:
+      return jsonify(status=404, msg="Failed to fetch cases or cases is empty")
+        
+    return jsonify(status=200, msg="Successfully grabbed Cases", data=data)
+  except Exception as e:
+    return jsonify(error=str(e)),404
 
 @case_api.route('/create_case', methods=['POST'])
 def create_case():

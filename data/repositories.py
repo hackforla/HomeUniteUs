@@ -2,6 +2,7 @@ import json
 from flask import jsonify, make_response
 from bson.objectid import ObjectId
 from data.mongo import MongoFacade
+from bson.json_util import dumps
 
 import gridfs
 
@@ -61,6 +62,23 @@ class Case_Repository:
     def __init__(self, collection_name, db_name):  
         self.db_name = db_name      
         self.collection_name = collection_name
+    
+    def get_case(self, resp):
+        try:
+            cursor = self.collection_name.find({ "caseworker_id": resp['caseworker_id'] })
+
+            cases = list(cursor)
+
+            if len(cases) <= 0:
+                return jsonify(status=400, msg="No cases available")
+            
+            for case in cases:
+                case["_id"] = str(case['_id'])
+
+            return cases
+
+        except Exception as e:
+            return jsonify(error=str(e)), 404
 
     def new_case(self, resp):
         try:
