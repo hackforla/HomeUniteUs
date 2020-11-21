@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, TableBody, Typography } from '@material-ui/core';
+import { Box, Container, TableBody, TextField, Typography } from '@material-ui/core';
 import Paper from "@material-ui/core/Paper";
 import TableContainer from '@material-ui/core/TableContainer';
 import Table from '@material-ui/core/Table';
@@ -8,7 +8,6 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import { useCaseworkerDashboard, CaseworkerDashboardDataProvider } from '../../data/caseworker-context'
-
 
 const useStyles = makeStyles({
   table: {
@@ -30,12 +29,19 @@ export const CaseworkerDashboardContainer = () => {
 
 export function CaseworkerDashboard({}: Props) {
   const { state, dispatch } = useCaseworkerDashboard()
+  const [search, setSearch] = React.useState("")
   const classes = useStyles();
 
   const displayCases = (): JSX.Element | JSX.Element[] => {
     if(!state){
       return (
-        <p>Loading....</p>
+        <TableRow>
+          <TableCell component="th" scope="row">
+            Loading...
+          </TableCell>
+          <TableCell align="center">Loading...</TableCell>
+          <TableCell align="center">Loading...</TableCell>
+        </TableRow>
       )
     } else {
       return state?.cases?.map(e => {
@@ -52,27 +58,34 @@ export function CaseworkerDashboard({}: Props) {
     }
   }
 
+  const handleSearch = (ev: any): void => {
+    setSearch(ev.target.value)
+  }
+
   return (
     <Container maxWidth={false}>
-      <Paper>
+      {/* <Paper> */}
         <h1>Caseworker Dashboard</h1>
-      </Paper>
+        <hr />
+      {/* </Paper> */}
 
       <Container fixed>
-        <Typography variant="h6">Total Cases: {state?.cases?.length}</Typography>
+        <Box display="flex" justifyContent="space-between">
+          <Typography variant="h6">Total Cases: {state?.cases?.length}</Typography>
+          <TextField id="outlined-basic" label="Search for a Guest or Case Number" variant="outlined" style={{ width: "50%"}} onChange={handleSearch} value={search}/>
+        </Box>
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="simple table">
 
           <TableHead>
             <TableRow>
-              <TableCell>CASE NUMBER</TableCell>
-              <TableCell align="center">GUEST NAME</TableCell>
-              <TableCell align="center">STATUS</TableCell>
+              <TableCell style={{ fontWeight: "bold"}}>CASE NUMBER</TableCell>
+              <TableCell align="center" style={{ fontWeight: "bold"}}>GUEST NAME</TableCell>
+              <TableCell align="center" style={{ fontWeight: "bold"}}>STATUS</TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
-            {console.log(state, "<-----------the state is?")}
             {displayCases()}
         </TableBody>
 

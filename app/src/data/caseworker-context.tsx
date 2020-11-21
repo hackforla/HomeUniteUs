@@ -82,6 +82,7 @@ const CaseworkerDashboardReducer = (state: CaseworkerDashboardState, action: Cas
 
 export function CaseworkerDashboardDataProvider(props: React.PropsWithChildren<{}>): JSX.Element {
   const [state, dispatch] = React.useReducer(CaseworkerDashboardReducer, initialState)
+  const [search, setSearch] = React.useState("")
   const { user } = useAuth0()
 
   const fetchingCases = async () => {
