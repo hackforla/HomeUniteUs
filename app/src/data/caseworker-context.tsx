@@ -1,10 +1,7 @@
 import * as React from 'react'
 import { Host } from '../models/v2'
 import { Guest } from '../models'
-import { useAuth0 } from '../react-auth0-spa'
-
-// we gotta find caseworker id
-//  
+import { useAuth0 } from '../react-auth0-spa' 
 
 const CaseworkerDashboardContext = React.createContext({
   state: {} as CaseworkerDashboardState,
@@ -13,10 +10,11 @@ const CaseworkerDashboardContext = React.createContext({
 
 interface Case {
   // hostGroup?: Array<Host>;
-  guestGroup?: Array<Guest>; 
-  caseWorkerId: string;
-  id: string;
-  status: Status; 
+  // guestGroup?: Array<Guest>; 
+  guest_id: string;
+  caseworker_id: string;
+  _id: string;
+  status_id: Status; 
 };
 
 interface Status {
@@ -101,7 +99,7 @@ export function CaseworkerDashboardDataProvider(props: React.PropsWithChildren<{
         return response.statusText
       }
       const caseworkerWithCases = await response.json()
-      dispatch({ type: CaseWorkerDashboardActionType.FinishFetchingCases, payload: caseworkerWithCases })
+      dispatch({ type: CaseWorkerDashboardActionType.FinishFetchingCases, payload: caseworkerWithCases.data })
     } catch(e){
       console.log(e, "<---------------error in context")
     }

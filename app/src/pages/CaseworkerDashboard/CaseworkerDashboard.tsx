@@ -32,13 +32,24 @@ export function CaseworkerDashboard({}: Props) {
   const { state, dispatch } = useCaseworkerDashboard()
   const classes = useStyles();
 
-  const displayCases: any = () => {
-    {console.log(state?.cases?.data, "<------------is it in state tho?")}
-    return state.cases.data.map(case => {
+  const displayCases = (): JSX.Element | JSX.Element[] => {
+    if(!state){
       return (
-      <h1>{case._id}</h1>
+        <p>Loading....</p>
       )
-    })
+    } else {
+      return state?.cases?.map(e => {
+        return (
+          <TableRow key={e._id}>
+            <TableCell component="th" scope="row">
+              {e._id}
+            </TableCell>
+            <TableCell align="center">{e.guest_id}</TableCell>
+            <TableCell align="center">{e.status_id}</TableCell>
+          </TableRow>
+        )
+      })
+    }
   }
 
   return (
@@ -48,7 +59,7 @@ export function CaseworkerDashboard({}: Props) {
       </Paper>
 
       <Container fixed>
-        <Typography variant="h6">Total Cases: 10</Typography>
+        <Typography variant="h6">Total Cases: {state?.cases?.length}</Typography>
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="simple table">
 
@@ -61,6 +72,7 @@ export function CaseworkerDashboard({}: Props) {
           </TableHead>
 
           <TableBody>
+            {console.log(state, "<-----------the state is?")}
             {displayCases()}
         </TableBody>
 
