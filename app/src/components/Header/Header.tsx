@@ -18,6 +18,9 @@ export const Header = () => {
                 </a>
             </AppStyle.FlexGrowHolder>
             <AppStyle.Holder>
+                <NavLink to={`/caseworkerdashboard`}>caseworker dashboard</NavLink>
+            </AppStyle.Holder>
+            <AppStyle.Holder>
                 <NavLink to={`/about`}>ABOUT</NavLink>
             </AppStyle.Holder>
             {/* Tyler 8/8/2020: Moving away from proof-of-concept to prototype */}

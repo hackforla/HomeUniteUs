@@ -29,10 +29,12 @@ import {
     AdminDashboard,
     AdminDashboardContainer,
 } from './pages/AdminDashboard/AdminDashboard'
+import { CaseworkerDashboard, CaseworkerDashboardContainer} from './pages/CaseworkerDashboard/CaseworkerDashboard'
 
 export default function Routes() {
     return (
         <Switch>
+            <Route exact path="/caseworkerdashboard" component={CaseworkerDashboardContainer} />
             <Route exact path="/" component={AboutPage} />
             <Route exact path="/demo" component={Demo} />
             <Route path="/about" component={AboutPage} />
