@@ -219,6 +219,13 @@ def favicon():
 
 @app.route('/api/guests', methods=['GET', 'POST'])
 def get_all_guests():
+    '''Route method for retrieving all guests and adding new ones.
+    Supports GET and POST requests.
+
+    Returns:
+        flask.Response: response corresponding to request
+    '''
+
 
     app.logger.warning(
         'get_all_guests: request.method = {}'.format(request.method))
@@ -272,6 +279,15 @@ def get_all_guests():
 
 @app.route('/api/guests/<int:id>', methods=['GET', 'PUT', 'DELETE'])
 def guest_by_id(id: int):
+    '''Route method for retrieving, updating, and deleting guests by ID.
+    Supports GET, PUT, DELETE requests.
+
+    Args:
+        id (int): guest ID
+
+    Returns:
+        flask.Response: response corresponding to request
+    '''
 
     app.logger.warning(
         'guest_by_id: request.method = {}'.format(request.method))
@@ -347,6 +363,11 @@ def guest_by_id(id: int):
 
 @app.route('/api/guestQuestions', methods=['GET'])
 def get_all_guestQuestions():
+    '''Route method for retrieving all guest questions. Supports GET requests.
+
+    Returns:
+        flask.Response: response corresponding to request
+    '''
 
     app.logger.warning(
         'get_all_guestQuestions: request.method = {}'.format(request.method))
@@ -372,6 +393,14 @@ def get_all_guestQuestions():
 
 @app.route('/api/guestQuestions/<int:id>', methods=['GET'])
 def get_guestQuestion_by_id(id: int):
+    '''Route method for retrieving a guest by ID. Supports GET requests.
+
+    Args:
+        id (int): question identifier
+
+    Returns:
+        flask.Response: response corresponding to request
+    '''
 
     app.logger.warning(
         'get_guestQuestion_by_id: request.method = {}'.format(request.method))
@@ -398,6 +427,15 @@ def get_guestQuestion_by_id(id: int):
 
 @app.route('/api/guests/<int:guest_id>/responses', methods=['GET', 'POST'])
 def get_guest_responses(guest_id: int):
+    '''Route method for retrieving all responses or adding a new one
+    for a guest using guest ID. Supports GET and POST requests.
+
+    Args:
+        guest_id (int): guest identifier
+
+    Returns:
+        flask.Response: response corresponding to request
+    '''
 
     app.logger.warning(
         'get_guest_responses: request.method = {}'.format(request.method))
@@ -455,6 +493,16 @@ def get_guest_responses(guest_id: int):
 
 @app.route('/api/guests/<int:guest_id>/responses/<int:question_id>', methods=['GET', 'PUT', 'DELETE'])
 def get_guest_response_by_id(guest_id: int, question_id: int):
+    '''Route method for retrieving, updating, and deleting a reponse for
+    a question of a specified guest. Supports GET, POST, DELETE requests.
+
+    Args:
+        guest_id (int): guest identifier
+        question_id (int): question identifier
+
+    Returns:
+        flask.Response: response corresponding to request
+    '''
 
     app.logger.warning(
         'get_guest_response_by_id: request.method = {}'.format(request.method))
@@ -542,6 +590,15 @@ def get_guest_response_by_id(guest_id: int, question_id: int):
 
 @app.route('/api/hosts/<int:host_id>/responses', methods=['GET', 'POST'])
 def get_host_responses(host_id: int):
+    '''Route method for retrieving all responses or adding a new one
+    for a host using host ID. Supports GET and POST requests.
+
+    Args:
+        host_id (int): host identifier
+
+    Returns:
+        flask.Response: response corresponding to request
+    '''
 
     app.logger.warning(
         'get_host_responses: request.method = {}'.format(request.method))
@@ -599,6 +656,16 @@ def get_host_responses(host_id: int):
 
 @app.route('/api/hosts/<int:host_id>/responses/<int:question_id>', methods=['GET', 'PUT', 'DELETE'])
 def get_host_response_by_id(host_id: int, question_id: int):
+    '''Route method for retrieving, updating, and deleting a reponse for
+    a question of a specified host. Supports GET, POST, DELETE requests.
+
+    Args:
+        host_id (int): host identifier
+        question_id (int): question identifier
+
+    Returns:
+        flask.Response: response corresponding to request
+    '''
 
     app.logger.warning(
         'get_host_response_by_id: request.method = {}'.format(request.method))
@@ -686,6 +753,12 @@ def get_host_response_by_id(host_id: int, question_id: int):
 
 @app.route('/api/restrictions', methods=['GET'])
 def get_all_restrictions():
+    '''Route method for retrieving all restrictions.
+    Supports GET requests.
+
+    Returns:
+        flask.Response: response corresponding to request
+    '''
 
     app.logger.warning(
         'all_restrictions: request.method = {}'.format(request.method))
@@ -712,6 +785,12 @@ def get_all_restrictions():
 
 @app.route('/api/responseValues', methods=['GET'])
 def get_all_response_values():
+    '''Route method for retrieving all responseValues.
+    Supports GET responses.
+
+    Returns:
+        flask.Response: response corresponding to request
+    '''
 
     try:
         responseValues = responseValuesRepository.get()
@@ -774,6 +853,13 @@ def get_all_data():
 
 
 def _populate_children(question):
+    '''Helper function for retrieving and populating
+    child question data for a structure where children
+    are identified by question IDs.
+
+    Returns:
+        Dict: response corresponding to request
+    '''
 
     children = question['children']
 
@@ -816,6 +902,12 @@ def _populate_children(question):
 
 @app.route('/api/v1/hostRegisterQuestions', methods=['GET'])
 def get_host_register_questions():
+    '''Route method for retrieving all host registration questions.
+    Supports GET requests.
+
+    Returns:
+        flask.Response: response corresponding to request
+    '''
 
     try:
         response = hostRegisterQuestionsRepository.get(
@@ -862,6 +954,15 @@ def get_host_register_questions():
 
 @app.route('/api/v1/hostRegisterQuestions/<question_id>', methods=['GET', 'PUT', 'DELETE'])
 def get_host_register_question_by_id(question_id):
+    '''Route method for retrieving, updating, and deleting
+    host registration questions. Supports GET, PUT, DELETE requests.
+
+    Args:
+        question_id (int): identifier for host registration question
+
+    Returns:
+        flask.Response: response corresponding to request
+    '''
 
     if request.method == 'GET':
 
@@ -979,6 +1080,12 @@ def get_questions_v1():
 
 @app.route('/api/matchResults', methods=['GET'])
 def get_all_match_results():
+    '''Route method for retrieving all match results.
+    Supports GET requests.
+
+    Returns:
+        flask.Response: response corresponding to request
+    '''
 
     try:
 
@@ -1017,6 +1124,15 @@ def get_all_match_results():
 #########################
 
 def allowed_file(filename):
+    '''Checks if supplied filename is allowed, requiring a filename with
+    one of the allowed extensions.
+
+    Args:
+        filename (str): filename for file to upload
+
+    Returns:
+        bool: whether or not a file is allowed for uploading
+    '''
     if not "." in filename:
         return False
 
@@ -1030,6 +1146,11 @@ def allowed_file(filename):
 
 @app.route('/api/uploadImage', methods=['POST'])
 def image_upload():
+    '''Route method for uploading an image. Supports POST requests.
+
+    Returns:
+        flask.Response: response corresponding to request
+    '''
     if 'image' not in request.files:
         flash('no image file')
         return Response(status=400, mimetype='application/json')
@@ -1064,6 +1185,14 @@ def image_upload():
 
 @app.route('/api/host/images/<subject>', methods=['POST'])
 def get_images(subject):
+    '''Route method for retrieving images for a subject.
+
+    Args:
+        subject: identifier for a subject
+
+    Returns:
+        flask.Response: response corresponding to request
+    '''
     try:
 
         email = request.json['email']
@@ -1096,6 +1225,15 @@ def get_images(subject):
 
 @app.route('/api/host/images/download/<file_id>', methods=['GET'])
 def image_download(file_id):
+    '''Route method for retrieving image files by ID.
+    Supports GET requests.
+
+    Args:
+        file_id: identifier for an image file
+
+    Returns:
+        flask.Response: response corresponding to request
+    '''
 
     app.logger.debug(f'image_download: file_id = {file_id}')
 
@@ -1143,7 +1281,11 @@ def image_download(file_id):
 
 @app.route('/api/account/type', methods=['POST'])
 def get_user_type():
-    """Returns user type"""
+    """Route method for getting user type. Supports POST requests.
+
+    Returns:
+        flask.Response: response containing user type
+    """
 
     try:
 
@@ -1169,7 +1311,11 @@ def get_user_type():
 
 @app.route('/api/host', methods=['POST'])
 def get_host_by_email():
-    """Returns user type"""
+    """Route method for retrieving a host by email. Supports POST requests.
+
+    Returns:
+        flask.Response: response containing user type
+    """
 
     try:
 
@@ -1195,8 +1341,11 @@ def get_host_by_email():
 
 @app.route('/api/host/registration', methods=['POST'])
 def add_new_host():
-    """Add a host"""
+    """Route method for adding a new host. Supports POST requests.
 
+    Returns:
+        flask.Response: response status for request
+    """
     try:
 
         data = request.json
@@ -1221,7 +1370,11 @@ def add_new_host():
 
 @app.route('/api/host/registration/info', methods=['PUT'])
 def add_host_info():
-    """Add the general info for a host"""
+    """Route method for adding a general info for host. Supports PUT requests.
+
+    Returns:
+        flask.Response: response status for request
+    """
 
     try:
 
@@ -1258,7 +1411,11 @@ def add_host_info():
 
 @app.route('/api/host/registration/contact', methods=['PUT'])
 def add_host_contact():
-    """Add the contact info for a host"""
+    """Add the contact info for a host. Supports PUT requests.
+
+    Returns:
+        flask.Response: response status for request
+    """
 
     try:
 
@@ -1276,7 +1433,11 @@ def add_host_contact():
 
 @app.route('/api/host/registration/address', methods=['PUT'])
 def add_host_address():
-    """Add the address info for a host"""
+    """Add the address info for a host. Supports PUT requests.
+
+    Returns:
+        flask.Response: response status for request
+    """
 
     try:
 
@@ -1294,7 +1455,11 @@ def add_host_address():
 
 @app.route('/api/host/registration/language', methods=['PUT'])
 def add_host_language():
-    """Add the language info for a host"""
+    """Add the language info for a host. Supports PUT requests.
+
+    Returns:
+        flask.Response: response status for request
+    """
 
     try:
 
@@ -1312,7 +1477,11 @@ def add_host_language():
 
 @app.route('/api/host/registration/gender', methods=['PUT'])
 def add_host_gender():
-    """Add the gender info for a host"""
+    """Add the gender info for a host. Supports PUT requests.
+
+    Returns:
+        flask.Response: response status for request
+    """
 
     try:
 
@@ -1330,7 +1499,14 @@ def add_host_gender():
 
 @app.route('/api/host/registration/matching/<questionId>', methods=['PUT'])
 def add_host_matching_response(questionId):
-    """Add the a response to a host matching question"""
+    """Add the a response to a host matching question. Supports PUT requests.
+
+    Args:
+        questionId (int): identifier for host matching question
+
+    Returns:
+        flask.Response: response status for request
+    """
 
     try:
 
@@ -1350,7 +1526,14 @@ def add_host_matching_response(questionId):
 
 @app.route('/api/host/registration/qualifying/<questionId>', methods=['PUT'])
 def add_host_qualifying_response(questionId):
-    """Add the a response to a host qualifying question"""
+    """Add the a response to a host qualifying question. Supports PUT requests.
+
+    Args:
+        questionId (int): identifier for host qualifying question
+
+    Returns:
+        flask.Response: response status for request
+    """
 
     try:
         data = request.json
@@ -1369,7 +1552,15 @@ def add_host_qualifying_response(questionId):
 
 @app.route('/api/questions/<user_type>/registration/matching/<question_id>/options', methods=['POST'])
 def add_response_option(user_type, question_id):
-    """Add a response option to a matching question"""
+    """Add a response option to a matching question. Supports POST requests.
+
+    Args:
+        user_type (str): type of user - host or guest
+        question_id (int): identifier for a matching question
+
+    Returns:
+        flask.Response: response status for request
+    """
 
     try:
         data = request.json
@@ -1390,7 +1581,11 @@ def add_response_option(user_type, question_id):
 @app.route('/api/v1/questions/host/qualifying', methods=['GET'])
 @app.route('/api/host/registration/qualifying', methods=['GET'])
 def get_host_qualifying_questions():
-    """Get all host qualifying questions"""
+    """Get all host qualifying questions. Supports GET requests.
+
+    Returns:
+        flask.Response: response status for request
+    """
 
     try:
 
@@ -1408,7 +1603,11 @@ def get_host_qualifying_questions():
 @app.route('/api/v1/questions/host/matching', methods=['GET'])
 @app.route('/api/host/registration/matching', methods=['GET'])
 def get_host_matching_questions():
-    """Get all host matching questions"""
+    """Get all host matching questions. Supports GET requests
+
+    Returns:
+        flask.Response: response status for request
+    """
 
     try:
 
@@ -1425,7 +1624,11 @@ def get_host_matching_questions():
 
 @app.route('/api/host/registration/info', methods=['GET'])
 def get_host_info_questions():
-    """Get all host info questions"""
+    """Get all host info questions. Supports GET requests.
+
+    Returns:
+        flask.Response: response status for request
+    """
 
     try:
 
@@ -1442,7 +1645,16 @@ def get_host_info_questions():
 
 @app.route('/api/questions/<user_type>/registration/<question_type>/<question_id>', methods=['DELETE'])
 def delete_question(user_type, question_type, question_id):
-    """Delete a question"""
+    """Delete a question. Supports DELETE requests.
+
+    Args:
+        user_type (str): type of user - host or guest
+        question_type (str): type of reg question: qualifying, matching, info
+        question_id (int): identifier for a matching question
+
+    Returns:
+        flask.Response: response status for request
+    """
 
     try:
         app.logger.debug(f'delete_question():')
@@ -1465,7 +1677,15 @@ def delete_question(user_type, question_type, question_id):
 
 @app.route('/api/questions/<user_type>/registration/<question_type>', methods=['POST'])
 def add_question(user_type, question_type):
-    """Add a question"""
+    """Add a question. Supports POST requests.
+
+    Args:
+        user_type (str): type of user - host or guest
+        question_type (str): type of reg question: qualifying, matching, info
+
+    Returns:
+        flask.Response: response status for request
+    """
 
     try:
 
@@ -1491,7 +1711,16 @@ def add_question(user_type, question_type):
 
 @app.route('/api/questions/<user_type>/registration/<question_type>/<question_id>', methods=['PUT'])
 def update_question(user_type, question_type, question_id):
-    """Update a question"""
+    """Update a question. Supports PUT requests.
+
+    Args:
+        user_type (str): type of user - host or guest
+        question_type (str): type of reg question: qualifying, matching, info
+        question_id (int): identifier for a matching question
+
+    Returns:
+        flask.Response: response status for request
+    """
 
     try:
 
@@ -1521,7 +1750,18 @@ def update_question(user_type, question_type, question_id):
 
 @app.route('/api/questions/<user_type>/registration/<question_type>/<question_id>/options/<response_option_id>', methods=['PUT'])
 def update_response_option(user_type, question_type, question_id, response_option_id):
-    """Update a response options"""
+    """Update response options. Supports PUT requests.
+
+    Args:
+        user_type (str): type of user - host or guest
+        question_type (str): type of reg question: qualifying, matching, info
+        question_id (int): identifier for a matching question
+        response_option_id (int): identifier for a question response option
+
+    Returns:
+        flask.Response: response status for request
+    """
+
     try:
 
         data = request.json
