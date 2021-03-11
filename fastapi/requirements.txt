@@ -1,0 +1,29 @@
+appdirs==1.4.4
+attrs @ file:///tmp/build/80754af9/attrs_1600298409949/work
+black==19.10b0
+certifi==2020.12.5
+click==7.1.2
+fastapi @ file:///home/conda/feedstock_root/build_artifacts/fastapi_1610101993319/work
+flake8 @ file:///tmp/build/80754af9/flake8_1601911421857/work
+h11 @ file:///home/conda/feedstock_root/build_artifacts/h11_1609518832927/work
+httptools @ file:///home/conda/feedstock_root/build_artifacts/httptools_1602326001169/work
+importlib-metadata @ file:///tmp/build/80754af9/importlib-metadata_1602276842396/work
+mccabe==0.6.1
+mypy-extensions==0.4.1
+pathspec==0.7.0
+pycodestyle==2.6.0
+pydantic @ file:///home/conda/feedstock_root/build_artifacts/pydantic_1602414773633/work
+pyflakes==2.2.0
+python-dotenv @ file:///home/conda/feedstock_root/build_artifacts/python-dotenv_1603979006023/work
+PyYAML==5.3.1
+regex @ file:///tmp/build/80754af9/regex_1606772693105/work
+SQLAlchemy @ file:///tmp/build/80754af9/sqlalchemy_1612467452667/work
+starlette @ file:///home/conda/feedstock_root/build_artifacts/starlette_1595508258730/work
+toml @ file:///tmp/build/80754af9/toml_1592853716807/work
+typed-ast @ file:///tmp/build/80754af9/typed-ast_1610484076176/work
+typing-extensions @ file:///tmp/build/80754af9/typing_extensions_1598376058250/work
+uvicorn @ file:///home/conda/feedstock_root/build_artifacts/uvicorn_1613844688227/work
+uvloop==0.14.0
+watchgod @ file:///home/conda/feedstock_root/build_artifacts/watchgod_1592453122359/work
+websockets @ file:///home/conda/feedstock_root/build_artifacts/websockets_1602327026998/work
+zipp @ file:///tmp/build/80754af9/zipp_1603306325174/work
