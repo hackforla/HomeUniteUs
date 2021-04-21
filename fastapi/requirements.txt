@@ -15,7 +15,7 @@ pycodestyle==2.6.0
 pydantic @ file:///home/conda/feedstock_root/build_artifacts/pydantic_1602414773633/work
 pyflakes==2.2.0
 python-dotenv @ file:///home/conda/feedstock_root/build_artifacts/python-dotenv_1603979006023/work
-PyYAML==5.3.1
+PyYAML==5.4
 regex @ file:///tmp/build/80754af9/regex_1606772693105/work
 SQLAlchemy @ file:///tmp/build/80754af9/sqlalchemy_1612467452667/work
 starlette @ file:///home/conda/feedstock_root/build_artifacts/starlette_1595508258730/work
