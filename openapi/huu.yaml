@@ -1,0 +1,351 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Home Unite Us
+  license:
+    name: MIT
+servers:
+  - url: http://homeunite.us/api
+paths:
+  /hosts:
+    get:
+      summary: List all hosts
+      operationId: listHosts
+      description: See the full list of hosts
+      tags:
+        - host
+      parameters:
+        - name: limit
+          in: query
+          description: How many items to return at one time (max 100)
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Hosts"
+          description: successful operation
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+    post:
+      summary: Create a host
+      operationId: createHost
+      tags:
+        - host
+      responses:
+        "201":
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+    put:
+      summary: Update a host
+      operationId: updateHost
+      description: Update a host
+      requestBody:
+        description: Update host
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Host"
+        required: true
+      tags:
+        - host
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Host"
+          description: Successful operation
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Host not found
+        "405":
+          description: Validation exception
+    delete:
+      operationId: deleteHost
+      summary: Deletes a host
+      description: Delete a host
+      tags:
+        - host
+      parameters:
+        - name: hostId
+          description: host id to delete
+          schema:
+            format: int64
+            type: integer
+          in: path
+          required: true
+      responses:
+        "400":
+          description: Invalid host valu
+  /hosts/{hostId}:
+    get:
+      summary: Info for a specific host
+      operationId: showHostById
+      tags:
+        - hosts
+      parameters:
+        - name: hostId
+          in: path
+          required: true
+          description: The id of the host to retrieve
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Host"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+  /hosts/{hostId}/uploadImage:
+    post:
+      operationId: uploadHostImage
+      summary: uploads an image
+      description: ""
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              format: binary
+              type: string
+      tags:
+        - host
+      parameters:
+        - name: hostId
+          description: ID of host to update
+          schema:
+            type: string
+          in: path
+          required: true
+        - name: additionalMetadata
+          description: Additional Metadata
+          schema:
+            type: string
+          in: query
+          required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+          description: successful operation
+  /guests:
+    get:
+      summary: List all guests
+      operationId: listGuests
+      description: See the full list of guests
+      tags:
+        - guest
+      parameters:
+        - name: limit
+          in: query
+          description: How many items to return at one time (max 100)
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Guests"
+          description: successful operation
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+    post:
+      summary: Create a guest
+      operationId: createGuest
+      tags:
+        - guest
+      responses:
+        "201":
+          description: Null response
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+    put:
+      summary: Update a guest
+      operationId: updateGuest
+      description: Update a guest
+      requestBody:
+        description: Update guest
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Guest"
+        required: true
+      tags:
+        - guest
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Guest"
+          description: Successful operation
+        "400":
+          description: Invalid ID supplied
+        "404":
+          description: Guest not found
+        "405":
+          description: Validation exception
+    delete:
+      operationId: deleteGuest
+      summary: Deletes a guest
+      description: Delete a guest
+      tags:
+        - guest
+      parameters:
+        - name: guestId
+          description: guest id to delete
+          schema:
+            format: int64
+            type: integer
+          in: path
+          required: true
+      responses:
+        "400":
+          description: Invalid guest valu
+  /guests/{guestId}:
+    get:
+      summary: Info for a specific guest
+      operationId: showGuestById
+      tags:
+        - guests
+      parameters:
+        - name: guestId
+          in: path
+          required: true
+          description: The id of the guest to retrieve
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Guest"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+  /guests/{guestId}/uploadImage:
+    post:
+      operationId: uploadGuestImage
+      summary: uploads an image
+      description: ""
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              format: binary
+              type: string
+      tags:
+        - guest
+      parameters:
+        - name: guestId
+          description: ID of guest to update
+          schema:
+            type: string
+          in: path
+          required: true
+        - name: additionalMetadata
+          description: Additional Metadata
+          schema:
+            type: string
+          in: query
+          required: false
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+          description: successful operation
+components:
+  schemas:
+    Host:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        tag:
+          type: string
+        photoUrls:
+          type: array
+          items:
+            type: string
+    Guest:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        tag:
+          type: string
+        photoUrls:
+          type: array
+          items:
+            type: string
+    Hosts:
+      type: array
+      items:
+        $ref: "#/components/schemas/Host"
+    Guests:
+      type: array
+      items:
+        $ref: "#/components/schemas/Guest"
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          format: int32
+          type: integer
+        type:
+          type: string
+        message:
+          type: string
