@@ -8,19 +8,27 @@ Once the member has Github access, re-assign the issue to them for tracking comp
 Action Items:
 
 All Members:
+
 [] - Joined Github Org
+
 [] - Able to contribute on Home Unite Us Repo
+
 [] - Google Drive Access
+
 [] - Added to Team Roster
+
 [] - Reviewed How Hack For LA Uses Kanban doc
 
 Developers:
+
 [] - Environment Setup
 
 UI/UX & Design:
+
 [] - Miro Access
 
 Project Management:
+
 [] - Community of Practice Board Access
 
 
