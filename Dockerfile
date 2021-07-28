@@ -20,8 +20,23 @@ RUN npm run build:docker
 
 # END Temporary image
 
-# Server image for MongoDB+Flask
-FROM host-home-base
+# comes with mongo deps, still will need Flask deps
+FROM mongo:latest
+
+# install flask deps, i.e. python and ssl libs
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y python3-pip \
+    python3-dev \
+    build-essential \
+    libssl-dev \
+    libffi-dev \
+    python3-setuptools
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip3 install -r requirements.txt
 
 # do all copies/builds within application's subdirectory
 WORKDIR /hosthome
@@ -33,14 +48,20 @@ COPY .env .
 COPY *.py ./
 COPY ./startup.sh .
 COPY ./initMongo.js .
-COPY data/*.json /var/tmp/
+COPY ./data/seed/*.json /var/tmp/
+COPY ./data ./data
+COPY ./blueprints ./blueprints
+COPY ./config ./config
 RUN chmod +x ./startup.sh
 
 # get client bundles from temporary image
-COPY --from=bundleBuilder /app/dist ./app/dist
+# COPY --from=bundleBuilder /app/dist ./app/dist
+COPY  ./app/dist ./app/dist
 
 # tell Docker to allow traffic to reach this port
-EXPOSE 80
+EXPOSE 5678
+
+RUN dos2unix /hosthome/startup.sh
 
 # run a shell when the container starts (script to configure and launch the app server)
 ENTRYPOINT ["/bin/bash", "-c", "/hosthome/startup.sh"]

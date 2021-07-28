@@ -131,7 +131,7 @@ module.exports = {
         port: 3333,
         proxy: {
             '/api': {
-                target: 'http://localhost:8080',
+                target: 'http://192.168.99.100:5678',
                 secure: false,
             },
         },

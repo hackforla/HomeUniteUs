@@ -1,4 +1,5 @@
 #!/bin/sh
+
 echo "starting mongo daemon.."
 
 mongod --bind_ip 0.0.0.0 &
@@ -46,4 +47,4 @@ echo "starting hosthome.."
 
 
 cd /hosthome
-gunicorn --log-level=debug --bind=0.0.0.0:80 wsgi
+gunicorn --log-level=debug --bind=0.0.0.0:5678 wsgi
