@@ -28,7 +28,6 @@ New Teammember Onboarding - Tasks to make sure new team-members have all needed 
 - [ ] Reviewed [How Hack For LA Uses Kanban Guide](https://docs.google.com/document/d/11Fe7mNdmPBP5bD_yLJ1C0_I1TmoK47AuHHrdhdDyWCs/edit?usp=sharing)
 
 - [ ] Reviewed [Safe Place For Youth program overview](https://www.safeplaceforyouth.org/housing)
-[link to Google!](http://google.com)
 
 #Developers:
 
