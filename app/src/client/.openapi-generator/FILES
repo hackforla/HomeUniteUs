@@ -1,7 +1,0 @@
-.openapi-generator-ignore
-apis/HostApi.ts
-apis/index.ts
-index.ts
-models/Host.ts
-models/index.ts
-runtime.ts

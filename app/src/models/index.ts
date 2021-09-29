@@ -1,11 +1,3 @@
-export { Guest } from './Guest'
-export { GuestQuestion } from './GuestQuestion'
-export { GuestResponse } from './GuestResponse'
-export { Host } from './Host'
-export { HostQuestion } from './HostQuestion'
-export { HostResponse } from './HostResponse'
-export { ResponseMultiplicity } from './ResponseMultiplicity'
-export { MatchResult } from './MatchResult'
-export { Restriction } from './Restriction'
-export { GuestInterestLevel } from './GuestInterestLevel'
-export { ResponseValue } from './ResponseValue'
+export type { Guest } from "./Guest";
+export type { Host } from "./Host";
+export type { Activity } from "./Activity";
