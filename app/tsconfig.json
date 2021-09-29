@@ -1,46 +1,77 @@
 {
-    "compilerOptions": {
-        "target": "ESNext",
-        "module": "umd",
-        "lib": [
-            "ES2015",
-            "ES2016",
-            "ES2017",
-            "ES2018",
-            "ES2019",
-            "ES2020",
-            "ESNext",
-            "dom"
-        ],
-        "jsx": "react",
-        "noEmit": true,
-        "sourceMap": true,
-        "strict": true,
-        "noImplicitAny": true,
-        "strictNullChecks": true,
-        "moduleResolution": "node",
-        "forceConsistentCasingInFileNames": true,
-        "esModuleInterop": true
-    },
-    "include": ["src"]
-    // Tyler 6/1/2020: Trying new config for better bundling
-    // "compilerOptions": {
-    //     "outDir": "./dist/",
-    //     "sourceMap": true,
-    //     "lib": [
-    //         "es2015",
-    //         "es6",
-    //         "dom",
-    //         "dom.iterable",
-    //         "esnext"
-    //     ],
-    //     "noImplicitThis": true,
-    //     "noImplicitAny": true,
-    //     "strictNullChecks": true,
-    //     "strict": true,
-    //     "module": "commonjs",
-    //     "target": "es5",
-    //     "esModuleInterop": true,
-    //     "jsx": "react",
-    // }
+  "compilerOptions": {
+      "target": "es5",
+      "lib": [
+          "es6",
+          "dom",
+          "dom.iterable",
+          "esnext"
+      ],
+      "allowJs": true,
+      "skipLibCheck": true,
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "strict": true,
+      "forceConsistentCasingInFileNames": true,
+      "noFallthroughCasesInSwitch": true,
+      "module": "esnext",
+      "moduleResolution": "node",
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "noEmit": false,
+      "noImplicitAny": true,
+      "noImplicitThis": true,
+      "strictNullChecks": true,
+      "jsx": "react-jsx"
+  },
+  "include": [
+      "src"
+  ]
 }
+
+// {
+//   "compilerOptions": {
+//       "target": "ESNext",
+//       "module": "umd",
+//       "lib": [
+//           "ES2015",
+//           "ES2016",
+//           "ES2017",
+//           "ES2018",
+//           "ES2019",
+//           "ES2020",
+//           "ESNext",
+//           "dom"
+//       ],
+//       "jsx": "react",
+//       "noEmit": true,
+//       "sourceMap": true,
+//       "strict": true,
+//       "noImplicitAny": true,
+//       "strictNullChecks": true,
+//       "moduleResolution": "node",
+//       "forceConsistentCasingInFileNames": true,
+//       "esModuleInterop": true
+//   },
+//   "include": ["src"]
+//   // Tyler 6/1/2020: Trying new config for better bundling
+//   // "compilerOptions": {
+//   //     "outDir": "./dist/",
+//   //     "sourceMap": true,
+//   //     "lib": [
+//   //         "es2015",
+//   //         "es6",
+//   //         "dom",
+//   //         "dom.iterable",
+//   //         "esnext"
+//   //     ],
+//   //     "noImplicitThis": true,
+//   //     "noImplicitAny": true,
+//   //     "strictNullChecks": true,
+//   //     "strict": true,
+//   //     "module": "commonjs",
+//   //     "target": "es5",
+//   //     "esModuleInterop": true,
+//   //     "jsx": "react",
+//   // }
+// }

@@ -1,15 +1,5 @@
 **/node_modules
 **/dist
-**/output
-build
-**/.env
 .env
-*.log
-**/.log
-initMongo.js
-hosthomeenv
-
-personalNotes.md
-
 **/*.pyc
 **/__pycache__
