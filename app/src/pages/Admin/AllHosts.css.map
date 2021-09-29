@@ -1,9 +1,0 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAAA,eAAe,AAAA,MAAM,CAAC;EAClB,MAAM,EAAE,OAAO;CAClB",
-    "sources": [
-        "AllHosts.scss"
-    ],
-    "names": [],
-    "file": "AllHosts.css"
-}

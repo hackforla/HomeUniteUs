@@ -1,63 +1,93 @@
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
-import { Auth0Provider } from './react-auth0-spa'
-import history from './utils/history'
-import { BrowserRouter } from 'react-router-dom'
+import "core-js/stable";
+import "regenerator-runtime/runtime";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import { BrowserRouter, NavLink, Route, Switch } from "react-router-dom";
+import { Auth0ProviderWithHistory, ProtectedRoute } from "./auth";
+import { Checkbox, Container, Grid, Typography } from "@mui/material";
+import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
+import { StyledEngineProvider } from "@mui/material/styles";
 
-import './index.css'
+import { HomeUniteUsTheme } from "./theme";
+import {
+  CoordinatorDashboard,
+  GuestApplicationTracker,
+  HostApplicationTracker,
+} from "./views";
+import { Box } from "@mui/system";
 
-import { App } from './App'
+function TempBtn(props: { name: string }) {
+  return (
+    <Box
+      sx={{
+        padding: "3rem 5rem",
+        bgcolor: "#6cccff",
+      }}
+    >
+      <Typography>{props.name}</Typography>
+    </Box>
+  );
+}
 
-window.addEventListener('load', function () {
-    console.log(`window:load: about to render app...`)
+function Home() {
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: "#249BE5",
+        flex: 1,
+        justifyContent: "space-evenly",
+        alignItems: "center",
+      }}
+    >
+      <NavLink to="/home/guest">
+        <TempBtn name="Guest" />
+      </NavLink>
+      <NavLink to="/home/host">
+        <TempBtn name="Host" />
+      </NavLink>
+      <NavLink to="/home/coordinator">
+        <TempBtn name="Coordinator" />
+      </NavLink>
+    </div>
+  );
+}
 
-    const auth0Domain = process.env.AUTH0_DOMAIN
-    const auth0ClientId = process.env.AUTH0_CLIENT_ID
-    const auth0RedirectUri = window.location.origin
+function Profile() {
+  return <div>Hello from profile</div>;
+}
 
-    console.log(`window:load: auth0Domain        = ${auth0Domain}`)
-    console.log(`window:load: auth0ClientId      = ${auth0ClientId}`)
-    console.log(`window:load: auth0RedirectUri   = ${auth0RedirectUri}`)
+function App() {
+  return (
+    <>
+      <Switch>
+        <Route path="/" exact component={Home} />
+        <Route path="/coord" component={CoordinatorDashboard} />
+        <ProtectedRoute path="/profile" component={Profile} />
+        <ProtectedRoute path="/home/host" component={HostApplicationTracker} />
+        <ProtectedRoute
+          path="/home/guest"
+          component={GuestApplicationTracker}
+        />
+        <ProtectedRoute
+          path="/home/coordinator"
+          component={CoordinatorDashboard}
+        />
+      </Switch>
+    </>
+  );
+}
 
-    // if (
-    //   auth0Domain === undefined
-    //   || auth0ClientId === undefined
-    //   || auth0Audience === undefined
-    // ) {
-    //   throw new Error('missing env vars');
-    // }
-
-    const onAuthRedirectCallback = (redirectResult?: RedirectLoginResult) => {
-        console.log(
-            'auth0 onRedirectCallback called with redirectState %o',
-            redirectResult
-        )
-
-        // Clears auth0 query string parameters from url
-        const targetUrl =
-            redirectResult &&
-            redirectResult.appState &&
-            redirectResult.appState.targetUrl
-                ? redirectResult.appState.targetUrl
-                : window.location.pathname
-
-        history.push(targetUrl)
-    }
-
-    ReactDOM.render(
-        <Auth0Provider
-            domain={auth0Domain || ''}
-            client_id={auth0ClientId || ''}
-            redirect_uri={auth0RedirectUri || ''}
-            // audience={auth0Audience}
-            onRedirectCallback={onAuthRedirectCallback}
-        >
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
-        </Auth0Provider>,
-        document.getElementById('app-root')
-    )
-
-    console.log(`window:load: app rendered`)
-})
+ReactDOM.render(
+  <BrowserRouter>
+    <Auth0ProviderWithHistory>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={HomeUniteUsTheme}>
+          <App />
+        </ThemeProvider>
+      </StyledEngineProvider>
+    </Auth0ProviderWithHistory>
+  </BrowserRouter>,
+  document.getElementById("app-root")
+);
