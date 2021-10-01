@@ -4,7 +4,13 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { BrowserRouter, NavLink, Route, Switch } from "react-router-dom";
 import { Auth0ProviderWithHistory, ProtectedRoute } from "./auth";
-import { Checkbox, Container, Grid, Typography } from "@mui/material";
+import {
+  Checkbox,
+  Container,
+  CssBaseline,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
 import { StyledEngineProvider } from "@mui/material/styles";
 
@@ -84,6 +90,7 @@ ReactDOM.render(
     <Auth0ProviderWithHistory>
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={HomeUniteUsTheme}>
+          <CssBaseline />
           <App />
         </ThemeProvider>
       </StyledEngineProvider>
