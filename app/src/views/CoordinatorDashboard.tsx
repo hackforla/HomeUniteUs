@@ -102,16 +102,30 @@ export function CoordinatorDashboardDetailsPanel() {
 
 export function CoordinatorDashboard(props: CoordinatorDashboardProps) {
   return (
+    <CoordinatorDashboardContainer>
+      <Grid container>
+        <Grid item xs={10}>
+          <CoordinatorDashboardContentPanel />
+        </Grid>
+        <Grid item xs={2}>
+          <CoordinatorDashboardDetailsPanel />
+        </Grid>
+      </Grid>
+    </CoordinatorDashboardContainer>
+  );
+}
+
+const CoordinatorDashboardContainer = ({
+  children,
+}: React.PropsWithChildren<{}>) => {
+  return (
     <Grid container spacing={2}>
       <Grid item xs={2}>
         <CoordinatorDashboardNav />
       </Grid>
-      <Grid item xs={8}>
-        <CoordinatorDashboardContentPanel />
-      </Grid>
-      <Grid item xs={2}>
-        <CoordinatorDashboardDetailsPanel />
+      <Grid item xs={10}>
+        {children}
       </Grid>
     </Grid>
   );
-}
+};
