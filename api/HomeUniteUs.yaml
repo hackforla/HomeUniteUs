@@ -308,8 +308,10 @@ components:
           format: int64
         name:
           type: string
-        tag:
-          type: string
+        tags:
+          type: array
+          items:
+            type: string
         photoUrls:
           type: array
           items:
@@ -325,8 +327,11 @@ components:
           format: int64
         name:
           type: string
-        tag:
-          type: string
+        tags:
+          type: array
+          items:
+            type: string
+
         photoUrls:
           type: array
           items:
@@ -339,6 +344,16 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/Guest"
+    MatchResult:
+      type: object
+      required:
+        - hostId
+        - guestId
+      properties:
+        hostId:
+          type: string
+        guestId:
+          type: string
     ApiResponse:
       type: object
       properties:
