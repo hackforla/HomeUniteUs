@@ -1,0 +1,12 @@
+.openapi-generator-ignore
+apis/GuestApi.ts
+apis/GuestsApi.ts
+apis/HostApi.ts
+apis/HostsApi.ts
+apis/index.ts
+index.ts
+models/Guest.ts
+models/Host.ts
+models/ModelApiResponse.ts
+models/index.ts
+runtime.ts
