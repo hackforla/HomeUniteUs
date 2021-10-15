@@ -66,7 +66,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new Dotenv({
-      path: "../.env",
+      path: ".env",
     }),
     new HtmlWebPackPlugin({
       template: "./src/index.html",
