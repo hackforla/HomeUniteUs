@@ -9,6 +9,7 @@ import {
   Badge,
   MenuItem,
   Menu,
+  useTheme,
 } from "@mui/material";
 
 import AccountCircle from "@mui/icons-material/AccountCircle";
@@ -103,6 +104,7 @@ function reducer(
 }
 
 export function ApplicationTrackerHeader() {
+  const theme = useTheme();
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
   const { user } = useAuth0();
@@ -135,14 +137,15 @@ export function ApplicationTrackerHeader() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar sx={{ backgroundColor: "#fff" }} position="static">
         <Toolbar>
           <Box sx={{ display: { xs: "flex" } }}>
-            <img src="/img/huu.svg" width="50" />
+            <img src="/img/spy.png" height="88" />
           </Box>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
+              sx={{ color: theme.palette.grey[500] }}
               size="large"
               aria-label="account of current user"
               aria-controls={ElementIds.ProfileMenu}
@@ -153,15 +156,17 @@ export function ApplicationTrackerHeader() {
               <AccountCircle />
             </IconButton>
             <IconButton
+              sx={{ color: theme.palette.grey[500] }}
               size="large"
               aria-label="show new notifications"
               color="inherit"
             >
-              <Badge color="error">
+              <Badge badgeContent={5} sx={{ color: theme.status.danger }}>
                 <NotificationsIcon />
               </Badge>
             </IconButton>
             <IconButton
+              sx={{ color: theme.palette.grey[500] }}
               size="large"
               aria-label="get help"
               color="inherit"
@@ -172,6 +177,7 @@ export function ApplicationTrackerHeader() {
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
+              sx={{ color: theme.palette.grey[400] }}
               size="large"
               aria-label="show more"
               aria-controls={ElementIds.MobileMenu}

@@ -22,6 +22,8 @@ interface CoordinatorDashboardNavItemProps {
   name: string;
 }
 
+const drawerWidth = 240;
+
 export function CoordinatorDashboardNavItem(
   props: React.PropsWithChildren<CoordinatorDashboardNavItemProps>
 ) {
@@ -35,9 +37,16 @@ export function CoordinatorDashboardNavItem(
 
 export function CoordinatorDashboardNav(props: CoordinatorDashboardNavProps) {
   return (
-    <nav>
-      <Drawer anchor="left" open variant="permanent">
-        <Box sx={{ minWidth: 250 }} role="presentation">
+    <Box component="nav">
+      <Drawer
+        sx={{
+          "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
+        }}
+        anchor="left"
+        open
+        variant="permanent"
+      >
+        <Box sx={{ minWidth: drawerWidth }} role="presentation">
           <Box sx={{ display: { xs: "flex" }, padding: "2rem 50px" }}>
             <img src="/img/huu.svg" width="150" />
           </Box>
@@ -57,7 +66,7 @@ export function CoordinatorDashboardNav(props: CoordinatorDashboardNavProps) {
           </List>
         </Box>
       </Drawer>
-    </nav>
+    </Box>
   );
 }
 
@@ -78,10 +87,12 @@ export function CoordinatorDashboardContentPanel() {
   ];
 
   return (
-    <main style={{ paddingTop: "2rem" }}>
+    <Box component="main" style={{ paddingTop: "2rem", height: "100%" }}>
       <Box sx={{ width: "100%" }}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
           <Tabs
+            variant="scrollable"
+            scrollButtons="auto"
             aria-label="basic tabs example"
             value={selectedItem}
             onChange={handleTabClicked}
@@ -92,7 +103,7 @@ export function CoordinatorDashboardContentPanel() {
           </Tabs>
         </Box>
       </Box>
-    </main>
+    </Box>
   );
 }
 
@@ -103,11 +114,11 @@ export function CoordinatorDashboardDetailsPanel() {
 export function CoordinatorDashboard(props: CoordinatorDashboardProps) {
   return (
     <CoordinatorDashboardContainer>
-      <Grid container>
-        <Grid item xs={10}>
+      <Grid sx={{ height: "100vh" }} container>
+        <Grid item xs={9}>
           <CoordinatorDashboardContentPanel />
         </Grid>
-        <Grid item xs={2}>
+        <Grid item xs={3}>
           <CoordinatorDashboardDetailsPanel />
         </Grid>
       </Grid>
@@ -119,13 +130,11 @@ const CoordinatorDashboardContainer = ({
   children,
 }: React.PropsWithChildren<{}>) => {
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={2}>
-        <CoordinatorDashboardNav />
-      </Grid>
-      <Grid item xs={10}>
+    <Box sx={{ width: "100%", height: "100vh" }}>
+      <CoordinatorDashboardNav />
+      <Box sx={{ display: "flex", paddingLeft: drawerWidth / 8 }}>
         {children}
-      </Grid>
-    </Grid>
+      </Box>
+    </Box>
   );
 };
