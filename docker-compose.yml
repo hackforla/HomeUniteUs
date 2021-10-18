@@ -1,9 +1,25 @@
-version: "3.3"
+version: "3.9"
 
 services:
+  db:
+    image: postgres
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+  api:
+    build:
+      context: ./api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
   app:
     build:
-      context: .
-      dockerfile: Dockerfile-alternate
+      context: ./app
     ports:
-      - "5678:5678"
+      - "4040:80"
+    depends_on:
+      - api

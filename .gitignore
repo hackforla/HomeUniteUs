@@ -1,5 +1,7 @@
 **/node_modules
 **/dist
 .env
+**/.env
 **/*.pyc
 **/__pycache__
+data
