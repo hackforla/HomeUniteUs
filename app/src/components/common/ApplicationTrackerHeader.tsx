@@ -17,7 +17,9 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { Help } from "@mui/icons-material";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useAuth0, User } from "@auth0/auth0-react";
+
+import { Avatar } from "./Avatar";
 
 const ElementIds = {
   ProfileMenu: "profile-trackernav-menu",
@@ -103,11 +105,20 @@ function reducer(
   }
 }
 
+const notificationLabel = (count: number) => {
+  if (count < 1) {
+    return "no notifications";
+  }
+
+  return `you have notifications`;
+};
+
 export function ApplicationTrackerHeader() {
   const theme = useTheme();
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
   const { user } = useAuth0();
+  const { name, picture } = user as User;
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     dispatch({
@@ -143,36 +154,48 @@ export function ApplicationTrackerHeader() {
             <img src="/img/spy.png" height="88" />
           </Box>
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <Box sx={{ display: { xs: "none", md: "flex" }, gap: "12px" }}>
             <IconButton
               sx={{ color: theme.palette.grey[500] }}
-              size="large"
+              size="small"
               aria-label="account of current user"
               aria-controls={ElementIds.ProfileMenu}
               aria-haspopup="true"
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <AccountCircle />
+              <Avatar name={name} image={picture} />
             </IconButton>
             <IconButton
               sx={{ color: theme.palette.grey[500] }}
-              size="large"
-              aria-label="show new notifications"
-              color="inherit"
+              color="primary"
+              size="small"
+              aria-label={notificationLabel(0)}
             >
-              <Badge badgeContent={5} sx={{ color: theme.status.danger }}>
-                <NotificationsIcon />
+              <Badge
+                badgeContent=""
+                variant="dot"
+                sx={{
+                  color: theme.palette.primary.main,
+                }}
+              >
+                <NotificationsIcon
+                  sx={{
+                    height: 32,
+                    width: 32,
+                  }}
+                />
               </Badge>
             </IconButton>
             <IconButton
-              sx={{ color: theme.palette.grey[500] }}
-              size="large"
+              size="small"
               aria-label="get help"
               color="inherit"
               edge="end"
             >
-              <Help />
+              <Help
+                sx={{ height: 32, width: 32, color: theme.palette.grey[500] }}
+              />
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
@@ -193,7 +216,7 @@ export function ApplicationTrackerHeader() {
       <Menu
         anchorEl={state.mobileMenu.anchorElement}
         anchorOrigin={{
-          vertical: "top",
+          vertical: "bottom",
           horizontal: "right",
         }}
         id={ElementIds.MobileMenu}
@@ -245,7 +268,7 @@ export function ApplicationTrackerHeader() {
       <Menu
         anchorEl={state.profileMenu.anchorElement}
         anchorOrigin={{
-          vertical: "top",
+          vertical: "bottom",
           horizontal: "right",
         }}
         id={ElementIds.ProfileMenu}
