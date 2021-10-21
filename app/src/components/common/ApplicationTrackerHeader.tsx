@@ -171,13 +171,14 @@ export function ApplicationTrackerHeader() {
               color="primary"
               size="small"
               aria-label={notificationLabel(0)}
+              disableFocusRipple={true}
+              disableRipple={true}
             >
               <Badge
                 badgeContent=""
                 variant="dot"
-                sx={{
-                  color: theme.palette.primary.main,
-                }}
+                color="primary"
+                overlap="circular"
               >
                 <NotificationsIcon
                   sx={{
