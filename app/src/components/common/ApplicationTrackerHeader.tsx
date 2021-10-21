@@ -15,7 +15,7 @@ import {
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import MoreIcon from "@mui/icons-material/MoreVert";
+import MenuIcon from "@mui/icons-material/Menu";
 import { Help } from "@mui/icons-material";
 import { useAuth0, User } from "@auth0/auth0-react";
 
@@ -209,12 +209,13 @@ export function ApplicationTrackerHeader() {
               onClick={handleMobileMenuOpen}
               color="inherit"
             >
-              <MoreIcon />
+              <MenuIcon />
             </IconButton>
           </Box>
         </Toolbar>
       </AppBar>
       <Menu
+        sx={{ display: { xs: "flex", md: "none" } }}
         anchorEl={state.mobileMenu.anchorElement}
         anchorOrigin={{
           vertical: "bottom",
@@ -267,13 +268,13 @@ export function ApplicationTrackerHeader() {
         </MenuItem>
       </Menu>
       <Menu
+        sx={{ display: { xs: "none", md: "inline-block" } }}
         anchorEl={state.profileMenu.anchorElement}
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "right",
         }}
         id={ElementIds.ProfileMenu}
-        keepMounted
         transformOrigin={{
           vertical: "top",
           horizontal: "right",
