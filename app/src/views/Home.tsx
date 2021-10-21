@@ -3,6 +3,7 @@ import { Typography } from "@mui/material";
 import { Box, styled } from "@mui/system";
 
 import { HomeLink } from "../components/common/HomeLink";
+import { HostIcon, CoordinatorIcon, GuestIcon } from "../components/Icons";
 
 export function Home() {
   return (
@@ -11,19 +12,13 @@ export function Home() {
       <SubHeader variant="h2">Select a profile</SubHeader>
       <LinkRow>
         <HomeLink to="/home/host" name="Host">
-          <img
-            src="../img/host-icon.svg"
-            alt="Family standing in front of home"
-          />
+          <HostIcon />
         </HomeLink>
         <HomeLink to="/home/coordinator" name="Admin">
-          <img
-            src="../img/admin-icon.svg"
-            alt="Administrator working at desk"
-          />
+          <CoordinatorIcon />
         </HomeLink>
         <HomeLink to="/home/guest" name="Guest">
-          <img src="../img/guest-icon.svg" alt="Guest carrying luggage" />
+          <GuestIcon />
         </HomeLink>
       </LinkRow>
     </HomeContainer>

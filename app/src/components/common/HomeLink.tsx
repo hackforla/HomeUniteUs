@@ -33,6 +33,10 @@ const Link = styled(NavLink)(({ theme }) => ({
   textDecoration: "none",
   transition: "all 0.2s ease",
   color: `${theme.palette.primary.main}`,
+  "&:hover": {
+    backgroundColor: `${theme.palette.primary.main}`,
+    color: "#fff",
+  },
 }));
 
 const Text = styled(Typography)(({ theme }) => ({
