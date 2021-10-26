@@ -117,7 +117,7 @@ export function ApplicationTrackerHeader() {
   const theme = useTheme();
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
-  const { user } = useAuth0();
+  const { user, logout } = useAuth0();
   const { name, picture } = user as User;
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -284,6 +284,9 @@ export function ApplicationTrackerHeader() {
       >
         <MenuItem onClick={handleMenuClose}>Hello, {user?.email}</MenuItem>
         <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+        <MenuItem onClick={() => logout({ returnTo: window.location.origin })}>
+          Log out
+        </MenuItem>
       </Menu>
     </Box>
   );
