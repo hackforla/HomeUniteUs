@@ -18,6 +18,11 @@ interface CoordinatorDashboardNavItemProps {
   name: string;
 }
 
+interface CoordinatorDashboardChildNavItemProps {
+  name: string;
+  count: number;
+}
+
 const tabOptions = [
   "Overview",
   "Applications",
@@ -38,11 +43,22 @@ export function CoordinatorDashboardNavItem(
   );
 }
 
+export function CoordinatorDashboardChildNavItem(
+  props: React.PropsWithChildren<CoordinatorDashboardNavItemProps>
+) {
+  return (
+    <ListItem button key={props.name}>
+      <ListItemText sx={{ paddingLeft: "3.6rem" }} primary={props.name} />
+    </ListItem>
+  );
+}
+
 export function CoordinatorDashboardNav(props: CoordinatorDashboardNavProps) {
   const theme = useTheme();
   return (
     <Box
       sx={{
+        paddingTop: "2rem",
         borderRight: `1px solid ${theme.palette.grey[300]}`,
         height: "100%",
       }}
@@ -53,9 +69,9 @@ export function CoordinatorDashboardNav(props: CoordinatorDashboardNavProps) {
           <CoordinatorDashboardNavItem name="Home">
             <Home />
           </CoordinatorDashboardNavItem>
-          <CoordinatorDashboardNavItem name="My Profile">
-            <Person />
-          </CoordinatorDashboardNavItem>
+          {tabOptions.map((tab) => {
+            return <CoordinatorDashboardChildNavItem name={tab} />;
+          })}
           <CoordinatorDashboardNavItem name="Activity">
             <ShowChart />
           </CoordinatorDashboardNavItem>
