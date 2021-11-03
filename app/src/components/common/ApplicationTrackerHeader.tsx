@@ -148,12 +148,18 @@ export function ApplicationTrackerHeader() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar sx={{ backgroundColor: "#fff" }} position="static">
-        <Toolbar>
+      <AppBar
+        sx={{
+          backgroundColor: "#fff",
+          boxShadow: "none",
+          borderBottom: `1px solid ${theme.palette.grey[300]}`,
+        }}
+        position="static"
+      >
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box sx={{ display: { xs: "flex" } }}>
             <img src="/img/spy.png" height="88" />
           </Box>
-          <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" }, gap: "12px" }}>
             <IconButton
               sx={{ color: theme.palette.grey[500] }}

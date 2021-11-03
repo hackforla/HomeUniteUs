@@ -3,6 +3,7 @@ import { styled } from "@mui/system";
 import React from "react";
 
 const MaxWidthContainer = styled(Container)({
+  height: "100vh",
   maxWidth: "1400px",
 });
 
