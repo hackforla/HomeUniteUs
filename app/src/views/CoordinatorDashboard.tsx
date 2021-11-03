@@ -20,7 +20,6 @@ interface CoordinatorDashboardNavItemProps {
 
 interface CoordinatorDashboardChildNavItemProps {
   name: string;
-  count: number;
 }
 
 const tabOptions = [
@@ -43,12 +42,12 @@ export function CoordinatorDashboardNavItem(
   );
 }
 
-export function CoordinatorDashboardChildNavItem(
-  props: React.PropsWithChildren<CoordinatorDashboardNavItemProps>
-) {
+export function CoordinatorDashboardChildNavItem({
+  name,
+}: CoordinatorDashboardChildNavItemProps) {
   return (
-    <ListItem button key={props.name}>
-      <ListItemText sx={{ paddingLeft: "3.6rem" }} primary={props.name} />
+    <ListItem button key={name}>
+      <ListItemText sx={{ paddingLeft: "3.6rem" }} primary={name} />
     </ListItem>
   );
 }
@@ -69,8 +68,8 @@ export function CoordinatorDashboardNav(props: CoordinatorDashboardNavProps) {
           <CoordinatorDashboardNavItem name="Home">
             <Home />
           </CoordinatorDashboardNavItem>
-          {tabOptions.map((tab) => {
-            return <CoordinatorDashboardChildNavItem name={tab} />;
+          {tabOptions.map((name) => {
+            return <CoordinatorDashboardChildNavItem name={name} />;
           })}
           <CoordinatorDashboardNavItem name="Activity">
             <ShowChart />
