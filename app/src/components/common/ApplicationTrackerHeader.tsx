@@ -9,14 +9,17 @@ import {
   Badge,
   MenuItem,
   Menu,
+  useTheme,
 } from "@mui/material";
 
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import MoreIcon from "@mui/icons-material/MoreVert";
+import MenuIcon from "@mui/icons-material/Menu";
 import { Help } from "@mui/icons-material";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useAuth0, User } from "@auth0/auth0-react";
+
+import { Avatar } from "./Avatar";
 
 const ElementIds = {
   ProfileMenu: "profile-trackernav-menu",
@@ -102,10 +105,20 @@ function reducer(
   }
 }
 
+const notificationLabel = (count: number) => {
+  if (count < 1) {
+    return "no notifications";
+  }
+
+  return `you have notifications`;
+};
+
 export function ApplicationTrackerHeader() {
+  const theme = useTheme();
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
-  const { user } = useAuth0();
+  const { user, logout } = useAuth0();
+  const { name, picture } = user as User;
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     dispatch({
@@ -135,43 +148,66 @@ export function ApplicationTrackerHeader() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
+      <AppBar
+        sx={{
+          backgroundColor: "#fff",
+          boxShadow: "none",
+          borderBottom: `1px solid ${theme.palette.grey[300]}`,
+        }}
+        position="static"
+      >
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <Box sx={{ display: { xs: "flex" } }}>
-            <img src="/img/huu.svg" width="50" />
+            <img src="/img/spy.png" height="88" />
           </Box>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <Box sx={{ display: { xs: "none", md: "flex" }, gap: "12px" }}>
             <IconButton
-              size="large"
+              sx={{ color: theme.palette.grey[500] }}
+              size="small"
               aria-label="account of current user"
               aria-controls={ElementIds.ProfileMenu}
               aria-haspopup="true"
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <AccountCircle />
+              <Avatar name={name} image={picture} />
             </IconButton>
             <IconButton
-              size="large"
-              aria-label="show new notifications"
-              color="inherit"
+              sx={{ color: theme.palette.grey[500] }}
+              color="primary"
+              size="small"
+              aria-label={notificationLabel(0)}
+              disableFocusRipple={true}
+              disableRipple={true}
             >
-              <Badge color="error">
-                <NotificationsIcon />
+              <Badge
+                badgeContent=""
+                variant="dot"
+                color="primary"
+                overlap="circular"
+              >
+                <NotificationsIcon
+                  sx={{
+                    height: 32,
+                    width: 32,
+                  }}
+                />
               </Badge>
             </IconButton>
             <IconButton
-              size="large"
+              size="small"
               aria-label="get help"
               color="inherit"
               edge="end"
             >
-              <Help />
+              <Help
+                sx={{ height: 32, width: 32, color: theme.palette.grey[500] }}
+              />
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
+              sx={{ color: theme.palette.grey[400] }}
               size="large"
               aria-label="show more"
               aria-controls={ElementIds.MobileMenu}
@@ -179,15 +215,16 @@ export function ApplicationTrackerHeader() {
               onClick={handleMobileMenuOpen}
               color="inherit"
             >
-              <MoreIcon />
+              <MenuIcon />
             </IconButton>
           </Box>
         </Toolbar>
       </AppBar>
       <Menu
+        sx={{ display: { xs: "flex", md: "none" } }}
         anchorEl={state.mobileMenu.anchorElement}
         anchorOrigin={{
-          vertical: "top",
+          vertical: "bottom",
           horizontal: "right",
         }}
         id={ElementIds.MobileMenu}
@@ -237,13 +274,13 @@ export function ApplicationTrackerHeader() {
         </MenuItem>
       </Menu>
       <Menu
+        sx={{ display: { xs: "none", md: "inline-block" } }}
         anchorEl={state.profileMenu.anchorElement}
         anchorOrigin={{
-          vertical: "top",
+          vertical: "bottom",
           horizontal: "right",
         }}
         id={ElementIds.ProfileMenu}
-        keepMounted
         transformOrigin={{
           vertical: "top",
           horizontal: "right",
@@ -253,6 +290,9 @@ export function ApplicationTrackerHeader() {
       >
         <MenuItem onClick={handleMenuClose}>Hello, {user?.email}</MenuItem>
         <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+        <MenuItem onClick={() => logout({ returnTo: window.location.origin })}>
+          Log out
+        </MenuItem>
       </Menu>
     </Box>
   );

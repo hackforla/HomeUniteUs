@@ -2,57 +2,20 @@ import "core-js/stable";
 import "regenerator-runtime/runtime";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { BrowserRouter, NavLink, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { Auth0ProviderWithHistory, ProtectedRoute } from "./auth";
-import { Checkbox, Container, Grid, Typography } from "@mui/material";
-import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
+import { CssBaseline } from "@mui/material";
+import { ThemeProvider } from "@mui/material/styles";
 import { StyledEngineProvider } from "@mui/material/styles";
 
 import { HomeUniteUsTheme } from "./theme";
 import {
+  Home,
   CoordinatorDashboard,
   GuestApplicationTracker,
   HostApplicationTracker,
 } from "./views";
 import { Box } from "@mui/system";
-
-function TempBtn(props: { name: string }) {
-  return (
-    <Box
-      sx={{
-        padding: "3rem 5rem",
-        bgcolor: "#6cccff",
-      }}
-    >
-      <Typography>{props.name}</Typography>
-    </Box>
-  );
-}
-
-function Home() {
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        backgroundColor: "#249BE5",
-        flex: 1,
-        justifyContent: "space-evenly",
-        alignItems: "center",
-      }}
-    >
-      <NavLink to="/home/guest">
-        <TempBtn name="Guest" />
-      </NavLink>
-      <NavLink to="/home/host">
-        <TempBtn name="Host" />
-      </NavLink>
-      <NavLink to="/home/coordinator">
-        <TempBtn name="Coordinator" />
-      </NavLink>
-    </div>
-  );
-}
 
 function Profile() {
   return <div>Hello from profile</div>;
@@ -84,6 +47,7 @@ ReactDOM.render(
     <Auth0ProviderWithHistory>
       <StyledEngineProvider injectFirst>
         <ThemeProvider theme={HomeUniteUsTheme}>
+          <CssBaseline />
           <App />
         </ThemeProvider>
       </StyledEngineProvider>

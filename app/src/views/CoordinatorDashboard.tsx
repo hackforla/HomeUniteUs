@@ -2,25 +2,34 @@ import * as React from "react";
 import { Home, Person, Settings, ShowChart } from "@mui/icons-material";
 import {
   Box,
-  Drawer,
   Grid,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  makeStyles,
-  Tab,
-  Tabs,
-  Typography,
   useTheme,
 } from "@mui/material";
 import { UiPlaceholder } from "../components/common/UiPlaceholder";
+import { ApplicationTrackerContainer } from "../components/common/ApplicationTrackerContainer";
 
 interface CoordinatorDashboardProps {}
 interface CoordinatorDashboardNavProps {}
 interface CoordinatorDashboardNavItemProps {
   name: string;
 }
+
+interface CoordinatorDashboardChildNavItemProps {
+  name: string;
+}
+
+const tabOptions = [
+  "Overview",
+  "Applications",
+  "Guests",
+  "Hosts",
+  "Matches",
+  "Holding Zone",
+];
 
 export function CoordinatorDashboardNavItem(
   props: React.PropsWithChildren<CoordinatorDashboardNavItemProps>
@@ -33,85 +42,99 @@ export function CoordinatorDashboardNavItem(
   );
 }
 
-export function CoordinatorDashboardNav(props: CoordinatorDashboardNavProps) {
+export function CoordinatorDashboardChildNavItem({
+  name,
+}: CoordinatorDashboardChildNavItemProps) {
   return (
-    <nav>
-      <Drawer anchor="left" open variant="permanent">
-        <Box sx={{ minWidth: 250 }} role="presentation">
-          <Box sx={{ display: { xs: "flex" }, padding: "2rem 50px" }}>
-            <img src="/img/huu.svg" width="150" />
-          </Box>
-          <List>
-            <CoordinatorDashboardNavItem name="Home">
-              <Home />
-            </CoordinatorDashboardNavItem>
-            <CoordinatorDashboardNavItem name="My Profile">
-              <Person />
-            </CoordinatorDashboardNavItem>
-            <CoordinatorDashboardNavItem name="Activity">
-              <ShowChart />
-            </CoordinatorDashboardNavItem>
-            <CoordinatorDashboardNavItem name="Settings">
-              <Settings />
-            </CoordinatorDashboardNavItem>
-          </List>
-        </Box>
-      </Drawer>
-    </nav>
+    <ListItem button key={name}>
+      <ListItemText sx={{ paddingLeft: "3.6rem" }} primary={name} />
+    </ListItem>
+  );
+}
+
+export function CoordinatorDashboardNav(props: CoordinatorDashboardNavProps) {
+  const theme = useTheme();
+  return (
+    <Box
+      sx={{
+        paddingTop: "2rem",
+        borderRight: `1px solid ${theme.palette.grey[300]}`,
+        height: "100%",
+      }}
+      component="nav"
+    >
+      <Box role="presentation">
+        <List>
+          <CoordinatorDashboardNavItem name="Home">
+            <Home />
+          </CoordinatorDashboardNavItem>
+          {tabOptions.map((name) => {
+            return <CoordinatorDashboardChildNavItem name={name} />;
+          })}
+          <CoordinatorDashboardNavItem name="Activity">
+            <ShowChart />
+          </CoordinatorDashboardNavItem>
+          <CoordinatorDashboardNavItem name="Settings">
+            <Settings />
+          </CoordinatorDashboardNavItem>
+        </List>
+      </Box>
+    </Box>
   );
 }
 
 export function CoordinatorDashboardContentPanel() {
-  const [selectedItem, setSelectedItem] = React.useState(0);
-
-  function handleTabClicked(event: React.SyntheticEvent, itemIndex: number) {
-    setSelectedItem(itemIndex);
-  }
-
-  const tabOptions = [
-    "Overview",
-    "Applications",
-    "Guests",
-    "Hosts",
-    "Matches",
-    "Holding Zone",
-  ];
+  const theme = useTheme();
 
   return (
-    <main style={{ paddingTop: "2rem" }}>
-      <Box sx={{ width: "100%" }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs
-            aria-label="basic tabs example"
-            value={selectedItem}
-            onChange={handleTabClicked}
-          >
-            {tabOptions.map((tabOption: string) => (
-              <Tab key={tabOption} label={tabOption} />
-            ))}
-          </Tabs>
-        </Box>
-      </Box>
-    </main>
+    <Box
+      sx={{
+        padding: "2rem",
+        height: "100%",
+        width: "100%",
+      }}
+    >
+      <Box
+        sx={{
+          backgroundColor: theme.palette.grey[300],
+          height: "100%",
+          width: "100%",
+        }}
+      ></Box>
+    </Box>
   );
 }
 
 export function CoordinatorDashboardDetailsPanel() {
-  return <UiPlaceholder name="Details Panel" />;
+  const theme = useTheme();
+  return (
+    <Box
+      sx={{
+        height: "100%",
+        width: "100%",
+        padding: "2rem",
+        borderLeft: `1px solid ${theme.palette.grey[300]}`,
+      }}
+    >
+      <UiPlaceholder name="Details Panel" />
+    </Box>
+  );
 }
 
 export function CoordinatorDashboard(props: CoordinatorDashboardProps) {
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={2}>
-        <CoordinatorDashboardNav />
+    <ApplicationTrackerContainer>
+      <Grid sx={{ display: "flex", flex: 1 }} container>
+        <Grid item xs={2}>
+          <CoordinatorDashboardNav />
+        </Grid>
+        <Grid item xs={8}>
+          <CoordinatorDashboardContentPanel />
+        </Grid>
+        <Grid item xs={2}>
+          <CoordinatorDashboardDetailsPanel />
+        </Grid>
       </Grid>
-      <Grid item xs={8}>
-        <CoordinatorDashboardContentPanel />
-      </Grid>
-      <Grid item xs={2}>
-        <CoordinatorDashboardDetailsPanel />
-      </Grid>
-    </Grid>
+    </ApplicationTrackerContainer>
   );
 }
