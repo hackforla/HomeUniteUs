@@ -1,29 +1,28 @@
-import * as React from "react";
+import * as React from 'react';
 
 import {
   AppBar,
   Box,
   Toolbar,
   IconButton,
-  InputBase,
   Badge,
   MenuItem,
   Menu,
   useTheme,
-} from "@mui/material";
+} from '@mui/material';
 
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import MenuIcon from "@mui/icons-material/Menu";
-import { Help } from "@mui/icons-material";
-import { useAuth0, User } from "@auth0/auth0-react";
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import MailIcon from '@mui/icons-material/Mail';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import MenuIcon from '@mui/icons-material/Menu';
+import {Help} from '@mui/icons-material';
+import {useAuth0, User} from '@auth0/auth0-react';
 
-import { Avatar } from "./Avatar";
+import {Avatar} from './Avatar';
 
 const ElementIds = {
-  ProfileMenu: "profile-trackernav-menu",
-  MobileMenu: "mobile-trackernav-menu",
+  ProfileMenu: 'profile-trackernav-menu',
+  MobileMenu: 'mobile-trackernav-menu',
 };
 
 interface ApplicationTrackerNavMenuState {
@@ -37,10 +36,10 @@ interface ApplicationTrackerNavState {
 }
 
 enum ApplicationTrackerNavActionType {
-  OpenMobileMenu = "OpenMobileMenu",
-  OpenProfileMenu = "OpenProfileMenu",
-  CloseMobileMenu = "CloseMobileMenu",
-  CloseProfileMenu = "CloseProfileMenu",
+  OpenMobileMenu = 'OpenMobileMenu',
+  OpenProfileMenu = 'OpenProfileMenu',
+  CloseMobileMenu = 'CloseMobileMenu',
+  CloseProfileMenu = 'CloseProfileMenu',
 }
 
 interface ApplicationTrackerNavAction {
@@ -61,7 +60,7 @@ const initialState: ApplicationTrackerNavState = {
 
 function reducer(
   state: ApplicationTrackerNavState,
-  action: ApplicationTrackerNavAction
+  action: ApplicationTrackerNavAction,
 ): ApplicationTrackerNavState {
   switch (action.type) {
     case ApplicationTrackerNavActionType.OpenProfileMenu:
@@ -107,7 +106,7 @@ function reducer(
 
 const notificationLabel = (count: number) => {
   if (count < 1) {
-    return "no notifications";
+    return 'no notifications';
   }
 
   return `you have notifications`;
@@ -117,8 +116,8 @@ export function ApplicationTrackerHeader() {
   const theme = useTheme();
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
-  const { user, logout } = useAuth0();
-  const { name, picture } = user as User;
+  const {user, logout} = useAuth0();
+  const {name, picture} = user as User;
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     dispatch({
@@ -147,22 +146,22 @@ export function ApplicationTrackerHeader() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{flexGrow: 1}}>
       <AppBar
         sx={{
-          backgroundColor: "#fff",
-          boxShadow: "none",
+          backgroundColor: '#fff',
+          boxShadow: 'none',
           borderBottom: `1px solid ${theme.palette.grey[300]}`,
         }}
         position="static"
       >
-        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Box sx={{ display: { xs: "flex" } }}>
+        <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
+          <Box sx={{display: {xs: 'flex'}}}>
             <img src="/img/spy.png" height="88" />
           </Box>
-          <Box sx={{ display: { xs: "none", md: "flex" }, gap: "12px" }}>
+          <Box sx={{display: {xs: 'none', md: 'flex'}, gap: '12px'}}>
             <IconButton
-              sx={{ color: theme.palette.grey[500] }}
+              sx={{color: theme.palette.grey[500]}}
               size="small"
               aria-label="account of current user"
               aria-controls={ElementIds.ProfileMenu}
@@ -173,7 +172,7 @@ export function ApplicationTrackerHeader() {
               <Avatar name={name} image={picture} />
             </IconButton>
             <IconButton
-              sx={{ color: theme.palette.grey[500] }}
+              sx={{color: theme.palette.grey[500]}}
               color="primary"
               size="small"
               aria-label={notificationLabel(0)}
@@ -201,13 +200,13 @@ export function ApplicationTrackerHeader() {
               edge="end"
             >
               <Help
-                sx={{ height: 32, width: 32, color: theme.palette.grey[500] }}
+                sx={{height: 32, width: 32, color: theme.palette.grey[500]}}
               />
             </IconButton>
           </Box>
-          <Box sx={{ display: { xs: "flex", md: "none" } }}>
+          <Box sx={{display: {xs: 'flex', md: 'none'}}}>
             <IconButton
-              sx={{ color: theme.palette.grey[400] }}
+              sx={{color: theme.palette.grey[400]}}
               size="large"
               aria-label="show more"
               aria-controls={ElementIds.MobileMenu}
@@ -221,17 +220,17 @@ export function ApplicationTrackerHeader() {
         </Toolbar>
       </AppBar>
       <Menu
-        sx={{ display: { xs: "flex", md: "none" } }}
+        sx={{display: {xs: 'flex', md: 'none'}}}
         anchorEl={state.mobileMenu.anchorElement}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
+          vertical: 'bottom',
+          horizontal: 'right',
         }}
         id={ElementIds.MobileMenu}
         keepMounted
         transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
         open={state.mobileMenu.open}
         onClose={handleMobileMenuClose}
@@ -274,23 +273,23 @@ export function ApplicationTrackerHeader() {
         </MenuItem>
       </Menu>
       <Menu
-        sx={{ display: { xs: "none", md: "inline-block" } }}
+        sx={{display: {xs: 'none', md: 'inline-block'}}}
         anchorEl={state.profileMenu.anchorElement}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
+          vertical: 'bottom',
+          horizontal: 'right',
         }}
         id={ElementIds.ProfileMenu}
         transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: 'top',
+          horizontal: 'right',
         }}
         open={state.profileMenu.open}
         onClose={handleMenuClose}
       >
         <MenuItem onClick={handleMenuClose}>Hello, {user?.email}</MenuItem>
         <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-        <MenuItem onClick={() => logout({ returnTo: window.location.origin })}>
+        <MenuItem onClick={() => logout({returnTo: window.location.origin})}>
           Log out
         </MenuItem>
       </Menu>

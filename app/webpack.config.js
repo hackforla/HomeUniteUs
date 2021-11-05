@@ -1,24 +1,26 @@
-const path = require("path");
-const webpack = require("webpack");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const HtmlWebPackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const CopyPlugin = require("copy-webpack-plugin");
-const Dotenv = require("dotenv-webpack");
+/* eslint-disable @typescript-eslint/no-var-requires */
+const path = require('path');
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const webpack = require('webpack');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
+const HtmlWebPackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: {
-    index: path.resolve(__dirname, "./src/index.tsx"),
+    index: path.resolve(__dirname, './src/index.tsx'),
   },
   output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "[name].[chunkhash].js",
-    publicPath: "/",
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].[chunkhash].js',
+    publicPath: '/',
   },
   optimization: {
-    runtimeChunk: "single",
+    runtimeChunk: 'single',
     splitChunks: {
-      chunks: "all",
+      chunks: 'all',
       maxInitialRequests: Infinity,
       minSize: 0,
       cacheGroups: {
@@ -26,22 +28,22 @@ module.exports = {
           test: /[\\/]node_modules[\\/]/,
           name(module) {
             const packageName = module.context.match(
-              /[\\/]node_modules[\\/](.*?)([\\/]|$)/
+              /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
             )[1];
-            return `npm.${packageName.replace("@", "")}`;
+            return `npm.${packageName.replace('@', '')}`;
           },
         },
       },
     },
   },
-  devtool: "source-map",
+  devtool: 'source-map',
 
   resolve: {
     modules: [
-      path.resolve(__dirname, "/src"),
-      path.resolve(__dirname, "node_modules/"),
+      path.resolve(__dirname, '/src'),
+      path.resolve(__dirname, 'node_modules/'),
     ],
-    extensions: [".ts", ".tsx", ".js", ".jsx", ".scss", ".css"],
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.scss', '.css'],
   },
 
   module: {
@@ -50,37 +52,37 @@ module.exports = {
         test: /\.([jt]s)x?$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader",
+          loader: 'babel-loader',
         },
       },
       {
         test: /\.s?css$/,
-        use: ["style-loader", "css-loader"],
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.(png|svg|jpg|gif)$/,
-        use: ["file-loader"],
+        use: ['file-loader'],
       },
     ],
   },
   plugins: [
     new CleanWebpackPlugin(),
     new Dotenv({
-      path: ".env",
+      path: '.env',
     }),
     new HtmlWebPackPlugin({
-      template: "./src/index.html",
-      filename: "index.html",
+      template: './src/index.html',
+      filename: 'index.html',
     }),
     new MiniCssExtractPlugin({
-      filename: "[name].[contenthash].css",
-      chunkFilename: "[id].css",
+      filename: '[name].[contenthash].css',
+      chunkFilename: '[id].css',
     }),
     new CopyPlugin({
       patterns: [
-        { from: "./src/img/favicon.png", to: "[name][ext]" },
-        { from: "./src/img/*.png", to: "img/[name][ext]" },
-        { from: "./src/img/*.svg", to: "img/[name][ext]" },
+        {from: './src/img/favicon.png', to: '[name][ext]'},
+        {from: './src/img/*.png', to: 'img/[name][ext]'},
+        {from: './src/img/*.svg', to: 'img/[name][ext]'},
       ],
     }),
   ],
@@ -88,12 +90,12 @@ module.exports = {
     historyApiFallback: true,
     hot: true,
     static: {
-      directory: path.resolve(__dirname, "./dist"),
+      directory: path.resolve(__dirname, './dist'),
     },
     port: 4040,
     proxy: {
-      "/api": {
-        target: "http://localhost:8080",
+      '/api': {
+        target: 'http://localhost:8080',
         secure: false,
       },
     },

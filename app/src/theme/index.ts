@@ -1,1 +1,1 @@
-export { HomeUniteUsTheme } from "./theme";
+export {HomeUniteUsTheme} from './theme';

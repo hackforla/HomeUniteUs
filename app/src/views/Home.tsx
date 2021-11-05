@@ -1,10 +1,10 @@
-import React from "react";
-import { Typography } from "@mui/material";
-import { Box, styled } from "@mui/system";
+import React from 'react';
+import {Typography} from '@mui/material';
+import {styled} from '@mui/system';
 
-import { HomeLink } from "../components/common/HomeLink";
-import { HostIcon, CoordinatorIcon, GuestIcon } from "../components/Icons";
-import { AppContainer } from "../components/common/AppContainer";
+import {HomeLink} from '../components/common/HomeLink';
+import {HostIcon, CoordinatorIcon, GuestIcon} from '../components/Icons';
+import {AppContainer} from '../components/common/AppContainer';
 
 export function Home() {
   return (
@@ -28,30 +28,30 @@ export function Home() {
   );
 }
 
-const HomeContainer = styled("section")({
-  display: "flex",
-  flexDirection: "column",
+const HomeContainer = styled('section')({
+  display: 'flex',
+  flexDirection: 'column',
   flex: 1,
-  height: "100%",
-  gap: "32px",
-  alignItems: "center",
-  justifyContent: "center",
+  height: '100%',
+  gap: '32px',
+  alignItems: 'center',
+  justifyContent: 'center',
 });
 
-const LinkRow = styled("div")({
-  display: "flex",
-  justifyContent: "center",
-  flexWrap: "wrap",
-  gap: "2rem",
+const LinkRow = styled('div')({
+  display: 'flex',
+  justifyContent: 'center',
+  flexWrap: 'wrap',
+  gap: '2rem',
 });
 
 const Header = styled(Typography)({
-  fontSize: "3rem",
+  fontSize: '3rem',
   fontWeight: 600,
-  textAlign: "center",
+  textAlign: 'center',
 });
 
 const SubHeader = styled(Typography)({
-  fontSize: "2rem",
+  fontSize: '2rem',
   fontWeight: 600,
 });

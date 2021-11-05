@@ -1,21 +1,20 @@
-import "core-js/stable";
-import "regenerator-runtime/runtime";
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import { Auth0ProviderWithHistory, ProtectedRoute } from "./auth";
-import { CssBaseline } from "@mui/material";
-import { ThemeProvider } from "@mui/material/styles";
-import { StyledEngineProvider } from "@mui/material/styles";
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {Auth0ProviderWithHistory, ProtectedRoute} from './auth';
+import {CssBaseline} from '@mui/material';
+import {ThemeProvider} from '@mui/material/styles';
+import {StyledEngineProvider} from '@mui/material/styles';
 
-import { HomeUniteUsTheme } from "./theme";
+import {HomeUniteUsTheme} from './theme';
 import {
   Home,
   CoordinatorDashboard,
   GuestApplicationTracker,
   HostApplicationTracker,
-} from "./views";
-import { Box } from "@mui/system";
+} from './views';
 
 function Profile() {
   return <div>Hello from profile</div>;
@@ -53,5 +52,5 @@ ReactDOM.render(
       </StyledEngineProvider>
     </Auth0ProviderWithHistory>
   </BrowserRouter>,
-  document.getElementById("app-root")
+  document.getElementById('app-root'),
 );

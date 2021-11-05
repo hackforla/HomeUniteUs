@@ -1,9 +1,6 @@
-import React from "react";
-import CircularProgress from "@mui/material/CircularProgress";
-import { styled } from "@mui/system";
-
-const loadingImg =
-  "https://cdn.auth0.com/blog/auth0-react-sample/assets/loading.svg";
+import React from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+import {styled} from '@mui/system';
 
 export const Loading = () => (
   <LoadingContainer>
@@ -11,10 +8,10 @@ export const Loading = () => (
   </LoadingContainer>
 );
 
-const LoadingContainer = styled("div")({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  height: "100vh",
-  width: "100vw",
+const LoadingContainer = styled('div')({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '100vh',
+  width: '100vw',
 });
