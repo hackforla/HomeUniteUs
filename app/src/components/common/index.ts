@@ -1,2 +1,2 @@
-export { Loading } from "./Loading";
-export { ApplicationTrackerHeader } from "./ApplicationTrackerHeader";
+export {Loading} from './Loading';
+export {ApplicationTrackerHeader} from './ApplicationTrackerHeader';

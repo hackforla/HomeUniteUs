@@ -1,7 +1,6 @@
-import { Container, Grid } from "@mui/material";
-import * as React from "react";
-import { ApplicationTrackerHeader } from "../components/common";
-import { ApplicationTrackerContainer } from "../components/common/ApplicationTrackerContainer";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import * as React from 'react';
+import {ApplicationTrackerContainer} from '../components/common/ApplicationTrackerContainer';
 
 interface HostApplicationTrackerProps {}
 
@@ -18,7 +17,7 @@ const initialState: HostApplicationTrackerState = {};
 
 function reducer(
   state: HostApplicationTrackerState,
-  action: HostApplicationTrackerAction
+  action: HostApplicationTrackerAction,
 ): HostApplicationTrackerState {
   switch (action.type) {
     default:

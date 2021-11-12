@@ -1,7 +1,7 @@
-import React from "react";
-import { Typography } from "@mui/material";
-import { styled } from "@mui/system";
-import { NavLink } from "react-router-dom";
+import React from 'react';
+import {Typography} from '@mui/material';
+import {styled} from '@mui/system';
+import {NavLink} from 'react-router-dom';
 
 interface HomeLinkProps {
   to: string;
@@ -21,26 +21,26 @@ export function HomeLink({
   );
 }
 
-const Link = styled(NavLink)(({ theme }) => ({
-  height: "11.625rem",
-  width: "11.625rem",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
+const Link = styled(NavLink)(({theme}) => ({
+  height: '11.625rem',
+  width: '11.625rem',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
   border: `1px solid ${theme.palette.grey[300]}`,
   borderRadius: 26,
-  textDecoration: "none",
-  transition: "all 0.2s ease",
+  textDecoration: 'none',
+  transition: 'all 0.2s ease',
   color: `${theme.palette.primary.main}`,
-  "&:hover": {
+  '&:hover': {
     backgroundColor: `${theme.palette.primary.main}`,
-    color: "#fff",
+    color: '#fff',
   },
 }));
 
-const Text = styled(Typography)(({ theme }) => ({
-  fontSize: "1.5rem",
+const Text = styled(Typography)({
+  fontSize: '1.5rem',
   fontWeight: 500,
-  color: "currentcolor",
-}));
+  color: 'currentcolor',
+});

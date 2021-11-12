@@ -1,8 +1,7 @@
-import { Container, Grid } from "@mui/material";
-import * as React from "react";
-import { ApplicationTrackerHeader } from "../components/common";
-import { ApplicationTrackerContainer } from "../components/common/ApplicationTrackerContainer";
-import { GuestDetailsProvider } from "../data/GuestDetailsProvider";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import * as React from 'react';
+import {ApplicationTrackerContainer} from '../components/common/ApplicationTrackerContainer';
+import {GuestDetailsProvider} from '../data/GuestDetailsProvider';
 
 interface GuestApplicationTrackerProps {}
 
@@ -19,7 +18,7 @@ const initialState: GuestApplicationTrackerState = {};
 
 function reducer(
   state: GuestApplicationTrackerState,
-  action: GuestApplicationTrackerAction
+  action: GuestApplicationTrackerAction,
 ): GuestApplicationTrackerState {
   switch (action.type) {
     default:

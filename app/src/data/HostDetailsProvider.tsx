@@ -1,5 +1,6 @@
-import * as React from "react";
-import { Activity, Guest, Host } from "../models";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import * as React from 'react';
+import {Activity, Guest, Host} from '../models';
 
 // interface HostDashboardUtils {
 //   data: HostDetails;
@@ -33,16 +34,16 @@ interface DataState<T> {
 
 // initial dummy values for data state
 const DEFAULT_HOST_DASHBOARD_DATA: HostDetails = {
-  host: { data: {}, isLoading: false } as DataState<Host>,
-  matchedGuests: { data: [], isLoading: false } as DataState<Guest[]>,
-  activities: { data: [], isLoading: false } as DataState<Activity[]>,
+  host: {data: {}, isLoading: false} as DataState<Host>,
+  matchedGuests: {data: [], isLoading: false} as DataState<Guest[]>,
+  activities: {data: [], isLoading: false} as DataState<Activity[]>,
 };
 
 // all data-related action types, these will affect elements of the
 //   "state" of our fetched data
 enum HostDetailsActionType {
-  FetchActivities = "FetchActivities",
-  LoadActivities = "LoadActivities",
+  FetchActivities = 'FetchActivities',
+  LoadActivities = 'LoadActivities',
 }
 
 // an action type, together with a payload, describes the state transition
@@ -58,7 +59,7 @@ function reducer(
   // current state of system data
   state: HostDetails,
   // a data-related action
-  action: HostDetailsAction
+  action: HostDetailsAction,
 ): HostDetails {
   switch (action.type) {
     case HostDetailsActionType.FetchActivities:
@@ -88,7 +89,7 @@ function reducer(
 //  any components using the useHostDetails hook must be
 //  a descendant of this Provider
 export function HostDetailsProvider(
-  props: React.PropsWithChildren<HostDetailsProviderProps>
+  props: React.PropsWithChildren<HostDetailsProviderProps>,
 ) {
   console.log(`HostDetailsProvider ctor`);
   // memo with no watch list means this value never needs to be recomputed
@@ -102,13 +103,13 @@ export function HostDetailsProvider(
   async function refreshActivities() {
     // turns on any loaders/spinners subscribed to isLoading for activity data
     //    while we call the API
-    dispatch({ type: HostDetailsActionType.FetchActivities });
+    dispatch({type: HostDetailsActionType.FetchActivities});
 
     // make the API call and parse the response
     const response = await fetch(`/api/activities`);
     if (response.status !== 200) {
       throw new Error(
-        `Bad response from server: \n\tstatus: ${response.status}\n\t${response.statusText}`
+        `Bad response from server: \n\tstatus: ${response.status}\n\t${response.statusText}`,
       );
     }
     const activities = await response.json();
@@ -121,14 +122,14 @@ export function HostDetailsProvider(
   }
 
   // only update what consumers are using when the state changes
-  const utils = React.useMemo(() => ({ state, dispatch }), [state]);
+  const utils = React.useMemo(() => ({state, dispatch}), [state]);
 
   return <HostContext.Provider value={utils} {...props} />;
 }
 
 function waitThreeSecs(): Promise<void> {
   console.log(`waitThreeSecs`);
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     setTimeout(() => {
       console.log(`waitThreeSecs: time up`);
       resolve();
@@ -140,10 +141,10 @@ export function useHostDetails() {
   const ctx = React.useContext(HostContext) as HostDashboardUtils;
   if (!ctx) {
     throw new Error(
-      `useHostDetails can only be called in a descendant of a HostDetailsProvider`
+      `useHostDetails can only be called in a descendant of a HostDetailsProvider`,
     );
   }
-  const { state, dispatch } = ctx;
+  const {state, dispatch} = ctx;
 
   /*
     TODO: We are returning state and dispatch directly to the client component here

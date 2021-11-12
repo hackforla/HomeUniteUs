@@ -1,5 +1,6 @@
-import * as React from "react";
-import { Activity, Guest, Host } from "../models";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import * as React from 'react';
+import {Activity, Guest, Host} from '../models';
 
 // interface GuestDashboardUtils {
 //   data: GuestDetails;
@@ -33,16 +34,16 @@ interface DataState<T> {
 
 // initial dummy values for data state
 const DEFAULT_GUEST_DASHBOARD_DATA: GuestDetails = {
-  guest: { data: {}, isLoading: false } as DataState<Guest>,
-  matchedHosts: { data: [], isLoading: false } as DataState<Host[]>,
-  activities: { data: [], isLoading: false } as DataState<Activity[]>,
+  guest: {data: {}, isLoading: false} as DataState<Guest>,
+  matchedHosts: {data: [], isLoading: false} as DataState<Host[]>,
+  activities: {data: [], isLoading: false} as DataState<Activity[]>,
 };
 
 // all data-related action types, these will affect elements of the
 //   "state" of our fetched data
 enum GuestDetailsActionType {
-  FetchActivities = "FetchActivities",
-  LoadActivities = "LoadActivities",
+  FetchActivities = 'FetchActivities',
+  LoadActivities = 'LoadActivities',
 }
 
 // an action type, together with a payload, describes the state transition
@@ -58,7 +59,7 @@ function reducer(
   // current state of system data
   state: GuestDetails,
   // a data-related action
-  action: GuestDetailsAction
+  action: GuestDetailsAction,
 ): GuestDetails {
   switch (action.type) {
     case GuestDetailsActionType.FetchActivities:
@@ -88,7 +89,7 @@ function reducer(
 //  any components using the useGuestDetails hook must be
 //  a descendant of this Provider
 export function GuestDetailsProvider(
-  props: React.PropsWithChildren<GuestDetailsProviderProps>
+  props: React.PropsWithChildren<GuestDetailsProviderProps>,
 ) {
   console.log(`GuestDetailsProvider ctor`);
   // memo with no watch list means this value never needs to be recomputed
@@ -102,13 +103,13 @@ export function GuestDetailsProvider(
   async function refreshActivities() {
     // turns on any loaders/spinners subscribed to isLoading for activity data
     //    while we call the API
-    dispatch({ type: GuestDetailsActionType.FetchActivities });
+    dispatch({type: GuestDetailsActionType.FetchActivities});
 
     // make the API call and parse the response
     const response = await fetch(`/api/activities`);
     if (response.status !== 200) {
       throw new Error(
-        `Bad response from server: \n\tstatus: ${response.status}\n\t${response.statusText}`
+        `Bad response from server: \n\tstatus: ${response.status}\n\t${response.statusText}`,
       );
     }
     const activities = await response.json();
@@ -121,7 +122,7 @@ export function GuestDetailsProvider(
   }
 
   // only update what consumers are using when the state changes
-  const utils = React.useMemo(() => ({ state, dispatch }), [state]);
+  const utils = React.useMemo(() => ({state, dispatch}), [state]);
 
   return <GuestContext.Provider value={utils} {...props} />;
 }
@@ -140,10 +141,10 @@ export function useGuestDetails() {
   const ctx = React.useContext(GuestContext) as GuestDashboardUtils;
   if (!ctx) {
     throw new Error(
-      `useGuestDetails can only be called in a descendant of a GuestDetailsProvider`
+      `useGuestDetails can only be called in a descendant of a GuestDetailsProvider`,
     );
   }
-  const { state, dispatch } = ctx;
+  const {state, dispatch} = ctx;
 
   /*
     TODO: We are returning state and dispatch directly to the client component here

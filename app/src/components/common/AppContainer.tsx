@@ -1,10 +1,10 @@
-import { Container } from "@mui/material";
-import { styled } from "@mui/system";
-import React from "react";
+import {Container} from '@mui/material';
+import {styled} from '@mui/system';
+import React from 'react';
 
 const MaxWidthContainer = styled(Container)({
-  height: "100vh",
-  maxWidth: "1400px",
+  height: '100vh',
+  maxWidth: '1400px',
 });
 
 interface AppContainerProps {}
