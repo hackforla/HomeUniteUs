@@ -10,6 +10,7 @@ import {
   Menu,
   useTheme,
 } from '@mui/material';
+import {styled} from '@mui/system';
 
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
@@ -172,26 +173,19 @@ export function ApplicationTrackerHeader() {
               <Avatar name={name} image={picture} />
             </IconButton>
             <IconButton
-              sx={{color: theme.palette.grey[500]}}
-              color="primary"
+              sx={{color: theme.palette.grey[500], position: 'relative'}}
               size="small"
               aria-label={notificationLabel(0)}
               disableFocusRipple={true}
               disableRipple={true}
             >
-              <Badge
-                badgeContent=""
-                variant="dot"
-                color="primary"
-                overlap="circular"
-              >
-                <NotificationsIcon
-                  sx={{
-                    height: 32,
-                    width: 32,
-                  }}
-                />
-              </Badge>
+              <NotificationsIcon
+                sx={{
+                  height: 32,
+                  width: 32,
+                }}
+              />
+              <NotificationsBadge />
             </IconButton>
             <IconButton
               size="small"
@@ -296,6 +290,17 @@ export function ApplicationTrackerHeader() {
     </Box>
   );
 }
+
+const NotificationsBadge = styled('span')(({theme}) => ({
+  position: 'absolute',
+  top: 0,
+  right: 0,
+  backgroundColor: theme.palette.primary.main,
+  height: '12px',
+  width: '12px',
+  borderRadius: '50%',
+  transform: 'translate3d(-6px, 6px, 0)',
+}));
 
 // const Search = styled("div")(({ theme }) => ({
 //   position: "relative",
