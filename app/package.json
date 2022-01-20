@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --env=jsdom",
+    "test-watch": "jest --watch --env=jsdom",
     "build": "webpack --config webpack.config.js --mode production",
     "dev": "webpack-dev-server --config webpack.config.js --mode development",
     "storybook": "start-storybook -p 6006"
@@ -59,6 +60,7 @@
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.2",
     "jest": "^27.4.7",
+    "jest-watch-typeahead": "^1.0.0",
     "mini-css-extract-plugin": "^2.3.0",
     "style-loader": "^3.3.0",
     "webpack-dev-server": "^4.2.1"

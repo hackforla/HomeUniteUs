@@ -5,7 +5,7 @@ interface ButtonProps extends React.ComponentPropsWithoutRef<'button'> {
   variant?: 'primary' | 'secondary';
   label: string;
   fullWidth?: boolean;
-  onClick?: () => void;
+  onClick: () => void;
 }
 
 export const Button = ({
@@ -13,6 +13,7 @@ export const Button = ({
   label,
   fullWidth = false,
   onClick,
+  disabled,
   ...props
 }: ButtonProps) => {
   const componentVariants = {
@@ -22,10 +23,17 @@ export const Button = ({
 
   const ButtonComponent = componentVariants[variant];
 
+  const handleClick = () => {
+    if (disabled) return;
+
+    onClick();
+  };
+
   return (
     <ButtonComponent
       sx={{width: fullWidth ? '100%' : null}}
-      onClick={onClick}
+      onClick={handleClick}
+      disabled={disabled}
       {...props}
     >
       {label}

@@ -1,4 +1,4 @@
-import {ReactElement, FC} from 'react';
+import React, {ReactElement, FC} from 'react';
 import {render, RenderOptions} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {ThemeProvider} from '@mui/material/styles';
