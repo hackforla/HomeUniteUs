@@ -1,4 +1,6 @@
-module.exports = {
+import type {Config} from '@jest/types';
+
+const config: Config.InitialOptions = {
   roots: ['<rootDir>'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'jsx'],
   testPathIgnorePatterns: ['<rootDir>[/\\\\](node_modules|cypress)[/\\\\]'],
@@ -19,3 +21,5 @@ module.exports = {
     './src/utils/test/setupTests.ts',
   ],
 };
+
+export default config;
