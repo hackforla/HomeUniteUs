@@ -3,7 +3,7 @@ import 'regenerator-runtime/runtime';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
-import {Auth0ProviderWithHistory, ProtectedRoute} from './auth';
+// import {Auth0ProviderWithHistory, ProtectedRoute} from './legacy/auth';
 import {CssBaseline} from '@mui/material';
 import {ThemeProvider} from '@mui/material/styles';
 import {StyledEngineProvider} from '@mui/material/styles';
@@ -26,7 +26,11 @@ function App() {
       <Switch>
         <Route path="/" exact component={Home} />
         <Route path="/coord" component={CoordinatorDashboard} />
-        <ProtectedRoute path="/profile" component={Profile} />
+        <Route path="/profile" component={Profile} />
+        <Route path="/home/host" component={HostApplicationTracker} />
+        <Route path="/home/guest" component={GuestApplicationTracker} />
+        <Route path="/home/coordinator" component={CoordinatorDashboard} />
+        {/* <ProtectedRoute path="/profile" component={Profile} />
         <ProtectedRoute path="/home/host" component={HostApplicationTracker} />
         <ProtectedRoute
           path="/home/guest"
@@ -35,7 +39,7 @@ function App() {
         <ProtectedRoute
           path="/home/coordinator"
           component={CoordinatorDashboard}
-        />
+        /> */}
       </Switch>
     </>
   );
@@ -43,14 +47,20 @@ function App() {
 
 ReactDOM.render(
   <BrowserRouter>
-    <Auth0ProviderWithHistory>
-      <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={HomeUniteUsTheme}>
-          <CssBaseline />
-          <App />
-        </ThemeProvider>
-      </StyledEngineProvider>
-    </Auth0ProviderWithHistory>
+    {/* <Auth0ProviderWithHistory>
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={HomeUniteUsTheme}>
+        <CssBaseline />
+        <App />
+      </ThemeProvider>
+    </StyledEngineProvider>
+  </Auth0ProviderWithHistory> */}
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={HomeUniteUsTheme}>
+        <CssBaseline />
+        <App />
+      </ThemeProvider>
+    </StyledEngineProvider>
   </BrowserRouter>,
   document.getElementById('app-root'),
 );

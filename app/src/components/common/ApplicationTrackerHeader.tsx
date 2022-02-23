@@ -16,7 +16,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MenuIcon from '@mui/icons-material/Menu';
 import {Help} from '@mui/icons-material';
-import {useAuth0, User} from '@auth0/auth0-react';
+// import {useAuth0, User} from '@auth0/auth0-react';
 
 import {Avatar} from './Avatar';
 
@@ -116,8 +116,8 @@ export function ApplicationTrackerHeader() {
   const theme = useTheme();
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
-  const {user, logout} = useAuth0();
-  const {name, picture} = user as User;
+  // const {user, logout} = useAuth0();
+  // const {name, picture} = user as User;
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     dispatch({
@@ -160,7 +160,7 @@ export function ApplicationTrackerHeader() {
             <img src="/img/spy.png" height="88" />
           </Box>
           <Box sx={{display: {xs: 'none', md: 'flex'}, gap: '12px'}}>
-            <IconButton
+            {/* <IconButton
               sx={{color: theme.palette.grey[500]}}
               size="small"
               aria-label="account of current user"
@@ -170,7 +170,7 @@ export function ApplicationTrackerHeader() {
               color="inherit"
             >
               <Avatar name={name} image={picture} />
-            </IconButton>
+            </IconButton> */}
             <IconButton
               sx={{color: theme.palette.grey[500]}}
               color="primary"
@@ -287,11 +287,11 @@ export function ApplicationTrackerHeader() {
         open={state.profileMenu.open}
         onClose={handleMenuClose}
       >
-        <MenuItem onClick={handleMenuClose}>Hello, {user?.email}</MenuItem>
+        {/* <MenuItem onClick={handleMenuClose}>Hello, {user?.email}</MenuItem> */}
         <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-        <MenuItem onClick={() => logout({returnTo: window.location.origin})}>
+        {/* <MenuItem onClick={() => logout({returnTo: window.location.origin})}>
           Log out
-        </MenuItem>
+        </MenuItem> */}
       </Menu>
     </Box>
   );
