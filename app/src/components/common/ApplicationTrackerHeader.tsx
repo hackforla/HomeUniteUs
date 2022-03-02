@@ -181,8 +181,8 @@ export function ApplicationTrackerHeader() {
             >
               <NotificationsIcon
                 sx={{
-                  height: 32,
-                  width: 32,
+                  height: 50,
+                  width: 50,
                 }}
               />
               <NotificationsBadge />
@@ -194,7 +194,7 @@ export function ApplicationTrackerHeader() {
               edge="end"
             >
               <Help
-                sx={{height: 32, width: 32, color: theme.palette.grey[500]}}
+                sx={{height: 50, width: 50, color: theme.palette.grey[500]}}
               />
             </IconButton>
           </Box>
@@ -296,10 +296,10 @@ const NotificationsBadge = styled('span')(({theme}) => ({
   top: 0,
   right: 0,
   backgroundColor: theme.palette.primary.main,
-  height: '12px',
-  width: '12px',
+  height: '16px',
+  width: '16px',
   borderRadius: '50%',
-  transform: 'translate3d(-6px, 6px, 0)',
+  transform: 'translate3d(-8px, 8px, 0)',
 }));
 
 // const Search = styled("div")(({ theme }) => ({
