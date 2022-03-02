@@ -14,7 +14,7 @@ This project is part of a larger initative at Hack for LA around creating a shar
 
 - [Docker](https://docs.docker.com/)
 - [Nginx](https://nginx.org/en/docs/)
-- [AWS](https://docs.aws.amazon.com/)\
+- [AWS](https://docs.aws.amazon.com/)
 - [React](https://reactjs.org/docs/getting-started.html)
 - [Material UI](https://material-ui.com/)
 - [Flask](https://flask.palletsprojects.com/en/1.1.x/)
