@@ -65,6 +65,6 @@
     "mini-css-extract-plugin": "^2.3.0",
     "style-loader": "^3.3.0",
     "ts-node": "^10.4.0",
-    "webpack-dev-server": "^4.2.1"
+    "webpack-dev-server": "^4.7.3"
   }
 }
