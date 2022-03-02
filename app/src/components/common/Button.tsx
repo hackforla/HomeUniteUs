@@ -48,7 +48,7 @@ const DefaultButton = styled('button')(({theme}) => ({
   [theme.breakpoints.down('md')]: {
     padding: '12px 16px',
   },
-  borderRadius: 4,
+  borderRadius: theme.shape.borderRadius,
   transition: '.2s all ease',
   '&:hover': {
     cursor: 'pointer',
