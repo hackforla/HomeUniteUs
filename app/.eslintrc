@@ -1,15 +1,17 @@
 {
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "prettier"],
+  "plugins": ["@typescript-eslint", "prettier", "jest"],
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
+    "plugin:cypress/recommended",
     "prettier"
   ],
   "env": {
     "browser": true,
     "es6": true,
+    "jest/globals": true,
     "node": true
   },
   "settings": {
