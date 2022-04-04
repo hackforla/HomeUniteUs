@@ -17,9 +17,18 @@
     "noImplicitAny": true,
     "noImplicitThis": true,
     "strictNullChecks": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "types": ["jest", "@testing-library/jest-dom", "cypress"]
   },
-  "include": ["src"]
+  "include": ["src", "**/*.ts", "**/*.tsx"],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+    "cypress/**/*",
+    "webclient/**/*",
+    "webclient/**/*.ts",
+    "webclient/**/*.tsx"
+  ]
 }
 
 // {
