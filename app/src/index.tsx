@@ -3,18 +3,20 @@ import 'regenerator-runtime/runtime';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
-import {Auth0ProviderWithHistory, ProtectedRoute} from './auth';
+import {Provider} from 'react-redux';
 import {CssBaseline} from '@mui/material';
 import {ThemeProvider} from '@mui/material/styles';
 import {StyledEngineProvider} from '@mui/material/styles';
 
 import {HomeUniteUsTheme} from './theme';
+import {Auth0ProviderWithHistory, ProtectedRoute} from './auth';
 import {
   Home,
   CoordinatorDashboard,
   GuestApplicationTracker,
   HostApplicationTracker,
 } from './views';
+import {store} from './redux/store';
 
 function Profile() {
   return <div>Hello from profile</div>;
@@ -42,15 +44,17 @@ function App() {
 }
 
 ReactDOM.render(
-  <BrowserRouter>
-    <Auth0ProviderWithHistory>
-      <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={HomeUniteUsTheme}>
-          <CssBaseline />
-          <App />
-        </ThemeProvider>
-      </StyledEngineProvider>
-    </Auth0ProviderWithHistory>
-  </BrowserRouter>,
+  <Provider store={store}>
+    <BrowserRouter>
+      <Auth0ProviderWithHistory>
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={HomeUniteUsTheme}>
+            <CssBaseline />
+            <App />
+          </ThemeProvider>
+        </StyledEngineProvider>
+      </Auth0ProviderWithHistory>
+    </BrowserRouter>
+  </Provider>,
   document.getElementById('app-root'),
 );
