@@ -20,6 +20,7 @@
     "@mui/icons-material": "^5.0.0",
     "@mui/material": "^5.0.0",
     "@reduxjs/toolkit": "^1.8.1",
+    "@rtk-query/codegen-openapi": "^1.0.0-alpha.1",
     "@types/node": "^16.9.6",
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",
@@ -73,5 +74,6 @@
     "style-loader": "^3.3.0",
     "ts-node": "^10.4.0",
     "webpack-dev-server": "^4.7.3"
-  }
+  },
+  "proxy": "http://localhost:8080/"
 }

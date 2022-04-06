@@ -1,14 +1,14 @@
 import {configureStore} from '@reduxjs/toolkit';
 import counterReducer from './counterSlice';
-import {pokemonApi} from '../services/pokemon';
+import {emptySplitApi as api} from '../services/emptyApi';
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
-    [pokemonApi.reducerPath]: pokemonApi.reducer,
+    [api.reducerPath]: api.reducer,
   },
   middleware: getDefaultMiddleware =>
-    getDefaultMiddleware().concat(pokemonApi.middleware),
+    getDefaultMiddleware().concat(api.middleware),
   devTools: process.env.NODE_ENV !== 'production',
 });
 
