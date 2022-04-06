@@ -9,7 +9,8 @@
     "test-watch": "jest --watch --env=jsdom",
     "cypress:open": "cypress open",
     "storybook": "start-storybook -p 6006",
-    "lint": "eslint . --ext ts --ext tsx --max-warnings 0"
+    "lint": "eslint . --ext ts --ext tsx --max-warnings 0",
+    "type-check": "npx tsc --noEmit"
   },
   "author": "",
   "license": "ISC",
