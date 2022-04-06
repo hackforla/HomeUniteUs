@@ -13,8 +13,8 @@ import {Auth0ProviderWithHistory, ProtectedRoute} from './auth';
 import {
   Home,
   CoordinatorDashboard,
-  // GuestApplicationTracker,
-  // HostApplicationTracker,
+  GuestApplicationTracker,
+  HostApplicationTracker,
 } from './views';
 import {store} from './app/store';
 
@@ -26,25 +26,24 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/">
-          <Home />
-        </Route>
-        <Route path="/coord">
-          <CoordinatorDashboard />
-        </Route>
+        <Route path="/" element={<Home />} />
+        <Route path="/coord" element={<CoordinatorDashboard />} />
         <Route
           path="/profile"
           element={<ProtectedRoute component={Profile} />}
         />
-        {/* <ProtectedRoute path="/home/host" component={HostApplicationTracker} />
-        <ProtectedRoute
-          path="/home/guest"
-          component={GuestApplicationTracker}
+        <Route
+          path="/home/host"
+          element={<ProtectedRoute component={HostApplicationTracker} />}
         />
-        <ProtectedRoute
+        <Route
+          path="/home/guest"
+          element={<ProtectedRoute component={GuestApplicationTracker} />}
+        />
+        <Route
           path="/home/coordinator"
-          component={CoordinatorDashboard}
-        /> */}
+          element={<ProtectedRoute component={CoordinatorDashboard} />}
+        />
       </Routes>
     </>
   );
