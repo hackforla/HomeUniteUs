@@ -6,7 +6,7 @@ import {HomeLink} from '../components/common/HomeLink';
 import {HostIcon, CoordinatorIcon, GuestIcon} from '../components/Icons';
 import {AppContainer} from '../components/common/AppContainer';
 
-export function Home() {
+export const Home = () => {
   return (
     <AppContainer>
       <HomeContainer>
@@ -26,7 +26,7 @@ export function Home() {
       </HomeContainer>
     </AppContainer>
   );
-}
+};
 
 const HomeContainer = styled('section')({
   display: 'flex',
