@@ -2,7 +2,7 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import {Provider} from 'react-redux';
 import {CssBaseline} from '@mui/material';
 import {ThemeProvider} from '@mui/material/styles';
@@ -13,8 +13,8 @@ import {Auth0ProviderWithHistory, ProtectedRoute} from './auth';
 import {
   Home,
   CoordinatorDashboard,
-  GuestApplicationTracker,
-  HostApplicationTracker,
+  // GuestApplicationTracker,
+  // HostApplicationTracker,
 } from './views';
 import {store} from './app/store';
 
@@ -25,11 +25,18 @@ function Profile() {
 function App() {
   return (
     <>
-      <Switch>
-        <Route path="/" exact component={Home} />
-        <Route path="/coord" component={CoordinatorDashboard} />
-        <ProtectedRoute path="/profile" component={Profile} />
-        <ProtectedRoute path="/home/host" component={HostApplicationTracker} />
+      <Routes>
+        <Route path="/">
+          <Home />
+        </Route>
+        <Route path="/coord">
+          <CoordinatorDashboard />
+        </Route>
+        <Route
+          path="/profile"
+          element={<ProtectedRoute component={Profile} />}
+        />
+        {/* <ProtectedRoute path="/home/host" component={HostApplicationTracker} />
         <ProtectedRoute
           path="/home/guest"
           component={GuestApplicationTracker}
@@ -37,8 +44,8 @@ function App() {
         <ProtectedRoute
           path="/home/coordinator"
           component={CoordinatorDashboard}
-        />
-      </Switch>
+        /> */}
+      </Routes>
     </>
   );
 }
