@@ -2,7 +2,7 @@ import {emptySplitApi as api} from './emptyApi';
 const injectedRtkApi = api.injectEndpoints({
   endpoints: build => ({
     deleteGuest: build.mutation<DeleteGuestApiResponse, DeleteGuestApiArg>({
-      query: queryArg => ({url: `/guests`, method: 'DELETE'}),
+      query: () => ({url: `/guests`, method: 'DELETE'}),
     }),
     listGuests: build.query<ListGuestsApiResponse, ListGuestsApiArg>({
       query: queryArg => ({url: `/guests`, params: {limit: queryArg.limit}}),
@@ -32,7 +32,7 @@ const injectedRtkApi = api.injectEndpoints({
       }),
     }),
     deleteHost: build.mutation<DeleteHostApiResponse, DeleteHostApiArg>({
-      query: queryArg => ({url: `/hosts`, method: 'DELETE'}),
+      query: () => ({url: `/hosts`, method: 'DELETE'}),
     }),
     listHosts: build.query<ListHostsApiResponse, ListHostsApiArg>({
       query: queryArg => ({url: `/hosts`, params: {limit: queryArg.limit}}),

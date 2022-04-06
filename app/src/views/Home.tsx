@@ -5,11 +5,8 @@ import {styled} from '@mui/system';
 import {HomeLink} from '../components/common/HomeLink';
 import {HostIcon, CoordinatorIcon, GuestIcon} from '../components/Icons';
 import {AppContainer} from '../components/common/AppContainer';
-import {useListGuestsQuery} from '../services/api';
 
-export function Home() {
-  const {data, isLoading, error} = useListGuestsQuery({limit: 10});
-  console.log(data);
+export const Home = () => {
   return (
     <AppContainer>
       <HomeContainer>
@@ -29,7 +26,7 @@ export function Home() {
       </HomeContainer>
     </AppContainer>
   );
-}
+};
 
 const HomeContainer = styled('section')({
   display: 'flex',
