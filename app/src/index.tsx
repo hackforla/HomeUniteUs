@@ -16,7 +16,7 @@ import {
   GuestApplicationTracker,
   HostApplicationTracker,
 } from './views';
-import {store} from './redux/store';
+import {store} from './app/store';
 
 function Profile() {
   return <div>Hello from profile</div>;
