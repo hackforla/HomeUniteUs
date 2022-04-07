@@ -8,18 +8,18 @@ interface HomeLinkProps {
   name: string;
 }
 
-export function HomeLink({
+export const HomeLink = ({
   to,
   name,
   children,
-}: React.PropsWithChildren<HomeLinkProps>) {
+}: React.PropsWithChildren<HomeLinkProps>) => {
   return (
     <Link to={to}>
       {children}
       <Text>{name}</Text>
     </Link>
   );
-}
+};
 
 const Link = styled(NavLink)(({theme}) => ({
   height: '11.625rem',
