@@ -20,6 +20,7 @@ import {Help} from '@mui/icons-material';
 import {useAuth0, User} from '@auth0/auth0-react';
 
 import {Avatar} from './Avatar';
+import logo from '../../img/spy.png';
 
 const ElementIds = {
   ProfileMenu: 'profile-trackernav-menu',
@@ -158,7 +159,7 @@ export function ApplicationTrackerHeader() {
       >
         <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
           <Box sx={{display: {xs: 'flex'}}}>
-            <img src="/img/spy.png" height="88" />
+            <img src={logo} height="88" />
           </Box>
           <Box sx={{display: {xs: 'none', md: 'flex'}, gap: '12px'}}>
             <IconButton
