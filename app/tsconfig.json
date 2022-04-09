@@ -20,7 +20,7 @@
     "jsx": "react-jsx",
     "types": ["jest", "@testing-library/jest-dom", "cypress"]
   },
-  "include": ["src", "**/*.ts", "**/*.tsx"],
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": [
     "node_modules",
     "**/*.spec.ts",
