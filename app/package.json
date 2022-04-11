@@ -10,10 +10,17 @@
     "cypress:open": "cypress open",
     "storybook": "start-storybook -p 6006",
     "lint": "eslint . --ext ts --ext tsx --max-warnings 0",
-    "type-check": "npx tsc --noEmit"
+    "type-check": "npx tsc --noEmit",
+    "prepare": "cd .. && husky install app/.husky",
+    "pre-commit": "lint-staged"
   },
   "author": "",
   "license": "ISC",
+  "lint-staged": {
+    "*.@(ts|tsx)": [
+      "npm run lint"
+    ]
+  },
   "dependencies": {
     "@auth0/auth0-react": "^1.8.0",
     "@emotion/react": "^11.4.1",
@@ -69,9 +76,11 @@
     "eslint-plugin-react": "^7.26.1",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.2",
+    "husky": "^7.0.4",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.4.7",
     "jest-watch-typeahead": "^1.0.0",
+    "lint-staged": "^12.3.7",
     "mini-css-extract-plugin": "^2.3.0",
     "style-loader": "^3.3.0",
     "ts-node": "^10.4.0",
