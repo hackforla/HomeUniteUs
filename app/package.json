@@ -6,7 +6,7 @@
     "build": "webpack --config webpack.config.js --mode production",
     "dev": "webpack-dev-server --config webpack.config.js --mode development",
     "test": "jest --env=jsdom",
-    "test-watch": "jest --watch --env=jsdom",
+    "test-watch": "jest --watch --runInBand --env=jsdom",
     "cypress:open": "cypress open",
     "storybook": "start-storybook -p 6006",
     "lint": "eslint . --ext ts --ext tsx --max-warnings 0",
@@ -17,7 +17,7 @@
   "author": "",
   "license": "ISC",
   "lint-staged": {
-    "*.@(ts|tsx)": [
+    "*.@(ts|tsx|js|jsx)": [
       "npm run lint"
     ]
   },

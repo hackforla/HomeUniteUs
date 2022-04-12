@@ -1,9 +1,10 @@
 import React from 'react';
 import {ThemeProvider} from '@emotion/react';
 import {ComponentMeta, ComponentStory} from '@storybook/react';
+import {Auth0Context, Auth0ContextInterface, User} from '@auth0/auth0-react';
+
 import {ApplicationTrackerHeader} from '../components/common/ApplicationTrackerHeader';
 import {HomeUniteUsTheme} from '../theme';
-import {Auth0Context, Auth0ContextInterface, User} from '@auth0/auth0-react';
 
 const stub = (): never => {
   throw new Error('You forgot to wrap your component in <Auth0Provider>.');
@@ -50,7 +51,11 @@ export default {
   title: 'Header',
   component: ApplicationTrackerHeader,
   decorators: [
-    story => <ThemeProvider theme={HomeUniteUsTheme}>{story()}</ThemeProvider>,
+    story => (
+      <MockAuth0Provider value={mockedAuth0Store}>
+        <ThemeProvider theme={HomeUniteUsTheme}>{story()}</ThemeProvider>
+      </MockAuth0Provider>
+    ),
   ],
 } as ComponentMeta<typeof ApplicationTrackerHeader>;
 
@@ -59,8 +64,3 @@ const Template: ComponentStory<typeof ApplicationTrackerHeader> = () => (
 );
 
 export const Primary = Template.bind({});
-Primary.decorators = [
-  story => (
-    <MockAuth0Provider value={mockedAuth0Store}>{story()}</MockAuth0Provider>
-  ),
-];
