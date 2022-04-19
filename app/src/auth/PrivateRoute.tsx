@@ -4,14 +4,18 @@ import {Loading} from '../components/common';
 import {useUserQuery} from '../services/auth';
 
 export const PrivateRoute = ({children}: {children: JSX.Element}) => {
-  const {data, isFetching, isLoading} = useUserQuery();
+  const {data, isLoading} = useUserQuery();
   const location = useLocation();
 
-  if (isFetching || isLoading) return <Loading />;
+  // show loader while fetching data
+  if (isLoading) return <Loading />;
 
+  // redirect to login page if user is not authenticated
+  // save location from which user was redirected to login page
   if (!data?.user) {
     return <Navigate to="/login" state={{from: location}} replace />;
   }
 
+  // render children if user is authenticated
   return children;
 };

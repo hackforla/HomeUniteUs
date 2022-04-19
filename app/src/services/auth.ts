@@ -18,6 +18,10 @@ export interface SignInRequest {
   password: string;
 }
 
+export interface SignOutResponse {
+  message: string;
+}
+
 const authApi = api.injectEndpoints({
   endpoints: build => ({
     signIn: build.mutation<SignInResponse, SignInRequest>({
@@ -29,6 +33,12 @@ const authApi = api.injectEndpoints({
         },
         withCredentials: true,
         body: credentials,
+      }),
+    }),
+    signOut: build.mutation<SignOutResponse, void>({
+      query: () => ({
+        url: 'auth/signout',
+        method: 'POST',
       }),
     }),
     private: build.query<{message: string}, void>({
@@ -56,4 +66,9 @@ const authApi = api.injectEndpoints({
 });
 
 export {authApi};
-export const {useSignInMutation, useUserQuery, usePrivateQuery} = authApi;
+export const {
+  useSignInMutation,
+  useSignOutMutation,
+  useUserQuery,
+  usePrivateQuery,
+} = authApi;

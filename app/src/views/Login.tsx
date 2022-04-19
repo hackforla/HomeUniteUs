@@ -8,14 +8,14 @@ export const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const [login, {data: userData, isLoading}] = useSignInMutation();
+  const [signIn, {data: userData, isLoading}] = useSignInMutation();
 
   // Save location from which user was redirected to login page
   const from = location.state?.from?.pathname || '/';
 
   const handleLogin = async () => {
     try {
-      const response = await login({
+      const response = await signIn({
         email: 'erikguntner@gmail.com',
         password: '#Abc1234',
       }).unwrap();

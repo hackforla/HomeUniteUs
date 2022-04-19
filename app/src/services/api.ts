@@ -5,15 +5,17 @@ import {
   FetchBaseQueryError,
   FetchArgs,
 } from '@reduxjs/toolkit/query/react';
-import {tokenReceived} from '../app/authSlice';
+import {clearAuthState, tokenReceived} from '../app/authSlice';
 import {RootState} from '../app/store';
 
 // Create base query
 const baseQuery = fetchBaseQuery({
   baseUrl: 'api/',
   prepareHeaders: (headers, {getState}) => {
+    // get token from state
     const token = (getState() as RootState).auth.token;
 
+    // apply authorization token to headers of all requests if token is available
     if (token) {
       headers.set('authorization', `Bearer ${token}`);
     }
@@ -28,8 +30,9 @@ const baseQueryWithReAuth: BaseQueryFn<
   FetchBaseQueryError
 > = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
+  // if token is expired, try to refresh it
   if (result.error && result.error.status === 401) {
-    // try to get new token
+    // make request to retrieve new tokens
     const refreshResult = await baseQuery('auth/refresh', api, extraOptions);
 
     if (refreshResult.data) {
@@ -38,9 +41,7 @@ const baseQueryWithReAuth: BaseQueryFn<
       // retry the intiail query
       result = await baseQuery(args, api, extraOptions);
     } else {
-      console.log('refresh failed. logout');
-      //TODO: logout
-      // api.dispatch(loggedOut());
+      api.dispatch(clearAuthState());
     }
   }
 
