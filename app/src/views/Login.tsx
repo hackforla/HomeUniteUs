@@ -1,12 +1,12 @@
 import React from 'react';
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks';
-import {useLoginMutation, usePrivateQuery} from '../services/auth';
+import {useSignInMutation, useUserQuery} from '../services/auth';
 
 export const Login = () => {
   const dispatch = useAppDispatch();
-  const [login, {data: userData, isLoading}] = useLoginMutation();
-  const {data, refetch} = usePrivateQuery();
+  const [login, {data: userData, isLoading}] = useSignInMutation();
+  const {data, refetch} = useUserQuery();
 
   const handleLogin = async () => {
     try {
@@ -34,7 +34,7 @@ export const Login = () => {
       {userData ? <p>{userData.user.email}</p> : null}
       <button onClick={handleLogin}>login</button>
       <button onClick={handlePrivateRequest}>Private Route</button>
-      <p>{data ? data.message : 'no private data'}</p>
+      <p>{data ? data.user.email : 'no private data'}</p>
     </div>
   );
 };

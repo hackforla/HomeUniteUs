@@ -6,19 +6,23 @@ export interface User {
 
 export interface UserResponse {
   user: User;
+}
+
+export interface SignInResponse {
+  user: User;
   token: string;
 }
 
-export interface LoginRequest {
+export interface SignInRequest {
   email: string;
   password: string;
 }
 
 const authApi = api.injectEndpoints({
   endpoints: build => ({
-    login: build.mutation<UserResponse, LoginRequest>({
+    signIn: build.mutation<SignInResponse, SignInRequest>({
       query: credentials => ({
-        url: 'auth/login',
+        url: 'auth/signin',
         method: 'POST',
         headers: {
           'Access-Control-Allow-Origin': 'http://localhost:4040',
@@ -37,9 +41,19 @@ const authApi = api.injectEndpoints({
         withCredentials: true,
       }),
     }),
+    user: build.query<UserResponse, void>({
+      query: () => ({
+        url: 'auth/user',
+        method: 'GET',
+        headers: {
+          'Access-Control-Allow-Origin': 'http://localhost:4040',
+        },
+        withCredentials: true,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
 
 export {authApi};
-export const {useLoginMutation, usePrivateQuery} = authApi;
+export const {useSignInMutation, useUserQuery, usePrivateQuery} = authApi;
