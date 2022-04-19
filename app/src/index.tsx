@@ -17,6 +17,7 @@ import {
   HostApplicationTracker,
 } from './views';
 import {store} from './app/store';
+import {Login} from './views/Login';
 
 function Profile() {
   return <div>Hello from profile</div>;
@@ -44,6 +45,7 @@ function App() {
           path="/home/coordinator"
           element={<ProtectedRoute component={CoordinatorDashboard} />}
         />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </>
   );

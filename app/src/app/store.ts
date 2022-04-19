@@ -1,10 +1,10 @@
 import {configureStore} from '@reduxjs/toolkit';
-import counterReducer from './counterSlice';
-import {emptySplitApi as api} from '../services/emptyApi';
+import authReducer from './authSlice';
+import {api} from '../services/api';
 
 export const store = configureStore({
   reducer: {
-    counter: counterReducer,
+    auth: authReducer,
     [api.reducerPath]: api.reducer,
   },
   middleware: getDefaultMiddleware =>

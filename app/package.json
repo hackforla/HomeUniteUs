@@ -12,7 +12,8 @@
     "lint": "eslint . --ext ts --ext tsx --max-warnings 0",
     "type-check": "npx tsc --noEmit",
     "prepare": "cd .. && husky install app/.husky",
-    "pre-commit": "lint-staged"
+    "pre-commit": "lint-staged",
+    "generate": "npx @rtk-query/codegen-openapi openapi-config.ts"
   },
   "author": "",
   "license": "ISC",
@@ -86,5 +87,5 @@
     "ts-node": "^10.4.0",
     "webpack-dev-server": "^4.7.3"
   },
-  "proxy": "http://localhost:8080/"
+  "proxy": "http://127.0.0.1:5000/"
 }
