@@ -1,12 +1,17 @@
 import React from 'react';
+import {useNavigate, useLocation} from 'react-router-dom';
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
-import {useSignInMutation, useUserQuery} from '../services/auth';
+import {useSignInMutation} from '../services/auth';
 
 export const Login = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useAppDispatch();
   const [login, {data: userData, isLoading}] = useSignInMutation();
-  const {data, refetch} = useUserQuery();
+
+  // Save location from which user was redirected to login page
+  const from = location.state?.from?.pathname || '/';
 
   const handleLogin = async () => {
     try {
@@ -18,13 +23,10 @@ export const Login = () => {
       const {user, token} = response;
 
       dispatch(setCredentials({user, token}));
+      navigate(from, {replace: true});
     } catch (err) {
       console.log(err);
     }
-  };
-
-  const handlePrivateRequest = async () => {
-    refetch();
   };
 
   return (
@@ -33,8 +35,6 @@ export const Login = () => {
       {isLoading ? <p>Loading</p> : null}
       {userData ? <p>{userData.user.email}</p> : null}
       <button onClick={handleLogin}>login</button>
-      <button onClick={handlePrivateRequest}>Private Route</button>
-      <p>{data ? data.user.email : 'no private data'}</p>
     </div>
   );
 };

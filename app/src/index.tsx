@@ -15,9 +15,12 @@ import {
   CoordinatorDashboard,
   GuestApplicationTracker,
   HostApplicationTracker,
+  Login,
+  PrivateView,
 } from './views';
 import {store} from './app/store';
-import {Login} from './views/Login';
+import {PrivateRoute} from './auth/PrivateRoute';
+import {ProtectedView} from './views/ProtectedView';
 
 function Profile() {
   return <div>Hello from profile</div>;
@@ -46,6 +49,22 @@ function App() {
           element={<ProtectedRoute component={CoordinatorDashboard} />}
         />
         <Route path="/login" element={<Login />} />
+        <Route
+          path="/private"
+          element={
+            <PrivateRoute>
+              <PrivateView />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/protected"
+          element={
+            <PrivateRoute>
+              <ProtectedView />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </>
   );
