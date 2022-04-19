@@ -39,7 +39,7 @@ const baseQueryWithReAuth: BaseQueryFn<
       result = await baseQuery(args, api, extraOptions);
     } else {
       console.log('refresh failed. logout');
-      //logout
+      //TODO: logout
       // api.dispatch(loggedOut());
     }
   }

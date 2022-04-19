@@ -1,6 +1,6 @@
 import React from 'react';
 import {setCredentials} from '../app/authSlice';
-import {useAppDispatch} from '../app/hooks';
+import {useAppDispatch} from '../app/hooks/store';
 import {useSignInMutation, useUserQuery} from '../services/auth';
 
 export const Login = () => {
