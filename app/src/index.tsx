@@ -21,12 +21,27 @@ import {
 import {store} from './app/store';
 import {PrivateRoute} from './auth/PrivateRoute';
 import {ProtectedView} from './views/ProtectedView';
+import {useSessionMutation} from './services/auth';
 
 function Profile() {
   return <div>Hello from profile</div>;
 }
 
 function App() {
+  const [session] = useSessionMutation();
+
+  const getSession = async () => {
+    try {
+      await session().unwrap();
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  React.useEffect(() => {
+    getSession();
+  }, []);
+
   return (
     <>
       <Routes>

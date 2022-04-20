@@ -2,6 +2,7 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import {User} from '../services/auth';
 import {RootState} from './store';
+import {authApi} from '../services/auth';
 
 interface AuthState {
   user: User | null;
@@ -19,13 +20,9 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    clearAuthState: state => {
-      state.user = null;
-      state.token = null;
-    },
     setCredentials: (
       state,
-      {payload: {user, token}}: PayloadAction<{user: User; token: string}>,
+      {payload: {user, token}}: PayloadAction<AuthState>,
     ) => {
       state.user = user;
       state.token = token;
@@ -34,13 +31,23 @@ export const authSlice = createSlice({
       state.token = token;
     },
   },
+  extraReducers: builder => {
+    builder
+      // Add a matcher to update auth state with user returned from the user query
+      .addMatcher(authApi.endpoints.user.matchFulfilled, (state, {payload}) => {
+        state.user = payload.user;
+      })
+      .addMatcher(
+        authApi.endpoints.session.matchFulfilled,
+        (state, {payload}) => {
+          state.user = payload.user;
+          state.token = payload.token;
+        },
+      );
+  },
 });
 
 export default authSlice.reducer;
-export const {
-  clearAuthState,
-  setCredentials,
-  tokenReceived,
-} = authSlice.actions;
+export const {setCredentials, tokenReceived} = authSlice.actions;
 
 export const selectCurrentUser = (state: RootState) => state.auth.user;

@@ -51,6 +51,16 @@ const authApi = api.injectEndpoints({
         withCredentials: true,
       }),
     }),
+    session: build.mutation<SignInResponse, void>({
+      query: () => ({
+        url: 'auth/current_session',
+        method: 'GET',
+        headers: {
+          'Access-Control-Allow-Origin': 'http://localhost:4040',
+        },
+        withCredentials: true,
+      }),
+    }),
     user: build.query<UserResponse, void>({
       query: () => ({
         url: 'auth/user',
@@ -69,6 +79,7 @@ export {authApi};
 export const {
   useSignInMutation,
   useSignOutMutation,
+  useSessionMutation,
   useUserQuery,
   usePrivateQuery,
 } = authApi;

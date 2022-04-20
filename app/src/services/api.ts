@@ -5,7 +5,7 @@ import {
   FetchBaseQueryError,
   FetchArgs,
 } from '@reduxjs/toolkit/query/react';
-import {clearAuthState, tokenReceived} from '../app/authSlice';
+import {setCredentials, tokenReceived} from '../app/authSlice';
 import {RootState} from '../app/store';
 
 // Create base query
@@ -41,7 +41,7 @@ const baseQueryWithReAuth: BaseQueryFn<
       // retry the intiail query
       result = await baseQuery(args, api, extraOptions);
     } else {
-      api.dispatch(clearAuthState());
+      api.dispatch(setCredentials({user: null, token: null}));
     }
   }
 
