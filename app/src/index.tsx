@@ -15,7 +15,7 @@ import {
   CoordinatorDashboard,
   GuestApplicationTracker,
   HostApplicationTracker,
-  Login,
+  SignIn,
   PrivateView,
 } from './views';
 import {store} from './app/store';
@@ -64,7 +64,7 @@ function App() {
           path="/home/coordinator"
           element={<ProtectedRoute component={CoordinatorDashboard} />}
         />
-        <Route path="/login" element={<Login />} />
+        <Route path="/signin" element={<SignIn />} />
         <Route
           path="/private"
           element={

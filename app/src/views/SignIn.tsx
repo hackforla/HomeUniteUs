@@ -4,7 +4,7 @@ import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
 import {useSignInMutation} from '../services/auth';
 
-export const Login = () => {
+export const SignIn = () => {
   const [disabled, setDisabled] = React.useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -56,11 +56,11 @@ export const Login = () => {
 
   return (
     <div>
-      <h1>Login</h1>
+      <h1>Sign In</h1>
       {isLoading ? <p>Loading</p> : null}
       {userData ? <p>{userData.user.email}</p> : null}
       <button disabled={disabled} onClick={handleLogin}>
-        login
+        sign in
       </button>
       <a
         href={`https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id=${process.env.COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri=${process.env.COGNITO_REDIRECT_URI}&identity_provider=Google`}

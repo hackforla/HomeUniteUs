@@ -16,7 +16,7 @@ export const PrivateView = () => {
     try {
       await signOut().unwrap();
       dispatch(setCredentials({user: null, token: null}));
-      navigate('/login');
+      navigate('/signin');
     } catch (err) {
       console.log(err);
     }
