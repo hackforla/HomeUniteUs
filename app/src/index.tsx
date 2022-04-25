@@ -38,6 +38,7 @@ function App() {
     }
   };
 
+  // signin to current session if it exists, otherwise fail silently
   React.useEffect(() => {
     getSession();
   }, []);
