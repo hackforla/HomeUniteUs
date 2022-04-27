@@ -5,9 +5,10 @@ import {Container} from '@mui/material';
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
 import {SignInForm} from '../components/common/SignInForm';
-import {SignInRequest, useSignInMutation} from '../services/auth';
+import {useSignInMutation} from '../services/auth';
 
 export const SignIn = () => {
+  const [disabled, setDisabled] = React.useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -35,11 +36,17 @@ export const SignIn = () => {
     }
   }, [location, from]);
 
-  const handleSignIn = async ({email, password}: SignInRequest) => {
+  const handleLogin = async () => {
+    if (disabled) {
+      return;
+    }
+
+    setDisabled(true);
+
     try {
       const response = await signIn({
-        email,
-        password,
+        email: 'erikguntner@gmail.com',
+        password: '#Abc1234',
       }).unwrap();
 
       const {user, token} = response;
@@ -49,11 +56,15 @@ export const SignIn = () => {
     } catch (err) {
       console.log(err);
     }
+
+    setDisabled(false);
   };
 
   return (
-    <Container maxWidth="sm">
-      <SignInForm onSubmit={handleSignIn} />
-    </Container>
+    <div>
+      <Container maxWidth="sm">
+        <SignInForm onSubmit={handleLogin} />
+      </Container>
+    </div>
   );
 };

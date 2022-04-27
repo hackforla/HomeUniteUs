@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Box,
   FormControl,
@@ -7,32 +8,68 @@ import {
 } from '@mui/material';
 import {styled} from '@mui/system';
 import GoogleIcon from '@mui/icons-material/Google';
-import React from 'react';
-import {Button} from './Button';
+import {useFormik} from 'formik';
+import {object, string} from 'yup';
+import {PrimaryButton} from './Button';
+import {SignInRequest} from '../../services/auth';
 
 interface SignInFormProps {
-  onSubmit: () => void;
+  onSubmit: ({email, password}: SignInRequest) => Promise<void>;
 }
 
+const validationSchema = object({
+  email: string().email().required('email is required'),
+  password: string()
+    .required('password is required')
+    .min(8, 'password must be at least 8 characters')
+    .matches(/^(?=.*[a-z])/, 'Must contain at least one lowercase character')
+    .matches(/^(?=.*[A-Z])/, 'Must contain at least one uppercase character')
+    .matches(
+      /^(?=.*[!@#%&])/,
+      'password must contain at least one special character',
+    ),
+});
+
 export const SignInForm = ({onSubmit}: SignInFormProps) => {
-  const handeSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    onSubmit();
-  };
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema,
+    onSubmit: values => {
+      onSubmit(values);
+    },
+  });
+
   return (
     <FormContainer>
       <FormHeader variant="h4">Sign In to your account</FormHeader>
-      <Form component="form">
+      <Form onSubmit={formik.handleSubmit}>
         <FormControl>
           <Label htmlFor="email">Email address</Label>
-          <Input fullWidth id="email" />
+          <Input
+            fullWidth
+            id="email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+          />
         </FormControl>
         <FormControl>
           <Label htmlFor="password">Password</Label>
-          <Input fullWidth id="password" />
+          <Input
+            fullWidth
+            id="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+          />
         </FormControl>
+        <SubmitButton type="submit" fullWidth>
+          Sign in
+        </SubmitButton>
       </Form>
-      <SubmitButton label="Submit" onClick={handeSubmit} />
       <Divider>or</Divider>
       <SocialSignIn
         href={`https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id=${process.env.COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri=${process.env.COGNITO_REDIRECT_URI}&identity_provider=Google`}
@@ -56,7 +93,7 @@ const FormHeader = styled(Typography)({
   fontWeight: 600,
 });
 
-const Form = styled(Box)({
+const Form = styled('form')({
   width: '100%',
   display: 'flex',
   flexDirection: 'column',
@@ -80,7 +117,7 @@ const Label = styled('label')(({theme}) => ({
   fontWeight: 500,
 }));
 
-const SubmitButton = styled(Button)({
+const SubmitButton = styled(PrimaryButton)({
   padding: '12px',
 });
 
