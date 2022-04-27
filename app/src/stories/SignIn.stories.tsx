@@ -1,12 +1,25 @@
 import {ThemeProvider} from '@emotion/react';
-import {ComponentMeta} from '@storybook/react';
+import {Container} from '@mui/material';
+import {ComponentMeta, ComponentStory} from '@storybook/react';
+import {SignInForm} from '../components/common/SignInForm';
 import {HomeUniteUsTheme} from '../theme';
-import {SignIn} from '../views';
 
 export default {
-  title: 'SignIn',
-  component: SignIn,
+  title: 'Sign In Form',
+  component: SignInForm,
   decorators: [
     story => <ThemeProvider theme={HomeUniteUsTheme}>{story()}</ThemeProvider>,
   ],
-} as ComponentMeta<typeof SignIn>;
+} as ComponentMeta<typeof SignInForm>;
+
+const Template: ComponentStory<typeof SignInForm> = () => (
+  <Container maxWidth="sm">
+    <SignInForm
+      onSubmit={() => {
+        console.log('submit');
+      }}
+    />
+  </Container>
+);
+
+export const Primary = Template.bind({});

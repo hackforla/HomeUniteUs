@@ -1,7 +1,10 @@
 import React from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
+import {Container} from '@mui/material';
+
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
+import {SignInForm} from '../components/common/SignInForm';
 import {useSignInMutation} from '../services/auth';
 
 export const SignIn = () => {
@@ -9,7 +12,10 @@ export const SignIn = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const [signIn, {data: userData, isLoading}] = useSignInMutation();
+  const [signIn] = useSignInMutation();
+
+  // Save location from which user was redirected to login page
+  const from = location.state?.from?.pathname || '/';
 
   React.useEffect(() => {
     if (location.search.includes('code')) {
@@ -22,13 +28,13 @@ export const SignIn = () => {
         body: JSON.stringify({code}),
       })
         .then(res => res.json())
-        .then(data => console.log(data))
+        .then(data => {
+          console.log(data);
+          navigate(from, {replace: true});
+        })
         .catch(err => console.log(err));
     }
-  }, [location]);
-
-  // Save location from which user was redirected to login page
-  const from = location.state?.from?.pathname || '/';
+  }, [location, from]);
 
   const handleLogin = async () => {
     if (disabled) {
@@ -56,17 +62,9 @@ export const SignIn = () => {
 
   return (
     <div>
-      <h1>Sign In</h1>
-      {isLoading ? <p>Loading</p> : null}
-      {userData ? <p>{userData.user.email}</p> : null}
-      <button disabled={disabled} onClick={handleLogin}>
-        sign in
-      </button>
-      <a
-        href={`https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id=${process.env.COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri=${process.env.COGNITO_REDIRECT_URI}&identity_provider=Google`}
-      >
-        Link to google
-      </a>
+      <Container maxWidth="sm">
+        <SignInForm onSubmit={handleLogin} />
+      </Container>
     </div>
   );
 };

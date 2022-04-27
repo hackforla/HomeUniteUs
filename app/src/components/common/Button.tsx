@@ -44,6 +44,7 @@ export const Button = ({
 const DefaultButton = styled('button')(({theme}) => ({
   border: 'none;',
   padding: '16px 20px',
+  fontSize: '16px',
   fontWeight: 700,
   [theme.breakpoints.down('md')]: {
     padding: '12px 16px',
