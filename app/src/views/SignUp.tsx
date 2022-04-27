@@ -4,15 +4,14 @@ import {Container} from '@mui/material';
 
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
-import {SignInForm} from '../components/common/SignInForm';
-import {useSignInMutation} from '../services/auth';
+import {SignUpForm} from '../components/common/SignUpForm';
+import {SignUpRequest, useSignUpMutation} from '../services/auth';
 
-export const SignIn = () => {
-  const [disabled, setDisabled] = React.useState(false);
+export const SignUp = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const [signIn] = useSignInMutation();
+  const [signUp] = useSignUpMutation();
 
   // Save location from which user was redirected to login page
   const from = location.state?.from?.pathname || '/';
@@ -36,17 +35,11 @@ export const SignIn = () => {
     }
   }, [location, from]);
 
-  const handleLogin = async () => {
-    if (disabled) {
-      return;
-    }
-
-    setDisabled(true);
-
+  const handleSignUp = async ({email, password}: SignUpRequest) => {
     try {
-      const response = await signIn({
-        email: 'erikguntner@gmail.com',
-        password: '#Abc1234',
+      const response = await signUp({
+        email,
+        password,
       }).unwrap();
 
       const {user, token} = response;
@@ -56,14 +49,12 @@ export const SignIn = () => {
     } catch (err) {
       console.log(err);
     }
-
-    setDisabled(false);
   };
 
   return (
     <div>
       <Container maxWidth="sm">
-        <SignInForm onSubmit={handleLogin} />
+        <SignUpForm onSubmit={handleSignUp} />
       </Container>
     </div>
   );

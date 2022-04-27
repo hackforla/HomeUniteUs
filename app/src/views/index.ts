@@ -3,4 +3,5 @@ export {GuestApplicationTracker} from './GuestApplicationTracker';
 export {HostApplicationTracker} from './HostApplicationTracker';
 export {Home} from './Home';
 export {SignIn} from './SignIn';
+export {SignUp} from './SignUp';
 export {PrivateView} from './PrivateView';
