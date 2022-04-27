@@ -1,6 +1,6 @@
 import React from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
-import {Container} from '@mui/material';
+import {styled} from '@mui/system';
 
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
@@ -52,8 +52,17 @@ export const SignIn = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <PageContainer>
       <SignInForm onSubmit={handleSignIn} />
-    </Container>
+    </PageContainer>
   );
 };
+
+const PageContainer = styled('div')(({theme}) => ({
+  minHeight: '100vh',
+  minWidth: '100vw',
+  backgroundColor: theme.palette.grey[100],
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+}));

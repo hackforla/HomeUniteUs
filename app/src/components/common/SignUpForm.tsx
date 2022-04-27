@@ -70,7 +70,11 @@ export const SignUpForm = ({onSubmit}: SignUpFormProps) => {
           Sign Up
         </SubmitButton>
       </Form>
-      <Divider>or</Divider>
+      <Divider>
+        <div />
+        <p>or</p>
+        <div />
+      </Divider>
       <SocialSignIn
         href={`https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id=${process.env.COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri=${process.env.COGNITO_REDIRECT_URI}&identity_provider=Google`}
       >
@@ -81,11 +85,13 @@ export const SignUpForm = ({onSubmit}: SignUpFormProps) => {
 };
 
 const FormContainer = styled(Stack)(({theme}) => ({
-  width: '100%',
+  maxWidth: '550px',
   alignItems: 'center',
   padding: '2rem',
   border: '1px solid #e0e0e0',
   borderRadius: theme.shape.borderRadius,
+  backgroundColor: '#fff',
+  margin: '0 16px',
 }));
 
 const FormHeader = styled(Typography)({
@@ -118,19 +124,30 @@ const Label = styled('label')(({theme}) => ({
 }));
 
 const SubmitButton = styled(PrimaryButton)({
-  padding: '12px',
+  padding: '8px',
 });
 
 const Divider = styled(Box)(({theme}) => ({
   color: theme.palette.text.secondary,
   marginBottom: '16px',
+  display: 'flex',
+  alignItems: 'center',
+  width: '100%',
+  '&> p': {
+    margin: '0 8px',
+  },
+  '& > div': {
+    flex: 1,
+    backgroundColor: theme.palette.text.secondary,
+    height: '1px',
+  },
 }));
 
 const SocialSignIn = styled('a')(({theme}) => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  padding: '12px',
+  padding: '8px',
   width: '100%',
   fontSize: '16px',
   fontWeight: 700,
