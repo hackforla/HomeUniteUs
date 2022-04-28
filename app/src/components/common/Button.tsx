@@ -39,18 +39,20 @@ export const PrimaryButton = styled(DefaultButton)(({theme}) => ({
   },
 }));
 
-export const SecondaryButton = styled(DefaultButton)(({theme}) => ({
+export const SecondaryButton = styled(DefaultButton)({
   backgroundColor: 'transparent',
+  color: 'black',
   border: '1px solid black',
   '&:hover': {
-    backgroundColor: theme.palette.grey[700],
+    backgroundColor: 'black',
+    color: '#fff',
   },
   '&:active': {
-    backgroundColor: theme.palette.grey[500],
+    backgroundColor: 'black',
   },
   '&:disabled': {
     backgroundColor: 'transparent',
-    color: theme.palette.grey[700],
-    border: `1px solid ${theme.palette.grey[700]}`,
+    color: 'black',
+    border: `1px solid black`,
   },
-}));
+});
