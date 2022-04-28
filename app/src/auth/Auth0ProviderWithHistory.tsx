@@ -1,30 +1,39 @@
 import * as React from 'react';
-import {useNavigate} from 'react-router-dom';
-import {AppState, Auth0Provider} from '@auth0/auth0-react';
+// import {useNavigate} from 'react-router-dom';
+// import {AppState, Auth0Provider} from '@auth0/auth0-react';
 
 interface Auth0ProviderWithHistoryProps {}
 
 export const Auth0ProviderWithHistory = (
   props: React.PropsWithChildren<Auth0ProviderWithHistoryProps>,
 ) => {
-  const navigate = useNavigate();
-  const domain = process.env.AUTH0_DOMAIN || 'UNASSIGNED';
-  const clientId = process.env.AUTH0_CLIENT_ID || 'UNASSIGNED';
-  const audience = process.env.AUTH0_AUDIENCE;
+  
+  /*
+   * TODO:
+   *    Tyler 2022-04-27: restore this snippet when an approatiate HOC or alternative auth mechanism established 
+   * 
+   */
 
-  const onRedirectCallback = (appState: AppState) => {
-    navigate(appState?.returnTo || window.location.pathname);
-  };
+  // const navigate = useNavigate();
+  // const domain = process.env.AUTH0_DOMAIN || 'UNASSIGNED';
+  // const clientId = process.env.AUTH0_CLIENT_ID || 'UNASSIGNED';
+  // const audience = process.env.AUTH0_AUDIENCE;
 
-  return (
-    <Auth0Provider
-      domain={domain}
-      clientId={clientId}
-      redirectUri={window.location.origin}
-      onRedirectCallback={onRedirectCallback}
-      audience={audience}
-    >
-      {props.children}
-    </Auth0Provider>
-  );
+  // const onRedirectCallback = (appState: AppState) => {
+  //   navigate(appState?.returnTo || window.location.pathname);
+  // };
+
+  // return (
+  //   <Auth0Provider
+  //     domain={domain}
+  //     clientId={clientId}
+  //     redirectUri={window.location.origin}
+  //     onRedirectCallback={onRedirectCallback}
+  //     audience={audience}
+  //   >
+  //     {props.children}
+  //   </Auth0Provider>
+  // );
+
+  return <>{props.children}</>;
 };
