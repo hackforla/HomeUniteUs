@@ -32,6 +32,11 @@ export interface SignOutResponse {
   message: string;
 }
 
+export interface VerificationRequest {
+  email: string;
+  code: string;
+}
+
 const authApi = api.injectEndpoints({
   endpoints: build => ({
     signUp: build.mutation<SignUpResponse, SignUpRequest>({
@@ -48,6 +53,17 @@ const authApi = api.injectEndpoints({
     signIn: build.mutation<SignInResponse, SignInRequest>({
       query: credentials => ({
         url: 'auth/signin',
+        method: 'POST',
+        headers: {
+          'Access-Control-Allow-Origin': 'http://localhost:4040',
+        },
+        withCredentials: true,
+        body: credentials,
+      }),
+    }),
+    verification: build.mutation<void, VerificationRequest>({
+      query: credentials => ({
+        url: 'auth/verify',
         method: 'POST',
         headers: {
           'Access-Control-Allow-Origin': 'http://localhost:4040',
@@ -101,6 +117,7 @@ export const {
   useSignUpMutation,
   useSignInMutation,
   useSignOutMutation,
+  useVerificationMutation,
   useSessionMutation,
   useUserQuery,
   usePrivateQuery,

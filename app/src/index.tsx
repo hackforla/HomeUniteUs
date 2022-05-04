@@ -23,6 +23,7 @@ import {store} from './app/store';
 import {PrivateRoute} from './auth/PrivateRoute';
 import {ProtectedView} from './views/ProtectedView';
 import {useSessionMutation} from './services/auth';
+import {AccountVerification} from './views/AccountVerification';
 
 function Profile() {
   return <div>Hello from profile</div>;
@@ -67,6 +68,7 @@ function App() {
         />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/verification" element={<AccountVerification />} />
         <Route
           path="/private"
           element={
