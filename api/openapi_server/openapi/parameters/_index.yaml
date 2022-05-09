@@ -1,0 +1,9 @@
+ProviderId:
+  name: providerId
+  description: The ID of the service provider to read, update or delete
+  explode: false
+  in: path
+  required: true
+  schema:
+    type: string
+  style: simple

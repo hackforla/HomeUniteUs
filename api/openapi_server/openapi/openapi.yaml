@@ -7,6 +7,10 @@ info:
 servers:
   - url: http://homeunite.us/api
 paths:
+  /serviceProviders:
+    $ref: './paths/serviceProviders.yaml'
+  /serviceProviders/{providerId}:
+    $ref: './paths/serviceProviders.yaml'
   /guests:
     delete:
       description: Delete a guest
@@ -549,81 +553,11 @@ paths:
       security:
         - jwt: ["secret"]
 components:
+  parameters:
+    $ref: './parameters/_index.yaml'
   schemas:
-    IntakeQuestion:
-      type: object
-      properties:
-        applicant_type:
-          $ref: '#/components/schemas/ApplicantType'
-        question_text:
-          title: question_text
-          type: string
-        intake_question_type:
-          $ref: '#/components/schemas/IntakeQuestionType'
-        intake_question_set:
-          $ref: '#/components/schemas/IntakeQuestionSet'
-      required:
-        - applicant_type
-        - question_text
-        - intake_question_type
-        - intake_question_set
-    ApplicantType:
-      type: object
-      properties:
-        applicant_type_description:
-          title: applicant_type_description
-          type: string
-      required:
-        - applicant_type_description
-    IntakeQuestionType:
-      type: object
-      properties:
-        type_description:
-          title: type_description
-          type: string
-      required:
-        - type_description
-    IntakeQuestionSet:
-      type: object
-      properties:
-        question_set_name:
-          title: question_set_name
-          type: string
-        housing_program:
-          $ref: '#/components/schemas/HousingProgram'
-      required: 
-        - question_set_name
-        - housing_program
-    HousingProgram:
-      type: object
-      properties:
-        program_name:           
-          title: program_name
-          type: string
-        service_provider:
-          $ref: '#/components/schemas/HousingProgramServiceProvider'
-        required:
-          - program_name
-          - service_provider
-    HousingProgramServiceProvider:
-      type: object
-      properties:
-        provider_name:           
-          title: provider_name
-          type: string
-      required:
-        - provider_name
-    IntakeResponseValue:
-      type: object
-      properties:
-        response_text:           
-          title: response_text
-          type: string
-        intake_question:
-          $ref: '#/components/schemas/IntakeQuestion'
-      required:
-        - response_text
-        - intake_question
+    allOf:
+      $ref: './schemas/_index.yaml'
     Host:
       example:
         photoUrls:

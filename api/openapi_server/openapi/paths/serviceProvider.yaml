@@ -1,0 +1,88 @@
+get:
+  summary: Get details about a housing program service provider from an ID
+  tags:
+    - service_provider
+  operationId: get_service_provider_by_id
+  parameters:
+    $ref: '#/components/parameters/ProviderId'
+  responses:
+    "200":
+      content:
+        application/json:
+          schema:
+            properties:
+              id:
+                format: int64
+                type: integer
+            allOf:
+              - $ref: '#/components/schemas/HousingProgramServiceProvider'
+      description: Service provider found
+    "400":
+      description: Malformed request
+    "404":
+      description: Service provider not found
+    default:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiResponse'
+      description: unexpected error
+  x-openapi-router-controller: openapi_server.controllers.service_provider_controller
+put:
+  summary: Update a housing program service provider
+  tags:
+    - service_provider
+  operationId: update_service_provider
+  parameters:
+    $ref: '#/components/parameters/ProviderId'
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/HousingProgramServiceProvider'
+  responses:
+    "200":
+      content:
+        application/json:
+          schema:
+          properties:
+            id:
+              format: int64
+              type: integer
+          allOf:
+            - $ref: '#/components/schemas/HousingProgramServiceProvider'
+      description: Successful operation
+    "400":
+      description: Malformed request
+    "404":
+      description: Service provider not found
+    "405":
+      description: Validation exception
+    default:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiResponse'
+      description: unexpected error
+  x-openapi-router-controller: openapi_server.controllers.service_provider_controller
+  delete:
+    summary: Delete a service provider
+    tags:
+      - service_provider
+    operationId: delete_service_provider
+    parameters:
+      $ref: '#/components/parameters/ProviderId'
+    responses:
+      "200":
+        description: Service provider successfully deleted
+      "400":
+        description: Malformed request
+      "404":
+        description: Service provider not found
+      default:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiResponse'
+
+    x-openapi-router-controller: openapi_server.controllers.host_controller
