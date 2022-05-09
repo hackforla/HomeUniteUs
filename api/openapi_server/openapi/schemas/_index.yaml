@@ -5,7 +5,7 @@ HousingProgram:
       title: program_name
       type: string
     service_provider:
-      $ref: '#/components/schemas/HousingProgramServiceProvider'
+      $ref: '#HousingProgramServiceProvider'
   required:
     - program_name
     - service_provider
@@ -26,19 +26,19 @@ HousingProgramServiceProviders:
         title: id
         type: integer
     allOf:
-      - $ref: "#/components/schemas/HousingProgramServiceProvider"
+      - $ref: "#HousingProgramServiceProvider"
 IntakeQuestion:
   type: object
   properties:
     applicant_type:
-      $ref: '#/components/schemas/ApplicantType'
+      $ref: '#ApplicantType'
     question_text:
       title: question_text
       type: string
     intake_question_type:
-      $ref: '#/components/schemas/IntakeQuestionType'
+      $ref: '#IntakeQuestionType'
     intake_question_set:
-      $ref: '#/components/schemas/IntakeQuestionSet'
+      $ref: '#IntakeQuestionSet'
   required:
     - applicant_type
     - question_text
@@ -59,18 +59,18 @@ IntakeQuestionSet:
       title: question_set_name
       type: string
     housing_program:
-      $ref: '#/components/schemas/HousingProgram'
+      $ref: '#HousingProgram'
   required: 
     - question_set_name
     - housing_program
 ApplicantType:
   type: object
   properties:
-  applicant_type_description:
-    title: applicant_type_description
-    type: string
+    applicant_type_description:
+      title: applicant_type_description
+      type: string
   required:
-  - applicant_type_description
+    - applicant_type_description
 IntakeResponseValue:
   type: object
   properties:
@@ -78,7 +78,7 @@ IntakeResponseValue:
       title: response_text
       type: string
     intake_question:
-      $ref: '#/components/schemas/IntakeQuestion'
+      $ref: '#IntakeQuestion'
   required:
     - response_text
     - intake_question

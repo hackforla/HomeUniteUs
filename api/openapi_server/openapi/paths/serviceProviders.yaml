@@ -5,11 +5,13 @@ get:
   operationId: get_service_providers
   responses:
     "200":
-      description: A paged array of service providers
+      description: An array of service providers
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/HousingProgramServiceProviders'
+            $ref: '../schemas/_index.yaml#/HousingProgramServiceProviders'
+    default:
+      $ref: '../responses/_index.yaml#/UnexpectedError'
   x-openapi-router-controller: openapi_server.controllers.service_provider_controller
 post:
   summary: Create a housing program service provider
@@ -20,7 +22,7 @@ post:
     content:
       application/json:
         schema:
-          $ref: '#/components/schemas/HousingProgramServiceProvider'
+          $ref: '../schemas/_index.yaml#/HousingProgramServiceProvider'
   responses:
     '201':
       description: Resource Created
@@ -28,7 +30,7 @@ post:
         application/json:
           schema:
             allOf: 
-              - $ref: '#/components/schemas/HousingProgramServiceProvider'
+              - $ref: '../schemas/_index.yaml#/HousingProgramServiceProvider'
             properties:
               id:
                 format: int64
@@ -40,9 +42,5 @@ post:
           parameters:
             providerId: '$response.body#/id'
     default:
-      description: Unexpected Error
-      content:
-        application/json:
-          schema:
-            $ref: "#/components/schemas/ApiResponse"
+      $ref: '../responses/_index.yaml#/UnexpectedError'
   x-openapi-router-controller: openapi_server.controllers.service_provider_controller

@@ -10,7 +10,7 @@ paths:
   /serviceProviders:
     $ref: './paths/serviceProviders.yaml'
   /serviceProviders/{providerId}:
-    $ref: './paths/serviceProviders.yaml'
+    $ref: './paths/serviceProvider.yaml'
   /guests:
     delete:
       description: Delete a guest
@@ -553,11 +553,12 @@ paths:
       security:
         - jwt: ["secret"]
 components:
+  responses:
+    $ref: './responses/_index.yaml'
   parameters:
     $ref: './parameters/_index.yaml'
   schemas:
-    allOf:
-      $ref: './schemas/_index.yaml'
+    $ref: './schemas/_index.yaml'
     Host:
       example:
         photoUrls:

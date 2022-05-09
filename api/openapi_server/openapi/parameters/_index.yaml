@@ -5,5 +5,5 @@ ProviderId:
   in: path
   required: true
   schema:
-    type: string
+    type: int64
   style: simple
