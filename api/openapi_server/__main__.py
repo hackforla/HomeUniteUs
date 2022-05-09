@@ -48,7 +48,7 @@ def list_providers():
 
 
 def main():
-    app = connexion.App(__name__, specification_dir='./openapi/')
+    app = connexion.App(__name__, specification_dir='./_openapi/')
     app.app.json_encoder = encoder.JSONEncoder
     app.app.secret_key = SECRET_KEY
     app.add_api('openapi.yaml',

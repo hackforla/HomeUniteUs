@@ -41,12 +41,12 @@ put:
       content:
         application/json:
           schema:
-          properties:
-            id:
-              format: int64
-              type: integer
-          allOf:
-            - $ref: '../schemas/_index.yaml#/HousingProgramServiceProvider'
+            properties:
+              id:
+                format: int64
+                type: integer
+            allOf:
+              - $ref: '../schemas/_index.yaml#/HousingProgramServiceProvider'
       description: Successful operation
     "400":
       description: Malformed request
