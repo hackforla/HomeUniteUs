@@ -550,6 +550,70 @@ paths:
         - jwt: ["secret"]
 components:
   schemas:
+    IntakeQuestion:
+      properties:
+        id:           
+          format: int64
+          title: id
+          type: integer
+        question_text:
+          title: question_text
+          type: string
+        intake_question_type:
+          $ref: '#/components/schemas/IntakeQuestionType'
+        intake_question_set:
+          $ref: '#/components/schemas/IntakeQuestionSet'
+    IntakeQuestionType:
+      properties:
+        id:           
+          format: int64
+          title: id
+          type: integer
+        type_description:
+          title: type_description
+          type: string
+    IntakeQuestionSet:
+      properties:
+        id:           
+          format: int64
+          title: id
+          type: integer
+        question_set_name:
+          title: question_set_name
+          type: string
+        housing_program:
+          $ref: '#/components/schemas/HousingProgram'
+    HousingProgram:
+      properties:
+        id:           
+          format: int64
+          title: id
+          type: integer
+        program_name:           
+          title: program_name
+          type: string
+        service_provider:
+          $ref: '#/components/schemas/HousingProgramServiceProvider'
+    HousingProgramServiceProvider:
+      properties:
+        id:           
+          format: int64
+          title: id
+          type: integer
+        provider_name:           
+          title: provider_name
+          type: string
+    IntakeResponseValue:
+      properties:
+        id:           
+          format: int64
+          title: id
+          type: integer
+        response_text:           
+          title: response_text
+          type: string
+        intake_question:
+          $ref: '#/components/schemas/IntakeQuestion'
     Host:
       example:
         photoUrls:
