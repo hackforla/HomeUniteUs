@@ -74,4 +74,4 @@ delete:
       default:
         $ref: '../responses/_index.yaml#/UnexpectedError'
 
-    x-openapi-router-controller: openapi_server.controllers.host_controller
+    x-openapi-router-controller: openapi_server.controllers.service_provider_controller
