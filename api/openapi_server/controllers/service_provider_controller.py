@@ -2,7 +2,7 @@ import connexion
 import six
 
 from openapi_server.models.api_response import ApiResponse  # noqa: E501
-from openapi_server.models.database import HousingProgramServiceProvider  # noqa: E501
+from openapi_server.models.housing_program_service_provider import HousingProgramServiceProvider  # noqa: E501
 from openapi_server import util
 
 
