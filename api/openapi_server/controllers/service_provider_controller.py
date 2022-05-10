@@ -25,7 +25,7 @@ def create_service_provider():  # noqa: E501
             # The auto-generated HousingProgramServiceProvider provides 
             # validation of required columns
             provider = HousingProgramServiceProvider.from_dict(
-                connexion.request.get_json()).to_dict()  # noqa: E501
+                connexion.request.get_json()).to_dict()  
         except ValueError:
             return traceback.format_exc(ValueError), 400
         with Session(dal.engine) as session:
@@ -122,7 +122,7 @@ def update_service_provider(provider_id):  # noqa: E501
             # The auto-generated HousingProgramServiceProvider provides 
             # validation of required columns
             provider = HousingProgramServiceProvider.from_dict(
-                connexion.request.get_json()).to_dict()  # noqa: E501
+                connexion.request.get_json()).to_dict() 
         except ValueError:
             return traceback.format_exc(ValueError), 400
         with Session(dal.engine) as session:
