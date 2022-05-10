@@ -1,5 +1,6 @@
 import connexion
 import six
+import traceback
 
 from openapi_server.models.api_response import ApiResponse  # noqa: E501
 from openapi_server.models.housing_program_service_provider import HousingProgramServiceProvider  # noqa: E501
@@ -20,7 +21,13 @@ def create_service_provider():  # noqa: E501
     :rtype: HousingProgramServiceProvider
     """
     if connexion.request.is_json:
-        provider = connexion.request.get_json()  # noqa: E501
+        try:
+            # The auto-generated HousingProgramServiceProvider provides 
+            # validation of required columns
+            provider = HousingProgramServiceProvider.from_dict(
+                connexion.request.get_json()).to_dict()  # noqa: E501
+        except ValueError:
+            return traceback.format_exc(ValueError), 400
         with Session(dal.engine) as session:
             row = db.HousingProgramServiceProvider(
                 provider_name=provider["provider_name"]
@@ -31,6 +38,8 @@ def create_service_provider():  # noqa: E501
 
             provider["id"] = row.id
             return provider, 201
+    else:
+        return "Bad Request", 400
 
 
 def delete_service_provider(provider_id):  # noqa: E501
@@ -44,11 +53,13 @@ def delete_service_provider(provider_id):  # noqa: E501
     :rtype: None
     """
     with Session(dal.engine) as session:
-        session.query(
+        query = session.query(
                 db.HousingProgramServiceProvider).filter(
-                    db.HousingProgramServiceProvider.id == provider_id).delete()
-        session.commit()
-    return 200
+                    db.HousingProgramServiceProvider.id == provider_id)
+        if query.first() != None:
+            query.delete()
+            session.commit()
+            return f"Service Provider with id {provider_id} successfully deleted", 200
 
 
 def get_service_provider_by_id(provider_id):  # noqa: E501
@@ -62,14 +73,16 @@ def get_service_provider_by_id(provider_id):  # noqa: E501
     :rtype: HousingProgramServiceProvider
     """
     with Session(dal.engine) as session:
-        row = session.query(
-            db.HousingProgramServiceProvider).get(provider_id)
-        
-        provider = HousingProgramServiceProvider(
-            provider_name=row.provider_name).to_dict()
-        
-        provider["id"] = row.id
-        return provider, 200
+        row = session.get(
+            db.HousingProgramServiceProvider, provider_id)
+        if row != None:
+            provider = HousingProgramServiceProvider(
+                provider_name=row.provider_name).to_dict()
+            
+            provider["id"] = row.id
+            return provider, 200
+        else:
+            return "Not Found", 404
 
 
 def get_service_providers():  # noqa: E501
@@ -105,13 +118,24 @@ def update_service_provider(provider_id):  # noqa: E501
     :rtype: HousingProgramServiceProvider
     """
     if connexion.request.is_json:
-        provider = connexion.request.get_json()
+        try:
+            # The auto-generated HousingProgramServiceProvider provides 
+            # validation of required columns
+            provider = HousingProgramServiceProvider.from_dict(
+                connexion.request.get_json()).to_dict()  # noqa: E501
+        except ValueError:
+            return traceback.format_exc(ValueError), 400
         with Session(dal.engine) as session:
-            session.query(
+            query = session.query(
                 db.HousingProgramServiceProvider).filter(
-                    db.HousingProgramServiceProvider.id == provider_id).update(
-                        provider)
-            session.commit()
-            provider["id"] = provider_id
-            return provider, 200
+                    db.HousingProgramServiceProvider.id == provider_id)
+            if query.first() != None:
+                query.update(provider)
+                session.commit()
+                provider["id"] = provider_id
+                return provider, 200
+            else:
+                return "Not Found", 404
+    else:
+        return "Bad Request", 400
 
