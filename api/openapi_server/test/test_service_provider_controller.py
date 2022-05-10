@@ -32,7 +32,7 @@ class TestServiceProviderController(BaseTestCase):
             headers=headers,
             data=json.dumps(housing_program_service_provider),
             content_type='application/json')
-        self.assert200(response,
+        self.assertStatus(response, 201,
                        'Response body is : ' + response.data.decode('utf-8'))
 
     def test_delete_service_provider(self):

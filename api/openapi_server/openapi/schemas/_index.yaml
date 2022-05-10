@@ -1,3 +1,29 @@
+ApiResponse:
+  example:
+    code: 0
+    type: type
+    message: message
+  properties:
+    code:
+      format: int32
+      title: code
+      type: integer
+    type:
+      title: type
+      type: string
+    message:
+      title: message
+      type: string
+  title: ApiResponse
+  type: object
+ApplicantType:
+  type: object
+  properties:
+    applicant_type_description:
+      title: applicant_type_description
+      type: string
+  required:
+    - applicant_type_description
 HousingProgram:
   type: object
   properties:
@@ -26,7 +52,7 @@ HousingProgramServiceProviders:
         title: id
         type: integer
       allOf:
-        - $ref: "#/HousingProgramServiceProvider"
+        $ref: "#/HousingProgramServiceProvider"
 IntakeQuestion:
   type: object
   properties:
@@ -44,14 +70,6 @@ IntakeQuestion:
     - question_text
     - intake_question_type
     - intake_question_set
-IntakeQuestionType:
-  type: object
-  properties:
-    type_description:
-      title: type_description
-      type: string
-  required:
-    - type_description
 IntakeQuestionSet:
   type: object
   properties:
@@ -63,14 +81,14 @@ IntakeQuestionSet:
   required: 
     - question_set_name
     - housing_program
-ApplicantType:
+IntakeQuestionType:
   type: object
   properties:
-    applicant_type_description:
-      title: applicant_type_description
+    type_description:
+      title: type_description
       type: string
   required:
-    - applicant_type_description
+    - type_description
 IntakeResponseValue:
   type: object
   properties:
