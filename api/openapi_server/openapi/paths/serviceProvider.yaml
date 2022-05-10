@@ -14,8 +14,8 @@ get:
               id:
                 format: int64
                 type: integer
-            allOf:
-              - $ref: '../schemas/_index.yaml#/HousingProgramServiceProvider'
+              allOf:
+                - $ref: '../schemas/_index.yaml#/HousingProgramServiceProvider'
       description: Service provider found
     "400":
       description: Malformed request
@@ -45,8 +45,8 @@ put:
               id:
                 format: int64
                 type: integer
-            allOf:
-              - $ref: '../schemas/_index.yaml#/HousingProgramServiceProvider'
+              allOf:
+                - $ref: '../schemas/_index.yaml#/HousingProgramServiceProvider'
       description: Successful operation
     "400":
       description: Malformed request

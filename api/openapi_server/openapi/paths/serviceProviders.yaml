@@ -29,13 +29,13 @@ post:
       content:
         application/json:
           schema:
-            allOf: 
-              - $ref: '../schemas/_index.yaml#/HousingProgramServiceProvider'
             properties:
               id:
                 format: int64
                 description: ID of the newly created service provider
                 type: integer
+              allOf: 
+                - $ref: '../schemas/_index.yaml#/HousingProgramServiceProvider'
       links:
         GetServiceProviderById:  
           operationId: getServiceProvider
