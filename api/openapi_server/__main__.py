@@ -7,6 +7,7 @@ from openapi_server.models.api_response import ApiResponse  # noqa: E501
 from openapi_server.models.database import HousingProgramServiceProvider, DataAccessLayer
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from openapi_server.exceptions import AuthError, handle_auth_error
 
 def add_provider(provider_name):
 
@@ -43,7 +44,7 @@ def main():
     app.add_api('openapi.yaml',
                 arguments={'title': 'Home Unite Us'},
                 pythonic_params=True)
-
+    app.add_error_handler(AuthError, handle_auth_error)
     app.run(port=8080)
 
 
