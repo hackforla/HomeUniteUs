@@ -17,7 +17,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MenuIcon from '@mui/icons-material/Menu';
 import {Help} from '@mui/icons-material';
-import {useAuth0, User} from '@auth0/auth0-react';
+// import {useAuth0, User} from '@auth0/auth0-react';
 
 import {Avatar} from './Avatar';
 import logo from '../../img/spy.png';
@@ -118,8 +118,15 @@ export function ApplicationTrackerHeader() {
   const theme = useTheme();
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
-  const {user, logout} = useAuth0();
-  const {name, picture} = user as User;
+  // const {user, logout} = useAuth0();
+  // const {name, picture} = user as User;
+
+  const {user,logout,name,picture} = {
+    user: {email: 'user@email.fake'},
+    logout: () => {},
+    name: 'Username',
+    picture: 'https://dev.homeunite.us/img/favicon.png'
+  };
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     dispatch({
@@ -263,7 +270,7 @@ export function ApplicationTrackerHeader() {
         onClose={handleMenuClose}
         aria-label="user account menu"
       >
-        <MenuItem onClick={handleMenuClose}>Hello, {user?.email}</MenuItem>
+        <MenuItem onClick={handleMenuClose}>Hello, {user?.email}</MenuItem>W
         <MenuItem onClick={handleMenuClose}>My account</MenuItem>
         <MenuItem onClick={() => logout({returnTo: window.location.origin})}>
           Log out
