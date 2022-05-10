@@ -1,5 +1,4 @@
 import connexion
-import logging
 import boto3
 import hmac
 import base64
