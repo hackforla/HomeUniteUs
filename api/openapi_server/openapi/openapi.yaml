@@ -476,6 +476,8 @@ paths:
       tags:
         - auth
       x-openapi-router-controller: openapi_server.controllers.auth_controller
+      security:
+        - jwt: ["secret"]
   /auth/private:
     get:
       description: A private route that returns a message
@@ -490,6 +492,8 @@ paths:
       tags:
         - auth
       x-openapi-router-controller: openapi_server.controllers.auth_controller
+      security:
+        - jwt: ["secret"]
 components:
   schemas:
     Host:
@@ -576,3 +580,9 @@ components:
           type: string
       title: ApiResponse
       type: object
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: openapi_server.controllers.security_controller.requires_auth

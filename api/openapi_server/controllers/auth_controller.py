@@ -74,33 +74,6 @@ def get_token_auth_header():
     token = parts[1]
     return token
 
-def requires_auth(f):
-    @wraps(f)
-    def decorated(*args, **kwargs):
-        token = get_token_auth_header()
-        
-        # Check if token is valid
-        try:
-            # Get user info from token
-            userInfo = userClient.get_user(
-                AccessToken=token
-            )
-            # Add user info to request
-            request.userInfo = userInfo
-            return f(*args, **kwargs)
-
-        # handle other errors
-        except Exception as e:
-            code = e.response['Error']['Code']
-            description = e.response['Error']['Message']
-            raise AuthError({
-                      "code": code, 
-                      "description": description
-                  }, 401)
-                                
-    return decorated
-
-
 def signup():  # noqa: E501
     """Signup a new user
     """
@@ -312,15 +285,12 @@ def refresh():
       "token": accessToken
     }
 
-@requires_auth
-def user():
-    user = get_user_attr(request.userInfo)
-    print(user)
+def user(token_info):
+    user = get_user_attr(token_info)
 
     return {
       "user": user
     }
 
-@requires_auth
-def private():
+def private(token_info):
     return {'message': 'Success - private'}
