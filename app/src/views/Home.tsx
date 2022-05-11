@@ -13,13 +13,13 @@ export const Home = () => {
         <Header variant="h1">Welcome to a Safe Place for Youth</Header>
         <SubHeader variant="h2">Select a profile</SubHeader>
         <LinkRow>
-          <HomeLink to="/home/host" name="Host">
+          <HomeLink to="/host" name="Host">
             <HostIcon />
           </HomeLink>
-          <HomeLink to="/home/coordinator" name="Admin">
+          <HomeLink to="/coordinator" name="Admin">
             <CoordinatorIcon />
           </HomeLink>
-          <HomeLink to="/home/guest" name="Guest">
+          <HomeLink to="/guest" name="Guest">
             <GuestIcon />
           </HomeLink>
         </LinkRow>

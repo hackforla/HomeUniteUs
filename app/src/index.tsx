@@ -9,7 +9,6 @@ import {ThemeProvider} from '@mui/material/styles';
 import {StyledEngineProvider} from '@mui/material/styles';
 
 import {HomeUniteUsTheme} from './theme';
-import {Auth0ProviderWithHistory, ProtectedRoute} from './auth';
 import {
   Home,
   CoordinatorDashboard,
@@ -17,11 +16,9 @@ import {
   HostApplicationTracker,
   SignIn,
   SignUp,
-  PrivateView,
 } from './views';
 import {store} from './app/store';
-import {PrivateRoute} from './auth/PrivateRoute';
-import {ProtectedView} from './views/ProtectedView';
+import {ProtectedRoute} from './auth/ProtectedRoute';
 import {useSessionMutation} from './services/auth';
 import {AccountVerification} from './views/AccountVerification';
 
@@ -32,17 +29,9 @@ function Profile() {
 function App() {
   const [session] = useSessionMutation();
 
-  const getSession = async () => {
-    try {
-      await session().unwrap();
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   // signin to current session if it exists, otherwise fail silently
   React.useEffect(() => {
-    getSession();
+    session();
   }, []);
 
   return (
@@ -52,39 +41,39 @@ function App() {
         <Route path="/coord" element={<CoordinatorDashboard />} />
         <Route
           path="/profile"
-          element={<ProtectedRoute component={Profile} />}
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
         />
         <Route
-          path="/home/host"
-          element={<ProtectedRoute component={HostApplicationTracker} />}
+          path="/host"
+          element={
+            <ProtectedRoute>
+              <HostApplicationTracker />
+            </ProtectedRoute>
+          }
         />
         <Route
-          path="/home/guest"
-          element={<ProtectedRoute component={GuestApplicationTracker} />}
+          path="/guest"
+          element={
+            <ProtectedRoute>
+              <GuestApplicationTracker />
+            </ProtectedRoute>
+          }
         />
         <Route
-          path="/home/coordinator"
-          element={<ProtectedRoute component={CoordinatorDashboard} />}
+          path="/coordinator"
+          element={
+            <ProtectedRoute>
+              <CoordinatorDashboard />
+            </ProtectedRoute>
+          }
         />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/verification" element={<AccountVerification />} />
-        <Route
-          path="/private"
-          element={
-            <PrivateRoute>
-              <PrivateView />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/protected"
-          element={
-            <PrivateRoute>
-              <ProtectedView />
-            </PrivateRoute>
-          }
-        />
       </Routes>
     </>
   );
@@ -93,14 +82,12 @@ function App() {
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <Auth0ProviderWithHistory>
-        <StyledEngineProvider injectFirst>
-          <ThemeProvider theme={HomeUniteUsTheme}>
-            <CssBaseline />
-            <App />
-          </ThemeProvider>
-        </StyledEngineProvider>
-      </Auth0ProviderWithHistory>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={HomeUniteUsTheme}>
+          <CssBaseline />
+          <App />
+        </ThemeProvider>
+      </StyledEngineProvider>
     </BrowserRouter>
   </Provider>,
   document.getElementById('app-root'),

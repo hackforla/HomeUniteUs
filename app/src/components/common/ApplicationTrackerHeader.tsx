@@ -21,6 +21,11 @@ import {Help} from '@mui/icons-material';
 
 import {Avatar} from './Avatar';
 import logo from '../../img/spy.png';
+import {useAuth} from '../../app/hooks/useAuth';
+import {useSignOutMutation} from '../../services/auth';
+import {setCredentials} from '../../app/authSlice';
+import {useAppDispatch} from '../../app/hooks/store';
+import {useNavigate} from 'react-router-dom';
 
 const ElementIds = {
   ProfileMenu: 'profile-trackernav-menu',
@@ -116,16 +121,25 @@ const notificationLabel = (count: number) => {
 
 export function ApplicationTrackerHeader() {
   const theme = useTheme();
+  const {user} = useAuth();
+  const [signOut] = useSignOutMutation();
+  const appDispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
-  // const {user, logout} = useAuth0();
-  // const {name, picture} = user as User;
-
-  const {user,logout,name,picture} = {
-    user: {email: 'user@email.fake'},
-    logout: () => {},
+  const {name, picture} = {
     name: 'Username',
-    picture: 'https://dev.homeunite.us/img/favicon.png'
+    picture: 'https://dev.homeunite.us/img/favicon.png',
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut().unwrap();
+      appDispatch(setCredentials({user: null, token: null}));
+      navigate('/signin');
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -272,9 +286,7 @@ export function ApplicationTrackerHeader() {
       >
         <MenuItem onClick={handleMenuClose}>Hello, {user?.email}</MenuItem>W
         <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-        <MenuItem onClick={() => logout({returnTo: window.location.origin})}>
-          Log out
-        </MenuItem>
+        <MenuItem onClick={handleSignOut}>Log out</MenuItem>
       </Menu>
     </Box>
   );

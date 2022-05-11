@@ -275,7 +275,6 @@ def current_session():
 
     # retrieve user data
     user_data = userClient.get_user(AccessToken=accessToken)
-    print(user_data)
 
     # create user object from user data
     user = get_user_attr(user_data)
@@ -316,6 +315,7 @@ def refresh():
 @requires_auth
 def user():
     user = get_user_attr(request.userInfo)
+    print(user)
 
     return {
       "user": user

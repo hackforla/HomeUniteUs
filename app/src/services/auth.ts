@@ -90,7 +90,7 @@ const authApi = api.injectEndpoints({
     }),
     session: build.mutation<SignInResponse, void>({
       query: () => ({
-        url: 'auth/current_session',
+        url: 'auth/session',
         method: 'GET',
         headers: {
           'Access-Control-Allow-Origin': 'http://localhost:4040',
