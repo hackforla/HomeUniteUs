@@ -1,11 +1,12 @@
-from tkinter import E
 import connexion
 import boto3
 import hmac
 import base64
+import requests
+
 from os import environ as env
 from dotenv import load_dotenv, find_dotenv
-from flask import session
+from flask import request, session
 from openapi_server.exceptions import AuthError
 
 # Load .env file
@@ -41,6 +42,35 @@ def get_user_attr(user_data):
       'email': email
     }
 
+# Get auth token from header
+def get_token_auth_header():
+    auth = request.headers.get('Authorization', None)
+    if not auth:
+        raise AuthError({
+        'code': 'authorization_header_missing',
+        'description': 'Authorization header is expected.'
+        }, 401)
+    
+    parts = auth.split()
+
+    # check if the header is in the correct format
+    if parts[0].lower() != 'bearer':
+        raise AuthError({
+        'code': 'invalid_header',
+        'description': 'Authorization header must start with "Bearer".'
+        }, 401)
+    
+    if len(parts) == 1:
+            raise AuthError({"code": "invalid_header",
+                            "description": "Token not found"}, 401)
+    if len(parts) > 2:
+        raise AuthError({"code": "invalid_header",
+                            "description":
+                                "Authorization header must be"
+                                " Bearer token"}, 401)
+    # return token
+    token = parts[1]
+    return token
 
 def signup():  # noqa: E501
     """Signup a new user
@@ -137,3 +167,56 @@ def confirm():
               }, 401)
 
     return response
+
+def signout():
+    access_token = get_token_auth_header()
+
+    # Signout user
+    response = userClient.global_sign_out(
+        AccessToken=access_token
+    )
+
+    # Remove refresh token cookie
+    session.pop('refresh_token', None)
+
+    # send response
+    return response
+
+def token():
+    # get code from body
+    code = request.get_json()['code']
+    client_id = COGNITO_CLIENT_ID
+    client_secret = COGNITO_CLIENT_SECRET
+    callback_uri = 'http://localhost:4040/signin'
+    cognito_app_url = 'https://homeuudemo.auth.us-east-1.amazoncognito.com'
+
+    token_url = f"{cognito_app_url}/oauth2/token"
+    auth = requests.auth.HTTPBasicAuth(client_id, client_secret)
+
+    params = {
+      'grant_type': 'authorization_code',
+      'client_id': client_id,
+      'code': code,
+      'redirect_uri': callback_uri
+    }
+
+    response = requests.post(token_url, auth=auth, data=params)
+
+    refresh_token = response.json().get('refresh_token')
+    access_token = response.json().get('access_token')
+
+    # retrieve user data
+    user_data = userClient.get_user(AccessToken=access_token)
+    print(user_data)
+
+    # create user object from user data
+    user = get_user_attr(user_data)
+
+    # set refresh token cookie
+    session['refresh_token'] = refresh_token
+
+    # return user data json
+    return {
+        'token': access_token,
+        'user': user
+    }
