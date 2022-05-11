@@ -220,3 +220,39 @@ def token():
         'token': access_token,
         'user': user
     }
+
+
+def session():
+    # Get refresh token from cookie
+    try:
+      refreshToken = session['refresh_token']
+    except Exception as e:
+        raise AuthError({
+                  "code": "session_expired", 
+                  "description": "session not found"
+              }, 401)
+
+    # Refresh tokens
+    response = userClient.initiate_auth(
+      ClientId=COGNITO_CLIENT_ID,
+      AuthFlow='REFRESH_TOKEN',
+      AuthParameters={
+        'REFRESH_TOKEN': refreshToken,
+        'SECRET_HASH': COGNITO_CLIENT_SECRET
+      }
+    )
+
+    accessToken = response['AuthenticationResult']['AccessToken']
+
+    # retrieve user data
+    user_data = userClient.get_user(AccessToken=accessToken)
+    print(user_data)
+
+    # create user object from user data
+    user = get_user_attr(user_data)
+
+    # return user data json
+    return {
+        'token': accessToken,
+        'user': user
+    }
