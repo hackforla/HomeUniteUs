@@ -68,6 +68,7 @@ def signup():  # noqa: E501
 
     return response
 
+
 def signin():
     # Validate request data
     if connexion.request.is_json:
@@ -111,3 +112,28 @@ def signin():
         'token': access_token,
         'user': user
     }
+
+
+def confirm():
+    # Validate request data
+    if connexion.request.is_json:
+        body = connexion.request.get_json()
+    
+    secret_hash = get_secret_hash(body['email'])
+
+    try:
+        response = userClient.confirm_sign_up(
+            ClientId=COGNITO_CLIENT_ID,
+            SecretHash=secret_hash,
+            Username=body['email'],
+            ConfirmationCode=body['code'],
+        )
+    except Exception as e:
+        code = e.response['Error']['Code']
+        description = e.response['Error']['Message']
+        raise AuthError({
+                  "code": code, 
+                  "description": description
+              }, 401)
+
+    return response
