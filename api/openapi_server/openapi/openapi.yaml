@@ -435,9 +435,23 @@ paths:
         - auth
       x-openapi-router-controller: openapi_server.controllers.auth_controller
   /auth/session:
-    post:
-      description: Check current session and user information
-      operationId: session
+    get:
+      description: Get current session and user information
+      operationId: current_session
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+          description: successful operation
+      tags:
+        - auth
+      x-openapi-router-controller: openapi_server.controllers.auth_controller
+  /auth/refresh:
+    get:
+      description: Check for refresh token and current session
+      operationId: refresh
       responses:
         "200":
           content:

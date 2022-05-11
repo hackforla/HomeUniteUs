@@ -8,6 +8,8 @@ from os import environ as env
 from dotenv import load_dotenv, find_dotenv
 from flask import request, session
 from openapi_server.exceptions import AuthError
+from functools import wraps
+
 
 # Load .env file
 ENV_FILE = find_dotenv()
@@ -71,6 +73,33 @@ def get_token_auth_header():
     # return token
     token = parts[1]
     return token
+
+def requires_auth(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = get_token_auth_header()
+        
+        # Check if token is valid
+        try:
+            # Get user info from token
+            userInfo = userClient.get_user(
+                AccessToken=token
+            )
+            # Add user info to request
+            request.userInfo = userInfo
+            return f(*args, **kwargs)
+
+        # handle other errors
+        except Exception as e:
+            code = e.response['Error']['Code']
+            description = e.response['Error']['Message']
+            raise AuthError({
+                      "code": code, 
+                      "description": description
+                  }, 401)
+                                
+    return decorated
+
 
 def signup():  # noqa: E501
     """Signup a new user
@@ -222,7 +251,7 @@ def token():
     }
 
 
-def session():
+def current_session():
     # Get refresh token from cookie
     try:
       refreshToken = session['refresh_token']
@@ -256,3 +285,42 @@ def session():
         'token': accessToken,
         'user': user
     }
+
+
+def refresh():
+    # Get refresh token from cookie
+    refreshToken = session['refresh_token']
+    if refreshToken is None:
+        raise AuthError({
+            'code': 'invalid_request',
+            'description': 'Refresh token not found'
+        }, 401)
+
+    # Refresh tokens
+    response = userClient.initiate_auth(
+      ClientId=COGNITO_CLIENT_ID,
+      AuthFlow='REFRESH_TOKEN',
+      AuthParameters={
+        'REFRESH_TOKEN': refreshToken,
+        'SECRET_HASH': COGNITO_CLIENT_SECRET
+      }
+    )
+
+    accessToken = response['AuthenticationResult']['AccessToken']
+
+    # Return access token
+    return {
+      "token": accessToken
+    }
+
+@requires_auth
+def user():
+    user = get_user_attr(request.userInfo)
+
+    return {
+      "user": user
+    }
+
+@requires_auth
+def private():
+    return {'message': 'Success - private'}
