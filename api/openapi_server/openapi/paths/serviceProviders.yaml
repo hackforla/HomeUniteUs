@@ -9,7 +9,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: '../schemas/_index.yaml#/HousingProgramServiceProviders'
+            $ref: '../schemas/_index.yaml#/ServiceProviders'
     default:
       $ref: '../responses/_index.yaml#/UnexpectedError'
   x-openapi-router-controller: openapi_server.controllers.service_provider_controller
@@ -22,20 +22,14 @@ post:
     content:
       application/json:
         schema:
-          $ref: '../schemas/_index.yaml#/HousingProgramServiceProvider'
+          $ref: '../schemas/_index.yaml#/ServiceProvider'
   responses:
     '201':
       description: Resource Created
       content:
         application/json:
           schema:
-            properties:
-              id:
-                format: int64
-                description: ID of the newly created service provider
-                type: integer
-              allOf: 
-                $ref: '../schemas/_index.yaml#/HousingProgramServiceProvider'
+            $ref: '../schemas/_index.yaml#/ServiceProviderWithId'
       links:
         GetServiceProviderById:  
           operationId: getServiceProvider

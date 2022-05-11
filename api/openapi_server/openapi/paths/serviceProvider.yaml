@@ -10,12 +10,7 @@ get:
       content:
         application/json:
           schema:
-            properties:
-              id:
-                format: int64
-                type: integer
-              allOf:
-                $ref: '../schemas/_index.yaml#/HousingProgramServiceProvider'
+            $ref: '../schemas/_index.yaml#/ServiceProviderWithId'
       description: Service provider found
     "400":
       description: Malformed request
@@ -35,18 +30,13 @@ put:
     content:
       application/json:
         schema:
-          $ref: '../schemas/_index.yaml#/HousingProgramServiceProvider'
+          $ref: '../schemas/_index.yaml#/ServiceProvider'
   responses:
     "200":
       content:
         application/json:
           schema:
-            properties:
-              id:
-                format: int64
-                type: integer
-              allOf:
-                $ref: '../schemas/_index.yaml#/HousingProgramServiceProvider'
+            $ref: '../schemas/_index.yaml#/ServiceProviderWithId'
       description: Successful operation
     "400":
       description: Malformed request
