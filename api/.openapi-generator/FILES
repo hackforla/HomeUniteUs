@@ -21,7 +21,7 @@ openapi_server/models/base_model_.py
 openapi_server/models/guest.py
 openapi_server/models/host.py
 openapi_server/models/housing_program.py
-openapi_server/models/housing_program_service_provider.py
+openapi_server/models/service_provider.py
 openapi_server/models/intake_question.py
 openapi_server/models/intake_question_set.py
 openapi_server/models/intake_question_type.py
