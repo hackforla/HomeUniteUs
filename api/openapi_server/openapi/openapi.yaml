@@ -462,6 +462,34 @@ paths:
       tags:
         - auth
       x-openapi-router-controller: openapi_server.controllers.auth_controller
+  /auth/user:
+    get:
+      description: Gets current user
+      operationId: user
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+          description: successful operation
+      tags:
+        - auth
+      x-openapi-router-controller: openapi_server.controllers.auth_controller
+  /auth/private:
+    get:
+      description: A private route that returns a message
+      operationId: private
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+          description: successful operation
+      tags:
+        - auth
+      x-openapi-router-controller: openapi_server.controllers.auth_controller
 components:
   schemas:
     Host:
