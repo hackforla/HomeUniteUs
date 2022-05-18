@@ -13,7 +13,7 @@ if ENV_FILE:
 # Define env variables
 COGNITO_REGION=env.get('COGNITO_REGION')
 
-# Initialize Cognito clients
+# Initialize Cognito client
 userClient = boto3.client('cognito-idp', region_name=COGNITO_REGION)
 
 
@@ -24,10 +24,10 @@ def requires_auth(token):
         userInfo = userClient.get_user(
             AccessToken=token
         )
-    
+
         return userInfo
 
-    # handle other errors
+    # handle any errors
     except Exception as e:
         code = e.response['Error']['Code']
         description = e.response['Error']['Message']

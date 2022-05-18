@@ -109,23 +109,24 @@ def signin():
     secret_hash = get_secret_hash(body['email'])
 
     # initiate authentication
-    try:
-        response = userClient.initiate_auth(
-            ClientId=COGNITO_CLIENT_ID,
-            AuthFlow='USER_PASSWORD_AUTH',
-            AuthParameters={
-                'USERNAME': body['email'],
-                'PASSWORD': body['password'],
-                'SECRET_HASH': secret_hash
-            }
-        )
-    except Exception as e:
-        code = e.response['Error']['Code']
-        description = e.response['Error']['Message']
-        raise AuthError({
-                  "code": code, 
-                  "description": description
-              }, 401)
+    # try:
+    response = userClient.initiate_auth(
+        ClientId=COGNITO_CLIENT_ID,
+        AuthFlow='USER_PASSWORD_AUTH',
+        AuthParameters={
+            'USERNAME': body['email'],
+            'PASSWORD': body['password'],
+            'SECRET_HASH': secret_hash
+        }
+    )
+    # except Exception as e:
+    #     print('exception', e.response)
+    #     code = e.response['Error']['Code']
+    #     description = e.response['Error']['Message']
+    #     raise AuthError({
+    #               "code": code, 
+    #               "description": description
+    #           }, 401)
               
     access_token = response['AuthenticationResult']['AccessToken']
     refresh_token = response['AuthenticationResult']['RefreshToken']
@@ -209,7 +210,6 @@ def token():
 
     # retrieve user data
     user_data = userClient.get_user(AccessToken=access_token)
-    print(user_data)
 
     # create user object from user data
     user = get_user_attr(user_data)
@@ -235,14 +235,22 @@ def current_session():
               }, 401)
 
     # Refresh tokens
-    response = userClient.initiate_auth(
-      ClientId=COGNITO_CLIENT_ID,
-      AuthFlow='REFRESH_TOKEN',
-      AuthParameters={
-        'REFRESH_TOKEN': refreshToken,
-        'SECRET_HASH': COGNITO_CLIENT_SECRET
-      }
-    )
+    try:
+        response = userClient.initiate_auth(
+            ClientId=COGNITO_CLIENT_ID,
+            AuthFlow='REFRESH_TOKEN',
+            AuthParameters={
+                'REFRESH_TOKEN': refreshToken,
+                'SECRET_HASH': COGNITO_CLIENT_SECRET
+            }
+        )
+    except Exception as e:
+        code = e.response['Error']['Code']
+        description = e.response['Error']['Message']
+        raise AuthError({
+                  "code": code, 
+                  "description": description
+              }, 401)
 
     accessToken = response['AuthenticationResult']['AccessToken']
 
@@ -269,14 +277,22 @@ def refresh():
         }, 401)
 
     # Refresh tokens
-    response = userClient.initiate_auth(
-      ClientId=COGNITO_CLIENT_ID,
-      AuthFlow='REFRESH_TOKEN',
-      AuthParameters={
-        'REFRESH_TOKEN': refreshToken,
-        'SECRET_HASH': COGNITO_CLIENT_SECRET
-      }
-    )
+    try:
+        response = userClient.initiate_auth(
+            ClientId=COGNITO_CLIENT_ID,
+            AuthFlow='REFRESH_TOKEN',
+            AuthParameters={
+                'REFRESH_TOKEN': refreshToken,
+                'SECRET_HASH': COGNITO_CLIENT_SECRET
+            }
+        )
+    except Exception as e:
+        code = e.response['Error']['Code']
+        description = e.response['Error']['Message']
+        raise AuthError({
+                  "code": code, 
+                  "description": description
+              }, 401)
 
     accessToken = response['AuthenticationResult']['AccessToken']
 
@@ -284,6 +300,40 @@ def refresh():
     return {
       "token": accessToken
     }
+
+def forgot_password():
+    # check for json in request body
+    if connexion.request.is_json:
+        body = connexion.request.get_json()
+
+    secret_hash = get_secret_hash(body['email'])
+
+    # call forgot password method
+    response = userClient.forgot_password(
+      ClientId=COGNITO_CLIENT_ID,
+      SecretHash=secret_hash,
+      Username=body['email']
+    )
+    
+    return response
+
+def confirm_forgot_password():
+    # check for json in request body
+    if connexion.request.is_json:
+        body = connexion.request.get_json()
+
+    secret_hash = get_secret_hash(body['email'])
+
+    # call forgot password method
+    response = userClient.confirm_forgot_password(
+        ClientId=COGNITO_CLIENT_ID,
+        SecretHash=secret_hash,
+        Username=body['email'],
+        ConfirmationCode=body['code'],
+        Password=body['password']
+    )
+    
+    return response
 
 def user(token_info):
     user = get_user_attr(token_info)

@@ -55,7 +55,7 @@ def main():
                 arguments={'title': 'Home Unite Us'},
                 pythonic_params=True)             
     app.add_error_handler(AuthError, handle_auth_error)
-    app.run(port=8080)
+    app.run(port=8080, debug=True)
 
 
 if __name__ == '__main__':
