@@ -1,12 +1,11 @@
 import React from 'react';
-import {Button} from '../components/common/Button';
+import {BaseButton as Button} from '../components/common/Button';
 import {render, screen, userEvent} from '../utils/test/test-utils';
 
 describe('Button', () => {
   test('Button renders with text and fires onClick', () => {
-    const label = 'label';
     const onClick = jest.fn();
-    render(<Button onClick={onClick} label={label} />);
+    render(<Button onClick={onClick} />);
     // screen.debug();
     const button = screen.getByRole('button', {name: /label/i});
 
@@ -17,9 +16,8 @@ describe('Button', () => {
   });
 
   test('onClick does not fire when disabled', () => {
-    const label = 'label';
     const onClick = jest.fn();
-    render(<Button disabled onClick={onClick} label={label} />);
+    render(<Button disabled onClick={onClick} />);
 
     const button = screen.getByRole('button', {name: /label/i});
 

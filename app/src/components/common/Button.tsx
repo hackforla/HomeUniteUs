@@ -2,7 +2,7 @@ import React from 'react';
 import {styled} from '@mui/system';
 import {Button, ButtonProps} from '@mui/material';
 
-const BaseButton = ({...props}: ButtonProps) => {
+export const BaseButton = ({...props}: ButtonProps) => {
   return <Button disableFocusRipple disableTouchRipple {...props} />;
 };
 

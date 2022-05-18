@@ -6,15 +6,17 @@ import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
 import {SignUpForm} from '../components/common/SignUpForm';
 import {SignUpRequest, useSignUpMutation} from '../services/auth';
+import {LocationState} from './SignIn';
 
 export const SignUp = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
   const [signUp] = useSignUpMutation();
+  const locationState = location.state as LocationState;
 
   // Save location from which user was redirected to login page
-  const from = location.state?.from?.pathname || '/';
+  const from = locationState?.from?.pathname || '/';
 
   React.useEffect(() => {
     if (location.search.includes('code')) {
@@ -27,8 +29,7 @@ export const SignUp = () => {
         body: JSON.stringify({code}),
       })
         .then(res => res.json())
-        .then(data => {
-          console.log(data);
+        .then(() => {
           navigate(from, {replace: true});
         })
         .catch(err => console.log(err));
@@ -45,7 +46,6 @@ export const SignUp = () => {
       const {user, token} = response;
 
       dispatch(setCredentials({user, token}));
-      navigate(from, {replace: true});
     } catch (err) {
       console.log(err);
     }

@@ -1,5 +1,5 @@
 import React from 'react';
-import {useNavigate, useLocation} from 'react-router-dom';
+import {useNavigate, useLocation, Location} from 'react-router-dom';
 import {styled} from '@mui/system';
 
 import {setCredentials} from '../app/authSlice';
@@ -7,14 +7,19 @@ import {useAppDispatch} from '../app/hooks/store';
 import {SignInForm} from '../components/common/SignInForm';
 import {SignInRequest, useSignInMutation} from '../services/auth';
 
+export interface LocationState {
+  from: Location;
+}
+
 export const SignIn = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
   const [signIn] = useSignInMutation();
+  const locationState = location.state as LocationState;
 
   // Save location from which user was redirected to login page
-  const from = location.state?.from?.pathname || '/';
+  const from = locationState?.from?.pathname || '/';
 
   React.useEffect(() => {
     if (location.search.includes('code')) {
