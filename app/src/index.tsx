@@ -9,20 +9,31 @@ import {ThemeProvider} from '@mui/material/styles';
 import {StyledEngineProvider} from '@mui/material/styles';
 
 import {HomeUniteUsTheme} from './theme';
-import {Auth0ProviderWithHistory, ProtectedRoute} from './auth';
 import {
   Home,
   CoordinatorDashboard,
   GuestApplicationTracker,
   HostApplicationTracker,
+  SignIn,
+  SignUp,
 } from './views';
 import {store} from './app/store';
+import {ProtectedRoute} from './auth/ProtectedRoute';
+import {useSessionMutation} from './services/auth';
+import {AccountVerification} from './views/AccountVerification';
 
 function Profile() {
   return <div>Hello from profile</div>;
 }
 
 function App() {
+  const [session] = useSessionMutation();
+
+  // signin to current session if it exists, otherwise fail silently
+  React.useEffect(() => {
+    session();
+  }, []);
+
   return (
     <>
       <Routes>
@@ -30,20 +41,39 @@ function App() {
         <Route path="/coord" element={<CoordinatorDashboard />} />
         <Route
           path="/profile"
-          element={<ProtectedRoute component={Profile} />}
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
         />
         <Route
-          path="/home/host"
-          element={<ProtectedRoute component={HostApplicationTracker} />}
+          path="/host"
+          element={
+            <ProtectedRoute>
+              <HostApplicationTracker />
+            </ProtectedRoute>
+          }
         />
         <Route
-          path="/home/guest"
-          element={<ProtectedRoute component={GuestApplicationTracker} />}
+          path="/guest"
+          element={
+            <ProtectedRoute>
+              <GuestApplicationTracker />
+            </ProtectedRoute>
+          }
         />
         <Route
-          path="/home/coordinator"
-          element={<ProtectedRoute component={CoordinatorDashboard} />}
+          path="/coordinator"
+          element={
+            <ProtectedRoute>
+              <CoordinatorDashboard />
+            </ProtectedRoute>
+          }
         />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/verification" element={<AccountVerification />} />
       </Routes>
     </>
   );
@@ -52,14 +82,12 @@ function App() {
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <Auth0ProviderWithHistory>
-        <StyledEngineProvider injectFirst>
-          <ThemeProvider theme={HomeUniteUsTheme}>
-            <CssBaseline />
-            <App />
-          </ThemeProvider>
-        </StyledEngineProvider>
-      </Auth0ProviderWithHistory>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={HomeUniteUsTheme}>
+          <CssBaseline />
+          <App />
+        </ThemeProvider>
+      </StyledEngineProvider>
     </BrowserRouter>
   </Provider>,
   document.getElementById('app-root'),

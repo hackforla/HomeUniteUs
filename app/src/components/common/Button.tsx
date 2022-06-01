@@ -1,49 +1,16 @@
 import React from 'react';
 import {styled} from '@mui/system';
+import {Button, ButtonProps} from '@mui/material';
 
-interface ButtonProps extends React.ComponentPropsWithoutRef<'button'> {
-  variant?: 'primary' | 'secondary';
-  label: string;
-  fullWidth?: boolean;
-  onClick: () => void;
-}
-
-export const Button = ({
-  variant = 'primary',
-  label,
-  fullWidth = false,
-  onClick,
-  disabled,
-  ...props
-}: ButtonProps) => {
-  const componentVariants = {
-    primary: PrimaryButton,
-    secondary: SecondaryButton,
-  };
-
-  const ButtonComponent = componentVariants[variant];
-
-  const handleClick = () => {
-    if (disabled) return;
-
-    onClick();
-  };
-
-  return (
-    <ButtonComponent
-      sx={{width: fullWidth ? '100%' : null}}
-      onClick={handleClick}
-      disabled={disabled}
-      {...props}
-    >
-      {label}
-    </ButtonComponent>
-  );
+export const BaseButton = ({...props}: ButtonProps) => {
+  return <Button disableFocusRipple disableTouchRipple {...props} />;
 };
 
-const DefaultButton = styled('button')(({theme}) => ({
-  border: 'none;',
+const DefaultButton = styled(BaseButton)<ButtonProps>(({theme}) => ({
   padding: '16px 20px',
+  border: 'none',
+  textTransform: 'none',
+  fontSize: '16px',
   fontWeight: 700,
   [theme.breakpoints.down('md')]: {
     padding: '12px 16px',
@@ -58,7 +25,7 @@ const DefaultButton = styled('button')(({theme}) => ({
   },
 }));
 
-const PrimaryButton = styled(DefaultButton)(({theme}) => ({
+export const PrimaryButton = styled(DefaultButton)(({theme}) => ({
   backgroundColor: theme.palette.primary.main,
   color: '#fff',
   '&:hover': {
@@ -72,18 +39,20 @@ const PrimaryButton = styled(DefaultButton)(({theme}) => ({
   },
 }));
 
-const SecondaryButton = styled(DefaultButton)(({theme}) => ({
+export const SecondaryButton = styled(DefaultButton)({
   backgroundColor: 'transparent',
+  color: 'black',
   border: '1px solid black',
   '&:hover': {
-    backgroundColor: theme.palette.grey[700],
+    backgroundColor: 'black',
+    color: '#fff',
   },
   '&:active': {
-    backgroundColor: theme.palette.grey[500],
+    backgroundColor: 'black',
   },
   '&:disabled': {
     backgroundColor: 'transparent',
-    color: theme.palette.grey[700],
-    border: `1px solid ${theme.palette.grey[700]}`,
+    color: 'black',
+    border: `1px solid black`,
   },
-}));
+});

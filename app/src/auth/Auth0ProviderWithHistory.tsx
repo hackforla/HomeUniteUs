@@ -7,11 +7,10 @@ interface Auth0ProviderWithHistoryProps {}
 export const Auth0ProviderWithHistory = (
   props: React.PropsWithChildren<Auth0ProviderWithHistoryProps>,
 ) => {
-  
   /*
    * TODO:
-   *    Tyler 2022-04-27: restore this snippet when an approatiate HOC or alternative auth mechanism established 
-   * 
+   *    Tyler 2022-04-27: restore this snippet when an approatiate HOC or alternative auth mechanism established
+   *
    */
 
   // const navigate = useNavigate();

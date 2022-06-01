@@ -28,7 +28,6 @@ function reducer(
 
 export function GuestApplicationTracker(props: GuestApplicationTrackerProps) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
-  console.log(`GuestApplicationTracker ctor`);
   return (
     <>
       <GuestDetailsProvider>

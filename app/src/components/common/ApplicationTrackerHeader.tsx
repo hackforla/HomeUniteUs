@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 import {
   AppBar,
@@ -20,6 +20,12 @@ import {Help} from '@mui/icons-material';
 // import {useAuth0, User} from '@auth0/auth0-react';
 
 import {Avatar} from './Avatar';
+import logo from '../../img/spy.png';
+import {useAuth} from '../../app/hooks/useAuth';
+import {useSignOutMutation} from '../../services/auth';
+import {setCredentials} from '../../app/authSlice';
+import {useAppDispatch} from '../../app/hooks/store';
+import {useNavigate} from 'react-router-dom';
 
 const ElementIds = {
   ProfileMenu: 'profile-trackernav-menu',
@@ -115,16 +121,25 @@ const notificationLabel = (count: number) => {
 
 export function ApplicationTrackerHeader() {
   const theme = useTheme();
+  const {user} = useAuth();
+  const [signOut] = useSignOutMutation();
+  const appDispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [state, dispatch] = React.useReducer(reducer, initialState);
 
-  // const {user, logout} = useAuth0();
-  // const {name, picture} = user as User;
-
-  const {user,logout,name,picture} = {
-    user: {email: 'user@email.fake'},
-    logout: () => {},
+  const {name, picture} = {
     name: 'Username',
-    picture: 'https://dev.homeunite.us/img/favicon.png'
+    picture: 'https://dev.homeunite.us/img/favicon.png',
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut().unwrap();
+      appDispatch(setCredentials({user: null, token: null}));
+      navigate('/signin');
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -165,7 +180,7 @@ export function ApplicationTrackerHeader() {
       >
         <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
           <Box sx={{display: {xs: 'flex'}}}>
-            <img src="/img/spy.png" height="88" />
+            <img src={logo} height="88" />
           </Box>
           <Box sx={{display: {xs: 'none', md: 'flex'}, gap: '12px'}}>
             <IconButton
@@ -237,39 +252,19 @@ export function ApplicationTrackerHeader() {
         onClose={handleMobileMenuClose}
       >
         <MenuItem>
-          <IconButton
-            size="large"
-            aria-label="show 4 new mails"
-            color="inherit"
-          >
-            <Badge badgeContent={4} color="error">
-              <MailIcon />
-            </Badge>
-          </IconButton>
+          <Badge badgeContent={4} color="error">
+            <MailIcon />
+          </Badge>
           <p>Messages</p>
         </MenuItem>
         <MenuItem>
-          <IconButton
-            size="large"
-            aria-label="show 17 new notifications"
-            color="inherit"
-          >
-            <Badge badgeContent={17} color="error">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+          <Badge badgeContent={17} color="error">
+            <NotificationsIcon />
+          </Badge>
           <p>Notifications</p>
         </MenuItem>
         <MenuItem onClick={handleProfileMenuOpen}>
-          <IconButton
-            size="large"
-            aria-label="account of current user"
-            aria-controls="primary-search-account-menu"
-            aria-haspopup="true"
-            color="inherit"
-          >
-            <AccountCircle />
-          </IconButton>
+          <AccountCircle />
           <p>Profile</p>
         </MenuItem>
       </Menu>
@@ -287,12 +282,11 @@ export function ApplicationTrackerHeader() {
         }}
         open={state.profileMenu.open}
         onClose={handleMenuClose}
+        aria-label="user account menu"
       >
         <MenuItem onClick={handleMenuClose}>Hello, {user?.email}</MenuItem>W
         <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-        <MenuItem onClick={() => logout({returnTo: window.location.origin})}>
-          Log out
-        </MenuItem>
+        <MenuItem onClick={handleSignOut}>Log out</MenuItem>
       </Menu>
     </Box>
   );
@@ -308,43 +302,3 @@ const NotificationsBadge = styled('span')(({theme}) => ({
   borderRadius: '50%',
   transform: 'translate3d(-8px, 8px, 0)',
 }));
-
-// const Search = styled("div")(({ theme }) => ({
-//   position: "relative",
-//   borderRadius: theme.shape.borderRadius,
-//   backgroundColor: alpha(theme.palette.common.white, 0.15),
-//   "&:hover": {
-//     backgroundColor: alpha(theme.palette.common.white, 0.25),
-//   },
-//   marginRight: theme.spacing(2),
-//   marginLeft: 0,
-//   width: "100%",
-//   [theme.breakpoints.up("sm")]: {
-//     marginLeft: theme.spacing(3),
-//     width: "auto",
-//   },
-// }));
-
-// const SearchIconWrapper = styled("div")(({ theme }) => ({
-//   padding: theme.spacing(0, 2),
-//   height: "100%",
-//   position: "absolute",
-//   pointerEvents: "none",
-//   display: "flex",
-//   alignItems: "center",
-//   justifyContent: "center",
-// }));
-
-// const StyledInputBase = styled(InputBase)(({ theme }) => ({
-//   color: "inherit",
-//   "& .MuiInputBase-input": {
-//     padding: theme.spacing(1, 1, 1, 0),
-//     // vertical padding + font size from searchIcon
-//     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-//     transition: theme.transitions.create("width"),
-//     width: "100%",
-//     [theme.breakpoints.up("md")]: {
-//       width: "20ch",
-//     },
-//   },
-// }));

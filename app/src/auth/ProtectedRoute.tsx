@@ -1,24 +1,23 @@
-import * as React from 'react';
-// import {withAuthenticationRequired} from '@auth0/auth0-react';
+import React from 'react';
+import {Navigate, useLocation} from 'react-router-dom';
+import {useAuth} from '../app/hooks/useAuth';
 import {Loading} from '../components/common';
+import {useUserQuery} from '../services/auth';
 
-interface ProtectedRouteProps {
-  component: React.ComponentType<unknown>;
-  [x: string]: unknown;
-}
+export const ProtectedRoute = ({children}: {children: JSX.Element}) => {
+  const {user} = useAuth();
+  const {isLoading} = useUserQuery();
+  const location = useLocation();
 
-export const ProtectedRoute = (props: ProtectedRouteProps) => {
-  const {component} = props;
+  // show loader while fetching data unless user already exists and is logged in
+  if (isLoading && !user) return <Loading />;
 
-  /*
-   * TODO:
-   *    Tyler 2022-04-27: restore this snippet when an approatiate HOC or alternative auth mechanism established 
-   */
-  // const Component = withAuthenticationRequired(component, {
-  //   onRedirecting: () => <Loading />,
-  // });
+  // redirect to login page if user is not authenticated
+  // save location from which user was redirected to login page
+  if (!user) {
+    return <Navigate to="/signin" state={{from: location}} replace />;
+  }
 
-  const Component = (() => component)();
-
-  return <Component />;
+  // render children if user is authenticated
+  return children;
 };
