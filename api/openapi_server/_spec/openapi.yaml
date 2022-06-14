@@ -1,0 +1,243 @@
+openapi: 3.0.0
+info:
+  license:
+    name: MIT
+  title: Home Unite Us
+  version: 1.0.0
+servers:
+  - url: 'http://homeunite.us/api'
+paths:
+  /serviceProviders:
+    get:
+      summary: Get a list of housing program service providers.
+      tags:
+        - service_provider
+      operationId: get_service_providers
+      responses:
+        '200':
+          description: An array of service providers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceProviders'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+      x-openapi-router-controller: openapi_server.controllers.service_provider_controller
+    post:
+      summary: Create a housing program service provider
+      tags:
+        - service_provider
+      operationId: create_service_provider
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceProvider'
+      responses:
+        '201':
+          description: Resource Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceProviderWithId'
+          links:
+            GetServiceProviderById:
+              operationId: getServiceProvider
+              parameters:
+                providerId: $response.body#/id
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+      x-openapi-router-controller: openapi_server.controllers.service_provider_controller
+  '/serviceProviders/{providerId}':
+    get:
+      summary: Get details about a housing program service provider from an ID
+      tags:
+        - service_provider
+      operationId: get_service_provider_by_id
+      parameters:
+        - $ref: '#/components/parameters/ProviderId'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceProviderWithId'
+          description: Service provider found
+        '400':
+          description: Malformed request
+        '404':
+          description: Service provider not found
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+      x-openapi-router-controller: openapi_server.controllers.service_provider_controller
+    put:
+      summary: Update a housing program service provider
+      tags:
+        - service_provider
+      operationId: update_service_provider
+      parameters:
+        - $ref: '#/components/parameters/ProviderId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceProvider'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceProviderWithId'
+          description: Successful operation
+        '400':
+          description: Malformed request
+        '404':
+          description: Service provider not found
+        '405':
+          description: Validation exception
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+      x-openapi-router-controller: openapi_server.controllers.service_provider_controller
+    delete:
+      summary: Delete a service provider
+      tags:
+        - service_provider
+      operationId: delete_service_provider
+      parameters:
+        - $ref: '#/components/parameters/ProviderId'
+      responses:
+        '200':
+          description: Service provider successfully deleted
+        '400':
+          description: Malformed request
+        '404':
+          description: Service provider not found
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+      x-openapi-router-controller: openapi_server.controllers.service_provider_controller
+components:
+  responses:
+    UnexpectedError:
+      description: Unexpected Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiResponse'
+  parameters:
+    ProviderId:
+      name: providerId
+      description: 'The ID of the service provider to read, update or delete'
+      explode: false
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+      style: simple
+  schemas:
+    ApiResponse:
+      example:
+        code: 0
+        type: type
+        message: message
+      properties:
+        code:
+          format: int32
+          title: code
+          type: integer
+        type:
+          title: type
+          type: string
+        message:
+          title: message
+          type: string
+      title: ApiResponse
+      type: object
+    ApplicantType:
+      type: object
+      properties:
+        applicant_type_description:
+          title: applicant_type_description
+          type: string
+      required:
+        - applicant_type_description
+    HousingProgram:
+      type: object
+      properties:
+        program_name:
+          title: program_name
+          type: string
+        service_provider:
+          $ref: '#/components/schemas/ServiceProvider'
+      required:
+        - program_name
+        - service_provider
+    ServiceProvider:
+      type: object
+      properties:
+        provider_name:
+          title: provider_name
+          type: string
+      required:
+        - provider_name
+    ServiceProviderWithId:
+      allOf:
+        - $ref: '#/components/schemas/ServiceProvider'
+      type: object
+      properties:
+        id:
+          format: int64
+          type: integer
+      required:
+        - id
+    ServiceProviders:
+      type: array
+      items:
+        $ref: '#/components/schemas/ServiceProviderWithId'
+    IntakeQuestion:
+      type: object
+      properties:
+        applicant_type:
+          $ref: '#/components/schemas/ApplicantType'
+        question_text:
+          title: question_text
+          type: string
+        intake_question_type:
+          $ref: '#/components/schemas/IntakeQuestionType'
+        intake_question_set:
+          $ref: '#/components/schemas/IntakeQuestionSet'
+      required:
+        - applicant_type
+        - question_text
+        - intake_question_type
+        - intake_question_set
+    IntakeQuestionSet:
+      type: object
+      properties:
+        question_set_name:
+          title: question_set_name
+          type: string
+        housing_program:
+          $ref: '#/components/schemas/HousingProgram'
+      required:
+        - question_set_name
+        - housing_program
+    IntakeQuestionType:
+      type: object
+      properties:
+        type_description:
+          title: type_description
+          type: string
+      required:
+        - type_description
+    IntakeResponseValue:
+      type: object
+      properties:
+        response_text:
+          title: response_text
+          type: string
+        intake_question:
+          $ref: '#/components/schemas/IntakeQuestion'
+      required:
+        - response_text
+        - intake_question
