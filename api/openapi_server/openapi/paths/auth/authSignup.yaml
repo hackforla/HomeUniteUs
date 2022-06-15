@@ -1,0 +1,26 @@
+post:
+  description: Signup a user
+  operationId: signup
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            email:
+              type: string
+            password:
+              type: string
+          required:
+            - email
+            - password
+  responses:
+    "200":
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiResponse"
+      description: successful operation
+  tags:
+    - auth
+  x-openapi-router-controller: openapi_server.controllers.auth_controller

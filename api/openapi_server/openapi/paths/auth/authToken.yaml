@@ -1,0 +1,13 @@
+post:
+  description: Sign in user from OAuth Provider
+  operationId: token
+  responses:
+    "200":
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ApiResponse"
+      description: successful operation
+  tags:
+    - auth
+  x-openapi-router-controller: openapi_server.controllers.auth_controller

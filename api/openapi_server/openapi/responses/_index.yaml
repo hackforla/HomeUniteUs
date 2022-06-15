@@ -1,0 +1,6 @@
+UnexpectedError:
+  description: Unexpected Error
+  content:
+    application/json:
+      schema:
+        $ref: "../openapi.yaml#/components/schemas/ApiResponse"

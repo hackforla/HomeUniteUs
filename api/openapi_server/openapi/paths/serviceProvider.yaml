@@ -1,0 +1,67 @@
+get:
+  summary: Get details about a housing program service provider from an ID
+  tags:
+    - service_provider
+  operationId: get_service_provider_by_id
+  parameters:
+    - $ref: '../parameters/_index.yaml#/ProviderId'
+  responses:
+    "200":
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/_index.yaml#/ServiceProviderWithId'
+      description: Service provider found
+    "400":
+      description: Malformed request
+    "404":
+      description: Service provider not found
+    default:
+      $ref: '../responses/_index.yaml#/UnexpectedError'
+  x-openapi-router-controller: openapi_server.controllers.service_provider_controller
+put:
+  summary: Update a housing program service provider
+  tags:
+    - service_provider
+  operationId: update_service_provider
+  parameters:
+    - $ref: '../parameters/_index.yaml#/ProviderId'
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/_index.yaml#/ServiceProvider'
+  responses:
+    "200":
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/_index.yaml#/ServiceProviderWithId'
+      description: Successful operation
+    "400":
+      description: Malformed request
+    "404":
+      description: Service provider not found
+    "405":
+      description: Validation exception
+    default:
+      $ref: '../responses/_index.yaml#/UnexpectedError'
+  x-openapi-router-controller: openapi_server.controllers.service_provider_controller
+delete:
+    summary: Delete a service provider
+    tags:
+      - service_provider
+    operationId: delete_service_provider
+    parameters:
+      - $ref: '../parameters/_index.yaml#/ProviderId'
+    responses:
+      "200":
+        description: Service provider successfully deleted
+      "400":
+        description: Malformed request
+      "404":
+        description: Service provider not found
+      default:
+        $ref: '../responses/_index.yaml#/UnexpectedError'
+
+    x-openapi-router-controller: openapi_server.controllers.service_provider_controller

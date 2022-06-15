@@ -1,0 +1,10 @@
+ProviderId:
+  name: providerId
+  description: The ID of the service provider to read, update or delete
+  explode: false
+  in: path
+  required: true
+  schema:
+    type: integer
+    format: int64
+  style: simple
