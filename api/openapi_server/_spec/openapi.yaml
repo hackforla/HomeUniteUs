@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   license:
-    name: MIT
+    name: GPL 2.0
   title: Home Unite Us
   version: 1.0.0
 servers:
@@ -115,7 +115,238 @@ paths:
         default:
           $ref: '#/components/responses/UnexpectedError'
       x-openapi-router-controller: openapi_server.controllers.service_provider_controller
+  /auth/signup:
+    post:
+      description: Signup a user
+      operationId: signup
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+          description: successful operation
+      tags:
+        - auth
+      x-openapi-router-controller: openapi_server.controllers.auth_controller
+  /auth/signin:
+    post:
+      description: Sign in a user
+      operationId: signin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+          description: successful operation
+      tags:
+        - auth
+      x-openapi-router-controller: openapi_server.controllers.auth_controller
+  /auth/confirm:
+    post:
+      description: Confirm users email
+      operationId: confirm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                code:
+                  type: string
+              required:
+                - email
+                - code
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+          description: successful operation
+      tags:
+        - auth
+      x-openapi-router-controller: openapi_server.controllers.auth_controller
+  /auth/signout:
+    post:
+      description: Sign out user from current session
+      operationId: signout
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+          description: successful operation
+      tags:
+        - auth
+      x-openapi-router-controller: openapi_server.controllers.auth_controller
+  /auth/token:
+    post:
+      description: Sign in user from OAuth Provider
+      operationId: token
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+          description: successful operation
+      tags:
+        - auth
+      x-openapi-router-controller: openapi_server.controllers.auth_controller
+  /auth/session:
+    get:
+      description: Get current session and user information
+      operationId: current_session
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+          description: successful operation
+      tags:
+        - auth
+      x-openapi-router-controller: openapi_server.controllers.auth_controller
+  /auth/refresh:
+    get:
+      description: Check for refresh token and current session
+      operationId: refresh
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+          description: successful operation
+      tags:
+        - auth
+      x-openapi-router-controller: openapi_server.controllers.auth_controller
+  /auth/forgot_password:
+    post:
+      description: Sends message with a code used when creating a new password
+      operationId: forgot_password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              required:
+                - email
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+          description: successful operation
+      tags:
+        - auth
+      x-openapi-router-controller: openapi_server.controllers.auth_controller
+  /auth/confirm_forgot_password:
+    post:
+      description: Exchanges code for a new password
+      operationId: confirm_forgot_password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                code:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - code
+                - password
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+          description: successful operation
+      tags:
+        - auth
+      x-openapi-router-controller: openapi_server.controllers.auth_controller
+  /auth/user:
+    get:
+      description: Gets current user
+      operationId: user
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+          description: successful operation
+      tags:
+        - auth
+      x-openapi-router-controller: openapi_server.controllers.auth_controller
+      security:
+        - jwt:
+            - secret
+  /auth/private:
+    get:
+      description: A private route that returns a message
+      operationId: private
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+          description: successful operation
+      tags:
+        - auth
+      x-openapi-router-controller: openapi_server.controllers.auth_controller
+      security:
+        - jwt:
+            - secret
 components:
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: openapi_server.controllers.security_controller.requires_auth
   responses:
     UnexpectedError:
       description: Unexpected Error
