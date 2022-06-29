@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   license:
-    name: MIT
+    name: GPL 2.0
   title: Home Unite Us
   version: 1.0.0
 servers:
@@ -30,10 +30,16 @@ paths:
   /auth/confirm_forgot_password:
     $ref: './paths/auth/authConfirmForgotPassword.yaml'
   /auth/user:
-   $ref: './paths/auth/authUser.yaml'
+    $ref: './paths/auth/authUser.yaml'
   /auth/private:
-   $ref: './paths/auth/authPrivate.yaml'
+    $ref: './paths/auth/authPrivate.yaml'
 components:
+  securitySchemes:
+      jwt:
+        type: http
+        scheme: bearer
+        bearerFormat: JWT
+        x-bearerInfoFunc: openapi_server.controllers.security_controller.requires_auth
   responses:
     $ref: './responses/_index.yaml'
   parameters:
@@ -58,9 +64,4 @@ components:
           type: string
       title: ApiResponse
       type: object
-  securitySchemes:
-    jwt:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      x-bearerInfoFunc: openapi_server.controllers.security_controller.requires_auth
+  
