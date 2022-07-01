@@ -9,8 +9,7 @@ from openapi_server.models.service_provider_with_id import ServiceProviderWithId
 from openapi_server.models import database as db
 from sqlalchemy.orm import Session
 
-dal = db.DataAccessLayer()
-dal.db_init()
+db_engine = db.DataAccessLayer.get_engine()
 
 def create_service_provider():  # noqa: E501
     """Create a housing program service provider
@@ -27,7 +26,7 @@ def create_service_provider():  # noqa: E501
                 connexion.request.get_json()).to_dict()  
         except ValueError:
             return traceback.format_exc(ValueError), 400
-        with Session(dal.engine) as session:
+        with Session(db_engine) as session:
             row = db.HousingProgramServiceProvider(
                 provider_name=provider["provider_name"]
             )
@@ -51,7 +50,7 @@ def delete_service_provider(provider_id):  # noqa: E501
 
     :rtype: None
     """
-    with Session(dal.engine) as session:
+    with Session(db_engine) as session:
         query = session.query(
                 db.HousingProgramServiceProvider).filter(
                     db.HousingProgramServiceProvider.id == provider_id)
@@ -71,7 +70,7 @@ def get_service_provider_by_id(provider_id):  # noqa: E501
 
     :rtype: ServiceProviderWithId
     """
-    with Session(dal.engine) as session:
+    with Session(db_engine) as session:
         row = session.get(
             db.HousingProgramServiceProvider, provider_id)
         if row != None:
@@ -93,7 +92,7 @@ def get_service_providers():  # noqa: E501
     :rtype: List[ServiceProviderWithId]
     """
     resp = []
-    with Session(dal.engine) as session:
+    with Session(db_engine) as session:
         table = session.query(db.HousingProgramServiceProvider).all()
         for row in table:
             provider = ServiceProvider(
@@ -122,7 +121,7 @@ def update_service_provider(provider_id):  # noqa: E501
                 connexion.request.get_json()).to_dict() 
         except ValueError:
             return traceback.format_exc(ValueError), 400
-        with Session(dal.engine) as session:
+        with Session(db_engine) as session:
             query = session.query(
                 db.HousingProgramServiceProvider).filter(
                     db.HousingProgramServiceProvider.id == provider_id)

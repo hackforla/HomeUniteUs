@@ -233,16 +233,22 @@ class ProgramCaseStatusLog(Base):
     src_status = Column(Integer, ForeignKey('case_status.id'), nullable=False)
     dest_status = Column(Integer, ForeignKey('case_status.id'), nullable=False)
 
-
-
 class DataAccessLayer:
-    connection = None
-    engine = None
+    _engine = None
 
     # temporary local sqlite DB, replace with conn str for postgres container port for real e2e
-    conn_string = "sqlite:///./homeuniteus.db"
+    _conn_string = "sqlite:///./homeuniteus.db"
 
-    def db_init(self, conn_string=None):
-        self.engine = create_engine(conn_string or self.conn_string, echo=True, future=True) 
-        Base.metadata.create_all(bind=self.engine)
-        self.connection = self.engine.connect()
+    @classmethod
+    def db_init(cls, conn_string=None):
+        Base.metadata.create_all(bind=cls.get_engine(conn_string))
+    
+    @classmethod
+    def connect(cls):
+        return cls.get_engine().connect()
+    
+    @classmethod
+    def get_engine(cls, conn_string=None):
+        if cls._engine == None:
+            cls._engine = create_engine(conn_string or cls._conn_string, echo=True, future=True)
+        return cls._engine
