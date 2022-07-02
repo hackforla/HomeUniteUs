@@ -1,45 +1,41 @@
 import React from 'react';
 import {ComponentStory, ComponentMeta} from '@storybook/react';
-import {ThemeProvider} from '@mui/material/styles';
-import {HomeUniteUsTheme} from '../theme';
 
-import {Button} from '../components/common/Button';
+import {Button} from './Button';
 
+// More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'Button',
+  title: 'Example/Button',
   component: Button,
-  decorators: [
-    story => <ThemeProvider theme={HomeUniteUsTheme}>{story()}</ThemeProvider>,
-  ],
+  // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
+  argTypes: {
+    backgroundColor: {control: 'color'},
+  },
 } as ComponentMeta<typeof Button>;
 
+// More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 const Template: ComponentStory<typeof Button> = args => <Button {...args} />;
 
 export const Primary = Template.bind({});
+// More on args: https://storybook.js.org/docs/react/writing-stories/args
 Primary.args = {
-  label: 'Primary button',
-};
-
-export const PrimaryFullWidth = Template.bind({});
-PrimaryFullWidth.args = {
-  label: 'Primary button',
-  fullWidth: true,
-};
-
-export const PrimaryDisabled = Template.bind({});
-PrimaryDisabled.args = {
-  ...Primary.args,
-  disabled: true,
+  primary: true,
+  label: 'Button',
 };
 
 export const Secondary = Template.bind({});
 Secondary.args = {
-  label: 'Secondary button',
-  variant: 'secondary',
+  label: 'Button',
 };
 
-export const SecondaryDisabled = Template.bind({});
-SecondaryDisabled.args = {
-  ...Secondary.args,
-  disabled: true,
+export const Large = Template.bind({});
+Large.args = {
+  size: 'large',
+  label: 'Button',
+};
+
+export const Small = Template.bind({});
+Small.args = {
+  size: 'small',
+  label: 'Button',
 };

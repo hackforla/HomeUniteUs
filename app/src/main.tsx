@@ -1,12 +1,21 @@
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
-import {Provider} from 'react-redux';
-import {CssBaseline} from '@mui/material';
-import {ThemeProvider} from '@mui/material/styles';
-import {StyledEngineProvider} from '@mui/material/styles';
+
+/*
+
+  import 'core-js/stable';
+  import 'regenerator-runtime/runtime';
+  import * as React from 'react';
+  import * as ReactDOM from 'react-dom';
+  import {BrowserRouter, Route, Routes} from 'react-router-dom';
+  import {Provider} from 'react-redux';
+  import {CssBaseline} from '@mui/material';
+  import {ThemeProvider} from '@mui/material/styles';
+  import {StyledEngineProvider} from '@mui/material/styles'; 
+
+*/
 
 import {HomeUniteUsTheme} from './theme';
 import {
@@ -21,12 +30,15 @@ import {store} from './app/store';
 import {ProtectedRoute} from './auth/ProtectedRoute';
 import {useSessionMutation} from './services/auth';
 import {AccountVerification} from './views/AccountVerification';
+import {CssBaseline, StyledEngineProvider, ThemeProvider} from '@mui/material';
+import {Provider} from 'react-redux';
+// import { ApprovalTwoTone } from '@mui/icons-material';
 
 function Profile() {
   return <div>Hello from profile</div>;
 }
 
-function App() {
+function HuuApp() {
   const [session] = useSessionMutation();
 
   // signin to current session if it exists, otherwise fail silently
@@ -79,16 +91,19 @@ function App() {
   );
 }
 
-ReactDOM.render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={HomeUniteUsTheme}>
-          <CssBaseline />
-          <App />
-        </ThemeProvider>
-      </StyledEngineProvider>
-    </BrowserRouter>
-  </Provider>,
-  document.getElementById('app-root'),
+const appRoot = document.getElementById('root') as HTMLElement;
+
+ReactDOM.createRoot(appRoot).render(
+  <React.StrictMode>
+    <Provider store={store}>
+      <BrowserRouter>
+        <StyledEngineProvider injectFirst>
+          <ThemeProvider theme={HomeUniteUsTheme}>
+            <CssBaseline />
+            <HuuApp />
+          </ThemeProvider>
+        </StyledEngineProvider>
+      </BrowserRouter>
+    </Provider>
+  </React.StrictMode>,
 );

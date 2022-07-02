@@ -1,12 +1,13 @@
-import React from 'react';
 import {
   Box,
   FormControl,
   OutlinedInput,
   Stack,
+  styled,
+  Theme,
   Typography,
 } from '@mui/material';
-import {styled} from '@mui/system';
+// import {styled} from '@mui/system';
 import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
 import {object, string} from 'yup';
@@ -79,9 +80,17 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
         <p>or</p>
         <div />
       </Divider>
+      {/* <SocialSignInLink
+        fullWidth
+        href={`https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id=${import.meta.env.VITE_COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri=${import.meta.env.VITE_COGNITO_REDIRECT_URI}&identity_provider=Google`}
+      > */}
       <SocialSignInLink
         fullWidth
-        href={`https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id=${process.env.COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri=${process.env.COGNITO_REDIRECT_URI}&identity_provider=Google`}
+        href={`https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id=${
+          import.meta.env.VITE_COGNITO_CLIENT_ID
+        }&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri=${
+          import.meta.env.VITE_COGNITO_REDIRECT_URI
+        }&identity_provider=Google`}
       >
         <GoogleIcon /> Sign in with Google
       </SocialSignInLink>
@@ -89,7 +98,7 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
   );
 };
 
-const FormContainer = styled(Stack)(({theme}) => ({
+const FormContainer = styled(Stack)(({theme}: {theme: Theme}) => ({
   maxWidth: '550px',
   alignItems: 'center',
   padding: '2rem',
@@ -113,7 +122,7 @@ const Form = styled('form')({
   marginBottom: '16px',
 });
 
-const Input = styled(OutlinedInput)(({theme}) => ({
+const Input = styled(OutlinedInput)(({theme}: {theme: Theme}) => ({
   '& > input': {
     padding: '8px 8px',
     fontSize: '16px',
@@ -121,7 +130,7 @@ const Input = styled(OutlinedInput)(({theme}) => ({
   },
 }));
 
-const Label = styled('label')(({theme}) => ({
+const Label = styled('label')(({theme}: {theme: Theme}) => ({
   marginBottom: '4px',
   color: theme.palette.text.secondary,
   fontSize: '16px',
@@ -141,7 +150,7 @@ const HelperText = styled('div')({
   color: '#f44336',
 });
 
-const Divider = styled(Box)(({theme}) => ({
+const Divider = styled(Box)(({theme}: {theme: Theme}) => ({
   color: theme.palette.text.secondary,
   marginBottom: '16px',
   display: 'flex',

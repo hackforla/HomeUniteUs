@@ -81,7 +81,11 @@ export const SignUpForm = ({onSubmit}: SignUpFormProps) => {
       </Divider>
       <SocialSignInLink
         fullWidth
-        href={`https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id=${process.env.COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri=${process.env.COGNITO_REDIRECT_URI}&identity_provider=Google`}
+        href={`https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id=${
+          import.meta.env.VITE_COGNITO_CLIENT_ID
+        }&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri=${
+          import.meta.env.VITE_COGNITO_REDIRECT_URI
+        }&identity_provider=Google`}
       >
         <GoogleIcon /> Sign up with Google
       </SocialSignInLink>
