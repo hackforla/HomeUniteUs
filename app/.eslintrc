@@ -26,12 +26,5 @@
     "prettier/prettier": ["warn", {"bracketSpacing": false}],
     "@typescript-eslint/no-empty-interface": 0
   },
-  "overrides": [
-    {
-      "files": "webpack.config.js",
-      "rules": {
-        "@typescript-eslint/no-var-requires": 0
-      }
-    }
-  ]
+  "ignorePatterns": ["!.storybook"]
 }

@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "lib": ["ES2015", "DOM"],
+    "strict": true,
+    "noEmit": true,
+    "isolatedModules": false,
+    "types": ["cypress", "@testing-library/cypress"]
+  },
+  "include": ["../node_modules/cypress", "**/*.ts"]
+}
