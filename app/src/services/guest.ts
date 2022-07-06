@@ -40,24 +40,28 @@ export type DeleteGuestApiArg = {
   /** guest id to delete */
   guestId: number;
 };
-export type ListGuestsApiResponse = /** status 200 successful operation */ Guests;
+export type ListGuestsApiResponse =
+  /** status 200 successful operation */ Guests;
 export type ListGuestsApiArg = {
   /** How many items to return at one time (max 100) */
   limit?: number;
 };
 export type CreateGuestApiResponse = /** status 201 Null response */ undefined;
 export type CreateGuestApiArg = void;
-export type UpdateGuestApiResponse = /** status 200 Successful operation */ Guest;
+export type UpdateGuestApiResponse =
+  /** status 200 Successful operation */ Guest;
 export type UpdateGuestApiArg = {
   /** Update guest */
   guest: Guest;
 };
-export type ShowGuestByIdApiResponse = /** status 200 Expected response to a valid request */ Guest;
+export type ShowGuestByIdApiResponse =
+  /** status 200 Expected response to a valid request */ Guest;
 export type ShowGuestByIdApiArg = {
   /** The id of the guest to retrieve */
   guestId: string;
 };
-export type UploadGuestImageApiResponse = /** status 200 successful operation */ ApiResponse;
+export type UploadGuestImageApiResponse =
+  /** status 200 successful operation */ ApiResponse;
 export type UploadGuestImageApiArg = {
   /** ID of guest to update */
   guestId: string;

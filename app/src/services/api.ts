@@ -36,8 +36,14 @@ const baseQueryWithReAuth: BaseQueryFn<
     const refreshResult = await baseQuery('auth/refresh', api, extraOptions);
 
     if (refreshResult.data) {
+      // if we made it here, then data is not undefined, but its type is unknown
+      //    due to current redux generator output.
+      //    TODO: make this nicer and more robust, i.e. wrap the class or call
+      //        to give us a flexible but strongly-typed interface to rely on
+      const {data} = refreshResult as {data: {token: string}};
       // store new token
-      api.dispatch(tokenReceived(refreshResult.data.token));
+      // api.dispatch(tokenReceived(refreshResult.data.token));
+      api.dispatch(tokenReceived(data.token));
       // retry the intiail query
       result = await baseQuery(args, api, extraOptions);
     } else {

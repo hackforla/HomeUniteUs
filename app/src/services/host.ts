@@ -48,12 +48,14 @@ export type UpdateHostApiArg = {
   /** Update host */
   host: Host;
 };
-export type ShowHostByIdApiResponse = /** status 200 Expected response to a valid request */ Host;
+export type ShowHostByIdApiResponse =
+  /** status 200 Expected response to a valid request */ Host;
 export type ShowHostByIdApiArg = {
   /** The id of the host to retrieve */
   hostId: string;
 };
-export type UploadHostImageApiResponse = /** status 200 successful operation */ ApiResponse;
+export type UploadHostImageApiResponse =
+  /** status 200 successful operation */ ApiResponse;
 export type UploadHostImageApiArg = {
   /** ID of host to update */
   hostId: string;
