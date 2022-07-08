@@ -9,7 +9,7 @@ describe('Input', () => {
         label="email"
         id="email"
         value={'fake@email.com'}
-        errors={undefined}
+        errorMessage={undefined}
       />,
     );
 
@@ -24,7 +24,7 @@ describe('Input', () => {
         label="email"
         id="email"
         value={'fake@email.com'}
-        errors={error}
+        errorMessage={error}
         touched={true}
       />,
     );
