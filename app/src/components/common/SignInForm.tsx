@@ -1,7 +1,6 @@
 import {
   Box,
   FormControl,
-  OutlinedInput,
   Stack,
   styled,
   Theme,
@@ -11,6 +10,8 @@ import {
 import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
 import {object, string} from 'yup';
+
+import {Input} from './Input';
 import {PrimaryButton, SecondaryButton} from './Button';
 import {SignInRequest} from '../../services/auth';
 
@@ -43,33 +44,33 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
     },
   });
 
+  console.log(formik.errors.email);
+
   return (
     <FormContainer>
       <FormHeader variant="h4">Sign in to your account</FormHeader>
       <Form onSubmit={formik.handleSubmit}>
         <FormControl>
-          <Label htmlFor="email">Email address</Label>
           <Input
             fullWidth
+            label="Email Address"
             id="email"
             value={formik.values.email}
             onChange={formik.handleChange}
-            error={formik.touched.email && Boolean(formik.errors.email)}
+            errors={formik.errors.email}
+            touched={formik.touched.email}
           />
-          <HelperText>{formik.touched.email && formik.errors.email}</HelperText>
         </FormControl>
         <FormControl>
-          <Label htmlFor="password">Password</Label>
           <Input
             fullWidth
+            label="Password"
             id="password"
             value={formik.values.password}
             onChange={formik.handleChange}
-            error={formik.touched.password && Boolean(formik.errors.password)}
+            errors={formik.errors.password}
+            touched={formik.touched.password}
           />
-          <HelperText>
-            {formik.touched.password && formik.errors.password}
-          </HelperText>
         </FormControl>
         <SubmitButton type="submit" fullWidth>
           Sign in
@@ -122,32 +123,8 @@ const Form = styled('form')({
   marginBottom: '16px',
 });
 
-const Input = styled(OutlinedInput)(({theme}: {theme: Theme}) => ({
-  '& > input': {
-    padding: '8px 8px',
-    fontSize: '16px',
-    borderRadius: theme.shape.borderRadius,
-  },
-}));
-
-const Label = styled('label')(({theme}: {theme: Theme}) => ({
-  marginBottom: '4px',
-  color: theme.palette.text.secondary,
-  fontSize: '16px',
-  fontWeight: 500,
-}));
-
 const SubmitButton = styled(PrimaryButton)({
   padding: '8px',
-});
-
-const HelperText = styled('div')({
-  height: '16px',
-  width: '100%',
-  display: 'flex',
-  alignItems: 'center',
-  fontSize: '12px',
-  color: '#f44336',
 });
 
 const Divider = styled(Box)(({theme}: {theme: Theme}) => ({
