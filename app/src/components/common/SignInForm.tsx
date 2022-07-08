@@ -44,8 +44,6 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
     },
   });
 
-  console.log(formik.errors.email);
-
   return (
     <FormContainer>
       <FormHeader variant="h4">Sign in to your account</FormHeader>

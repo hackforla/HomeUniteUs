@@ -33,10 +33,10 @@ export const SignIn = () => {
       })
         .then(res => res.json())
         .then(data => {
-          console.log(data);
+          console.log('data', data);
           navigate(from, {replace: true});
         })
-        .catch(err => console.log(err));
+        .catch(err => console.log('error', err));
     }
   }, [location, from]);
 
