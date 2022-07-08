@@ -9,7 +9,7 @@ import {
 
 interface InputProps extends Omit<OutlinedInputProps, 'label'> {
   label: string;
-  errors?: string | undefined;
+  errorMessage?: string | undefined;
   touched?: boolean | undefined;
 }
 
@@ -18,7 +18,7 @@ export const Input = ({
   id,
   value,
   onChange,
-  errors,
+  errorMessage,
   touched,
   ...props
 }: InputProps) => {
@@ -30,11 +30,11 @@ export const Input = ({
         id={id}
         value={value}
         onChange={onChange}
-        error={touched && Boolean(errors)}
+        error={touched && Boolean(errorMessage)}
         {...props}
       />
       <HelperText>
-        <Typography variant="body2">{touched && errors}</Typography>
+        <Typography variant="body2">{touched && errorMessage}</Typography>
       </HelperText>
     </>
   );

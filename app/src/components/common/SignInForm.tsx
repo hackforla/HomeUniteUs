@@ -55,7 +55,7 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
             id="email"
             value={formik.values.email}
             onChange={formik.handleChange}
-            errors={formik.errors.email}
+            errorMessage={formik.errors.email}
             touched={formik.touched.email}
           />
         </FormControl>
@@ -66,7 +66,7 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
             id="password"
             value={formik.values.password}
             onChange={formik.handleChange}
-            errors={formik.errors.password}
+            errorMessage={formik.errors.password}
             touched={formik.touched.password}
           />
         </FormControl>
