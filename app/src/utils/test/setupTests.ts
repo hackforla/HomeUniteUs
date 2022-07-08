@@ -1,4 +1,2 @@
 // Handle test setup here
-
-// Can be removed once file is populated
-export {};
+import '@testing-library/jest-dom';
