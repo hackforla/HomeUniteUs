@@ -1,17 +1,17 @@
 import {
   Box,
-  FormControl,
+  OutlinedInput,
+  FormHelperText,
+  InputLabel,
   Stack,
   styled,
   Theme,
   Typography,
 } from '@mui/material';
-// import {styled} from '@mui/system';
 import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
 import {object, string} from 'yup';
 
-import {Input} from './Input';
 import {PrimaryButton, SecondaryButton} from './Button';
 import {SignInRequest} from '../../services/auth';
 
@@ -33,7 +33,7 @@ const validationSchema = object({
 });
 
 export const SignInForm = ({onSubmit}: SignInFormProps) => {
-  const formik = useFormik({
+  const {handleSubmit, handleChange, values, touched, errors} = useFormik({
     initialValues: {
       email: '',
       password: '',
@@ -47,29 +47,33 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
   return (
     <FormContainer>
       <FormHeader variant="h4">Sign in to your account</FormHeader>
-      <Form onSubmit={formik.handleSubmit}>
-        <FormControl>
-          <Input
+      <Form onSubmit={handleSubmit}>
+        <Stack spacing={1}>
+          <InputLabel htmlFor="email">Email address</InputLabel>
+          <OutlinedInput
             fullWidth
-            label="Email Address"
             id="email"
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            errorMessage={formik.errors.email}
-            touched={formik.touched.email}
+            value={values.email}
+            onChange={handleChange}
+            error={touched.email && Boolean(errors.email)}
           />
-        </FormControl>
-        <FormControl>
-          <Input
+          {touched.email && errors.email && (
+            <FormHelperText error>{errors.email}</FormHelperText>
+          )}
+        </Stack>
+        <Stack spacing={1}>
+          <InputLabel htmlFor="password">Password</InputLabel>
+          <OutlinedInput
             fullWidth
-            label="Password"
             id="password"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            errorMessage={formik.errors.password}
-            touched={formik.touched.password}
+            value={values.password}
+            onChange={handleChange}
+            error={touched.password && Boolean(errors.password)}
           />
-        </FormControl>
+          {touched.password && errors.password && (
+            <FormHelperText error>{errors.password}</FormHelperText>
+          )}
+        </Stack>
         <SubmitButton type="submit" fullWidth>
           Sign in
         </SubmitButton>
@@ -118,6 +122,7 @@ const Form = styled('form')({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'stretch',
+  gap: '1rem',
   marginBottom: '16px',
 });
 

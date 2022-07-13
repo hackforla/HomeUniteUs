@@ -1,5 +1,5 @@
 import React from 'react';
-import {FormControl, OutlinedInput, Stack} from '@mui/material';
+import {OutlinedInput, Stack, InputLabel, FormHelperText} from '@mui/material';
 import {styled} from '@mui/system';
 import {useFormik} from 'formik';
 import {object, string} from 'yup';
@@ -20,7 +20,7 @@ const codeValidationSchema = object({
 export const AccountVerificationForm = ({
   onSubmit,
 }: AccountVerificationFormProps) => {
-  const formik = useFormik({
+  const {handleSubmit, handleChange, values, touched, errors} = useFormik({
     initialValues: {
       email: '',
       code: '',
@@ -32,29 +32,33 @@ export const AccountVerificationForm = ({
   });
 
   return (
-    <Form onSubmit={formik.handleSubmit}>
-      <FormControl>
-        <Label htmlFor="email">Email address</Label>
-        <Input
+    <Form onSubmit={handleSubmit}>
+      <Stack spacing={1}>
+        <InputLabel htmlFor="email">Email address</InputLabel>
+        <OutlinedInput
           fullWidth
           id="email"
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          error={formik.touched.email && Boolean(formik.errors.email)}
+          value={values.email}
+          onChange={handleChange}
+          error={touched.email && Boolean(errors.email)}
         />
-        <HelperText>{formik.touched.code && formik.errors.code}</HelperText>
-      </FormControl>
-      <FormControl>
-        <Label htmlFor="verification-code">Verification code</Label>
-        <Input
+        {touched.email && errors.email && (
+          <FormHelperText error>{errors.email}</FormHelperText>
+        )}
+      </Stack>
+      <Stack spacing={1}>
+        <InputLabel htmlFor="email">Verification Code</InputLabel>
+        <OutlinedInput
           fullWidth
-          id="verification-code"
-          value={formik.values.code}
-          onChange={formik.handleChange}
-          error={formik.touched.code && Boolean(formik.errors.code)}
+          id="email"
+          value={values.code}
+          onChange={handleChange}
+          error={touched.code && Boolean(errors.code)}
         />
-        <HelperText>{formik.touched.code && formik.errors.code}</HelperText>
-      </FormControl>
+        {touched.code && errors.code && (
+          <FormHelperText error>{errors.code}</FormHelperText>
+        )}
+      </Stack>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
         <ResendButton>Resend code</ResendButton>
         <SubmitButton type="submit">Submit code</SubmitButton>
@@ -71,34 +75,10 @@ const Form = styled('form')({
   marginBottom: '16px',
 });
 
-const Input = styled(OutlinedInput)(({theme}) => ({
-  '& > input': {
-    padding: '8px 8px',
-    fontSize: '16px',
-    borderRadius: theme.shape.borderRadius,
-  },
-}));
-
-const Label = styled('label')(({theme}) => ({
-  marginBottom: '4px',
-  color: theme.palette.text.secondary,
-  fontSize: '16px',
-  fontWeight: 500,
-}));
-
 const ResendButton = styled(SecondaryButton)({
   padding: '8px 12px',
 });
 
 const SubmitButton = styled(PrimaryButton)({
   padding: '8px 12px',
-});
-
-const HelperText = styled('div')({
-  height: '16px',
-  width: '100%',
-  display: 'flex',
-  alignItems: 'center',
-  fontSize: '12px',
-  color: '#f44336',
 });

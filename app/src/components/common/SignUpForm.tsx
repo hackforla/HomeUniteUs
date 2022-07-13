@@ -1,8 +1,9 @@
 import React from 'react';
 import {
   Box,
-  FormControl,
+  InputLabel,
   OutlinedInput,
+  FormHelperText,
   Stack,
   Typography,
 } from '@mui/material';
@@ -31,7 +32,7 @@ const validationSchema = object({
 });
 
 export const SignUpForm = ({onSubmit}: SignUpFormProps) => {
-  const formik = useFormik({
+  const {handleSubmit, handleChange, values, touched, errors} = useFormik({
     initialValues: {
       email: '',
       password: '',
@@ -45,31 +46,33 @@ export const SignUpForm = ({onSubmit}: SignUpFormProps) => {
   return (
     <FormContainer>
       <FormHeader variant="h4">Sign up for an account</FormHeader>
-      <Form onSubmit={formik.handleSubmit}>
-        <FormControl>
-          <Label htmlFor="email">Email address</Label>
-          <Input
+      <Form onSubmit={handleSubmit}>
+        <Stack spacing={1}>
+          <InputLabel htmlFor="email">Email address</InputLabel>
+          <OutlinedInput
             fullWidth
             id="email"
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            error={formik.touched.email && Boolean(formik.errors.email)}
+            value={values.email}
+            onChange={handleChange}
+            error={touched.email && Boolean(errors.email)}
           />
-          <HelperText>{formik.touched.email && formik.errors.email}</HelperText>
-        </FormControl>
-        <FormControl>
-          <Label htmlFor="password">Password</Label>
-          <Input
+          {touched.email && errors.email && (
+            <FormHelperText error>{errors.email}</FormHelperText>
+          )}
+        </Stack>
+        <Stack spacing={1}>
+          <InputLabel htmlFor="password">Password</InputLabel>
+          <OutlinedInput
             fullWidth
             id="password"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            error={formik.touched.password && Boolean(formik.errors.password)}
+            value={values.password}
+            onChange={handleChange}
+            error={touched.password && Boolean(errors.password)}
           />
-          <HelperText>
-            {formik.touched.password && formik.errors.password}
-          </HelperText>
-        </FormControl>
+          {touched.password && errors.password && (
+            <FormHelperText error>{errors.password}</FormHelperText>
+          )}
+        </Stack>
         <SubmitButton type="submit" fullWidth>
           Sign Up
         </SubmitButton>
@@ -114,35 +117,12 @@ const Form = styled('form')({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'stretch',
+  gap: '1rem',
   marginBottom: '16px',
 });
 
-const Input = styled(OutlinedInput)(({theme}) => ({
-  '& > input': {
-    padding: '8px 8px',
-    fontSize: '16px',
-    borderRadius: theme.shape.borderRadius,
-  },
-}));
-
-const Label = styled('label')(({theme}) => ({
-  marginBottom: '4px',
-  color: theme.palette.text.secondary,
-  fontSize: '16px',
-  fontWeight: 500,
-}));
-
 const SubmitButton = styled(PrimaryButton)({
   padding: '8px',
-});
-
-const HelperText = styled('div')({
-  height: '16px',
-  width: '100%',
-  display: 'flex',
-  alignItems: 'center',
-  fontSize: '12px',
-  color: '#f44336',
 });
 
 const Divider = styled(Box)(({theme}) => ({

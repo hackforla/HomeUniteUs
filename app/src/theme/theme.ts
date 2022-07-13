@@ -1,5 +1,5 @@
 import {createTheme} from '@mui/material/styles';
-import {orange} from '@mui/material/colors';
+import {componentOverrides} from './overrides';
 
 declare module '@mui/material/styles' {
   interface Theme {
@@ -34,10 +34,11 @@ export const HomeUniteUsTheme = createTheme({
       300: '#E6E6E6',
     },
   },
-  status: {
-    danger: orange[500],
-  },
   shape: {
     borderRadius: 4,
   },
 });
+
+// Add component overrides to theme
+HomeUniteUsTheme.components = componentOverrides(HomeUniteUsTheme);
+console.log(HomeUniteUsTheme.components);
