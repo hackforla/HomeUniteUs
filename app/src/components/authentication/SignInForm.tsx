@@ -1,12 +1,11 @@
 import {
-  Box,
   OutlinedInput,
   FormHelperText,
   InputLabel,
   Button,
   Stack,
   styled,
-  Theme,
+  Divider,
 } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
@@ -75,11 +74,7 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
       <Button variant="contained" size="large" type="submit" fullWidth>
         Sign in
       </Button>
-      <Divider>
-        <div />
-        <p>or</p>
-        <div />
-      </Divider>
+      <Divider>or</Divider>
       {/* <SocialSignInLink
         fullWidth
         href={`https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id=${import.meta.env.VITE_COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri=${import.meta.env.VITE_COGNITO_REDIRECT_URI}&identity_provider=Google`}
@@ -108,18 +103,3 @@ const Form = styled('form')({
   alignItems: 'stretch',
   gap: '1rem',
 });
-
-const Divider = styled(Box)(({theme}: {theme: Theme}) => ({
-  color: theme.palette.text.secondary,
-  display: 'flex',
-  alignItems: 'center',
-  width: '100%',
-  '&> p': {
-    margin: '0 8px',
-  },
-  '& > div': {
-    flex: 1,
-    backgroundColor: theme.palette.text.secondary,
-    height: '1px',
-  },
-}));

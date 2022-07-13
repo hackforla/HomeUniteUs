@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Box,
+  Divider,
   InputLabel,
   OutlinedInput,
   FormHelperText,
@@ -74,11 +74,7 @@ export const SignUpForm = ({onSubmit}: SignUpFormProps) => {
       <Button variant="contained" size="large" type="submit" fullWidth>
         Sign up
       </Button>
-      <Divider>
-        <div />
-        <p>or</p>
-        <div />
-      </Divider>
+      <Divider>or</Divider>
       <Button
         variant="outlined"
         color="secondary"
@@ -103,18 +99,3 @@ const Form = styled('form')({
   alignItems: 'stretch',
   gap: '1rem',
 });
-
-const Divider = styled(Box)(({theme}) => ({
-  color: theme.palette.text.secondary,
-  display: 'flex',
-  alignItems: 'center',
-  width: '100%',
-  '&> p': {
-    margin: '0 8px',
-  },
-  '& > div': {
-    flex: 1,
-    backgroundColor: theme.palette.text.secondary,
-    height: '1px',
-  },
-}));
