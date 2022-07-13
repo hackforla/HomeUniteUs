@@ -3,7 +3,7 @@ import {OutlinedInput, Stack, InputLabel, FormHelperText} from '@mui/material';
 import {styled} from '@mui/system';
 import {useFormik} from 'formik';
 import {object, string} from 'yup';
-import {PrimaryButton, SecondaryButton} from './Button';
+import {PrimaryButton, SecondaryButton} from '../common/Button';
 import {VerificationRequest} from '../../services/auth';
 
 interface AccountVerificationFormProps {

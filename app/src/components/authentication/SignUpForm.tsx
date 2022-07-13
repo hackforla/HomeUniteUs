@@ -10,7 +10,7 @@ import {styled} from '@mui/system';
 import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
 import {object, string} from 'yup';
-import {PrimaryButton, SecondaryButton} from './Button';
+import {PrimaryButton, SecondaryButton} from '../common/Button';
 import {SignInRequest} from '../../services/auth';
 
 interface SignUpFormProps {

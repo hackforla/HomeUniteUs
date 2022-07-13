@@ -4,7 +4,7 @@ import {Typography, Stack, styled, Theme} from '@mui/material';
 
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
-import {SignInForm} from '../components/common/SignInForm';
+import {SignInForm} from '../components/authentication/SignInForm';
 import {SignInRequest, useSignInMutation} from '../services/auth';
 
 export interface LocationState {

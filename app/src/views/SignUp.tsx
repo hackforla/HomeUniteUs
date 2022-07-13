@@ -4,7 +4,7 @@ import {Stack, Typography, styled} from '@mui/material';
 
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
-import {SignUpForm} from '../components/common/SignUpForm';
+import {SignUpForm} from '../components/authentication/SignUpForm';
 import {SignUpRequest, useSignUpMutation} from '../services/auth';
 import {LocationState} from './SignIn';
 
