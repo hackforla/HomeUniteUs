@@ -3,6 +3,7 @@ import {
   OutlinedInput,
   FormHelperText,
   InputLabel,
+  Button,
   Stack,
   styled,
   Theme,
@@ -11,7 +12,6 @@ import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
 import {object, string} from 'yup';
 
-import {PrimaryButton, SecondaryButton} from '../common/Button';
 import {SignInRequest} from '../../services/auth';
 
 interface SignInFormProps {
@@ -72,9 +72,9 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
           <FormHelperText error>{errors.password}</FormHelperText>
         )}
       </Stack>
-      <SubmitButton type="submit" fullWidth>
+      <Button variant="contained" size="large" type="submit" fullWidth>
         Sign in
-      </SubmitButton>
+      </Button>
       <Divider>
         <div />
         <p>or</p>
@@ -84,7 +84,10 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
         fullWidth
         href={`https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id=${import.meta.env.VITE_COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri=${import.meta.env.VITE_COGNITO_REDIRECT_URI}&identity_provider=Google`}
       > */}
-      <SocialSignInLink
+      <Button
+        variant="outlined"
+        color="secondary"
+        size="large"
         fullWidth
         href={`https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id=${
           import.meta.env.VITE_COGNITO_CLIENT_ID
@@ -92,8 +95,8 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
           import.meta.env.VITE_COGNITO_REDIRECT_URI
         }&identity_provider=Google`}
       >
-        <GoogleIcon /> Sign in with Google
-      </SocialSignInLink>
+        <GoogleIcon sx={{fontSize: 16, marginRight: 1}} /> Sign in with Google
+      </Button>
     </Form>
   );
 };
@@ -104,10 +107,6 @@ const Form = styled('form')({
   flexDirection: 'column',
   alignItems: 'stretch',
   gap: '1rem',
-});
-
-const SubmitButton = styled(PrimaryButton)({
-  padding: '8px',
 });
 
 const Divider = styled(Box)(({theme}: {theme: Theme}) => ({
@@ -124,15 +123,3 @@ const Divider = styled(Box)(({theme}: {theme: Theme}) => ({
     height: '1px',
   },
 }));
-
-const SocialSignInLink = styled(SecondaryButton)({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: '8px',
-  textDecoration: 'none',
-  '& > svg': {
-    marginRight: '4px',
-    fontSize: '16px',
-  },
-});

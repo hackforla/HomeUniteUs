@@ -1,9 +1,14 @@
 import React from 'react';
-import {OutlinedInput, Stack, InputLabel, FormHelperText} from '@mui/material';
+import {
+  OutlinedInput,
+  Stack,
+  InputLabel,
+  FormHelperText,
+  Button,
+} from '@mui/material';
 import {styled} from '@mui/system';
 import {useFormik} from 'formik';
 import {object, string} from 'yup';
-import {PrimaryButton, SecondaryButton} from '../common/Button';
 import {VerificationRequest} from '../../services/auth';
 
 interface AccountVerificationFormProps {
@@ -60,8 +65,12 @@ export const AccountVerificationForm = ({
         )}
       </Stack>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <ResendButton>Resend code</ResendButton>
-        <SubmitButton type="submit">Submit code</SubmitButton>
+        <Button variant="outlined" color="secondary" size="large">
+          Resend code
+        </Button>
+        <Button variant="contained" size="large" type="submit">
+          Submit code
+        </Button>
       </Stack>
     </Form>
   );
@@ -73,12 +82,4 @@ const Form = styled('form')({
   flexDirection: 'column',
   alignItems: 'stretch',
   gap: '1rem',
-});
-
-const ResendButton = styled(SecondaryButton)({
-  padding: '8px 12px',
-});
-
-const SubmitButton = styled(PrimaryButton)({
-  padding: '8px 12px',
 });

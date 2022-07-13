@@ -18,14 +18,11 @@ declare module '@mui/material/styles' {
 export const HomeUniteUsTheme = createTheme({
   palette: {
     primary: {
+      dark: '#196ca0',
       main: '#249BE5',
-      // primary
-      700: '#249BE5',
-      // hover
       600: '#36A3E7',
-      // pressed
+      light: '#4fafea',
       300: '#6ABBED',
-      // disabled
       100: '#ACD9F5',
     },
     grey: {
@@ -41,4 +38,3 @@ export const HomeUniteUsTheme = createTheme({
 
 // Add component overrides to theme
 HomeUniteUsTheme.components = componentOverrides(HomeUniteUsTheme);
-console.log(HomeUniteUsTheme.components);

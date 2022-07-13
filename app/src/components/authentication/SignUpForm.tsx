@@ -5,12 +5,12 @@ import {
   OutlinedInput,
   FormHelperText,
   Stack,
+  Button,
 } from '@mui/material';
 import {styled} from '@mui/system';
 import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
 import {object, string} from 'yup';
-import {PrimaryButton, SecondaryButton} from '../common/Button';
 import {SignInRequest} from '../../services/auth';
 
 interface SignUpFormProps {
@@ -71,15 +71,18 @@ export const SignUpForm = ({onSubmit}: SignUpFormProps) => {
           <FormHelperText error>{errors.password}</FormHelperText>
         )}
       </Stack>
-      <SubmitButton type="submit" fullWidth>
-        Sign Up
-      </SubmitButton>
+      <Button variant="contained" size="large" type="submit" fullWidth>
+        Sign up
+      </Button>
       <Divider>
         <div />
         <p>or</p>
         <div />
       </Divider>
-      <SocialSignInLink
+      <Button
+        variant="outlined"
+        color="secondary"
+        size="large"
         fullWidth
         href={`https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id=${
           import.meta.env.VITE_COGNITO_CLIENT_ID
@@ -87,8 +90,8 @@ export const SignUpForm = ({onSubmit}: SignUpFormProps) => {
           import.meta.env.VITE_COGNITO_REDIRECT_URI
         }&identity_provider=Google`}
       >
-        <GoogleIcon /> Sign up with Google
-      </SocialSignInLink>
+        <GoogleIcon sx={{fontSize: 16, marginRight: 1}} /> Sign up with Google
+      </Button>
     </Form>
   );
 };
@@ -99,10 +102,6 @@ const Form = styled('form')({
   flexDirection: 'column',
   alignItems: 'stretch',
   gap: '1rem',
-});
-
-const SubmitButton = styled(PrimaryButton)({
-  padding: '8px',
 });
 
 const Divider = styled(Box)(({theme}) => ({
@@ -119,15 +118,3 @@ const Divider = styled(Box)(({theme}) => ({
     height: '1px',
   },
 }));
-
-const SocialSignInLink = styled(SecondaryButton)({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: '8px',
-  textDecoration: 'none',
-  '& > svg': {
-    marginRight: '4px',
-    fontSize: '16px',
-  },
-});
