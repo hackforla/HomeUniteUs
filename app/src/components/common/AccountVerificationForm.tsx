@@ -47,10 +47,10 @@ export const AccountVerificationForm = ({
         )}
       </Stack>
       <Stack spacing={1}>
-        <InputLabel htmlFor="email">Verification Code</InputLabel>
+        <InputLabel htmlFor="code">Verification Code</InputLabel>
         <OutlinedInput
           fullWidth
-          id="email"
+          id="code"
           value={values.code}
           onChange={handleChange}
           error={touched.code && Boolean(errors.code)}
@@ -72,7 +72,7 @@ const Form = styled('form')({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'stretch',
-  marginBottom: '16px',
+  gap: '1rem',
 });
 
 const ResendButton = styled(SecondaryButton)({

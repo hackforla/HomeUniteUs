@@ -6,7 +6,6 @@ import {
   Stack,
   styled,
   Theme,
-  Typography,
 } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
@@ -45,39 +44,37 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
   });
 
   return (
-    <FormContainer>
-      <FormHeader variant="h4">Sign in to your account</FormHeader>
-      <Form onSubmit={handleSubmit}>
-        <Stack spacing={1}>
-          <InputLabel htmlFor="email">Email address</InputLabel>
-          <OutlinedInput
-            fullWidth
-            id="email"
-            value={values.email}
-            onChange={handleChange}
-            error={touched.email && Boolean(errors.email)}
-          />
-          {touched.email && errors.email && (
-            <FormHelperText error>{errors.email}</FormHelperText>
-          )}
-        </Stack>
-        <Stack spacing={1}>
-          <InputLabel htmlFor="password">Password</InputLabel>
-          <OutlinedInput
-            fullWidth
-            id="password"
-            value={values.password}
-            onChange={handleChange}
-            error={touched.password && Boolean(errors.password)}
-          />
-          {touched.password && errors.password && (
-            <FormHelperText error>{errors.password}</FormHelperText>
-          )}
-        </Stack>
-        <SubmitButton type="submit" fullWidth>
-          Sign in
-        </SubmitButton>
-      </Form>
+    <Form onSubmit={handleSubmit}>
+      <Stack spacing={1}>
+        <InputLabel htmlFor="email">Email address</InputLabel>
+        <OutlinedInput
+          fullWidth
+          id="email"
+          value={values.email}
+          onChange={handleChange}
+          error={touched.email && Boolean(errors.email)}
+        />
+        {touched.email && errors.email && (
+          <FormHelperText error>{errors.email}</FormHelperText>
+        )}
+      </Stack>
+      <Stack spacing={1}>
+        <InputLabel htmlFor="password">Password</InputLabel>
+        <OutlinedInput
+          fullWidth
+          id="password"
+          type="password"
+          value={values.password}
+          onChange={handleChange}
+          error={touched.password && Boolean(errors.password)}
+        />
+        {touched.password && errors.password && (
+          <FormHelperText error>{errors.password}</FormHelperText>
+        )}
+      </Stack>
+      <SubmitButton type="submit" fullWidth>
+        Sign in
+      </SubmitButton>
       <Divider>
         <div />
         <p>or</p>
@@ -97,25 +94,9 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
       >
         <GoogleIcon /> Sign in with Google
       </SocialSignInLink>
-    </FormContainer>
+    </Form>
   );
 };
-
-const FormContainer = styled(Stack)(({theme}: {theme: Theme}) => ({
-  maxWidth: '550px',
-  alignItems: 'center',
-  padding: '2rem',
-  border: '1px solid #e0e0e0',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: '#fff',
-  margin: '0 16px',
-}));
-
-const FormHeader = styled(Typography)({
-  textAlign: 'center',
-  marginBottom: '16px',
-  fontWeight: 600,
-});
 
 const Form = styled('form')({
   width: '100%',
@@ -123,7 +104,6 @@ const Form = styled('form')({
   flexDirection: 'column',
   alignItems: 'stretch',
   gap: '1rem',
-  marginBottom: '16px',
 });
 
 const SubmitButton = styled(PrimaryButton)({
@@ -132,7 +112,6 @@ const SubmitButton = styled(PrimaryButton)({
 
 const Divider = styled(Box)(({theme}: {theme: Theme}) => ({
   color: theme.palette.text.secondary,
-  marginBottom: '16px',
   display: 'flex',
   alignItems: 'center',
   width: '100%',
