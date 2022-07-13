@@ -1,10 +1,18 @@
-import React, {ReactElement, FC} from 'react';
-import {render, RenderOptions} from '@testing-library/react';
+import React, {ReactElement} from 'react';
+import {render, cleanup, RenderOptions} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {ThemeProvider} from '@mui/material/styles';
 import {HomeUniteUsTheme} from '../../theme';
+import {afterEach} from 'vitest';
 
-const AllTheProviders: FC = ({children}) => {
+afterEach(() => {
+  cleanup();
+});
+interface ProviderProps {
+  children: ReactElement;
+}
+
+const AllTheProviders = ({children}: ProviderProps) => {
   return <ThemeProvider theme={HomeUniteUsTheme}>{children}</ThemeProvider>;
 };
 
