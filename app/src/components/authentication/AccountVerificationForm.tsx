@@ -64,10 +64,8 @@ export const AccountVerificationForm = ({
           <FormHelperText error>{errors.code}</FormHelperText>
         )}
       </Stack>
-      <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Button variant="outlined" color="secondary" size="large">
-          Resend code
-        </Button>
+      <Stack direction="row" justifyContent="end" alignItems="center" gap={1}>
+        <Button size="large">Resend code</Button>
         <Button variant="contained" size="large" type="submit">
           Submit code
         </Button>
