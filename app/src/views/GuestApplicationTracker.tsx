@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react';
+import {Container} from '@mui/material';
 import {ApplicationTrackerContainer} from '../components/common/ApplicationTrackerContainer';
 import {GuestDetailsProvider} from '../data/GuestDetailsProvider';
 
@@ -29,12 +30,10 @@ function reducer(
 export function GuestApplicationTracker(props: GuestApplicationTrackerProps) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   return (
-    <>
-      <GuestDetailsProvider>
-        <ApplicationTrackerContainer>
-          <h1>Guest application tracker</h1>
-        </ApplicationTrackerContainer>
-      </GuestDetailsProvider>
-    </>
+    <GuestDetailsProvider>
+      <Container>
+        <h1>Guest application tracker</h1>
+      </Container>
+    </GuestDetailsProvider>
   );
 }

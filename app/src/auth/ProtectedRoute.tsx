@@ -8,6 +8,7 @@ export const ProtectedRoute = ({children}: {children: JSX.Element}) => {
   const {user} = useAuth();
   const {isLoading} = useUserQuery();
   const location = useLocation();
+  // console.log(user, isLoading);
 
   // show loader while fetching data unless user already exists and is logged in
   if (isLoading && !user) return <Loading />;

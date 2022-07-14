@@ -2,26 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
-
-/*
-
-  import 'core-js/stable';
-  import 'regenerator-runtime/runtime';
-  import * as React from 'react';
-  import * as ReactDOM from 'react-dom';
-  import {BrowserRouter, Route, Routes} from 'react-router-dom';
-  import {Provider} from 'react-redux';
-  import {CssBaseline} from '@mui/material';
-  import {ThemeProvider} from '@mui/material/styles';
-  import {StyledEngineProvider} from '@mui/material/styles'; 
-
-*/
-
+import {CssBaseline, StyledEngineProvider, ThemeProvider} from '@mui/material';
+import {Provider} from 'react-redux';
 import {HomeUniteUsTheme} from './theme';
 import {
   Home,
   CoordinatorDashboard,
   GuestApplicationTracker,
+  Guests,
+  GuestProfile,
   HostApplicationTracker,
   SignIn,
   SignUp,
@@ -30,13 +19,7 @@ import {store} from './app/store';
 import {ProtectedRoute} from './auth/ProtectedRoute';
 import {useSessionMutation} from './services/auth';
 import {AccountVerification} from './views/AccountVerification';
-import {CssBaseline, StyledEngineProvider, ThemeProvider} from '@mui/material';
-import {Provider} from 'react-redux';
 // import { ApprovalTwoTone } from '@mui/icons-material';
-
-function Profile() {
-  return <div>Hello from profile</div>;
-}
 
 function HuuApp() {
   const [session] = useSessionMutation();
@@ -51,14 +34,9 @@ function HuuApp() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/coord" element={<CoordinatorDashboard />} />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signin" element={<SignIn />} />
+        <Route path="/verification" element={<AccountVerification />} />
         <Route
           path="/host"
           element={
@@ -71,10 +49,13 @@ function HuuApp() {
           path="/guest"
           element={
             <ProtectedRoute>
-              <GuestApplicationTracker />
+              <Guests />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route index element={<GuestProfile />} />
+          <Route path="application" element={<GuestApplicationTracker />} />
+        </Route>
         <Route
           path="/coordinator"
           element={
@@ -83,9 +64,6 @@ function HuuApp() {
             </ProtectedRoute>
           }
         />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/verification" element={<AccountVerification />} />
       </Routes>
     </>
   );

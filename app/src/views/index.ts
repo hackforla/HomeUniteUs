@@ -1,5 +1,7 @@
 export {CoordinatorDashboard} from './CoordinatorDashboard';
+export {Guests} from './Guests';
 export {GuestApplicationTracker} from './GuestApplicationTracker';
+export {GuestProfile} from './GuestProfile';
 export {HostApplicationTracker} from './HostApplicationTracker';
 export {Home} from './Home';
 export {SignIn} from './SignIn';
