@@ -22,8 +22,14 @@ const validationSchema = object({
   password: string()
     .required('password is required')
     .min(8, 'password must be at least 8 characters')
-    .matches(/^(?=.*[a-z])/, 'Must contain at least one lowercase character')
-    .matches(/^(?=.*[A-Z])/, 'Must contain at least one uppercase character')
+    .matches(
+      /^(?=.*[a-z])/,
+      'password must contain at least one lowercase character',
+    )
+    .matches(
+      /^(?=.*[A-Z])/,
+      'password must contain at least one uppercase character',
+    )
     .matches(
       /^(?=.*[!@#%&])/,
       'password must contain at least one special character',
@@ -49,6 +55,7 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
         <OutlinedInput
           fullWidth
           id="email"
+          name="email"
           value={values.email}
           onChange={handleChange}
           error={touched.email && Boolean(errors.email)}
@@ -62,6 +69,7 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
         <OutlinedInput
           fullWidth
           id="password"
+          name="password"
           type="password"
           value={values.password}
           onChange={handleChange}
