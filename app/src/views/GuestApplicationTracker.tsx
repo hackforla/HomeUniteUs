@@ -1,88 +1,31 @@
 import * as React from 'react';
-import {
-  Button,
-  Container,
-  Divider,
-  Stack,
-  Box,
-  Typography,
-  OutlinedInput,
-} from '@mui/material';
+import {Button, Container, Divider, Stack, Box} from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {Route, Routes, useNavigate, useParams} from 'react-router-dom';
 import {useFormik} from 'formik';
-
-interface FormProps {
-  handleChange: (e: React.ChangeEvent<unknown>) => void;
-  value: string;
-  touched: boolean | undefined;
-  error: string | undefined;
-}
-
-const NameForm = ({handleChange, value, touched, error}: FormProps) => {
-  return (
-    <Stack sx={{flexGrow: 1, gap: 1, maxWidth: '600px'}}>
-      <Typography variant="h5">What is your name?</Typography>
-      <OutlinedInput
-        fullWidth
-        id="name"
-        name="name"
-        value={value}
-        onChange={handleChange}
-        error={touched && Boolean(error)}
-      />
-    </Stack>
-  );
-};
-
-const AddressForm = ({handleChange, value, touched, error}: FormProps) => {
-  return (
-    <Stack sx={{flexGrow: 1, gap: 1, maxWidth: '600px'}}>
-      <Typography variant="h5">What is your address?</Typography>
-      <OutlinedInput
-        fullWidth
-        id="address"
-        name="address"
-        value={value}
-        onChange={handleChange}
-        error={touched && Boolean(error)}
-      />
-    </Stack>
-  );
-};
-
-const PhoneForm = ({handleChange, value, touched, error}: FormProps) => {
-  return (
-    <Stack sx={{flexGrow: 1, gap: 1, maxWidth: '600px'}}>
-      <Typography variant="h5">What is your phone number?</Typography>
-      <OutlinedInput
-        fullWidth
-        id="phone"
-        name="phone"
-        value={value}
-        onChange={handleChange}
-        error={touched && Boolean(error)}
-      />
-    </Stack>
-  );
-};
+import {
+  AddressForm,
+  NameForm,
+  PhoneForm,
+} from '../components/applications/guest-forms';
 
 interface FormValues {
   name: string;
   address: string;
   phone: string;
 }
-
-// list out routes in order to visit them
-const routes = ['name', 'address', 'phone'];
-
+// Initial formik values
 const initialValues: FormValues = {
   name: '',
   address: '',
   phone: '',
 };
 
+// list out routes in order in which to visit them
+const routes = ['name', 'address', 'phone'];
+
 export const GuestApplicationTracker = () => {
+  const navigate = useNavigate();
   const params = useParams();
   // use url params to set initial state for step incase of refresh
   const [step, setStep] = React.useState(
@@ -90,7 +33,6 @@ export const GuestApplicationTracker = () => {
   );
   const [formValues, setFormValues] = React.useState<FormValues | null>(null);
 
-  const navigate = useNavigate();
   const {handleSubmit, handleChange, values, touched, errors} = useFormik({
     initialValues: formValues || initialValues,
     onSubmit: values => {
@@ -98,7 +40,6 @@ export const GuestApplicationTracker = () => {
     },
     enableReinitialize: true,
   });
-  console.log(values);
 
   React.useEffect(() => {
     // use a fake request and data for form values
