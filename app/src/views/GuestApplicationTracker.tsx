@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {Button, Container, Divider, Stack, Box} from '@mui/material';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
+import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 import {Route, Routes, useNavigate, useParams} from 'react-router-dom';
 import {useFormik} from 'formik';
 import {
@@ -175,14 +176,25 @@ export const GuestApplicationTracker = () => {
           >
             Go Back
           </Button>
-          <Button
-            disabled={isSubmitting}
-            variant="contained"
-            size="large"
-            type="submit"
-          >
-            Save and Continue
-          </Button>
+          <Stack sx={{flexDirection: 'row', gap: 2}}>
+            <Button
+              onClick={nextStep}
+              variant="contained"
+              color="inherit"
+              size="large"
+              endIcon={<ArrowForwardIosRoundedIcon />}
+            >
+              Skip
+            </Button>
+            <Button
+              disabled={isSubmitting}
+              variant="contained"
+              size="large"
+              type="submit"
+            >
+              Save and Continue
+            </Button>
+          </Stack>
         </Stack>
       </Stack>
     </Container>
