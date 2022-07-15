@@ -30,6 +30,9 @@ export const HomeUniteUsTheme = createTheme({
       500: '#B7B6B6',
       300: '#E6E6E6',
     },
+    text: {
+      primary: '#2F2F2F',
+    },
   },
   shape: {
     borderRadius: 4,

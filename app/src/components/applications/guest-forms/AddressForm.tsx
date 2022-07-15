@@ -1,4 +1,5 @@
-import {Stack, Typography, OutlinedInput} from '@mui/material';
+import {Stack, OutlinedInput} from '@mui/material';
+import {ApplicationFormLabel} from '../ApplicationFormLabel';
 
 interface FormProps {
   handleChange: (e: React.ChangeEvent<unknown>) => void;
@@ -15,7 +16,9 @@ export const AddressForm = ({
 }: FormProps) => {
   return (
     <Stack sx={{flexGrow: 1, gap: 1, maxWidth: '600px'}}>
-      <Typography variant="h5">What is your address?</Typography>
+      <ApplicationFormLabel htmlFor="address">
+        What is your address?
+      </ApplicationFormLabel>
       <OutlinedInput
         fullWidth
         id="address"

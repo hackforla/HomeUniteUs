@@ -7,22 +7,25 @@ import {
   AddressForm,
   NameForm,
   PhoneForm,
+  PetsForm,
 } from '../components/applications/guest-forms';
 
 export interface FormValues {
   name: string;
   address: string;
   phone: string;
+  pets: string;
 }
 // Initial formik values
 const initialValues: FormValues = {
   name: '',
   address: '',
   phone: '',
+  pets: '',
 };
 
 // list out routes in order in which to visit them
-const routes = ['name', 'address', 'phone'];
+const routes = ['name', 'address', 'phone', 'pets'];
 
 export const GuestApplicationTracker = () => {
   const navigate = useNavigate();
@@ -60,6 +63,7 @@ export const GuestApplicationTracker = () => {
         name: 'erik',
         address: '732 North Main St',
         phone: '555-555-5555',
+        pets: '',
       };
       setTimeout(() => {
         resolve(updatedValues);
@@ -137,6 +141,12 @@ export const GuestApplicationTracker = () => {
               }
             />
             <Route
+              path="pets"
+              element={
+                <PetsForm handleChange={handleChange} value={values.pets} />
+              }
+            />
+            <Route
               path="*"
               element={
                 <NameForm
@@ -158,6 +168,7 @@ export const GuestApplicationTracker = () => {
           }}
         >
           <Button
+            disabled={step === 0}
             onClick={goBack}
             size="large"
             startIcon={<ArrowBackIosNewRoundedIcon />}

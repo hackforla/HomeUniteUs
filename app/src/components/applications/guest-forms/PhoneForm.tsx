@@ -1,4 +1,5 @@
-import {Stack, Typography, OutlinedInput} from '@mui/material';
+import {Stack, OutlinedInput} from '@mui/material';
+import {ApplicationFormLabel} from '../ApplicationFormLabel';
 
 interface FormProps {
   handleChange: (e: React.ChangeEvent<unknown>) => void;
@@ -10,7 +11,9 @@ interface FormProps {
 export const PhoneForm = ({handleChange, value, touched, error}: FormProps) => {
   return (
     <Stack sx={{flexGrow: 1, gap: 1, maxWidth: '600px'}}>
-      <Typography variant="h5">What is your phone number?</Typography>
+      <ApplicationFormLabel htmlFor="phone">
+        What is your phone number?
+      </ApplicationFormLabel>
       <OutlinedInput
         fullWidth
         id="phone"

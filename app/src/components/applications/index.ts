@@ -1,0 +1,1 @@
+export {ApplicationFormLabel} from './ApplicationFormLabel';
