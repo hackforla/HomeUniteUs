@@ -169,8 +169,9 @@ export const GuestApplicationTracker = () => {
           }}
         >
           <Button
-            disabled={step === 0}
             onClick={goBack}
+            disabled={step === 0}
+            color="inherit"
             size="large"
             startIcon={<ArrowBackIosNewRoundedIcon />}
           >
@@ -179,7 +180,6 @@ export const GuestApplicationTracker = () => {
           <Stack sx={{flexDirection: 'row', gap: 2}}>
             <Button
               onClick={nextStep}
-              variant="contained"
               color="inherit"
               size="large"
               endIcon={<ArrowForwardIosRoundedIcon />}
