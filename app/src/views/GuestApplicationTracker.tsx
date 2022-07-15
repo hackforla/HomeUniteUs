@@ -1,30 +1,84 @@
 import * as React from 'react';
-import {Button, Container, Divider, Stack, Box} from '@mui/material';
+import {
+  Button,
+  Container,
+  Divider,
+  Stack,
+  Box,
+  Typography,
+  OutlinedInput,
+} from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import {Route, Routes, useNavigate} from 'react-router-dom';
+import {Route, Routes, useNavigate, useParams} from 'react-router-dom';
 import {useFormik} from 'formik';
 
-const NameForm = () => {
-  return <Box>Name form</Box>;
+interface FormProps {
+  handleChange: (e: React.ChangeEvent<unknown>) => void;
+  value: string;
+  touched: boolean | undefined;
+  error: string | undefined;
+}
+
+const NameForm = ({handleChange, value, touched, error}: FormProps) => {
+  return (
+    <Stack sx={{flexGrow: 1, gap: 1, maxWidth: '600px'}}>
+      <Typography variant="h5">What is your name?</Typography>
+      <OutlinedInput
+        fullWidth
+        id="name"
+        name="name"
+        value={value}
+        onChange={handleChange}
+        error={touched && Boolean(error)}
+      />
+    </Stack>
+  );
 };
 
-const AddressForm = () => {
-  return <div>address form</div>;
+const AddressForm = ({handleChange, value, touched, error}: FormProps) => {
+  return (
+    <Stack sx={{flexGrow: 1, gap: 1, maxWidth: '600px'}}>
+      <Typography variant="h5">What is your address?</Typography>
+      <OutlinedInput
+        fullWidth
+        id="address"
+        name="address"
+        value={value}
+        onChange={handleChange}
+        error={touched && Boolean(error)}
+      />
+    </Stack>
+  );
 };
 
-const PhoneForm = () => {
-  return <div>phone form</div>;
+const PhoneForm = ({handleChange, value, touched, error}: FormProps) => {
+  return (
+    <Stack sx={{flexGrow: 1, gap: 1, maxWidth: '600px'}}>
+      <Typography variant="h5">What is your phone number?</Typography>
+      <OutlinedInput
+        fullWidth
+        id="phone"
+        name="phone"
+        value={value}
+        onChange={handleChange}
+        error={touched && Boolean(error)}
+      />
+    </Stack>
+  );
 };
 
 const routes = ['name', 'address', 'phone'];
 
 export const GuestApplicationTracker = () => {
-  const [step, setStep] = React.useState(0);
+  const params = useParams();
+  // use url params to set initial state for step incase of refresh
+  const [step, setStep] = React.useState(
+    () => routes.indexOf(params['*'] || '') || 0,
+  );
   const navigate = useNavigate();
-  const {handleSubmit} = useFormik({
+  const {handleSubmit, handleChange, values, touched, errors} = useFormik({
     initialValues: {
-      firstName: '',
-      lastName: '',
+      name: '',
       address: '',
       phone: '',
     },
@@ -34,6 +88,7 @@ export const GuestApplicationTracker = () => {
   });
 
   const handleNextStep = () => {
+    // increment step as long as it's not the last step
     if (step < routes.length - 1) {
       setStep(step + 1);
       navigate(`${routes[step + 1]}`);
@@ -41,6 +96,7 @@ export const GuestApplicationTracker = () => {
   };
 
   const handleGoBack = () => {
+    // decrement step as long as it's not the first step
     if (step === 0) return;
     setStep(step - 1);
     navigate(`${routes[step - 1]}`);
@@ -62,10 +118,50 @@ export const GuestApplicationTracker = () => {
           }}
         >
           <Routes>
-            <Route path="name" element={<NameForm />} />
-            <Route path="address" element={<AddressForm />} />
-            <Route path="phone" element={<PhoneForm />} />
-            <Route path="*" element={<NameForm />} />
+            <Route
+              path="name"
+              element={
+                <NameForm
+                  handleChange={handleChange}
+                  value={values.name}
+                  touched={touched.name}
+                  error={errors.name}
+                />
+              }
+            />
+            <Route
+              path="address"
+              element={
+                <AddressForm
+                  handleChange={handleChange}
+                  value={values.address}
+                  touched={touched.address}
+                  error={errors.address}
+                />
+              }
+            />
+            <Route
+              path="phone"
+              element={
+                <PhoneForm
+                  handleChange={handleChange}
+                  value={values.phone}
+                  touched={touched.phone}
+                  error={errors.phone}
+                />
+              }
+            />
+            <Route
+              path="*"
+              element={
+                <NameForm
+                  handleChange={handleChange}
+                  value={values.name}
+                  touched={touched.name}
+                  error={errors.name}
+                />
+              }
+            />
           </Routes>
         </Box>
         <Divider />
