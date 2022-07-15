@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Button, Container, Divider, Stack, Box} from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import {Route, Routes, useNavigate, useParams} from 'react-router-dom';
 import {useFormik} from 'formik';
 import {
@@ -9,7 +9,7 @@ import {
   PhoneForm,
 } from '../components/applications/guest-forms';
 
-interface FormValues {
+export interface FormValues {
   name: string;
   address: string;
   phone: string;
@@ -33,10 +33,22 @@ export const GuestApplicationTracker = () => {
   );
   const [formValues, setFormValues] = React.useState<FormValues | null>(null);
 
-  const {handleSubmit, handleChange, values, touched, errors} = useFormik({
+  const {
+    handleSubmit,
+    handleChange,
+    setSubmitting,
+    isSubmitting,
+    values,
+    touched,
+    errors,
+  } = useFormik({
     initialValues: formValues || initialValues,
     onSubmit: values => {
       console.log(values);
+      nextStep();
+      setTimeout(() => {
+        setSubmitting(false);
+      }, 600);
     },
     enableReinitialize: true,
   });
@@ -59,7 +71,7 @@ export const GuestApplicationTracker = () => {
     });
   }, []);
 
-  const handleNextStep = () => {
+  const nextStep = () => {
     // increment step as long as it's not the last step
     if (step < routes.length - 1) {
       setStep(step + 1);
@@ -67,7 +79,7 @@ export const GuestApplicationTracker = () => {
     }
   };
 
-  const handleGoBack = () => {
+  const goBack = () => {
     // decrement step as long as it's not the first step
     if (step === 0) return;
     setStep(step - 1);
@@ -87,6 +99,7 @@ export const GuestApplicationTracker = () => {
             flexGrow: 1,
             alignItems: 'center',
             justifyContent: 'center',
+            overflowY: 'scroll',
           }}
         >
           <Routes>
@@ -145,14 +158,14 @@ export const GuestApplicationTracker = () => {
           }}
         >
           <Button
-            onClick={handleGoBack}
+            onClick={goBack}
             size="large"
-            startIcon={<ArrowBackIcon />}
+            startIcon={<ArrowBackIosNewRoundedIcon />}
           >
             Go Back
           </Button>
           <Button
-            onClick={handleNextStep}
+            disabled={isSubmitting}
             variant="contained"
             size="large"
             type="submit"
