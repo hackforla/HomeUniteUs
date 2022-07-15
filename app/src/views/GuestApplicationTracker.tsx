@@ -67,7 +67,20 @@ const PhoneForm = ({handleChange, value, touched, error}: FormProps) => {
   );
 };
 
+interface FormValues {
+  name: string;
+  address: string;
+  phone: string;
+}
+
+// list out routes in order to visit them
 const routes = ['name', 'address', 'phone'];
+
+const initialValues: FormValues = {
+  name: '',
+  address: '',
+  phone: '',
+};
 
 export const GuestApplicationTracker = () => {
   const params = useParams();
@@ -75,17 +88,35 @@ export const GuestApplicationTracker = () => {
   const [step, setStep] = React.useState(
     () => routes.indexOf(params['*'] || '') || 0,
   );
+  const [formValues, setFormValues] = React.useState<FormValues | null>(null);
+
   const navigate = useNavigate();
   const {handleSubmit, handleChange, values, touched, errors} = useFormik({
-    initialValues: {
-      name: '',
-      address: '',
-      phone: '',
-    },
+    initialValues: formValues || initialValues,
     onSubmit: values => {
       console.log(values);
     },
+    enableReinitialize: true,
   });
+  console.log(values);
+
+  React.useEffect(() => {
+    // use a fake request and data for form values
+    const getFormValues = new Promise<FormValues>(resolve => {
+      const updatedValues = {
+        name: 'erik',
+        address: '732 North Main St',
+        phone: '555-555-5555',
+      };
+      setTimeout(() => {
+        resolve(updatedValues);
+      }, 1000);
+    });
+
+    getFormValues.then(formValues => {
+      setFormValues(formValues);
+    });
+  }, []);
 
   const handleNextStep = () => {
     // increment step as long as it's not the last step
