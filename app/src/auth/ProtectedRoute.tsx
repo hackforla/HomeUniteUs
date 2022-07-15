@@ -1,10 +1,10 @@
 import React from 'react';
-import {Navigate, useLocation} from 'react-router-dom';
+import {Navigate, useLocation, Outlet} from 'react-router-dom';
 import {useAuth} from '../app/hooks/useAuth';
 import {Loading} from '../components/common';
 import {useUserQuery} from '../services/auth';
 
-export const ProtectedRoute = ({children}: {children: JSX.Element}) => {
+export const ProtectedRoute = () => {
   const {user} = useAuth();
   const {isLoading} = useUserQuery();
   const location = useLocation();
@@ -20,5 +20,5 @@ export const ProtectedRoute = ({children}: {children: JSX.Element}) => {
   }
 
   // render children if user is authenticated
-  return children;
+  return <Outlet />;
 };

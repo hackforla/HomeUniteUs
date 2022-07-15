@@ -1,39 +1,98 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react';
-import {Container} from '@mui/material';
-import {ApplicationTrackerContainer} from '../components/common/ApplicationTrackerContainer';
-import {GuestDetailsProvider} from '../data/GuestDetailsProvider';
+import {Button, Container, Divider, Stack, Box} from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import {Route, Routes, useNavigate} from 'react-router-dom';
+import {useFormik} from 'formik';
 
-interface GuestApplicationTrackerProps {}
+const NameForm = () => {
+  return <Box>Name form</Box>;
+};
 
-interface GuestApplicationTrackerState {}
+const AddressForm = () => {
+  return <div>address form</div>;
+};
 
-enum GuestApplicationTrackerActionType {}
+const PhoneForm = () => {
+  return <div>phone form</div>;
+};
 
-interface GuestApplicationTrackerAction {
-  type: GuestApplicationTrackerActionType;
-  payload?: string;
-}
+const routes = ['name', 'address', 'phone'];
 
-const initialState: GuestApplicationTrackerState = {};
+export const GuestApplicationTracker = () => {
+  const [step, setStep] = React.useState(0);
+  const navigate = useNavigate();
+  const {handleSubmit} = useFormik({
+    initialValues: {
+      firstName: '',
+      lastName: '',
+      address: '',
+      phone: '',
+    },
+    onSubmit: values => {
+      console.log(values);
+    },
+  });
 
-function reducer(
-  state: GuestApplicationTrackerState,
-  action: GuestApplicationTrackerAction,
-): GuestApplicationTrackerState {
-  switch (action.type) {
-    default:
-      throw new Error(`Unsupported action: ${JSON.stringify(action)}`);
-  }
-}
+  const handleNextStep = () => {
+    if (step < routes.length - 1) {
+      setStep(step + 1);
+      navigate(`${routes[step + 1]}`);
+    }
+  };
 
-export function GuestApplicationTracker(props: GuestApplicationTrackerProps) {
-  const [state, dispatch] = React.useReducer(reducer, initialState);
+  const handleGoBack = () => {
+    if (step === 0) return;
+    setStep(step - 1);
+    navigate(`${routes[step - 1]}`);
+  };
+
   return (
-    <GuestDetailsProvider>
-      <Container>
-        <h1>Guest application tracker</h1>
-      </Container>
-    </GuestDetailsProvider>
+    <Container component="main" sx={{flexGrow: 1}}>
+      <Stack
+        sx={{height: 'calc(100vh - 89px)'}}
+        component="form"
+        onSubmit={handleSubmit}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            flexGrow: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Routes>
+            <Route path="name" element={<NameForm />} />
+            <Route path="address" element={<AddressForm />} />
+            <Route path="phone" element={<PhoneForm />} />
+            <Route path="*" element={<NameForm />} />
+          </Routes>
+        </Box>
+        <Divider />
+        <Stack
+          sx={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingY: 2,
+          }}
+        >
+          <Button
+            onClick={handleGoBack}
+            size="large"
+            startIcon={<ArrowBackIcon />}
+          >
+            Go Back
+          </Button>
+          <Button
+            onClick={handleNextStep}
+            variant="contained"
+            size="large"
+            type="submit"
+          >
+            Save and Continue
+          </Button>
+        </Stack>
+      </Stack>
+    </Container>
   );
-}
+};

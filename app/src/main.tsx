@@ -37,33 +37,15 @@ function HuuApp() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/verification" element={<AccountVerification />} />
-        <Route
-          path="/host"
-          element={
-            <ProtectedRoute>
-              <HostApplicationTracker />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/guest"
-          element={
-            <ProtectedRoute>
-              <Guests />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<GuestProfile />} />
-          <Route path="application" element={<GuestApplicationTracker />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/host" element={<HostApplicationTracker />} />
+          <Route path="/guest" element={<Guests />}>
+            <Route index element={<GuestProfile />} />
+            {/* Route contains a nested Routes component that renders multi step */}
+            <Route path="application/*" element={<GuestApplicationTracker />} />
+          </Route>
+          <Route path="/coordinator" element={<CoordinatorDashboard />} />
         </Route>
-        <Route
-          path="/coordinator"
-          element={
-            <ProtectedRoute>
-              <CoordinatorDashboard />
-            </ProtectedRoute>
-          }
-        />
       </Routes>
     </>
   );

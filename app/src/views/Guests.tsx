@@ -1,19 +1,20 @@
-import {Box} from '@mui/material';
+import {Box, Stack} from '@mui/material';
 import React from 'react';
 import {Outlet} from 'react-router-dom';
 import {ApplicationTrackerHeader} from '../components/common';
 
 export const Guests = () => {
   return (
-    <Box
-      style={{
+    <Stack
+      sx={{
         minHeight: '100vh',
         minWidth: '100vw',
-        backgroundColor: 'coral',
       }}
     >
-      <ApplicationTrackerHeader />
+      <Box>
+        <ApplicationTrackerHeader />
+      </Box>
       <Outlet />
-    </Box>
+    </Stack>
   );
 };
