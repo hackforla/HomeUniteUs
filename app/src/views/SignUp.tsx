@@ -1,10 +1,10 @@
 import React from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
-import {styled} from '@mui/system';
+import {Stack, Typography, styled} from '@mui/material';
 
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
-import {SignUpForm} from '../components/common/SignUpForm';
+import {SignUpForm} from '../components/authentication/SignUpForm';
 import {SignUpRequest, useSignUpMutation} from '../services/auth';
 import {LocationState} from './SignIn';
 
@@ -53,7 +53,10 @@ export const SignUp = () => {
 
   return (
     <PageContainer>
-      <SignUpForm onSubmit={handleSignUp} />
+      <FormContainer>
+        <FormHeader variant="h4">Sign up for an account</FormHeader>
+        <SignUpForm onSubmit={handleSignUp} />
+      </FormContainer>
     </PageContainer>
   );
 };
@@ -66,3 +69,19 @@ const PageContainer = styled('div')(({theme}) => ({
   justifyContent: 'center',
   alignItems: 'center',
 }));
+
+const FormContainer = styled(Stack)(({theme}) => ({
+  maxWidth: '550px',
+  alignItems: 'center',
+  padding: '2rem',
+  border: '1px solid #e0e0e0',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: '#fff',
+  margin: '0 16px',
+}));
+
+const FormHeader = styled(Typography)({
+  textAlign: 'center',
+  marginBottom: '16px',
+  fontWeight: 600,
+});

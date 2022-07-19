@@ -1,10 +1,10 @@
 import React from 'react';
 import {useNavigate, useLocation, Location} from 'react-router-dom';
-import {styled} from '@mui/system';
+import {Typography, Stack, styled, Theme} from '@mui/material';
 
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
-import {SignInForm} from '../components/common/SignInForm';
+import {SignInForm} from '../components/authentication/SignInForm';
 import {SignInRequest, useSignInMutation} from '../services/auth';
 
 export interface LocationState {
@@ -58,10 +58,29 @@ export const SignIn = () => {
 
   return (
     <PageContainer>
-      <SignInForm onSubmit={handleSignIn} />
+      <FormContainer>
+        <FormHeader variant="h4">Sign in to your account</FormHeader>
+        <SignInForm onSubmit={handleSignIn} />
+      </FormContainer>
     </PageContainer>
   );
 };
+
+const FormContainer = styled(Stack)(({theme}: {theme: Theme}) => ({
+  maxWidth: '550px',
+  alignItems: 'center',
+  padding: '2rem',
+  border: '1px solid #e0e0e0',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: '#fff',
+  margin: '0 16px',
+}));
+
+const FormHeader = styled(Typography)({
+  textAlign: 'center',
+  marginBottom: '16px',
+  fontWeight: 600,
+});
 
 const PageContainer = styled('div')(({theme}) => ({
   minHeight: '100vh',

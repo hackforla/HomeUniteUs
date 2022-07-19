@@ -1,5 +1,5 @@
 import {createTheme} from '@mui/material/styles';
-import {orange} from '@mui/material/colors';
+import {componentOverrides} from './overrides';
 
 declare module '@mui/material/styles' {
   interface Theme {
@@ -18,14 +18,11 @@ declare module '@mui/material/styles' {
 export const HomeUniteUsTheme = createTheme({
   palette: {
     primary: {
+      dark: '#196ca0',
       main: '#249BE5',
-      // primary
-      700: '#249BE5',
-      // hover
       600: '#36A3E7',
-      // pressed
+      light: '#4fafea',
       300: '#6ABBED',
-      // disabled
       100: '#ACD9F5',
     },
     grey: {
@@ -34,10 +31,10 @@ export const HomeUniteUsTheme = createTheme({
       300: '#E6E6E6',
     },
   },
-  status: {
-    danger: orange[500],
-  },
   shape: {
     borderRadius: 4,
   },
 });
+
+// Add component overrides to theme
+HomeUniteUsTheme.components = componentOverrides(HomeUniteUsTheme);
