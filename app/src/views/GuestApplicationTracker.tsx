@@ -9,13 +9,17 @@ import {
   NameForm,
   PhoneForm,
   PetsForm,
+  EmploymentForm,
 } from '../components/applications/guest-forms';
+import {boolean, object, string} from 'yup';
 
 export interface FormValues {
   firstName: string;
   middleName: string;
   lastName: string;
   dateOfBirth: string;
+  isEmployed: boolean | null;
+  employmentDescription: string;
   address: string;
   phone: string;
   pets: string;
@@ -26,13 +30,32 @@ const initialValues: FormValues = {
   middleName: '',
   lastName: '',
   dateOfBirth: '',
+  isEmployed: null,
+  employmentDescription: '',
   address: '',
   phone: '',
   pets: '',
 };
 
+// Form validation schema
+const validationSchema = object({
+  firstName: string().required('First name is required'),
+  middleName: string().required('Middle name is required'),
+  lastName: string().required('Last name is required'),
+  // Use transform to convert date to ISO string
+  dateOfBirth: string().required('Date of birth is required'),
+  isEmployed: boolean().required('Is employed is required'),
+  employmentDescription: string().when('isEmployed', {
+    is: true,
+    then: string().required('Employment description is required'),
+  }),
+  address: string().required('Address is required'),
+  phone: string().required('Phone is required'),
+  pets: string().required('Pets is required'),
+});
+
 // list out routes in order in which to visit them
-const routes = ['name', 'address', 'phone', 'pets'];
+const routes = ['name', 'employment', 'address', 'phone', 'pets'];
 
 export const GuestApplicationTracker = () => {
   const navigate = useNavigate();
@@ -50,6 +73,8 @@ export const GuestApplicationTracker = () => {
       middleName: '',
       lastName: '',
       dateOfBirth: '',
+      isEmployed: null,
+      employmentDescription: '',
       address: '732 North Main St',
       phone: '555-555-5555',
       pets: '',
@@ -77,13 +102,16 @@ export const GuestApplicationTracker = () => {
 
   return (
     <Formik
+      // use loaded form values if they exist
       initialValues={formValues || initialValues}
+      validationSchema={validationSchema}
       onSubmit={(values, {setSubmitting}) => {
         nextStep();
         setTimeout(() => {
           setSubmitting(false);
         }, 600);
       }}
+      // allow form to be values to be updated
       enableReinitialize={true}
     >
       {({handleSubmit, isSubmitting}) => (
@@ -104,6 +132,7 @@ export const GuestApplicationTracker = () => {
             >
               <Routes>
                 <Route path="name" element={<NameForm />} />
+                <Route path="employment" element={<EmploymentForm />} />
                 <Route path="address" element={<AddressForm />} />
                 <Route path="phone" element={<PhoneForm />} />
                 <Route path="pets" element={<PetsForm />} />
