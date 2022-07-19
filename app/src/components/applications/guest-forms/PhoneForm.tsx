@@ -1,14 +1,16 @@
 import {Stack, OutlinedInput} from '@mui/material';
+import {useFormikContext} from 'formik';
+import {FormValues} from '../../../views/GuestApplicationTracker';
 import {ApplicationFormLabel} from '../ApplicationFormLabel';
 
-interface FormProps {
-  handleChange: (e: React.ChangeEvent<unknown>) => void;
-  value: string;
-  touched: boolean | undefined;
-  error: string | undefined;
-}
+export const PhoneForm = () => {
+  const {
+    values: {phone},
+    handleChange,
+    touched,
+    errors,
+  } = useFormikContext<FormValues>();
 
-export const PhoneForm = ({handleChange, value, touched, error}: FormProps) => {
   return (
     <Stack sx={{flexGrow: 1, gap: 1, maxWidth: '600px'}}>
       <ApplicationFormLabel htmlFor="phone">
@@ -18,9 +20,9 @@ export const PhoneForm = ({handleChange, value, touched, error}: FormProps) => {
         fullWidth
         id="phone"
         name="phone"
-        value={value}
+        value={phone}
         onChange={handleChange}
-        error={touched && Boolean(error)}
+        error={touched.phone && Boolean(errors.phone)}
       />
     </Stack>
   );

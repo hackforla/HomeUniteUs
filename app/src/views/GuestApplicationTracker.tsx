@@ -3,7 +3,7 @@ import {Button, Container, Divider, Stack, Box} from '@mui/material';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import ArrowForwardIosRoundedIcon from '@mui/icons-material/ArrowForwardIosRounded';
 import {Route, Routes, useNavigate, useParams} from 'react-router-dom';
-import {useFormik} from 'formik';
+import {Formik} from 'formik';
 import {
   AddressForm,
   NameForm,
@@ -12,14 +12,20 @@ import {
 } from '../components/applications/guest-forms';
 
 export interface FormValues {
-  name: string;
+  firstName: string;
+  middleName: string;
+  lastName: string;
+  dateOfBirth: string;
   address: string;
   phone: string;
   pets: string;
 }
 // Initial formik values
 const initialValues: FormValues = {
-  name: '',
+  firstName: '',
+  middleName: '',
+  lastName: '',
+  dateOfBirth: '',
   address: '',
   phone: '',
   pets: '',
@@ -37,43 +43,21 @@ export const GuestApplicationTracker = () => {
   );
   const [formValues, setFormValues] = React.useState<FormValues | null>(null);
 
-  const {
-    handleSubmit,
-    handleChange,
-    setSubmitting,
-    isSubmitting,
-    values,
-    touched,
-    errors,
-  } = useFormik({
-    initialValues: formValues || initialValues,
-    onSubmit: values => {
-      console.log(values);
-      nextStep();
-      setTimeout(() => {
-        setSubmitting(false);
-      }, 600);
-    },
-    enableReinitialize: true,
-  });
-
   React.useEffect(() => {
     // use a fake request and data for form values
-    const getFormValues = new Promise<FormValues>(resolve => {
-      const updatedValues = {
-        name: 'erik',
-        address: '732 North Main St',
-        phone: '555-555-5555',
-        pets: '',
-      };
-      setTimeout(() => {
-        resolve(updatedValues);
-      }, 1000);
-    });
+    const updatedValues = {
+      firstName: 'Erik Guntner',
+      middleName: '',
+      lastName: '',
+      dateOfBirth: '',
+      address: '732 North Main St',
+      phone: '555-555-5555',
+      pets: '',
+    };
 
-    getFormValues.then(formValues => {
-      setFormValues(formValues);
-    });
+    setTimeout(() => {
+      setFormValues(updatedValues);
+    }, 1000);
   }, []);
 
   const nextStep = () => {
@@ -92,111 +76,79 @@ export const GuestApplicationTracker = () => {
   };
 
   return (
-    <Container component="main" sx={{flexGrow: 1}}>
-      <Stack
-        sx={{height: 'calc(100vh - 89px)'}}
-        component="form"
-        onSubmit={handleSubmit}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            flexGrow: 1,
-            alignItems: 'center',
-            justifyContent: 'center',
-            overflowY: 'scroll',
-          }}
-        >
-          <Routes>
-            <Route
-              path="name"
-              element={
-                <NameForm
-                  handleChange={handleChange}
-                  value={values.name}
-                  touched={touched.name}
-                  error={errors.name}
-                />
-              }
-            />
-            <Route
-              path="address"
-              element={
-                <AddressForm
-                  handleChange={handleChange}
-                  value={values.address}
-                  touched={touched.address}
-                  error={errors.address}
-                />
-              }
-            />
-            <Route
-              path="phone"
-              element={
-                <PhoneForm
-                  handleChange={handleChange}
-                  value={values.phone}
-                  touched={touched.phone}
-                  error={errors.phone}
-                />
-              }
-            />
-            <Route
-              path="pets"
-              element={
-                <PetsForm handleChange={handleChange} value={values.pets} />
-              }
-            />
-            <Route
-              path="*"
-              element={
-                <NameForm
-                  handleChange={handleChange}
-                  value={values.name}
-                  touched={touched.name}
-                  error={errors.name}
-                />
-              }
-            />
-          </Routes>
-        </Box>
-        <Divider />
-        <Stack
-          sx={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            paddingY: 2,
-          }}
-        >
-          <Button
-            onClick={goBack}
-            disabled={step === 0}
-            color="inherit"
-            size="large"
-            startIcon={<ArrowBackIosNewRoundedIcon />}
+    <Formik
+      initialValues={formValues || initialValues}
+      onSubmit={(values, {setSubmitting}) => {
+        nextStep();
+        setTimeout(() => {
+          setSubmitting(false);
+        }, 600);
+      }}
+      enableReinitialize={true}
+    >
+      {({handleSubmit, isSubmitting}) => (
+        <Container maxWidth="md" component="main" sx={{flexGrow: 1}}>
+          <Stack
+            sx={{height: 'calc(100vh - 89px)'}}
+            component="form"
+            onSubmit={handleSubmit}
           >
-            Go Back
-          </Button>
-          <Stack sx={{flexDirection: 'row', gap: 2}}>
-            <Button
-              onClick={nextStep}
-              color="inherit"
-              size="large"
-              endIcon={<ArrowForwardIosRoundedIcon />}
+            <Box
+              sx={{
+                display: 'flex',
+                flexGrow: 1,
+                alignItems: 'center',
+                justifyContent: 'start',
+                overflowY: 'scroll',
+              }}
             >
-              Skip
-            </Button>
-            <Button
-              disabled={isSubmitting}
-              variant="contained"
-              size="large"
-              type="submit"
+              <Routes>
+                <Route path="name" element={<NameForm />} />
+                <Route path="address" element={<AddressForm />} />
+                <Route path="phone" element={<PhoneForm />} />
+                <Route path="pets" element={<PetsForm />} />
+                <Route path="*" element={<NameForm />} />
+              </Routes>
+            </Box>
+            <Divider />
+            <Stack
+              sx={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingY: 2,
+              }}
             >
-              Save and Continue
-            </Button>
+              <Button
+                onClick={goBack}
+                disabled={step === 0}
+                color="inherit"
+                size="large"
+                startIcon={<ArrowBackIosNewRoundedIcon />}
+              >
+                Go Back
+              </Button>
+              <Stack sx={{flexDirection: 'row', gap: 2}}>
+                <Button
+                  onClick={nextStep}
+                  color="inherit"
+                  size="large"
+                  endIcon={<ArrowForwardIosRoundedIcon />}
+                >
+                  Skip
+                </Button>
+                <Button
+                  disabled={isSubmitting}
+                  variant="contained"
+                  size="large"
+                  type="submit"
+                >
+                  Save and Continue
+                </Button>
+              </Stack>
+            </Stack>
           </Stack>
-        </Stack>
-      </Stack>
-    </Container>
+        </Container>
+      )}
+    </Formik>
   );
 };
