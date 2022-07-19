@@ -64,7 +64,7 @@ export const NameForm = () => {
         )}
       </Stack>
       <Stack spacing={1}>
-        <InputLabel htmlFor="dateOfBirth">Date of Birth</InputLabel>
+        <InputLabel htmlFor="dateOfBirth">Date of Birth MM/DD/YYYY</InputLabel>
         <OutlinedInput
           fullWidth
           id="dateOfBirth"
