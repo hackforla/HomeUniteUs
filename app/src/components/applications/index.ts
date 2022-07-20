@@ -1,2 +1,2 @@
 export {ApplicationFormLabel} from './ApplicationFormLabel';
-export {getSchemaFromRoute} from './guestValidationSchema';
+export {getSchemaAndKeysFromRoute} from './guestValidationSchema';

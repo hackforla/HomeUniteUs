@@ -11,7 +11,7 @@ import {
   PetsForm,
   EmploymentForm,
 } from '../components/applications/guest-forms';
-import {getSchemaFromRoute} from '../components/applications';
+import {getSchemaAndKeysFromRoute} from '../components/applications';
 
 export interface FormValues {
   firstName: string;
@@ -35,6 +35,23 @@ const initialValues: FormValues = {
   address: '',
   phone: '',
   pets: '',
+};
+
+/**
+ *
+ * @param values - Formik values
+ * @param keys - Keys of values to be selected
+ * @returns - An object containing the values selected from the formik values
+ */
+
+const getValuesFromKeys = (
+  values: FormValues,
+  keys: Array<keyof FormValues>,
+) => {
+  return keys.reduce((acc, key) => {
+    acc[key] = values[key];
+    return acc;
+  }, {});
 };
 
 // list out routes in order in which to visit them
@@ -83,12 +100,18 @@ export const GuestApplicationTracker = () => {
     navigate(`${routes[step - 1]}`);
   };
 
+  // get the validation schema and keys for the current route
+  const {validationSchema, keys} = getSchemaAndKeysFromRoute(routes[step]);
+
   return (
     <Formik
       // use loaded form values if they exist
       initialValues={formValues || initialValues}
-      validationSchema={getSchemaFromRoute(routes[step])}
+      validationSchema={validationSchema}
       onSubmit={(values, {setSubmitting}) => {
+        // parse current values to submit from keys
+        const valuesToSubmit = keys ? getValuesFromKeys(values, keys) : values;
+        console.log(valuesToSubmit);
         nextStep();
         setTimeout(() => {
           setSubmitting(false);
