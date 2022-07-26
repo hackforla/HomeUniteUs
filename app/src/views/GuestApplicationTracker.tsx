@@ -51,7 +51,7 @@ const getValuesFromKeys = (
   return keys.reduce((acc, key) => {
     acc[key] = values[key];
     return acc;
-  }, {});
+  }, {} as Partial<FormValues>);
 };
 
 // list out routes in order in which to visit them
