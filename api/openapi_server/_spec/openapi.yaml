@@ -5,7 +5,7 @@ info:
   title: Home Unite Us
   version: 1.0.0
 servers:
-  - url: 'http://homeunite.us/api'
+  - url: "http://homeunite.us/api"
 paths:
   /serviceProviders:
     get:
@@ -14,14 +14,14 @@ paths:
         - service_provider
       operationId: get_service_providers
       responses:
-        '200':
+        "200":
           description: An array of service providers
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceProviders'
+                $ref: "#/components/schemas/ServiceProviders"
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: "#/components/responses/UnexpectedError"
       x-openapi-router-controller: openapi_server.controllers.service_provider_controller
     post:
       summary: Create a housing program service provider
@@ -32,43 +32,43 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ServiceProvider'
+              $ref: "#/components/schemas/ServiceProvider"
       responses:
-        '201':
+        "201":
           description: Resource Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceProviderWithId'
+                $ref: "#/components/schemas/ServiceProviderWithId"
           links:
             GetServiceProviderById:
               operationId: getServiceProvider
               parameters:
                 providerId: $response.body#/id
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: "#/components/responses/UnexpectedError"
       x-openapi-router-controller: openapi_server.controllers.service_provider_controller
-  '/serviceProviders/{providerId}':
+  "/serviceProviders/{providerId}":
     get:
       summary: Get details about a housing program service provider from an ID
       tags:
         - service_provider
       operationId: get_service_provider_by_id
       parameters:
-        - $ref: '#/components/parameters/ProviderId'
+        - $ref: "#/components/parameters/ProviderId"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceProviderWithId'
+                $ref: "#/components/schemas/ServiceProviderWithId"
           description: Service provider found
-        '400':
+        "400":
           description: Malformed request
-        '404':
+        "404":
           description: Service provider not found
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: "#/components/responses/UnexpectedError"
       x-openapi-router-controller: openapi_server.controllers.service_provider_controller
     put:
       summary: Update a housing program service provider
@@ -76,27 +76,27 @@ paths:
         - service_provider
       operationId: update_service_provider
       parameters:
-        - $ref: '#/components/parameters/ProviderId'
+        - $ref: "#/components/parameters/ProviderId"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ServiceProvider'
+              $ref: "#/components/schemas/ServiceProvider"
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceProviderWithId'
+                $ref: "#/components/schemas/ServiceProviderWithId"
           description: Successful operation
-        '400':
+        "400":
           description: Malformed request
-        '404':
+        "404":
           description: Service provider not found
-        '405':
+        "405":
           description: Validation exception
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: "#/components/responses/UnexpectedError"
       x-openapi-router-controller: openapi_server.controllers.service_provider_controller
     delete:
       summary: Delete a service provider
@@ -104,16 +104,16 @@ paths:
         - service_provider
       operationId: delete_service_provider
       parameters:
-        - $ref: '#/components/parameters/ProviderId'
+        - $ref: "#/components/parameters/ProviderId"
       responses:
-        '200':
+        "200":
           description: Service provider successfully deleted
-        '400':
+        "400":
           description: Malformed request
-        '404':
+        "404":
           description: Service provider not found
         default:
-          $ref: '#/components/responses/UnexpectedError'
+          $ref: "#/components/responses/UnexpectedError"
       x-openapi-router-controller: openapi_server.controllers.service_provider_controller
   /auth/signup:
     post:
@@ -133,11 +133,11 @@ paths:
                 - email
                 - password
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: "#/components/schemas/ApiResponse"
           description: successful operation
       tags:
         - auth
@@ -160,11 +160,11 @@ paths:
                 - email
                 - password
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: "#/components/schemas/ApiResponse"
           description: successful operation
       tags:
         - auth
@@ -187,11 +187,11 @@ paths:
                 - email
                 - code
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: "#/components/schemas/ApiResponse"
           description: successful operation
       tags:
         - auth
@@ -201,11 +201,11 @@ paths:
       description: Sign out user from current session
       operationId: signout
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: "#/components/schemas/ApiResponse"
           description: successful operation
       tags:
         - auth
@@ -215,11 +215,11 @@ paths:
       description: Sign in user from OAuth Provider
       operationId: token
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: "#/components/schemas/ApiResponse"
           description: successful operation
       tags:
         - auth
@@ -229,11 +229,11 @@ paths:
       description: Get current session and user information
       operationId: current_session
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: "#/components/schemas/ApiResponse"
           description: successful operation
       tags:
         - auth
@@ -243,11 +243,11 @@ paths:
       description: Check for refresh token and current session
       operationId: refresh
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: "#/components/schemas/ApiResponse"
           description: successful operation
       tags:
         - auth
@@ -267,11 +267,11 @@ paths:
               required:
                 - email
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: "#/components/schemas/ApiResponse"
           description: successful operation
       tags:
         - auth
@@ -297,11 +297,11 @@ paths:
                 - code
                 - password
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: "#/components/schemas/ApiResponse"
           description: successful operation
       tags:
         - auth
@@ -311,11 +311,11 @@ paths:
       description: Gets current user
       operationId: user
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: "#/components/schemas/ApiResponse"
           description: successful operation
       tags:
         - auth
@@ -328,11 +328,11 @@ paths:
       description: A private route that returns a message
       operationId: private
       responses:
-        '200':
+        "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: "#/components/schemas/ApiResponse"
           description: successful operation
       tags:
         - auth
@@ -340,6 +340,16 @@ paths:
       security:
         - jwt:
             - secret
+  /auth/google:
+    get:
+      description: Sign in with Google
+      operationId: google
+      responses:
+        "302":
+          description: successful operation
+      tags:
+        - auth
+      x-openapi-router-controller: openapi_server.controllers.auth_controller
 components:
   securitySchemes:
     jwt:
@@ -353,11 +363,11 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ApiResponse'
+            $ref: "#/components/schemas/ApiResponse"
   parameters:
     ProviderId:
       name: providerId
-      description: 'The ID of the service provider to read, update or delete'
+      description: "The ID of the service provider to read, update or delete"
       explode: false
       in: path
       required: true
@@ -399,7 +409,7 @@ components:
           title: program_name
           type: string
         service_provider:
-          $ref: '#/components/schemas/ServiceProvider'
+          $ref: "#/components/schemas/ServiceProvider"
       required:
         - program_name
         - service_provider
@@ -413,7 +423,7 @@ components:
         - provider_name
     ServiceProviderWithId:
       allOf:
-        - $ref: '#/components/schemas/ServiceProvider'
+        - $ref: "#/components/schemas/ServiceProvider"
       type: object
       properties:
         id:
@@ -424,19 +434,19 @@ components:
     ServiceProviders:
       type: array
       items:
-        $ref: '#/components/schemas/ServiceProviderWithId'
+        $ref: "#/components/schemas/ServiceProviderWithId"
     IntakeQuestion:
       type: object
       properties:
         applicant_type:
-          $ref: '#/components/schemas/ApplicantType'
+          $ref: "#/components/schemas/ApplicantType"
         question_text:
           title: question_text
           type: string
         intake_question_type:
-          $ref: '#/components/schemas/IntakeQuestionType'
+          $ref: "#/components/schemas/IntakeQuestionType"
         intake_question_set:
-          $ref: '#/components/schemas/IntakeQuestionSet'
+          $ref: "#/components/schemas/IntakeQuestionSet"
       required:
         - applicant_type
         - question_text
@@ -449,7 +459,7 @@ components:
           title: question_set_name
           type: string
         housing_program:
-          $ref: '#/components/schemas/HousingProgram'
+          $ref: "#/components/schemas/HousingProgram"
       required:
         - question_set_name
         - housing_program
@@ -468,7 +478,7 @@ components:
           title: response_text
           type: string
         intake_question:
-          $ref: '#/components/schemas/IntakeQuestion'
+          $ref: "#/components/schemas/IntakeQuestion"
       required:
         - response_text
         - intake_question
