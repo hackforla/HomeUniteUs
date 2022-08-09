@@ -6,7 +6,7 @@ import requests
 
 from os import environ as env
 from dotenv import load_dotenv, find_dotenv
-from flask import request, session
+from flask import redirect, request, session, redirect
 from openapi_server.exceptions import AuthError
 from functools import wraps
 
@@ -21,6 +21,7 @@ COGNITO_REGION=env.get('COGNITO_REGION')
 COGNITO_CLIENT_ID=env.get('COGNITO_CLIENT_ID')
 COGNITO_CLIENT_SECRET=env.get('COGNITO_CLIENT_SECRET')
 COGNITO_USER_POOL_ID=env.get('COGNITO_USER_POOL_ID')
+COGNITO_REDIRECT_URI = env.get('COGNITO_REDIRECT_URI')
 SECRET_KEY=env.get('SECRET_KEY')
 
 # Initialize Cognito clients
@@ -344,3 +345,6 @@ def user(token_info):
 
 def private(token_info):
     return {'message': 'Success - private'}
+
+def google():
+    return redirect(f"https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri={COGNITO_REDIRECT_URI}&identity_provider=Google")

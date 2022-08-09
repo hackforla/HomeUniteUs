@@ -92,11 +92,7 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
         color="secondary"
         size="large"
         fullWidth
-        href={`https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id=${
-          import.meta.env.VITE_COGNITO_CLIENT_ID
-        }&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri=${
-          import.meta.env.VITE_COGNITO_REDIRECT_URI
-        }&identity_provider=Google`}
+        href={'/api/auth/google'}
       >
         <GoogleIcon sx={{fontSize: 16, marginRight: 1}} /> Sign in with Google
       </Button>
