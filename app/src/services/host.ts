@@ -10,9 +10,11 @@ const injectedRtkApi = api.injectEndpoints({
   }),
   overrideExisting: false,
 });
+
 export {injectedRtkApi as hostAPI};
+export type Host = {id: number; name: string};
 export type GetHostsApiResponse =
-  /** status 200 An array of hosts */ ApiResponse;
+  /** status 200 An array of hosts */ Array<Host>;
 export type GetHostsApiArg = void;
 export type CreateHostApiResponse =
   /** status 200 Succes created host */ ApiResponse;
