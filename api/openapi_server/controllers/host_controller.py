@@ -1,6 +1,7 @@
 import traceback
 import connexion
 
+from openapi_server.models.host import Host
 from openapi_server.models import database as db
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.serializer import loads, dumps
@@ -27,9 +28,13 @@ def create_host():
       return {"id": row.id}, 201
 
 def get_hosts():
+    resp = []
+
     with Session(db_engine) as session:
-        query = session.query(db.Host)
+        table = session.query(db.Host)
 
-        serialized = dumps(query)
+        for row in table:
+            host = Host(id=row.id, name=row.name).to_dict()
+            resp.append(Host.from_dict(host))
 
-        return query.all()
+    return resp, 200
