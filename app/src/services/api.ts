@@ -57,5 +57,6 @@ const baseQueryWithReAuth: BaseQueryFn<
 // initialize an empty api service that we'll inject endpoints into later as needed
 export const api = createApi({
   baseQuery: baseQueryWithReAuth,
+  tagTypes: ['Hosts'],
   endpoints: () => ({}),
 });
