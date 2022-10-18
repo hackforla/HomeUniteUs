@@ -12,7 +12,7 @@ db_engine = db.DataAccessLayer.get_engine()
 def create_host():
     if connexion.request.is_json:
         try:
-            host = connexion.request.get_json()
+            host = Host.from_dict(connexion.request.get_json()).to_dict()
             print(host)
         except ValueError:
             return traceback.format_exc(ValueError), 400
@@ -25,7 +25,8 @@ def create_host():
       session.add(row)
       session.commit()
 
-      return {"id": row.id}, 201
+      host["id"] = row.id
+      return Host.from_dict(host), 201
 
 def get_hosts():
     resp = []
