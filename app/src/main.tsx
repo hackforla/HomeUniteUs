@@ -25,6 +25,7 @@ import {
   HostApplicationTracker,
   SignIn,
   SignUp,
+  HostsList,
 } from './views';
 import {store} from './app/store';
 import {ProtectedRoute} from './auth/ProtectedRoute';
@@ -51,6 +52,7 @@ function HuuApp() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/coord" element={<CoordinatorDashboard />} />
+        <Route path="/hosts" element={<HostsList />} />
         <Route
           path="/profile"
           element={
