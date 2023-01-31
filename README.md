@@ -10,14 +10,22 @@ Come visit us at https://homeunite.us/
 
 This project is part of a larger initative at Hack for LA around creating a shared housing application, that can be used by organizations accross the county to help people tranisition to living independently and sustainably through host homes, empty bedrooms, and roomate matching for shared housing with lease signing.
 
-### Technology used
+## Technology used
 
+### Frontend
+- [TypeScript](https://www.typescriptlang.org/)
+- [React](https://reactjs.org/docs/getting-started.html)
+- [Redux Toolkit](https://redux-toolkit.js.org/)
+- [Material UI](https://material-ui.com/)
+- [Vite](https://vitejs.dev/)
+
+### Backend
+- [Python/Flask](https://flask.palletsprojects.com/en/1.1.x/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [SQLAlchemy](https://www.sqlalchemy.org/)
 - [Docker](https://docs.docker.com/)
 - [Nginx](https://nginx.org/en/docs/)
 - [AWS](https://docs.aws.amazon.com/)
-- [React](https://reactjs.org/docs/getting-started.html)
-- [Material UI](https://material-ui.com/)
-- [Flask](https://flask.palletsprojects.com/en/1.1.x/)
 
 # How to contribute
 
