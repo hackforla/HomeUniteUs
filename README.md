@@ -46,7 +46,7 @@ git --version
 6. Message a team member to obtain values for the .env file
 7. From the ``app/`` directory run ``npm run dev`` to start a development server at ``http://127.0.0.1:4040/``
 
-The setup for the front end application is now complete and in order to get the server running reference the instructions [here](https://github.com/hackforla/HomeUniteUs/tree/main/api). If you run into any issues please message one of our team members.
+The setup for the front end application is now complete and you should see the website running in your browser at the listed port. In order to get the server running reference the instructions [here](https://github.com/hackforla/HomeUniteUs/tree/main/api). If you run into any issues please message one of our team members.
 
 ### Working with issues
 
