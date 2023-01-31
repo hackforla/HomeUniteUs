@@ -28,10 +28,25 @@ This project is part of a larger initative at Hack for LA around creating a shar
 
 ## Installation instructions
 
-1. Step-by-step instructions help new contributors get a development environment up and running quickly.
-2. You'll want to find the balance between being specific enough for novices to follow, without being so specific that you reinvent the wheel by providing overly-basic instructions that can be found elsewhere.
-3. Feel free to adapt this section and its sub-sections to your own processes.
-4. Alternatively, you can move everything from _Installation instructions_ through _Testing_ to a separate **Contributing.md** file to keep your **ReadMe.md** more succinct.
+### Requirements
+
+Before getting started, make sure you have a Node.js version compatible with 14.18+, 16+ as well as Git. If you're unfamiliar with Git and the necessary workflows please checkout the Hack for LA [website project](https://github.com/hackforla/website) and get started there. You can check your local versions by running the following commands in a terminal:
+```
+node --version
+git --version
+```
+
+### Getting Started
+
+1. Clone the respoistory to a directory on your computer
+2. Inside a terminal change directories to the root ``HomeUniteUs/`` directory
+3. Navigate to the the ``app/`` directory ``cd app/``
+4. Run the command ```npm install``` to download all dependencies from the local package.json
+5. Create a local ``.env`` file and copy the contents from ``.env.example``
+6. Message a team member to obtain values for the .env file
+7. From the ``app/`` directory run ``npm run dev`` to start a development server at ``http://127.0.0.1:4040/``
+
+The setup for the front end application is now complete and in order to get the server running reference the instructions [here](https://github.com/hackforla/HomeUniteUs/tree/main/api). If you run into any issues please message one of our team members.
 
 ### Working with issues
 
