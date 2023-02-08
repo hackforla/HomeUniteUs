@@ -6,6 +6,8 @@ import {
   FormHelperText,
   Stack,
   Button,
+  Link,
+  Typography,
 } from '@mui/material';
 import {styled} from '@mui/system';
 import GoogleIcon from '@mui/icons-material/Google';
@@ -72,6 +74,12 @@ export const SignUpForm = ({onSubmit}: SignUpFormProps) => {
           <FormHelperText error>{errors.password}</FormHelperText>
         )}
       </Stack>
+      <Stack direction="row" gap={1}>
+        <Typography>Already a member?</Typography>
+        <Link fontWeight="bold" href="/signin">
+          Sign in
+        </Link>
+      </Stack>
       <Button variant="contained" size="large" type="submit" fullWidth>
         Sign up
       </Button>
@@ -81,7 +89,9 @@ export const SignUpForm = ({onSubmit}: SignUpFormProps) => {
         color="secondary"
         size="large"
         fullWidth
-        href={'/api/auth/google'}
+        // overrides the default react router link since we're hitting a redirect from the api
+        component="a"
+        href={'/api/auth/google?redirect_uri=http://localhost:4040/signup'}
       >
         <GoogleIcon sx={{fontSize: 16, marginRight: 1}} /> Sign up with Google
       </Button>

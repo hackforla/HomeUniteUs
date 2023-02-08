@@ -1,11 +1,13 @@
 import {Theme} from '@mui/material';
 import {Components} from '@mui/material/styles';
+import {LinkBehavior} from './Link';
 
 export const Button = (theme: Theme): Components => {
   return {
     MuiButtonBase: {
       defaultProps: {
         disableRipple: true,
+        LinkComponent: LinkBehavior,
       },
     },
     MuiButton: {
