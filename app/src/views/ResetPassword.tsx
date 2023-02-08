@@ -7,7 +7,6 @@ import {
   Typography,
 } from '@mui/material';
 import {useFormik} from 'formik';
-import React from 'react';
 import {object, ref, string} from 'yup';
 import {ResetPasswordRequest, useResetPasswordMutation} from '../services/auth';
 
@@ -32,7 +31,9 @@ const validationSchema = object({
   confirmPassword: string()
     .required('confirm password is required')
     .oneOf([ref('password'), null], 'passwords must match'),
-  code: string().required('code is required'),
+  code: string()
+    .required('code is required')
+    .length(6, 'code must be 6 digits'),
 });
 
 export const ResetPassword = () => {
