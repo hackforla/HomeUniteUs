@@ -20,6 +20,7 @@ const validationSchema = object({
       /^(?=.*[a-z])/,
       'password must contain at least one lowercase character',
     )
+    .matches(/^(?=.*[0-9])/, 'password must contain at least one number')
     .matches(
       /^(?=.*[A-Z])/,
       'password must contain at least one uppercase character',
