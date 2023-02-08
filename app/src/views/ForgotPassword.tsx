@@ -6,18 +6,26 @@ import {
   Typography,
 } from '@mui/material';
 import React from 'react';
+import {useForgotPasswordMutation} from '../services/auth';
 
 export const ResetPassword = () => {
   const [email, setEmail] = React.useState('');
+
+  const [forgotPassword] = useForgotPasswordMutation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log(email);
+    try {
+      const response = await forgotPassword({email}).unwrap();
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

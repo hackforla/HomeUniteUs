@@ -33,7 +33,7 @@ import {
   SignUp,
 } from './views';
 import {AccountVerification} from './views/AccountVerification';
-import {ResetPassword} from './views/ResetPassword';
+import {ResetPassword} from './views/ForgotPassword';
 // import { ApprovalTwoTone } from '@mui/icons-material';
 
 function Profile() {

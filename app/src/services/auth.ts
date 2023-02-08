@@ -37,6 +37,10 @@ export interface VerificationRequest {
   code: string;
 }
 
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
 const authApi = api.injectEndpoints({
   endpoints: build => ({
     signUp: build.mutation<SignUpResponse, SignUpRequest>({
@@ -68,6 +72,14 @@ const authApi = api.injectEndpoints({
         headers: {
           'Access-Control-Allow-Origin': 'http://localhost:4040',
         },
+        withCredentials: true,
+        body: credentials,
+      }),
+    }),
+    forgotPassword: build.mutation<void, ForgotPasswordRequest>({
+      query: credentials => ({
+        url: 'auth/forgot_password',
+        method: 'POST',
         withCredentials: true,
         body: credentials,
       }),
@@ -118,6 +130,7 @@ export const {
   useSignInMutation,
   useSignOutMutation,
   useVerificationMutation,
+  useForgotPasswordMutation,
   useSessionMutation,
   useUserQuery,
   usePrivateQuery,
