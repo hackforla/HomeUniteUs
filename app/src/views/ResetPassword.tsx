@@ -9,9 +9,10 @@ import {
 import {useFormik} from 'formik';
 import React from 'react';
 import {object, ref, string} from 'yup';
-import {useForgotPasswordMutation} from '../services/auth';
+import {ResetPasswordRequest, useResetPasswordMutation} from '../services/auth';
 
 const validationSchema = object({
+  email: string().email().required('email is required'),
   password: string()
     .required('password is required')
     .min(8, 'password must be at least 8 characters')
@@ -37,11 +38,12 @@ export const ResetPassword = () => {
   const {
     handleSubmit,
     handleChange,
-    values: {password, confirmPassword, code},
+    values: {email, password, confirmPassword, code},
     touched,
     errors,
   } = useFormik({
     initialValues: {
+      email: '',
       password: '',
       confirmPassword: '',
       code: '',
@@ -52,11 +54,11 @@ export const ResetPassword = () => {
     },
   });
 
-  const [forgotPassword] = useForgotPasswordMutation();
+  const [resetPassword] = useResetPasswordMutation();
 
-  const onSubmit = async ({password, code}) => {
+  const onSubmit = async ({email, password, code}: ResetPasswordRequest) => {
     try {
-      const response = await forgotPassword({password, code}).unwrap();
+      const response = await resetPassword({email, password, code}).unwrap();
       console.log(response);
     } catch (err) {
       console.log(err);
@@ -75,6 +77,20 @@ export const ResetPassword = () => {
         sx={{minWidth: '350px', alignItems: 'flex-start'}}
         onSubmit={handleSubmit}
       >
+        <Stack spacing={1} sx={{width: '100%'}}>
+          <InputLabel htmlFor="email">Email address</InputLabel>
+          <OutlinedInput
+            fullWidth
+            id="email"
+            name="email"
+            value={email}
+            onChange={handleChange}
+            error={touched.email && Boolean(errors.email)}
+          />
+          {touched.email && errors.email && (
+            <FormHelperText error>{errors.email}</FormHelperText>
+          )}
+        </Stack>
         <Stack spacing={1} sx={{width: '100%'}}>
           <InputLabel htmlFor="password">Password</InputLabel>
           <OutlinedInput

@@ -318,7 +318,7 @@ def forgot_password():
     
     return response
 
-def confirm_reset_password():
+def reset_password():
     # check for json in request body
     if connexion.request.is_json:
         body = connexion.request.get_json()

@@ -27,7 +27,7 @@ paths:
     $ref: "./paths/auth/authRefresh.yaml"
   /auth/forgot_password:
     $ref: "./paths/auth/authForgotPassword.yaml"
-  /auth/confirm_reset_password:
+  /auth/reset_password:
     $ref: "./paths/auth/authConfirmForgotPassword.yaml"
   /auth/user:
     $ref: "./paths/auth/authUser.yaml"

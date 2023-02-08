@@ -42,6 +42,7 @@ export interface ForgotPasswordRequest {
 }
 
 export interface ResetPasswordRequest {
+  email: string;
   password: string;
   code: string;
 }
@@ -84,6 +85,14 @@ const authApi = api.injectEndpoints({
     forgotPassword: build.mutation<void, ForgotPasswordRequest>({
       query: credentials => ({
         url: 'auth/forgot_password',
+        method: 'POST',
+        withCredentials: true,
+        body: credentials,
+      }),
+    }),
+    resetPassword: build.mutation<void, ResetPasswordRequest>({
+      query: credentials => ({
+        url: 'auth/reset_password',
         method: 'POST',
         withCredentials: true,
         body: credentials,
@@ -136,6 +145,7 @@ export const {
   useSignOutMutation,
   useVerificationMutation,
   useForgotPasswordMutation,
+  useResetPasswordMutation,
   useSessionMutation,
   useUserQuery,
   usePrivateQuery,
