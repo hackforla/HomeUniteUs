@@ -41,6 +41,11 @@ export interface ForgotPasswordRequest {
   email: string;
 }
 
+export interface ResetPasswordRequest {
+  password: string;
+  code: string;
+}
+
 const authApi = api.injectEndpoints({
   endpoints: build => ({
     signUp: build.mutation<SignUpResponse, SignUpRequest>({
