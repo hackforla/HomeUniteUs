@@ -31,9 +31,10 @@ import {
   HostsList,
   SignIn,
   SignUp,
+  ForgotPassword,
+  ResetPassword,
 } from './views';
 import {AccountVerification} from './views/AccountVerification';
-import {ResetPassword} from './views/ForgotPassword';
 // import { ApprovalTwoTone } from '@mui/icons-material';
 
 function Profile() {
@@ -89,6 +90,7 @@ function HuuApp() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/verification" element={<AccountVerification />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
     </>
