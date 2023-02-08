@@ -1,12 +1,12 @@
 import React from 'react';
 import {useNavigate, useLocation, Location} from 'react-router-dom';
-import {Typography, Stack, styled, Theme} from '@mui/material';
+import {Typography, Stack, styled, Theme, Link, Box} from '@mui/material';
 
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
 import {SignInForm} from '../components/authentication/SignInForm';
 import {SignInRequest, useSignInMutation} from '../services/auth';
-
+import logo from '../img/favicon.png';
 export interface LocationState {
   from: Location;
 }
@@ -62,13 +62,25 @@ export const SignIn = () => {
 
   return (
     <PageContainer>
-      <FormContainer>
+      <FormContainer gap={2}>
+        <Logo src={logo} alt="Home Unite Us logo" />
         <FormHeader variant="h4">Sign in to your account</FormHeader>
         <SignInForm onSubmit={handleSignIn} />
+        <Stack direction="row" alignItems="center" gap={0.5}>
+          <Typography variant="body2">Don&apos;t have an account?</Typography>
+          <Link fontWeight="bold" href="/signup">
+            Sign up
+          </Link>
+        </Stack>
       </FormContainer>
     </PageContainer>
   );
 };
+
+const Logo = styled('img')({
+  width: '100px',
+  height: '100px',
+});
 
 const FormContainer = styled(Stack)(({theme}: {theme: Theme}) => ({
   maxWidth: '550px',
@@ -82,11 +94,10 @@ const FormContainer = styled(Stack)(({theme}: {theme: Theme}) => ({
 
 const FormHeader = styled(Typography)({
   textAlign: 'center',
-  marginBottom: '16px',
   fontWeight: 600,
 });
 
-const PageContainer = styled('div')(({theme}) => ({
+const PageContainer = styled(Box)(({theme}) => ({
   minHeight: '100vh',
   minWidth: '100vw',
   backgroundColor: theme.palette.grey[100],
