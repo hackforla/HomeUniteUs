@@ -8,44 +8,44 @@ servers:
   - url: http://homeunite.us/api
 paths:
   /serviceProviders:
-    $ref: './paths/serviceProviders.yaml'
+    $ref: "./paths/serviceProviders.yaml"
   /serviceProviders/{providerId}:
-    $ref: './paths/serviceProvider.yaml'
+    $ref: "./paths/serviceProvider.yaml"
   /auth/signup:
-    $ref: './paths/auth/authSignup.yaml'
+    $ref: "./paths/auth/authSignup.yaml"
   /auth/signin:
-    $ref: './paths/auth/authSignin.yaml'
+    $ref: "./paths/auth/authSignin.yaml"
   /auth/confirm:
-    $ref: './paths/auth/authConfirm.yaml'
+    $ref: "./paths/auth/authConfirm.yaml"
   /auth/signout:
-    $ref: './paths/auth/authSignout.yaml'
+    $ref: "./paths/auth/authSignout.yaml"
   /auth/token:
-    $ref: './paths/auth/authToken.yaml'
+    $ref: "./paths/auth/authToken.yaml"
   /auth/session:
-    $ref: './paths/auth/authSession.yaml'
+    $ref: "./paths/auth/authSession.yaml"
   /auth/refresh:
-    $ref: './paths/auth/authRefresh.yaml'
+    $ref: "./paths/auth/authRefresh.yaml"
   /auth/forgot_password:
-    $ref: './paths/auth/authForgotPassword.yaml'
-  /auth/confirm_forgot_password:
-    $ref: './paths/auth/authConfirmForgotPassword.yaml'
+    $ref: "./paths/auth/authForgotPassword.yaml"
+  /auth/reset_password:
+    $ref: "./paths/auth/authConfirmForgotPassword.yaml"
   /auth/user:
-    $ref: './paths/auth/authUser.yaml'
+    $ref: "./paths/auth/authUser.yaml"
   /auth/private:
-    $ref: './paths/auth/authPrivate.yaml'
+    $ref: "./paths/auth/authPrivate.yaml"
 components:
   securitySchemes:
-      jwt:
-        type: http
-        scheme: bearer
-        bearerFormat: JWT
-        x-bearerInfoFunc: openapi_server.controllers.security_controller.requires_auth
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: openapi_server.controllers.security_controller.requires_auth
   responses:
-    $ref: './responses/_index.yaml'
+    $ref: "./responses/_index.yaml"
   parameters:
-    $ref: './parameters/_index.yaml'
+    $ref: "./parameters/_index.yaml"
   schemas:
-    $ref: './schemas/_index.yaml'
+    $ref: "./schemas/_index.yaml"
     ApiResponse:
       example:
         code: 0
@@ -64,4 +64,3 @@ components:
           type: string
       title: ApiResponse
       type: object
-  

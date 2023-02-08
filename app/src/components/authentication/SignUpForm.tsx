@@ -22,6 +22,7 @@ const validationSchema = object({
   password: string()
     .required('password is required')
     .min(8, 'password must be at least 8 characters')
+    .matches(/^(?=.*[0-9])/, 'password must contain at least one number')
     .matches(/^(?=.*[a-z])/, 'Must contain at least one lowercase character')
     .matches(/^(?=.*[A-Z])/, 'Must contain at least one uppercase character')
     .matches(

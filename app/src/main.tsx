@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import './index.css';
 
 /*
 
@@ -17,22 +17,24 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom';
 
 */
 
-import {HomeUniteUsTheme} from './theme';
-import {
-  Home,
-  CoordinatorDashboard,
-  GuestApplicationTracker,
-  HostApplicationTracker,
-  SignIn,
-  SignUp,
-  HostsList,
-} from './views';
+import {CssBaseline, StyledEngineProvider, ThemeProvider} from '@mui/material';
+import {Provider} from 'react-redux';
 import {store} from './app/store';
 import {ProtectedRoute} from './auth/ProtectedRoute';
 import {useSessionMutation} from './services/auth';
+import {HomeUniteUsTheme} from './theme';
+import {
+  CoordinatorDashboard,
+  GuestApplicationTracker,
+  Home,
+  HostApplicationTracker,
+  HostsList,
+  SignIn,
+  SignUp,
+  ForgotPassword,
+  ResetPassword,
+} from './views';
 import {AccountVerification} from './views/AccountVerification';
-import {CssBaseline, StyledEngineProvider, ThemeProvider} from '@mui/material';
-import {Provider} from 'react-redux';
 // import { ApprovalTwoTone } from '@mui/icons-material';
 
 function Profile() {
@@ -88,6 +90,8 @@ function HuuApp() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/verification" element={<AccountVerification />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Routes>
     </>
   );

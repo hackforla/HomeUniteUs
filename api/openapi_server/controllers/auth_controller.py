@@ -318,7 +318,7 @@ def forgot_password():
     
     return response
 
-def confirm_forgot_password():
+def reset_password():
     # check for json in request body
     if connexion.request.is_json:
         body = connexion.request.get_json()
@@ -347,4 +347,6 @@ def private(token_info):
     return {'message': 'Success - private'}
 
 def google():
+    # print hello
+    print('hello')
     return redirect(f"https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri={COGNITO_REDIRECT_URI}&identity_provider=Google")
