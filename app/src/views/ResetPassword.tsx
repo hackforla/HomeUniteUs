@@ -129,11 +129,11 @@ export const ResetPassword = () => {
             name="code"
             value={code}
             onChange={handleChange}
-            // error={touched.email && Boolean (errors.email)}
+            error={touched.code && Boolean(errors.code)}
           />
-          {/* {touched.email && errors.email && (
-            <FormHelperText error>{errors.email}</FormHelperText>
-          )} */}
+          {touched.code && errors.code && (
+            <FormHelperText error>{errors.code}</FormHelperText>
+          )}
         </Stack>
 
         <Button variant="contained" size="large" type="submit">
