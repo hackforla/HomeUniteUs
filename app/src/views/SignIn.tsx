@@ -12,8 +12,8 @@ export interface LocationState {
 }
 
 export const SignIn = () => {
-  const navigate = useNavigate();
   const location = useLocation();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [signIn] = useSignInMutation();
   const locationState = location.state as LocationState;
@@ -32,9 +32,10 @@ export const SignIn = () => {
         body: JSON.stringify({code}),
       })
         .then(res => res.json())
-        .then(data => {
-          console.log('data', data);
-          navigate(from, {replace: true});
+        .then(() => {
+          // navigate user to the page they tried to access before being redirected to login page
+          // navigate(from, {replace: true});
+          navigate('/');
         })
         .catch(err => console.log('error', err));
     }
@@ -50,7 +51,10 @@ export const SignIn = () => {
       const {user, token} = response;
 
       dispatch(setCredentials({user, token}));
-      navigate(from, {replace: true});
+      // navigate user to the page they tried to access before being redirected to login page
+      // navigate(from, {replace: true});
+      // navigate user to home page
+      navigate('/');
     } catch (err) {
       console.log(err);
     }

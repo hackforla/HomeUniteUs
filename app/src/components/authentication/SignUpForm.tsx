@@ -76,7 +76,9 @@ export const SignUpForm = ({onSubmit}: SignUpFormProps) => {
       </Stack>
       <Stack direction="row" gap={1}>
         <Typography>Already a member?</Typography>
-        <Link href="/signin">Sign in</Link>
+        <Link fontWeight="bold" href="/signin">
+          Sign in
+        </Link>
       </Stack>
       <Button variant="contained" size="large" type="submit" fullWidth>
         Sign up
@@ -87,6 +89,8 @@ export const SignUpForm = ({onSubmit}: SignUpFormProps) => {
         color="secondary"
         size="large"
         fullWidth
+        // overrides the default react router link since we're hitting a redirect from the api
+        component="a"
         href={'/api/auth/google'}
       >
         <GoogleIcon sx={{fontSize: 16, marginRight: 1}} /> Sign up with Google

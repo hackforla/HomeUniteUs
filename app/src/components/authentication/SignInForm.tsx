@@ -82,21 +82,21 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
         )}
       </Stack>
       <Stack direction="row">
-        <Link href="/forgot-password">forgot password?</Link>
+        <Link fontWeight="bold" href="/forgot-password">
+          forgot password?
+        </Link>
       </Stack>
       <Button variant="contained" size="large" type="submit" fullWidth>
         Sign in
       </Button>
       <Divider>or</Divider>
-      {/* <SocialSignInLink
-        fullWidth
-        href={`https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id=${import.meta.env.VITE_COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri=${import.meta.env.VITE_COGNITO_REDIRECT_URI}&identity_provider=Google`}
-      > */}
       <Button
         variant="outlined"
         color="secondary"
         size="large"
         fullWidth
+        // overrides the default react router link since we're hitting a redirect from the api
+        component="a"
         href={'/api/auth/google'}
       >
         <GoogleIcon sx={{fontSize: 16, marginRight: 1}} /> Sign in with Google

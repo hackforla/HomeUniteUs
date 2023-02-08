@@ -30,7 +30,8 @@ export const SignUp = () => {
       })
         .then(res => res.json())
         .then(() => {
-          navigate(from, {replace: true});
+          // navigate(from, {replace: true});
+          navigate('/');
         })
         .catch(err => console.log(err));
     }
