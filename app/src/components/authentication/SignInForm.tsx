@@ -6,6 +6,7 @@ import {
   Stack,
   styled,
   Divider,
+  Link,
 } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
@@ -79,6 +80,9 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
         {touched.password && errors.password && (
           <FormHelperText error>{errors.password}</FormHelperText>
         )}
+      </Stack>
+      <Stack>
+        <Link href="/forgot-password">forgot password?</Link>
       </Stack>
       <Button variant="contained" size="large" type="submit" fullWidth>
         Sign in

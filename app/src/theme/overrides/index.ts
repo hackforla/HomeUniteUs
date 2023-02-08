@@ -3,6 +3,7 @@ import {OutlinedInput} from './OutlinedInput';
 import {InputLabel} from './InputLabel';
 import {Button} from './Button';
 import {Divider} from './Divider';
+import {Link} from './Link';
 
 /**
  * Merge component overrides into a single object to be used by the theme.
@@ -17,6 +18,7 @@ export const componentOverrides = (theme: Theme) => {
     InputLabel(theme),
     Button(theme),
     Divider(theme),
+    Link(),
   ];
 
   // Reduce components into a single object
