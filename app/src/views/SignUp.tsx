@@ -22,7 +22,7 @@ export const SignUp = () => {
   React.useEffect(() => {
     if (location.search.includes('code')) {
       const code = location.search.split('?code=')[1];
-      fetch('/api/auth/token', {
+      fetch('/api/auth/token?callback_uri=http://localhost:4040/signup', {
         headers: {
           'Content-Type': 'application/json',
         },

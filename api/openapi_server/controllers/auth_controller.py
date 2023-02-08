@@ -191,7 +191,7 @@ def token():
     code = request.get_json()['code']
     client_id = COGNITO_CLIENT_ID
     client_secret = COGNITO_CLIENT_SECRET
-    callback_uri = 'http://localhost:4040/signin'
+    callback_uri = request.args['callback_uri']
     cognito_app_url = 'https://homeuudemo.auth.us-east-1.amazoncognito.com'
 
     token_url = f"{cognito_app_url}/oauth2/token"
@@ -348,5 +348,6 @@ def private(token_info):
 
 def google():
     # print hello
-    print('hello')
-    return redirect(f"https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri={COGNITO_REDIRECT_URI}&identity_provider=Google")
+    redirect_uri = request.args['redirect_uri']
+        
+    return redirect(f"https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri={redirect_uri}&identity_provider=Google")
