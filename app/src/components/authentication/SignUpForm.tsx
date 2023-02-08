@@ -6,6 +6,8 @@ import {
   FormHelperText,
   Stack,
   Button,
+  Link,
+  Typography,
 } from '@mui/material';
 import {styled} from '@mui/system';
 import GoogleIcon from '@mui/icons-material/Google';
@@ -71,6 +73,10 @@ export const SignUpForm = ({onSubmit}: SignUpFormProps) => {
         {touched.password && errors.password && (
           <FormHelperText error>{errors.password}</FormHelperText>
         )}
+      </Stack>
+      <Stack direction="row" gap={1}>
+        <Typography>Already a member?</Typography>
+        <Link href="/signin">Sign in</Link>
       </Stack>
       <Button variant="contained" size="large" type="submit" fullWidth>
         Sign up

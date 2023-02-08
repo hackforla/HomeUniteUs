@@ -81,7 +81,7 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
           <FormHelperText error>{errors.password}</FormHelperText>
         )}
       </Stack>
-      <Stack>
+      <Stack direction="row">
         <Link href="/forgot-password">forgot password?</Link>
       </Stack>
       <Button variant="contained" size="large" type="submit" fullWidth>
