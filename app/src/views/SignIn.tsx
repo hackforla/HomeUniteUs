@@ -5,7 +5,11 @@ import {Typography, Stack, styled, Theme, Link, Box} from '@mui/material';
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
 import {SignInForm} from '../components/authentication/SignInForm';
-import {SignInRequest, useSignInMutation} from '../services/auth';
+import {
+  SignInRequest,
+  useSignInMutation,
+  useGetTokenMutation,
+} from '../services/auth';
 import logo from '../img/favicon.png';
 export interface LocationState {
   from: Location;
@@ -16,30 +20,30 @@ export const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [signIn] = useSignInMutation();
-  const locationState = location.state as LocationState;
+  const [getToken] = useGetTokenMutation();
+  // const locationState = location.state as LocationState;
 
   // Save location from which user was redirected to login page
-  const from = locationState?.from?.pathname || '/';
+  // const from = locationState?.from?.pathname || '/';
 
   React.useEffect(() => {
     if (location.search.includes('code')) {
       const code = location.search.split('?code=')[1];
-      fetch('/api/auth/token?callback_uri=http://localhost:4040/signin', {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({code}),
+      getToken({
+        code,
+        callbackUri: 'http://localhost:4040/signin',
       })
-        .then(res => res.json())
-        .then(() => {
-          // navigate user to the page they tried to access before being redirected to login page
-          // navigate(from, {replace: true});
+        .unwrap()
+        .then(response => {
+          const {token, user} = response;
+          dispatch(setCredentials({user, token}));
           navigate('/');
         })
-        .catch(err => console.log('error', err));
+        .catch(err => {
+          console.log(err);
+        });
     }
-  }, [location, from]);
+  }, [location]);
 
   const handleSignIn = async ({email, password}: SignInRequest) => {
     try {

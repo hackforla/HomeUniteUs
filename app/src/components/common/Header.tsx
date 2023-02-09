@@ -47,8 +47,6 @@ export const Header = (props: Props) => {
   const appDispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  console.log(user);
-
   const handleSignOut = async () => {
     try {
       await signOut().unwrap();

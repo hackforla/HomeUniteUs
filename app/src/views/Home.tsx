@@ -10,10 +10,13 @@ export const Home = () => {
   return (
     <Header>
       <HomeContainer>
-        <Typography variant="h1" sx={{fontSize: 38, fontWeight: 500}}>
+        <Typography
+          variant="h1"
+          sx={{textAlign: 'center', fontSize: 38, fontWeight: 500}}
+        >
           Welcome to a Safe Place for Youth
         </Typography>
-        <Typography variant="h2" sx={{fontSize: 32}}>
+        <Typography variant="h2" sx={{textAlign: 'center', fontSize: 32}}>
           Select a profile
         </Typography>
         <LinkRow>
@@ -40,6 +43,7 @@ const HomeContainer = styled('section')({
   gap: '32px',
   alignItems: 'center',
   justifyContent: 'center',
+  padding: 16,
 });
 
 const LinkRow = styled('div')({

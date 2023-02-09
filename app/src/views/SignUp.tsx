@@ -5,8 +5,12 @@ import {Stack, Typography, styled} from '@mui/material';
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
 import {SignUpForm} from '../components/authentication/SignUpForm';
-import {SignUpRequest, useSignUpMutation} from '../services/auth';
-import {LocationState} from './SignIn';
+import {
+  SignUpRequest,
+  useSignUpMutation,
+  useGetTokenMutation,
+} from '../services/auth';
+// import {LocationState} from './SignIn';
 import logo from '../img/favicon.png';
 
 export const SignUp = () => {
@@ -14,29 +18,30 @@ export const SignUp = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const [signUp] = useSignUpMutation();
-  const locationState = location.state as LocationState;
+  const [getToken] = useGetTokenMutation();
+  // const locationState = location.state as LocationState;
 
   // Save location from which user was redirected to login page
-  const from = locationState?.from?.pathname || '/';
+  // const from = locationState?.from?.pathname || '/';
 
   React.useEffect(() => {
     if (location.search.includes('code')) {
       const code = location.search.split('?code=')[1];
-      fetch('/api/auth/token?callback_uri=http://localhost:4040/signup', {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({code}),
+      getToken({
+        code,
+        callbackUri: 'http://localhost:4040/signup',
       })
-        .then(res => res.json())
-        .then(() => {
-          // navigate(from, {replace: true});
+        .unwrap()
+        .then(response => {
+          const {token, user} = response;
+          dispatch(setCredentials({user, token}));
           navigate('/');
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          console.log(err);
+        });
     }
-  }, [location, from]);
+  }, [location]);
 
   const handleSignUp = async ({email, password}: SignUpRequest) => {
     try {
@@ -48,6 +53,7 @@ export const SignUp = () => {
       const {user, token} = response;
 
       dispatch(setCredentials({user, token}));
+      navigate('/');
     } catch (err) {
       console.log(err);
     }
