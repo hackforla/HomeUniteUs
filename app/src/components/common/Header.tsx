@@ -12,7 +12,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import {Tooltip, Avatar, Menu, MenuItem} from '@mui/material';
+import {Tooltip, Avatar, Menu, MenuItem, Stack} from '@mui/material';
+import logo from '../../img/favicon.png';
 
 interface Props {
   /**
@@ -20,6 +21,7 @@ interface Props {
    * You won't need it on your project.
    */
   window?: () => Window;
+  children: React.ReactElement;
 }
 
 const drawerWidth = 240;
@@ -31,7 +33,7 @@ const navItems = [
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export const Header = (props: Props) => {
-  const {window} = props;
+  const {window, children} = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null,
@@ -83,58 +85,67 @@ export const Header = (props: Props) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            variant="h6"
-            color="primary"
-            component="div"
-            sx={{flexGrow: 1, display: {xs: 'none', sm: 'block'}}}
-          >
-            Home Unite Us
-          </Typography>
-          <Box sx={{display: {xs: 'none', sm: 'flex'}, marginRight: 1}}>
-            {navItems.map(({title, href}) => {
-              const variant = title === 'Sign Up' ? 'contained' : 'text';
-              return (
-                <Button
-                  variant={variant}
-                  href={href}
-                  color="primary"
-                  key={title}
-                >
-                  {title}
-                </Button>
-              );
-            })}
-          </Box>
-          <Box sx={{flexGrow: 0}}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{mt: '45px'}}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
+          <Stack direction="row" gap={1} sx={{alignItems: 'center'}}>
+            <img
+              style={{width: '42px', height: '42px'}}
+              src={logo}
+              alt="Home Unite Us logo"
+            />
+            <Typography
+              variant="h6"
+              color="primary"
+              component="div"
+              sx={{flexGrow: 1, display: {xs: 'none', sm: 'block'}}}
             >
-              {settings.map(setting => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+              Home Unite Us
+            </Typography>
+          </Stack>
+          <Stack direction="row" gap={1} sx={{alignItems: 'center'}}>
+            <Box sx={{display: {xs: 'none', sm: 'flex'}}}>
+              {navItems.map(({title, href}) => {
+                const variant = title === 'Sign Up' ? 'contained' : 'text';
+                return (
+                  <Button
+                    variant={variant}
+                    href={href}
+                    color="primary"
+                    key={title}
+                  >
+                    {title}
+                  </Button>
+                );
+              })}
+            </Box>
+            <Box sx={{flexGrow: 0}}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{mt: '45px'}}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map(setting => (
+                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">{setting}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          </Stack>
         </Toolbar>
       </AppBar>
       <Box component="nav">
@@ -154,45 +165,15 @@ export const Header = (props: Props) => {
           {drawer}
         </Drawer>
       </Box>
-      <Box component="main" sx={{p: 3}}>
+      <Box
+        component="main"
+        sx={{
+          minHeight: '100vh',
+          width: '100vw',
+        }}
+      >
         <Toolbar />
-        <Typography>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique
-          unde fugit veniam eius, perspiciatis sunt? Corporis qui ducimus
-          quibusdam, aliquam dolore excepturi quae. Distinctio enim at eligendi
-          perferendis in cum quibusdam sed quae, accusantium et aperiam? Quod
-          itaque exercitationem, at ab sequi qui modi delectus quia corrupti
-          alias distinctio nostrum. Minima ex dolor modi inventore sapiente
-          necessitatibus aliquam fuga et. Sed numquam quibusdam at officia
-          sapiente porro maxime corrupti perspiciatis asperiores, exercitationem
-          eius nostrum consequuntur iure aliquam itaque, assumenda et! Quibusdam
-          temporibus beatae doloremque voluptatum doloribus soluta accusamus
-          porro reprehenderit eos inventore facere, fugit, molestiae ab officiis
-          illo voluptates recusandae. Vel dolor nobis eius, ratione atque
-          soluta, aliquam fugit qui iste architecto perspiciatis. Nobis,
-          voluptatem! Cumque, eligendi unde aliquid minus quis sit debitis
-          obcaecati error, delectus quo eius exercitationem tempore. Delectus
-          sapiente, provident corporis dolorum quibusdam aut beatae repellendus
-          est labore quisquam praesentium repudiandae non vel laboriosam quo ab
-          perferendis velit ipsa deleniti modi! Ipsam, illo quod. Nesciunt
-          commodi nihil corrupti cum non fugiat praesentium doloremque
-          architecto laborum aliquid. Quae, maxime recusandae? Eveniet dolore
-          molestiae dicta blanditiis est expedita eius debitis cupiditate porro
-          sed aspernatur quidem, repellat nihil quasi praesentium quia eos,
-          quibusdam provident. Incidunt tempore vel placeat voluptate iure
-          labore, repellendus beatae quia unde est aliquid dolor molestias
-          libero. Reiciendis similique exercitationem consequatur, nobis placeat
-          illo laudantium! Enim perferendis nulla soluta magni error, provident
-          repellat similique cupiditate ipsam, et tempore cumque quod! Qui, iure
-          suscipit tempora unde rerum autem saepe nisi vel cupiditate iusto.
-          Illum, corrupti? Fugiat quidem accusantium nulla. Aliquid inventore
-          commodi reprehenderit rerum reiciendis! Quidem alias repudiandae eaque
-          eveniet cumque nihil aliquam in expedita, impedit quas ipsum nesciunt
-          ipsa ullam consequuntur dignissimos numquam at nisi porro a, quaerat
-          rem repellendus. Voluptates perspiciatis, in pariatur impedit, nam
-          facilis libero dolorem dolores sunt inventore perferendis, aut
-          sapiente modi nesciunt.
-        </Typography>
+        {children}
       </Box>
     </Box>
   );
