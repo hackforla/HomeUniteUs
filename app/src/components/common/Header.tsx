@@ -92,11 +92,19 @@ export const Header = (props: Props) => {
             Home Unite Us
           </Typography>
           <Box sx={{display: {xs: 'none', sm: 'flex'}, marginRight: 1}}>
-            {navItems.map(({title, href}) => (
-              <Button href={href} color="primary" key={title}>
-                {title}
-              </Button>
-            ))}
+            {navItems.map(({title, href}) => {
+              const variant = title === 'Sign Up' ? 'contained' : 'text';
+              return (
+                <Button
+                  variant={variant}
+                  href={href}
+                  color="primary"
+                  key={title}
+                >
+                  {title}
+                </Button>
+              );
+            })}
           </Box>
           <Box sx={{flexGrow: 0}}>
             <Tooltip title="Open settings">
