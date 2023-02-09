@@ -14,6 +14,11 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import {Tooltip, Avatar, Menu, MenuItem, Stack} from '@mui/material';
 import logo from '../../img/favicon.png';
+import {useAuth} from '../../app/hooks/useAuth';
+import {useSignOutMutation} from '../../services/auth';
+import {useAppDispatch} from '../../app/hooks/store';
+import {setCredentials} from '../../app/authSlice';
+import {useNavigate} from 'react-router-dom';
 
 interface Props {
   /**
@@ -26,11 +31,9 @@ interface Props {
 
 const drawerWidth = 240;
 const navItems = [
-  {title: 'Home', href: '/'},
   {title: 'Login', href: '/signin'},
   {title: 'Sign Up', href: '/signup'},
 ];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 export const Header = (props: Props) => {
   const {window, children} = props;
@@ -38,6 +41,23 @@ export const Header = (props: Props) => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null,
   );
+
+  const {user} = useAuth();
+  const [signOut] = useSignOutMutation();
+  const appDispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  console.log(user);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut().unwrap();
+      appDispatch(setCredentials({user: null, token: null}));
+      navigate('/signin');
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleDrawerToggle = () => {
     setMobileOpen(prevState => !prevState);
@@ -101,50 +121,61 @@ export const Header = (props: Props) => {
             </Typography>
           </Stack>
           <Stack direction="row" gap={1} sx={{alignItems: 'center'}}>
-            <Box sx={{display: {xs: 'none', sm: 'flex'}}}>
-              {navItems.map(({title, href}) => {
-                const variant = title === 'Sign Up' ? 'contained' : 'text';
-                return (
-                  <Button
-                    variant={variant}
-                    href={href}
-                    color="primary"
-                    key={title}
-                  >
-                    {title}
-                  </Button>
-                );
-              })}
-            </Box>
-            <Box sx={{flexGrow: 0}}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                </IconButton>
-              </Tooltip>
-              <Menu
-                sx={{mt: '45px'}}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                {settings.map(setting => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
+            {!user ? (
+              <Box sx={{display: {xs: 'none', sm: 'flex'}}}>
+                {navItems.map(({title, href}) => {
+                  const variant = title === 'Sign Up' ? 'contained' : 'text';
+                  return (
+                    <Button
+                      variant={variant}
+                      href={href}
+                      color="primary"
+                      key={title}
+                    >
+                      {title}
+                    </Button>
+                  );
+                })}
+              </Box>
+            ) : null}
+            {user ? (
+              <Box sx={{flexGrow: 0}}>
+                <Tooltip title="Open settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
+                    <Avatar
+                      alt={user.email}
+                      src="/static/images/avatar/2.jpg"
+                    />
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{mt: '45px'}}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">Profile</Typography>
                   </MenuItem>
-                ))}
-              </Menu>
-            </Box>
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">Account</Typography>
+                  </MenuItem>
+                  <MenuItem onClick={handleSignOut}>
+                    <Typography textAlign="center">Logout</Typography>
+                  </MenuItem>
+                </Menu>
+              </Box>
+            ) : null}
           </Stack>
         </Toolbar>
       </AppBar>
