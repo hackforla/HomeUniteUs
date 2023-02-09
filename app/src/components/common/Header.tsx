@@ -165,7 +165,7 @@ export const Header = (props: Props) => {
           {drawer}
         </Drawer>
       </Box>
-      <Box
+      <Stack
         component="main"
         sx={{
           minHeight: '100vh',
@@ -174,7 +174,7 @@ export const Header = (props: Props) => {
       >
         <Toolbar />
         {children}
-      </Box>
+      </Stack>
     </Box>
   );
 };
