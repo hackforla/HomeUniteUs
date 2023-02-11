@@ -140,6 +140,7 @@ const PageContainer = styled('div')(({theme}) => ({
   flex: 1,
   justifyContent: 'center',
   alignItems: 'center',
+  padding: '2rem 0',
 }));
 
 const FormContainer = styled(Stack)(({theme}) => ({

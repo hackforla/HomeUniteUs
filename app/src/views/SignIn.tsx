@@ -144,4 +144,5 @@ const PageContainer = styled(Box)(({theme}) => ({
   justifyContent: 'center',
   alignItems: 'center',
   backgroundColor: theme.palette.grey[100],
+  padding: '2rem 0',
 }));
