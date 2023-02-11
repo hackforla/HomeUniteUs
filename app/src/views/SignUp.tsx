@@ -1,6 +1,6 @@
 import React from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
-import {Stack, Typography, styled} from '@mui/material';
+import {Stack, Typography, styled, Dialog, DialogTitle} from '@mui/material';
 
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
@@ -15,6 +15,8 @@ import logo from '../img/favicon.png';
 import {Header} from '../components/common';
 
 export const SignUp = () => {
+  const [open, setOpen] = React.useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -44,6 +46,10 @@ export const SignUp = () => {
     }
   }, [location]);
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const handleSignUp = async ({email, password}: SignUpRequest) => {
     try {
       const response = await signUp({
@@ -51,25 +57,44 @@ export const SignUp = () => {
         password,
       }).unwrap();
 
-      const {user, token} = response;
-
-      dispatch(setCredentials({user, token}));
-      navigate('/');
+      console.log('signup response', response);
+      setOpen(true);
     } catch (err) {
-      console.log(err);
+      console.log('signup error', err);
     }
   };
 
   return (
     <Header>
-      <PageContainer>
-        <FormContainer gap={2}>
-          <Logo src={logo} alt="Home Unite Us logo" />
-          <FormHeader variant="h4">Sign up for an account</FormHeader>
-          <SignUpForm onSubmit={handleSignUp} />
-        </FormContainer>
-      </PageContainer>
+      <>
+        <PageContainer>
+          <FormContainer gap={2}>
+            <Logo src={logo} alt="Home Unite Us logo" />
+            <FormHeader variant="h4">Sign up for an account</FormHeader>
+            <SignUpForm onSubmit={handleSignUp} />
+          </FormContainer>
+        </PageContainer>
+        <EmailVerificationDialog open={open} handleClose={handleClose} />
+      </>
     </Header>
+  );
+};
+
+interface EmailVerificationDialogProps {
+  open: boolean;
+  handleClose: () => void;
+}
+
+const EmailVerificationDialog = ({
+  open,
+  handleClose,
+}: EmailVerificationDialogProps) => {
+  return (
+    <Dialog onClose={handleClose} open={open}>
+      <DialogTitle>
+        We have sent a link to your email. Please verify your email address
+      </DialogTitle>
+    </Dialog>
   );
 };
 
