@@ -12,6 +12,7 @@ import {
 } from '../services/auth';
 // import {LocationState} from './SignIn';
 import logo from '../img/favicon.png';
+import {Header} from '../components/common';
 
 export const SignUp = () => {
   const navigate = useNavigate();
@@ -60,13 +61,15 @@ export const SignUp = () => {
   };
 
   return (
-    <PageContainer>
-      <FormContainer gap={2}>
-        <Logo src={logo} alt="Home Unite Us logo" />
-        <FormHeader variant="h4">Sign up for an account</FormHeader>
-        <SignUpForm onSubmit={handleSignUp} />
-      </FormContainer>
-    </PageContainer>
+    <Header>
+      <PageContainer>
+        <FormContainer gap={2}>
+          <Logo src={logo} alt="Home Unite Us logo" />
+          <FormHeader variant="h4">Sign up for an account</FormHeader>
+          <SignUpForm onSubmit={handleSignUp} />
+        </FormContainer>
+      </PageContainer>
+    </Header>
   );
 };
 
@@ -76,10 +79,9 @@ const Logo = styled('img')({
 });
 
 const PageContainer = styled('div')(({theme}) => ({
-  minHeight: '100vh',
-  minWidth: '100vw',
   backgroundColor: theme.palette.grey[100],
   display: 'flex',
+  flex: 1,
   justifyContent: 'center',
   alignItems: 'center',
 }));
