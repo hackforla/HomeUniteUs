@@ -1,6 +1,16 @@
 import React from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
-import {Stack, Typography, styled, Dialog, DialogTitle} from '@mui/material';
+import {
+  Stack,
+  Typography,
+  styled,
+  Dialog,
+  DialogTitle,
+  Alert,
+  Collapse,
+  IconButton,
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
@@ -15,7 +25,8 @@ import logo from '../img/favicon.png';
 import {Header} from '../components/common';
 
 export const SignUp = () => {
-  const [open, setOpen] = React.useState(false);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [alertOpen, setAlertOpen] = React.useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -42,12 +53,13 @@ export const SignUp = () => {
         })
         .catch(err => {
           console.log(err);
+          setAlertOpen(true);
         });
     }
   }, [location]);
 
   const handleClose = () => {
-    setOpen(false);
+    setDialogOpen(false);
   };
 
   const handleSignUp = async ({email, password}: SignUpRequest) => {
@@ -58,9 +70,9 @@ export const SignUp = () => {
       }).unwrap();
 
       console.log('signup response', response);
-      setOpen(true);
+      setDialogOpen(true);
     } catch (err) {
-      console.log('signup error', err);
+      setAlertOpen(true);
     }
   };
 
@@ -72,9 +84,28 @@ export const SignUp = () => {
             <Logo src={logo} alt="Home Unite Us logo" />
             <FormHeader variant="h4">Sign up for an account</FormHeader>
             <SignUpForm onSubmit={handleSignUp} />
+            <Collapse sx={{width: '100%'}} in={alertOpen}>
+              <Alert
+                severity="error"
+                action={
+                  <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => {
+                      setAlertOpen(false);
+                    }}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
+              >
+                This is an error message!
+              </Alert>
+            </Collapse>
           </FormContainer>
         </PageContainer>
-        <EmailVerificationDialog open={open} handleClose={handleClose} />
+        <EmailVerificationDialog open={dialogOpen} handleClose={handleClose} />
       </>
     </Header>
   );
