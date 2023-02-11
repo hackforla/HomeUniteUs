@@ -119,6 +119,9 @@ export const Header = (props: Props) => {
             </Typography>
           </Stack>
           <Stack direction="row" gap={1} sx={{alignItems: 'center'}}>
+            <Button href="/" color="primary">
+              Home
+            </Button>
             {!user ? (
               <Box sx={{display: {xs: 'none', sm: 'flex'}}}>
                 {navItems.map(({title, href}) => {
