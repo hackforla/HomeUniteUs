@@ -30,8 +30,8 @@ def requires_auth(token):
     # handle any errors
     except Exception as e:
         code = e.response['Error']['Code']
-        description = e.response['Error']['Message']
+        message = e.response['Error']['Message']
         raise AuthError({
                     "code": code, 
-                    "description": description
+                    "message": message
                 }, 401)

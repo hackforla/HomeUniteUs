@@ -73,7 +73,7 @@ export const SignUp = () => {
         setDialogOpen(true);
       })
       .catch(err => {
-        console.log('signup error', err);
+        console.log('signup error', err.data.message);
         // setAlertOpen(true);
       });
   };
@@ -104,7 +104,7 @@ export const SignUp = () => {
                   </IconButton>
                 }
               >
-                {error?.data?.description}
+                {error?.data?.message}
               </Alert>
             </Collapse>
           </FormContainer>
