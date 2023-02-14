@@ -1,6 +1,17 @@
 import React from 'react';
 import {useNavigate, useLocation, Location} from 'react-router-dom';
-import {Typography, Stack, styled, Theme, Link, Box} from '@mui/material';
+import {
+  Typography,
+  Stack,
+  styled,
+  Theme,
+  Link,
+  Box,
+  Alert,
+  Collapse,
+  IconButton,
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
@@ -17,6 +28,8 @@ export interface LocationState {
 }
 
 export const SignIn = () => {
+  const [alertOpen, setAlertOpen] = React.useState(false);
+
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -42,6 +55,7 @@ export const SignIn = () => {
         })
         .catch(err => {
           console.log(err);
+          setAlertOpen(true);
         });
     }
   }, [location]);
@@ -62,6 +76,7 @@ export const SignIn = () => {
       navigate('/');
     } catch (err) {
       console.log(err);
+      setAlertOpen(true);
     }
   };
 
@@ -78,6 +93,25 @@ export const SignIn = () => {
               Sign up
             </Link>
           </Stack>
+          <Collapse sx={{width: '100%'}} in={alertOpen}>
+            <Alert
+              severity="error"
+              action={
+                <IconButton
+                  aria-label="close"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    setAlertOpen(false);
+                  }}
+                >
+                  <CloseIcon fontSize="inherit" />
+                </IconButton>
+              }
+            >
+              This is an error message!
+            </Alert>
+          </Collapse>
         </FormContainer>
       </PageContainer>
     </Header>
@@ -110,4 +144,5 @@ const PageContainer = styled(Box)(({theme}) => ({
   justifyContent: 'center',
   alignItems: 'center',
   backgroundColor: theme.palette.grey[100],
+  padding: '2rem 0',
 }));

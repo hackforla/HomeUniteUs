@@ -1,6 +1,16 @@
 import React from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
-import {Stack, Typography, styled} from '@mui/material';
+import {
+  Stack,
+  Typography,
+  styled,
+  Dialog,
+  DialogTitle,
+  Alert,
+  Collapse,
+  IconButton,
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
@@ -15,6 +25,9 @@ import logo from '../img/favicon.png';
 import {Header} from '../components/common';
 
 export const SignUp = () => {
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [alertOpen, setAlertOpen] = React.useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
@@ -40,9 +53,14 @@ export const SignUp = () => {
         })
         .catch(err => {
           console.log(err);
+          setAlertOpen(true);
         });
     }
   }, [location]);
+
+  const handleClose = () => {
+    setDialogOpen(false);
+  };
 
   const handleSignUp = async ({email, password}: SignUpRequest) => {
     try {
@@ -51,25 +69,63 @@ export const SignUp = () => {
         password,
       }).unwrap();
 
-      const {user, token} = response;
-
-      dispatch(setCredentials({user, token}));
-      navigate('/');
+      console.log('signup response', response);
+      setDialogOpen(true);
     } catch (err) {
-      console.log(err);
+      setAlertOpen(true);
     }
   };
 
   return (
     <Header>
-      <PageContainer>
-        <FormContainer gap={2}>
-          <Logo src={logo} alt="Home Unite Us logo" />
-          <FormHeader variant="h4">Sign up for an account</FormHeader>
-          <SignUpForm onSubmit={handleSignUp} />
-        </FormContainer>
-      </PageContainer>
+      <>
+        <PageContainer>
+          <FormContainer gap={2}>
+            <Logo src={logo} alt="Home Unite Us logo" />
+            <FormHeader variant="h4">Sign up for an account</FormHeader>
+            <SignUpForm onSubmit={handleSignUp} />
+            <Collapse sx={{width: '100%'}} in={alertOpen}>
+              <Alert
+                severity="error"
+                action={
+                  <IconButton
+                    aria-label="close"
+                    color="inherit"
+                    size="small"
+                    onClick={() => {
+                      setAlertOpen(false);
+                    }}
+                  >
+                    <CloseIcon fontSize="inherit" />
+                  </IconButton>
+                }
+              >
+                This is an error message!
+              </Alert>
+            </Collapse>
+          </FormContainer>
+        </PageContainer>
+        <EmailVerificationDialog open={dialogOpen} handleClose={handleClose} />
+      </>
     </Header>
+  );
+};
+
+interface EmailVerificationDialogProps {
+  open: boolean;
+  handleClose: () => void;
+}
+
+const EmailVerificationDialog = ({
+  open,
+  handleClose,
+}: EmailVerificationDialogProps) => {
+  return (
+    <Dialog onClose={handleClose} open={open}>
+      <DialogTitle>
+        We have sent a link to your email. Please verify your email address
+      </DialogTitle>
+    </Dialog>
   );
 };
 
@@ -84,6 +140,7 @@ const PageContainer = styled('div')(({theme}) => ({
   flex: 1,
   justifyContent: 'center',
   alignItems: 'center',
+  padding: '2rem 0',
 }));
 
 const FormContainer = styled(Stack)(({theme}) => ({
