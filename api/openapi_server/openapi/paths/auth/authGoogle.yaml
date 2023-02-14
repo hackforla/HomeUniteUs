@@ -1,0 +1,9 @@
+get:
+  description: Sign in with Google
+  operationId: google
+  responses:
+    "302":
+      description: successful operation
+  tags:
+    - auth
+  x-openapi-router-controller: openapi_server.controllers.auth_controller

@@ -1,0 +1,36 @@
+get:
+  summary: Get a list of hosts
+  tags:
+    - host
+  operationId: get_hosts
+  responses:
+    "200":
+      description: An array of hosts
+      content:
+        application/json:
+          schema:
+            $ref: "../openapi.yaml#/components/schemas/ApiResponse"
+  x-openapi-router-controller: openapi_server.controllers.host_controller
+post:
+  summary: Create a host
+  tags:
+    - host
+  operationId: create_host
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+          required:
+            - name
+  responses:
+    "200":
+      description: Succes created host
+      content:
+        application/json:
+          schema:
+            $ref: "../openapi.yaml#/components/schemas/ApiResponse"
+  x-openapi-router-controller: openapi_server.controllers.host_controller

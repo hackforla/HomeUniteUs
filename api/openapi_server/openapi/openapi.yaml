@@ -10,7 +10,9 @@ paths:
   /serviceProviders:
     $ref: "./paths/serviceProviders.yaml"
   /serviceProviders/{providerId}:
-    $ref: "./paths/serviceProvider.yaml"
+    $ref: './paths/serviceProvider.yaml'
+  /host:
+    $ref: './paths/host.yaml'
   /auth/signup:
     $ref: "./paths/auth/authSignup.yaml"
   /auth/signin:
@@ -32,7 +34,9 @@ paths:
   /auth/user:
     $ref: "./paths/auth/authUser.yaml"
   /auth/private:
-    $ref: "./paths/auth/authPrivate.yaml"
+    $ref: './paths/auth/authPrivate.yaml'
+  /auth/google:
+    $ref: './paths/auth/authGoogle.yaml'
 components:
   securitySchemes:
     jwt:
