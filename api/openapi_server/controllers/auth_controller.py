@@ -94,10 +94,12 @@ def signup():  # noqa: E501
     except Exception as e:
         code = e.response['Error']['Code']
         description = e.response['Error']['Message']
+        status_code = e.response['ResponseMetadata']['HTTPStatusCode']
+
         raise AuthError({
                   "code": code, 
                   "description": description
-              }, 401)
+              }, status_code)
 
     return response
 
