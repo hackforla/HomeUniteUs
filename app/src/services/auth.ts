@@ -47,6 +47,16 @@ export interface ResetPasswordRequest {
   code: string;
 }
 
+export interface TokenRequest {
+  code: string;
+  callbackUri: string;
+}
+
+export interface TokenResponse {
+  token: string;
+  user: User;
+}
+
 const authApi = api.injectEndpoints({
   endpoints: build => ({
     signUp: build.mutation<SignUpResponse, SignUpRequest>({
@@ -70,6 +80,17 @@ const authApi = api.injectEndpoints({
         withCredentials: true,
         body: credentials,
       }),
+    }),
+    getToken: build.mutation<TokenResponse, TokenRequest>({
+      query: data => {
+        const {code, callbackUri} = data;
+        return {
+          url: `api/auth/token?callback_uri=${callbackUri}`,
+          method: 'POST',
+          withCredentials: true,
+          body: {code},
+        };
+      },
     }),
     verification: build.mutation<void, VerificationRequest>({
       query: credentials => ({
@@ -144,6 +165,7 @@ export const {
   useSignInMutation,
   useSignOutMutation,
   useVerificationMutation,
+  useGetTokenMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
   useSessionMutation,

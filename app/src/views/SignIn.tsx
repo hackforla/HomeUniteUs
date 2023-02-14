@@ -5,8 +5,13 @@ import {Typography, Stack, styled, Theme, Link, Box} from '@mui/material';
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
 import {SignInForm} from '../components/authentication/SignInForm';
-import {SignInRequest, useSignInMutation} from '../services/auth';
+import {
+  SignInRequest,
+  useSignInMutation,
+  useGetTokenMutation,
+} from '../services/auth';
 import logo from '../img/favicon.png';
+import {Header} from '../components/common';
 export interface LocationState {
   from: Location;
 }
@@ -16,30 +21,30 @@ export const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [signIn] = useSignInMutation();
-  const locationState = location.state as LocationState;
+  const [getToken] = useGetTokenMutation();
+  // const locationState = location.state as LocationState;
 
   // Save location from which user was redirected to login page
-  const from = locationState?.from?.pathname || '/';
+  // const from = locationState?.from?.pathname || '/';
 
   React.useEffect(() => {
     if (location.search.includes('code')) {
       const code = location.search.split('?code=')[1];
-      fetch('/api/auth/token?callback_uri=http://localhost:4040/signin', {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-        body: JSON.stringify({code}),
+      getToken({
+        code,
+        callbackUri: 'http://localhost:4040/signin',
       })
-        .then(res => res.json())
-        .then(() => {
-          // navigate user to the page they tried to access before being redirected to login page
-          // navigate(from, {replace: true});
+        .unwrap()
+        .then(response => {
+          const {token, user} = response;
+          dispatch(setCredentials({user, token}));
           navigate('/');
         })
-        .catch(err => console.log('error', err));
+        .catch(err => {
+          console.log(err);
+        });
     }
-  }, [location, from]);
+  }, [location]);
 
   const handleSignIn = async ({email, password}: SignInRequest) => {
     try {
@@ -61,19 +66,21 @@ export const SignIn = () => {
   };
 
   return (
-    <PageContainer>
-      <FormContainer gap={2}>
-        <Logo src={logo} alt="Home Unite Us logo" />
-        <FormHeader variant="h4">Sign in to your account</FormHeader>
-        <SignInForm onSubmit={handleSignIn} />
-        <Stack direction="row" alignItems="center" gap={0.5}>
-          <Typography variant="body2">Don&apos;t have an account?</Typography>
-          <Link fontWeight="bold" href="/signup">
-            Sign up
-          </Link>
-        </Stack>
-      </FormContainer>
-    </PageContainer>
+    <Header>
+      <PageContainer>
+        <FormContainer gap={2}>
+          <Logo src={logo} alt="Home Unite Us logo" />
+          <FormHeader variant="h4">Sign in to your account</FormHeader>
+          <SignInForm onSubmit={handleSignIn} />
+          <Stack direction="row" alignItems="center" gap={0.5}>
+            <Typography variant="body2">Don&apos;t have an account?</Typography>
+            <Link fontWeight="bold" href="/signup">
+              Sign up
+            </Link>
+          </Stack>
+        </FormContainer>
+      </PageContainer>
+    </Header>
   );
 };
 
@@ -98,10 +105,9 @@ const FormHeader = styled(Typography)({
 });
 
 const PageContainer = styled(Box)(({theme}) => ({
-  minHeight: '100vh',
-  minWidth: '100vw',
-  backgroundColor: theme.palette.grey[100],
   display: 'flex',
+  flex: 1,
   justifyContent: 'center',
   alignItems: 'center',
+  backgroundColor: theme.palette.grey[100],
 }));

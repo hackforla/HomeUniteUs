@@ -4,14 +4,21 @@ import {styled} from '@mui/system';
 
 import {HomeLink} from '../components/common/HomeLink';
 import {HostIcon, CoordinatorIcon, GuestIcon} from '../components/Icons';
-import {AppContainer} from '../components/common/AppContainer';
+import {Header} from '../components/common';
 
 export const Home = () => {
   return (
-    <AppContainer>
+    <Header>
       <HomeContainer>
-        <Header variant="h1">Welcome to a Safe Place for Youth</Header>
-        <SubHeader variant="h2">Select a profile</SubHeader>
+        <Typography
+          variant="h1"
+          sx={{textAlign: 'center', fontSize: 38, fontWeight: 500}}
+        >
+          Welcome to a Safe Place for Youth
+        </Typography>
+        <Typography variant="h2" sx={{textAlign: 'center', fontSize: 32}}>
+          Select a profile
+        </Typography>
         <LinkRow>
           <HomeLink to="/host" name="Host">
             <HostIcon />
@@ -24,7 +31,7 @@ export const Home = () => {
           </HomeLink>
         </LinkRow>
       </HomeContainer>
-    </AppContainer>
+    </Header>
   );
 };
 
@@ -36,6 +43,7 @@ const HomeContainer = styled('section')({
   gap: '32px',
   alignItems: 'center',
   justifyContent: 'center',
+  padding: 16,
 });
 
 const LinkRow = styled('div')({
@@ -43,15 +51,4 @@ const LinkRow = styled('div')({
   justifyContent: 'center',
   flexWrap: 'wrap',
   gap: '2rem',
-});
-
-const Header = styled(Typography)({
-  fontSize: '3rem',
-  fontWeight: 600,
-  textAlign: 'center',
-});
-
-const SubHeader = styled(Typography)({
-  fontSize: '2rem',
-  fontWeight: 600,
 });

@@ -35,6 +35,7 @@ import {
   ResetPassword,
 } from './views';
 import {AccountVerification} from './views/AccountVerification';
+import {Header} from './components/common';
 // import { ApprovalTwoTone } from '@mui/icons-material';
 
 function Profile() {
@@ -92,6 +93,7 @@ function HuuApp() {
         <Route path="/verification" element={<AccountVerification />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/header" element={<Header />} />
       </Routes>
     </>
   );
