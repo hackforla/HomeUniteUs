@@ -26,12 +26,12 @@ import {Header} from '../components/common';
 
 export const SignUp = () => {
   const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [alertOpen, setAlertOpen] = React.useState(false);
+  const [, setAlertOpen] = React.useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const [signUp] = useSignUpMutation();
+  const [signUp, {error}] = useSignUpMutation();
   const [getToken] = useGetTokenMutation();
   // const locationState = location.state as LocationState;
 
@@ -63,18 +63,22 @@ export const SignUp = () => {
   };
 
   const handleSignUp = async ({email, password}: SignUpRequest) => {
-    try {
-      const response = await signUp({
-        email,
-        password,
-      }).unwrap();
-
-      console.log('signup response', response);
-      setDialogOpen(true);
-    } catch (err) {
-      setAlertOpen(true);
-    }
+    await signUp({
+      email,
+      password,
+    })
+      .unwrap()
+      .then(() => {
+        // console.log('signup response', response);
+        setDialogOpen(true);
+      })
+      .catch(err => {
+        console.log('signup error', err);
+        // setAlertOpen(true);
+      });
   };
+
+  console.log('redux error', error);
 
   return (
     <Header>
@@ -84,7 +88,7 @@ export const SignUp = () => {
             <Logo src={logo} alt="Home Unite Us logo" />
             <FormHeader variant="h4">Sign up for an account</FormHeader>
             <SignUpForm onSubmit={handleSignUp} />
-            <Collapse sx={{width: '100%'}} in={alertOpen}>
+            <Collapse sx={{width: '100%'}} in={error !== undefined}>
               <Alert
                 severity="error"
                 action={
@@ -100,7 +104,7 @@ export const SignUp = () => {
                   </IconButton>
                 }
               >
-                This is an error message!
+                {error?.data?.description}
               </Alert>
             </Collapse>
           </FormContainer>
