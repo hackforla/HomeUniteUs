@@ -23,12 +23,13 @@ import {
 } from '../services/auth';
 import logo from '../img/favicon.png';
 import {Header} from '../components/common';
+import {isFetchBaseQueryError, isErrorWithMessage} from '../app/helpers';
 export interface LocationState {
   from: Location;
 }
 
 export const SignIn = () => {
-  const [alertOpen, setAlertOpen] = React.useState(false);
+  const [error, setError] = React.useState('There is an error');
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -54,8 +55,15 @@ export const SignIn = () => {
           navigate('/');
         })
         .catch(err => {
-          console.log(err);
-          setAlertOpen(true);
+          if (isFetchBaseQueryError(err)) {
+            // you can access all properties of `FetchBaseQueryError` here
+            const errMsg = err.data.message;
+            setError(errMsg);
+          } else if (isErrorWithMessage(err)) {
+            // you can access a string 'message' property here
+            console.log('error with message', err.message);
+            setError(err.message);
+          }
         });
     }
   }, [location]);
@@ -75,8 +83,14 @@ export const SignIn = () => {
       // navigate user to home page
       navigate('/');
     } catch (err) {
-      console.log(err);
-      setAlertOpen(true);
+      if (isFetchBaseQueryError(err)) {
+        // you can access all properties of `FetchBaseQueryError` here
+        const errMsg = err.data.message;
+        setError(errMsg);
+      } else if (isErrorWithMessage(err)) {
+        // you can access a string 'message' property here
+        setError(err.message);
+      }
     }
   };
 
@@ -93,7 +107,7 @@ export const SignIn = () => {
               Sign up
             </Link>
           </Stack>
-          <Collapse sx={{width: '100%'}} in={alertOpen}>
+          <Collapse sx={{width: '100%'}} in={error !== ''}>
             <Alert
               severity="error"
               action={
@@ -102,14 +116,14 @@ export const SignIn = () => {
                   color="inherit"
                   size="small"
                   onClick={() => {
-                    setAlertOpen(false);
+                    setError('');
                   }}
                 >
                   <CloseIcon fontSize="inherit" />
                 </IconButton>
               }
             >
-              This is an error message!
+              {error}
             </Alert>
           </Collapse>
         </FormContainer>

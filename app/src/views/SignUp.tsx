@@ -23,15 +23,16 @@ import {
 // import {LocationState} from './SignIn';
 import logo from '../img/favicon.png';
 import {Header} from '../components/common';
+import {isErrorWithMessage, isFetchBaseQueryError} from '../app/helpers';
 
 export const SignUp = () => {
   const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [, setAlertOpen] = React.useState(false);
+  const [error, setError] = React.useState('');
 
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const [signUp, {error}] = useSignUpMutation();
+  const [signUp] = useSignUpMutation();
   const [getToken] = useGetTokenMutation();
   // const locationState = location.state as LocationState;
 
@@ -52,8 +53,14 @@ export const SignUp = () => {
           navigate('/');
         })
         .catch(err => {
-          console.log(err);
-          setAlertOpen(true);
+          if (isFetchBaseQueryError(err)) {
+            // you can access all properties of `FetchBaseQueryError` here
+            const errMsg = err.data.message;
+            setError(errMsg);
+          } else if (isErrorWithMessage(err)) {
+            // you can access a string 'message' property here
+            setError(err.message);
+          }
         });
     }
   }, [location]);
@@ -63,22 +70,24 @@ export const SignUp = () => {
   };
 
   const handleSignUp = async ({email, password}: SignUpRequest) => {
-    await signUp({
-      email,
-      password,
-    })
-      .unwrap()
-      .then(() => {
-        // console.log('signup response', response);
-        setDialogOpen(true);
-      })
-      .catch(err => {
-        console.log('signup error', err.data.message);
-        // setAlertOpen(true);
-      });
+    try {
+      await signUp({
+        email,
+        password,
+      }).unwrap();
+      // console.log('signup response', response);
+      setDialogOpen(true);
+    } catch (err) {
+      if (isFetchBaseQueryError(err)) {
+        // you can access all properties of `FetchBaseQueryError` here
+        const errMsg = err.data.message;
+        setError(errMsg);
+      } else if (isErrorWithMessage(err)) {
+        // you can access a string 'message' property here
+        setError(err.message);
+      }
+    }
   };
-
-  console.log('redux error', error);
 
   return (
     <Header>
@@ -88,7 +97,7 @@ export const SignUp = () => {
             <Logo src={logo} alt="Home Unite Us logo" />
             <FormHeader variant="h4">Sign up for an account</FormHeader>
             <SignUpForm onSubmit={handleSignUp} />
-            <Collapse sx={{width: '100%'}} in={error !== undefined}>
+            <Collapse sx={{width: '100%'}} in={error !== ''}>
               <Alert
                 severity="error"
                 action={
@@ -97,14 +106,14 @@ export const SignUp = () => {
                     color="inherit"
                     size="small"
                     onClick={() => {
-                      setAlertOpen(false);
+                      setError('');
                     }}
                   >
                     <CloseIcon fontSize="inherit" />
                   </IconButton>
                 }
               >
-                {error?.data?.message}
+                {error}
               </Alert>
             </Collapse>
           </FormContainer>
