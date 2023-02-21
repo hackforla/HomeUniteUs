@@ -1,17 +1,6 @@
 import React from 'react';
 import {useNavigate, useLocation, Location} from 'react-router-dom';
-import {
-  Typography,
-  Stack,
-  styled,
-  Theme,
-  Link,
-  Box,
-  Alert,
-  Collapse,
-  IconButton,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import {Typography, Stack, styled, Theme, Link, Box} from '@mui/material';
 
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
@@ -29,7 +18,7 @@ export interface LocationState {
 }
 
 export const SignIn = () => {
-  const [error, setError] = React.useState('');
+  const [errorMessage, setErrorMessage] = React.useState('');
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -58,11 +47,11 @@ export const SignIn = () => {
           if (isFetchBaseQueryError(err)) {
             // you can access all properties of `FetchBaseQueryError` here
             const errMsg = err.data.message;
-            setError(errMsg);
+            setErrorMessage(errMsg);
           } else if (isErrorWithMessage(err)) {
             // you can access a string 'message' property here
             console.log('error with message', err.message);
-            setError(err.message);
+            setErrorMessage(err.message);
           }
         });
     }
@@ -87,10 +76,10 @@ export const SignIn = () => {
         console.log(err);
         // you can access all properties of `FetchBaseQueryError` here
         const errMsg = err.data.message;
-        setError(errMsg);
+        setErrorMessage(errMsg);
       } else if (isErrorWithMessage(err)) {
         // you can access a string 'message' property here
-        setError(err.message);
+        setErrorMessage(err.message);
       }
     }
   };
@@ -101,32 +90,17 @@ export const SignIn = () => {
         <FormContainer gap={2}>
           <Logo src={logo} alt="Home Unite Us logo" />
           <FormHeader variant="h4">Sign in to your account</FormHeader>
-          <SignInForm onSubmit={handleSignIn} />
+          <SignInForm
+            onSubmit={handleSignIn}
+            errorMessage={errorMessage}
+            setErrorMessage={setErrorMessage}
+          />
           <Stack direction="row" alignItems="center" gap={0.5}>
             <Typography variant="body2">Don&apos;t have an account?</Typography>
             <Link fontWeight="bold" href="/signup">
               Sign up
             </Link>
           </Stack>
-          <Collapse sx={{width: '100%'}} in={error !== ''}>
-            <Alert
-              severity="error"
-              action={
-                <IconButton
-                  aria-label="close"
-                  color="inherit"
-                  size="small"
-                  onClick={() => {
-                    setError('');
-                  }}
-                >
-                  <CloseIcon fontSize="inherit" />
-                </IconButton>
-              }
-            >
-              {error}
-            </Alert>
-          </Collapse>
         </FormContainer>
       </PageContainer>
     </Header>
