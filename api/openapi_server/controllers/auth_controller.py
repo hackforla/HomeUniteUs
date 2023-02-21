@@ -112,24 +112,25 @@ def signin():
     secret_hash = get_secret_hash(body['email'])
 
     # initiate authentication
-    # try:
-    response = userClient.initiate_auth(
-        ClientId=COGNITO_CLIENT_ID,
-        AuthFlow='USER_PASSWORD_AUTH',
-        AuthParameters={
-            'USERNAME': body['email'],
-            'PASSWORD': body['password'],
-            'SECRET_HASH': secret_hash
-        }
-    )
-    # except Exception as e:
-    #     print('exception', e.response)
-    #     code = e.response['Error']['Code']
-    #     message = e.response['Error']['Message']
-    #     raise AuthError({
-    #               "code": code, 
-    #               "message": message
-    #           }, 401)
+    try:
+        response = userClient.initiate_auth(
+            ClientId=COGNITO_CLIENT_ID,
+            AuthFlow='USER_PASSWORD_AUTH',
+            AuthParameters={
+                'USERNAME': body['email'],
+                'PASSWORD': body['password'],
+                'SECRET_HASH': secret_hash
+            }
+        )
+    except Exception as e:
+        code = e.response['Error']['Code']
+        message = e.response['Error']['Message']
+        status_code = e.response['ResponseMetadata']['HTTPStatusCode']
+
+        raise AuthError({
+                  "code": code, 
+                  "message": message
+              }, status_code)
               
     access_token = response['AuthenticationResult']['AccessToken']
     refresh_token = response['AuthenticationResult']['RefreshToken']

@@ -29,7 +29,7 @@ export interface LocationState {
 }
 
 export const SignIn = () => {
-  const [error, setError] = React.useState('There is an error');
+  const [error, setError] = React.useState('');
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -84,6 +84,7 @@ export const SignIn = () => {
       navigate('/');
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
+        console.log(err);
         // you can access all properties of `FetchBaseQueryError` here
         const errMsg = err.data.message;
         setError(errMsg);
