@@ -1,16 +1,6 @@
 import React from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
-import {
-  Stack,
-  Typography,
-  styled,
-  Dialog,
-  DialogTitle,
-  Alert,
-  Collapse,
-  IconButton,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import {Stack, Typography, styled, Dialog, DialogTitle} from '@mui/material';
 
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
@@ -23,10 +13,11 @@ import {
 // import {LocationState} from './SignIn';
 import logo from '../img/favicon.png';
 import {Header} from '../components/common';
+import {isErrorWithMessage, isFetchBaseQueryError} from '../app/helpers';
 
 export const SignUp = () => {
   const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [alertOpen, setAlertOpen] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState('');
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -52,8 +43,14 @@ export const SignUp = () => {
           navigate('/');
         })
         .catch(err => {
-          console.log(err);
-          setAlertOpen(true);
+          if (isFetchBaseQueryError(err)) {
+            // you can access all properties of `FetchBaseQueryError` here
+            const errMsg = err.data.message;
+            setErrorMessage(errMsg);
+          } else if (isErrorWithMessage(err)) {
+            // you can access a string 'message' property here
+            setErrorMessage(err.message);
+          }
         });
     }
   }, [location]);
@@ -64,15 +61,21 @@ export const SignUp = () => {
 
   const handleSignUp = async ({email, password}: SignUpRequest) => {
     try {
-      const response = await signUp({
+      await signUp({
         email,
         password,
       }).unwrap();
 
-      console.log('signup response', response);
       setDialogOpen(true);
     } catch (err) {
-      setAlertOpen(true);
+      if (isFetchBaseQueryError(err)) {
+        // you can access all properties of `FetchBaseQueryError` here
+        const errMsg = err.data.message;
+        setErrorMessage(errMsg);
+      } else if (isErrorWithMessage(err)) {
+        // you can access a string 'message' property here
+        setErrorMessage(err.message);
+      }
     }
   };
 
@@ -83,26 +86,11 @@ export const SignUp = () => {
           <FormContainer gap={2}>
             <Logo src={logo} alt="Home Unite Us logo" />
             <FormHeader variant="h4">Sign up for an account</FormHeader>
-            <SignUpForm onSubmit={handleSignUp} />
-            <Collapse sx={{width: '100%'}} in={alertOpen}>
-              <Alert
-                severity="error"
-                action={
-                  <IconButton
-                    aria-label="close"
-                    color="inherit"
-                    size="small"
-                    onClick={() => {
-                      setAlertOpen(false);
-                    }}
-                  >
-                    <CloseIcon fontSize="inherit" />
-                  </IconButton>
-                }
-              >
-                This is an error message!
-              </Alert>
-            </Collapse>
+            <SignUpForm
+              onSubmit={handleSignUp}
+              errorMessage={errorMessage}
+              setErrorMessage={setErrorMessage}
+            />
           </FormContainer>
         </PageContainer>
         <EmailVerificationDialog open={dialogOpen} handleClose={handleClose} />

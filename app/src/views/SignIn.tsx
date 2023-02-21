@@ -1,17 +1,6 @@
 import React from 'react';
 import {useNavigate, useLocation, Location} from 'react-router-dom';
-import {
-  Typography,
-  Stack,
-  styled,
-  Theme,
-  Link,
-  Box,
-  Alert,
-  Collapse,
-  IconButton,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import {Typography, Stack, styled, Theme, Link, Box} from '@mui/material';
 
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
@@ -23,12 +12,13 @@ import {
 } from '../services/auth';
 import logo from '../img/favicon.png';
 import {Header} from '../components/common';
+import {isFetchBaseQueryError, isErrorWithMessage} from '../app/helpers';
 export interface LocationState {
   from: Location;
 }
 
 export const SignIn = () => {
-  const [alertOpen, setAlertOpen] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState('');
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -54,8 +44,14 @@ export const SignIn = () => {
           navigate('/');
         })
         .catch(err => {
-          console.log(err);
-          setAlertOpen(true);
+          if (isFetchBaseQueryError(err)) {
+            // you can access all properties of `FetchBaseQueryError` here
+            const errMsg = err.data.message;
+            setErrorMessage(errMsg);
+          } else if (isErrorWithMessage(err)) {
+            // you can access a string 'message' property here
+            setErrorMessage(err.message);
+          }
         });
     }
   }, [location]);
@@ -75,8 +71,14 @@ export const SignIn = () => {
       // navigate user to home page
       navigate('/');
     } catch (err) {
-      console.log(err);
-      setAlertOpen(true);
+      if (isFetchBaseQueryError(err)) {
+        // you can access all properties of `FetchBaseQueryError` here
+        const errMsg = err.data.message;
+        setErrorMessage(errMsg);
+      } else if (isErrorWithMessage(err)) {
+        // you can access a string 'message' property here
+        setErrorMessage(err.message);
+      }
     }
   };
 
@@ -86,32 +88,17 @@ export const SignIn = () => {
         <FormContainer gap={2}>
           <Logo src={logo} alt="Home Unite Us logo" />
           <FormHeader variant="h4">Sign in to your account</FormHeader>
-          <SignInForm onSubmit={handleSignIn} />
+          <SignInForm
+            onSubmit={handleSignIn}
+            errorMessage={errorMessage}
+            setErrorMessage={setErrorMessage}
+          />
           <Stack direction="row" alignItems="center" gap={0.5}>
             <Typography variant="body2">Don&apos;t have an account?</Typography>
             <Link fontWeight="bold" href="/signup">
               Sign up
             </Link>
           </Stack>
-          <Collapse sx={{width: '100%'}} in={alertOpen}>
-            <Alert
-              severity="error"
-              action={
-                <IconButton
-                  aria-label="close"
-                  color="inherit"
-                  size="small"
-                  onClick={() => {
-                    setAlertOpen(false);
-                  }}
-                >
-                  <CloseIcon fontSize="inherit" />
-                </IconButton>
-              }
-            >
-              This is an error message!
-            </Alert>
-          </Collapse>
         </FormContainer>
       </PageContainer>
     </Header>

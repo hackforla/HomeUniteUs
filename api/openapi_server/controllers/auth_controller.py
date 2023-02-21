@@ -51,7 +51,7 @@ def get_token_auth_header():
     if not auth:
         raise AuthError({
         'code': 'authorization_header_missing',
-        'description': 'Authorization header is expected.'
+        'message': 'Authorization header is expected.'
         }, 401)
     
     parts = auth.split()
@@ -60,15 +60,15 @@ def get_token_auth_header():
     if parts[0].lower() != 'bearer':
         raise AuthError({
         'code': 'invalid_header',
-        'description': 'Authorization header must start with "Bearer".'
+        'message': 'Authorization header must start with "Bearer".'
         }, 401)
     
     if len(parts) == 1:
             raise AuthError({"code": "invalid_header",
-                            "description": "Token not found"}, 401)
+                            "message": "Token not found"}, 401)
     if len(parts) > 2:
         raise AuthError({"code": "invalid_header",
-                            "description":
+                            "message":
                                 "Authorization header must be"
                                 " Bearer token"}, 401)
     # return token
@@ -93,11 +93,13 @@ def signup():  # noqa: E501
         )
     except Exception as e:
         code = e.response['Error']['Code']
-        description = e.response['Error']['Message']
+        message = e.response['Error']['Message']
+        status_code = e.response['ResponseMetadata']['HTTPStatusCode']
+
         raise AuthError({
                   "code": code, 
-                  "description": description
-              }, 401)
+                  "message": message
+              }, status_code)
 
     return response
 
@@ -110,24 +112,25 @@ def signin():
     secret_hash = get_secret_hash(body['email'])
 
     # initiate authentication
-    # try:
-    response = userClient.initiate_auth(
-        ClientId=COGNITO_CLIENT_ID,
-        AuthFlow='USER_PASSWORD_AUTH',
-        AuthParameters={
-            'USERNAME': body['email'],
-            'PASSWORD': body['password'],
-            'SECRET_HASH': secret_hash
-        }
-    )
-    # except Exception as e:
-    #     print('exception', e.response)
-    #     code = e.response['Error']['Code']
-    #     description = e.response['Error']['Message']
-    #     raise AuthError({
-    #               "code": code, 
-    #               "description": description
-    #           }, 401)
+    try:
+        response = userClient.initiate_auth(
+            ClientId=COGNITO_CLIENT_ID,
+            AuthFlow='USER_PASSWORD_AUTH',
+            AuthParameters={
+                'USERNAME': body['email'],
+                'PASSWORD': body['password'],
+                'SECRET_HASH': secret_hash
+            }
+        )
+    except Exception as e:
+        code = e.response['Error']['Code']
+        message = e.response['Error']['Message']
+        status_code = e.response['ResponseMetadata']['HTTPStatusCode']
+
+        raise AuthError({
+                  "code": code, 
+                  "message": message
+              }, status_code)
               
     access_token = response['AuthenticationResult']['AccessToken']
     refresh_token = response['AuthenticationResult']['RefreshToken']
@@ -164,10 +167,10 @@ def confirm():
         )
     except Exception as e:
         code = e.response['Error']['Code']
-        description = e.response['Error']['Message']
+        message = e.response['Error']['Message']
         raise AuthError({
                   "code": code, 
-                  "description": description
+                  "message": message
               }, 401)
 
     return response
@@ -232,7 +235,7 @@ def current_session():
     except Exception as e:
         raise AuthError({
                   "code": "session_expired", 
-                  "description": "session not found"
+                  "message": "session not found"
               }, 401)
 
     # Refresh tokens
@@ -247,10 +250,10 @@ def current_session():
         )
     except Exception as e:
         code = e.response['Error']['Code']
-        description = e.response['Error']['Message']
+        message = e.response['Error']['Message']
         raise AuthError({
                   "code": code, 
-                  "description": description
+                  "message": message
               }, 401)
 
     accessToken = response['AuthenticationResult']['AccessToken']
@@ -274,7 +277,7 @@ def refresh():
     if refreshToken is None:
         raise AuthError({
             'code': 'invalid_request',
-            'description': 'Refresh token not found'
+            'message': 'Refresh token not found'
         }, 401)
 
     # Refresh tokens
@@ -289,10 +292,10 @@ def refresh():
         )
     except Exception as e:
         code = e.response['Error']['Code']
-        description = e.response['Error']['Message']
+        message = e.response['Error']['Message']
         raise AuthError({
                   "code": code, 
-                  "description": description
+                  "message": message
               }, 401)
 
     accessToken = response['AuthenticationResult']['AccessToken']

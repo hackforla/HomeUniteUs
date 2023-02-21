@@ -8,7 +8,11 @@ import {
   Button,
   Link,
   Typography,
+  Alert,
+  Collapse,
+  IconButton,
 } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import {styled} from '@mui/system';
 import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
@@ -17,6 +21,8 @@ import {SignInRequest} from '../../services/auth';
 
 interface SignUpFormProps {
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
+  setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
+  errorMessage: string;
 }
 
 const validationSchema = object({
@@ -33,7 +39,11 @@ const validationSchema = object({
     ),
 });
 
-export const SignUpForm = ({onSubmit}: SignUpFormProps) => {
+export const SignUpForm = ({
+  onSubmit,
+  errorMessage,
+  setErrorMessage,
+}: SignUpFormProps) => {
   const {handleSubmit, handleChange, values, touched, errors} = useFormik({
     initialValues: {
       email: '',
@@ -83,6 +93,25 @@ export const SignUpForm = ({onSubmit}: SignUpFormProps) => {
       <Button variant="contained" size="large" type="submit" fullWidth>
         Sign up
       </Button>
+      <Collapse sx={{width: '100%'}} in={errorMessage !== ''}>
+        <Alert
+          severity="error"
+          action={
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setErrorMessage('');
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          }
+        >
+          {errorMessage}
+        </Alert>
+      </Collapse>
       <Divider>or</Divider>
       <Button
         variant="outlined"

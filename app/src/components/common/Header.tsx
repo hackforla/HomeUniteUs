@@ -163,7 +163,7 @@ export const Header = (props: Props) => {
                   onClose={handleCloseUserMenu}
                 >
                   <MenuItem onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">Profile</Typography>
+                    <Typography textAlign="center">{user.email}</Typography>
                   </MenuItem>
                   <MenuItem onClick={handleCloseUserMenu}>
                     <Typography textAlign="center">Account</Typography>
