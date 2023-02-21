@@ -50,7 +50,6 @@ export const SignIn = () => {
             setErrorMessage(errMsg);
           } else if (isErrorWithMessage(err)) {
             // you can access a string 'message' property here
-            console.log('error with message', err.message);
             setErrorMessage(err.message);
           }
         });
@@ -73,7 +72,6 @@ export const SignIn = () => {
       navigate('/');
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
-        console.log(err);
         // you can access all properties of `FetchBaseQueryError` here
         const errMsg = err.data.message;
         setErrorMessage(errMsg);

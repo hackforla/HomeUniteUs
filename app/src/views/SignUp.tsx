@@ -65,7 +65,7 @@ export const SignUp = () => {
         email,
         password,
       }).unwrap();
-      // console.log('signup response', response);
+
       setDialogOpen(true);
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
