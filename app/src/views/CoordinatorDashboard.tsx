@@ -10,7 +10,6 @@ import {
   useTheme,
 } from '@mui/material';
 import {UiPlaceholder} from '../components/common/UiPlaceholder';
-import {ApplicationTrackerContainer} from '../components/common/ApplicationTrackerContainer';
 
 interface CoordinatorDashboardProps {}
 interface CoordinatorDashboardNavProps {}
@@ -125,18 +124,16 @@ export function CoordinatorDashboardDetailsPanel() {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function CoordinatorDashboard(props: CoordinatorDashboardProps) {
   return (
-    <ApplicationTrackerContainer>
-      <Grid sx={{display: 'flex', flex: 1}} container>
-        <Grid item xs={2}>
-          <CoordinatorDashboardNav />
-        </Grid>
-        <Grid item xs={8}>
-          <CoordinatorDashboardContentPanel />
-        </Grid>
-        <Grid item xs={2}>
-          <CoordinatorDashboardDetailsPanel />
-        </Grid>
+    <Grid sx={{display: 'flex', flex: 1}} container>
+      <Grid item xs={2}>
+        <CoordinatorDashboardNav />
       </Grid>
-    </ApplicationTrackerContainer>
+      <Grid item xs={8}>
+        <CoordinatorDashboardContentPanel />
+      </Grid>
+      <Grid item xs={2}>
+        <CoordinatorDashboardDetailsPanel />
+      </Grid>
+    </Grid>
   );
 }

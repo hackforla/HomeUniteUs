@@ -12,7 +12,6 @@ import {
 } from '../services/auth';
 // import {LocationState} from './SignIn';
 import logo from '../img/favicon.png';
-import {Header} from '../components/common';
 import {isErrorWithMessage, isFetchBaseQueryError} from '../app/helpers';
 
 export const SignUp = () => {
@@ -80,22 +79,20 @@ export const SignUp = () => {
   };
 
   return (
-    <Header>
-      <>
-        <PageContainer>
-          <FormContainer gap={2}>
-            <Logo src={logo} alt="Home Unite Us logo" />
-            <FormHeader variant="h4">Sign up for an account</FormHeader>
-            <SignUpForm
-              onSubmit={handleSignUp}
-              errorMessage={errorMessage}
-              setErrorMessage={setErrorMessage}
-            />
-          </FormContainer>
-        </PageContainer>
-        <EmailVerificationDialog open={dialogOpen} handleClose={handleClose} />
-      </>
-    </Header>
+    <>
+      <PageContainer>
+        <FormContainer gap={2}>
+          <Logo src={logo} alt="Home Unite Us logo" />
+          <FormHeader variant="h4">Sign up for an account</FormHeader>
+          <SignUpForm
+            onSubmit={handleSignUp}
+            errorMessage={errorMessage}
+            setErrorMessage={setErrorMessage}
+          />
+        </FormContainer>
+      </PageContainer>
+      <EmailVerificationDialog open={dialogOpen} handleClose={handleClose} />
+    </>
   );
 };
 

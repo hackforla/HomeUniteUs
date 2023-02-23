@@ -26,7 +26,6 @@ interface Props {
    * You won't need it on your project.
    */
   window?: () => Window;
-  children: React.ReactElement;
 }
 
 const drawerWidth = 240;
@@ -36,7 +35,7 @@ const navItems = [
 ];
 
 export const Header = (props: Props) => {
-  const {window, children} = props;
+  const {window} = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null,
@@ -194,16 +193,6 @@ export const Header = (props: Props) => {
           {drawer}
         </Drawer>
       </Box>
-      <Stack
-        component="main"
-        sx={{
-          minHeight: '100vh',
-          width: '100vw',
-        }}
-      >
-        <Toolbar />
-        {children}
-      </Stack>
     </Box>
   );
 };

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react';
-import {ApplicationTrackerContainer} from '../components/common/ApplicationTrackerContainer';
 
 interface HostApplicationTrackerProps {}
 
@@ -27,9 +26,5 @@ function reducer(
 
 export function HostApplicationTracker(props: HostApplicationTrackerProps) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
-  return (
-    <ApplicationTrackerContainer>
-      <h1>Host application tracker</h1>
-    </ApplicationTrackerContainer>
-  );
+  return <h1>Host application tracker</h1>;
 }

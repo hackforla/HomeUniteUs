@@ -21,23 +21,12 @@ export const AccountVerification = () => {
   };
 
   return (
-    <PageContainer>
-      <FormContainer>
-        <FormHeader variant="h4">Verify your account</FormHeader>
-        <AccountVerificationForm onSubmit={handleVerification} />
-      </FormContainer>
-    </PageContainer>
+    <FormContainer>
+      <FormHeader variant="h4">Verify your account</FormHeader>
+      <AccountVerificationForm onSubmit={handleVerification} />
+    </FormContainer>
   );
 };
-
-const PageContainer = styled('div')(({theme}) => ({
-  minHeight: '100vh',
-  minWidth: '100vw',
-  backgroundColor: theme.palette.grey[100],
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-}));
 
 const FormContainer = styled(Stack)(({theme}) => ({
   maxWidth: '550px',

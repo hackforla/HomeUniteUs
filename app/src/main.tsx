@@ -35,7 +35,7 @@ import {
   ResetPassword,
 } from './views';
 import {AccountVerification} from './views/AccountVerification';
-import {Header} from './components/common';
+import {AppLayout, Header} from './components/common';
 // import { ApprovalTwoTone } from '@mui/icons-material';
 
 function Profile() {
@@ -53,47 +53,49 @@ function HuuApp() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/coord" element={<CoordinatorDashboard />} />
-        <Route path="/hosts" element={<HostsList />} />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/host"
-          element={
-            <ProtectedRoute>
-              <HostApplicationTracker />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/guest"
-          element={
-            <ProtectedRoute>
-              <GuestApplicationTracker />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/coordinator"
-          element={
-            <ProtectedRoute>
-              <CoordinatorDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/verification" element={<AccountVerification />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/header" element={<Header />} />
+        <Route element={<AppLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/coord" element={<CoordinatorDashboard />} />
+          <Route path="/hosts" element={<HostsList />} />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/host"
+            element={
+              <ProtectedRoute>
+                <HostApplicationTracker />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/guest"
+            element={
+              <ProtectedRoute>
+                <GuestApplicationTracker />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/coordinator"
+            element={
+              <ProtectedRoute>
+                <CoordinatorDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/verification" element={<AccountVerification />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/header" element={<Header />} />
+        </Route>
       </Routes>
     </>
   );
