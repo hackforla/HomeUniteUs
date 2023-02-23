@@ -8,8 +8,12 @@ from os import environ as env
 from dotenv import load_dotenv, find_dotenv
 from flask import redirect, request, session, redirect
 from openapi_server.exceptions import AuthError
+from openapi_server.models import database as db
+from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
 from functools import wraps
 
+db_engine = db.DataAccessLayer.get_engine()
 
 # Load .env file
 ENV_FILE = find_dotenv()
@@ -83,7 +87,18 @@ def signup():  # noqa: E501
 
     secret_hash = get_secret_hash(body['email'])
 
-     # Signup user
+    # Signup user
+    with Session(db_engine) as session:
+        user = db.User(email=body['email'])
+        session.add(user)
+        try:
+            session.commit()
+        except IntegrityError:
+            session.rollback()
+            raise AuthError({
+                "message": "A user with this email already exists."
+            }, 422)
+
     try:
         response = userClient.sign_up(
           ClientId=COGNITO_CLIENT_ID,
@@ -218,6 +233,12 @@ def token():
     # create user object from user data
     user = get_user_attr(user_data)
 
+    with Session(db_engine) as session:
+        db_user = db.User(email=user['email'])
+        if session.query(db.User.id).filter_by(email=user["email"]).first() is None:
+            session.add(db_user)
+            session.commit()
+
     # set refresh token cookie
     session['refresh_token'] = refresh_token
 
@@ -273,7 +294,7 @@ def current_session():
 
 def refresh():
     # Get refresh token from cookie
-    refreshToken = session['refresh_token']
+    refreshToken = session.get('refresh_token')
     if refreshToken is None:
         raise AuthError({
             'code': 'invalid_request',
