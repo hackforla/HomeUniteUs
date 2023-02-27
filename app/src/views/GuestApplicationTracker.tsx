@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import * as React from 'react';
-import {ApplicationTrackerContainer} from '../components/common/ApplicationTrackerContainer';
 import {GuestDetailsProvider} from '../data/GuestDetailsProvider';
 
 interface GuestApplicationTrackerProps {}
@@ -31,9 +30,7 @@ export function GuestApplicationTracker(props: GuestApplicationTrackerProps) {
   return (
     <>
       <GuestDetailsProvider>
-        <ApplicationTrackerContainer>
-          <h1>Guest application tracker</h1>
-        </ApplicationTrackerContainer>
+        <h1>Guest application tracker</h1>
       </GuestDetailsProvider>
     </>
   );

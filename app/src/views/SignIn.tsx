@@ -11,7 +11,6 @@ import {
   useGetTokenMutation,
 } from '../services/auth';
 import logo from '../img/favicon.png';
-import {Header} from '../components/common';
 import {isFetchBaseQueryError, isErrorWithMessage} from '../app/helpers';
 export interface LocationState {
   from: Location;
@@ -83,25 +82,23 @@ export const SignIn = () => {
   };
 
   return (
-    <Header>
-      <PageContainer>
-        <FormContainer gap={2}>
-          <Logo src={logo} alt="Home Unite Us logo" />
-          <FormHeader variant="h4">Sign in to your account</FormHeader>
-          <SignInForm
-            onSubmit={handleSignIn}
-            errorMessage={errorMessage}
-            setErrorMessage={setErrorMessage}
-          />
-          <Stack direction="row" alignItems="center" gap={0.5}>
-            <Typography variant="body2">Don&apos;t have an account?</Typography>
-            <Link fontWeight="bold" href="/signup">
-              Sign up
-            </Link>
-          </Stack>
-        </FormContainer>
-      </PageContainer>
-    </Header>
+    <PageContainer>
+      <FormContainer gap={2}>
+        <Logo src={logo} alt="Home Unite Us logo" />
+        <FormHeader variant="h4">Sign in to your account</FormHeader>
+        <SignInForm
+          onSubmit={handleSignIn}
+          errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}
+        />
+        <Stack direction="row" alignItems="center" gap={0.5}>
+          <Typography variant="body2">Don&apos;t have an account?</Typography>
+          <Link fontWeight="bold" href="/signup">
+            Sign up
+          </Link>
+        </Stack>
+      </FormContainer>
+    </PageContainer>
   );
 };
 
