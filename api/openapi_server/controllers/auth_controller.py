@@ -233,11 +233,11 @@ def token():
     # create user object from user data
     user = get_user_attr(user_data)
 
-    with Session(db_engine) as session:
+    with Session(db_engine) as db_session:
         db_user = db.User(email=user['email'])
-        if session.query(db.User.id).filter_by(email=user["email"]).first() is None:
-            session.add(db_user)
-            session.commit()
+        if db_session.query(db.User.id).filter_by(email=user["email"]).first() is None:
+            db_session.add(db_user)
+            db_session.commit()
 
     # set refresh token cookie
     session['refresh_token'] = refresh_token
@@ -375,3 +375,42 @@ def google():
     redirect_uri = request.args['redirect_uri']
         
     return redirect(f"https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri={redirect_uri}&identity_provider=Google")
+
+def delete():
+    # get access token from header
+    access_token = get_token_auth_header()
+
+    # get user data
+    user_data = userClient.get_user(AccessToken=access_token)
+
+    # get user email
+    email = user_data['Username']
+
+    # delete user from cognito
+    try:
+        response = userClient.delete_user(
+            AccessToken=access_token
+        )
+    except Exception as e:
+        code = e.response['Error']['Code']
+        message = e.response['Error']['Message']
+        raise AuthError({
+                  "code": code, 
+                  "message": message
+              }, 401)
+    
+    # delete user from database
+    with Session(db_engine) as db_session:
+        db_session.query(db.User).filter_by(email=email).delete()
+        try:
+            db_session.commit()
+        except IntegrityError:
+            db_session.rollback()
+            raise AuthError({
+                "message": "An error occured while removing user to database."
+            }, 422)
+        
+    # Remove refresh token cookie
+    session.pop('refresh_token', None)
+
+    return response
