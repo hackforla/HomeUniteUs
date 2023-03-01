@@ -1,0 +1,21 @@
+delete:
+  description: Delete a specific user
+  operationId: delete
+  tags:
+    - users
+  parameters:
+    - name: userId
+      in: path
+      required: true
+      description: The id of the user to delete
+      schema:
+        type: string
+  responses:
+    "200":
+      description: Null response
+    default:
+      description: Unexpected error
+      $ref: "../responses/_index.yaml#/UnexpectedError"
+  x-openapi-router-controller: openapi_server.controllers.users_controller
+  security:
+    - jwt: ["secret"]

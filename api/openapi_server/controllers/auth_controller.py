@@ -222,22 +222,31 @@ def token():
       'redirect_uri': callback_uri
     }
 
+    # get tokens from oauth2/token endpoint
     response = requests.post(token_url, auth=auth, data=params)
 
     refresh_token = response.json().get('refresh_token')
     access_token = response.json().get('access_token')
 
     # retrieve user data
-    user_data = userClient.get_user(AccessToken=access_token)
+    try:
+        user_data = userClient.get_user(AccessToken=access_token)
+    except Exception as e:
+        code = e.response['Error']['Code']
+        message = e.response['Error']['Message']
+        raise AuthError({
+                  "code": code, 
+                  "message": message
+              }, 401)
 
     # create user object from user data
     user = get_user_attr(user_data)
 
-    with Session(db_engine) as session:
+    with Session(db_engine) as db_session:
         db_user = db.User(email=user['email'])
-        if session.query(db.User.id).filter_by(email=user["email"]).first() is None:
-            session.add(db_user)
-            session.commit()
+        if db_session.query(db.User.id).filter_by(email=user["email"]).first() is None:
+            db_session.add(db_user)
+            db_session.commit()
 
     # set refresh token cookie
     session['refresh_token'] = refresh_token
@@ -375,3 +384,22 @@ def google():
     redirect_uri = request.args['redirect_uri']
         
     return redirect(f"https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri={redirect_uri}&identity_provider=Google")
+
+def confirm_signup():
+    code = request.args['code']
+    email = request.args['email']
+    client_id = request.args['clientId']
+
+    secret_hash = get_secret_hash(email)
+
+    try:
+        userClient.confirm_sign_up(
+            ClientId=client_id,
+            SecretHash=secret_hash,
+            Username=email,
+            ConfirmationCode=code
+        )
+
+        return redirect("http://localhost:4040/email-verification-success")
+    except Exception as e:
+        return redirect("http://localhost:4040/email-verification-error")
