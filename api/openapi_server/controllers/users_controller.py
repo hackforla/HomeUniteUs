@@ -2,7 +2,7 @@
 import string
 import boto3
 
-from api.openapi_server.controllers.auth_controller import get_token_auth_header
+from openapi_server.controllers.auth_controller import get_token_auth_header
 
 from os import environ as env
 from openapi_server.models import database as db

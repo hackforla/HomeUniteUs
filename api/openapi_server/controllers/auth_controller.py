@@ -222,13 +222,22 @@ def token():
       'redirect_uri': callback_uri
     }
 
+    # get tokens from oauth2/token endpoint
     response = requests.post(token_url, auth=auth, data=params)
 
     refresh_token = response.json().get('refresh_token')
     access_token = response.json().get('access_token')
 
     # retrieve user data
-    user_data = userClient.get_user(AccessToken=access_token)
+    try:
+        user_data = userClient.get_user(AccessToken=access_token)
+    except Exception as e:
+        code = e.response['Error']['Code']
+        message = e.response['Error']['Message']
+        raise AuthError({
+                  "code": code, 
+                  "message": message
+              }, 401)
 
     # create user object from user data
     user = get_user_attr(user_data)

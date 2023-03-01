@@ -257,23 +257,6 @@ paths:
       tags:
         - auth
       x-openapi-router-controller: openapi_server.controllers.auth_controller
-  /auth/delete:
-    delete:
-      description: Delete user from AWS Cognito and DB
-      operationId: delete
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-          description: successful operation
-      tags:
-        - auth
-      x-openapi-router-controller: openapi_server.controllers.auth_controller
-      security:
-        - jwt:
-            - secret
   /auth/token:
     post:
       description: Sign in user from OAuth Provider
