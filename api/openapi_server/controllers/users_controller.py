@@ -32,7 +32,7 @@ SECRET_KEY=env.get('SECRET_KEY')
 userClient = boto3.client('cognito-idp', region_name=COGNITO_REGION)
 
 
-def delete(id: string):
+def delete(user_id: string):
     # get access token from header
     access_token = get_token_auth_header()
 
@@ -51,7 +51,7 @@ def delete(id: string):
     
     # delete user from database
     with Session(db_engine) as db_session:
-        db_session.query(db.User).filter_by(id=id).delete()
+        db_session.query(db.User).filter_by(id=user_id).delete()
         try:
             db_session.commit()
         except IntegrityError:
