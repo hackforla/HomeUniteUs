@@ -7,6 +7,29 @@ info:
 servers:
   - url: 'http://homeunite.us/api'
 paths:
+  '/users/{userId}':
+    delete:
+      description: Delete a specific user
+      operationId: delete
+      tags:
+        - users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The id of the user to delete
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Null response
+        default:
+          description: Unexpected error
+          $ref: '#/components/responses/UnexpectedError'
+      x-openapi-router-controller: openapi_server.controllers.users_controller
+      security:
+        - jwt:
+            - secret
   /serviceProviders:
     get:
       summary: Get a list of housing program service providers.
@@ -207,22 +230,9 @@ paths:
         - auth
       x-openapi-router-controller: openapi_server.controllers.auth_controller
   /auth/confirm:
-    post:
-      description: Confirm users email
-      operationId: confirm
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                code:
-                  type: string
-              required:
-                - email
-                - code
+    get:
+      description: Confirm or deny verification of users email
+      operationId: confirm_signup
       responses:
         '200':
           content:
@@ -247,6 +257,23 @@ paths:
       tags:
         - auth
       x-openapi-router-controller: openapi_server.controllers.auth_controller
+  /auth/delete:
+    delete:
+      description: Delete user from AWS Cognito and DB
+      operationId: delete
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+          description: successful operation
+      tags:
+        - auth
+      x-openapi-router-controller: openapi_server.controllers.auth_controller
+      security:
+        - jwt:
+            - secret
   /auth/token:
     post:
       description: Sign in user from OAuth Provider
