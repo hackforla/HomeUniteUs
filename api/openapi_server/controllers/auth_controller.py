@@ -376,6 +376,28 @@ def google():
         
     return redirect(f"https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri={redirect_uri}&identity_provider=Google")
 
+def confirm_signup():
+    code = request.args['code']
+    email = request.args['email']
+    username = request.args['username']
+    client_id = request.args['clientId']
+
+    try:
+        userClient.confirm_sign_up(
+            ClientId=client_id,
+            Username=username,
+            ConfirmationCode=code
+        )
+
+        return redirect(f"")
+    except Exception as e:
+        code = e.response['Error']['Code']
+        message = e.response['Error']['Message']
+        return redirect(f"")
+    
+
+    
+
 def delete():
     # get access token from header
     access_token = get_token_auth_header()
