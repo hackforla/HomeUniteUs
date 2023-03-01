@@ -388,18 +388,18 @@ def google():
 def confirm_signup():
     code = request.args['code']
     email = request.args['email']
-    username = request.args['username']
     client_id = request.args['clientId']
+
+    secret_hash = get_secret_hash(email)
 
     try:
         userClient.confirm_sign_up(
             ClientId=client_id,
-            Username=username,
+            SecretHash=secret_hash,
+            Username=email,
             ConfirmationCode=code
         )
 
-        return redirect(f"")
+        return redirect("http://localhost:4040/email-verification-success")
     except Exception as e:
-        code = e.response['Error']['Code']
-        message = e.response['Error']['Message']
-        return redirect(f"")
+        return redirect("http://localhost:4040/email-verification-error")
