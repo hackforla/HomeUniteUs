@@ -33,6 +33,7 @@ import {
   SignUp,
   ForgotPassword,
   ResetPassword,
+  EmailVerificationSuccess,
 } from './views';
 import {AccountVerification} from './views/AccountVerification';
 import {AppLayout, Header} from './components/common';
@@ -95,6 +96,10 @@ function HuuApp() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/header" element={<Header />} />
+          <Route
+            path="/email-verification-success"
+            element={<EmailVerificationSuccess />}
+          />
         </Route>
       </Routes>
     </>
