@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 
 export const OneTimePasswordField = () => {
   const [otpCode, setOtpCode] = React.useState<string[]>(new Array(6).fill(''));
-  const [activeIndex, setActiveIndex] = React.useState<number>(0);
+  const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
 
   // Ref to the input element
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -19,12 +19,18 @@ export const OneTimePasswordField = () => {
     event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const {value} = event.currentTarget;
+    // only allow numbers
     if (value !== '' && new RegExp(/^\d+$/).test(value) === false) return;
 
+    // handle pasted codes
+    if (value.length === otpCode.length) {
+      setOtpCode([...value.split('')]);
+      setActiveIndex(otpCode.length - 1);
+      return;
+    }
+
     const otpCodeCopy = [...otpCode];
-
     otpCodeCopy[currentOTPIndex.current] = value.substring(value.length - 1);
-
     setOtpCode(otpCodeCopy);
 
     if (!value) {
@@ -60,6 +66,7 @@ export const OneTimePasswordField = () => {
   };
 
   const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+    // Sometimes the cursor is not at the end of the input. This makes sure it is.
     event.target.setSelectionRange(0, 1);
   };
 
@@ -82,3 +89,5 @@ export const OneTimePasswordField = () => {
     </Stack>
   );
 };
+
+// 123456
