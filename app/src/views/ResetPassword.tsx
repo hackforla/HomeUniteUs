@@ -8,6 +8,7 @@ import {
 } from '@mui/material';
 import {useFormik} from 'formik';
 import {object, ref, string} from 'yup';
+import {OneTimePasswordField} from '../components/authentication/OneTimePasswordField';
 import {ResetPasswordRequest, useResetPasswordMutation} from '../services/auth';
 
 const validationSchema = object({
@@ -40,7 +41,7 @@ export const ResetPassword = () => {
   const {
     handleSubmit,
     handleChange,
-    values: {email, password, confirmPassword, code},
+    values: {email, password, confirmPassword},
     touched,
     errors,
   } = useFormik({
@@ -123,14 +124,7 @@ export const ResetPassword = () => {
         </Stack>
         <Stack spacing={1} sx={{width: '100%'}}>
           <InputLabel htmlFor="code">Code</InputLabel>
-          <OutlinedInput
-            fullWidth
-            id="code"
-            name="code"
-            value={code}
-            onChange={handleChange}
-            error={touched.code && Boolean(errors.code)}
-          />
+          <OneTimePasswordField />
           {touched.code && errors.code && (
             <FormHelperText error>{errors.code}</FormHelperText>
           )}
