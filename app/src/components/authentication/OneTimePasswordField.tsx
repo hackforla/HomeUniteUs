@@ -1,4 +1,4 @@
-import {Stack, TextField} from '@mui/material';
+import {OutlinedInput, Stack} from '@mui/material';
 import React, {useEffect} from 'react';
 
 export const OneTimePasswordField = () => {
@@ -7,7 +7,7 @@ export const OneTimePasswordField = () => {
 
   // Ref to the input element
   const inputRef = React.useRef<HTMLInputElement>(null);
-  // Ref to the current index. This is necessary to stop the on change event from firing when deleting a value
+  // Ref to the current index. This is necessary to sync the active index with the input value when the user presses backspace
   const currentOTPIndex = React.useRef<number>(0);
 
   // When active index updates focus on the input
@@ -30,21 +30,32 @@ export const OneTimePasswordField = () => {
     if (!value) {
       setActiveIndex(currentOTPIndex.current - 1);
     } else {
-      setActiveIndex(
-        currentOTPIndex.current < otpCode.length - 1
-          ? currentOTPIndex.current + 1
-          : currentOTPIndex.current,
-      );
+      if (currentOTPIndex.current < otpCode.length - 1) {
+        setActiveIndex(currentOTPIndex.current + 1);
+      } else {
+        setActiveIndex(currentOTPIndex.current);
+      }
     }
   };
 
   const handleKeyDown = (
-    event: React.KeyboardEvent<HTMLDivElement>,
+    event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
     index: number,
   ) => {
+    // syncs current index with the active index on keypress
     currentOTPIndex.current = index;
+
     if (event.key === 'Backspace') {
-      setActiveIndex(index - 1);
+      // If the last input cotains a value, delete the value and keep focus on the input
+      if (activeIndex === otpCode.length - 1) {
+        setOtpCode(otpCode.map((val, i) => (i === index ? '' : val)));
+      }
+
+      // If the input is empty and the user presses backspace, delete the number from the previous input and focus on the previous input
+      if (otpCode[index] === '' && index > 0) {
+        setActiveIndex(index - 1);
+        setOtpCode(otpCode.map((val, i) => (i === index - 1 ? '' : val)));
+      }
     }
   };
 
@@ -56,11 +67,10 @@ export const OneTimePasswordField = () => {
     <Stack direction="row" gap={2}>
       {otpCode.map((value, index) => {
         return (
-          <TextField
+          <OutlinedInput
             placeholder="-"
             inputMode="numeric"
             inputRef={index === activeIndex ? inputRef : null}
-            variant="outlined"
             key={index}
             value={value}
             onChange={handleChange}
