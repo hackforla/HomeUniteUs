@@ -39,6 +39,7 @@ const validationSchema = object({
 
 export const ResetPassword = () => {
   const {
+    setFieldValue,
     handleSubmit,
     handleChange,
     values: {email, password, confirmPassword},
@@ -66,6 +67,10 @@ export const ResetPassword = () => {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const setCode = (code: string) => {
+    setFieldValue('code', code);
   };
 
   return (
@@ -124,7 +129,10 @@ export const ResetPassword = () => {
         </Stack>
         <Stack spacing={1} sx={{width: '100%'}}>
           <InputLabel htmlFor="code">Code</InputLabel>
-          <OneTimePasswordField />
+          <OneTimePasswordField
+            onChange={setCode}
+            error={Boolean(touched.code && errors.code)}
+          />
           {touched.code && errors.code && (
             <FormHelperText error>{errors.code}</FormHelperText>
           )}

@@ -1,7 +1,15 @@
 import {OutlinedInput, Stack} from '@mui/material';
 import React, {useEffect} from 'react';
 
-export const OneTimePasswordField = () => {
+interface OneTimePasswordFieldProps {
+  onChange?: (value: string) => void;
+  error?: boolean;
+}
+
+export const OneTimePasswordField = ({
+  onChange,
+  error,
+}: OneTimePasswordFieldProps) => {
   const [otpCode, setOtpCode] = React.useState<string[]>(new Array(6).fill(''));
   const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
 
@@ -15,6 +23,15 @@ export const OneTimePasswordField = () => {
     inputRef.current?.focus();
   }, [activeIndex]);
 
+  //update local state and any controlled state
+  const updateCodeValues = (code: string[]) => {
+    if (onChange) {
+      onChange(code.join(''));
+    }
+
+    setOtpCode(code);
+  };
+
   const handleChange = (
     event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
@@ -24,14 +41,14 @@ export const OneTimePasswordField = () => {
 
     // handle pasted codes
     if (value.length === otpCode.length) {
-      setOtpCode([...value.split('')]);
+      updateCodeValues([...value.split('')]);
       setActiveIndex(otpCode.length - 1);
       return;
     }
 
     const otpCodeCopy = [...otpCode];
     otpCodeCopy[currentOTPIndex.current] = value.substring(value.length - 1);
-    setOtpCode(otpCodeCopy);
+    updateCodeValues(otpCodeCopy);
 
     if (!value) {
       setActiveIndex(currentOTPIndex.current - 1);
@@ -54,13 +71,13 @@ export const OneTimePasswordField = () => {
     if (event.key === 'Backspace') {
       // If the last input cotains a value, delete the value and keep focus on the input
       if (activeIndex === otpCode.length - 1) {
-        setOtpCode(otpCode.map((val, i) => (i === index ? '' : val)));
+        updateCodeValues(otpCode.map((val, i) => (i === index ? '' : val)));
       }
 
       // If the input is empty and the user presses backspace, delete the number from the previous input and focus on the previous input
       if (otpCode[index] === '' && index > 0) {
         setActiveIndex(index - 1);
-        setOtpCode(otpCode.map((val, i) => (i === index - 1 ? '' : val)));
+        updateCodeValues(otpCode.map((val, i) => (i === index - 1 ? '' : val)));
       }
     }
   };
@@ -83,11 +100,10 @@ export const OneTimePasswordField = () => {
             onChange={handleChange}
             onKeyDown={e => handleKeyDown(e, index)}
             onFocus={handleFocus}
+            error={error}
           />
         );
       })}
     </Stack>
   );
 };
-
-// 123456
