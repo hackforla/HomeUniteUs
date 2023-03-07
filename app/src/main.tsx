@@ -20,7 +20,7 @@ import './index.css';
 import {CssBaseline, StyledEngineProvider, ThemeProvider} from '@mui/material';
 import {Provider} from 'react-redux';
 import {store} from './app/store';
-import {ProtectedRoute} from './auth/ProtectedRoute';
+import {ProtectedRoute} from './components/authentication/ProtectedRoute';
 import {useSessionMutation} from './services/auth';
 import {HomeUniteUsTheme} from './theme';
 import {
