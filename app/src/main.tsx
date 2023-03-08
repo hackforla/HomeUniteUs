@@ -35,11 +35,11 @@ import {
   ResetPassword,
   EmailVerificationSuccess,
   EmailVerificationError,
+  ForgotPasswordCode,
 } from './views';
 import {AccountVerification} from './views/AccountVerification';
 import {AppLayout, Header} from './components/common';
 import {ResetPasswordContext} from './components/authentication/ResetPasswordContext';
-// import { ApprovalTwoTone } from '@mui/icons-material';
 
 function Profile() {
   return <div>Hello from profile</div>;
@@ -96,6 +96,7 @@ function HuuApp() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/forgot-password" element={<ResetPasswordContext />}>
             <Route index element={<ForgotPassword />} />
+            <Route path="code" element={<ForgotPasswordCode />} />
             <Route path="reset" element={<ResetPassword />} />
           </Route>
           <Route path="/verification" element={<AccountVerification />} />

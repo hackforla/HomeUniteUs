@@ -10,3 +10,4 @@ export {SignIn} from './SignIn';
 export {SignUp} from './SignUp';
 export {EmailVerificationSuccess} from './EmailVerificationSuccess';
 export {EmailVerificationError} from './EmailVerificationError';
+export {ForgotPasswordCode} from './ForgotPasswordCode';
