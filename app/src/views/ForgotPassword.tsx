@@ -13,9 +13,11 @@ import React from 'react';
 import {isErrorWithMessage, isFetchBaseQueryError} from '../app/helpers';
 import {ResestPasswordValues} from '../components/authentication/ResetPasswordContext';
 import {useForgotPasswordMutation} from '../services/auth';
+import {useNavigate} from 'react-router-dom';
 
 export const ForgotPassword = () => {
   const [errorMessage, setErrorMessage] = React.useState('');
+  const navigate = useNavigate();
 
   const {
     values: {email},
@@ -30,8 +32,8 @@ export const ForgotPassword = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await forgotPassword({email}).unwrap();
-      console.log(response);
+      await forgotPassword({email}).unwrap();
+      navigate('code');
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
         // you can access all properties of `FetchBaseQueryError` here

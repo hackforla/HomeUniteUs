@@ -12,23 +12,22 @@ import {useFormikContext} from 'formik';
 import React from 'react';
 import {ResestPasswordValues} from '../components/authentication/ResetPasswordContext';
 import {OneTimePasswordField} from '../components/authentication';
+import {useNavigate} from 'react-router-dom';
 
 export const ForgotPasswordCode = () => {
   const [errorMessage, setErrorMessage] = React.useState('');
 
-  const {
-    values: {code},
-    errors,
-    touched,
-    setFieldValue,
-    handleBlur,
-  } = useFormikContext<ResestPasswordValues>();
+  const navigate = useNavigate();
+
+  const {errors, touched, setFieldValue, handleBlur} =
+    useFormikContext<ResestPasswordValues>();
 
   // const [forgotPassword] = useForgotPasswordMutation();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(code);
+    if (errors.code) return;
+    navigate('/forgot-password/reset');
   };
 
   const setCode = (code: string) => {
