@@ -3,7 +3,6 @@ import {
   Button,
   Collapse,
   IconButton,
-  InputLabel,
   Stack,
   FormHelperText,
   Typography,
@@ -22,6 +21,7 @@ export const ForgotPasswordCode = () => {
     errors,
     touched,
     setFieldValue,
+    handleBlur,
   } = useFormikContext<ResestPasswordValues>();
 
   // const [forgotPassword] = useForgotPasswordMutation();
@@ -49,14 +49,15 @@ export const ForgotPasswordCode = () => {
         onSubmit={handleSubmit}
       >
         <Stack spacing={1} sx={{width: '100%'}}>
-          <InputLabel htmlFor="code">Code</InputLabel>
           <OneTimePasswordField
+            id="code"
             onChange={setCode}
-            error={Boolean(touched.code && errors.code)}
+            onBlur={handleBlur}
+            error={touched.code && Boolean(errors.code)}
           />
-          {touched.code && errors.code && (
+          {touched.code && errors.code ? (
             <FormHelperText error>{errors.code}</FormHelperText>
-          )}
+          ) : null}
         </Stack>
         <Collapse sx={{width: '100%'}} in={errorMessage !== ''}>
           <Alert

@@ -1,14 +1,20 @@
-import {OutlinedInput, Stack} from '@mui/material';
+import {Stack, TextField} from '@mui/material';
 import React, {useEffect} from 'react';
 
 interface OneTimePasswordFieldProps {
   onChange?: (value: string) => void;
+  onBlur?: (
+    e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => void;
   error?: boolean;
+  id: string;
 }
 
 export const OneTimePasswordField = ({
   onChange,
+  onBlur,
   error,
+  id,
 }: OneTimePasswordFieldProps) => {
   const [otpCode, setOtpCode] = React.useState<string[]>(new Array(6).fill(''));
   const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
@@ -62,7 +68,7 @@ export const OneTimePasswordField = ({
   };
 
   const handleKeyDown = (
-    event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.KeyboardEvent<HTMLDivElement>,
     index: number,
   ) => {
     // syncs current index with the active index on keypress
@@ -91,7 +97,8 @@ export const OneTimePasswordField = ({
     <Stack direction="row" gap={2}>
       {otpCode.map((value, index) => {
         return (
-          <OutlinedInput
+          <TextField
+            id={id}
             placeholder="-"
             inputMode="numeric"
             inputRef={index === activeIndex ? inputRef : null}
@@ -100,6 +107,7 @@ export const OneTimePasswordField = ({
             onChange={handleChange}
             onKeyDown={e => handleKeyDown(e, index)}
             onFocus={handleFocus}
+            onBlur={onBlur}
             error={error}
           />
         );
