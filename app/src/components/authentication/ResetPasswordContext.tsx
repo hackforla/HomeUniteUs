@@ -2,11 +2,13 @@ import {Formik} from 'formik';
 import React from 'react';
 import {Outlet} from 'react-router-dom';
 import {object, string, ref} from 'yup';
+import {useResetPasswordMutation} from '../../services/auth';
 
 export interface ResestPasswordValues {
   email: string;
   code: string;
   password: string;
+  confirmPassword: string;
 }
 
 const validationSchema = object({
@@ -39,14 +41,23 @@ const initialValues = {
   email: '',
   code: '',
   password: '',
+  confirmPassword: '',
 };
 
 export const ResetPasswordContext = () => {
+  const [resetPassword] = useResetPasswordMutation({
+    fixedCacheKey: 'reset-password-post',
+  });
+
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={values => {
-        console.log(values);
+      onSubmit={async values => {
+        try {
+          await resetPassword(values);
+        } catch (err) {
+          console.log({err});
+        }
       }}
       validationSchema={validationSchema}
     >
