@@ -20,8 +20,8 @@ import {SignInRequest} from '../../services/auth';
 
 interface SignInFormProps {
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
-  errorMessage: string;
-  setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
+  errorMessage?: string;
+  setErrorMessage?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const validationSchema = object({
@@ -108,7 +108,9 @@ export const SignInForm = ({
               color="inherit"
               size="small"
               onClick={() => {
-                setErrorMessage('');
+                if (setErrorMessage) {
+                  setErrorMessage('');
+                }
               }}
             >
               <CloseIcon fontSize="inherit" />
