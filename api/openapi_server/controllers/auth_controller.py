@@ -341,13 +341,21 @@ def forgot_password():
         body = connexion.request.get_json()
 
     secret_hash = get_secret_hash(body['email'])
-
+    
     # call forgot password method
-    response = userClient.forgot_password(
-      ClientId=COGNITO_CLIENT_ID,
-      SecretHash=secret_hash,
-      Username=body['email']
-    )
+    try:
+        response = userClient.forgot_password(
+            ClientId=COGNITO_CLIENT_ID,
+            SecretHash=secret_hash,
+            Username=body['email']
+        )
+    except Exception as e:
+        code = e.response['Error']['Code']
+        message = e.response['Error']['Message']
+        raise AuthError({
+                  "code": code, 
+                  "message": message
+              }, 401)
     
     return response
 
