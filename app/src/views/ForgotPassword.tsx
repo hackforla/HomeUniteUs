@@ -1,30 +1,46 @@
 import {
+  Alert,
   Button,
-  InputLabel,
-  OutlinedInput,
+  Collapse,
+  IconButton,
   Stack,
+  TextField,
   Typography,
 } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import {useFormikContext} from 'formik';
 import React from 'react';
+import {isErrorWithMessage, isFetchBaseQueryError} from '../app/helpers';
+import {ResestPasswordValues} from '../components/authentication/ResetPasswordContext';
 import {useForgotPasswordMutation} from '../services/auth';
 
 export const ForgotPassword = () => {
-  const [email, setEmail] = React.useState('');
+  const [errorMessage, setErrorMessage] = React.useState('');
+
+  const {
+    values: {email},
+    errors,
+    touched,
+    handleChange,
+    handleBlur,
+  } = useFormikContext<ResestPasswordValues>();
 
   const [forgotPassword] = useForgotPasswordMutation();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     try {
       const response = await forgotPassword({email}).unwrap();
       console.log(response);
     } catch (err) {
-      console.log(err);
+      if (isFetchBaseQueryError(err)) {
+        // you can access all properties of `FetchBaseQueryError` here
+        const errMsg = err.data.message;
+        setErrorMessage(errMsg);
+      } else if (isErrorWithMessage(err)) {
+        // you can access a string 'message' property here
+        setErrorMessage(err.message);
+      }
     }
   };
 
@@ -40,21 +56,36 @@ export const ForgotPassword = () => {
         sx={{minWidth: '350px', alignItems: 'flex-start'}}
         onSubmit={handleSubmit}
       >
-        <Stack spacing={1} sx={{width: '100%'}}>
-          <InputLabel htmlFor="email">Email address</InputLabel>
-          <OutlinedInput
-            fullWidth
-            id="email"
-            name="email"
-            value={email}
-            onChange={handleChange}
-            // error={touched.email && Boolean(errors.email)}
-          />
-          {/* {touched.email && errors.email && (
-            <FormHelperText error>{errors.email}</FormHelperText>
-          )} */}
-        </Stack>
-
+        <TextField
+          fullWidth
+          id="email"
+          name="email"
+          label="Email"
+          value={email}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          error={touched.email && Boolean(errors.email)}
+          helperText={touched.email && errors.email}
+        />
+        <Collapse sx={{width: '100%'}} in={errorMessage !== ''}>
+          <Alert
+            severity="error"
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setErrorMessage('');
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            {errorMessage}
+          </Alert>
+        </Collapse>
         <Button variant="contained" size="large" type="submit">
           Submit
         </Button>
