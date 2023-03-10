@@ -11,7 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import {useFormikContext} from 'formik';
 import React from 'react';
 import {ResestPasswordValues} from '../components/authentication/ResetPasswordContext';
-import {OneTimePasswordField} from '../components/authentication';
+import {CodeField} from '../components/authentication';
 import {useNavigate} from 'react-router-dom';
 
 export const ForgotPasswordCode = () => {
@@ -46,7 +46,7 @@ export const ForgotPasswordCode = () => {
         onSubmit={handleSubmit}
       >
         <Stack spacing={1} sx={{width: '100%'}}>
-          <OneTimePasswordField
+          <CodeField
             id="code"
             onChange={setCode}
             onBlur={handleBlur}

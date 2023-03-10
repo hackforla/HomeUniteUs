@@ -1,7 +1,7 @@
 import {Stack, TextField} from '@mui/material';
 import React, {useEffect} from 'react';
 
-interface OneTimePasswordFieldProps {
+interface CodeFieldProps {
   onChange?: (value: string) => void;
   onBlur?: (
     e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -10,16 +10,10 @@ interface OneTimePasswordFieldProps {
   id: string;
 }
 
-export const OneTimePasswordField = ({
-  onChange,
-  onBlur,
-  error,
-  id,
-}: OneTimePasswordFieldProps) => {
+export const CodeField = ({onChange, onBlur, error, id}: CodeFieldProps) => {
   const [otpCode, setOtpCode] = React.useState<string[]>(new Array(6).fill(''));
   const [activeIndex, setActiveIndex] = React.useState<number | null>(null);
 
-  // Ref to the input element
   const inputRef = React.useRef<HTMLInputElement>(null);
   // Ref to the current index. This is necessary to sync the active index with the input value when the user presses backspace
   const currentOTPIndex = React.useRef<number>(0);

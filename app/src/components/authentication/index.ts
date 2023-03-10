@@ -1,1 +1,1 @@
-export {OneTimePasswordField} from './OneTimePasswordField';
+export {CodeField} from './CodeField';
