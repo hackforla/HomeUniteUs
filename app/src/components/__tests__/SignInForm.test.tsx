@@ -3,11 +3,9 @@ import {describe, vi} from 'vitest';
 import {fireEvent, render, screen} from '../../utils/test/test-utils';
 import {SignInForm} from '../authentication/SignInForm';
 
-const setErrorMessage = vi.fn();
-
 const prepare = (errorMessage = '') => {
   const onSubmit = vi.fn();
-  const setErrorMesage = vi.fn();
+  const setErrorMessage = vi.fn();
 
   render(
     <BrowserRouter>
@@ -23,7 +21,7 @@ const prepare = (errorMessage = '') => {
   const passwordInput = screen.getByLabelText(/password/i);
   const submitButton = screen.getByRole('button', {name: /sign in/i});
 
-  return {onSubmit, setErrorMesage, emailInput, passwordInput, submitButton};
+  return {onSubmit, setErrorMessage, emailInput, passwordInput, submitButton};
 };
 
 describe('<SignInForm />', () => {
@@ -62,7 +60,7 @@ describe('<SignInForm />', () => {
 
   it('clicking the close button calls setErrorMessage', async () => {
     const errorMessage = 'error';
-    prepare(errorMessage);
+    const {setErrorMessage} = prepare(errorMessage);
     const closeButton = screen.getByRole('button', {name: /close/i});
     fireEvent.click(closeButton);
     expect(setErrorMessage).toHaveBeenCalledWith('');
