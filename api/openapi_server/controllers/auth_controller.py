@@ -350,6 +350,7 @@ def forgot_password():
             Username=body['email']
         )
     except Exception as e:
+        print(e)
         code = e.response['Error']['Code']
         message = e.response['Error']['Message']
         raise AuthError({
