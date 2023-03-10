@@ -1,7 +1,16 @@
-import {Button, Stack, TextField, Typography} from '@mui/material';
+import {
+  Alert,
+  Button,
+  Collapse,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
+import React from 'react';
 import {useFormikContext} from 'formik';
 import {ResestPasswordValues} from '../components/authentication/ResetPasswordContext';
 import {useResetPasswordMutation} from '../services/auth';
+import {getErrorMessage} from '../app/helpers';
 
 export const ResetPassword = () => {
   const {
@@ -11,15 +20,27 @@ export const ResetPassword = () => {
     errors,
     handleSubmit,
   } = useFormikContext<ResestPasswordValues>();
-  const [, {error, isError}] = useResetPasswordMutation({
+
+  // access mutation state when hook is called from Formik provider
+  const [, {error, isError, reset}] = useResetPasswordMutation({
     fixedCacheKey: 'reset-password-post',
   });
-  console.log({error, isError});
+
+  React.useEffect(() => {
+    return () => {
+      // remove error message when unmounting by resetting the state
+      reset();
+    };
+  }, []);
+
   return (
     <Stack
       spacing={2}
       sx={{justifyContent: 'center', alignItems: 'flex-start', p: 4}}
     >
+      <Collapse sx={{width: '100%'}} in={isError}>
+        <Alert severity="error">{getErrorMessage(error)}</Alert>
+      </Collapse>
       <Typography variant="h4">Reset Password</Typography>
       <Stack
         component="form"
