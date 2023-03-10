@@ -1,4 +1,3 @@
-import {describe, vi} from 'vitest';
 import {fireEvent, render, screen} from '../../utils/test/test-utils';
 import {SignInForm} from '../authentication/SignInForm';
 
