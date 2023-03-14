@@ -11,6 +11,10 @@ import {
   Alert,
   Collapse,
   IconButton,
+  List,
+  ListSubheader,
+  ListItem,
+  Checkbox,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import {styled} from '@mui/system';
@@ -44,16 +48,17 @@ export const SignUpForm = ({
   errorMessage,
   setErrorMessage,
 }: SignUpFormProps) => {
-  const {handleSubmit, handleChange, values, touched, errors} = useFormik({
-    initialValues: {
-      email: '',
-      password: '',
-    },
-    validationSchema,
-    onSubmit: values => {
-      onSubmit(values);
-    },
-  });
+  const {handleSubmit, handleChange, handleBlur, values, touched, errors} =
+    useFormik({
+      initialValues: {
+        email: '',
+        password: '',
+      },
+      validationSchema,
+      onSubmit: values => {
+        onSubmit(values);
+      },
+    });
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -78,11 +83,37 @@ export const SignUpForm = ({
           type="password"
           value={values.password}
           onChange={handleChange}
+          onBlur={handleBlur}
           error={touched.password && Boolean(errors.password)}
         />
         {touched.password && errors.password && (
           <FormHelperText error>{errors.password}</FormHelperText>
         )}
+      </Stack>
+      <Stack spacing={1}>
+        <List>
+          <ListSubheader>Password must contain:</ListSubheader>
+          <ListItem>
+            {' '}
+            <Checkbox />
+            8-20 Characters
+          </ListItem>
+          <ListItem>
+            {' '}
+            <Checkbox />
+            At least one capital letter
+          </ListItem>
+          <ListItem>
+            {' '}
+            <Checkbox />
+            At least one number
+          </ListItem>
+          <ListItem>
+            {' '}
+            <Checkbox />
+            At least one special character
+          </ListItem>
+        </List>
       </Stack>
       <Stack direction="row" gap={1}>
         <Typography>Already a member?</Typography>
