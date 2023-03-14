@@ -14,7 +14,6 @@ import {
   List,
   ListSubheader,
   ListItem,
-  Checkbox,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import {styled} from '@mui/system';
@@ -22,6 +21,8 @@ import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
 import {object, string} from 'yup';
 import {SignInRequest} from '../../services/auth';
+
+// do we want to use yup and formik, or just formik and manual changing
 
 interface SignUpFormProps {
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
@@ -93,24 +94,11 @@ export const SignUpForm = ({
       <Stack spacing={1}>
         <List>
           <ListSubheader>Password must contain:</ListSubheader>
-          <ListItem>
-            {' '}
-            <Checkbox />
-            8-20 Characters
-          </ListItem>
-          <ListItem>
-            {' '}
-            <Checkbox />
-            At least one capital letter
-          </ListItem>
-          <ListItem>
-            {' '}
-            <Checkbox />
-            At least one number
-          </ListItem>
-          <ListItem>
-            {' '}
-            <Checkbox />
+          {/* should I give valid and invalid classes, and toggle between views depending on onBlur validation */}
+          <ListItem className="invalid"> 8-20 Characters</ListItem>
+          <ListItem className="invalid"> At least one capital letter</ListItem>
+          <ListItem className="invalid"> At least one number</ListItem>
+          <ListItem className="invalid">
             At least one special character
           </ListItem>
         </List>
