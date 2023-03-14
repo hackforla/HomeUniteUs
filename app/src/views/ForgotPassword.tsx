@@ -1,7 +1,6 @@
 import {
   Alert,
   Button,
-  Collapse,
   IconButton,
   Stack,
   TextField,
@@ -10,10 +9,11 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import {useFormikContext} from 'formik';
 import React from 'react';
+import {useNavigate} from 'react-router-dom';
 import {isErrorWithMessage, isFetchBaseQueryError} from '../app/helpers';
 import {ResestPasswordValues} from '../components/authentication/ResetPasswordContext';
 import {useForgotPasswordMutation} from '../services/auth';
-import {useNavigate} from 'react-router-dom';
+import {FormContainer} from '../components/authentication';
 
 export const ForgotPassword = () => {
   const [errorMessage, setErrorMessage] = React.useState('');
@@ -47,30 +47,14 @@ export const ForgotPassword = () => {
   };
 
   return (
-    <Stack
-      spacing={2}
-      sx={{justifyContent: 'center', alignItems: 'flex-start', p: 4}}
-    >
-      <Typography variant="h4">Forgot Password</Typography>
+    <FormContainer>
       <Stack
-        component="form"
-        spacing={2}
-        sx={{minWidth: '350px', alignItems: 'flex-start'}}
-        onSubmit={handleSubmit}
+        spacing={4}
+        sx={{justifyContent: 'center', alignItems: 'center', width: '100%'}}
       >
-        <TextField
-          fullWidth
-          id="email"
-          name="email"
-          label="Email"
-          value={email}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          error={touched.email && Boolean(errors.email)}
-          helperText={touched.email && errors.email}
-        />
-        <Collapse sx={{width: '100%'}} in={errorMessage !== ''}>
+        {errorMessage ? (
           <Alert
+            sx={{width: '100%'}}
             severity="error"
             action={
               <IconButton
@@ -87,11 +71,30 @@ export const ForgotPassword = () => {
           >
             {errorMessage}
           </Alert>
-        </Collapse>
-        <Button variant="contained" size="large" type="submit">
-          Submit
-        </Button>
+        ) : null}
+        <Typography variant="h4">Forgot Password</Typography>
+        <Stack
+          component="form"
+          sx={{width: '100%', alignItems: 'flex-start'}}
+          onSubmit={handleSubmit}
+          spacing={4}
+        >
+          <TextField
+            fullWidth
+            id="email"
+            name="email"
+            label="Email"
+            value={email}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={touched.email && Boolean(errors.email)}
+            helperText={touched.email && errors.email}
+          />
+          <Button fullWidth variant="contained" size="large" type="submit">
+            Submit
+          </Button>
+        </Stack>
       </Stack>
-    </Stack>
+    </FormContainer>
   );
 };
