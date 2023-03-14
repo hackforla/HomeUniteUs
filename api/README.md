@@ -15,6 +15,7 @@ To run the server, please execute the following from the root directory:
 
 ```
 pip3 install -r requirements.txt
+alembic upgrade head
 python3 -m openapi_server
 ```
 If you're seeing error messages, this may be related to missing environment variables. In the ``api/`` directory create a ``.env`` file and copy and paste the variable definitions from ``.env.example``. Message a team member to receive the necessary values.
@@ -36,6 +37,10 @@ To launch the integration tests, use tox:
 sudo pip install tox
 tox
 ```
+
+## Alembic migrations
+When changing the database, you can automatically generate an alembic migration. Simply change the model however you want in `database.py`, run `alembic revision --autogenerate -m <name_of_migration>` to generate a new migration, and then run `alembic upgrade head` to upgrade your database to the latest revision.
+In the case of someone else adding a revision to the database, simply pull their changes to their repo and run `alembic upgrade head` to upgrade your local database to the latest revision.
 
 ## Making changes to the openapi specification
 In order to make changes to the openapi specification you should edit the files within the `openapi_server/openapi` folder.
