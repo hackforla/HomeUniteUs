@@ -33,5 +33,5 @@ SQLAlchemy==1.4.36
 swagger-ui-bundle==0.0.9
 typing_extensions==4.5.0
 urllib3==1.26.9
-Werkzeug==2.1.2
+Werkzeug==2.2.3
 zipp==3.11.0
