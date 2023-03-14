@@ -1,25 +1,21 @@
-import {
-  Alert,
-  Button,
-  Collapse,
-  Stack,
-  TextField,
-  Typography,
-} from '@mui/material';
+import {Alert, Button, Stack, TextField, Typography} from '@mui/material';
 import React from 'react';
 import {useFormikContext} from 'formik';
 import {ResestPasswordValues} from '../components/authentication/ResetPasswordContext';
 import {useResetPasswordMutation} from '../services/auth';
 import {getErrorMessage} from '../app/helpers';
+import {FormContainer} from '../components/authentication';
 
 export const ResetPassword = () => {
   const {
     handleChange,
-    values: {password, confirmPassword},
+    values: {password, confirmPassword, email, code},
     touched,
     errors,
     handleSubmit,
   } = useFormikContext<ResestPasswordValues>();
+
+  console.log(email, code);
 
   // access mutation state when hook is called from Formik provider
   const [, {error, isError, reset}] = useResetPasswordMutation({
@@ -34,42 +30,45 @@ export const ResetPassword = () => {
   }, []);
 
   return (
-    <Stack
-      spacing={2}
-      sx={{justifyContent: 'center', alignItems: 'flex-start', p: 4}}
-    >
-      <Collapse sx={{width: '100%'}} in={isError}>
-        <Alert severity="error">{getErrorMessage(error)}</Alert>
-      </Collapse>
-      <Typography variant="h4">Reset Password</Typography>
-      <Stack
-        component="form"
-        spacing={2}
-        sx={{minWidth: '350px', alignItems: 'flex-start'}}
-        onSubmit={handleSubmit}
-      >
-        <TextField
-          fullWidth
-          label="Password"
-          id="password"
-          name="password"
-          value={password}
-          onChange={handleChange}
-          error={touched.password && Boolean(errors.password)}
-        />
-        <TextField
-          fullWidth
-          label="Confirm password"
-          id="confirmPassword"
-          name="confirmPassword"
-          value={confirmPassword}
-          onChange={handleChange}
-          error={touched.confirmPassword && Boolean(errors.confirmPassword)}
-        />
-        <Button variant="contained" size="large" type="submit">
-          Submit
-        </Button>
+    <FormContainer>
+      <Stack spacing={4} sx={{justifyContent: 'center', alignItems: 'center'}}>
+        {isError ? (
+          <Alert sx={{width: '100%'}} severity="error">
+            {getErrorMessage(error)}
+          </Alert>
+        ) : null}
+        <Typography variant="h4">Reset Password</Typography>
+        <Stack
+          component="form"
+          spacing={4}
+          sx={{width: '100%', alignItems: 'flex-start'}}
+          onSubmit={handleSubmit}
+        >
+          <TextField
+            fullWidth
+            label="New password"
+            id="password"
+            name="password"
+            value={password}
+            onChange={handleChange}
+            error={touched.password && Boolean(errors.password)}
+            helperText={touched.password && errors.password}
+          />
+          <TextField
+            fullWidth
+            label="Confirm new password"
+            id="confirmPassword"
+            name="confirmPassword"
+            value={confirmPassword}
+            onChange={handleChange}
+            error={touched.confirmPassword && Boolean(errors.confirmPassword)}
+            helperText={touched.confirmPassword && errors.confirmPassword}
+          />
+          <Button fullWidth variant="contained" size="large" type="submit">
+            Submit
+          </Button>
+        </Stack>
       </Stack>
-    </Stack>
+    </FormContainer>
   );
 };
