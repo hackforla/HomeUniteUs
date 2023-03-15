@@ -14,6 +14,7 @@ import {
   List,
   ListSubheader,
   ListItem,
+  ListItemProps,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import {styled} from '@mui/system';
@@ -22,13 +23,19 @@ import {useFormik} from 'formik';
 import {object, string} from 'yup';
 import {SignInRequest} from '../../services/auth';
 
-// do we want to use yup and formik, or just formik and manual changing
-
 interface SignUpFormProps {
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   errorMessage: string;
 }
+
+// styled list item component customized to change from simple - to ✓
+interface StyledListItems extends ListItemProps {
+  success?: boolean;
+}
+
+// validation function that uses conditional to see if matches regEx test
+// remember to validate on change
 
 const validationSchema = object({
   email: string().email().required('email is required'),
@@ -44,22 +51,34 @@ const validationSchema = object({
     ),
 });
 
+// update formik on change of input values using validateOnChange
+// Yup's validation errors will be turned into objects
+
+// function validatePassword(value: string) {
+//   let error;
+//   if (!value) {
+//     error = 'Required';
+//   } else if (!/^(?=.*[0-9])/.test(value)) {
+//     // !success, which will change the content of the list item
+//   }
+//   return error;
+// }
+
 export const SignUpForm = ({
   onSubmit,
   errorMessage,
   setErrorMessage,
 }: SignUpFormProps) => {
-  const {handleSubmit, handleChange, handleBlur, values, touched, errors} =
-    useFormik({
-      initialValues: {
-        email: '',
-        password: '',
-      },
-      validationSchema,
-      onSubmit: values => {
-        onSubmit(values);
-      },
-    });
+  const {handleSubmit, handleChange, values, touched, errors} = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validationSchema,
+    onSubmit: values => {
+      onSubmit(values);
+    },
+  });
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -84,7 +103,6 @@ export const SignUpForm = ({
           type="password"
           value={values.password}
           onChange={handleChange}
-          onBlur={handleBlur}
           error={touched.password && Boolean(errors.password)}
         />
         {touched.password && errors.password && (
@@ -94,13 +112,10 @@ export const SignUpForm = ({
       <Stack spacing={1}>
         <List>
           <ListSubheader>Password must contain:</ListSubheader>
-          {/* should I give valid and invalid classes, and toggle between views depending on onBlur validation */}
-          <ListItem className="invalid"> 8-20 Characters</ListItem>
-          <ListItem className="invalid"> At least one capital letter</ListItem>
-          <ListItem className="invalid"> At least one number</ListItem>
-          <ListItem className="invalid">
-            At least one special character
-          </ListItem>
+          <ValidationItem> 8-20 Characters</ValidationItem>
+          <ValidationItem> At least one capital letter</ValidationItem>
+          <ValidationItem> At least one number</ValidationItem>
+          <ValidationItem>At least one special character</ValidationItem>
         </List>
       </Stack>
       <Stack direction="row" gap={1}>
@@ -154,3 +169,16 @@ const Form = styled('form')({
   alignItems: 'stretch',
   gap: '1rem',
 });
+
+const ValidationItem = styled(ListItem, {
+  shouldForwardProp: prop => prop !== 'success',
+})<StyledListItems>(({success}) => ({
+  ...(success && {
+    color: 'blue',
+  }),
+}));
+
+// second possible logic
+// const ValidationItem = styled('li')({
+//   color: `${props => (props.success ? 'blue' : 'black')}`,
+// });
