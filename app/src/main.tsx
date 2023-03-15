@@ -4,7 +4,6 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import './index.css';
 
 /*
-
   import 'core-js/stable';
   import 'regenerator-runtime/runtime';
   import * as React from 'react';
@@ -14,7 +13,6 @@ import './index.css';
   import {CssBaseline} from '@mui/material';
   import {ThemeProvider} from '@mui/material/styles';
   import {StyledEngineProvider} from '@mui/material/styles'; 
-
 */
 
 import {CssBaseline, StyledEngineProvider, ThemeProvider} from '@mui/material';

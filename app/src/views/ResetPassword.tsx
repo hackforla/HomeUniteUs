@@ -9,13 +9,11 @@ import {FormContainer} from '../components/authentication';
 export const ResetPassword = () => {
   const {
     handleChange,
-    values: {password, confirmPassword, email, code},
+    values: {password, confirmPassword},
     touched,
     errors,
     handleSubmit,
   } = useFormikContext<ResestPasswordValues>();
-
-  console.log(email, code);
 
   // access mutation state when hook is called from Formik provider
   const [, {error, isError, reset}] = useResetPasswordMutation({
