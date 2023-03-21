@@ -2,7 +2,7 @@ import {Alert, Button, Stack, TextField, Typography} from '@mui/material';
 import React from 'react';
 import {useFormikContext} from 'formik';
 import {ResestPasswordValues} from '../components/authentication/ResetPasswordContext';
-import {useResetPasswordMutation} from '../services/auth';
+import {useConfirmForgotPasswordMutation} from '../services/auth';
 import {getErrorMessage} from '../app/helpers';
 import {FormContainer} from '../components/authentication';
 
@@ -16,7 +16,7 @@ export const ResetPassword = () => {
   } = useFormikContext<ResestPasswordValues>();
 
   // access mutation state when hook is called from Formik provider
-  const [, {error, isError, reset}] = useResetPasswordMutation({
+  const [, {error, isError, reset}] = useConfirmForgotPasswordMutation({
     fixedCacheKey: 'reset-password-post',
   });
 

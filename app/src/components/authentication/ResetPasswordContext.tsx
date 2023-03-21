@@ -2,7 +2,7 @@ import {Formik} from 'formik';
 import React from 'react';
 import {Outlet} from 'react-router-dom';
 import {object, string, ref} from 'yup';
-import {useResetPasswordMutation} from '../../services/auth';
+import {useConfirmForgotPasswordMutation} from '../../services/auth';
 
 export interface ResestPasswordValues {
   email: string;
@@ -45,7 +45,7 @@ const initialValues = {
 };
 
 export const ResetPasswordContext = () => {
-  const [resetPassword] = useResetPasswordMutation({
+  const [resetPassword] = useConfirmForgotPasswordMutation({
     fixedCacheKey: 'reset-password-post',
   });
 

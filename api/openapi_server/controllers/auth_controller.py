@@ -146,7 +146,8 @@ def signin():
                   "code": code, 
                   "message": message
               }, status_code)
-              
+
+    print(response)
     access_token = response['AuthenticationResult']['AccessToken']
     refresh_token = response['AuthenticationResult']['RefreshToken']
 
@@ -360,7 +361,7 @@ def forgot_password():
     
     return response
 
-def reset_password():
+def confirm_forgot_password():
     # check for json in request body
     if connexion.request.is_json:
         body = connexion.request.get_json()
@@ -383,6 +384,8 @@ def reset_password():
                   "code": code, 
                   "message": message
               }, 401)
+    
+    print(response);
     
     return response
 
