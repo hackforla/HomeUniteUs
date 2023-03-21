@@ -147,7 +147,6 @@ def signin():
                   "message": message
               }, status_code)
 
-    print(response)
     access_token = response['AuthenticationResult']['AccessToken']
     refresh_token = response['AuthenticationResult']['RefreshToken']
 
@@ -351,7 +350,6 @@ def forgot_password():
             Username=body['email']
         )
     except Exception as e:
-        print(e)
         code = e.response['Error']['Code']
         message = e.response['Error']['Message']
         raise AuthError({
@@ -384,9 +382,7 @@ def confirm_forgot_password():
                   "code": code, 
                   "message": message
               }, 401)
-    
-    print(response);
-    
+        
     return response
 
 def user(token_info):
@@ -400,7 +396,6 @@ def private(token_info):
     return {'message': 'Success - private'}
 
 def google():
-    # print hello
     redirect_uri = request.args['redirect_uri']
         
     return redirect(f"https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri={redirect_uri}&identity_provider=Google")
