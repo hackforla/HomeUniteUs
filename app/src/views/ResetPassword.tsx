@@ -12,7 +12,9 @@ export const ResetPassword = () => {
     values: {password, confirmPassword},
     touched,
     errors,
+    setFieldTouched,
     handleSubmit,
+    handleBlur,
   } = useFormikContext<ResestPasswordValues>();
 
   // access mutation state when hook is called from Formik provider
@@ -24,6 +26,8 @@ export const ResetPassword = () => {
     return () => {
       // remove error message when unmounting by resetting the state
       reset();
+      setFieldTouched('password', false);
+      setFieldTouched('confirmPassword', false);
     };
   }, []);
 
@@ -49,6 +53,7 @@ export const ResetPassword = () => {
             name="password"
             value={password}
             onChange={handleChange}
+            onBlur={handleBlur}
             error={touched.password && Boolean(errors.password)}
             helperText={touched.password && errors.password}
           />
@@ -59,6 +64,7 @@ export const ResetPassword = () => {
             name="confirmPassword"
             value={confirmPassword}
             onChange={handleChange}
+            onBlur={handleBlur}
             error={touched.confirmPassword && Boolean(errors.confirmPassword)}
             helperText={touched.confirmPassword && errors.confirmPassword}
           />

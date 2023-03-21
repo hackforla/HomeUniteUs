@@ -8,8 +8,13 @@ import {useNavigate} from 'react-router-dom';
 export const ForgotPasswordCode = () => {
   const navigate = useNavigate();
 
-  const {errors, touched, setFieldValue, handleBlur} =
-    useFormikContext<ResestPasswordValues>();
+  const {
+    values: {code},
+    errors,
+    touched,
+    setFieldValue,
+    handleBlur,
+  } = useFormikContext<ResestPasswordValues>();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,6 +25,8 @@ export const ForgotPasswordCode = () => {
   const setCode = (code: string) => {
     setFieldValue('code', code);
   };
+
+  console.log(code);
 
   return (
     <FormContainer>
@@ -34,7 +41,7 @@ export const ForgotPasswordCode = () => {
         </Box>
         <Stack
           component="form"
-          spacing={2}
+          spacing={4}
           sx={{alignItems: 'center'}}
           onSubmit={handleSubmit}
         >
@@ -49,7 +56,13 @@ export const ForgotPasswordCode = () => {
               <FormHelperText error>{errors.code}</FormHelperText>
             ) : null}
           </Stack>
-          <Button fullWidth variant="contained" size="large" type="submit">
+          <Button
+            disabled={code.length < 6}
+            fullWidth
+            variant="contained"
+            size="large"
+            type="submit"
+          >
             Submit
           </Button>
           <Button href="/forgot-password" fullWidth variant="outlined">
