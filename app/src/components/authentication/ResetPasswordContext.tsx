@@ -1,6 +1,6 @@
 import {Formik} from 'formik';
 import React from 'react';
-import {Outlet} from 'react-router-dom';
+import {Outlet, useNavigate} from 'react-router-dom';
 import {object, string, ref} from 'yup';
 import {useConfirmForgotPasswordMutation} from '../../services/auth';
 
@@ -45,6 +45,7 @@ const initialValues = {
 };
 
 export const ResetPasswordContext = () => {
+  const navigate = useNavigate();
   const [resetPassword] = useConfirmForgotPasswordMutation({
     fixedCacheKey: 'reset-password-post',
   });
@@ -56,6 +57,7 @@ export const ResetPasswordContext = () => {
         console.log(values);
         try {
           await resetPassword(values);
+          navigate('/forgot-password/success');
         } catch (err) {
           console.log({err});
         }
