@@ -25,12 +25,14 @@ export const ForgotPassword = () => {
     touched,
     handleChange,
     handleBlur,
+    validateField,
   } = useFormikContext<ResestPasswordValues>();
 
   const [forgotPassword] = useForgotPasswordMutation();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    validateField('email');
     try {
       await forgotPassword({email}).unwrap();
       navigate('code');
@@ -45,6 +47,8 @@ export const ForgotPassword = () => {
       }
     }
   };
+
+  console.log({errors});
 
   return (
     <FormContainer>
@@ -92,6 +96,9 @@ export const ForgotPassword = () => {
           />
           <Button fullWidth variant="contained" size="large" type="submit">
             Submit
+          </Button>
+          <Button href="/signin" fullWidth variant="outlined">
+            Back
           </Button>
         </Stack>
       </Stack>

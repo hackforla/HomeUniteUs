@@ -65,6 +65,9 @@ export const ResetPassword = () => {
           <Button fullWidth variant="contained" size="large" type="submit">
             Submit
           </Button>
+          <Button href="/forgot-password/code" fullWidth variant="outlined">
+            Back
+          </Button>
         </Stack>
       </Stack>
     </FormContainer>
