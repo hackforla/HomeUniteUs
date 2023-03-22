@@ -1,6 +1,7 @@
 import {
   Alert,
   Button,
+  CircularProgress,
   IconButton,
   Stack,
   TextField,
@@ -29,7 +30,7 @@ export const ForgotPassword = () => {
     validateForm,
   } = useFormikContext<ResestPasswordValues>();
 
-  const [forgotPassword] = useForgotPasswordMutation();
+  const [forgotPassword, {isLoading}] = useForgotPasswordMutation();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -100,8 +101,17 @@ export const ForgotPassword = () => {
             error={touched.email && Boolean(errors.email)}
             helperText={touched.email && errors.email}
           />
-          <Button fullWidth variant="contained" size="large" type="submit">
+          <Button
+            disabled={isLoading}
+            fullWidth
+            variant="contained"
+            size="large"
+            type="submit"
+          >
             Submit
+            {isLoading ? (
+              <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
+            ) : null}
           </Button>
           <Button href="/signin" fullWidth variant="outlined">
             Back

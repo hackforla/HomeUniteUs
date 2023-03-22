@@ -56,7 +56,7 @@ export const ResetPasswordContext = () => {
       onSubmit={async values => {
         console.log(values);
         try {
-          await resetPassword(values);
+          await resetPassword(values).unwrap();
           navigate('/forgot-password/success');
         } catch (err) {
           console.log({err});

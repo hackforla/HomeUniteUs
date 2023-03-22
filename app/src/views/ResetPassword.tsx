@@ -1,10 +1,16 @@
-import {Alert, Button, Stack, TextField, Typography} from '@mui/material';
+import {
+  Alert,
+  Button,
+  Stack,
+  Typography,
+  CircularProgress,
+} from '@mui/material';
 import React from 'react';
 import {useFormikContext} from 'formik';
 import {ResestPasswordValues} from '../components/authentication/ResetPasswordContext';
 import {useConfirmForgotPasswordMutation} from '../services/auth';
 import {getErrorMessage} from '../app/helpers';
-import {FormContainer} from '../components/authentication';
+import {FormContainer, PasswordField} from '../components/authentication';
 
 export const ResetPassword = () => {
   const {
@@ -18,9 +24,10 @@ export const ResetPassword = () => {
   } = useFormikContext<ResestPasswordValues>();
 
   // access mutation state when hook is called from Formik provider
-  const [, {error, isError, reset}] = useConfirmForgotPasswordMutation({
-    fixedCacheKey: 'reset-password-post',
-  });
+  const [, {error, isError, isLoading, reset}] =
+    useConfirmForgotPasswordMutation({
+      fixedCacheKey: 'reset-password-post',
+    });
 
   React.useEffect(() => {
     return () => {
@@ -46,7 +53,7 @@ export const ResetPassword = () => {
           sx={{width: '100%', alignItems: 'flex-start'}}
           onSubmit={handleSubmit}
         >
-          <TextField
+          <PasswordField
             fullWidth
             label="New password"
             id="password"
@@ -57,7 +64,7 @@ export const ResetPassword = () => {
             error={touched.password && Boolean(errors.password)}
             helperText={touched.password && errors.password}
           />
-          <TextField
+          <PasswordField
             fullWidth
             label="Confirm new password"
             id="confirmPassword"
@@ -68,8 +75,17 @@ export const ResetPassword = () => {
             error={touched.confirmPassword && Boolean(errors.confirmPassword)}
             helperText={touched.confirmPassword && errors.confirmPassword}
           />
-          <Button fullWidth variant="contained" size="large" type="submit">
+          <Button
+            disabled={isLoading}
+            fullWidth
+            variant="contained"
+            size="large"
+            type="submit"
+          >
             Submit
+            {isLoading ? (
+              <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
+            ) : null}
           </Button>
           <Button href="/forgot-password/code" fullWidth variant="outlined">
             Back
