@@ -54,7 +54,6 @@ export const ResetPasswordContext = () => {
     <Formik
       initialValues={initialValues}
       onSubmit={async values => {
-        console.log(values);
         try {
           await resetPassword(values).unwrap();
           navigate('/forgot-password/success');

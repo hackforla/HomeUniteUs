@@ -45,7 +45,6 @@ export const ForgotPassword = () => {
       await forgotPassword({email}).unwrap();
       navigate('code');
     } catch (err) {
-      console.log(err);
       if (isFetchBaseQueryError(err)) {
         // you can access all properties of `FetchBaseQueryError` here
         const errMsg = err.data.message;

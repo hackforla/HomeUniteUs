@@ -26,8 +26,6 @@ export const ForgotPasswordCode = () => {
     setFieldValue('code', code);
   };
 
-  console.log(code);
-
   return (
     <FormContainer>
       <Stack spacing={4} sx={{justifyContent: 'center', alignItems: 'center'}}>
