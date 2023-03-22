@@ -369,6 +369,26 @@ def reset_password():
     
     return response
 
+def inital_sign_in_reset_password():
+    # check for json in request body
+    if connexion.request.is_json:
+        body = connexion.request.get_json()
+
+    secret_hash = get_secret_hash(body['email'])
+
+    # call forgot password method
+    response = userClient.respond_to_auth_challenge(
+        ClientId=COGNITO_CLIENT_ID,
+        ChallengeName = 'NEW_PASSWORD_REQUIRED',
+        
+        ChallengeResponses = {'NEW_PASSWORD':body['password'] ,
+                              'USERNAME':body['email'],
+                              'SECRET_HASH':secret_hash},
+        
+    )
+    
+    return response
+
 def user(token_info):
     user = get_user_attr(token_info)
 
