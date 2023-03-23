@@ -9,7 +9,7 @@ RUN swagger-cli bundle openapi_server/openapi/openapi.yaml \
     --outfile openapi_server/_spec/openapi.yaml \
     --type yaml
 
-FROM python:3-alpine
+FROM python:3.9.10-alpine
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
