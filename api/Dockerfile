@@ -1,4 +1,4 @@
-from node:latest as swagger-bundle
+FROM node:latest as swagger-bundle
 
 WORKDIR /usr/src/
 COPY . . 
