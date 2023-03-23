@@ -3,6 +3,7 @@ import boto3
 import hmac
 import base64
 import requests
+import uuid
 
 from os import environ as env
 from dotenv import load_dotenv, find_dotenv
@@ -403,3 +404,33 @@ def confirm_signup():
         return redirect("http://localhost:4040/email-verification-success")
     except Exception as e:
         return redirect("http://localhost:4040/email-verification-error")
+
+# What comes first invite or adding the user 
+#Do I have an oauth token
+def invite():
+
+    if connexion.request.is_json:
+        body = connexion.request.get_json()
+        
+    try:
+
+        userName = body['username']
+        print(userName)
+
+        response = userClient.admin_create_user(
+                UserPoolId=COGNITO_USER_POOL_ID,
+                Username=body['username'],
+        )
+
+        print(response)
+
+        return response
+
+    except Exception as e:
+        print(e)
+        raise AuthError({
+                  "message": e.response['Error']['Message']
+              }, 500)  
+
+
+
