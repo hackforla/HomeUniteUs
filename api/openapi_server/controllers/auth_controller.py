@@ -146,7 +146,7 @@ def signin():
                   "code": code, 
                   "message": message
               }, status_code)
-              
+
     access_token = response['AuthenticationResult']['AccessToken']
     refresh_token = response['AuthenticationResult']['RefreshToken']
 
@@ -341,17 +341,25 @@ def forgot_password():
         body = connexion.request.get_json()
 
     secret_hash = get_secret_hash(body['email'])
-
+    
     # call forgot password method
-    response = userClient.forgot_password(
-      ClientId=COGNITO_CLIENT_ID,
-      SecretHash=secret_hash,
-      Username=body['email']
-    )
+    try:
+        response = userClient.forgot_password(
+            ClientId=COGNITO_CLIENT_ID,
+            SecretHash=secret_hash,
+            Username=body['email']
+        )
+    except Exception as e:
+        code = e.response['Error']['Code']
+        message = e.response['Error']['Message']
+        raise AuthError({
+                  "code": code, 
+                  "message": message
+              }, 401)
     
     return response
 
-def reset_password():
+def confirm_forgot_password():
     # check for json in request body
     if connexion.request.is_json:
         body = connexion.request.get_json()
@@ -359,14 +367,22 @@ def reset_password():
     secret_hash = get_secret_hash(body['email'])
 
     # call forgot password method
-    response = userClient.confirm_forgot_password(
-        ClientId=COGNITO_CLIENT_ID,
-        SecretHash=secret_hash,
-        Username=body['email'],
-        ConfirmationCode=body['code'],
-        Password=body['password']
-    )
-    
+    try:
+        response = userClient.confirm_forgot_password(
+            ClientId=COGNITO_CLIENT_ID,
+            SecretHash=secret_hash,
+            Username=body['email'],
+            ConfirmationCode=body['code'],
+            Password=body['password']
+        )
+    except Exception as e:
+        code = e.response['Error']['Code']
+        message = e.response['Error']['Message']
+        raise AuthError({
+                  "code": code, 
+                  "message": message
+              }, 401)
+        
     return response
 
 def user(token_info):
@@ -380,7 +396,6 @@ def private(token_info):
     return {'message': 'Success - private'}
 
 def google():
-    # print hello
     redirect_uri = request.args['redirect_uri']
         
     return redirect(f"https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri={redirect_uri}&identity_provider=Google")

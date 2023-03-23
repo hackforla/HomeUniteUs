@@ -4,7 +4,6 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import './index.css';
 
 /*
-
   import 'core-js/stable';
   import 'regenerator-runtime/runtime';
   import * as React from 'react';
@@ -14,13 +13,12 @@ import './index.css';
   import {CssBaseline} from '@mui/material';
   import {ThemeProvider} from '@mui/material/styles';
   import {StyledEngineProvider} from '@mui/material/styles'; 
-
 */
 
 import {CssBaseline, StyledEngineProvider, ThemeProvider} from '@mui/material';
 import {Provider} from 'react-redux';
 import {store} from './app/store';
-import {ProtectedRoute} from './auth/ProtectedRoute';
+import {ProtectedRoute} from './components/authentication/ProtectedRoute';
 import {useSessionMutation} from './services/auth';
 import {HomeUniteUsTheme} from './theme';
 import {
@@ -35,10 +33,12 @@ import {
   ResetPassword,
   EmailVerificationSuccess,
   EmailVerificationError,
+  ForgotPasswordCode,
+  ForgotPasswordSuccess,
 } from './views';
 import {AccountVerification} from './views/AccountVerification';
 import {AppLayout, Header} from './components/common';
-// import { ApprovalTwoTone } from '@mui/icons-material';
+import {ResetPasswordContext} from './components/authentication/ResetPasswordContext';
 
 function Profile() {
   return <div>Hello from profile</div>;
@@ -93,9 +93,16 @@ function HuuApp() {
           />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ResetPasswordContext />}>
+            <Route index element={<ForgotPassword />} />
+            <Route path="code" element={<ForgotPasswordCode />} />
+            <Route path="reset" element={<ResetPassword />} />
+          </Route>
+          <Route
+            path="/forgot-password/success"
+            element={<ForgotPasswordSuccess />}
+          />
           <Route path="/verification" element={<AccountVerification />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/header" element={<Header />} />
           <Route
             path="/email-verification-success"
