@@ -5,7 +5,7 @@ services:
     image: postgres
     restart: always
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=huu
       - POSTGRES_USER=postgres
@@ -34,4 +34,4 @@ services:
     depends_on:
       - api
 volumes:
-  db-data:
+  db-data: {}
