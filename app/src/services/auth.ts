@@ -32,9 +32,18 @@ export interface SignOutResponse {
   message: string;
 }
 
+export interface InviteRequest {
+  email: string;
+}
+
 export interface VerificationRequest {
   email: string;
   code: string;
+}
+
+export interface NewPasswordRequest {
+  password: string;
+  confirmPassword: string;
 }
 
 export interface ForgotPasswordRequest {
