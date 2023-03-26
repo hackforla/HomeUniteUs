@@ -1,8 +1,8 @@
 import React from 'react';
 import {Navigate, useLocation} from 'react-router-dom';
-import {useAuth} from '../app/hooks/useAuth';
-import {Loading} from '../components/common';
-import {useUserQuery} from '../services/auth';
+import {useAuth} from '../../app/hooks/useAuth';
+import {Loading} from '../common';
+import {useUserQuery} from '../../services/auth';
 
 export const ProtectedRoute = ({children}: {children: JSX.Element}) => {
   const {user} = useAuth();

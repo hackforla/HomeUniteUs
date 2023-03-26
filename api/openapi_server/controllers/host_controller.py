@@ -13,7 +13,6 @@ def create_host():
     if connexion.request.is_json:
         try:
             host = Host.from_dict(connexion.request.get_json()).to_dict()
-            print(host)
         except ValueError:
             return traceback.format_exc(ValueError), 400
     

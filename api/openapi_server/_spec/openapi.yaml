@@ -323,10 +323,10 @@ paths:
       tags:
         - auth
       x-openapi-router-controller: openapi_server.controllers.auth_controller
-  /auth/reset_password:
+  /auth/forgot_password/confirm:
     post:
       description: Exchanges code for a new password
-      operationId: reset_password
+      operationId: confirm_forgot_password
       requestBody:
         content:
           application/json:
