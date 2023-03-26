@@ -11,58 +11,23 @@ import {
   Alert,
   Collapse,
   IconButton,
-  List,
-  ListSubheader,
-  ListItem,
-  ListItemProps,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import {styled} from '@mui/system';
 import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
-import {object, string} from 'yup';
 import {SignInRequest} from '../../services/auth';
+import {PasswordValidation} from './PasswordValidation';
+import pwValidate, {
+  passwordValidationSchema,
+} from '../common/PasswordValidationSchema';
 
+// useState?
 interface SignUpFormProps {
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   errorMessage: string;
 }
-
-// styled list item component customized to change from simple - to ✓
-interface StyledListItems extends ListItemProps {
-  success?: boolean;
-}
-
-// validation function that uses conditional to see if matches regEx test
-// remember to validate on change
-
-const validationSchema = object({
-  email: string().email().required('email is required'),
-  password: string()
-    .required('password is required')
-    .min(8, 'password must be at least 8 characters')
-    .matches(/^(?=.*[0-9])/, 'password must contain at least one number')
-    .matches(/^(?=.*[a-z])/, 'Must contain at least one lowercase character')
-    .matches(/^(?=.*[A-Z])/, 'Must contain at least one uppercase character')
-    .matches(
-      /^(?=.*[!@#%&])/,
-      'password must contain at least one special character',
-    ),
-});
-
-// update formik on change of input values using validateOnChange
-// Yup's validation errors will be turned into objects
-
-// function validatePassword(value: string) {
-//   let error;
-//   if (!value) {
-//     error = 'Required';
-//   } else if (!/^(?=.*[0-9])/.test(value)) {
-//     // !success, which will change the content of the list item
-//   }
-//   return error;
-// }
 
 export const SignUpForm = ({
   onSubmit,
@@ -74,11 +39,20 @@ export const SignUpForm = ({
       email: '',
       password: '',
     },
-    validationSchema,
+    validationSchema: passwordValidationSchema,
+
     onSubmit: values => {
       onSubmit(values);
     },
   });
+
+  const handleValidatePassword = async e => {
+    e.preventDefault();
+    const passwordValues = e.target.value;
+    console.log('password', passwordValues);
+    const result = await pwValidate(passwordValues);
+    console.log('result', result);
+  };
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -91,6 +65,7 @@ export const SignUpForm = ({
           onChange={handleChange}
           error={touched.email && Boolean(errors.email)}
         />
+
         {touched.email && errors.email && (
           <FormHelperText error>{errors.email}</FormHelperText>
         )}
@@ -102,22 +77,14 @@ export const SignUpForm = ({
           id="password"
           type="password"
           value={values.password}
-          onChange={handleChange}
+          onChange={handleValidatePassword}
           error={touched.password && Boolean(errors.password)}
         />
         {touched.password && errors.password && (
           <FormHelperText error>{errors.password}</FormHelperText>
         )}
       </Stack>
-      <Stack spacing={1}>
-        <List>
-          <ListSubheader>Password must contain:</ListSubheader>
-          <ValidationItem> 8-20 Characters</ValidationItem>
-          <ValidationItem> At least one capital letter</ValidationItem>
-          <ValidationItem> At least one number</ValidationItem>
-          <ValidationItem>At least one special character</ValidationItem>
-        </List>
-      </Stack>
+      <PasswordValidation />
       <Stack direction="row" gap={1}>
         <Typography>Already a member?</Typography>
         <Link fontWeight="bold" href="/signin">
@@ -169,16 +136,3 @@ const Form = styled('form')({
   alignItems: 'stretch',
   gap: '1rem',
 });
-
-const ValidationItem = styled(ListItem, {
-  shouldForwardProp: prop => prop !== 'success',
-})<StyledListItems>(({success}) => ({
-  ...(success && {
-    color: 'blue',
-  }),
-}));
-
-// second possible logic
-// const ValidationItem = styled('li')({
-//   color: `${props => (props.success ? 'blue' : 'black')}`,
-// });
