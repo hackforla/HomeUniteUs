@@ -13,7 +13,7 @@ import './index.css';
   import {Provider} from 'react-redux';
   import {CssBaseline} from '@mui/material';
   import {ThemeProvider} from '@mui/material/styles';
-  import {StyledEngineProvider} from '@mui/material/styles'; 
+  import {StyledEngineProvider} from '@mui/material/styles';
 
 */
 
@@ -35,6 +35,7 @@ import {
   ResetPassword,
   EmailVerificationSuccess,
   EmailVerificationError,
+  NewPassword,
 } from './views';
 import {AccountVerification} from './views/AccountVerification';
 import {AppLayout, Header} from './components/common';
@@ -96,6 +97,7 @@ function HuuApp() {
           <Route path="/verification" element={<AccountVerification />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/new-password" element={<NewPassword />} />
           <Route path="/header" element={<Header />} />
           <Route
             path="/email-verification-success"
