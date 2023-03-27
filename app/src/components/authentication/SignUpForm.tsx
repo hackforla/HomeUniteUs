@@ -51,6 +51,7 @@ export const SignUpForm = ({
     const results = await pwValidate(values.password);
     console.log('results', results);
   };
+  // right now the results are one step behind
 
   return (
     <Form onSubmit={handleSubmit}>

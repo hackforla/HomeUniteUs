@@ -23,8 +23,7 @@ const pwValidate = password =>
   validationSchema.fields.password
     .validate(password, {abortEarly: false})
     .catch(({errors}) => {
-      const validationErrors = errors;
-      return Promise.resolve({errors: validationErrors});
+      return Promise.resolve({errors});
     });
 
 export default pwValidate;
