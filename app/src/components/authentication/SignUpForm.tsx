@@ -23,7 +23,7 @@ import pwValidate, {validationSchema} from '../common/PasswordValidationSchema';
 // QUESTIONS TO ASK NEXT MEETING:
 // 1. Should sign up button be disabled before validation is done?
 // 2. should we have option to see value of password (like the eye thing)
-// 3. type error on line 56
+// 3. type error on line 58
 // 4. right now the results are one step behind, useEffect?
 interface SignUpFormProps {
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
@@ -50,14 +50,14 @@ export const SignUpForm = ({
 
   // set errors to "contains" state, passdown to password validation as prop
   // and dynamically change UI according to what is in errors array
-  const [contains, setContains] = useState(['']);
+  const [errorsLeft, setErrorsLeft] = useState([]);
 
   const handleValidate = async e => {
     handleChange(e);
     const results: string[] = await pwValidate(values.password);
-    setContains(results);
+    setErrorsLeft(results ? Object.values(results) : []);
   };
-
+  console.log('errorsLeft', errorsLeft);
   return (
     <Form onSubmit={handleSubmit}>
       <Stack spacing={1}>
@@ -88,7 +88,7 @@ export const SignUpForm = ({
           <FormHelperText error>{errors.password}</FormHelperText>
         )}
       </Stack>
-      <PasswordValidation contains={contains} />
+      <PasswordValidation errorsLeft={errorsLeft} />
       <Stack direction="row" gap={1}>
         <Typography>Already a member?</Typography>
         <Link fontWeight="bold" href="/signin">
