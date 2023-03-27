@@ -1,6 +1,7 @@
 import {List, ListItem, ListSubheader, Stack} from '@mui/material';
 
-export const PasswordValidation = () => {
+export const PasswordValidation = ({contains}) => {
+  console.log('contains', contains);
   return (
     <Stack spacing={1}>
       <List>
