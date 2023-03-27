@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Divider,
   InputLabel,
@@ -23,6 +23,7 @@ import pwValidate, {validationSchema} from '../common/PasswordValidationSchema';
 // QUESTIONS TO ASK NEXT MEETING:
 // 1. Should sign up button be disabled before validation is done?
 // 2. should we have option to see value of password (like the eye thing)
+// 3. type error on line 56
 interface SignUpFormProps {
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
@@ -48,13 +49,15 @@ export const SignUpForm = ({
 
   // set errors to state, passdown to password validation as prop
   // and dynamically change UI according to what is in errors array
-  // const [pwErrors, setPwErrors] = useState([]);
+  const [contains, setContains] = useState([]);
 
   const handleValidate = async e => {
     handleChange(e);
-    const results = await pwValidate(values.password);
-    console.log('results', results);
+    const results: string[] = await pwValidate(values.password);
+    setContains(results);
   };
+
+  console.log('contains', contains);
 
   // right now the results are one step behind
 

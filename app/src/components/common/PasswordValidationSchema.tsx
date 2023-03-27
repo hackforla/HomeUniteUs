@@ -16,26 +16,13 @@ export const validationSchema = object().shape({
 
 // formik requires errors object with keys from yup, but yup only returns ValidationError with
 // no way of managing schema
-// create new errors array and check for validation there -> must abortEarly: false but
-// cannot manage without resolver
 
 const pwValidate = password =>
   validationSchema.fields.password
     .validate(password, {abortEarly: false})
     .catch(({errors}) => {
+      // errors is array of strings
       return Promise.resolve({errors});
     });
 
 export default pwValidate;
-
-// ROADMAP:
-// 1. user types in password
-// 2. as user types in password, password validation is going on
-// -> password validation is checking by whether it exists in the mapped out errors
-// array or not.
-// So there are two components: one password validation with the server
-// and one password validation check off in the "must contain"
-//right now, password validtion IS working on server side
-// what I need to do is: 1. have total validation errors in array
-// if the value in the current password matches the "must contain", it receives a check
-//
