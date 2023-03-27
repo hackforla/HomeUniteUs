@@ -46,11 +46,16 @@ export const SignUpForm = ({
     },
   });
 
+  // set errors to state, passdown to password validation as prop
+  // and dynamically change UI according to what is in errors array
+  // const [pwErrors, setPwErrors] = useState([]);
+
   const handleValidate = async e => {
     handleChange(e);
     const results = await pwValidate(values.password);
     console.log('results', results);
   };
+
   // right now the results are one step behind
 
   return (
