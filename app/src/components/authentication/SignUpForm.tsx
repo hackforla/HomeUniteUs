@@ -18,11 +18,11 @@ import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
 import {SignInRequest} from '../../services/auth';
 import {PasswordValidation} from './PasswordValidation';
-import pwValidate, {
-  passwordValidationSchema,
-} from '../common/PasswordValidationSchema';
+import pwValidate, {validationSchema} from '../common/PasswordValidationSchema';
 
-// useState?
+// QUESTIONS TO ASK NEXT MEETING:
+// 1. Should sign up button be disabled before validation is done?
+// 2. should we have option to see value of password (like the eye thing)
 interface SignUpFormProps {
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
@@ -39,19 +39,17 @@ export const SignUpForm = ({
       email: '',
       password: '',
     },
-    validationSchema: passwordValidationSchema,
+    validationSchema: validationSchema,
 
     onSubmit: values => {
       onSubmit(values);
     },
   });
 
-  const handleValidatePassword = async e => {
-    e.preventDefault();
-    const passwordValues = e.target.value;
-    console.log('password', passwordValues);
-    const result = await pwValidate(passwordValues);
-    console.log('result', result);
+  const handleValidate = async e => {
+    handleChange(e);
+    const results = await pwValidate(values.password);
+    console.log('results', results);
   };
 
   return (
@@ -77,7 +75,7 @@ export const SignUpForm = ({
           id="password"
           type="password"
           value={values.password}
-          onChange={handleValidatePassword}
+          onChange={handleValidate}
           error={touched.password && Boolean(errors.password)}
         />
         {touched.password && errors.password && (
