@@ -421,6 +421,9 @@ paths:
       tags:
         - auth
       x-openapi-router-controller: openapi_server.controllers.auth_controller
+      security:
+        - jwt:
+            - secret 
 components:
   securitySchemes:
     jwt:

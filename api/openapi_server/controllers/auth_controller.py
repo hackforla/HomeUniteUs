@@ -27,10 +27,12 @@ COGNITO_CLIENT_ID=env.get('COGNITO_CLIENT_ID')
 COGNITO_CLIENT_SECRET=env.get('COGNITO_CLIENT_SECRET')
 COGNITO_USER_POOL_ID=env.get('COGNITO_USER_POOL_ID')
 COGNITO_REDIRECT_URI = env.get('COGNITO_REDIRECT_URI')
+COGNITO_ACCESS_ID = env.get('COGNITO_ACCESS_ID')
+COGNITO_ACCESS_KEY = env.get('COGNITO_ACCESS_KEY')
 SECRET_KEY=env.get('SECRET_KEY')
 
 # Initialize Cognito clients
-userClient = boto3.client('cognito-idp', region_name=COGNITO_REGION)
+userClient = boto3.client('cognito-idp', region_name=COGNITO_REGION, aws_access_key_id = COGNITO_ACCESS_ID, aws_secret_access_key = COGNITO_ACCESS_KEY)
 
 # Get secret hash
 def get_secret_hash(username):
@@ -409,18 +411,25 @@ def confirm_signup():
 #Do I have an oauth token
 def invite():
 
+    get_token_auth_header()
+
     if connexion.request.is_json:
         body = connexion.request.get_json()
         
     try:
 
         userName = body['username']
-        print(userName)
 
         response = userClient.admin_create_user(
-                UserPoolId=COGNITO_USER_POOL_ID,
-                Username=body['username'],
-        )
+            UserPoolId=COGNITO_USER_POOL_ID,
+            Username=userName,
+            UserAttributes=[
+            {
+                'Name': "email",
+                'Value': userName
+            }
+            ],
+            DesiredDeliveryMediums=["EMAIL"])
 
         print(response)
 
