@@ -21,7 +21,6 @@ import {PasswordValidation} from './PasswordValidation';
 import pwValidate, {validationSchema} from '../common/PasswordValidationSchema';
 
 // QUESTIONS TO ASK NEXT MEETING:
-// 1. Should sign up button be disabled before validation is done?
 // 2. should we have option to see value of password (like the eye thing)
 // 3. type error on line 58
 // 4. right now the results are one step behind, useEffect?
