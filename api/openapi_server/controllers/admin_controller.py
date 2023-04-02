@@ -29,7 +29,7 @@ def get_secret_hash(username):
 
 userClient = boto3.client('cognito-idp', region_name=COGNITO_REGION)
 
-
+# description: Removes auto generated password and replaces with user assigned password. Used for account setup.
 def inital_sign_in_reset_password():
     # check for json in request body
     if connexion.request.is_json:
