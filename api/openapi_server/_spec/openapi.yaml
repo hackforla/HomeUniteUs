@@ -397,6 +397,36 @@ paths:
       tags:
         - auth
       x-openapi-router-controller: openapi_server.controllers.auth_controller
+  /auth/initial_invite:
+    post:
+      description: Exchanges code for a new password
+      operationId: reset_password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                code:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - code
+                - password
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+          description: successful operation
+      tags:
+        - auth
+      x-openapi-router-controller: openapi_server.controllers.admin_controller
 components:
   securitySchemes:
     jwt:
