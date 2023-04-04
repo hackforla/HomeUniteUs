@@ -1,106 +1,90 @@
-import React, {useState} from 'react';
-import {Location} from 'react-router-dom';
+import React from 'react';
 import {
   Typography,
   Stack,
-  styled,
-  Theme,
-  Dialog,
-  DialogTitle,
-  Box,
+  Alert,
+  Button,
+  CircularProgress,
 } from '@mui/material';
-
-// import {setCredentials} from '../app/authSlice';
-// import {useAppDispatch} from '../app/hooks/store';
-import {NewPasswordForm} from '../components/authentication/NewPasswordForm';
-// import {NewPasswordRequest} from '../services/auth';
-// import {
-//   SignInRequest,
-//   useSignInMutation,
-//   useGetTokenMutation,
-// } from '../services/auth';
-export interface LocationState {
-  from: Location;
-}
+import {useFormikContext} from 'formik';
+import {NewPasswordValues} from '../components/authentication/NewPasswordContext';
+import {useNewPasswordMutation} from '../services/auth';
+import {getErrorMessage} from '../app/helpers';
+import {FormContainer, PasswordField} from '../components/authentication';
 
 export const NewPassword = () => {
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const {
+    handleChange,
+    values: {password, confirmPassword},
+    touched,
+    errors,
+    setFieldTouched,
+    handleSubmit,
+    handleBlur,
+  } = useFormikContext<NewPasswordValues>();
 
-  // const handleNewPassword = async ({
-  //   password,
-  //   confirmPassword,
-  // }: NewPasswordRequest) => {
-  //   try {
-  //     // api call here
-  //   } catch (err) {
-  //     // handle error here
-  //   }
-  // };
+  const [, {error, isError, isLoading, reset}] = useNewPasswordMutation();
 
-  const handleClose = () => {
-    setDialogOpen(false);
-  };
+  React.useEffect(() => {
+    return () => {
+      // remove error message when unmounting by resetting the state
+      reset();
+      setFieldTouched('password', false);
+      setFieldTouched('confirmPassword', false);
+    };
+  }, []);
 
   return (
-    <>
-      <PageContainer>
-        <FormContainer gap={2}>
-          {/* <Logo src={logo} alt="Home Unite Us logo" /> */}
-          <FormHeader variant="h4">New Password</FormHeader>
-          <NewPasswordForm
-            onSubmit={handleNewPassword}
-            setErrorMessage={setErrorMessage}
-            errorMessage={errorMessage}
+    <FormContainer>
+      <Stack spacing={4} sx={{justifyContent: 'center', alignItems: 'center'}}>
+        {isError ? (
+          <Alert sx={{width: '100%'}} severity="error">
+            {getErrorMessage(error)}
+          </Alert>
+        ) : null}
+        <Typography variant="h4">Enter a New Password:</Typography>
+        <Stack
+          component="form"
+          spacing={4}
+          sx={{width: '100%', alignItems: 'flex-start'}}
+          onSubmit={handleSubmit}
+        >
+          <PasswordField
+            fullWidth
+            label="New password"
+            id="password"
+            name="password"
+            value={password}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={touched.password && Boolean(errors.password)}
+            helperText={touched.password && errors.password}
           />
-          {/* <Stack direction="row" alignItems="center" gap={0.5}>
-            <Typography variant="body2">Don&apos;t have an account?</Typography>
-            <Link fontWeight="bold" href="/signup">
-              Sign up
-            </Link>
-          </Stack> */}
-        </FormContainer>
-      </PageContainer>
-      <NewPasswordDialog open={dialogOpen} handleClose={handleClose} />
-    </>
+          <PasswordField
+            fullWidth
+            label="Confirm new password"
+            id="confirmPassword"
+            name="confirmPassword"
+            value={confirmPassword}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={touched.confirmPassword && Boolean(errors.confirmPassword)}
+            helperText={touched.confirmPassword && errors.confirmPassword}
+          />
+          <Button
+            disabled={isLoading}
+            fullWidth
+            variant="contained"
+            size="large"
+            type="submit"
+          >
+            Submit
+            {isLoading ? (
+              <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
+            ) : null}
+          </Button>
+        </Stack>
+      </Stack>
+    </FormContainer>
   );
 };
-
-interface NewPasswordDialogProps {
-  open: boolean;
-  handleClose: () => void;
-}
-
-const NewPasswordDialog = ({open, handleClose}: NewPasswordDialogProps) => {
-  return (
-    <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>
-        We have reset your password. Please login with your new password.
-      </DialogTitle>
-    </Dialog>
-  );
-};
-
-const FormContainer = styled(Stack)(({theme}: {theme: Theme}) => ({
-  maxWidth: '550px',
-  alignItems: 'center',
-  padding: '2rem',
-  border: '1px solid #e0e0e0',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: '#fff',
-  margin: '0 16px',
-}));
-
-const FormHeader = styled(Typography)({
-  textAlign: 'center',
-  fontWeight: 600,
-});
-
-const PageContainer = styled(Box)(({theme}) => ({
-  display: 'flex',
-  flex: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-  backgroundColor: theme.palette.grey[100],
-  padding: '2rem 0',
-}));
