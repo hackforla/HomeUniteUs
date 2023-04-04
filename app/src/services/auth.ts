@@ -112,6 +112,22 @@ const authApi = api.injectEndpoints({
         body: credentials,
       }),
     }),
+    inviteUser: build.mutation<void, InviteRequest>({
+      query: credentials => ({
+        url: 'auth/invite',
+        method: 'POST',
+        withCredentials: true,
+        body: credentials,
+      }),
+    }),
+    newPassword: build.mutation<void, NewPasswordRequest>({
+      query: credentials => ({
+        url: 'auth/initial_invite',
+        method: 'POST',
+        withCredentials: true,
+        body: credentials,
+      }),
+    }),
     forgotPassword: build.mutation<void, ForgotPasswordRequest>({
       query: credentials => ({
         url: 'auth/forgot_password',
@@ -174,6 +190,8 @@ export const {
   useSignInMutation,
   useSignOutMutation,
   useVerificationMutation,
+  useNewPasswordMutation,
+  useInviteUserMutation,
   useGetTokenMutation,
   useForgotPasswordMutation,
   useConfirmForgotPasswordMutation,
