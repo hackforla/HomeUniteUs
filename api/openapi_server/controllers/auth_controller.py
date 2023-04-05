@@ -426,6 +426,9 @@ def confirm_signup():
 #Do I have an oauth token
 def invite():
 
+    if "username" not in body:
+    raise AuthError({"message": "bad request, no username"},400)
+
     get_token_auth_header()
 
     if connexion.request.is_json:
@@ -446,14 +449,17 @@ def invite():
             ],
             DesiredDeliveryMediums=["EMAIL"])
 
-        print(response)
-
         return response
 
     except Exception as e:
-        print(e)
+        
+        msg = "Invite could not be sent"
+        
+        if e.response != None
+            msg = e.response['Error']['Message']
+
         raise AuthError({
-                  "message": e.response['Error']['Message']
+                  "message": msg
               }, 500)  
 
 
