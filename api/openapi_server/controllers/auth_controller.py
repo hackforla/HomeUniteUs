@@ -455,7 +455,7 @@ def invite():
         
         msg = "Invite could not be sent"
         
-        if e.response is not None
+        if e.response != None
             msg = e.response['Error']['Message']
 
         raise AuthError({
