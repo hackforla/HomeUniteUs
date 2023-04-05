@@ -426,13 +426,13 @@ def confirm_signup():
 #Do I have an oauth token
 def invite():
 
-    if "username" not in body:
-    raise AuthError({"message": "bad request, no username"},400)
-
     get_token_auth_header()
 
     if connexion.request.is_json:
         body = connexion.request.get_json()
+
+     if "username" not in body:
+        raise AuthError({"message": "username invalid"},400)       
         
     try:
 
