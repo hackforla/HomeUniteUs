@@ -431,7 +431,7 @@ def invite():
     if connexion.request.is_json:
         body = connexion.request.get_json()
 
-     if "username" not in body:
+    if "username" not in body:
         raise AuthError({"message": "username invalid"},400)       
         
     try:
