@@ -9,20 +9,20 @@ post:
           properties:
             email:
               type: string
-            code:
-              type: string
             password:
+              type: string
+            session:
               type: string
           required:
             - email
-            - code
             - password
+            - session
   responses:
-    '200':
+    "200":
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ApiResponse'
+            $ref: "../../openapi.yaml#/components/schemas/ApiResponse"
       description: successful operation
   tags:
     - auth

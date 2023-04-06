@@ -146,6 +146,12 @@ def signin():
                   "code": code, 
                   "message": message
               }, status_code)
+    
+    if(response['ChallengeName'] == 'NEW_PASSWORD_REQUIRED'):
+        # maybe redirect the user to the reset password screen here?
+        session = response["Session"]
+        userId = response["ChallengeParameters"]["USER_ID_FOR_SRP"]
+        return redirect(f'/create-password?session={session}&id={userId}')
               
     access_token = response['AuthenticationResult']['AccessToken']
     refresh_token = response['AuthenticationResult']['RefreshToken']

@@ -1,11 +1,9 @@
 
 import connexion
 import boto3
-import hmac
-import base64
-import requests
 
-from api.openapi_server.controllers import auth_controller
+
+from openapi_server.controllers import auth_controller
 from os import environ as env
 from dotenv import load_dotenv, find_dotenv
 from flask import redirect, request, session, redirect
@@ -55,13 +53,30 @@ def initial_sign_in_reset_password():
         response = userClient.respond_to_auth_challenge(
             ClientId=COGNITO_CLIENT_ID,
             ChallengeName = 'NEW_PASSWORD_REQUIRED',
-            
-            ChallengeResponses = {'NEW_PASSWORD':body['password'] ,
-                                'USERNAME':body['email'],
-                                'SECRET_HASH':secret_hash},
+            Session=body['session'],
+            ChallengeResponses = {
+                'NEW_PASSWORD':body['password'] ,
+                'USERNAME':body['email'],
+                'SECRET_HASH':secret_hash
+            },
             
         )
     except Exception as e:
+        print(e)
         raise AuthError({"message": "failed to change password"}, 500) from e
+    
+    access_token = response['AuthenticationResult']['AccessToken']
+    refresh_token = response['AuthenticationResult']['RefreshToken']
+
+    user_data = userClient.get_user(AccessToken=access_token)
+    user = auth_controller.get_user_attr(user_data)
+
+    session['refresh_token'] = refresh_token
+
+    # return user data json
+    return {
+        'token': access_token,
+        'user': user
+    }
     
     return response

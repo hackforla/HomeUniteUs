@@ -397,7 +397,7 @@ paths:
       tags:
         - auth
       x-openapi-router-controller: openapi_server.controllers.auth_controller
-  /auth/initial_invite:
+  /auth/initialInvite:
     post:
       description: Removes auto generated password and replaces with user assigned password. Used for account setup.
       operationId: initial_sign_in_reset_password
@@ -409,14 +409,14 @@ paths:
               properties:
                 email:
                   type: string
-                code:
-                  type: string
                 password:
+                  type: string
+                session:
                   type: string
               required:
                 - email
-                - code
                 - password
+                - session
       responses:
         '200':
           content:
