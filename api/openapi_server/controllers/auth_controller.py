@@ -3,6 +3,7 @@ import boto3
 import hmac
 import base64
 import requests
+import uuid
 
 from os import environ as env
 from dotenv import load_dotenv, find_dotenv
@@ -26,10 +27,12 @@ COGNITO_CLIENT_ID=env.get('COGNITO_CLIENT_ID')
 COGNITO_CLIENT_SECRET=env.get('COGNITO_CLIENT_SECRET')
 COGNITO_USER_POOL_ID=env.get('COGNITO_USER_POOL_ID')
 COGNITO_REDIRECT_URI = env.get('COGNITO_REDIRECT_URI')
+COGNITO_ACCESS_ID = env.get('COGNITO_ACCESS_ID')
+COGNITO_ACCESS_KEY = env.get('COGNITO_ACCESS_KEY')
 SECRET_KEY=env.get('SECRET_KEY')
 
 # Initialize Cognito clients
-userClient = boto3.client('cognito-idp', region_name=COGNITO_REGION)
+userClient = boto3.client('cognito-idp', region_name=COGNITO_REGION, aws_access_key_id = COGNITO_ACCESS_ID, aws_secret_access_key = COGNITO_ACCESS_KEY)
 
 # Get secret hash
 def get_secret_hash(username):
@@ -153,6 +156,7 @@ def signin():
         userId = response["ChallengeParameters"]["USER_ID_FOR_SRP"]
         return redirect(f'/create-password?session={session}&id={userId}')
               
+
     access_token = response['AuthenticationResult']['AccessToken']
     refresh_token = response['AuthenticationResult']['RefreshToken']
 
@@ -347,17 +351,25 @@ def forgot_password():
         body = connexion.request.get_json()
 
     secret_hash = get_secret_hash(body['email'])
-
+    
     # call forgot password method
-    response = userClient.forgot_password(
-      ClientId=COGNITO_CLIENT_ID,
-      SecretHash=secret_hash,
-      Username=body['email']
-    )
+    try:
+        response = userClient.forgot_password(
+            ClientId=COGNITO_CLIENT_ID,
+            SecretHash=secret_hash,
+            Username=body['email']
+        )
+    except Exception as e:
+        code = e.response['Error']['Code']
+        message = e.response['Error']['Message']
+        raise AuthError({
+                  "code": code, 
+                  "message": message
+              }, 401)
     
     return response
 
-def reset_password():
+def confirm_forgot_password():
     # check for json in request body
     if connexion.request.is_json:
         body = connexion.request.get_json()
@@ -365,14 +377,22 @@ def reset_password():
     secret_hash = get_secret_hash(body['email'])
 
     # call forgot password method
-    response = userClient.confirm_forgot_password(
-        ClientId=COGNITO_CLIENT_ID,
-        SecretHash=secret_hash,
-        Username=body['email'],
-        ConfirmationCode=body['code'],
-        Password=body['password']
-    )
-    
+    try:
+        response = userClient.confirm_forgot_password(
+            ClientId=COGNITO_CLIENT_ID,
+            SecretHash=secret_hash,
+            Username=body['email'],
+            ConfirmationCode=body['code'],
+            Password=body['password']
+        )
+    except Exception as e:
+        code = e.response['Error']['Code']
+        message = e.response['Error']['Message']
+        raise AuthError({
+                  "code": code, 
+                  "message": message
+              }, 401)
+        
     return response
 
 def user(token_info):
@@ -386,7 +406,6 @@ def private(token_info):
     return {'message': 'Success - private'}
 
 def google():
-    # print hello
     redirect_uri = request.args['redirect_uri']
         
     return redirect(f"https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri={redirect_uri}&identity_provider=Google")
@@ -409,3 +428,46 @@ def confirm_signup():
         return redirect("http://localhost:4040/email-verification-success")
     except Exception as e:
         return redirect("http://localhost:4040/email-verification-error")
+
+# What comes first invite or adding the user 
+#Do I have an oauth token
+def invite():
+
+    get_token_auth_header()
+
+    if connexion.request.is_json:
+        body = connexion.request.get_json()
+
+    if "username" not in body:
+        raise AuthError({"message": "username invalid"},400)       
+        
+    try:
+
+        userName = body['username']
+
+        response = userClient.admin_create_user(
+            UserPoolId=COGNITO_USER_POOL_ID,
+            Username=userName,
+            UserAttributes=[
+            {
+                'Name': "email",
+                'Value': userName
+            }
+            ],
+            DesiredDeliveryMediums=["EMAIL"])
+
+        return response
+
+    except Exception as e:
+        
+        msg = "Invite could not be sent"
+        
+        if e.response != None:
+            msg = e.response['Error']['Message']
+
+        raise AuthError({
+                  "message": msg
+              }, 500)  
+
+
+

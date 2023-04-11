@@ -25,3 +25,18 @@ export function isErrorWithMessage(error: unknown): error is {message: string} {
     typeof (error as any).message === 'string'
   );
 }
+
+export function getErrorMessage(err: unknown): string {
+  if (isFetchBaseQueryError(err)) {
+    // you can access all properties of `FetchBaseQueryError` here
+    const errMsg = err.data.message;
+    return errMsg;
+  }
+
+  if (isErrorWithMessage(err)) {
+    // you can access a string 'message' property here
+    return err.message;
+  }
+
+  return JSON.stringify(err);
+}
