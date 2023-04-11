@@ -23,6 +23,7 @@ import pwValidate, {validationSchema} from '../common/PasswordValidationSchema';
 // QUESTIONS TO ASK NEXT MEETING - 04/11/23:
 // 1. type error on line 58
 // 2. Still updating a step behind
+// 3. Validating email?
 interface SignUpFormProps {
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
@@ -34,17 +35,21 @@ export const SignUpForm = ({
   errorMessage,
   setErrorMessage,
 }: SignUpFormProps) => {
-  const {handleSubmit, handleChange, values, touched, errors} = useFormik({
-    initialValues: {
-      email: '',
-      password: '',
-    },
-    validationSchema: validationSchema,
+  const {handleSubmit, handleChange, values, touched, errors, isValid} =
+    useFormik({
+      initialValues: {
+        email: '',
+        password: '',
+      },
+      validationSchema: validationSchema,
 
-    onSubmit: values => {
-      onSubmit(values);
-    },
-  });
+      onSubmit: values => {
+        onSubmit(values);
+      },
+    });
+
+  console.log('isValid', isValid);
+  console.log('errors', errors);
 
   // set errors to "contains" state, passdown to password validation as prop
   // and dynamically change UI according to what is in errors array
@@ -57,6 +62,7 @@ export const SignUpForm = ({
     setErrorsLeft(results ? Object.values(results) : []);
   };
 
+  console.log('errorsLeft', errorsLeft, length);
   return (
     <Form onSubmit={handleSubmit}>
       <Stack spacing={1}>
@@ -94,7 +100,13 @@ export const SignUpForm = ({
           Sign in
         </Link>
       </Stack>
-      <Button variant="contained" size="large" type="submit" fullWidth>
+      <Button
+        variant="contained"
+        size="large"
+        type="submit"
+        disabled={isValid === false || errorsLeft.length === 0}
+        fullWidth
+      >
         Sign up
       </Button>
       <Collapse sx={{width: '100%'}} in={errorMessage !== ''}>
