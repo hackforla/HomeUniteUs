@@ -21,9 +21,7 @@ import {PasswordValidation} from './PasswordValidation';
 import pwValidate, {validationSchema} from '../common/PasswordValidationSchema';
 
 // QUESTIONS TO ASK NEXT MEETING:
-// 2. should we have option to see value of password (like the eye thing)
 // 3. type error on line 58
-// 4. right now the results are one step behind, useEffect?
 interface SignUpFormProps {
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
@@ -49,14 +47,15 @@ export const SignUpForm = ({
 
   // set errors to "contains" state, passdown to password validation as prop
   // and dynamically change UI according to what is in errors array
+
   const [errorsLeft, setErrorsLeft] = useState([]);
 
   const handleValidate = async e => {
     handleChange(e);
-    const results: string[] = await pwValidate(values.password);
+    const results = await pwValidate(values.password);
     setErrorsLeft(results ? Object.values(results) : []);
   };
-  console.log('errorsLeft', errorsLeft);
+
   return (
     <Form onSubmit={handleSubmit}>
       <Stack spacing={1}>
