@@ -8,8 +8,6 @@ export const PasswordValidation = ({errorsLeft}) => {
   // if is NOT in errorsLeft, change to checkRoundedIcon
   // get all the keys in errorsLeft
   const errors = errorsLeft[0] ? Object.keys(errorsLeft[0]) : [];
-  console.log('errors', errors);
-  // create function to check for value
   // 1. initial state, check keys array and everything is remove rounded
   // 2. everytime there is a change in the keys array, check what is missing -> map? filter? find?
   // everytime there is a change, find what is missing
@@ -45,7 +43,11 @@ export const PasswordValidation = ({errorsLeft}) => {
         {listItems.map(item => {
           return (
             <ListItem key={item.name}>
-              {item.icon === false && <CheckRoundedIcon />}
+              {/* initial state when errors.length === 0, render RemoveRounded */}
+              {errors.length === 0 ? <RemoveRoundedIcon /> : null}
+              {item.icon === false && errors.length > 0 ? (
+                <CheckRoundedIcon />
+              ) : null}
               {item.icon === true && <RemoveRoundedIcon />}
               {item.name}
             </ListItem>
@@ -58,4 +60,3 @@ export const PasswordValidation = ({errorsLeft}) => {
 
 // - neutral state
 // green check - meets validation criteria
-// template literal
