@@ -20,8 +20,9 @@ import {SignInRequest} from '../../services/auth';
 import {PasswordValidation} from './PasswordValidation';
 import pwValidate, {validationSchema} from '../common/PasswordValidationSchema';
 
-// QUESTIONS TO ASK NEXT MEETING:
-// 3. type error on line 58
+// QUESTIONS TO ASK NEXT MEETING - 04/11/23:
+// 1. type error on line 58
+// 2. Still updating a step behind
 interface SignUpFormProps {
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
