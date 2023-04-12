@@ -21,8 +21,7 @@ import {PasswordValidation} from './PasswordValidation';
 import pwValidate, {validationSchema} from '../common/PasswordValidationSchema';
 
 // QUESTIONS TO ASK NEXT MEETING - 04/11/23:
-// 1. type error on line 58
-// 2. Still updating a step behind
+// 1. updating a step behind
 interface SignUpFormProps {
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
@@ -47,21 +46,17 @@ export const SignUpForm = ({
       },
     });
 
-  console.log('isValid', isValid);
-  console.log('errors', errors);
-
   // set errors to "contains" state, passdown to password validation as prop
   // and dynamically change UI according to what is in errors array
 
-  const [errorsLeft, setErrorsLeft] = useState([]);
+  const [errorsLeft, setErrorsLeft] = useState<string[]>([]);
 
-  const handleValidate = async e => {
+  const handleValidate = async (e: React.ChangeEvent<HTMLInputElement>) => {
     handleChange(e);
     const results = await pwValidate(values.password);
     setErrorsLeft(results ? Object.values(results) : []);
   };
 
-  console.log('errorsLeft', errorsLeft, length);
   return (
     <Form onSubmit={handleSubmit}>
       <Stack spacing={1}>

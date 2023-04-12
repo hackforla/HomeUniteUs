@@ -43,7 +43,6 @@ export const PasswordValidation = ({errorsLeft}) => {
         {listItems.map(item => {
           return (
             <ListItem key={item.name}>
-              {/* initial state when errors.length === 0, render RemoveRounded */}
               {errors.length === 0 ? <RemoveRoundedIcon /> : null}
               {item.icon === false && errors.length > 0 ? (
                 <CheckRoundedIcon />
