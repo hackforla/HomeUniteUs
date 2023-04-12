@@ -19,11 +19,13 @@ COGNITO_CLIENT_ID=env.get('COGNITO_CLIENT_ID')
 COGNITO_CLIENT_SECRET=env.get('COGNITO_CLIENT_SECRET')
 COGNITO_USER_POOL_ID=env.get('COGNITO_USER_POOL_ID')
 COGNITO_REDIRECT_URI = env.get('COGNITO_REDIRECT_URI')
+COGNITO_ACCESS_ID = env.get('COGNITO_ACCESS_ID')
+COGNITO_ACCESS_KEY = env.get('COGNITO_ACCESS_KEY')
 SECRET_KEY=env.get('SECRET_KEY')
 
 
 
-userClient = boto3.client('cognito-idp', region_name=COGNITO_REGION)
+userClient = boto3.client('cognito-idp', region_name=COGNITO_REGION, aws_access_key_id = COGNITO_ACCESS_ID, aws_secret_access_key = COGNITO_ACCESS_KEY)
 
 def initial_sign_in_reset_password(): 
     """Sets initial password.
@@ -78,5 +80,3 @@ def initial_sign_in_reset_password():
         'token': access_token,
         'user': user
     }
-    
-    return response
