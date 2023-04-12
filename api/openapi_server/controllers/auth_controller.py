@@ -3,11 +3,10 @@ import boto3
 import hmac
 import base64
 import requests
-import uuid
 
 from os import environ as env
 from dotenv import load_dotenv, find_dotenv
-from flask import redirect, request, session, redirect
+from flask import redirect, request, session
 from openapi_server.exceptions import AuthError
 from openapi_server.models import database as db
 from sqlalchemy.orm import Session
@@ -149,6 +148,11 @@ def signin():
                   "code": code, 
                   "message": message
               }, status_code)
+    
+    if(response.get('ChallengeName') and response['ChallengeName'] == 'NEW_PASSWORD_REQUIRED'):
+        userId = response['ChallengeParameters']['USER_ID_FOR_SRP']
+        sessionId = response['Session']
+        return redirect(f"http://localhost:4040/create-password?userId={userId}&sessionId={sessionId}")              
 
     access_token = response['AuthenticationResult']['AccessToken']
     refresh_token = response['AuthenticationResult']['RefreshToken']
