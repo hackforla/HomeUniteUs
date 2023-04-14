@@ -53,7 +53,7 @@ export const SignUpForm = ({
 
   const handleValidate = async (e: React.ChangeEvent<HTMLInputElement>) => {
     handleChange(e);
-    const results = await pwValidate(values.password);
+    const results = await pwValidate(e.target.value);
     setErrorsLeft(results ? Object.values(results) : []);
   };
 
