@@ -17,6 +17,7 @@ To run the server, please execute the following from the root directory:
 pip3 install -r requirements.txt
 alembic upgrade head
 python3 -m openapi_server
+or for me: 'py -3 -m openapi_server'
 ```
 If you're seeing error messages, this may be related to missing environment variables. In the ``api/`` directory create a ``.env`` file and copy and paste the variable definitions from ``.env.example``. Message a team member to receive the necessary values.
  
