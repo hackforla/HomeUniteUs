@@ -40,7 +40,6 @@ import {
 import {AccountVerification} from './views/AccountVerification';
 import {AppLayout, Header} from './components/common';
 import {ResetPasswordContext} from './components/authentication/ResetPasswordContext';
-import {NewPasswordContext} from './components/authentication/NewPasswordContext';
 
 function Profile() {
   return <div>Hello from profile</div>;
@@ -114,10 +113,7 @@ function HuuApp() {
             path="/email-verification-error"
             element={<EmailVerificationError />}
           />
-          <Route path="/new-password" element={<NewPasswordContext />}>
-            <Route index element={<NewPassword />} />
-            {/* Redirected to sign in page with module pop - up? "Sign in with new Password" */}
-          </Route>
+          <Route path="/new-password" element={<NewPassword />} />
         </Route>
       </Routes>
     </>
