@@ -15,7 +15,9 @@ export const validationSchema = object().shape({
     })
     .matches(/^(?=.*[!@#%&])/, {
       message: {
-        special: 'password must contain at least one special character',
+        // add specificity into message
+        special:
+          'password must contain at least these special characters (!@#%&)',
       },
     })
     .required({required: 'password is required'}),

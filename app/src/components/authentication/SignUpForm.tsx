@@ -17,11 +17,9 @@ import {styled} from '@mui/system';
 import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
 import {SignInRequest} from '../../services/auth';
-import {PasswordValidation} from './PasswordValidation';
+import {PasswordValidation} from '../../utils/PasswordValidation';
 import pwValidate, {validationSchema} from '../common/PasswordValidationSchema';
 
-// QUESTIONS TO ASK NEXT MEETING - 04/11/23:
-// 1. updating a step behind
 interface SignUpFormProps {
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
