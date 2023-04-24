@@ -10,8 +10,6 @@ interface PasswordProps {
 
 export const PasswordValidation = (password: PasswordProps) => {
   const [errorsLeft, setErrorsLeft] = useState<string[]>([]);
-  console.log('errorsLeft', errorsLeft);
-  console.log('password.password', password.password);
 
   useEffect(() => {
     const validatePwResults = async () => {
