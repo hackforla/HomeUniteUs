@@ -1,17 +1,27 @@
 import {List, ListItem, ListSubheader, Stack} from '@mui/material';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import {useEffect, useState} from 'react';
+import pwValidate from '../../utils/PasswordValidationSchema';
 
-export const PasswordValidation = ({errorsLeft}) => {
-  // when error in errorsLeft disappears, change hyphen to check circle
-  // how to do this? ->
-  // if is NOT in errorsLeft, change to checkRoundedIcon
-  // get all the keys in errorsLeft
+interface PasswordProps {
+  password: string;
+}
+
+export const PasswordValidation = (password: PasswordProps) => {
+  const [errorsLeft, setErrorsLeft] = useState<string[]>([]);
+  console.log('errorsLeft', errorsLeft);
+  console.log('password.password', password.password);
+
+  useEffect(() => {
+    const validatePwResults = async () => {
+      const validated = await pwValidate(password.password);
+      setErrorsLeft(validated ? Object.values(validated) : []);
+    };
+    validatePwResults();
+  }, [password]);
+
   const errors = errorsLeft[0] ? Object.keys(errorsLeft[0]) : [];
-  // 1. initial state, check keys array and everything is remove rounded
-  // 2. everytime there is a change in the keys array, check what is missing -> map? filter? find?
-  // everytime there is a change, find what is missing
-  // or everytime there is a change, only render what is there
 
   const listItems = [
     {

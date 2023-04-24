@@ -23,19 +23,24 @@ export const validationSchema = object().shape({
     .required({required: 'password is required'}),
 });
 
-// formik requires errors object with keys from yup, but yup only returns ValidationError with
-// no way of managing schema
+// formik requires errors object with keys from yup
+
+interface ValidationErrors {
+  [key: string]: string;
+}
 
 const pwValidate = (password: string) =>
   validationSchema.fields.password
     .validate(password, {abortEarly: false})
     .catch(({errors}) => {
-      // errors is array of strings
-      const validationErrors = errors.reduce((acc: string[], error: string) => {
-        const [key, value] = Object.entries(error)[0];
-        acc[key] = value;
-        return acc;
-      }, {});
+      const validationErrors = errors.reduce(
+        (acc: ValidationErrors, error: string) => {
+          const [key, value] = Object.entries(error)[0];
+          acc[key] = value;
+          return acc;
+        },
+        {},
+      );
       return Promise.resolve({errors: validationErrors});
     });
 

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   Divider,
   InputLabel,
@@ -17,8 +17,8 @@ import {styled} from '@mui/system';
 import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
 import {SignInRequest} from '../../services/auth';
-import {PasswordValidation} from '../../utils/PasswordValidation';
-import pwValidate, {validationSchema} from '../common/PasswordValidationSchema';
+import {PasswordValidation} from '../common/PasswordValidation';
+import {validationSchema} from '../../utils/PasswordValidationSchema';
 
 interface SignUpFormProps {
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
@@ -44,15 +44,8 @@ export const SignUpForm = ({
       },
     });
 
-  // set errors to "contains" state, passdown to password validation as prop
-  // and dynamically change UI according to what is in errors array
-
-  const [errorsLeft, setErrorsLeft] = useState<string[]>([]);
-
   const handleValidate = async (e: React.ChangeEvent<HTMLInputElement>) => {
     handleChange(e);
-    const results = await pwValidate(e.target.value);
-    setErrorsLeft(results ? Object.values(results) : []);
   };
 
   return (
@@ -85,7 +78,7 @@ export const SignUpForm = ({
           <FormHelperText error>{errors.password}</FormHelperText>
         )}
       </Stack>
-      <PasswordValidation errorsLeft={errorsLeft} />
+      <PasswordValidation password={values.password} />
       <Stack direction="row" gap={1}>
         <Typography>Already a member?</Typography>
         <Link fontWeight="bold" href="/signin">
@@ -96,7 +89,7 @@ export const SignUpForm = ({
         variant="contained"
         size="large"
         type="submit"
-        disabled={isValid === false || errorsLeft.length === 0}
+        disabled={isValid === false} /*|| errorsLeft.length === 0 */
         fullWidth
       >
         Sign up
