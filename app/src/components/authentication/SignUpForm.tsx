@@ -16,8 +16,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import {styled} from '@mui/system';
 import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
-import {object, string} from 'yup';
 import {SignInRequest} from '../../services/auth';
+import {PasswordValidation} from '../common/PasswordValidation';
+import {validationSchema} from '../../utils/PasswordValidationSchema';
 
 interface SignUpFormProps {
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
@@ -25,35 +26,23 @@ interface SignUpFormProps {
   errorMessage: string;
 }
 
-const validationSchema = object({
-  email: string().email().required('email is required'),
-  password: string()
-    .required('password is required')
-    .min(8, 'password must be at least 8 characters')
-    .matches(/^(?=.*[0-9])/, 'password must contain at least one number')
-    .matches(/^(?=.*[a-z])/, 'Must contain at least one lowercase character')
-    .matches(/^(?=.*[A-Z])/, 'Must contain at least one uppercase character')
-    .matches(
-      /^(?=.*[!@#%&])/,
-      'password must contain at least one special character',
-    ),
-});
-
 export const SignUpForm = ({
   onSubmit,
   errorMessage,
   setErrorMessage,
 }: SignUpFormProps) => {
-  const {handleSubmit, handleChange, values, touched, errors} = useFormik({
-    initialValues: {
-      email: '',
-      password: '',
-    },
-    validationSchema,
-    onSubmit: values => {
-      onSubmit(values);
-    },
-  });
+  const {handleSubmit, handleChange, values, touched, errors, isValid} =
+    useFormik({
+      initialValues: {
+        email: '',
+        password: '',
+      },
+      validationSchema: validationSchema,
+
+      onSubmit: values => {
+        onSubmit(values);
+      },
+    });
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -66,6 +55,7 @@ export const SignUpForm = ({
           onChange={handleChange}
           error={touched.email && Boolean(errors.email)}
         />
+
         {touched.email && errors.email && (
           <FormHelperText error>{errors.email}</FormHelperText>
         )}
@@ -84,13 +74,20 @@ export const SignUpForm = ({
           <FormHelperText error>{errors.password}</FormHelperText>
         )}
       </Stack>
+      <PasswordValidation password={values.password} />
       <Stack direction="row" gap={1}>
         <Typography>Already a member?</Typography>
         <Link fontWeight="bold" href="/signin">
           Sign in
         </Link>
       </Stack>
-      <Button variant="contained" size="large" type="submit" fullWidth>
+      <Button
+        variant="contained"
+        size="large"
+        type="submit"
+        disabled={isValid === false || Object.keys(errors).length === 0}
+        fullWidth
+      >
         Sign up
       </Button>
       <Collapse sx={{width: '100%'}} in={errorMessage !== ''}>
