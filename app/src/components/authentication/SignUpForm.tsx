@@ -44,10 +44,6 @@ export const SignUpForm = ({
       },
     });
 
-  const handleValidate = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleChange(e);
-  };
-
   return (
     <Form onSubmit={handleSubmit}>
       <Stack spacing={1}>
@@ -71,7 +67,7 @@ export const SignUpForm = ({
           id="password"
           type="password"
           value={values.password}
-          onChange={handleValidate}
+          onChange={handleChange}
           error={touched.password && Boolean(errors.password)}
         />
         {touched.password && errors.password && (
@@ -89,7 +85,7 @@ export const SignUpForm = ({
         variant="contained"
         size="large"
         type="submit"
-        disabled={isValid === false} /*|| errorsLeft.length === 0 */
+        disabled={isValid === false || Object.keys(errors).length === 0}
         fullWidth
       >
         Sign up
