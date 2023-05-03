@@ -6,7 +6,7 @@ import requests
 
 from os import environ as env
 from dotenv import load_dotenv, find_dotenv
-from flask import redirect, request, session, redirect
+from flask import redirect, request, session
 from openapi_server.exceptions import AuthError
 from openapi_server.models import database as db
 from sqlalchemy.orm import Session
@@ -26,10 +26,12 @@ COGNITO_CLIENT_ID=env.get('COGNITO_CLIENT_ID')
 COGNITO_CLIENT_SECRET=env.get('COGNITO_CLIENT_SECRET')
 COGNITO_USER_POOL_ID=env.get('COGNITO_USER_POOL_ID')
 COGNITO_REDIRECT_URI = env.get('COGNITO_REDIRECT_URI')
+COGNITO_ACCESS_ID = env.get('COGNITO_ACCESS_ID')
+COGNITO_ACCESS_KEY = env.get('COGNITO_ACCESS_KEY')
 SECRET_KEY=env.get('SECRET_KEY')
 
 # Initialize Cognito clients
-userClient = boto3.client('cognito-idp', region_name=COGNITO_REGION)
+userClient = boto3.client('cognito-idp', region_name=COGNITO_REGION, aws_access_key_id = COGNITO_ACCESS_ID, aws_secret_access_key = COGNITO_ACCESS_KEY)
 
 # Get secret hash
 def get_secret_hash(username):
@@ -146,6 +148,11 @@ def signin():
                   "code": code, 
                   "message": message
               }, status_code)
+    
+    if(response.get('ChallengeName') and response['ChallengeName'] == 'NEW_PASSWORD_REQUIRED'):
+        userId = response['ChallengeParameters']['USER_ID_FOR_SRP']
+        sessionId = response['Session']
+        return redirect(f"http://localhost:4040/create-password?userId={userId}&sessionId={sessionId}")              
 
     access_token = response['AuthenticationResult']['AccessToken']
     refresh_token = response['AuthenticationResult']['RefreshToken']
@@ -418,3 +425,46 @@ def confirm_signup():
         return redirect("http://localhost:4040/email-verification-success")
     except Exception as e:
         return redirect("http://localhost:4040/email-verification-error")
+
+# What comes first invite or adding the user 
+#Do I have an oauth token
+def invite():
+
+    get_token_auth_header()
+
+    if connexion.request.is_json:
+        body = connexion.request.get_json()
+
+    if "username" not in body:
+        raise AuthError({"message": "username invalid"},400)       
+        
+    try:
+
+        userName = body['username']
+
+        response = userClient.admin_create_user(
+            UserPoolId=COGNITO_USER_POOL_ID,
+            Username=userName,
+            UserAttributes=[
+            {
+                'Name': "email",
+                'Value': userName
+            }
+            ],
+            DesiredDeliveryMediums=["EMAIL"])
+
+        return response
+
+    except Exception as e:
+        
+        msg = "Invite could not be sent"
+        
+        if e.response != None:
+            msg = e.response['Error']['Message']
+
+        raise AuthError({
+                  "message": msg
+              }, 500)  
+
+
+
