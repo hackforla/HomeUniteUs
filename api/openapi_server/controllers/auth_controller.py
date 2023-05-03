@@ -210,7 +210,7 @@ def token():
     client_id = COGNITO_CLIENT_ID
     client_secret = COGNITO_CLIENT_SECRET
     callback_uri = request.args['callback_uri']
-    cognito_app_url = 'https://homeuudemo.auth.us-east-1.amazoncognito.com'
+    cognito_app_url = 'https://homeuniteus.auth.us-east-1.amazoncognito.com'
 
     token_url = f"{cognito_app_url}/oauth2/token"
     auth = requests.auth.HTTPBasicAuth(client_id, client_secret)
@@ -397,8 +397,8 @@ def private(token_info):
 
 def google():
     redirect_uri = request.args['redirect_uri']
-        
-    return redirect(f"https://homeuudemo.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+phone+profile+aws.cognito.signin.user.admin&redirect_uri={redirect_uri}&identity_provider=Google")
+
+    return redirect(f"https://homeuniteus.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+profile+phone+aws.cognito.signin.user.admin&redirect_uri={redirect_uri}&identity_provider=Google")
 
 def confirm_signup():
     code = request.args['code']
