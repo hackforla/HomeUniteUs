@@ -43,9 +43,16 @@ const validationSchema = object({
 const initialValues = {
   password: '',
   confirmPassword: '',
+  email: '',
+  session_id: '',
 };
 
-export const NewPasswordForm = () => {
+export interface NewPasswordFormProps {
+  session_id: string | null;
+  email: string | null;
+}
+
+export const NewPasswordForm = ({session_id, email}: NewPasswordFormProps) => {
   const navigate = useNavigate();
   const {
     handleSubmit,
@@ -60,7 +67,11 @@ export const NewPasswordForm = () => {
     validationSchema,
     onSubmit: async values => {
       try {
-        await newPassword(values).unwrap();
+        if (session_id && email) {
+          values.email = email;
+          values.session_id = session_id;
+          await newPassword(values).unwrap();
+        }
         navigate('/');
       } catch (err) {
         console.log({err});
