@@ -121,6 +121,29 @@ export function CoordinatorDashboardDetailsPanel() {
   );
 }
 
+// export function InviteUserModal() {
+//   const [open, setOpen] = React.useState(false);
+//   const handleOpen = () => setOpen(true);
+//   const handleClose = () => setOpen(false);
+//   return (
+//     <Box>
+//       <Fab color="primary" variant="extended" onClick={handleOpen}>
+//         Invite User
+//       </Fab>
+//       <Modal
+//         open={open}
+//         onClose={handleClose}
+//         aria-labelledby="modal-modal-title"
+//         aria-describedby="modal-modal-description"
+//       >
+//         <Box>
+//           {/* Add formik context/validation with appropriate MUI TextField */}
+//         </Box>
+//       </Modal>
+//     </Box>
+//   );
+// }
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function CoordinatorDashboard(props: CoordinatorDashboardProps) {
   return (

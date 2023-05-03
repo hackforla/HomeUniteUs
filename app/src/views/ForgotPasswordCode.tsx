@@ -1,7 +1,7 @@
 import {Button, Stack, FormHelperText, Typography, Box} from '@mui/material';
 import {useFormikContext} from 'formik';
 import React from 'react';
-import {ResestPasswordValues} from '../components/authentication/ResetPasswordContext';
+import {ResetPasswordValues} from '../components/authentication/ResetPasswordContext';
 import {CodeField, FormContainer} from '../components/authentication';
 import {useNavigate} from 'react-router-dom';
 
@@ -14,7 +14,7 @@ export const ForgotPasswordCode = () => {
     touched,
     setFieldValue,
     handleBlur,
-  } = useFormikContext<ResestPasswordValues>();
+  } = useFormikContext<ResetPasswordValues>();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

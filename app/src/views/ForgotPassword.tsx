@@ -12,7 +12,7 @@ import {useFormikContext} from 'formik';
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import {isErrorWithMessage, isFetchBaseQueryError} from '../app/helpers';
-import {ResestPasswordValues} from '../components/authentication/ResetPasswordContext';
+import {ResetPasswordValues} from '../components/authentication/ResetPasswordContext';
 import {useForgotPasswordMutation} from '../services/auth';
 import {FormContainer} from '../components/authentication';
 
@@ -28,7 +28,7 @@ export const ForgotPassword = () => {
     handleBlur,
     setFieldTouched,
     validateForm,
-  } = useFormikContext<ResestPasswordValues>();
+  } = useFormikContext<ResetPasswordValues>();
 
   const [forgotPassword, {isLoading}] = useForgotPasswordMutation();
 

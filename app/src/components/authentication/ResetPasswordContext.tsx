@@ -4,7 +4,7 @@ import {Outlet, useNavigate} from 'react-router-dom';
 import {object, string, ref} from 'yup';
 import {useConfirmForgotPasswordMutation} from '../../services/auth';
 
-export interface ResestPasswordValues {
+export interface ResetPasswordValues {
   email: string;
   code: string;
   password: string;
