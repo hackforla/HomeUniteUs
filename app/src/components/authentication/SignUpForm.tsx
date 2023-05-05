@@ -31,14 +31,13 @@ export const SignUpForm = ({
   errorMessage,
   setErrorMessage,
 }: SignUpFormProps) => {
-  const {handleSubmit, handleChange, values, touched, errors, isValid} =
+  const {handleSubmit, handleChange, values, touched, errors, isValid, dirty} =
     useFormik({
       initialValues: {
         email: '',
         password: '',
       },
       validationSchema: validationSchema,
-
       onSubmit: values => {
         onSubmit(values);
       },
@@ -85,7 +84,7 @@ export const SignUpForm = ({
         variant="contained"
         size="large"
         type="submit"
-        disabled={isValid === false || Object.keys(errors).length === 0}
+        disabled={!isValid || !dirty}
         fullWidth
       >
         Sign up
