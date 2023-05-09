@@ -29,6 +29,7 @@ COGNITO_REDIRECT_URI = env.get('COGNITO_REDIRECT_URI')
 COGNITO_ACCESS_ID = env.get('COGNITO_ACCESS_ID')
 COGNITO_ACCESS_KEY = env.get('COGNITO_ACCESS_KEY')
 SECRET_KEY=env.get('SECRET_KEY')
+cognito_client_url = 'https://homeuniteus.auth.us-east-1.amazoncognito.com'
 
 # Initialize Cognito clients
 userClient = boto3.client('cognito-idp', region_name=COGNITO_REGION, aws_access_key_id = COGNITO_ACCESS_ID, aws_secret_access_key = COGNITO_ACCESS_KEY)
@@ -217,9 +218,8 @@ def token():
     client_id = COGNITO_CLIENT_ID
     client_secret = COGNITO_CLIENT_SECRET
     callback_uri = request.args['callback_uri']
-    cognito_app_url = 'https://homeuniteus.auth.us-east-1.amazoncognito.com'
 
-    token_url = f"{cognito_app_url}/oauth2/token"
+    token_url = f"{cognito_client_url}/oauth2/token"
     auth = requests.auth.HTTPBasicAuth(client_id, client_secret)
 
     params = {
@@ -405,7 +405,7 @@ def private(token_info):
 def google():
     redirect_uri = request.args['redirect_uri']
 
-    return redirect(f"https://homeuniteus.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+profile+phone+aws.cognito.signin.user.admin&redirect_uri={redirect_uri}&identity_provider=Google")
+    return redirect(f"{cognito_client_url}/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+profile+phone+aws.cognito.signin.user.admin&redirect_uri={redirect_uri}&identity_provider=Google")
 
 def confirm_signup():
     code = request.args['code']
