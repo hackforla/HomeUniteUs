@@ -9,7 +9,6 @@ clickclick==20.10.2
 colorama==0.4.4
 connexion==2.13.1
 Flask==2.3.2
-greenlet==1.1.2
 idna==3.3
 importlib-metadata==6.0.0
 importlib-resources==5.10.2
