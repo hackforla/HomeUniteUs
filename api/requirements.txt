@@ -20,6 +20,7 @@ jsonschema==4.4.0
 Mako==1.2.4
 MarkupSafe==2.1.1
 packaging==21.3
+psycopg2-binary==2.9.5
 pyparsing==3.0.8
 pyrsistent==0.18.1
 python-dateutil==2.8.2

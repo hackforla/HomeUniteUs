@@ -31,6 +31,7 @@ COGNITO_ACCESS_KEY = env.get('COGNITO_ACCESS_KEY')
 SECRET_KEY=env.get('SECRET_KEY')
 cognito_client_url = 'https://homeuniteus.auth.us-east-1.amazoncognito.com'
 
+
 # Initialize Cognito clients
 userClient = boto3.client('cognito-idp', region_name=COGNITO_REGION, aws_access_key_id = COGNITO_ACCESS_ID, aws_secret_access_key = COGNITO_ACCESS_KEY)
 

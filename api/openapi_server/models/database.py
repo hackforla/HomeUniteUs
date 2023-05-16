@@ -5,6 +5,10 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, LargeBinary
 from sqlalchemy import text
 
+from os import environ as env
+
+DATABASE_URL = env.get('DATABASE_URL')
+
 Base = declarative_base()
 
 class User(Base):
@@ -244,7 +248,7 @@ class DataAccessLayer:
     _engine = None
 
     # temporary local sqlite DB, replace with conn str for postgres container port for real e2e
-    _conn_string = "sqlite:///./homeuniteus.db"
+    _conn_string = DATABASE_URL if DATABASE_URL else "sqlite:///./homeuniteus.db"
 
     @classmethod
     def db_init(cls, conn_string=None):
