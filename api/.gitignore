@@ -67,3 +67,7 @@ target/
 
 # Local database
 homeuniteus.db
+
+# Local Setup
+.DS_Store
+.vscode
