@@ -1,9 +1,9 @@
 name: Build application
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -11,17 +11,24 @@ jobs:
       matrix:
         node-version: [16.x]
     steps:
-    - name: Checkout source
-      uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: cd app && npm ci
-    - run: cd app && npm run build
-    - run: cd app && npm run test
-    - name: E2E Tests
+      - name: Checkout source
+        uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: cd app && npm ci
+      - run: cd app && npm run build
+      - run: cd app && npm run test
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      # Install NPM dependencies, cache them correctly
+      # and run all Cypress tests
+      - name: Run E2E tests
         uses: cypress-io/github-action@v2
         with:
-          start: cd app && npm run dev
-          wait-on: 'http://localhost:4040'    
+          build: cd app && npm run build
+          start: cd app && run run dev
