@@ -28,7 +28,9 @@ describe('Forgot Password', () => {
 
     cy.url().should('include', '/forgot-password/code');
 
-    cy.findAllByRole('textbox').each(($el, index) => {
+    cy.findAllByRole('textbox').as('codeInputs');
+
+    cy.get('@codeInputs').each(($el, index) => {
       cy.wrap($el).type(`${code[index]}`);
     });
 
