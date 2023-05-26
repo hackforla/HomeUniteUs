@@ -20,7 +20,6 @@ export const ForgotPasswordCode = () => {
     errors,
     touched,
     setFieldValue,
-    handleBlur,
   } = useFormikContext<ResestPasswordValues>();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -66,7 +65,6 @@ export const ForgotPasswordCode = () => {
             <CodeField
               id="code"
               onChange={setCode}
-              onBlur={handleBlur}
               error={touched.code && Boolean(errors.code)}
             />
             {touched.code && errors.code ? (
