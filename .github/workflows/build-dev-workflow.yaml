@@ -23,5 +23,7 @@ jobs:
       - name: Run E2E tests
         uses: cypress-io/github-action@v2
         with:
-          start: cd app && run run dev
+          install: false
+          project: ./app
+          start: run run dev
           wait-on: http://localhost:4040
