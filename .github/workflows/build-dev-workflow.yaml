@@ -29,6 +29,7 @@ jobs:
       # and run all Cypress tests
       - name: Run E2E tests
         uses: cypress-io/github-action@v2
+        working-directory: ./app
         with:
           build: cd app && npm run build
           start: cd app && run run dev
