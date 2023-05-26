@@ -25,5 +25,5 @@ jobs:
         with:
           install: false
           working-directory: app
-          start: run run dev
+          start: npm run dev
           wait-on: http://localhost:4040
