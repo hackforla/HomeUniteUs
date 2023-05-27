@@ -37,7 +37,7 @@ const validationSchema = object({
     .length(6, 'code must be 6 digits'),
 });
 
-const initialValues = {
+export const initialValues = {
   email: '',
   code: '',
   password: '',
