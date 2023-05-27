@@ -11,7 +11,7 @@ export interface ResestPasswordValues {
   confirmPassword: string;
 }
 
-const validationSchema = object({
+export const validationSchema = object({
   email: string().email().required('email is required'),
   password: string()
     .required('password is required')
