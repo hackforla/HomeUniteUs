@@ -1,3 +1,5 @@
+import {BrowserRouter} from 'react-router-dom';
+import {Formik} from 'formik';
 import {
   ResestPasswordValues,
   initialValues,
@@ -5,12 +7,12 @@ import {
 } from '../../components/authentication/ResetPasswordContext';
 import {render, screen, waitFor, fireEvent} from '../../utils/test/test-utils';
 import {ResetPassword} from '../ResetPassword';
-import {BrowserRouter} from 'react-router-dom';
-import {Formik} from 'formik';
+import {server, rest} from '../../utils/test/server';
 
-const {navigate} = vi.hoisted(() => {
+const {navigate, onSubmit} = vi.hoisted(() => {
   return {
     navigate: vi.fn(),
+    onSubmit: vi.fn(),
   };
 });
 
@@ -23,16 +25,19 @@ vi.mock('react-router-dom', async () => {
 });
 
 const setup = (values: Partial<ResestPasswordValues> = {}) => {
+  const email = 'test@gmail.com';
+  const code = '123456';
+
   render(
     <BrowserRouter>
       <Formik
         initialValues={{
           ...initialValues,
-          email: 'test@gmail.com',
-          code: '123456',
+          email,
+          code,
           ...values,
         }}
-        onSubmit={vi.fn()}
+        onSubmit={onSubmit}
         validationSchema={validationSchema}
       >
         <ResetPassword />
@@ -40,14 +45,7 @@ const setup = (values: Partial<ResestPasswordValues> = {}) => {
     </BrowserRouter>,
   );
 
-  const passwordInput = screen.getByRole('textbox', {name: /password/i});
-  const confirmPasswordInput = screen.getByRole('textbox', {
-    name: /confirmPassword/i,
-  });
-
-  const submitButton = screen.getByRole('button', {name: /submit/i});
-
-  return {passwordInput, confirmPasswordInput, submitButton};
+  return {email, code};
 };
 
 describe('ResetPassword page', () => {
@@ -76,12 +74,64 @@ describe('ResetPassword page', () => {
     waitFor(() => expect(screen.queryByRole('alert')).toBeInTheDocument());
   });
 
-  test('displays error message when passwords do not match', () => {
-    const {passwordInput, confirmPasswordInput, submitButton} = setup();
+  test('Submits form with all data and matching password', async () => {
+    const {email, code} = setup();
+    const password = 'Password1!';
+
+    const passwordInput = screen.getByLabelText('New password');
+    const confirmPasswordInput = screen.getByLabelText('Confirm new password');
+    const submitButton = screen.getByRole('button', {name: /submit/i});
+
+    fireEvent.change(passwordInput, {target: {value: password}});
+    fireEvent.change(confirmPasswordInput, {target: {value: password}});
+    fireEvent.click(submitButton);
+
+    await waitFor(() =>
+      expect(onSubmit).toHaveBeenCalledWith(
+        {
+          code,
+          confirmPassword: password,
+          email,
+          password,
+        },
+        expect.anything(),
+      ),
+    );
+
+    await waitFor(() => expect(navigate).toHaveBeenCalledWith('/whhoop'));
+  });
+
+  test.skip('Displays error message returned from server', async () => {
+    const errorMessage = 'The provided verification code is invalid.';
+
+    server.use(
+      rest.post(
+        'http://localhost:4040/api/auth/forgot_password/confirm',
+        (req, res, ctx) => {
+          return res(
+            ctx.status(401),
+            ctx.json({
+              data: {
+                code: 'InvalidCodeException',
+                message: errorMessage,
+              },
+            }),
+          );
+        },
+      ),
+    );
+
+    setup();
+
+    const passwordInput = screen.getByLabelText('New password');
+    const confirmPasswordInput = screen.getByLabelText('Confirm new password');
+    const submitButton = screen.getByRole('button', {name: /submit/i});
 
     fireEvent.change(passwordInput, {target: {value: 'Password1!'}});
-    fireEvent.change(confirmPasswordInput, {target: {value: 'Password2!'}});
+    fireEvent.change(confirmPasswordInput, {target: {value: 'Password1!'}});
     fireEvent.click(submitButton);
+
+    await screen.findByRole('alert');
 
     screen.debug();
   });

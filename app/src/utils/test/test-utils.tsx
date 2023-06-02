@@ -1,17 +1,12 @@
 import React, {ReactElement} from 'react';
-import {render, cleanup, RenderOptions} from '@testing-library/react';
+import {render, RenderOptions} from '@testing-library/react';
 import {ThemeProvider} from '@mui/material/styles';
 import {Provider} from 'react-redux';
-import {afterEach} from 'vitest';
 import userEvent from '@testing-library/user-event';
 
 import {HomeUniteUsTheme} from '../../theme';
 import {PreloadedState} from '@reduxjs/toolkit';
 import {setupStore, RootState, AppStore} from '../../app/store';
-
-afterEach(() => {
-  cleanup();
-});
 
 interface ProviderProps {
   children: ReactElement;

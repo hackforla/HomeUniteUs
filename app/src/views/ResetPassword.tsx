@@ -75,6 +75,9 @@ export const ResetPassword = () => {
             onBlur={handleBlur}
             error={touched.password && Boolean(errors.password)}
             helperText={touched.password && errors.password}
+            inputProps={{
+              'aria-label': 'new password',
+            }}
           />
           <PasswordField
             fullWidth
@@ -86,6 +89,9 @@ export const ResetPassword = () => {
             onBlur={handleBlur}
             error={touched.confirmPassword && Boolean(errors.confirmPassword)}
             helperText={touched.confirmPassword && errors.confirmPassword}
+            inputProps={{
+              'aria-label': 'confirm new password',
+            }}
           />
           <Button
             disabled={isLoading}
