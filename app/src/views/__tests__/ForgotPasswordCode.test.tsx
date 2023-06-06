@@ -3,10 +3,17 @@ import {
   initialValues,
   validationSchema,
 } from '../../components/authentication/ResetPasswordContext';
-import {render, screen, waitFor, fireEvent} from '../../utils/test/test-utils';
+import {
+  render,
+  screen,
+  waitFor,
+  fireEvent,
+  waitForElementToBeRemoved,
+} from '../../utils/test/test-utils';
 import {ForgotPasswordCode} from '../ForgotPasswordCode';
 import {BrowserRouter} from 'react-router-dom';
 import {Formik} from 'formik';
+import {server, rest} from '../../utils/test/server';
 
 const {navigate} = vi.hoisted(() => {
   return {
@@ -58,18 +65,59 @@ describe('ForgotPasswordCode page', () => {
   describe('If the code is invalid', () => {
     test('submit button should be disabled', () => {
       setup({code: ''});
-      expect(screen.getByRole('button')).toBeDisabled();
+      const verifyButton = screen.getByRole('button', {name: /verify/i});
+
+      expect(verifyButton).toBeDisabled();
     });
   });
 
   describe('If the code is valid', () => {
     test('submit button should be enabled and navigate to next page', () => {
       setup({code: '123456'});
-      const submitButton = screen.getByRole('button', {name: /submit/i});
+      const verifyButton = screen.getByRole('button', {name: /verify/i});
 
-      expect(submitButton).toBeEnabled();
-      fireEvent.click(submitButton);
+      expect(verifyButton).toBeEnabled();
+      fireEvent.click(verifyButton);
       expect(navigate).toHaveBeenCalledWith('/forgot-password/reset');
+    });
+  });
+
+  describe('Resend code', () => {
+    test('display a success message when the code is sent', async () => {
+      setup();
+      const resendButton = screen.getByRole('button', {name: /resend/i});
+
+      fireEvent.click(resendButton);
+
+      await screen.findByRole('alert');
+
+      expect(screen.getByTestId(/success/i)).toBeInTheDocument();
+      expect(screen.getByRole('alert')).toBeInTheDocument();
+    });
+
+    test('display an error message', async () => {
+      server.use(
+        rest.post(
+          'http://localhost:4040/api/auth/forgot_password',
+          (req, res, ctx) => {
+            return res(
+              ctx.status(400),
+              ctx.json({message: 'There was an error'}),
+            );
+          },
+        ),
+      );
+
+      setup();
+      const resendButton = screen.getByRole('button', {name: /resend/i});
+
+      fireEvent.click(resendButton);
+      expect(resendButton).toBeDisabled();
+
+      await waitForElementToBeRemoved(() => screen.queryByRole('progressbar'));
+
+      expect(screen.getByTestId(/error/i)).toBeInTheDocument();
+      expect(screen.getByRole('alert')).toBeInTheDocument();
     });
   });
 });
