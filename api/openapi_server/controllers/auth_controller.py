@@ -29,6 +29,7 @@ COGNITO_REDIRECT_URI = env.get('COGNITO_REDIRECT_URI')
 COGNITO_ACCESS_ID = env.get('COGNITO_ACCESS_ID')
 COGNITO_ACCESS_KEY = env.get('COGNITO_ACCESS_KEY')
 SECRET_KEY=env.get('SECRET_KEY')
+URL=env.get('URL')
 cognito_client_url = 'https://homeuniteus.auth.us-east-1.amazoncognito.com'
 
 
@@ -154,7 +155,7 @@ def signin():
     if(response.get('ChallengeName') and response['ChallengeName'] == 'NEW_PASSWORD_REQUIRED'):
         userId = response['ChallengeParameters']['USER_ID_FOR_SRP']
         sessionId = response['Session']
-        return redirect(f"http://localhost:4040/create-password?userId={userId}&sessionId={sessionId}")              
+        return redirect(f"{URL}/create-password?userId={userId}&sessionId={sessionId}")              
 
     access_token = response['AuthenticationResult']['AccessToken']
     refresh_token = response['AuthenticationResult']['RefreshToken']
@@ -423,9 +424,9 @@ def confirm_signup():
             ConfirmationCode=code
         )
 
-        return redirect("http://localhost:4040/email-verification-success")
+        return redirect("{URL}/email-verification-success")
     except Exception as e:
-        return redirect("http://localhost:4040/email-verification-error")
+        return redirect("{URL}/email-verification-error")
 
 # What comes first invite or adding the user 
 #Do I have an oauth token
