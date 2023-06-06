@@ -48,18 +48,18 @@ describe('ForgotPasswordCode page', () => {
     vi.resetAllMocks();
   });
 
-  test('should display the form when the email is present', () => {
+  test('should display the form when the email is present', async () => {
     setup();
 
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
-    waitFor(() => expect(screen.queryByRole('form')).toBeInTheDocument());
+    waitFor(() => expect(screen.getByRole('form')).toBeInTheDocument());
   });
 
-  test('should dispaly an error message when the email is missing', () => {
+  test('should dispaly an error message when the email is missing', async () => {
     setup({email: ''});
 
     expect(screen.queryByRole('form')).not.toBeInTheDocument();
-    waitFor(() => expect(screen.queryByRole('alert')).toBeInTheDocument());
+    waitFor(() => expect(screen.getByRole('alert')).toBeInTheDocument());
   });
 
   describe('If the code is invalid', () => {
