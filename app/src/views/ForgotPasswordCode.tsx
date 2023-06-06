@@ -1,4 +1,11 @@
-import {Button, Stack, FormHelperText, Typography, Box} from '@mui/material';
+import {
+  Button,
+  Stack,
+  FormHelperText,
+  Typography,
+  Box,
+  Alert,
+} from '@mui/material';
 import {useFormikContext} from 'formik';
 import React from 'react';
 import {ResestPasswordValues} from '../components/authentication/ResetPasswordContext';
@@ -9,11 +16,10 @@ export const ForgotPasswordCode = () => {
   const navigate = useNavigate();
 
   const {
-    values: {code},
+    values: {code, email},
     errors,
     touched,
     setFieldValue,
-    handleBlur,
   } = useFormikContext<ResestPasswordValues>();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -25,6 +31,18 @@ export const ForgotPasswordCode = () => {
   const setCode = (code: string) => {
     setFieldValue('code', code);
   };
+
+  if (!email) {
+    return (
+      <FormContainer>
+        <Alert sx={{width: '100%'}} severity="error">
+          Whoops! This action relies on data collected in previous steps that is
+          currently missing. Please restart the process if you would still like
+          to reset your password.
+        </Alert>
+      </FormContainer>
+    );
+  }
 
   return (
     <FormContainer>
@@ -47,7 +65,6 @@ export const ForgotPasswordCode = () => {
             <CodeField
               id="code"
               onChange={setCode}
-              onBlur={handleBlur}
               error={touched.code && Boolean(errors.code)}
             />
             {touched.code && errors.code ? (

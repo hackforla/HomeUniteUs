@@ -15,7 +15,7 @@ import {FormContainer, PasswordField} from '../components/authentication';
 export const ResetPassword = () => {
   const {
     handleChange,
-    values: {password, confirmPassword},
+    values: {password, confirmPassword, email, code},
     touched,
     errors,
     setFieldTouched,
@@ -37,6 +37,18 @@ export const ResetPassword = () => {
       setFieldTouched('confirmPassword', false);
     };
   }, []);
+
+  if (!email || !code) {
+    return (
+      <FormContainer>
+        <Alert sx={{width: '100%'}} severity="error">
+          Whoops! This action relies on data collected in previous steps that is
+          currently missing. Please restart the process if you would still like
+          to reset your password.
+        </Alert>
+      </FormContainer>
+    );
+  }
 
   return (
     <FormContainer>
@@ -63,6 +75,9 @@ export const ResetPassword = () => {
             onBlur={handleBlur}
             error={touched.password && Boolean(errors.password)}
             helperText={touched.password && errors.password}
+            inputProps={{
+              'aria-label': 'new password',
+            }}
           />
           <PasswordField
             fullWidth
@@ -74,6 +89,9 @@ export const ResetPassword = () => {
             onBlur={handleBlur}
             error={touched.confirmPassword && Boolean(errors.confirmPassword)}
             helperText={touched.confirmPassword && errors.confirmPassword}
+            inputProps={{
+              'aria-label': 'confirm new password',
+            }}
           />
           <Button
             disabled={isLoading}

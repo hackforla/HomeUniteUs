@@ -92,6 +92,9 @@ export const CodeField = ({onChange, onBlur, error, id}: CodeFieldProps) => {
       {otpCode.map((value, index) => {
         return (
           <TextField
+            inputProps={{
+              'aria-label': `code-${index + 1}`,
+            }}
             id={id}
             placeholder="-"
             inputMode="numeric"
