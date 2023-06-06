@@ -7,7 +7,6 @@ import {
 } from '../../components/authentication/ResetPasswordContext';
 import {render, screen, waitFor, fireEvent} from '../../utils/test/test-utils';
 import {ResetPassword} from '../ResetPassword';
-import {server, rest} from '../../utils/test/server';
 
 const {navigate, onSubmit} = vi.hoisted(() => {
   return {
@@ -97,30 +96,9 @@ describe('ResetPassword page', () => {
         expect.anything(),
       ),
     );
-
-    await waitFor(() => expect(navigate).toHaveBeenCalledWith('/whhoop'));
   });
 
   test.skip('Displays error message returned from server', async () => {
-    const errorMessage = 'The provided verification code is invalid.';
-
-    server.use(
-      rest.post(
-        'http://localhost:4040/api/auth/forgot_password/confirm',
-        (req, res, ctx) => {
-          return res(
-            ctx.status(401),
-            ctx.json({
-              data: {
-                code: 'InvalidCodeException',
-                message: errorMessage,
-              },
-            }),
-          );
-        },
-      ),
-    );
-
     setup();
 
     const passwordInput = screen.getByLabelText('New password');

@@ -21,7 +21,6 @@ export const ForgotPasswordCode = () => {
     touched,
     setFieldValue,
   } = useFormikContext<ResestPasswordValues>();
-  console.log(code);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
