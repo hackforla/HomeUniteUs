@@ -8,10 +8,24 @@ import {
 import {render, screen, waitFor, fireEvent} from '../../utils/test/test-utils';
 import {ResetPassword} from '../ResetPassword';
 
+interface Mocks {
+  isError: boolean;
+  error: string | undefined;
+  isLoading: boolean;
+}
+
 const {navigate, onSubmit} = vi.hoisted(() => {
   return {
     navigate: vi.fn(),
     onSubmit: vi.fn(),
+  };
+});
+
+const serviceMocks = vi.hoisted<Mocks>(() => {
+  return {
+    isError: false,
+    error: undefined,
+    isLoading: false,
   };
 });
 
@@ -20,6 +34,24 @@ vi.mock('react-router-dom', async () => {
   return {
     ...actual,
     useNavigate: () => navigate,
+  };
+});
+
+vi.mock('../../services/auth', async () => {
+  const actual: object = await vi.importActual('../../services/auth');
+  return {
+    ...actual,
+    useConfirmForgotPasswordMutation: () => {
+      return [
+        vi.fn(),
+        {
+          error: serviceMocks.error,
+          isError: serviceMocks.isError,
+          isLoading: serviceMocks.isLoading,
+          reset: vi.fn(),
+        },
+      ];
+    },
   };
 });
 
@@ -98,19 +130,23 @@ describe('ResetPassword page', () => {
     );
   });
 
-  test.skip('Displays error message returned from server', async () => {
+  test('displays error message returned from server', async () => {
+    const errorMessage = 'There was an error';
+    serviceMocks.isError = true;
+    serviceMocks.error = errorMessage;
+
     setup();
 
-    const passwordInput = screen.getByLabelText('New password');
-    const confirmPasswordInput = screen.getByLabelText('Confirm new password');
+    expect(screen.queryByRole('alert')).toBeInTheDocument();
+    expect(screen.getByRole('alert')).toHaveTextContent(errorMessage);
+  });
+
+  test('Submit button is disabled and shows spinner when loading', async () => {
+    serviceMocks.isLoading = true;
+    setup();
+
     const submitButton = screen.getByRole('button', {name: /submit/i});
-
-    fireEvent.change(passwordInput, {target: {value: 'Password1!'}});
-    fireEvent.change(confirmPasswordInput, {target: {value: 'Password1!'}});
-    fireEvent.click(submitButton);
-
-    await screen.findByRole('alert');
-
-    screen.debug();
+    expect(submitButton).toBeDisabled();
+    expect(screen.queryByRole('progressbar')).toBeInTheDocument();
   });
 });
