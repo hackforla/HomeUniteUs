@@ -10,7 +10,7 @@ import {RootState} from '../app/store';
 
 // Create base query
 const baseQuery = fetchBaseQuery({
-  baseUrl: '/api/',
+  baseUrl: 'http://localhost:4040/api/',
   prepareHeaders: (headers, {getState}) => {
     // get token from state
     const token = (getState() as RootState).auth.token;
