@@ -424,9 +424,9 @@ def confirm_signup():
             ConfirmationCode=code
         )
 
-        return redirect("{URL}/email-verification-success")
+        return redirect(f"{URL}/email-verification-success")
     except Exception as e:
-        return redirect("{URL}/email-verification-error")
+        return redirect(f"{URL}/email-verification-error")
 
 # What comes first invite or adding the user 
 #Do I have an oauth token
