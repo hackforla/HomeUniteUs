@@ -12,8 +12,8 @@ const prepare = () => {
     </BrowserRouter>,
   );
 
-  const emailInput = screen.getByRole('textbox', {name: /email/i});
-  const passwordInput = screen.getByLabelText(/password/i);
+  const emailInput = screen.getByLabelText(/email/i);
+  const passwordInput = screen.getByLabelText('Password');
   const submitButton = screen.getByRole('button', {name: /sign in/i});
 
   return {onSubmit, emailInput, passwordInput, submitButton};
