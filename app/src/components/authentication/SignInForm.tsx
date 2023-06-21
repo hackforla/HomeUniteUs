@@ -61,7 +61,7 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
         autoComplete="username"
         id="email"
         name="email"
-        label="Email"
+        label="Email address"
         value={email}
         onChange={handleChange}
         onBlur={handleBlur}
@@ -84,7 +84,9 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
         }}
       />
       <Stack direction="row" justifyContent="flex-end">
-        <Link href="/forgot-password">Forgot password?</Link>
+        <Link underline="always" href="/forgot-password">
+          Forgot password?
+        </Link>
       </Stack>
       <Button variant="contained" size="large" type="submit" fullWidth>
         Sign in
@@ -92,14 +94,14 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
       <Divider>or</Divider>
       <Button
         variant="outlined"
-        color="secondary"
         size="large"
         fullWidth
+        sx={{color: 'text.primary'}}
         // overrides the default react router link since we're hitting a redirect from the api
         component="a"
         href={'/api/auth/google?redirect_uri=http://localhost:4040/signin'}
       >
-        <GoogleIcon sx={{fontSize: 16, marginRight: 1}} /> Sign in with Google
+        <GoogleIcon sx={{fontSize: 16, marginRight: 1}} /> Continue with Google
       </Button>
     </Stack>
   );

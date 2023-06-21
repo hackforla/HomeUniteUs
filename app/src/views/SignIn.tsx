@@ -92,6 +92,7 @@ export const SignIn = () => {
   return (
     <FormContainer>
       <Stack
+        py={2}
         spacing={4}
         sx={{justifyContent: 'center', alignItems: 'center', width: '100%'}}
       >
@@ -122,7 +123,9 @@ export const SignIn = () => {
         <Divider sx={{width: '100%'}} />
         <Stack direction="row" alignItems="center" gap={0.5}>
           <Typography variant="body2">New user?</Typography>
-          <Link href="/signup">Create an account</Link>
+          <Link underline="always" href="/signup">
+            Create an account
+          </Link>
         </Stack>
       </Stack>
     </FormContainer>
