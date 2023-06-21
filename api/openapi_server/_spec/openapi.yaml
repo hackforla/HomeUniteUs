@@ -423,7 +423,7 @@ paths:
       x-openapi-router-controller: openapi_server.controllers.auth_controller
       security:
         - jwt:
-            - secret 
+            - secret
   /auth/initialInvite:
     post:
       description: Removes auto generated password and replaces with user assigned password. Used for account setup.
