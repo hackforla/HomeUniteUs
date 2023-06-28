@@ -1,27 +1,13 @@
-import {
-  OutlinedInput,
-  FormHelperText,
-  InputLabel,
-  Button,
-  Stack,
-  styled,
-  Divider,
-  Link,
-  Alert,
-  Collapse,
-  IconButton,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import {Button, Stack, Divider, Link, TextField} from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
 import {object, string} from 'yup';
 
 import {SignInRequest} from '../../services/auth';
+import {PasswordField} from './PasswordField';
 
 interface SignInFormProps {
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
-  errorMessage: string;
-  setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const validationSchema = object({
@@ -44,12 +30,15 @@ const validationSchema = object({
     ),
 });
 
-export const SignInForm = ({
-  onSubmit,
-  setErrorMessage,
-  errorMessage,
-}: SignInFormProps) => {
-  const {handleSubmit, handleChange, values, touched, errors} = useFormik({
+export const SignInForm = ({onSubmit}: SignInFormProps) => {
+  const {
+    handleSubmit,
+    handleChange,
+    handleBlur,
+    values: {email, password},
+    touched,
+    errors,
+  } = useFormik({
     initialValues: {
       email: '',
       password: '',
@@ -61,83 +50,59 @@ export const SignInForm = ({
   });
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Stack spacing={1}>
-        <InputLabel htmlFor="email">Email address</InputLabel>
-        <OutlinedInput
-          fullWidth
-          id="email"
-          name="email"
-          value={values.email}
-          onChange={handleChange}
-          error={touched.email && Boolean(errors.email)}
-        />
-        {touched.email && errors.email && (
-          <FormHelperText error>{errors.email}</FormHelperText>
-        )}
-      </Stack>
-      <Stack spacing={1}>
-        <InputLabel htmlFor="password">Password</InputLabel>
-        <OutlinedInput
-          fullWidth
-          id="password"
-          name="password"
-          type="password"
-          value={values.password}
-          onChange={handleChange}
-          error={touched.password && Boolean(errors.password)}
-        />
-        {touched.password && errors.password && (
-          <FormHelperText error>{errors.password}</FormHelperText>
-        )}
-      </Stack>
-      <Stack direction="row">
-        <Link fontWeight="bold" href="/forgot-password">
-          forgot password?
+    <Stack
+      component="form"
+      onSubmit={handleSubmit}
+      spacing={4}
+      sx={{width: '100%'}}
+    >
+      <TextField
+        fullWidth
+        autoComplete="username"
+        id="email"
+        name="email"
+        label="Email address"
+        value={email}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        error={touched.email && Boolean(errors.email)}
+        helperText={touched.email && errors.email}
+      />
+      <PasswordField
+        fullWidth
+        label="Password"
+        id="password"
+        name="password"
+        autoComplete="current-password"
+        value={password}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        error={touched.password && Boolean(errors.password)}
+        helperText={touched.password && errors.password}
+        inputProps={{
+          'aria-label': 'password',
+        }}
+      />
+      <Stack direction="row" justifyContent="flex-end">
+        <Link underline="always" href="/forgot-password">
+          Forgot password?
         </Link>
       </Stack>
       <Button variant="contained" size="large" type="submit" fullWidth>
         Sign in
       </Button>
-      <Collapse sx={{width: '100%'}} in={errorMessage !== ''}>
-        <Alert
-          severity="error"
-          action={
-            <IconButton
-              aria-label="close"
-              color="inherit"
-              size="small"
-              onClick={() => {
-                setErrorMessage('');
-              }}
-            >
-              <CloseIcon fontSize="inherit" />
-            </IconButton>
-          }
-        >
-          {errorMessage}
-        </Alert>
-      </Collapse>
       <Divider>or</Divider>
       <Button
         variant="outlined"
-        color="secondary"
         size="large"
         fullWidth
+        sx={{color: 'text.primary'}}
         // overrides the default react router link since we're hitting a redirect from the api
         component="a"
         href={'/api/auth/google?redirect_uri=http://localhost:4040/signin'}
       >
-        <GoogleIcon sx={{fontSize: 16, marginRight: 1}} /> Sign in with Google
+        <GoogleIcon sx={{fontSize: 16, marginRight: 1}} /> Continue with Google
       </Button>
-    </Form>
+    </Stack>
   );
 };
-
-const Form = styled('form')({
-  width: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'stretch',
-  gap: '1rem',
-});
