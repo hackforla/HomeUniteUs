@@ -1,8 +1,5 @@
 import {Theme} from '@mui/material';
-import {OutlinedInput} from './OutlinedInput';
-import {InputLabel} from './InputLabel';
 import {Button} from './Button';
-import {Divider} from './Divider';
 import {Link} from './Link';
 
 /**
@@ -13,13 +10,7 @@ import {Link} from './Link';
 
 export const componentOverrides = (theme: Theme) => {
   // Array of component overrides
-  const components = [
-    OutlinedInput(theme),
-    InputLabel(theme),
-    Button(theme),
-    Divider(theme),
-    Link(),
-  ];
+  const components = [Button(theme), Link()];
 
   // Reduce components into a single object
   return components.reduce((accum, curr) => {

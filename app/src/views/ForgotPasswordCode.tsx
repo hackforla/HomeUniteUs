@@ -5,16 +5,28 @@ import {
   Typography,
   Box,
   Alert,
+  IconButton,
+  AlertColor,
+  CircularProgress,
 } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import {useFormikContext} from 'formik';
 import React from 'react';
+import {useNavigate} from 'react-router-dom';
 import {ResestPasswordValues} from '../components/authentication/ResetPasswordContext';
 import {CodeField, FormContainer} from '../components/authentication';
-import {useNavigate} from 'react-router-dom';
+import {useForgotPasswordMutation} from '../services/auth';
+import {getErrorMessage} from '../app/helpers';
+
+interface Alert {
+  severity: AlertColor;
+  message: string;
+}
 
 export const ForgotPasswordCode = () => {
-  const navigate = useNavigate();
+  const [alert, setAlert] = React.useState<Alert | undefined>(undefined);
 
+  const navigate = useNavigate();
   const {
     values: {code, email},
     errors,
@@ -22,10 +34,27 @@ export const ForgotPasswordCode = () => {
     setFieldValue,
   } = useFormikContext<ResestPasswordValues>();
 
+  const [forgotPassword, {isLoading}] = useForgotPasswordMutation();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (errors.code) return;
     navigate('/forgot-password/reset');
+  };
+
+  const resendCode = async () => {
+    try {
+      await forgotPassword({email}).unwrap();
+      setAlert({
+        severity: 'success',
+        message: 'A new code has been sent to your email.',
+      });
+    } catch (err) {
+      setAlert({
+        severity: 'error',
+        message: getErrorMessage(err),
+      });
+    }
   };
 
   const setCode = (code: string) => {
@@ -47,6 +76,26 @@ export const ForgotPasswordCode = () => {
   return (
     <FormContainer>
       <Stack spacing={4} sx={{justifyContent: 'center', alignItems: 'center'}}>
+        {alert?.message ? (
+          <Alert
+            sx={{width: '100%'}}
+            severity={alert.severity}
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setAlert(undefined);
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            {alert.message}
+          </Alert>
+        ) : null}
         <Box>
           <Typography mb={1} variant="h4">
             Verification Code
@@ -72,13 +121,24 @@ export const ForgotPasswordCode = () => {
             ) : null}
           </Stack>
           <Button
+            disabled={isLoading}
+            onClick={resendCode}
+            fullWidth
+            size="large"
+          >
+            Resend Code
+            {isLoading ? (
+              <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
+            ) : null}
+          </Button>
+          <Button
             disabled={code.length < 6}
             fullWidth
             variant="contained"
             size="large"
             type="submit"
           >
-            Submit
+            Verify
           </Button>
           <Button href="/forgot-password" fullWidth variant="outlined">
             Back

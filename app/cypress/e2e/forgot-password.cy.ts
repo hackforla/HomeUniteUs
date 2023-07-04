@@ -34,7 +34,7 @@ describe('Forgot Password', () => {
       cy.wrap($el).type(`${code[index]}`);
     });
 
-    cy.findByRole('button', {name: /submit/i}).click();
+    cy.findByRole('button', {name: /verify/i}).click();
 
     cy.url().should('include', '/forgot-password/reset');
 

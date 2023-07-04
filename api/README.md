@@ -133,6 +133,27 @@ docker compose down -v
 
 This command will stop the containers and delete the volumes. Then you can run `docker compose up api --build` to build and start the containers again.
 
+
+## Configuration Profile
+For local development, you can create your own set of configurations by doing the following:
+- Add the variable below to your `.env` located in `/api`.
+```
+CONFIG_PROFILE="personal"
+```
+- Create the file `personal.py` at `/api/configs` with the following,
+```
+from configs.configs import Config
+class PersonalConfig(Config):
+    # Example config to override HOST
+    HOST = 8082
+```
+To reference configs in other modules you can do the following if it doesn't exist already,
+```
+from flask import current_app
+current_app.config['CONFIG']
+```
+If you create any new configuration properties, please add an associative enum to `/api/configs/configuration_properties.py`.
+
 ## Debugging
 
 For Visual Studio Code users:
