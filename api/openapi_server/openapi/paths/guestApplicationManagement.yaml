@@ -1,0 +1,13 @@
+get:
+  summary: Get a list of tasks to complete application.
+  operationId: get_application_tasks
+  responses:
+    "200":
+      description: An array of steps with their tasks.
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/_index.yaml#/ServiceProviders'
+    default:
+      $ref: '../responses/_index.yaml#/UnexpectedError'
+  x-openapi-router-controller: openapi_server.controllers.guest_dashboard_controller

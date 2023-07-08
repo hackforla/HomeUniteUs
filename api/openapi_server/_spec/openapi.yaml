@@ -397,33 +397,6 @@ paths:
       tags:
         - auth
       x-openapi-router-controller: openapi_server.controllers.auth_controller
-  /auth/invite:
-    post:
-      description: Invite user using AWS Congnito
-      operationId: invite
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                username:
-                  type: string
-              required:
-                - username
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-          description: successful operation
-      tags:
-        - auth
-      x-openapi-router-controller: openapi_server.controllers.auth_controller
-      security:
-        - jwt:
-            - secret 
   /auth/initialInvite:
     post:
       description: Removes auto generated password and replaces with user assigned password. Used for account setup.
@@ -454,6 +427,47 @@ paths:
       tags:
         - auth
       x-openapi-router-controller: openapi_server.controllers.admin_controller
+  /auth/invite:
+    post:
+      description: Invite user using AWS Congnito
+      operationId: invite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+              required:
+                - username
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+          description: successful operation
+      tags:
+        - auth
+      x-openapi-router-controller: openapi_server.controllers.auth_controller
+      security:
+        - jwt:
+            - secret
+  '/application_management/guests/{guest_id}/applications/{application_id}/tasks':
+    get:
+      summary: Get a list of tasks to complete application.
+      operationId: get_application_tasks
+      responses:
+        '200':
+          description: An array of steps with their tasks.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceProviders'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+      x-openapi-router-controller: openapi_server.controllers.guest_dashboard_controller
 components:
   securitySchemes:
     jwt:
