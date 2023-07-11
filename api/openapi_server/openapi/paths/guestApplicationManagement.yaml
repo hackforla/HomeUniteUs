@@ -1,5 +1,5 @@
 get:
-  summary: Get a list of tasks to complete application.
+  summary: Get a list of tasks or steps to complete application in order to complete the matching process.
   operationId: get_application_tasks
   responses:
     "200":
