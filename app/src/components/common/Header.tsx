@@ -20,6 +20,13 @@ import {useAppDispatch} from '../../app/hooks/store';
 import {setCredentials} from '../../app/authSlice';
 import {Link, useNavigate} from 'react-router-dom';
 
+const userName = 'Hank Hill';
+
+function getInitials(name: string) {
+  const splitName = name.split(' ');
+  return splitName[0][0] + splitName[1][0];
+}
+
 interface Props {
   /**
    * Injected by the documentation to work in an iframe.
@@ -131,8 +138,8 @@ export const Header = (props: Props) => {
               <Box sx={{flexGrow: 0}}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                    {/* Replace with user name when we get it */}
-                    <Avatar alt={'User Name'}>UN</Avatar>
+                    {/* Replace with real user name */}
+                    <Avatar alt={userName}>{getInitials(userName)}</Avatar>
                   </IconButton>
                 </Tooltip>
                 <Menu
