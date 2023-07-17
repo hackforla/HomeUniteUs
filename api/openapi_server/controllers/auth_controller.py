@@ -123,6 +123,83 @@ def signup():  # noqa: E501
 
     return response
 
+def signUpHost():  # noqa: E501
+    """Signup a new user
+    """
+    if connexion.request.is_json:
+        body = connexion.request.get_json()
+
+    secret_hash = get_secret_hash(body['email'])
+
+    # Signup user
+    with Session(db_engine) as session:
+        user = db.User(email=body['email'])
+        session.add(user)
+        try:
+            session.commit()
+        except IntegrityError:
+            session.rollback()
+            raise AuthError({
+                "message": "A user with this email already exists."
+            }, 422)
+
+    try:
+        response = userClient.sign_up(
+          ClientId=COGNITO_CLIENT_ID,
+          SecretHash=secret_hash,
+          Username=body['email'],
+          Password=body['password'],
+        )
+    except Exception as e:
+        code = e.response['Error']['Code']
+        message = e.response['Error']['Message']
+        status_code = e.response['ResponseMetadata']['HTTPStatusCode']
+
+        raise AuthError({
+                  "code": code, 
+                  "message": message
+              }, status_code)
+
+    return response
+
+def signUpCoordinator():  # noqa: E501
+    """Signup a new user
+    """
+    if connexion.request.is_json:
+        body = connexion.request.get_json()
+
+    secret_hash = get_secret_hash(body['email'])
+
+    # Signup user
+    with Session(db_engine) as session:
+        user = db.User(email=body['email'])
+        session.add(user)
+        try:
+            session.commit()
+        except IntegrityError:
+            session.rollback()
+            raise AuthError({
+                "message": "A user with this email already exists."
+            }, 422)
+
+    try:
+        response = userClient.sign_up(
+          ClientId=COGNITO_CLIENT_ID,
+          SecretHash=secret_hash,
+          Username=body['email'],
+          Password=body['password'],
+        )
+    except Exception as e:
+        code = e.response['Error']['Code']
+        message = e.response['Error']['Message']
+        status_code = e.response['ResponseMetadata']['HTTPStatusCode']
+
+        raise AuthError({
+                  "code": code, 
+                  "message": message
+              }, status_code)
+
+    return response
 
 def signin():
     # Validate request data
