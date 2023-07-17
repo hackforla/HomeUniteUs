@@ -30,8 +30,8 @@ export const SignIn = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [signIn] = useSignInMutation();
-  const [getToken] = useGetTokenMutation();
+  const [signIn, {isLoading: signInIsLoading}] = useSignInMutation();
+  const [getToken, {isLoading: getTokenIsLoading}] = useGetTokenMutation();
   // const locationState = location.state as LocationState;
 
   // Save location from which user was redirected to login page
@@ -119,7 +119,11 @@ export const SignIn = () => {
         <Typography variant="h4" fontWeight="600">
           Sign in
         </Typography>
-        <SignInForm onSubmit={handleSignIn} />
+        <SignInForm
+          onSubmit={handleSignIn}
+          signInisLoading={signInIsLoading}
+          getTokenIsLoading={getTokenIsLoading}
+        />
         <Divider sx={{width: '100%'}} />
         <Stack direction="row" alignItems="center" gap={0.5}>
           <Typography variant="body2">New user?</Typography>
