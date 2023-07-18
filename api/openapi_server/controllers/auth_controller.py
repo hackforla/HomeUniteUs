@@ -475,20 +475,20 @@ def invite():
     if connexion.request.is_json:
         body = connexion.request.get_json()
 
-    if "username" not in body:
-        raise AuthError({"message": "username invalid"},400)       
+    if "email" not in body:
+        raise AuthError({"message": "email invalid"},400)       
         
     try:
 
-        userName = body['username']
+        email = body['email']
 
         response = userClient.admin_create_user(
             UserPoolId=COGNITO_USER_POOL_ID,
-            Username=userName,
+            Username=email,
             UserAttributes=[
             {
                 'Name': "email",
-                'Value': userName
+                'Value': email
             }
             ],
             DesiredDeliveryMediums=["EMAIL"])
