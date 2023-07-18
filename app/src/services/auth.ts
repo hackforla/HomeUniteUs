@@ -28,6 +28,13 @@ export interface SignInRequest {
   password: string;
 }
 
+export interface NewPasswordRequest {
+  password: string;
+  confirmPassword: string;
+  user_id: string;
+  session_id: string;
+}
+
 export interface SignOutResponse {
   message: string;
 }
@@ -119,6 +126,14 @@ const authApi = api.injectEndpoints({
         body: credentials,
       }),
     }),
+    newPassword: build.mutation<void, NewPasswordRequest>({
+      query: credentials => ({
+        url: 'auth/initial_invite',
+        method: 'POST',
+        withCredentials: true,
+        body: credentials,
+      }),
+    }),
     signOut: build.mutation<SignOutResponse, void>({
       query: () => ({
         url: 'auth/signout',
@@ -165,6 +180,7 @@ export const {
   useSignInMutation,
   useSignOutMutation,
   useVerificationMutation,
+  useNewPasswordMutation,
   useGetTokenMutation,
   useForgotPasswordMutation,
   useConfirmForgotPasswordMutation,
