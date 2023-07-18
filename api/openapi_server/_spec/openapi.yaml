@@ -464,10 +464,10 @@ paths:
             schema:
               type: object
               properties:
-                username:
+                email:
                   type: string
               required:
-                - username
+                - email
       responses:
         '200':
           content:
