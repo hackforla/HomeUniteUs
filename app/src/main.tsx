@@ -35,6 +35,7 @@ import {
   EmailVerificationError,
   ForgotPasswordCode,
   ForgotPasswordSuccess,
+  Settings,
 } from './views';
 import {AccountVerification} from './views/AccountVerification';
 import {AppLayout, Header} from './components/common';
@@ -59,6 +60,7 @@ function HuuApp() {
           <Route path="/" element={<Home />} />
           <Route path="/coord" element={<CoordinatorDashboard />} />
           <Route path="/hosts" element={<HostsList />} />
+          <Route path="/settings" element={<Settings />} />
           <Route
             path="/profile"
             element={
