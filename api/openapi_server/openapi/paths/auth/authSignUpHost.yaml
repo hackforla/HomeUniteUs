@@ -1,6 +1,6 @@
 post:
-  description: Signup a user
-  operationId: signup
+  description: Signup a Host
+  operationId: signUpHost
   requestBody:
     content:
       application/json:
