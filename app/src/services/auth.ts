@@ -31,8 +31,8 @@ export interface SignInRequest {
 export interface NewPasswordRequest {
   password: string;
   confirmPassword: string;
-  user_id: string;
-  session_id: string;
+  user_id: string | null;
+  session_id: string | null;
 }
 
 export interface SignOutResponse {
