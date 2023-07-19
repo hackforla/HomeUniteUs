@@ -4,6 +4,7 @@ import {object, string, ref} from 'yup';
 
 import {NewPasswordRequest} from '../../services/auth';
 import {PasswordField} from './PasswordField';
+import {PasswordValidation} from '../common/PasswordValidation';
 
 interface NewPasswordFormProps {
   onSubmit: ({password, confirmPassword}: NewPasswordRequest) => Promise<void>;
@@ -95,6 +96,7 @@ export const NewPasswordForm = ({
           'aria-label': 'password',
         }}
       />
+      <PasswordValidation password={password} />
       <Button variant="contained" size="large" type="submit" fullWidth>
         Change Password
       </Button>

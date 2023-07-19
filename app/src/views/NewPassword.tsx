@@ -17,9 +17,11 @@ import {FormContainer} from '../components/authentication';
 
 export const NewPassword = () => {
   const [errorMessage, setErrorMessage] = React.useState('');
+
   const [searchParams] = useSearchParams();
   const session_id = searchParams.get('session_id');
   const user_id = searchParams.get('user_id');
+
   const navigate = useNavigate();
   const [newPassword] = useNewPasswordMutation();
 
