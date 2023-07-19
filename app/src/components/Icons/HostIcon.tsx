@@ -3,8 +3,8 @@ import React from 'react';
 export const HostIcon = () => {
   return (
     <svg
-      width="88"
-      height="88"
+      width="200"
+      height="200"
       viewBox="0 0 88 88"
       fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
