@@ -1,14 +1,7 @@
 import React from 'react';
 import {NewPasswordForm} from '../components/authentication/NewPasswordForm';
 import {useSearchParams} from 'react-router-dom';
-import {
-  Typography,
-  Stack,
-  Link,
-  Divider,
-  Alert,
-  IconButton,
-} from '@mui/material';
+import {Typography, Stack, Alert, IconButton} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import {NewPasswordRequest, useNewPasswordMutation} from '../services/auth';
 import {useNavigate} from 'react-router-dom';
@@ -87,13 +80,6 @@ export const NewPassword = () => {
           session_id={session_id}
           user_id={user_id}
         />
-        <Divider sx={{width: '100%'}} />
-        <Stack direction="row" alignItems="center" gap={0.5}>
-          <Typography variant="body2">New user?</Typography>
-          <Link underline="always" href="/signup">
-            Create an account
-          </Link>
-        </Stack>
       </Stack>
     </FormContainer>
   );
