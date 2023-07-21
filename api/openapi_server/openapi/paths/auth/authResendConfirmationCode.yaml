@@ -13,7 +13,7 @@ post:
             - email
   responses:
     '200':
-      description: successful operation
+      description: A confirmation code is being sent again.
       content:
         application/json:
           schema:
@@ -25,5 +25,3 @@ post:
   tags:
     - auth
   x-openapi-router-controller: openapi_server.controllers.auth_controller
-  security:
-    - jwt: ["secret"]

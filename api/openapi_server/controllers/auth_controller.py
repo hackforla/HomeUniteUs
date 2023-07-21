@@ -9,7 +9,7 @@ from os import environ as env
 from dotenv import load_dotenv, find_dotenv
 from flask import redirect, request, session
 from openapi_server.exceptions import AuthError
-from openapi_server.models import database as db
+from openapi_server.models import database as db, ApiResponse
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from functools import wraps
@@ -230,12 +230,13 @@ def resend_confirmation_code():
 
     try:
         email = body['email']
-        response = userClient.resend_confirmation_code(
+        userClient.resend_confirmation_code(
             ClientId=COGNITO_CLIENT_ID,
             SecretHash=secret_hash,
             Username=email,
         )
-        return response
+        message = "A confirmation code is being sent again."
+        return ApiResponse(code=200, type=str, message=message)
     except botocore.exceptions.ClientError as error:
         match error.response['Error']['Code']:
             case 'UserNotFoundException':
