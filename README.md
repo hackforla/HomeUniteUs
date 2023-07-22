@@ -10,22 +10,20 @@ Come visit us at https://homeunite.us/
 
 This project is part of a larger initative at Hack for LA around creating a shared housing application, that can be used by organizations accross the county to help people tranisition to living independently and sustainably through host homes, empty bedrooms, and roomate matching for shared housing with lease signing.
 
-## Technology used
+## Technology Overview
 
-### Frontend
-- [TypeScript](https://www.typescriptlang.org/)
-- [React](https://reactjs.org/docs/getting-started.html)
-- [Redux Toolkit](https://redux-toolkit.js.org/)
-- [Material UI](https://material-ui.com/)
-- [Vite](https://vitejs.dev/)
+The HomeUniteUs project is structured as a multi-[docker](https://docs.docker.com/) container application, with secret-protected access to networked resources. The project contains three containers, whose activities are coordinated using the `docker compose` configuration outlined in `docker-compose.yml`. The three containers are:
 
-### Backend
-- [Python/Flask](https://flask.palletsprojects.com/en/1.1.x/)
-- [PostgreSQL](https://www.postgresql.org/)
-- [SQLAlchemy](https://www.sqlalchemy.org/)
-- [Docker](https://docs.docker.com/)
-- [Nginx](https://nginx.org/en/docs/)
-- [AWS](https://docs.aws.amazon.com/)
+1. `app`: A frontend [React](https://reactjs.org/docs/getting-started.html) app developed using [TypeScript](https://www.typescriptlang.org/).
+   * We use [Redux](https://redux.js.org/) to manage client state, with the [Redux Toolkit](https://redux-toolkit.js.org/) to simplify development.
+   * We use the [Material UI](https://material-ui.com/) component library, for access to high quality UI components designed with accessibility in mind.
+   * We use the [Vite](https://vitejs.dev/) build tool, for fast dev builds and optimized production builds.
+2. `api`: A backend python [Flask](https://flask.palletsprojects.com/en/1.1.x/) REST API, hosted on [AWS](https://docs.aws.amazon.com/).
+   * We use the [SQLAlchemy](https://www.sqlalchemy.org/) SQL toolkit and [Object-Relational Mapper (ORM)](https://en.wikipedia.org/wiki/Object%E2%80%93relational_mapping). This essentially serves as a developer-friendly layer between the python app and the database.
+   * We use [nginx](https://nginx.org/en/docs/) as our HTTP server. This “reverse proxy” can handle incoming requests, TLS, and other security and performance concerns better than the WSGI server.
+3. `db`: A [PostgreSQL](https://www.postgresql.org/) database container.
+   * The database is stored as a docker volume, `db-data`.
+   * If the volume is not found during spin-up, then an empty database volume will be created.
 
 # How to contribute
 
