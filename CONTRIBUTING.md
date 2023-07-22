@@ -1,0 +1,64 @@
+# HomeUniteUs Contributing Guide
+
+To begin working on the `HomeUniteUs` project you will need to be an active member of Hack for LA. If you have not completed the onboarding process, then please prefer to the [Getting Started Page](https://www.hackforla.org/getting-started) for full instructions. This onboarding will provide you access to the Hack for LA Slack, GitHub, and Google Drive.
+
+Once you have access to these systems you can introduce yourself on our [Slack channel](https://hackforla.slack.com/archives/CRWUG7X0C) and check for open positions by reviewing the [development job board](https://github.com/hackforla/engineering/projects/2).
+
+Welcome to Hack for LA, and thank you for contributing 🥳🥳!!
+
+## First Steps
+
+Once you've completed onboarding and been assigned a role on the team, you can begin reviewing our internal documentation and open tasks.
+
+1. Join the [#home-unite-us slack channel](https://hackforla.slack.com/archives/CRWUG7X0C).
+2. Request access to, and review the documents in, the [home-unite-us shared drive](https://drive.google.com/drive/u/0/folders/1ahxiD9rIsBtx0yAPlPcPaGw8zGrfHHm9).
+3. Visit our [project boards](https://github.com/hackforla/HomeUniteUs/projects) and see issues in the prioritized backlog.
+
+## Code of Conduct
+
+As part of Hack for LA, we are passionate about the organization's [Code of Conduct](https://github.com/hackforla/codeofconduct). Please help us uphold these policies so that we can continue to maintain an open, safe, and inclusive culture. It is everyone's responsibility to maintain these policies, so please report any violations to the [Hack for LA team](https://github.com/hackforla/codeofconduct#email-template-for-anti-harassment-reporting).
+
+## Issues
+
+### Create a new issue
+
+Before creating a new issue, search through the [current list of issues](https://github.com/hackforla/HomeUniteUs/issues) to determine if the issue has been identified. If it is already present, then feel free to comment on the existing issue to confirm the problem and add any additional information.
+
+To create a new issue, please use the blank issue template (available when you click New Issue). Issues with more information and fuller descriptions are more likely get addressed, so please include as much information as possible.
+
+If you want to create an issue for other projects to use, please create the issue in your own repository and send a slack message to one of your hack night hosts with the link.
+
+### Finding an issue to solve
+
+All issues can be found on our [project board](https://github.com/hackforla/HomeUniteUs/projects/3). The `Prioritized Backlog` column contains features that are ready to work, and considered a high priority. Each item will list the current assignees. If the role you are interested in is unfilled, then you can assign the issue to yourself and add a comment to the issue stating your intention to work the issue.
+
+### Start a fix
+
+The HomeUniteUs repository gladly accepts pull requests from forked repositories. A fork is a personal copy of the repository that is stored under your GitHub account. You can fork by pressing the [Fork](https://github.com/hackforla/HomeUniteUs/fork) button on GitHub. Once forked, you can clone your fork to your local machine using the new git URL. The URL can be found under the `<Code>` button and should look something like this: `https://github.com/{Your-GitHub-Handle}/HomeUniteUs.git`.
+
+Once you've forked the repo and copied the URL, you are nearly ready to begin committing your fix!
+
+```bash
+# Create a copy of the repo on your local machine
+git clone https://github.com/{Your-GitHub-Handle}/HomeUniteUs.git
+# Go to your new local clone
+cd HomeUniteUs
+# Verify your clone is pointing to the correct origin URL
+# fetch and push should be https://github.com/{Your-GitHub-Handle}/HomeUniteUs.git
+git remote -v
+# Set the HomeUniteUs main repo as the upstream repo
+# This will allow us to synchronize the fork with the main repo
+git remote add upstream https://github.com/hackforla/HomeUniteUs.git
+# Use the upstream URL to pull recent changes and branch info into clone
+git fetch upstream
+# Create a branch and start working!
+git checkout -b my-new-awesome-branch
+```
+
+### Submit a fix
+
+Once you are satisfied with your changes, push them to the feature branch you made within your remote forked repository.
+
+`git push --set-upstream origin my-new-awesome-branch`
+
+From here, you can use the GitHub UI to create and submit a Pull Request. Navigate to the branch on your fork repo, and click `New pull request`. The base repository should be set to the `hackforla/HomeUniteUs` repo by default. Add a detailed description of your change, submit your PR, and wait back for comments. Additional changes may be required before merging - don't worry, this is a normal part of the merging process!
