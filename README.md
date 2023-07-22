@@ -1,14 +1,14 @@
 # Home Unite Us
 
-We're working with community non-profits who have a host home initiative to develop a workflow management tool to make the process scaleable (across all providers), reduce institutional bias, and effectively capture data.
+We're working with community non-profits who have a host home initiative to develop a workflow management tool to make the process scalable (across all providers), reduce institutional bias, and effectively capture data.
 
 Host home programs are centered around housing young people, 18 - 25 years old. Their approach focuses on low-cost, community-driven intervention by matching a willing host with a guest or group of guests, providing a stable housing environment for youths who are experiencing homelessness and seeking stable housing.
 
-Come visit us at https://homeunite.us/
+Come visit us at <https://homeunite.us/>
 
-### Project context
+## Project Context
 
-This project is part of a larger initative at Hack for LA around creating a shared housing application, that can be used by organizations accross the county to help people tranisition to living independently and sustainably through host homes, empty bedrooms, and roomate matching for shared housing with lease signing.
+This project is part of a larger initiative at Hack for LA around creating a shared housing application, that can be used by organizations across the county to help people transition to living independently and sustainably through host homes, empty bedrooms, and roommate matching for shared housing with lease signing.
 
 ## Technology Overview
 
@@ -25,26 +25,47 @@ The HomeUniteUs project is structured as a multi-[docker](https://docs.docker.co
    * The database is stored as a docker volume, `db-data`.
    * If the volume is not found during spin-up, then an empty database volume will be created.
 
-# How to contribute
+## How to Contribute
 
 - Review the [Getting Started guide on the Hack for LA website](https://github.com/hackforla/getting-started)
 - Review the documents in the [home-unite-us shared drive](https://drive.google.com/drive/u/0/folders/1ahxiD9rIsBtx0yAPlPcPaGw8zGrfHHm9).
 - Join the [#home-unite-us slack channel](https://hackforla.slack.com/archives/CRWUG7X0C).
 - Visit our [project boards](https://github.com/hackforla/HomeUniteUs/projects) and see issues in the prioritized backlog.
 
-## Installation instructions
+### Working with Issues
+
+- Explain how to submit a bug.
+- Explain how to submit a feature request.
+- Explain how to contribute to an existing issue.
+
+To create a new issue, please use the blank issue template (available when you click New Issue). If you want to create an issue for other projects to use, please create the issue in your own repository and send a slack message to one of your hack night hosts with the link.
+
+### Working with Forks and Branches
+
+- Explain your guidelines here.
+
+### Working with Pull Requests and Reviews
+
+- Explain your process.
+
+### Testing
+
+- Provide instructions.
+
+## Installation Instructions
 
 ### Requirements
 
 Before getting started, make sure you have a Node.js version compatible with 14.18+, 16+ as well as Git. If you're unfamiliar with Git and the necessary workflows please checkout the Hack for LA [website project](https://github.com/hackforla/website) and get started there. You can check your local versions by running the following commands in a terminal:
-```
+
+```terminal
 node --version
 git --version
 ```
 
 ### Getting Started
 
-1. Clone the respoistory to a directory on your computer
+1. Clone the repository to a directory on your computer
 2. Inside a terminal change directories to the root ``HomeUniteUs/`` directory
 3. Navigate to the the ``app/`` directory ``cd app/``
 4. Run the command ```npm install``` to download all dependencies from the local package.json
@@ -54,32 +75,12 @@ git --version
 
 The setup for the front end application is now complete and you should see the website running in your browser at the listed port. In order to get the server running reference the instructions [here](https://github.com/hackforla/HomeUniteUs/tree/main/api). If you run into any issues please message one of our team members.
 
-### Working with issues
-
-- Explain how to submit a bug.
-- Explain how to submit a feature request.
-- Explain how to contribute to an existing issue.
-
-To create a new issue, please use the blank issue template (available when you click New Issue). If you want to create an issue for other projects to use, please create the issue in your own repository and send a slack message to one of your hack night hosts with the link.
-
-### Working with forks and branches
-
-- Explain your guidelines here.
-
-### Working with pull requests and reviews
-
-- Explain your process.
-
-### Testing
-
-- Provide instructions.
-
-# Contact info
+## Contact info
 
 Please join our [Slack channel](https://hackforla.slack.com/archives/CRWUG7X0C) and introduce yourself!
 
-### Licensing
+## Licensing
 
 Include details about the project's open source status.
 
-_this readme file sourced from [Jessica Sand](http://jessicasand.com/other-stuff/just-enough-docs/)_
+_this readme file sourced from [Jessica Sand](http://jessicasand.com/other-stuff/just-enough-docs/).
