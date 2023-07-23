@@ -31,9 +31,9 @@ class HousingProviderRepository:
 
         session.add(row)
         session.commit()
-        session.close()
-
         provider["id"] = row.id
+
+        session.close()
         return ServiceProviderWithId.from_dict(provider)
     
     def delete_service_provider(self, provider_id):
