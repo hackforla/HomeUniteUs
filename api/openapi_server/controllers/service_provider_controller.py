@@ -26,7 +26,7 @@ def create_service_provider():  # noqa: E501
     except ValueError:
         return traceback.format_exc(ValueError), 400
     
-    withId = housing_provider_repository.createServiceProvider(provider)
+    withId = housing_provider_repository.create_service_provider(provider)
     return withId, 201
 
 
