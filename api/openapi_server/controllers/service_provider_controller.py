@@ -54,7 +54,7 @@ def get_service_provider_by_id(provider_id):  # noqa: E501
     :rtype: ServiceProviderWithId
     """
     provider = housing_provider_repository.get_service_provider_by_id(provider_id)
-    return provider, 200 if provider != None else "Not Found", 404
+    return (provider, 200) if provider is not None else ("Not Found", 404)
 
 def get_service_providers():  # noqa: E501
     """Get a list of housing program service providers.
@@ -89,4 +89,4 @@ def update_service_provider(provider_id):  # noqa: E501
         return traceback.format_exc(ValueError), 400
     
     updated = housing_provider_repository.update_service_provider(provider, provider_id)
-    return updated, 200 if updated != None else "Not Found", 404
+    return (updated, 200) if updated is not None else ("Not Found", 404)
