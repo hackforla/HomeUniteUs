@@ -2,7 +2,7 @@
 name: Onboarding
 about: Onboarding New Team Members
 title: ''
-labels: 'Feature: Administrative, Role - Product Mgmt'
+labels: 'Feature: Administrative'
 assignees: ''
 
 ---

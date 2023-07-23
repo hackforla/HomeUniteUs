@@ -13,7 +13,7 @@ class TestConfigs:
         config_variables = [ attr for attr in dir(configs) if not callable(getattr(configs, attr)) and not attr.startswith("__") ]
 
         assert EXPECTED_NUM_CONFIGS == len(config_variables)
-        assert configs.HOST == 'localhost'
+        assert configs.HOST == '0.0.0.0'
         assert configs.PORT == 8080
         assert configs.DEBUG == True
         assert configs.USE_RELOADER == True
@@ -25,7 +25,7 @@ class TestConfigs:
     def test_compile_config_some_personal(self):
         configs = compile_config('personal', 'configs.personal_config_example', 'PersonalConfigExample')
 
-        assert configs.HOST == 'localhost'
+        assert configs.HOST == '0.0.0.0'
         assert configs.PORT == 8081
         assert configs.DEBUG == False
         assert configs.USE_RELOADER == False
