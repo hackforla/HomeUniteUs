@@ -39,11 +39,13 @@ class TestHousingProviderRepository:
         mock_query = MagicMock()
 
         mock_query.first.return_value = None
+        mock_query.delete.return_value = 0
         repo._get_session = lambda: mock_session
         repo._get_query_by_id = lambda x, y: mock_query
 
-        repo.delete_service_provider(expected_id)
-
+        row_deleted = repo.delete_service_provider(expected_id)
+        
+        assert row_deleted == False
         mock_query.first.assert_called_once()
         mock_query.delete.assert_not_called()
         mock_session.commit.assert_not_called()
@@ -56,11 +58,13 @@ class TestHousingProviderRepository:
         mock_query = MagicMock()
 
         mock_query.first.return_value = True
+        mock_query.delete.return_value = 1
         repo._get_session = lambda: mock_session
         repo._get_query_by_id = lambda x, y: mock_query
 
-        repo.delete_service_provider(expected_id)
+        row_deleted = repo.delete_service_provider(expected_id)
 
+        assert row_deleted == True
         mock_query.first.assert_called_once()
         mock_query.delete.assert_called_once()
         mock_session.commit.assert_called_once()
