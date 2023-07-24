@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=61.0", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openapi_server"
+dynamic = ["version"]
+authors = [
+    { name="Home Unite Us", email=" homeuniteus@hackforla.org" },
+]
+description = "Web API for Home Unite Us"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "alembic==1.11.1",
+    "boto3==1.22.10",
+    "connexion [swagger-ui]==2.14.2",
+    "psycopg2-binary==2.9.6",
+    "python-dotenv==1.0.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/hackforla/HomeUniteUs"
+"Bug Tracker" = "https://github.com/hackforla/HomeUniteUs/issues"
+
+[project.optional-dependencies]
+dev = [
+  "tox==4.6.4",
+]
+prod = [
+  "gunicorn==21.2.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[tool.setuptools.package-data]
+"*" = ["openapi_server/*.yaml"]
+
+[tool.setuptools_scm]
+root = ".."

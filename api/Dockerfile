@@ -1,30 +1,24 @@
-FROM node:latest as swagger-bundle
-
-WORKDIR /usr/src/
-COPY . . 
-
-RUN npm install -g swagger-cli
-
-RUN swagger-cli bundle openapi_server/openapi/openapi.yaml \
-    --outfile openapi_server/_spec/openapi.yaml \
-    --type yaml
-
-FROM python:3.9.10-alpine
-
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-
-COPY requirements.txt /usr/src/app/
-
-COPY --from=swagger-bundle /usr/src/openapi_server/_spec/openapi.yaml openapi_server/_spec/openapi.yaml
+# TODO: Remove .env from docker container
+# TODO: Install openapi_server not as editable
+# TODO: Run the openapi_server with nginx as reverse proxy and gunicorn as WSGI server
+FROM python:3.10-alpine
 
 RUN apk update && apk add build-base
 
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN mkdir -p /opt/HomeUniteUs/api
+WORKDIR /opt/HomeUniteUs/api
 
-COPY . /usr/src/app
+COPY . .
+
+COPY --from=swagger-bundle /usr/share/misc/openapi.yaml openapi_server/_spec/openapi.yaml
+
+ARG PSEUDO_VERSION=1
+ENV SETUPTOOLS_SCM_PRETEND_VERSION_FOR_OPENAPI_SERVER=${PSEUDO_VERSION}
+RUN python3 -m pip install -e .
 
 EXPOSE 8080
+
+RUN export $(grep -v '^#' .env | xargs -d '\n')
 
 ENTRYPOINT ["python3"]
 
