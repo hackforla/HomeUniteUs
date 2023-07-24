@@ -40,8 +40,9 @@ def delete_service_provider(provider_id):  # noqa: E501
 
     :rtype: None
     """
-    housing_provider_repository.delete_service_provider(provider_id)
-    return f"Service Provider with id {provider_id} successfully deleted", 200
+    if housing_provider_repository.delete_service_provider(provider_id):
+        return f"Service Provider with id {provider_id} successfully deleted", 200
+    return f"Service provider {provider_id} not found", '404'
 
 def get_service_provider_by_id(provider_id):  # noqa: E501
     """Get details about a housing program service provider from an ID
