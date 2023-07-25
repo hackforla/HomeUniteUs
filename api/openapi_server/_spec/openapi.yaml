@@ -464,7 +464,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ServiceProviders'
+                $ref: '#/components/schemas/GuestDashboardApplicationTasks'
         default:
           $ref: '#/components/responses/UnexpectedError'
       x-openapi-router-controller: openapi_server.controllers.guest_dashboard_controller
@@ -600,3 +600,16 @@ components:
       required:
         - response_text
         - intake_question
+    GuestDashboardApplicationTasks:
+      type: object
+      properties:
+        guest_id:
+          format: int64
+          type: integer
+        application_id:
+          format: int64
+          type: integer
+        task:
+          title: task
+          type: string
+      required: null

@@ -1,0 +1,25 @@
+{
+    "tasks": [
+        {
+            "Application and Onboarding": [
+                "Not Started",
+                "In Progress",
+                "Complete"
+            ]
+        },
+        {
+            "Host Selection": [
+                "Not Started",
+                "In Progress",
+                "Complete"
+            ]
+        },
+        {
+            "Match": [
+                "Not Started",
+                "In Progress",
+                "Complete"
+            ]
+        }
+    ]
+}

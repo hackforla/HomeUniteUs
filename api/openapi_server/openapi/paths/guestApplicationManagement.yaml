@@ -1,5 +1,5 @@
 get:
-  summary: Get a list of tasks or steps to complete application in order to complete the matching process.
+  summary: Get a list of tasks to complete application. 
   operationId: get_application_tasks
   responses:
     "200":
@@ -7,7 +7,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: '../schemas/_index.yaml#/ServiceProviders'
+            $ref: '../schemas/_index.yaml#/GuestDashboardApplicationTasks'
     default:
       $ref: '../responses/_index.yaml#/UnexpectedError'
   x-openapi-router-controller: openapi_server.controllers.guest_dashboard_controller

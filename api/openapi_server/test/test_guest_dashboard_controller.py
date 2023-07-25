@@ -9,7 +9,6 @@ from six import BytesIO
 
 from openapi_server.test import BaseTestCase
 
-
 class TestGuestDashboardController(BaseTestCase):
 
     def test_get_guest_dashboard_tasks(self):

@@ -104,3 +104,16 @@ IntakeResponseValue:
   required:
     - response_text
     - intake_question
+GuestDashboardApplicationTasks:
+  type: object
+  properties:
+    guest_id:
+      format: int64
+      type: integer
+    application_id:
+      format: int64
+      type: integer
+    task:           
+      title: task
+      type: string
+  required:

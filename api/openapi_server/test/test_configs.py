@@ -2,7 +2,7 @@
 import pytest
 
 # Local
-from configs.configs import Config, _compile_config
+from configs.configs import Config, compile_config
 
 class TestConfigs:
 

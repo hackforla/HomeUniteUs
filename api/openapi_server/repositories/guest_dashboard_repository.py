@@ -1,27 +1,27 @@
-# # Third Party
-# from sqlalchemy.orm import Session
+# Third Party
+from sqlalchemy.orm import Session
 
-# # Local
+# Local
 
 
-# class GuestDashboardRepository:
+class GuestDashboardRepository:
 
-#     def __init__(self, db_engine=db.DataAccessLayer.get_engine()):
-#         """Instantiate GuestDashboardRepository
+    def __init__(self, db_engine=db.DataAccessLayer.get_engine()):
+        """Instantiate GuestDashboardRepository
 
-#         :param db_engine: persistence layer instance
-#         :type db_engine: Engine
+        :param db_engine: persistence layer instance
+        :type db_engine: Engine
 
-#         :rtype: None
-#         """
-#         self.db_engine = db_engine
+        :rtype: None
+        """
+        self.db_engine = db_engine
 
-#     def get_guest_dashboard(self):
-#         """Get guest dashboard information
+    def get_guest_dashboard(self):
+        """Get guest dashboard information
 
-#         :rtype: dict
-#         """
-#         pass
+        :rtype: dict
+        """
+        pass
     
-#     def _get_session(self):
-#         return Session(self.db_engine)
+    def _get_session(self):
+        return Session(self.db_engine)
