@@ -18,19 +18,7 @@ class TestServiceProviderController(BaseTestCase):
 
         Create a housing program service provider
         """
-        housing_program_service_provider = {
-  "provider_name" : "provider_name"
-}
-        headers = { 
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        }
-        response = self.client.open(
-            '/api/serviceProviders',
-            method='POST',
-            headers=headers,
-            data=json.dumps(housing_program_service_provider),
-            content_type='application/json')
+        response = self.create_service_provider()
         self.assertStatus(response, 201,
                        'Response body is : ' + response.data.decode('utf-8'))
 
@@ -39,11 +27,13 @@ class TestServiceProviderController(BaseTestCase):
 
         Delete a service provider
         """
+        # Test database is empty at start. Create an entry to delete
+        ids = self.populate_test_database(num_entries=1)
         headers = { 
             'Accept': 'application/json',
         }
         response = self.client.open(
-            '/api/serviceProviders/{provider_id}'.format(provider_id=56),
+            f'/api/serviceProviders/{ids[0]}',
             method='DELETE',
             headers=headers)
         self.assert200(response,
@@ -54,11 +44,12 @@ class TestServiceProviderController(BaseTestCase):
 
         Get details about a housing program service provider from an ID
         """
+        ids = self.populate_test_database(num_entries=8)
         headers = { 
             'Accept': 'application/json',
         }
         response = self.client.open(
-            '/api/serviceProviders/{provider_id}'.format(provider_id=56),
+            f"/api/serviceProviders/{ids[3]}",
             method='GET',
             headers=headers)
         self.assert200(response,
@@ -69,6 +60,9 @@ class TestServiceProviderController(BaseTestCase):
 
         Get a list of housing program service providers.
         """
+        expected_provider_count = 12
+        self.populate_test_database(num_entries=expected_provider_count)
+        
         headers = { 
             'Accept': 'application/json',
         }
@@ -76,14 +70,18 @@ class TestServiceProviderController(BaseTestCase):
             '/api/serviceProviders',
             method='GET',
             headers=headers)
+        response_str = response.data.decode('utf-8')  
         self.assert200(response,
-                       'Response body is : ' + response.data.decode('utf-8'))
+                       f"Response body is : {response_str}")
+        decoded_response = json.loads(response_str)
+        assert len(decoded_response) == expected_provider_count
 
     def test_update_service_provider(self):
         """Test case for update_service_provider
 
         Update a housing program service provider
         """
+        ids = self.populate_test_database(num_entries=1)
         housing_program_service_provider = {
   "provider_name" : "provider_name"
 }
@@ -92,7 +90,7 @@ class TestServiceProviderController(BaseTestCase):
             'Content-Type': 'application/json',
         }
         response = self.client.open(
-            '/api/serviceProviders/{provider_id}'.format(provider_id=56),
+            f"/api/serviceProviders/{ids[0]}",
             method='PUT',
             headers=headers,
             data=json.dumps(housing_program_service_provider),

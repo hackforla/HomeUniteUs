@@ -1,5 +1,4 @@
 # Third Party
-import pytest
 from unittest.mock import MagicMock
 
 # Local
@@ -7,7 +6,6 @@ from openapi_server.models.service_provider import ServiceProvider
 from openapi_server.models.service_provider_with_id import ServiceProviderWithId
 from openapi_server.models import database as db
 from openapi_server.repositories.service_provider_repository import HousingProviderRepository
-
 
 class TestHousingProviderRepository:
 

@@ -2,7 +2,10 @@ import logging
 from pathlib import Path
 
 import connexion
+from flask import json
 from flask_testing import TestCase
+from typing import List
+from werkzeug.test import TestResponse
 
 from openapi_server.encoder import JSONEncoder
 from openapi_server.models import database
@@ -42,3 +45,35 @@ class BaseTestCase(TestCase):
         '''
         database.DataAccessLayer._engine = self.cached_engine
         self.tmp_testing_database.unlink(missing_ok=True)
+
+    def create_service_provider(self) -> TestResponse:
+        housing_program_service_provider = {
+  "provider_name" : "provider_name"
+}
+        headers = { 
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+        return self.client.open(
+            '/api/serviceProviders',
+            method='POST',
+            headers=headers,
+            data=json.dumps(housing_program_service_provider),
+            content_type='application/json')
+    
+    def populate_test_database(self, num_entries) -> List[int]:
+        '''
+        Add num_entries rows to the test database and return the
+        created Ids. Fail test if any of the creation requests
+        fails.
+        '''
+        ids = []
+        for _ in range(num_entries):
+            create_response = self.create_service_provider()
+            raw_response = create_response.data.decode('utf-8')
+            self.assertStatus(create_response, 201,
+                       f"Test setup failure! Received response {raw_response}")
+            deserialized_response = json.loads(raw_response)
+            ids.append(deserialized_response["id"])
+        return ids
+
