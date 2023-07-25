@@ -6,41 +6,9 @@ Get a list of tasks to complete application.
 Input:
 - Guest_id
 - Application_id
-```SQL
-SELECT 
-    id AS application_id, 
-    guest_id, 
-    application_tasks, 
-    onboarding_tasks, 
-    host_selection_tasks, 
-    match_finalize_tasks
-FROM huu.guest_applications
-WHERE guest_id = {id}
-;
-```
+
 Output:
 - Steps with their tasks
-```json
-{
-    "guest_id": 4587,
-    "application_id": 789,
-    "tasks": [
-        {
-            "Application": "Application Complete"
-        },
-        {
-            "Onboarding": "Onboarding Complete"
-        },
-        {
-            "Host Selection": "Host Selection Compelete"
-        },
-        {
-            "Match Finalized": "Match Finalizing In Progress"
-        }
-    ]
-}
-
-```
 
 ## Design File
 https://www.figma.com/file/BNWqZk8SHKbtN1nw8BB7VM/HUU-Everything-Figma-Nov-2022?type=design&node-id=8154-110885&mode=design&t=YHkDnA9Ao3YSriGo-0
