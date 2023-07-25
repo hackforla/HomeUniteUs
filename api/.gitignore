@@ -71,3 +71,4 @@ homeuniteus.db
 # Local Setup
 .DS_Store
 .vscode
+personal.py

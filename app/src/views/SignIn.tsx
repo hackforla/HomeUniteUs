@@ -1,6 +1,14 @@
 import React from 'react';
 import {useNavigate, useLocation, Location} from 'react-router-dom';
-import {Typography, Stack, styled, Theme, Link, Box} from '@mui/material';
+import {
+  Typography,
+  Stack,
+  Link,
+  Divider,
+  Alert,
+  IconButton,
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
@@ -10,8 +18,8 @@ import {
   useSignInMutation,
   useGetTokenMutation,
 } from '../services/auth';
-import logo from '../img/favicon.png';
 import {isFetchBaseQueryError, isErrorWithMessage} from '../app/helpers';
+import {FormContainer} from '../components/authentication';
 export interface LocationState {
   from: Location;
 }
@@ -82,51 +90,44 @@ export const SignIn = () => {
   };
 
   return (
-    <PageContainer>
-      <FormContainer gap={2}>
-        <Logo src={logo} alt="Home Unite Us logo" />
-        <FormHeader variant="h4">Sign in to your account</FormHeader>
-        <SignInForm
-          onSubmit={handleSignIn}
-          errorMessage={errorMessage}
-          setErrorMessage={setErrorMessage}
-        />
+    <FormContainer>
+      <Stack
+        py={2}
+        spacing={4}
+        sx={{justifyContent: 'center', alignItems: 'center', width: '100%'}}
+      >
+        {errorMessage ? (
+          <Alert
+            sx={{width: '100%'}}
+            severity="error"
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setErrorMessage('');
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            {errorMessage}
+          </Alert>
+        ) : null}
+        <Typography variant="h4" fontWeight="600">
+          Sign in
+        </Typography>
+        <SignInForm onSubmit={handleSignIn} />
+        <Divider sx={{width: '100%'}} />
         <Stack direction="row" alignItems="center" gap={0.5}>
-          <Typography variant="body2">Don&apos;t have an account?</Typography>
-          <Link fontWeight="bold" href="/signup">
-            Sign up
+          <Typography variant="body2">New user?</Typography>
+          <Link underline="always" href="/signup">
+            Create an account
           </Link>
         </Stack>
-      </FormContainer>
-    </PageContainer>
+      </Stack>
+    </FormContainer>
   );
 };
-
-const Logo = styled('img')({
-  width: '100px',
-  height: '100px',
-});
-
-const FormContainer = styled(Stack)(({theme}: {theme: Theme}) => ({
-  maxWidth: '550px',
-  alignItems: 'center',
-  padding: '2rem',
-  border: '1px solid #e0e0e0',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: '#fff',
-  margin: '0 16px',
-}));
-
-const FormHeader = styled(Typography)({
-  textAlign: 'center',
-  fontWeight: 600,
-});
-
-const PageContainer = styled(Box)(({theme}) => ({
-  display: 'flex',
-  flex: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-  backgroundColor: theme.palette.grey[100],
-  padding: '2rem 0',
-}));
