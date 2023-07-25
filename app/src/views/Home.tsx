@@ -17,7 +17,7 @@ export const Home = () => {
       </Typography> */}
       <Typography
         variant="h2"
-        sx={{textAlign: 'center', fontSize: 32, fontWeight: 'bold'}}
+        sx={{textAlign: 'center', fontSize: 32, fontWeight: 'normal'}}
       >
         Select your account type
       </Typography>
@@ -51,7 +51,10 @@ export const Home = () => {
         variant="contained"
         disabled={!label}
         size="large"
-        sx={{width: '35%', marginTop: '1.5rem'}}
+        sx={{
+          width: '35%',
+          marginTop: {xs: '0.8rem', sm: '1rem'},
+        }}
       >
         {!label && <span>Select Account Type</span>}
         {label && <span>Join as {label}</span>}
@@ -79,28 +82,24 @@ const HomeContainer = styled('section')({
 
 const AccountStack = styled('div')({
   display: 'flex',
-  gap: '24px',
-  height: '30%',
-  width: '50%',
-  justifyContent: 'space-between',
-  minWidth: '700px',
-  maxWidth: '670px',
+  gap: '1.4rem',
+  width: '100vw',
+  justifyContent: 'center',
   marginBottom: '1.2rem',
 });
 
 const AccountButton = styled('button')({
   display: 'flex',
   flexDirection: 'column',
-  height: '100%',
-  width: '100%',
-  maxWidth: '350px',
-  minWidth: '250px',
-  minHeight: '280px',
+  width: '25%',
   justifyContent: 'center',
   alignItems: 'center',
   backgroundColor: 'white',
   borderColor: 'primary',
-  borderRadius: '10px',
+  borderRadius: '0.4rem',
+  paddingTop: '1.5rem',
+  paddingBottom: '1.5rem',
+  minWidth: '200px',
 });
 
 const AccountLabel = styled('div')({

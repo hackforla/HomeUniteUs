@@ -42,6 +42,7 @@ export const SignUpForm = ({
         onSubmit(values);
       },
     });
+  // Add the user type field to Formik data and send it to the server in the form of a string (?). This will require updates to the types and data fetching hooks, as well as the OpenAPI spec for the signup route.
 
   return (
     <Form onSubmit={handleSubmit}>
