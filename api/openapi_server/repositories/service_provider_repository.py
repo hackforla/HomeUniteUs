@@ -8,7 +8,7 @@ from openapi_server.models import database as db
 
 class HousingProviderRepository:
     
-    def __init__(self, db_engine=db.DataAccessLayer.get_engine()):
+    def __init__(self, db_engine=None):
         """Instantiate HousingProviderRepository
 
         :param db_engine: persistence layer instance
@@ -16,6 +16,8 @@ class HousingProviderRepository:
 
         :rtype: None
         """
+        if db_engine is None:
+            db_engine = db.DataAccessLayer.get_engine()
         self.db_engine = db_engine
 
     def create_service_provider(self, provider):
