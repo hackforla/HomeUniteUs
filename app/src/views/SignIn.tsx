@@ -121,7 +121,7 @@ export const SignIn = () => {
         </Typography>
         <SignInForm
           onSubmit={handleSignIn}
-          signInisLoading={signInIsLoading}
+          signInIsLoading={signInIsLoading}
           getTokenIsLoading={getTokenIsLoading}
         />
         <Divider sx={{width: '100%'}} />
