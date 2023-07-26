@@ -9,6 +9,7 @@ from werkzeug.test import TestResponse
 
 from openapi_server.encoder import JSONEncoder
 from openapi_server.models import database
+from openapi_server.__main__ import get_bundled_specs
 
 
 class BaseTestCase(TestCase):
@@ -33,9 +34,11 @@ class BaseTestCase(TestCase):
         database.DataAccessLayer.db_init()
 
         logging.getLogger('connexion.operation').setLevel('ERROR')
-        app = connexion.App(__name__, specification_dir='../_spec/')
+        app = connexion.App(__name__)
         app.app.json_encoder = JSONEncoder
-        app.add_api('openapi.yaml', pythonic_params=True)
+        app.add_api(get_bundled_specs(Path('openapi_server/openapi/openapi.yaml')),
+                arguments={'title': 'Home Unite Us'},
+                pythonic_params=True)   
         return app.app
     
     def tearDown(self):
