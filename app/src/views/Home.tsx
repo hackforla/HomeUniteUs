@@ -1,11 +1,17 @@
 import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {Typography, Button, Stack, Link} from '@mui/material';
 import {styled} from '@mui/system';
 // import {HomeLink} from '../components/common/HomeLink';
 import {HostIcon, CoordinatorIcon} from '../components/Icons';
 
 export const Home = () => {
-  const [label, setLabel] = useState(null);
+  const [type, setType] = useState(null);
+  const navigateTo = useNavigate();
+
+  const handleJoin = () => {
+    navigateTo(`/signup/${type}`);
+  };
 
   return (
     <HomeContainer>
@@ -28,7 +34,7 @@ export const Home = () => {
           to="/coordinator"
           name="Coordinator"
           onClick={() => {
-            setLabel('coordinator');
+            setType('coordinator');
           }}
         >
           <CoordinatorIcon />
@@ -40,7 +46,7 @@ export const Home = () => {
           to="/host"
           name="Host"
           onClick={() => {
-            setLabel('Host');
+            setType('Host');
           }}
         >
           <HostIcon />
@@ -49,15 +55,16 @@ export const Home = () => {
       </AccountStack>
       <Button
         variant="contained"
-        disabled={!label}
+        disabled={!type}
         size="large"
         sx={{
           width: '35%',
           marginTop: {xs: '0.8rem', sm: '1rem'},
         }}
+        onClick={handleJoin}
       >
-        {!label && <span>Select Account Type</span>}
-        {label && <span>Join as {label}</span>}
+        {!type && <span>Select Account Type</span>}
+        {type && <span>Join as {type}</span>}
       </Button>
       <Stack direction="row" gap={1}>
         <Typography>Already have an account?</Typography>
@@ -83,7 +90,7 @@ const HomeContainer = styled('section')({
 const AccountStack = styled('div')({
   display: 'flex',
   gap: '1.4rem',
-  width: '100vw',
+  width: '80vw',
   justifyContent: 'center',
   marginBottom: '1.2rem',
 });
@@ -92,6 +99,7 @@ const AccountButton = styled('button')({
   display: 'flex',
   flexDirection: 'column',
   width: '25%',
+  height: '80%',
   justifyContent: 'center',
   alignItems: 'center',
   backgroundColor: 'white',
@@ -100,6 +108,7 @@ const AccountButton = styled('button')({
   paddingTop: '1.5rem',
   paddingBottom: '1.5rem',
   minWidth: '200px',
+  padding: '2rem',
 });
 
 const AccountLabel = styled('div')({

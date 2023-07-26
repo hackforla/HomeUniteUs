@@ -1,13 +1,14 @@
 import React from 'react';
-import {useNavigate, useLocation} from 'react-router-dom';
+import {useNavigate, useLocation, useParams} from 'react-router-dom';
 import {Stack, Typography, styled, Dialog, DialogTitle} from '@mui/material';
-
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
 import {SignUpForm} from '../components/authentication/SignUpForm';
 import {
   SignUpHostRequest,
+  SignUpCoordinatorRequest,
   useSignUpHostMutation,
+  useSignUpCoordinatorMutation,
   useGetTokenMutation,
 } from '../services/auth';
 // import {LocationState} from './SignIn';
@@ -17,12 +18,15 @@ import {isErrorWithMessage, isFetchBaseQueryError} from '../app/helpers';
 export const SignUp = () => {
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
+  const {type} = useParams();
 
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const [signUp] = useSignUpHostMutation();
+  const [signUpHost] = useSignUpHostMutation();
+  const [signUpCoordinator] = useSignUpCoordinatorMutation();
   const [getToken] = useGetTokenMutation();
+  // get type from params
   // const locationState = location.state as LocationState;
 
   // Save location from which user was redirected to login page
@@ -58,12 +62,24 @@ export const SignUp = () => {
     setDialogOpen(false);
   };
 
-  const handleSignUp = async ({email, password}: SignUpHostRequest) => {
+  const handleSignUp = async ({
+    email,
+    password,
+  }: SignUpHostRequest | SignUpCoordinatorRequest) => {
     try {
-      await signUp({
-        email,
-        password,
-      }).unwrap();
+      if (type === 'host') {
+        await signUpHost({
+          email,
+          password,
+        }).unwrap();
+      }
+
+      if (type === 'coordinator') {
+        await signUpCoordinator({
+          email,
+          password,
+        }).unwrap();
+      }
 
       setDialogOpen(true);
     } catch (err) {
@@ -88,6 +104,7 @@ export const SignUp = () => {
             onSubmit={handleSignUp}
             errorMessage={errorMessage}
             setErrorMessage={setErrorMessage}
+            type={type}
           />
         </FormContainer>
       </PageContainer>

@@ -2,6 +2,7 @@ import {api} from './api';
 
 export interface User {
   email: string;
+  type: string;
 }
 
 export interface UserResponse {
@@ -14,6 +15,15 @@ export interface SignUpHostResponse {
 }
 
 export interface SignUpHostRequest {
+  email: string;
+  password: string;
+}
+export interface SignUpCoordinatorResponse {
+  user: User;
+  token: string;
+}
+
+export interface SignUpCoordinatorRequest {
   email: string;
   password: string;
 }
@@ -62,6 +72,20 @@ const authApi = api.injectEndpoints({
     signUpHost: build.mutation<SignUpHostResponse, SignUpHostRequest>({
       query: credentials => ({
         url: '/auth/signup/host',
+        method: 'POST',
+        headers: {
+          'Access-Control-Allow-Origin': 'http://localhost:4040',
+        },
+        withCredentials: true,
+        body: credentials,
+      }),
+    }),
+    signUpCoordinator: build.mutation<
+      SignUpCoordinatorResponse,
+      SignUpCoordinatorRequest
+    >({
+      query: credentials => ({
+        url: '/auth/signup/coordinator',
         method: 'POST',
         headers: {
           'Access-Control-Allow-Origin': 'http://localhost:4040',
@@ -162,6 +186,7 @@ const authApi = api.injectEndpoints({
 export {authApi};
 export const {
   useSignUpHostMutation,
+  useSignUpCoordinatorMutation,
   useSignInMutation,
   useSignOutMutation,
   useVerificationMutation,

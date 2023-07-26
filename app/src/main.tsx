@@ -94,7 +94,7 @@ function HuuApp() {
             }
           />
           <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signup/:type" element={<SignUp />} />
           <Route path="/forgot-password" element={<ResetPasswordContext />}>
             <Route index element={<ForgotPassword />} />
             <Route path="code" element={<ForgotPasswordCode />} />

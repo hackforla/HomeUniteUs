@@ -24,24 +24,28 @@ interface SignUpFormProps {
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   errorMessage: string;
+  type: string;
 }
 
 export const SignUpForm = ({
   onSubmit,
   errorMessage,
   setErrorMessage,
+  type,
 }: SignUpFormProps) => {
   const {handleSubmit, handleChange, values, touched, errors, isValid, dirty} =
     useFormik({
       initialValues: {
         email: '',
         password: '',
+        type: '',
       },
       validationSchema: validationSchema,
       onSubmit: values => {
         onSubmit(values);
       },
     });
+
   // Add the user type field to Formik data and send it to the server in the form of a string (?). This will require updates to the types and data fetching hooks, as well as the OpenAPI spec for the signup route.
 
   return (
@@ -117,7 +121,7 @@ export const SignUpForm = ({
         fullWidth
         // overrides the default react router link since we're hitting a redirect from the api
         component="a"
-        href={'/api/auth/google?redirect_uri=http://localhost:4040/signup'}
+        href={`/api/auth/google?redirect_uri=http://localhost:4040/signup/${type}`}
       >
         <GoogleIcon sx={{fontSize: 16, marginRight: 1}} /> Sign up with Google
       </Button>
