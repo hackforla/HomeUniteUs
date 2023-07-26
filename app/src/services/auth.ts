@@ -2,7 +2,6 @@ import {api} from './api';
 
 export interface User {
   email: string;
-  type: string;
 }
 
 export interface UserResponse {

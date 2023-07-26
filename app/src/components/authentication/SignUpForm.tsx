@@ -21,6 +21,7 @@ import {PasswordValidation} from '../common/PasswordValidation';
 import {validationSchema} from '../../utils/PasswordValidationSchema';
 
 interface SignUpFormProps {
+  // sign up according to host/coordinator
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   errorMessage: string;

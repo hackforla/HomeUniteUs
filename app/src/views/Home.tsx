@@ -44,9 +44,9 @@ export const Home = () => {
           variant="contained"
           size="large"
           to="/host"
-          name="Host"
+          name="host"
           onClick={() => {
-            setType('Host');
+            setType('host');
           }}
         >
           <HostIcon />
@@ -59,7 +59,6 @@ export const Home = () => {
         size="large"
         sx={{
           width: '35%',
-          marginTop: {xs: '0.8rem', sm: '1rem'},
         }}
         onClick={handleJoin}
       >
@@ -90,15 +89,16 @@ const HomeContainer = styled('section')({
 const AccountStack = styled('div')({
   display: 'flex',
   gap: '1.4rem',
-  width: '80vw',
+  width: '90vw',
+  height: '45%',
   justifyContent: 'center',
-  marginBottom: '1.2rem',
+  alignItems: 'center',
 });
 
 const AccountButton = styled('button')({
   display: 'flex',
   flexDirection: 'column',
-  width: '25%',
+  width: '20%',
   height: '80%',
   justifyContent: 'center',
   alignItems: 'center',
