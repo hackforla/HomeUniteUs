@@ -133,6 +133,7 @@ docker compose down -v
 
 This command will stop the containers and delete the volumes. Then you can run `docker compose up api --build` to build and start the containers again.
 
+
 ## Configuration Profile
 For local development, you can create your own set of configurations by doing the following:
 - Add the variable below to your `.env` located in `/api`.
@@ -152,3 +153,31 @@ from flask import current_app
 current_app.config['CONFIG']
 ```
 If you create any new configuration properties, please add an associative enum to `/api/configs/configuration_properties.py`.
+
+## Debugging
+
+For Visual Studio Code users:
+- Set breakpoint(s).
+- Add the following config below to `api/openapi_server/.vscode/launch.json` and replace "absolute path to folder" accordingly.
+
+```
+{
+          "name": "Python: Connexion",
+            "type": "python",
+            "request": "launch",
+            "module": "connexion",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "FLASK_APP": "openapi_server.__main__.py",
+                "FLASK_ENV": "development",
+                "FLASK_DEBUG": "1"
+            },
+            "args": [
+                "run",
+                "< absolute path to folder >/openapi_server",
+                "--port",
+                "8080"
+            ],
+        }
+```
+- Go to `openapi_server/__main__.py` and select "Run" -> "Start with Debugging".

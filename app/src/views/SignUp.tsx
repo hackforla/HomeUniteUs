@@ -6,8 +6,8 @@ import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
 import {SignUpForm} from '../components/authentication/SignUpForm';
 import {
-  SignUpRequest,
-  useSignUpMutation,
+  SignUpHostRequest,
+  useSignUpHostMutation,
   useGetTokenMutation,
 } from '../services/auth';
 // import {LocationState} from './SignIn';
@@ -21,7 +21,7 @@ export const SignUp = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const [signUp] = useSignUpMutation();
+  const [signUp] = useSignUpHostMutation();
   const [getToken] = useGetTokenMutation();
   // const locationState = location.state as LocationState;
 
@@ -58,7 +58,7 @@ export const SignUp = () => {
     setDialogOpen(false);
   };
 
-  const handleSignUp = async ({email, password}: SignUpRequest) => {
+  const handleSignUp = async ({email, password}: SignUpHostRequest) => {
     try {
       await signUp({
         email,

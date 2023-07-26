@@ -18,7 +18,17 @@ import {useAuth} from '../../app/hooks/useAuth';
 import {useSignOutMutation} from '../../services/auth';
 import {useAppDispatch} from '../../app/hooks/store';
 import {setCredentials} from '../../app/authSlice';
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+
+const userName = 'Hank Hill';
+
+function getInitials(name: string) {
+  const splitName = name.split(' ');
+
+  if (splitName.length === 1) return splitName[0][0];
+
+  return splitName[0][0] + splitName[splitName.length - 1][0];
+}
 
 interface Props {
   /**
@@ -104,23 +114,12 @@ export const Header = (props: Props) => {
           </IconButton>
           <Stack direction="row" gap={1} sx={{alignItems: 'center'}}>
             <img
-              style={{width: '42px', height: '42px'}}
+              style={{width: '40px', height: '40px'}}
               src={logo}
               alt="Home Unite Us logo"
             />
-            <Typography
-              variant="h6"
-              color="primary"
-              component="div"
-              sx={{flexGrow: 1, display: {xs: 'none', sm: 'block'}}}
-            >
-              Home Unite Us
-            </Typography>
           </Stack>
           <Stack direction="row" gap={1} sx={{alignItems: 'center'}}>
-            <Button href="/" color="primary">
-              Home
-            </Button>
             {!user ? (
               <Box sx={{display: {xs: 'none', sm: 'flex'}}}>
                 {navItems.map(({title, href}) => {
@@ -142,7 +141,8 @@ export const Header = (props: Props) => {
               <Box sx={{flexGrow: 0}}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                    <Avatar alt={user.email} src="" />
+                    {/* Replace with real user name */}
+                    <Avatar alt={userName}>{getInitials(userName)}</Avatar>
                   </IconButton>
                 </Tooltip>
                 <Menu
@@ -161,11 +161,15 @@ export const Header = (props: Props) => {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
-                  <MenuItem onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{user.email}</Typography>
+                  <MenuItem component={Link} to="/settings">
+                    <Typography textAlign="center">Settings</Typography>
                   </MenuItem>
-                  <MenuItem onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">Account</Typography>
+                  <MenuItem
+                    component="a"
+                    target="_blank"
+                    href="https://github.com/hackforla/HomeUniteUs/wiki/Home-Unite-Us-User-Guide"
+                  >
+                    <Typography textAlign="center">Help</Typography>
                   </MenuItem>
                   <MenuItem onClick={handleSignOut}>
                     <Typography textAlign="center">Logout</Typography>

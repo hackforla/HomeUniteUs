@@ -175,10 +175,37 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiResponse'
       x-openapi-router-controller: openapi_server.controllers.host_controller
-  /auth/signup:
+  /auth/signup/host:
     post:
-      description: Signup a user
-      operationId: signup
+      description: Signup a Host
+      operationId: signUpHost
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+          description: successful operation
+      tags:
+        - auth
+      x-openapi-router-controller: openapi_server.controllers.auth_controller
+  /auth/signup/coordinator:
+    post:
+      description: Sign up a Coordinator
+      operationId: signUpCoordinator
       requestBody:
         content:
           application/json:
@@ -397,33 +424,6 @@ paths:
       tags:
         - auth
       x-openapi-router-controller: openapi_server.controllers.auth_controller
-  /auth/invite:
-    post:
-      description: Invite user using AWS Congnito
-      operationId: invite
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                username:
-                  type: string
-              required:
-                - username
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiResponse'
-          description: successful operation
-      tags:
-        - auth
-      x-openapi-router-controller: openapi_server.controllers.auth_controller
-      security:
-        - jwt:
-            - secret
   /auth/initialInvite:
     post:
       description: Removes auto generated password and replaces with user assigned password. Used for account setup.
@@ -454,6 +454,33 @@ paths:
       tags:
         - auth
       x-openapi-router-controller: openapi_server.controllers.admin_controller
+  /auth/invite:
+    post:
+      description: Invite user using AWS Congnito
+      operationId: invite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              required:
+                - email
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+          description: successful operation
+      tags:
+        - auth
+      x-openapi-router-controller: openapi_server.controllers.auth_controller
+      security:
+        - jwt:
+            - secret
 components:
   securitySchemes:
     jwt:

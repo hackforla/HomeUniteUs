@@ -8,12 +8,12 @@ export interface UserResponse {
   user: User;
 }
 
-export interface SignUpResponse {
+export interface SignUpHostResponse {
   user: User;
   token: string;
 }
 
-export interface SignUpRequest {
+export interface SignUpHostRequest {
   email: string;
   password: string;
 }
@@ -59,9 +59,9 @@ export interface TokenResponse {
 
 const authApi = api.injectEndpoints({
   endpoints: build => ({
-    signUp: build.mutation<SignUpResponse, SignUpRequest>({
+    signUpHost: build.mutation<SignUpHostResponse, SignUpHostRequest>({
       query: credentials => ({
-        url: '/auth/signup',
+        url: '/auth/signup/host',
         method: 'POST',
         headers: {
           'Access-Control-Allow-Origin': 'http://localhost:4040',
@@ -161,7 +161,7 @@ const authApi = api.injectEndpoints({
 
 export {authApi};
 export const {
-  useSignUpMutation,
+  useSignUpHostMutation,
   useSignInMutation,
   useSignOutMutation,
   useVerificationMutation,

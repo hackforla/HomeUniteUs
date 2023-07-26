@@ -12,11 +12,13 @@ paths:
   /serviceProviders:
     $ref: "./paths/serviceProviders.yaml"
   /serviceProviders/{providerId}:
-    $ref: './paths/serviceProvider.yaml'
+    $ref: "./paths/serviceProvider.yaml"
   /host:
-    $ref: './paths/host.yaml'
-  /auth/signup:
-    $ref: "./paths/auth/authSignup.yaml"
+    $ref: "./paths/host.yaml"
+  /auth/signup/host:
+    $ref: "./paths/auth/authSignupHost.yaml"
+  /auth/signup/coordinator:
+    $ref: "./paths/auth/authSignupCoordinator.yaml"
   /auth/signin:
     $ref: "./paths/auth/authSignin.yaml"
   /auth/confirm:
@@ -36,13 +38,13 @@ paths:
   /auth/user:
     $ref: "./paths/auth/authUser.yaml"
   /auth/private:
-    $ref: './paths/auth/authPrivate.yaml'
+    $ref: "./paths/auth/authPrivate.yaml"
   /auth/google:
-    $ref: './paths/auth/authGoogle.yaml'
+    $ref: "./paths/auth/authGoogle.yaml"
   /auth/initialInvite:
-    $ref: './paths/auth/authInitialInvite.yaml'
+    $ref: "./paths/auth/authInitialInvite.yaml"
   /auth/invite:
-    $ref: './paths/auth/authInvite.yaml'
+    $ref: "./paths/auth/authInvite.yaml"
 components:
   securitySchemes:
     jwt:
