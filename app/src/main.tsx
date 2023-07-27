@@ -23,6 +23,7 @@ import {useSessionMutation} from './services/auth';
 import {HomeUniteUsTheme} from './theme';
 import {
   CoordinatorDashboard,
+  GuestDashboard,
   GuestApplicationTracker,
   Home,
   HostApplicationTracker,
@@ -58,6 +59,7 @@ function HuuApp() {
         <Route element={<AppLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/coord" element={<CoordinatorDashboard />} />
+          <Route path="/guest" element={<GuestDashboard />} />
           <Route path="/hosts" element={<HostsList />} />
           <Route
             path="/profile"
