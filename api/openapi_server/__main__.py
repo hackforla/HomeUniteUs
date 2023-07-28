@@ -41,7 +41,7 @@ def main():
     app.app.config.from_object(compile_config(env_config_profile))
     app.app.json_encoder = encoder.JSONEncoder
     app.app.secret_key = SECRET_KEY
-    app.add_api(get_bundled_specs(Path('openapi_server/openapi/openapi.yaml')),
+    app.add_api(get_bundled_specs(app.get_root_path() / Path('./openapi/openapi.yaml')),
                 arguments={'title': 'Home Unite Us'},
                 pythonic_params=True)             
     app.add_error_handler(AuthError, handle_auth_error)
