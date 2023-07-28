@@ -114,7 +114,8 @@ jobs:
             rm ~/github-deploy/api/*
             sudo systemctl restart homeuniteus.service
             cd ~/github-deploy/app
-            sudo mv * /var/www/dev.homeunite.us/html/
+            sudo rsync -a * /var/www/dev.homeunite.us/html/
+            rm -r *
             
 
             
