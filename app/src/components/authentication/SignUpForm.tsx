@@ -16,13 +16,16 @@ import CloseIcon from '@mui/icons-material/Close';
 import {styled} from '@mui/system';
 import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
-import {SignInRequest} from '../../services/auth';
+import {SignUpHostRequest, SignUpCoordinatorRequest} from '../../services/auth';
 import {PasswordValidation} from '../common/PasswordValidation';
 import {validationSchema} from '../../utils/PasswordValidationSchema';
 
 interface SignUpFormProps {
   // sign up according to host/coordinator
-  onSubmit: ({email, password}: SignInRequest) => Promise<void>;
+  onSubmit: ({
+    email,
+    password,
+  }: SignUpHostRequest | SignUpCoordinatorRequest) => Promise<void>;
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   errorMessage: string;
   type: string;
@@ -39,7 +42,6 @@ export const SignUpForm = ({
       initialValues: {
         email: '',
         password: '',
-        type: '',
       },
       validationSchema: validationSchema,
       onSubmit: values => {

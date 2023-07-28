@@ -79,10 +79,8 @@ const authApi = api.injectEndpoints({
         body: credentials,
       }),
     }),
-    signUpCoordinator: build.mutation<
-      SignUpCoordinatorResponse,
-      SignUpCoordinatorRequest
-    >({
+    // prettier-ignore
+    signUpCoordinator: build.mutation<SignUpCoordinatorResponse, SignUpCoordinatorRequest>({
       query: credentials => ({
         url: '/auth/signup/coordinator',
         method: 'POST',

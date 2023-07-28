@@ -37,7 +37,7 @@ export const SignUp = () => {
       const code = location.search.split('?code=')[1];
       getToken({
         code,
-        callbackUri: 'http://localhost:4040/signup',
+        callbackUri: `http://localhost:4040/signup/${type}`,
       })
         .unwrap()
         .then(response => {
