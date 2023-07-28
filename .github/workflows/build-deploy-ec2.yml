@@ -95,4 +95,26 @@ jobs:
           # upload the api and app directories to the EC2 instance
           rsync --mkpath -r app ubuntu@homeunite.us:github-deploy/
           rsync --mkpath -r api ubuntu@homeunite.us:github-deploy/
+      - name: Configure EC2
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: homeunite.us
+          username: ubuntu
+          script_stop: true
+          # the following script was manually uploaded
+          # this will take at least 2 seconds to complete
+          script: |
+            cd /opt/homeuniteus
+            source homeuniteusenv/bin/activate
+            pip uninstall -y -r <(pip freeze)
+            pip install gunicorn
+            pip install ~/github-deploy/api/openapi_server-*.whl
+            deactivate
+            rm ~/github-deploy/api/*
+            sudo systemctl restart homeuniteus.service
+            cd ~/github-deploy/app
+            sudo mv * /var/www/dev.homeunite.us/html/
+            
+
+            
     
