@@ -63,26 +63,22 @@ In the case of someone else adding a revision to the database, simply pull their
 
 ## Usage - Production
 
-Build a Python "wheel" and install it in a production environment. From the `api/` directory run the following commands:
+A WSGI server is needed to run our application. A WSGI (Web Server Gateway Interface) server is a bridge between a web server and web applications. The server handles requests, invokes the web application, translates responses back to HTTP, and also manages concurrency to ensure the server can handle multiple requests simultaneously.
+
+While Flask does provide a built-in development server, it is not intended for production use. Therefore, we utilize a third-party, production-grade WSGI server to manage our application. Various options exist, but we've chosen `gunicorn`.
+
+WSGI servers like `gunicorn` require the python module to be installed on the system, in order to properly import the application class. To run the server, use pip to install `openapi_server` and then start the application from `gunicorn`.
+
+Run the following commands in the shell, from the `api/` directory:
 
 ```shell
 python -m venv .venv          # Creates a virtual environment in the `.venv` directory
 source .venv/bin/activate     # Activate the virtual environment
-pip install --upgrade build   # Installs the build tool
-python -m build --wheel       # Builds a wheel in a `dist/` directory.
+pip install .                 # Install openapi_server into your virtual environment
+gunicorn -w 4 "openapi_server.__main__:create_app()" # Launch production server!
 ```
 
-The wheel located in the `dist/` directory can be installed in the production environment using the following commands:
-
-```shell
-pip install openapi_server-<version>.whl
-```
-
-The `openapi_server` module will be installed. Now, a WSGI server, such as `gunicorn`, can be used to run it using the following:
-
-```shell
-gunicorn -w 4 "openapi_server.__main__:create_app()"
-```
+The console output will provide the listening address, that you can visit through your browser.
 
 ## Running with Docker
 
