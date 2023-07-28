@@ -16,9 +16,9 @@ paths:
   /host:
     $ref: "./paths/host.yaml"
   /auth/signup/host:
-    $ref: "./paths/auth/authSignupHost.yaml"
+    $ref: "./paths/auth/authSignUpHost.yaml"
   /auth/signup/coordinator:
-    $ref: "./paths/auth/authSignupCoordinator.yaml"
+    $ref: "./paths/auth/authSignUpCoordinator.yaml"
   /auth/signin:
     $ref: "./paths/auth/authSignin.yaml"
   /auth/confirm:
