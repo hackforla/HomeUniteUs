@@ -77,7 +77,7 @@ jobs:
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v2
         with:
-          key: ${{ secrets.SSH_KEY }}
+          key: ${{ secrets.HUU_EC2_SSH_KEY }}
           known_hosts: ${{ secrets.KNOWN_HOSTS }}
       - name: rsync over SSH the App to EC2
         run: |
