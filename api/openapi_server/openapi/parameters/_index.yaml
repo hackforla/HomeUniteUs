@@ -8,3 +8,23 @@ ProviderId:
     type: integer
     format: int64
   style: simple
+guest_id:
+  name: guest_id
+  description: The ID of the guest to read, update or delete
+  explode: false
+  in: path
+  required: true
+  schema:
+    type: integer
+    format: int64
+  style: simple
+application_id:
+  name: application_id
+  description: The ID of the application to read, update or delete
+  explode: false
+  in: path
+  required: true
+  schema:
+    type: integer
+    format: int64
+  style: simple

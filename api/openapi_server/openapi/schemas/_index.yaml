@@ -117,3 +117,6 @@ GuestDashboardApplicationTasks:
       title: task
       type: string
   required:
+    - guest_id
+    - application_id
+    - task 

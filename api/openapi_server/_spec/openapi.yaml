@@ -457,7 +457,12 @@ paths:
   '/application_management/guests/{guest_id}/applications/{application_id}/tasks':
     get:
       summary: Get a list of tasks to complete application.
+      tags:
+        - guest_dashboard
       operationId: get_application_tasks
+      parameters:
+        - $ref: '#/components/parameters/guest_id'
+        - $ref: '#/components/parameters/application_id'
       responses:
         '200':
           description: An array of steps with their tasks.
@@ -465,6 +470,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GuestDashboardApplicationTasks'
+        '400':
+          description: Malformed request
+        '404':
+          description: guest tasks not found
         default:
           $ref: '#/components/responses/UnexpectedError'
       x-openapi-router-controller: openapi_server.controllers.guest_dashboard_controller
@@ -486,6 +495,26 @@ components:
     ProviderId:
       name: providerId
       description: 'The ID of the service provider to read, update or delete'
+      explode: false
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+      style: simple
+    guest_id:
+      name: guest_id
+      description: 'The ID of the guest to read, update or delete'
+      explode: false
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int64
+      style: simple
+    application_id:
+      name: application_id
+      description: 'The ID of the application to read, update or delete'
       explode: false
       in: path
       required: true
@@ -612,4 +641,7 @@ components:
         task:
           title: task
           type: string
-      required: null
+      required:
+        - guest_id
+        - application_id
+        - task

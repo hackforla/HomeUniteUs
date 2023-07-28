@@ -2,7 +2,7 @@
 from sqlalchemy.orm import Session
 
 # Local
-
+from openapi_server.models import database as db
 
 class GuestDashboardRepository:
 
@@ -16,12 +16,38 @@ class GuestDashboardRepository:
         """
         self.db_engine = db_engine
 
-    def get_guest_dashboard(self):
+    def get_application_tasks(self, guest_id, application_id):
         """Get guest dashboard information
 
         :rtype: dict
         """
-        pass
+        # session = self._get_session()
+        # result = None
+
+        if (not guest_id or not application_id):
+            return {"message" : "error"}
+
+
+        tasks = [
+            {
+                "Application and Onboarding": "Application and Onboarding Complete"
+            },
+            {
+                "Host Selection": "Host Selection Complete"
+            },
+            {
+                "Match": "Match Complete"
+            }
+        ]
+
+        result = {
+            "guest_id": guest_id,
+            "application_id": application_id,
+            "tasks": tasks
+        }
+
+        # session.close()
+        return result
     
     def _get_session(self):
         return Session(self.db_engine)

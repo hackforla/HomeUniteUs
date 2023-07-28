@@ -1,6 +1,11 @@
 get:
   summary: Get a list of tasks to complete application. 
+  tags:
+    - guest_dashboard
   operationId: get_application_tasks
+  parameters:
+    - $ref: '../parameters/_index.yaml#/guest_id'
+    - $ref: '../parameters/_index.yaml#/application_id'
   responses:
     "200":
       description: An array of steps with their tasks.
@@ -8,6 +13,10 @@ get:
         application/json:
           schema:
             $ref: '../schemas/_index.yaml#/GuestDashboardApplicationTasks'
+    "400":
+      description: Malformed request
+    "404":
+      description: guest tasks not found
     default:
       $ref: '../responses/_index.yaml#/UnexpectedError'
   x-openapi-router-controller: openapi_server.controllers.guest_dashboard_controller

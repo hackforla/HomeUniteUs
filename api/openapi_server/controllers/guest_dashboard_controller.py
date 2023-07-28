@@ -1,20 +1,23 @@
-# # # Third Party
-# import connexion
-# import traceback
+# # Third Party
+import connexion
+import traceback
 
-# guest_dashboard_repository = GuestDashboardRepository()
+# Local
+from openapi_server.repositories.guest_dashboard_repository import GuestDashboardRepository # noqa: E501
 
-# def get_application_tasks():
-#     """sumary_line
+guest_dashboard_repository = GuestDashboardRepository()
 
-#     # noqa: E501
+def get_application_tasks(guest_id,application_id):
+    """sumary_line
 
-#     Keyword arguments:
-#     argument -- description
-#     Return: return_description
-#     """
-#     tasks = guest_dashboard_repository.get_application_tasks()
-#     if tasks != None:
-#         return tasks, 200
-#     else:
-#         return "tasks not found", 404
+    # noqa: E501
+
+    Keyword arguments:
+    argument -- description
+    Return: return_description
+    """
+    tasks = guest_dashboard_repository.get_application_tasks(guest_id,application_id)
+    if tasks != None:
+        return tasks, 200
+    else:
+        return "tasks not found", 404
