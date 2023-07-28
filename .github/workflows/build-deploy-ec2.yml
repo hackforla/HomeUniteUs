@@ -100,6 +100,7 @@ jobs:
         with:
           host: homeunite.us
           username: ubuntu
+          key: ${{ secrets.HUU_EC2_SSH_KEY }}
           script_stop: true
           # the following script was manually uploaded
           # this will take at least 2 seconds to complete
