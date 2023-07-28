@@ -88,7 +88,7 @@ jobs:
         uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.HUU_EC2_SSH_KEY }}
-          known_hosts: ${{ secrets.HUU_EC2_KNOWN_HOSTS }}
+          known_hosts: homeunite.us ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCu/AdtdkNgDuezmkVeENDtC1Mf2erROKDEslMj+RFwuXj5CuLG2PRNTpzebgVlIJwxrq76+QWEFFG4gub2+mq2N+FlQ/if+R+a3Ym7lS3J25usgBliO6Dgp3Oxuq6n3V3/SopXIZ3/p8zGyBOiEjF8NXXy6y/ByfqT61jhZZR4MuMxdsaTbOI8wYfCAkxJTRn7E3U36iZNxgyxl5LCw97AxxiAzzg+f4GmpY7JuNy0EEqAEdRHPs6LBjrmDw6QLkDVS7AEA64yF8cDqDtNdB4Q/SkmJ0AyggU+fkFJ+wq01+mjtBMfjlaMmk+a2KowCIU6L+Mo2E7FnbQ0vKBg4iY3
       - name: rsync over SSH API and App to EC2
         run: |
           # upload the api and app directories to the EC2 instance
