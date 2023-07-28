@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {Typography, Button, Stack, Link} from '@mui/material';
+import {Typography, Button, Stack, Link, useTheme} from '@mui/material';
 import {styled} from '@mui/system';
 // import {HomeLink} from '../components/common/HomeLink';
 import {HostIcon, CoordinatorIcon} from '../components/Icons';
@@ -8,6 +8,7 @@ import {HostIcon, CoordinatorIcon} from '../components/Icons';
 export const Home = () => {
   const [type, setType] = useState(null);
   const navigateTo = useNavigate();
+  const theme = useTheme();
 
   const handleJoin = () => {
     navigateTo(`/signup/${type}`);
@@ -28,22 +29,43 @@ export const Home = () => {
         Select your account type
       </Typography>
       <AccountStack>
-        <AccountButton
-          variant="contained"
-          size="large"
-          to="/coordinator"
-          name="Coordinator"
-          onClick={() => {
-            setType('coordinator');
+        <Button
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+            width: '25%',
+            padding: '2rem',
+            '&:hover': {
+              backgroundColor: theme.palette.primary[100],
+            },
+            '&:active': {
+              backgroundColor: theme.palette.primary[300],
+            },
+            color: 'black',
           }}
+          variant={type === 'coordinator' || null ? 'contained' : 'outlined'}
+          size="large"
+          name="coordinator"
+          onClick={() => setType('coordinator')}
         >
           <CoordinatorIcon />
           <AccountLabel>Coordinator</AccountLabel>
-        </AccountButton>
-        <AccountButton
-          variant="contained"
+        </Button>
+        <Button
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%',
+            width: '25%',
+            padding: '2rem',
+            '&:hover': {
+              backgroundColor: theme.palette.primary[100],
+            },
+            color: 'black',
+          }}
+          variant={type === 'host' || null ? 'contained' : 'outlined'}
           size="large"
-          to="/host"
           name="host"
           onClick={() => {
             setType('host');
@@ -51,7 +73,7 @@ export const Home = () => {
         >
           <HostIcon />
           <AccountLabel>Host</AccountLabel>
-        </AccountButton>
+        </Button>
       </AccountStack>
       <Button
         variant="contained"
@@ -93,22 +115,6 @@ const AccountStack = styled('div')({
   height: '45%',
   justifyContent: 'center',
   alignItems: 'center',
-});
-
-const AccountButton = styled('button')({
-  display: 'flex',
-  flexDirection: 'column',
-  width: '20%',
-  height: '80%',
-  justifyContent: 'center',
-  alignItems: 'center',
-  backgroundColor: 'white',
-  borderColor: 'primary',
-  borderRadius: '0.4rem',
-  paddingTop: '1.5rem',
-  paddingBottom: '1.5rem',
-  minWidth: '200px',
-  padding: '2rem',
 });
 
 const AccountLabel = styled('div')({
