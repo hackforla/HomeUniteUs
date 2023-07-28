@@ -65,7 +65,7 @@ In the case of someone else adding a revision to the database, simply pull their
 
 A WSGI server is needed to run our application. A WSGI (Web Server Gateway Interface) server is a bridge between a web server and web applications. The server handles requests, invokes the web application, translates responses back to HTTP, and also manages concurrency to ensure the server can handle multiple requests simultaneously.
 
-While Flask does provide a built-in development server, it is not intended for production use. Therefore, we utilize a third-party, production-grade WSGI server to manage our application. Various options exist, but we've chosen `gunicorn`.
+While Flask does provide a built-in development server, it is not intended for production use. Therefore, we utilize a third-party, production-grade WSGI server to manage our application. Various options exist, but we've chosen `gunicorn`. `gunicorn` does not support Windows, but you can use another WSGI server like `waitress` if Windows support is needed.
 
 WSGI servers like `gunicorn` require the python module to be installed on the system, in order to properly import the application class. To run the server, use pip to install `openapi_server` and then start the application from `gunicorn`.
 
