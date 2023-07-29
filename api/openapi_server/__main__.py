@@ -20,6 +20,19 @@ DataAccessLayer.db_init()
 
 
 def get_bundled_specs(main_file: Path) -> Dict[str, Any]:
+    '''
+    Prance is able to resolve references to local *.yaml files.
+
+    Use prance to parse the api specification document. Connexion's 
+    default parser is not able to handle local file references, but
+    our api specification is split across multiple files for readability.
+
+    Args:
+        main_file (Path): Path to a api specification .yaml file
+    
+    Returns:
+        Dict[str, Any]: Parsed specification file, stored in a dict
+    '''
     parser = prance.ResolvingParser(str(main_file.absolute()), lazy=True, strict=True)
     parser.parse()
 
@@ -43,8 +56,10 @@ def create_app():
     # which is the connexion layer built on top of Flask. So we think of it as
     # the connexion application.
     connexion_app = connexion.App(__name__)
+    api_spec_path = connexion_app.get_root_path() / Path('./openapi/openapi.yaml')
+    parsed_specs = get_bundled_specs(api_spec_path)
 
-    connexion_app.add_api(get_bundled_specs(app.get_root_path() / Path('./openapi/openapi.yaml')),
+    connexion_app.add_api(parsed_specs,
                 arguments={'title': 'Home Unite Us'},
                 pythonic_params=True)
     connexion_app.add_error_handler(AuthError, handle_auth_error)
