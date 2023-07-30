@@ -51,8 +51,8 @@ class BaseTestCase(TestCase):
 
     def create_service_provider(self) -> TestResponse:
         housing_program_service_provider = {
-  "provider_name" : "provider_name"
-}
+        "provider_name" : "provider_name"
+        }
         headers = { 
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -62,6 +62,22 @@ class BaseTestCase(TestCase):
             method='POST',
             headers=headers,
             data=json.dumps(housing_program_service_provider),
+            content_type='application/json')
+
+    def create_guest_dashboard(self) -> TestResponse:
+        guest_dashboard = {
+        "guest_id" : 1,
+        "application_id" : 1
+        }
+        headers = { 
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+        return self.client.open(
+            '/api/application_management/guests/{guest_id}/applications/{application_id}/tasks',
+            method='POST',
+            headers=headers,
+            data=json.dumps(guest_dashboard),
             content_type='application/json')
     
     def populate_test_database(self, num_entries) -> List[int]:
