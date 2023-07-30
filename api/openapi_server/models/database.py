@@ -40,6 +40,14 @@ class Applicant(Base):
     applicant_status = Column(Integer, ForeignKey('applicant_status.id'), nullable=False)
     user = Column(Integer, ForeignKey('user.id'), nullable=False)
 
+class GuestApplications(Base):
+    __tablename__ = "guest_applications"
+
+    id = Column(Integer, primary_key=True, index=True)
+    guest_id = Column(Integer, ForeignKey('applicant.id'), nullable=False)
+    application_and_onboarding_tasks = Column(String, nullable=False)
+    host_selection_tasks = Column(String, nullable=False)
+    matching_tasks = Column(String, nullable=False)
 
 class ApplicantStatusLog(Base):
     __tablename__ = "applicant_status_log"
