@@ -27,25 +27,25 @@ ApplicantType:
 HousingProgram:
   type: object
   properties:
-    program_name:           
+    program_name:
       title: program_name
       type: string
     service_provider:
-      $ref: '#/ServiceProvider'
+      $ref: "#/ServiceProvider"
   required:
     - program_name
     - service_provider
 ServiceProvider:
   type: object
   properties:
-    provider_name:           
+    provider_name:
       title: provider_name
       type: string
   required:
     - provider_name
 ServiceProviderWithId:
   allOf:
-    - $ref: '#/ServiceProvider'
+    - $ref: "#/ServiceProvider"
   type: object
   properties:
     id:
@@ -56,19 +56,19 @@ ServiceProviderWithId:
 ServiceProviders:
   type: array
   items:
-    $ref: '#/ServiceProviderWithId'
+    $ref: "#/ServiceProviderWithId"
 IntakeQuestion:
   type: object
   properties:
     applicant_type:
-      $ref: '#/ApplicantType'
+      $ref: "#/ApplicantType"
     question_text:
       title: question_text
       type: string
     intake_question_type:
-      $ref: '#/IntakeQuestionType'
+      $ref: "#/IntakeQuestionType"
     intake_question_set:
-      $ref: '#/IntakeQuestionSet'
+      $ref: "#/IntakeQuestionSet"
   required:
     - applicant_type
     - question_text
@@ -81,8 +81,8 @@ IntakeQuestionSet:
       title: question_set_name
       type: string
     housing_program:
-      $ref: '#/HousingProgram'
-  required: 
+      $ref: "#/HousingProgram"
+  required:
     - question_set_name
     - housing_program
 IntakeQuestionType:
@@ -96,11 +96,23 @@ IntakeQuestionType:
 IntakeResponseValue:
   type: object
   properties:
-    response_text:           
+    response_text:
       title: response_text
       type: string
     intake_question:
-      $ref: '#/IntakeQuestion'
+      $ref: "#/IntakeQuestion"
   required:
     - response_text
     - intake_question
+GuestDashboard:
+  type: object
+  properties:
+    guest_id:
+      format: int64
+      type: integer
+    application_id:
+      format: int64
+      type: integer
+  required:
+    - guest_id
+    - application_id

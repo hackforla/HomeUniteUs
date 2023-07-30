@@ -45,6 +45,8 @@ paths:
     $ref: "./paths/auth/authInitialInvite.yaml"
   /auth/invite:
     $ref: "./paths/auth/authInvite.yaml"
+  /application_management/guests/{guest_id}/applications/{application_id}/tasks:
+    $ref: "./paths/guestApplicationManagement.yaml"
 components:
   securitySchemes:
     jwt:
