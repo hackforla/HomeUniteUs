@@ -47,35 +47,11 @@ const navItems = [
 export const Header = (props: Props) => {
   const {window} = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null,
-  );
 
   const {user} = useAuth();
-  const [signOut] = useSignOutMutation();
-  const appDispatch = useAppDispatch();
-  const navigate = useNavigate();
-
-  const handleSignOut = async () => {
-    try {
-      await signOut().unwrap();
-      appDispatch(setCredentials({user: null, token: null}));
-      navigate('/signin');
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   const handleDrawerToggle = () => {
     setMobileOpen(prevState => !prevState);
-  };
-
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
   };
 
   const drawer = (
@@ -137,46 +113,7 @@ export const Header = (props: Props) => {
                 })}
               </Box>
             ) : null}
-            {user ? (
-              <Box sx={{flexGrow: 0}}>
-                <Tooltip title="Open settings">
-                  <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                    {/* Replace with real user name */}
-                    <Avatar alt={userName}>{getInitials(userName)}</Avatar>
-                  </IconButton>
-                </Tooltip>
-                <Menu
-                  sx={{mt: '45px'}}
-                  id="menu-appbar"
-                  anchorEl={anchorElUser}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={Boolean(anchorElUser)}
-                  onClose={handleCloseUserMenu}
-                >
-                  <MenuItem component={Link} to="/settings">
-                    <Typography textAlign="center">Settings</Typography>
-                  </MenuItem>
-                  <MenuItem
-                    component="a"
-                    target="_blank"
-                    href="https://github.com/hackforla/HomeUniteUs/wiki/Home-Unite-Us-User-Guide"
-                  >
-                    <Typography textAlign="center">Help</Typography>
-                  </MenuItem>
-                  <MenuItem onClick={handleSignOut}>
-                    <Typography textAlign="center">Logout</Typography>
-                  </MenuItem>
-                </Menu>
-              </Box>
-            ) : null}
+            {user ? <AvatarDropdownMenu /> : null}
           </Stack>
         </Toolbar>
       </AppBar>
@@ -197,6 +134,75 @@ export const Header = (props: Props) => {
           {drawer}
         </Drawer>
       </Box>
+    </Box>
+  );
+};
+
+const AvatarDropdownMenu = () => {
+  const [signOut] = useSignOutMutation();
+  const appDispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+    null,
+  );
+
+  const handleSignOut = async () => {
+    try {
+      await signOut().unwrap();
+      appDispatch(setCredentials({user: null, token: null}));
+      navigate('/signin');
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  return (
+    <Box sx={{flexGrow: 0}}>
+      <Tooltip title="Open settings">
+        <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
+          {/* Replace with real user name */}
+          <Avatar alt={userName}>{getInitials(userName)}</Avatar>
+        </IconButton>
+      </Tooltip>
+      <Menu
+        sx={{mt: '45px'}}
+        id="menu-appbar"
+        anchorEl={anchorElUser}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        keepMounted
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        open={Boolean(anchorElUser)}
+        onClose={handleCloseUserMenu}
+      >
+        <MenuItem component={Link} to="/settings">
+          <Typography textAlign="center">Settings</Typography>
+        </MenuItem>
+        <MenuItem
+          component="a"
+          target="_blank"
+          href="https://github.com/hackforla/HomeUniteUs/wiki/Home-Unite-Us-User-Guide"
+        >
+          <Typography textAlign="center">Help</Typography>
+        </MenuItem>
+        <MenuItem onClick={handleSignOut}>
+          <Typography textAlign="center">Logout</Typography>
+        </MenuItem>
+      </Menu>
     </Box>
   );
 };
