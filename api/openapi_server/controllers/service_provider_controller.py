@@ -26,7 +26,7 @@ def create_service_provider():  # noqa: E501
     except ValueError:
         return traceback.format_exc(ValueError), 400
     
-    withId = housing_provider_repository.createServiceProvider(provider)
+    withId = housing_provider_repository.create_service_provider(provider)
     return withId, 201
 
 
@@ -40,8 +40,9 @@ def delete_service_provider(provider_id):  # noqa: E501
 
     :rtype: None
     """
-    housing_provider_repository.delete_service_provider(provider_id)
-    return f"Service Provider with id {provider_id} successfully deleted", 200
+    if housing_provider_repository.delete_service_provider(provider_id):
+        return f"Service Provider with id {provider_id} successfully deleted", 200
+    return f"Service provider {provider_id} not found", 404
 
 def get_service_provider_by_id(provider_id):  # noqa: E501
     """Get details about a housing program service provider from an ID
@@ -54,7 +55,7 @@ def get_service_provider_by_id(provider_id):  # noqa: E501
     :rtype: ServiceProviderWithId
     """
     provider = housing_provider_repository.get_service_provider_by_id(provider_id)
-    return provider, 200 if provider != None else "Not Found", 404
+    return (provider, 200) if provider is not None else ("Not Found", 404)
 
 def get_service_providers():  # noqa: E501
     """Get a list of housing program service providers.
@@ -89,4 +90,4 @@ def update_service_provider(provider_id):  # noqa: E501
         return traceback.format_exc(ValueError), 400
     
     updated = housing_provider_repository.update_service_provider(provider, provider_id)
-    return updated, 200 if updated != None else "Not Found", 404
+    return (updated, 200) if updated is not None else ("Not Found", 404)
