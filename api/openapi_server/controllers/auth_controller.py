@@ -9,7 +9,7 @@ from os import environ as env
 from dotenv import load_dotenv, find_dotenv
 from flask import redirect, request, session
 from openapi_server.exceptions import AuthError
-from openapi_server.models import database as db, ApiResponse
+from openapi_server.models import database as db
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from functools import wraps
@@ -236,7 +236,7 @@ def resend_confirmation_code():
             Username=email,
         )
         message = "A confirmation code is being sent again."
-        return ApiResponse(code=200, type=str, message=message)
+        return {"message": message}, 200
     except botocore.exceptions.ClientError as error:
         match error.response['Error']['Code']:
             case 'UserNotFoundException':
