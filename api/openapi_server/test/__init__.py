@@ -96,3 +96,17 @@ class BaseTestCase(TestCase):
             ids.append(deserialized_response["id"])
         return ids
 
+    def populate_test_database_for_guest_dashboard(self) -> List[int]:
+        '''
+        Add num_entries rows to the test database and return the
+        created guest_id's and application_id's. Fail test if any of the creation requests
+        fails.
+        '''
+        guest_dashboard_ids = []
+        create_response = self.create_guest_dashboard()
+        raw_response = create_response.data.decode('utf-8')
+        self.assertStatus(create_response, 201, f"Test setup failure! Received response {raw_response}")
+        deserialized_response = json.loads(raw_response)
+        guest_dashboard_ids.append(deserialized_response["id"])
+        return guest_dashboard_ids
+

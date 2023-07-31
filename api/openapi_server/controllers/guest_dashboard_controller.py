@@ -22,7 +22,6 @@ def get_guest_dashboard_by_id_and_application_id(guest_id,application_id):
     #     return "tasks not found", 404
 
 
-
     ################################ Testing OpenAPI UI ################################
     tasks = [
         {
