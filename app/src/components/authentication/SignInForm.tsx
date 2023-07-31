@@ -1,4 +1,11 @@
-import {Button, Stack, Divider, Link, TextField} from '@mui/material';
+import {
+  Button,
+  Stack,
+  Divider,
+  Link,
+  TextField,
+  CircularProgress,
+} from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
 import {object, string} from 'yup';
@@ -7,6 +14,8 @@ import {SignInRequest} from '../../services/auth';
 import {PasswordField} from './PasswordField';
 
 interface SignInFormProps {
+  signInIsLoading: boolean;
+  getTokenIsLoading: boolean;
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
 }
 
@@ -30,7 +39,11 @@ const validationSchema = object({
     ),
 });
 
-export const SignInForm = ({onSubmit}: SignInFormProps) => {
+export const SignInForm = ({
+  onSubmit,
+  signInIsLoading,
+  getTokenIsLoading,
+}: SignInFormProps) => {
   const {
     handleSubmit,
     handleChange,
@@ -88,11 +101,21 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
           Forgot password?
         </Link>
       </Stack>
-      <Button variant="contained" size="large" type="submit" fullWidth>
+      <Button
+        disabled={signInIsLoading}
+        variant="contained"
+        size="large"
+        type="submit"
+        fullWidth
+      >
         Sign in
+        {signInIsLoading ? (
+          <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
+        ) : null}
       </Button>
       <Divider>or</Divider>
       <Button
+        disabled={getTokenIsLoading}
         variant="outlined"
         size="large"
         fullWidth
@@ -102,6 +125,9 @@ export const SignInForm = ({onSubmit}: SignInFormProps) => {
         href={'/api/auth/google?redirect_uri=http://localhost:4040/signin'}
       >
         <GoogleIcon sx={{fontSize: 16, marginRight: 1}} /> Continue with Google
+        {getTokenIsLoading ? (
+          <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
+        ) : null}
       </Button>
     </Stack>
   );
