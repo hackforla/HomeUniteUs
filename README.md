@@ -1,7 +1,5 @@
 # Home Unite Us
 
-<img src="./app/src/img/favicon.png" title="HomeUniteUs" style="float: right; margin: 10px;"/>
-
 Home Unite Us is a community developed web platform designed to support and scale the [host homes](https://www.pointsourceyouth.org/interventions/host-homes) initiative.
 
 Host homes provide short-term housing interventions for young people, aged 18-25, who are experiencing homelessness for any variety of reasons. The process for matching youth with a temporary safe space can be challenging, but numerous organization have implemented programs tailored to the needs of their local area. These implementations can vary in their exactly policies and procedures, but they are all driven by the core principles of the host homes initiative and they often share an overlapping set of technological needs.
@@ -54,3 +52,20 @@ Building with Docker is the simplest option, and debugging applications within t
 2. Place a copy of the `.env` file in the `\api` directory
 3. Build all three containers by running the `docker compose up` shell command from the root directory:
 4. Verify there are no build errors, and open `localhost:4040` in any browser, to see the application
+
+#### Testing
+
+You can run the api test cases directly within the docker container. To do this, however, you'll need to find the find the docker container Id. You can do this by reviewing the output from `docker ps` or use the following Powershell commands.
+
+```Powershell
+# Find the container ids 
+# (-a show all containers, -q only display ids, -f filter output)
+$api_container_id = docker ps -aqf "name=homeuniteus-api"
+
+# Install the additional testing requirements before running api tests
+docker exec -it $api_container_id pip install -r test-requirements.txt
+# Run api tests
+docker exec $api_container_id pytest
+```
+
+Running the `app` tests will require building the application locally, and invoking the `npm test` command within the `\app` directory.
