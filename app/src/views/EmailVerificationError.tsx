@@ -1,13 +1,14 @@
-import {Button, Container, Stack, Typography} from '@mui/material';
+import {Button, Stack, Typography} from '@mui/material';
 import React from 'react';
 import CancelOutlined from '@mui/icons-material/CancelOutlined';
+import {FormContainer} from '../components/authentication';
 
 export const EmailVerificationError = () => {
   return (
-    <Container>
-      <Stack gap={2} alignItems="center">
+    <FormContainer>
+      <Stack gap={2} alignItems="center" justifyContent="center">
         <CancelOutlined sx={{fontSize: 64, color: 'error.main'}} />
-        <Typography sx={{textAlign: 'center'}} variant="h3">
+        <Typography variant="h4" fontWeight="600" textAlign="center">
           Email Verification Error
         </Typography>
         <Typography sx={{textAlign: 'center'}}>
@@ -17,6 +18,6 @@ export const EmailVerificationError = () => {
           Sign Up
         </Button>
       </Stack>
-    </Container>
+    </FormContainer>
   );
 };
