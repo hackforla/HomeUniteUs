@@ -1,14 +1,12 @@
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {Typography, Button, Stack, Link, useTheme} from '@mui/material';
+import {Typography, Button, Stack, Link, Divider} from '@mui/material';
 import {styled} from '@mui/system';
-// import {HomeLink} from '../components/common/HomeLink';
 import {HostIcon, CoordinatorIcon} from '../components/Icons';
 
 export const Home = () => {
   const [type, setType] = useState(null);
   const navigateTo = useNavigate();
-  const theme = useTheme();
 
   const handleJoin = () => {
     navigateTo(`/signup/${type}`);
@@ -16,12 +14,6 @@ export const Home = () => {
 
   return (
     <HomeContainer>
-      {/* <Typography
-        variant="h1"
-        sx={{textAlign: 'center', fontSize: 38, fontWeight: 500}}
-      >
-        Welcome to a Safe Place for Youth
-      </Typography> */}
       <Typography
         variant="h2"
         sx={{textAlign: 'center', fontSize: 32, fontWeight: 'normal'}}
@@ -29,42 +21,17 @@ export const Home = () => {
         Select your account type
       </Typography>
       <AccountStack>
-        <Button
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100%',
-            width: '25%',
-            padding: '2rem',
-            '&:hover': {
-              backgroundColor: theme.palette.primary[100],
-            },
-            '&:active': {
-              backgroundColor: theme.palette.primary[300],
-            },
-            color: 'black',
-          }}
-          variant={type === 'coordinator' || null ? 'contained' : 'outlined'}
+        <AccountButton
+          variant="outlined"
           size="large"
           name="coordinator"
           onClick={() => setType('coordinator')}
         >
           <CoordinatorIcon />
           <AccountLabel>Coordinator</AccountLabel>
-        </Button>
-        <Button
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            height: '100%',
-            width: '25%',
-            padding: '2rem',
-            '&:hover': {
-              backgroundColor: theme.palette.primary[100],
-            },
-            color: 'black',
-          }}
-          variant={type === 'host' || null ? 'contained' : 'outlined'}
+        </AccountButton>
+        <AccountButton
+          variant="outlined"
           size="large"
           name="host"
           onClick={() => {
@@ -73,7 +40,7 @@ export const Home = () => {
         >
           <HostIcon />
           <AccountLabel>Host</AccountLabel>
-        </Button>
+        </AccountButton>
       </AccountStack>
       <Button
         variant="contained"
@@ -87,6 +54,7 @@ export const Home = () => {
         {!type && <span>Select Account Type</span>}
         {type && <span>Join as {type}</span>}
       </Button>
+      <Divider variant="middle" style={{width: '35%'}} />
       <Stack direction="row" gap={1}>
         <Typography>Already have an account?</Typography>
         <Link fontWeight="bold" href="/signin">
@@ -125,3 +93,19 @@ const AccountLabel = styled('div')({
   fontSize: '1.4rem',
   fontWeight: 'bold',
 });
+
+const AccountButton = styled(Button)(({theme}) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  height: '100%',
+  width: '25%',
+  padding: '2rem',
+  borderColor: theme.palette.primary.dark,
+  transition: 'border 0.6s',
+  '&:hover': {
+    // backgroundColor: theme.palette.primary[100],
+    border: '3px solid',
+    borderColor: theme.palette.primary.dark,
+  },
+  color: 'black',
+}));

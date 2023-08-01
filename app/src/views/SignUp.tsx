@@ -19,7 +19,6 @@ export const SignUp = () => {
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
   const {type} = useParams();
-
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
