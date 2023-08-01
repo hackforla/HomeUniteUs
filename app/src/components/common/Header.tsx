@@ -18,7 +18,17 @@ import {useAuth} from '../../app/hooks/useAuth';
 import {useSignOutMutation} from '../../services/auth';
 import {useAppDispatch} from '../../app/hooks/store';
 import {setCredentials} from '../../app/authSlice';
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+
+const userName = 'Hank Hill';
+
+function getInitials(name: string) {
+  const splitName = name.split(' ');
+
+  if (splitName.length === 1) return splitName[0][0];
+
+  return splitName[0][0] + splitName[splitName.length - 1][0];
+}
 
 interface Props {
   /**
@@ -37,35 +47,11 @@ const navItems = [
 export const Header = (props: Props) => {
   const {window} = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null,
-  );
 
   const {user} = useAuth();
-  const [signOut] = useSignOutMutation();
-  const appDispatch = useAppDispatch();
-  const navigate = useNavigate();
-
-  const handleSignOut = async () => {
-    try {
-      await signOut().unwrap();
-      appDispatch(setCredentials({user: null, token: null}));
-      navigate('/signin');
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   const handleDrawerToggle = () => {
     setMobileOpen(prevState => !prevState);
-  };
-
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
   };
 
   const drawer = (
@@ -104,23 +90,12 @@ export const Header = (props: Props) => {
           </IconButton>
           <Stack direction="row" gap={1} sx={{alignItems: 'center'}}>
             <img
-              style={{width: '42px', height: '42px'}}
+              style={{width: '40px', height: '40px'}}
               src={logo}
               alt="Home Unite Us logo"
             />
-            <Typography
-              variant="h6"
-              color="primary"
-              component="div"
-              sx={{flexGrow: 1, display: {xs: 'none', sm: 'block'}}}
-            >
-              Home Unite Us
-            </Typography>
           </Stack>
           <Stack direction="row" gap={1} sx={{alignItems: 'center'}}>
-            <Button href="/" color="primary">
-              Home
-            </Button>
             {!user ? (
               <Box sx={{display: {xs: 'none', sm: 'flex'}}}>
                 {navItems.map(({title, href}) => {
@@ -138,41 +113,7 @@ export const Header = (props: Props) => {
                 })}
               </Box>
             ) : null}
-            {user ? (
-              <Box sx={{flexGrow: 0}}>
-                <Tooltip title="Open settings">
-                  <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                    <Avatar alt={user.email} src="" />
-                  </IconButton>
-                </Tooltip>
-                <Menu
-                  sx={{mt: '45px'}}
-                  id="menu-appbar"
-                  anchorEl={anchorElUser}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={Boolean(anchorElUser)}
-                  onClose={handleCloseUserMenu}
-                >
-                  <MenuItem onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{user.email}</Typography>
-                  </MenuItem>
-                  <MenuItem onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">Account</Typography>
-                  </MenuItem>
-                  <MenuItem onClick={handleSignOut}>
-                    <Typography textAlign="center">Logout</Typography>
-                  </MenuItem>
-                </Menu>
-              </Box>
-            ) : null}
+            {user ? <AvatarDropdownMenu /> : null}
           </Stack>
         </Toolbar>
       </AppBar>
@@ -193,6 +134,75 @@ export const Header = (props: Props) => {
           {drawer}
         </Drawer>
       </Box>
+    </Box>
+  );
+};
+
+const AvatarDropdownMenu = () => {
+  const [signOut] = useSignOutMutation();
+  const appDispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+    null,
+  );
+
+  const handleSignOut = async () => {
+    try {
+      await signOut().unwrap();
+      appDispatch(setCredentials({user: null, token: null}));
+      navigate('/signin');
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
+
+  return (
+    <Box sx={{flexGrow: 0}}>
+      <Tooltip title="Open settings">
+        <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
+          {/* Replace with real user name */}
+          <Avatar alt={userName}>{getInitials(userName)}</Avatar>
+        </IconButton>
+      </Tooltip>
+      <Menu
+        sx={{mt: '45px'}}
+        id="menu-appbar"
+        anchorEl={anchorElUser}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        keepMounted
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        open={Boolean(anchorElUser)}
+        onClose={handleCloseUserMenu}
+      >
+        <MenuItem component={Link} to="/settings">
+          <Typography textAlign="center">Settings</Typography>
+        </MenuItem>
+        <MenuItem
+          component="a"
+          target="_blank"
+          href="https://github.com/hackforla/HomeUniteUs/wiki/Home-Unite-Us-User-Guide"
+        >
+          <Typography textAlign="center">Help</Typography>
+        </MenuItem>
+        <MenuItem onClick={handleSignOut}>
+          <Typography textAlign="center">Logout</Typography>
+        </MenuItem>
+      </Menu>
     </Box>
   );
 };

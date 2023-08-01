@@ -1,5 +1,6 @@
 import connexion
 import boto3
+import botocore
 import hmac
 import base64
 import requests
@@ -84,8 +85,8 @@ def get_token_auth_header():
     token = parts[1]
     return token
 
-def signup():  # noqa: E501
-    """Signup a new user
+def signUpHost():  # noqa: E501
+    """Signup a new Host
     """
     if connexion.request.is_json:
         body = connexion.request.get_json()
@@ -123,6 +124,44 @@ def signup():  # noqa: E501
 
     return response
 
+def signUpCoordinator():  # noqa: E501
+    """Signup a new Coordinator
+    """
+    if connexion.request.is_json:
+        body = connexion.request.get_json()
+
+    secret_hash = get_secret_hash(body['email'])
+
+    # Signup user
+    with Session(db_engine) as session:
+        user = db.User(email=body['email'])
+        session.add(user)
+        try:
+            session.commit()
+        except IntegrityError:
+            session.rollback()
+            raise AuthError({
+                "message": "A user with this email already exists."
+            }, 422)
+
+    try:
+        response = userClient.sign_up(
+          ClientId=COGNITO_CLIENT_ID,
+          SecretHash=secret_hash,
+          Username=body['email'],
+          Password=body['password'],
+        )
+    except Exception as e:
+        code = e.response['Error']['Code']
+        message = e.response['Error']['Message']
+        status_code = e.response['ResponseMetadata']['HTTPStatusCode']
+
+        raise AuthError({
+                  "code": code, 
+                  "message": message
+              }, status_code)
+
+    return response
 
 def signin():
     # Validate request data
@@ -174,6 +213,44 @@ def signin():
         'token': access_token,
         'user': user
     }
+
+
+def resend_confirmation_code():
+    '''
+    Resends the registration confirmation code to the specified user (identified by email).
+    '''
+
+    if connexion.request.is_json:
+        body = connexion.request.get_json()
+
+    if "email" not in body:
+        raise AuthError({"message": "email invalid"}, 400)
+
+    secret_hash = get_secret_hash(body['email'])
+
+    try:
+        email = body['email']
+        userClient.resend_confirmation_code(
+            ClientId=COGNITO_CLIENT_ID,
+            SecretHash=secret_hash,
+            Username=email,
+        )
+        message = "A confirmation code is being sent again."
+        return {"message": message}, 200
+    except botocore.exceptions.ClientError as error:
+        match error.response['Error']['Code']:
+            case 'UserNotFoundException':
+                msg = "User not found. Confirmation not sent."
+                raise AuthError({"message": msg}, 400)
+            case 'TooManyRequestsException':
+                msg = "Too many attempts to resend confirmation in a short amount of time."
+                raise AuthError({"message": msg}, 429)
+            case _:
+                msg = error.response['Error']['Message']
+                raise AuthError({"message": msg}, 500)
+    except botocore.exceptions.ParamValidationError as error:
+        msg = f"The parameters you provided are incorrect: {error}"
+        raise AuthError({"message": msg}, 500)
 
 
 def confirm():
@@ -437,20 +514,20 @@ def invite():
     if connexion.request.is_json:
         body = connexion.request.get_json()
 
-    if "username" not in body:
-        raise AuthError({"message": "username invalid"},400)       
+    if "email" not in body:
+        raise AuthError({"message": "email invalid"},400)       
         
     try:
 
-        userName = body['username']
+        email = body['email']
 
         response = userClient.admin_create_user(
             UserPoolId=COGNITO_USER_POOL_ID,
-            Username=userName,
+            Username=email,
             UserAttributes=[
             {
                 'Name': "email",
-                'Value': userName
+                'Value': email
             }
             ],
             DesiredDeliveryMediums=["EMAIL"])
