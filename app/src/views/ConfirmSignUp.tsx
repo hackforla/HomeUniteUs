@@ -86,14 +86,14 @@ export const ConfirmSignUp = () => {
           variant="contained"
           size="large"
           onClick={handleResendCode}
-          disabled={isLoading}
+          disabled={isLoading || !email}
         >
           Resend email
           {isLoading ? (
             <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
           ) : null}
         </Button>
-        <Button href="/forgot-password" fullWidth variant="outlined">
+        <Button href="/signup" fullWidth variant="outlined">
           Back
         </Button>
       </Stack>
