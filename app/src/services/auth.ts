@@ -64,6 +64,15 @@ export interface TokenResponse {
   user: User;
 }
 
+export interface ResendConfirmationCodeRequest {
+  email: string;
+}
+
+export interface ResendConfirmationCodeResponse {
+  message: string;
+}
+// /auth/resend_confirmation_code
+
 const authApi = api.injectEndpoints({
   endpoints: build => ({
     signUpHost: build.mutation<SignUpHostResponse, SignUpHostRequest>({
@@ -170,6 +179,20 @@ const authApi = api.injectEndpoints({
         withCredentials: true,
       }),
     }),
+    resendConfirmationCode: build.mutation<
+      ResendConfirmationCodeResponse,
+      ResendConfirmationCodeRequest
+    >({
+      query: body => ({
+        url: 'auth/resend_confirmation_code',
+        method: 'POST',
+        headers: {
+          'Access-Control-Allow-Origin': 'http://localhost:4040',
+        },
+        body,
+        withCredentials: true,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -187,4 +210,5 @@ export const {
   useSessionMutation,
   useUserQuery,
   usePrivateQuery,
+  useResendConfirmationCodeMutation,
 } = authApi;
