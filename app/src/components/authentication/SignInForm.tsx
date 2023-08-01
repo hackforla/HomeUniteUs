@@ -51,6 +51,8 @@ export const SignInForm = ({
     values: {email, password},
     touched,
     errors,
+    isValid,
+    dirty,
   } = useFormik({
     initialValues: {
       email: '',
@@ -102,7 +104,7 @@ export const SignInForm = ({
         </Link>
       </Stack>
       <Button
-        disabled={signInIsLoading}
+        disabled={!isValid || !dirty || signInIsLoading}
         variant="contained"
         size="large"
         type="submit"
