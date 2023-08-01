@@ -35,7 +35,7 @@ The HomeUniteUs project is structured as a multi-[docker](https://docs.docker.co
 
 Before you can build the project, you will require a `.env` file containing access keys to the application third party services. Please message a team member on the [#home-unite-us slack channel](https://hackforla.slack.com/archives/CRWUG7X0C) once you've completed onboarding.
 
-Since this project is dockerized, you can choose to either build the backend and frontend apps as docker containers or directly onto your local machine. This guide is focused on docker builds. For instructions tailored towards local builds and deploying in a production environment, please refer to the [api README](api/README.md).
+Since this project is dockerized, you can choose to either build the backend and frontend apps as docker containers or directly onto your local machine. This guide will focus on docker builds, but full local build and deployment instructions can be found on the [api](./api/README.md) and [app](./app/README.md) READMEs.
 
 Also note that the code in this repo *should* build without issue on Linux, Windows, and MacOS. We do, however, utilize some Linux-only tools during deployment and primarily target the Linux platform.
 
@@ -43,29 +43,14 @@ Also note that the code in this repo *should* build without issue on Linux, Wind
 
 Building with Docker is the simplest option, and debugging applications within the container is also easy with [some configuration](https://code.visualstudio.com/docs/containers/debug-common).
 
-Copy the `.env` file to the `\app` directory, and run the following command from the repository root directory.
+#### Requirements
 
-```shell
-docker compose up
-```
+* A copy of the `.env` file described above
+* An up-to-date installation of [docker](https://docs.docker.com/get-docker/)
 
-### Requirements
+#### Instructions
 
-Before getting started, make sure you have a Node.js version compatible with 14.18+, 16+ as well as Git. If you're unfamiliar with Git and the necessary workflows please checkout the Hack for LA [website project](https://github.com/hackforla/website) and get started there. You can check your local versions by running the following commands in a terminal:
-
-```terminal
-node --version
-git --version
-```
-
-### Getting Started
-
-1. Clone the repository to a directory on your computer
-2. Inside a terminal change directories to the root ``HomeUniteUs/`` directory
-3. Navigate to the the ``app/`` directory ``cd app/``
-4. Run the command ```npm install``` to download all dependencies from the local package.json
-5. Create a local ``.env`` file and copy the contents from ``.env.example``
-6. Message a team member to obtain values for the .env file
-7. From the ``app/`` directory run ``npm run dev`` to start a development server at ``http://127.0.0.1:4040/``
-
-The setup for the front end application is now complete and you should see the website running in your browser at the listed port. In order to get the server running reference the instructions [here](https://github.com/hackforla/HomeUniteUs/tree/main/api). If you run into any issues please message one of our team members.
+1. Place a copy of the `.env` file in the `\app` directory
+2. Place a copy of the `.env` file in the `\api` directory
+3. Build all three containers by running the `docker compose up` shell command from the root directory:
+4. Verify there are no build errors, and open `localhost:4040` in any browser, to see the application
