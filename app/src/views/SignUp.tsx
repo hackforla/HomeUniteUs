@@ -1,6 +1,7 @@
 import React from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
-import {Stack, Typography, styled, Dialog, DialogTitle} from '@mui/material';
+import {IconButton, Alert, Typography, Stack} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
@@ -10,19 +11,17 @@ import {
   useSignUpHostMutation,
   useGetTokenMutation,
 } from '../services/auth';
-// import {LocationState} from './SignIn';
-import logo from '../img/favicon.png';
 import {isErrorWithMessage, isFetchBaseQueryError} from '../app/helpers';
+import {FormContainer} from '../components/authentication';
 
 export const SignUp = () => {
-  const [dialogOpen, setDialogOpen] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
 
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
   const [signUp] = useSignUpHostMutation();
-  const [getToken] = useGetTokenMutation();
+  const [getToken, {isLoading: getTokenIsLoading}] = useGetTokenMutation();
   // const locationState = location.state as LocationState;
 
   // Save location from which user was redirected to login page
@@ -54,10 +53,6 @@ export const SignUp = () => {
     }
   }, [location]);
 
-  const handleClose = () => {
-    setDialogOpen(false);
-  };
-
   const handleSignUp = async ({email, password}: SignUpHostRequest) => {
     try {
       await signUp({
@@ -65,7 +60,7 @@ export const SignUp = () => {
         password,
       }).unwrap();
 
-      setDialogOpen(true);
+      navigate(`/signup/success?email=${email}`);
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
         // you can access all properties of `FetchBaseQueryError` here
@@ -79,66 +74,40 @@ export const SignUp = () => {
   };
 
   return (
-    <>
-      <PageContainer>
-        <FormContainer gap={2}>
-          <Logo src={logo} alt="Home Unite Us logo" />
-          <FormHeader variant="h4">Sign up for an account</FormHeader>
-          <SignUpForm
-            onSubmit={handleSignUp}
-            errorMessage={errorMessage}
-            setErrorMessage={setErrorMessage}
-          />
-        </FormContainer>
-      </PageContainer>
-      <EmailVerificationDialog open={dialogOpen} handleClose={handleClose} />
-    </>
+    <FormContainer>
+      <Stack
+        py={2}
+        spacing={4}
+        sx={{justifyContent: 'center', alignItems: 'center', width: '100%'}}
+      >
+        {errorMessage ? (
+          <Alert
+            sx={{width: '100%'}}
+            severity="error"
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setErrorMessage('');
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            {errorMessage}
+          </Alert>
+        ) : null}
+        <Typography variant="h4" fontWeight="600">
+          Create Account
+        </Typography>
+        <SignUpForm
+          onSubmit={handleSignUp}
+          getTokenIsLoading={getTokenIsLoading}
+        />
+      </Stack>
+    </FormContainer>
   );
 };
-
-interface EmailVerificationDialogProps {
-  open: boolean;
-  handleClose: () => void;
-}
-
-const EmailVerificationDialog = ({
-  open,
-  handleClose,
-}: EmailVerificationDialogProps) => {
-  return (
-    <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>
-        We have sent a link to your email. Please verify your email address
-      </DialogTitle>
-    </Dialog>
-  );
-};
-
-const Logo = styled('img')({
-  width: '100px',
-  height: '100px',
-});
-
-const PageContainer = styled('div')(({theme}) => ({
-  backgroundColor: theme.palette.grey[100],
-  display: 'flex',
-  flex: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: '2rem 0',
-}));
-
-const FormContainer = styled(Stack)(({theme}) => ({
-  maxWidth: '550px',
-  alignItems: 'center',
-  padding: '2rem',
-  border: '1px solid #e0e0e0',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: '#fff',
-  margin: '0 16px',
-}));
-
-const FormHeader = styled(Typography)({
-  textAlign: 'center',
-  fontWeight: 600,
-});
