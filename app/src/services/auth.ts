@@ -8,12 +8,12 @@ export interface UserResponse {
   user: User;
 }
 
-export interface SignUpResponse {
+export interface SignUpHostResponse {
   user: User;
   token: string;
 }
 
-export interface SignUpRequest {
+export interface SignUpHostRequest {
   email: string;
   password: string;
 }
@@ -26,6 +26,13 @@ export interface SignInResponse {
 export interface SignInRequest {
   email: string;
   password: string;
+}
+
+export interface NewPasswordRequest {
+  password: string;
+  confirmPassword: string;
+  user_id: string | null;
+  session_id: string | null;
 }
 
 export interface SignOutResponse {
@@ -59,9 +66,9 @@ export interface TokenResponse {
 
 const authApi = api.injectEndpoints({
   endpoints: build => ({
-    signUp: build.mutation<SignUpResponse, SignUpRequest>({
+    signUpHost: build.mutation<SignUpHostResponse, SignUpHostRequest>({
       query: credentials => ({
-        url: '/auth/signup',
+        url: '/auth/signup/host',
         method: 'POST',
         headers: {
           'Access-Control-Allow-Origin': 'http://localhost:4040',
@@ -119,6 +126,14 @@ const authApi = api.injectEndpoints({
         body: credentials,
       }),
     }),
+    newPassword: build.mutation<void, NewPasswordRequest>({
+      query: credentials => ({
+        url: 'auth/initial_invite',
+        method: 'POST',
+        withCredentials: true,
+        body: credentials,
+      }),
+    }),
     signOut: build.mutation<SignOutResponse, void>({
       query: () => ({
         url: 'auth/signout',
@@ -161,10 +176,11 @@ const authApi = api.injectEndpoints({
 
 export {authApi};
 export const {
-  useSignUpMutation,
+  useSignUpHostMutation,
   useSignInMutation,
   useSignOutMutation,
   useVerificationMutation,
+  useNewPasswordMutation,
   useGetTokenMutation,
   useForgotPasswordMutation,
   useConfirmForgotPasswordMutation,

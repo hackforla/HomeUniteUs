@@ -48,25 +48,6 @@ tox
 When changing the database, you can automatically generate an alembic migration. Simply change the model however you want in `database.py`, run `alembic revision --autogenerate -m <name_of_migration>` to generate a new migration, and then run `alembic upgrade head` to upgrade your database to the latest revision.
 In the case of someone else adding a revision to the database, simply pull their changes to your repo and run `alembic upgrade head` to upgrade your local database to the latest revision.
 
-## Making changes to the openapi specification
-
-In order to make changes to the openapi specification you should edit the files within the `openapi_server/openapi` folder.
-You should NOT make any manual changes to the file in the `_spec` folder, as this is an auto-generated file compiled from the smaller files in the `openapi` folder.
-
-After making your changes, you can recompile the file in the `_spec` folder by running the following command:
-
-```
-swagger-cli bundle openapi_server/openapi/openapi.yaml \
-    --outfile openapi_server/_spec/openapi.yaml \
-    --type yaml
-```
-
-If you do not have `swagger-cli` installed, you can install it with the following command:
-
-```
-npm install -g swagger-cli
-```
-
 ## Running with Docker
 
 To run the server on a Docker container, please execute the following from the root directory:
@@ -133,6 +114,7 @@ docker compose down -v
 
 This command will stop the containers and delete the volumes. Then you can run `docker compose up api --build` to build and start the containers again.
 
+
 ## Configuration Profile
 For local development, you can create your own set of configurations by doing the following:
 - Add the variable below to your `.env` located in `/api`.
@@ -152,3 +134,31 @@ from flask import current_app
 current_app.config['CONFIG']
 ```
 If you create any new configuration properties, please add an associative enum to `/api/configs/configuration_properties.py`.
+
+## Debugging
+
+For Visual Studio Code users:
+- Set breakpoint(s).
+- Add the following config below to `api/openapi_server/.vscode/launch.json` and replace "absolute path to folder" accordingly.
+
+```
+{
+          "name": "Python: Connexion",
+            "type": "python",
+            "request": "launch",
+            "module": "connexion",
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "FLASK_APP": "openapi_server.__main__.py",
+                "FLASK_ENV": "development",
+                "FLASK_DEBUG": "1"
+            },
+            "args": [
+                "run",
+                "< absolute path to folder >/openapi_server",
+                "--port",
+                "8080"
+            ],
+        }
+```
+- Go to `openapi_server/__main__.py` and select "Run" -> "Start with Debugging".
