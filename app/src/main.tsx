@@ -12,7 +12,7 @@ import './index.css';
   import {Provider} from 'react-redux';
   import {CssBaseline} from '@mui/material';
   import {ThemeProvider} from '@mui/material/styles';
-  import {StyledEngineProvider} from '@mui/material/styles'; 
+  import {StyledEngineProvider} from '@mui/material/styles';
 */
 
 import {CssBaseline, StyledEngineProvider, ThemeProvider} from '@mui/material';
