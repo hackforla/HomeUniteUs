@@ -103,7 +103,7 @@ export const SignUp = () => {
             onSubmit={handleSignUp}
             errorMessage={errorMessage}
             setErrorMessage={setErrorMessage}
-            type={type}
+            type={type ? type : ''}
           />
         </FormContainer>
       </PageContainer>

@@ -5,7 +5,7 @@ import {styled} from '@mui/system';
 import {HostIcon, CoordinatorIcon} from '../components/Icons';
 
 export const SelectAccountType = () => {
-  const [type, setType] = useState(null);
+  const [type, setType] = useState('');
   const navigateTo = useNavigate();
 
   const handleJoin = () => {
