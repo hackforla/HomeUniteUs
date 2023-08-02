@@ -11,6 +11,8 @@ export {SignIn} from './SignIn';
 export {SignUp} from './SignUp';
 export {EmailVerificationSuccess} from './EmailVerificationSuccess';
 export {EmailVerificationError} from './EmailVerificationError';
+export {NewPassword} from './NewPassword';
 export {ForgotPasswordCode} from './ForgotPasswordCode';
 export {ForgotPasswordSuccess} from './ForgotPasswordSuccess';
 export {Settings} from './Settings';
+export {ConfirmSignUp} from './ConfirmSignUp';

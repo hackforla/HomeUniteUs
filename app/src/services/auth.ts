@@ -37,6 +37,13 @@ export interface SignInRequest {
   password: string;
 }
 
+export interface NewPasswordRequest {
+  password: string;
+  confirmPassword: string;
+  user_id: string | null;
+  session_id: string | null;
+}
+
 export interface SignOutResponse {
   message: string;
 }
@@ -65,6 +72,15 @@ export interface TokenResponse {
   token: string;
   user: User;
 }
+
+export interface ResendConfirmationCodeRequest {
+  email: string;
+}
+
+export interface ResendConfirmationCodeResponse {
+  message: string;
+}
+// /auth/resend_confirmation_code
 
 const authApi = api.injectEndpoints({
   endpoints: build => ({
@@ -140,6 +156,14 @@ const authApi = api.injectEndpoints({
         body: credentials,
       }),
     }),
+    newPassword: build.mutation<void, NewPasswordRequest>({
+      query: credentials => ({
+        url: 'auth/initial_invite',
+        method: 'POST',
+        withCredentials: true,
+        body: credentials,
+      }),
+    }),
     signOut: build.mutation<SignOutResponse, void>({
       query: () => ({
         url: 'auth/signout',
@@ -176,6 +200,20 @@ const authApi = api.injectEndpoints({
         withCredentials: true,
       }),
     }),
+    resendConfirmationCode: build.mutation<
+      ResendConfirmationCodeResponse,
+      ResendConfirmationCodeRequest
+    >({
+      query: body => ({
+        url: 'auth/resend_confirmation_code',
+        method: 'POST',
+        headers: {
+          'Access-Control-Allow-Origin': 'http://localhost:4040',
+        },
+        body,
+        withCredentials: true,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -187,10 +225,12 @@ export const {
   useSignInMutation,
   useSignOutMutation,
   useVerificationMutation,
+  useNewPasswordMutation,
   useGetTokenMutation,
   useForgotPasswordMutation,
   useConfirmForgotPasswordMutation,
   useSessionMutation,
   useUserQuery,
   usePrivateQuery,
+  useResendConfirmationCodeMutation,
 } = authApi;

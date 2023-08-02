@@ -16,11 +16,13 @@ paths:
   /host:
     $ref: "./paths/host.yaml"
   /auth/signup/host:
-    $ref: "./paths/auth/authSignupHost.yaml"
+    $ref: "./paths/auth/authSignUpHost.yaml"
   /auth/signup/coordinator:
-    $ref: "./paths/auth/authSignupCoordinator.yaml"
+    $ref: "./paths/auth/authSignUpCoordinator.yaml"
   /auth/signin:
     $ref: "./paths/auth/authSignin.yaml"
+  /auth/resend_confirmation_code:
+    $ref: "./paths/auth/authResendConfirmationCode.yaml"
   /auth/confirm:
     $ref: "./paths/auth/authConfirm.yaml"
   /auth/signout:
