@@ -3,8 +3,6 @@ import {
   Divider,
   Stack,
   Button,
-  Link,
-  Typography,
   TextField,
   CircularProgress,
 } from '@mui/material';
@@ -74,12 +72,6 @@ export const SignUpForm = ({onSubmit, getTokenIsLoading}: SignUpFormProps) => {
           'aria-label': 'password',
         }}
       />
-      <Stack direction="row" justifyContent="flex-end" gap={0.5}>
-        <Typography>Already a member?</Typography>
-        <Link fontWeight="bold" href="/signin">
-          Sign in
-        </Link>
-      </Stack>
       {password ? <PasswordValidation password={password} /> : null}
       <Button
         variant="contained"

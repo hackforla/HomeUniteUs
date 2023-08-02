@@ -1,6 +1,13 @@
 import React from 'react';
 import {useNavigate, useLocation} from 'react-router-dom';
-import {IconButton, Alert, Typography, Stack} from '@mui/material';
+import {
+  IconButton,
+  Alert,
+  Typography,
+  Stack,
+  Divider,
+  Link,
+} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
 import {setCredentials} from '../app/authSlice';
@@ -107,6 +114,13 @@ export const SignUp = () => {
           onSubmit={handleSignUp}
           getTokenIsLoading={getTokenIsLoading}
         />
+        <Divider sx={{width: '100%'}} />
+        <Stack direction="row" justifyContent="flex-end" gap={0.5}>
+          <Typography>Already an account?</Typography>
+          <Link underline="always" href="/signin">
+            Sign in
+          </Link>
+        </Stack>
       </Stack>
     </FormContainer>
   );
