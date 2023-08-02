@@ -103,6 +103,7 @@ export const SignUp = () => {
             onSubmit={handleSignUp}
             errorMessage={errorMessage}
             setErrorMessage={setErrorMessage}
+            // set as type or empty string
             type={type ? type : ''}
           />
         </FormContainer>
