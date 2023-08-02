@@ -6,6 +6,7 @@ export {HostApplicationTracker} from './HostApplicationTracker';
 export {HostsList} from './HostsList';
 export {ForgotPassword} from './ForgotPassword';
 export {ResetPassword} from './ResetPassword';
+export {SelectAccountType} from './SelectAccountType';
 export {SignIn} from './SignIn';
 export {SignUp} from './SignUp';
 export {EmailVerificationSuccess} from './EmailVerificationSuccess';
