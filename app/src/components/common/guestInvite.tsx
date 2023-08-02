@@ -22,6 +22,7 @@ const theme = createTheme({
   typography: {
     button: {
       textTransform: 'none',
+      fontFamily: 'roboto',
     },
   },
 });
@@ -69,12 +70,14 @@ export const GuestInviteButton = () => {
           onClick={handleOpen}
           sx={{
             width: '100%',
-            marginRight: '2em',
+            marginTop: '0.5em',
+            marginRight: '0.5em',
+            marginLeft: '0.5em',
           }}
           color="primary"
         >
-          <ControlPointIcon color="primary" />
-          &nbsp;&nbsp;Invite Guest
+          <ControlPointIcon color="primary" sx={{marginRight: '0.25em'}} />
+          Invite Guest
         </Button>
 
         <form onSubmit={handleSubmit}>
