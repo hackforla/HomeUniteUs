@@ -65,19 +65,18 @@ export const PasswordValidation = ({
           </ListItem>
         );
       })}
-      {confirmPassword ? (
+      {confirmPassword !== undefined ? (
         <ListItem key="confirmPassword" sx={{padding: 0, mb: 1}}>
           {errors.length === 0 ? <RemoveRoundedIcon /> : null}
-          {confirmPassword !== password && errors.length > 0 ? (
+          {confirmPassword.length > 0 && confirmPassword === password ? (
             <CheckRoundedIcon color="success" />
           ) : null}
-          {confirmPassword === password && <RemoveRoundedIcon />}
+          {confirmPassword !== password && errors.length > 0 ? (
+            <RemoveRoundedIcon />
+          ) : null}
           match
         </ListItem>
       ) : null}
     </List>
   );
 };
-
-// - neutral state
-// green check - meets validation criteria
