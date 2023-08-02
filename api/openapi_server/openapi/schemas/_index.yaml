@@ -104,3 +104,34 @@ IntakeResponseValue:
   required:
     - response_text
     - intake_question
+ApplicationTask:
+  type: object
+  properties:
+    name:
+      title: name
+      type: string
+ApplicationStep:
+  type: object
+  properties:
+    name:
+      title: name
+      type: string
+    tasks:
+      format: array
+      items:
+        $ref: '#/ApplicationTask'
+GuestApplicationSteps:
+  type: object
+  properties:
+    guest_id:
+      $ref: '../parameters/_index.yaml#/GuestId'
+    application_id:
+      $ref: '../parameters/_index.yaml#/ApplicationId'
+    steps:
+      format: array
+      items:
+        $ref: '#/ApplicationStep'
+  required:
+    - guest_id
+    - application_id
+    - steps

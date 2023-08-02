@@ -1,0 +1,20 @@
+get:
+  summary: Get guest's application steps given guest and application IDs.
+  operationId: get_guest_application_steps
+  parameters:
+    - $ref: '../parameters/_index.yaml#/GuestId'
+    - $ref: '../parameters/_index.yaml#/ApplicationId'
+  responses:
+    "200":
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/_index.yaml#/GuestApplicationSteps'
+      description: Guest application steps found.
+    "400":
+      description: Malformed request.
+    "404":
+      description: Guest application steps not found.
+    default:
+      $ref: '../responses/_index.yaml#/UnexpectedError'
+  x-openapi-router-controller: openapi_server.controllers.guest_dashboard_controller
