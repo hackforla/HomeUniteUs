@@ -1,5 +1,4 @@
 import React from 'react';
-import {useNavigate, useLocation} from 'react-router-dom';
 import {
   IconButton,
   Alert,
@@ -10,12 +9,15 @@ import {
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
+import {useNavigate, useLocation, useParams} from 'react-router-dom';
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
 import {SignUpForm} from '../components/authentication/SignUpForm';
 import {
   SignUpHostRequest,
+  SignUpCoordinatorRequest,
   useSignUpHostMutation,
+  useSignUpCoordinatorMutation,
   useGetTokenMutation,
 } from '../services/auth';
 import {isErrorWithMessage, isFetchBaseQueryError} from '../app/helpers';
@@ -23,12 +25,15 @@ import {FormContainer} from '../components/authentication';
 
 export const SignUp = () => {
   const [errorMessage, setErrorMessage] = React.useState('');
-
+  const {type} = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const [signUp] = useSignUpHostMutation();
+
+  const [signUpHost] = useSignUpHostMutation();
+  const [signUpCoordinator] = useSignUpCoordinatorMutation();
   const [getToken, {isLoading: getTokenIsLoading}] = useGetTokenMutation();
+  // get type from params
   // const locationState = location.state as LocationState;
 
   // Save location from which user was redirected to login page
@@ -39,13 +44,13 @@ export const SignUp = () => {
       const code = location.search.split('?code=')[1];
       getToken({
         code,
-        callbackUri: 'http://localhost:4040/signup',
+        callbackUri: `http://localhost:4040/signup/${type}`,
       })
         .unwrap()
         .then(response => {
           const {token, user} = response;
           dispatch(setCredentials({user, token}));
-          navigate('/');
+          navigate('/coordinator');
         })
         .catch(err => {
           if (isFetchBaseQueryError(err)) {
@@ -60,12 +65,24 @@ export const SignUp = () => {
     }
   }, [location]);
 
-  const handleSignUp = async ({email, password}: SignUpHostRequest) => {
+  const handleSignUp = async ({
+    email,
+    password,
+  }: SignUpHostRequest | SignUpCoordinatorRequest) => {
     try {
-      await signUp({
-        email,
-        password,
-      }).unwrap();
+      if (type === 'host') {
+        await signUpHost({
+          email,
+          password,
+        }).unwrap();
+      }
+
+      if (type === 'coordinator') {
+        await signUpCoordinator({
+          email,
+          password,
+        }).unwrap();
+      }
 
       navigate(`/signup/success?email=${email}`);
     } catch (err) {
@@ -113,6 +130,8 @@ export const SignUp = () => {
         <SignUpForm
           onSubmit={handleSignUp}
           getTokenIsLoading={getTokenIsLoading}
+          // set as type or empty string
+          type={type ? type : ''}
         />
         <Divider sx={{width: '100%'}} />
         <Stack direction="row" justifyContent="flex-end" gap={0.5}>

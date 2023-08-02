@@ -37,6 +37,7 @@ import {
   ForgotPasswordCode,
   ForgotPasswordSuccess,
   Settings,
+  SelectAccountType,
   ConfirmSignUp,
 } from './views';
 import {AccountVerification} from './views/AccountVerification';
@@ -96,7 +97,9 @@ function HuuApp() {
             }
           />
           <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
+
+          <Route path="/signup" element={<SelectAccountType />} />
+          <Route path="/signup/:type" element={<SignUp />} />
           <Route path="/signup/success" element={<ConfirmSignUp />} />
           <Route path="/forgot-password" element={<ResetPasswordContext />}>
             <Route index element={<ForgotPassword />} />
