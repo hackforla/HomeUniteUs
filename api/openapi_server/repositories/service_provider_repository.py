@@ -8,7 +8,7 @@ from openapi_server.models import database as db
 
 class HousingProviderRepository:
     
-    def __init__(self, db_engine=db.DataAccessLayer.get_engine()):
+    def __init__(self, db_engine=None):
         """Instantiate HousingProviderRepository
 
         :param db_engine: persistence layer instance
@@ -16,6 +16,8 @@ class HousingProviderRepository:
 
         :rtype: None
         """
+        if db_engine is None:
+            db_engine = db.DataAccessLayer.get_engine()
         self.db_engine = db_engine
 
     def create_service_provider(self, provider):
@@ -31,27 +33,29 @@ class HousingProviderRepository:
 
         session.add(row)
         session.commit()
-        session.close()
-
         provider["id"] = row.id
+
+        session.close()
         return ServiceProviderWithId.from_dict(provider)
     
     def delete_service_provider(self, provider_id):
-        """Delete a service provider
+        """Delete a service provider. Return false if the
+        service provider is not found. Return true otherwise.
 
         :param provider_id: The ID of the service provider to read, update or delete
         :type provider_id: int
 
-        :rtype: None
+        :rtype: bool
         """  
+        num_rows_deleted = 0
         session = self._get_session()
         query = self._get_query_by_id(session, provider_id)
-        
         if query.first() != None:
-            query.delete()
+            num_rows_deleted = query.delete()
             session.commit()
         
         session.close()
+        return bool(num_rows_deleted > 0)
 
     def get_service_provider_by_id(self, provider_id): 
         """Get details about a housing program service provider from an ID
