@@ -1,3 +1,7 @@
+on:
+  push:
+    tags:
+      - 'infra-v*'
 jobs:
   provision-ec2:
     runs-on: ubuntu-latest
