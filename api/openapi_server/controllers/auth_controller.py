@@ -111,6 +111,9 @@ def signUpHost():  # noqa: E501
           SecretHash=secret_hash,
           Username=body['email'],
           Password=body['password'],
+          ClientMetadata={
+              'url': ROOT_URL
+          }
         )
     except Exception as e:
         code = e.response['Error']['Code']
@@ -150,6 +153,9 @@ def signUpCoordinator():  # noqa: E501
           SecretHash=secret_hash,
           Username=body['email'],
           Password=body['password'],
+          ClientMetadata={
+              'url': ROOT_URL
+          }
         )
     except Exception as e:
         code = e.response['Error']['Code']
@@ -234,6 +240,9 @@ def resend_confirmation_code():
             ClientId=COGNITO_CLIENT_ID,
             SecretHash=secret_hash,
             Username=email,
+            ClientMetadata={
+              'url': ROOT_URL
+          }
         )
         message = "A confirmation code is being sent again."
         return {"message": message}, 200
