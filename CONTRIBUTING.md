@@ -2,8 +2,6 @@
 
 To begin working on the `HomeUniteUs` project you will need to be an active member of Hack for LA. If you have not completed the onboarding process, then please prefer to the [Getting Started Page](https://www.hackforla.org/getting-started) for full instructions. This onboarding will provide you access to the Hack for LA Slack, GitHub, and Google Drive.
 
-Once you have access to these systems you can introduce yourself on our [Slack channel](https://hackforla.slack.com/archives/CRWUG7X0C) and check for open positions by reviewing the [development job board](https://github.com/hackforla/engineering/projects/2).
-
 Welcome to Hack for LA, and thank you for contributing 🥳🥳!!
 
 ## First Steps
@@ -16,7 +14,7 @@ Once you've completed onboarding and been assigned a role on the team, you can b
 
 ## Code of Conduct
 
-As part of Hack for LA, we are passionate about the organization's [Code of Conduct](https://github.com/hackforla/codeofconduct). Please help us uphold these policies so that we can continue to maintain an open, safe, and inclusive culture. It is everyone's responsibility to maintain these policies, so please report any violations to the [Hack for LA team](https://github.com/hackforla/codeofconduct#email-template-for-anti-harassment-reporting).
+We are passionate about the Hack for LA [Code of Conduct](https://github.com/hackforla/codeofconduct). Please help us uphold these policies so that we can continue to maintain an open, safe, and inclusive culture. It is everyone's responsibility to maintain these policies, so please report any violations to the [Hack for LA team](https://github.com/hackforla/codeofconduct#email-template-for-anti-harassment-reporting).
 
 ## Issues
 
