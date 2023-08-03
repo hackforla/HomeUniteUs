@@ -1,6 +1,6 @@
 # HomeUniteUs Contributing Guide
 
-To begin working on the `HomeUniteUs` project you will need to be an active member of Hack for LA. If you have not completed the onboarding process, then please prefer to the [Getting Started Page](https://www.hackforla.org/getting-started) for full instructions. This onboarding will provide you access to the Hack for LA Slack, GitHub, and Google Drive.
+To begin working on the `HomeUniteUs` project you will need to be an active member of Hack for LA. If you have not completed the onboarding process, then please refer to the [Getting Started Page](https://www.hackforla.org/getting-started) for full instructions. This onboarding will provide you access to the Hack for LA Slack, GitHub, and Google Drive.
 
 Welcome to Hack for LA, and thank you for contributing 🥳🥳!!
 
@@ -22,7 +22,7 @@ We are passionate about the Hack for LA [Code of Conduct](https://github.com/hac
 
 Before creating a new issue, search through the [current list of issues](https://github.com/hackforla/HomeUniteUs/issues) to determine if the issue has been identified. If it is already present, then feel free to comment on the existing issue to confirm the problem and add any additional information.
 
-To create a new issue, please use the blank issue template (available when you click New Issue). Issues with more information and fuller descriptions are more likely get addressed, so please include as much information as possible.
+To create a new issue, please use the [blank issue template](/.github/ISSUE_TEMPLATE/blank-issue.md) (available when you click New Issue). Issues with more information and fuller descriptions are more likely get addressed, so please include as much information as possible.
 
 If you want to create an issue for other projects to use, please create the issue in your own repository and send a slack message to one of your hack night hosts with the link.
 
@@ -32,13 +32,13 @@ All issues can be found on our [project board](https://github.com/hackforla/Home
 
 ### Start a fix
 
-The HomeUniteUs repository gladly accepts pull requests from forked repositories. A fork is a personal copy of the repository that is stored under your GitHub account. You can fork by pressing the [Fork](https://github.com/hackforla/HomeUniteUs/fork) button on GitHub. Once forked, you can clone your fork to your local machine using the new git URL. The URL can be found under the `<Code>` button and should look something like this: `https://github.com/{Your-GitHub-Handle}/HomeUniteUs.git`.
+The HomeUniteUs repository gladly accepts pull requests from onboarded members. The onboarding process should grant you with write access to the repository, so creating a fork is not necessary.
 
-Once you've forked the repo and copied the URL, you are nearly ready to begin committing your fix!
+Once you find an issue you want to work on, you need to self-assign to claim it and then update the [project board](https://github.com/hackforla/HomeUniteUs/projects/3) to move the issue from the `Prioritized Backlog` to the `In progress` column.
 
-```bash
+```shell
 # Create a copy of the repo on your local machine
-git clone https://github.com/{Your-GitHub-Handle}/HomeUniteUs.git
+git clone https://github.com/hackforla/HomeUniteUs.git
 # Go to your new local clone
 cd HomeUniteUs
 # Verify your clone is pointing to the correct origin URL
@@ -47,8 +47,6 @@ git remote -v
 # Set the HomeUniteUs main repo as the upstream repo
 # This will allow us to synchronize the fork with the main repo
 git remote add upstream https://github.com/hackforla/HomeUniteUs.git
-# Use the upstream URL to pull recent changes and branch info into clone
-git fetch upstream
 # Create a branch and start working!
 git checkout -b my-new-awesome-branch
 ```
