@@ -1,6 +1,6 @@
 post:
-  description: Sign in a user
-  operationId: signin
+  description: Resends the registration confirmation code to the specified user (identified by email).
+  operationId: resend_confirmation_code
   requestBody:
     content:
       application/json:
@@ -9,18 +9,19 @@ post:
           properties:
             email:
               type: string
-            password:
-              type: string
           required:
             - email
-            - password
   responses:
     '200':
+      description: A confirmation code is being sent again.
       content:
         application/json:
           schema:
             $ref: '../../openapi.yaml#/components/schemas/ApiResponse'
-      description: successful operation
+    '400':
+      description: The email parameter was not sent or the user with the given email was not found.
+    '429':
+      description: Too many requests to resend the registration confirmation code were made to this user.
   tags:
     - auth
   x-openapi-router-controller: openapi_server.controllers.auth_controller

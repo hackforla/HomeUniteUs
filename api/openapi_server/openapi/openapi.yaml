@@ -21,6 +21,8 @@ paths:
     $ref: "./paths/auth/authSignUpCoordinator.yaml"
   /auth/signin:
     $ref: "./paths/auth/authSignin.yaml"
+  /auth/resend_confirmation_code:
+    $ref: "./paths/auth/authResendConfirmationCode.yaml"
   /auth/confirm:
     $ref: "./paths/auth/authConfirm.yaml"
   /auth/signout:

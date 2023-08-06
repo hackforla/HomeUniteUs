@@ -16,20 +16,26 @@ import CloseIcon from '@mui/icons-material/Close';
 import {styled} from '@mui/system';
 import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
-import {SignInRequest} from '../../services/auth';
+import {SignUpHostRequest, SignUpCoordinatorRequest} from '../../services/auth';
 import {PasswordValidation} from '../common/PasswordValidation';
 import {validationSchema} from '../../utils/PasswordValidationSchema';
 
 interface SignUpFormProps {
-  onSubmit: ({email, password}: SignInRequest) => Promise<void>;
+  // sign up according to host/coordinator
+  onSubmit: ({
+    email,
+    password,
+  }: SignUpHostRequest | SignUpCoordinatorRequest) => Promise<void>;
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   errorMessage: string;
+  type: string;
 }
 
 export const SignUpForm = ({
   onSubmit,
   errorMessage,
   setErrorMessage,
+  type,
 }: SignUpFormProps) => {
   const {handleSubmit, handleChange, values, touched, errors, isValid, dirty} =
     useFormik({
@@ -42,6 +48,8 @@ export const SignUpForm = ({
         onSubmit(values);
       },
     });
+
+  // Add the user type field to Formik data and send it to the server in the form of a string (?). This will require updates to the types and data fetching hooks, as well as the OpenAPI spec for the signup route.
 
   return (
     <Form onSubmit={handleSubmit}>
@@ -116,7 +124,7 @@ export const SignUpForm = ({
         fullWidth
         // overrides the default react router link since we're hitting a redirect from the api
         component="a"
-        href={'/api/auth/google?redirect_uri=http://localhost:4040/signup'}
+        href={`/api/auth/google?redirect_uri=http://localhost:4040/signup/${type}`}
       >
         <GoogleIcon sx={{fontSize: 16, marginRight: 1}} /> Sign up with Google
       </Button>
