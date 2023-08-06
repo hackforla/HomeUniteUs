@@ -10,8 +10,6 @@ WORKDIR /opt/HomeUniteUs/api
 
 COPY . .
 
-COPY --from=swagger-bundle /usr/share/misc/openapi.yaml openapi_server/_spec/openapi.yaml
-
 ARG PSEUDO_VERSION=1
 ENV SETUPTOOLS_SCM_PRETEND_VERSION_FOR_OPENAPI_SERVER=${PSEUDO_VERSION}
 RUN python3 -m pip install -e .
