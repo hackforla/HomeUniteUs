@@ -58,14 +58,14 @@ Building with Docker is the simplest option, and debugging applications within t
 You can run the api test cases directly within the docker container. To do this, however, you'll need to find the find the docker container Id. You can do this by reviewing the output from `docker ps` or use the following Powershell commands.
 
 ```Powershell
-# Find the container ids 
+# Find the container id (result will be empty if container is not running)
 # (-a show all containers, -q only display ids, -f filter output)
-$api_container_id = docker ps -aqf "name=homeuniteus-api"
+$api_container_id = docker ps -aqf "ancestor=homeuniteus-api"
 
 # Install the additional testing requirements before running api tests
-docker exec -it $api_container_id pip install -r test-requirements.txt
-# Run api tests
-docker exec $api_container_id pytest
+docker exec -it $api_container_id pip install .[dev]
+# Run api tests within the container
+docker exec $api_container_id tox
 ```
 
 Running the `app` tests will require building the application locally, and invoking the `npm test` command within the `\app` directory.
