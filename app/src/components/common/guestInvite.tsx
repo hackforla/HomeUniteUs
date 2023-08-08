@@ -5,27 +5,13 @@ import {
   Box,
   Button,
   TextField,
-  FormHelperText,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
 } from '@mui/material';
-import {createTheme, ThemeProvider} from '@mui/material/styles';
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
 import {useInviteGuestMutation} from '../../services/coordinator';
-
-const theme = createTheme({
-  palette: {
-    primary: {main: '#0057A1'},
-  },
-  typography: {
-    button: {
-      textTransform: 'none',
-      fontFamily: 'roboto',
-    },
-  },
-});
 
 export const validationSchema = object({
   fullName: string().required('name is required'),
@@ -64,89 +50,83 @@ export const GuestInviteButton = () => {
   };
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <Button
-          variant="outlined"
-          onClick={handleOpen}
-          sx={{
-            width: '100%',
-            marginTop: '0.5em',
-            marginRight: '0.5em',
-            marginLeft: '0.5em',
-          }}
-          color="primary"
-        >
-          <ControlPointIcon color="primary" sx={{marginRight: '0.25em'}} />
-          Invite Guest
-        </Button>
+      <Button
+        variant="outlined"
+        onClick={handleOpen}
+        sx={{
+          width: '100%',
+          marginTop: '0.5em',
+          marginRight: '0.5em',
+          marginLeft: '0.5em',
+        }}
+        color="primary"
+      >
+        <ControlPointIcon color="primary" sx={{marginRight: '0.25em'}} />
+        Invite Guest
+      </Button>
 
-        <form onSubmit={handleSubmit}>
-          <Dialog
-            open={open}
-            onClose={handleClose}
-            fullWidth={true}
-            maxWidth={'xs'}
-            disablePortal
-          >
-            <DialogTitle>Invite a Guest</DialogTitle>
-            <DialogContent dividers>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                }}
-              >
-                <TextField
-                  id="outlined-name-input"
-                  label="Full Name"
-                  type="FullName"
-                  name="fullName"
-                  value={fullName}
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  error={touched.fullName && Boolean(errors.fullName)}
-                />
-                {touched.fullName && errors.fullName && (
-                  <FormHelperText error>{errors.fullName}</FormHelperText>
-                )}
-                <TextField
-                  id="outlined-email-input"
-                  label="Email"
-                  type="email"
-                  name="email"
-                  sx={{
-                    marginTop: '1em',
-                  }}
-                  value={email}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={touched.email && Boolean(errors.email)}
-                />
-                {touched.email && errors.email && (
-                  <FormHelperText error>{errors.email}</FormHelperText>
-                )}
-              </Box>
-            </DialogContent>
-            <DialogActions
+      <form onSubmit={handleSubmit}>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          fullWidth={true}
+          maxWidth="xs"
+          disablePortal
+        >
+          <DialogTitle>Invite a Guest</DialogTitle>
+          <DialogContent dividers>
+            <Box
               sx={{
-                marginRight: '1em',
+                display: 'flex',
+                flexDirection: 'column',
               }}
             >
-              <Button variant="text" color="primary" onClick={handleClose}>
-                Cancel
-              </Button>
-              <Button
-                variant="contained"
-                type="submit"
-                color="primary"
-                disabled={!isValid || !dirty}
-              >
-                Send Invite
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </form>
-      </ThemeProvider>
+              <TextField
+                id="outlined-name-input"
+                label="Full Name"
+                type="FullName"
+                name="fullName"
+                value={fullName}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                error={touched.fullName && Boolean(errors.fullName)}
+                helperText={errors.fullName}
+              />
+              <TextField
+                id="outlined-email-input"
+                label="Email"
+                type="email"
+                name="email"
+                sx={{
+                  marginTop: '1em',
+                }}
+                value={email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.email && Boolean(errors.email)}
+                helperText={errors.email}
+              />
+            </Box>
+          </DialogContent>
+          <DialogActions
+            sx={{
+              marginRight: '1em',
+            }}
+          >
+            <Button variant="text" color="primary" onClick={handleClose}>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              type="submit"
+              color="primary"
+              disabled={!isValid || !dirty}
+            >
+              Send Invite
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </form>
     </>
   );
 };
