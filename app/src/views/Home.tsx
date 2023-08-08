@@ -1,33 +1,15 @@
 import React from 'react';
-import {Typography} from '@mui/material';
-import {styled} from '@mui/system';
-
-import {HomeLink} from '../components/common/HomeLink';
-import {HostIcon, CoordinatorIcon, GuestIcon} from '../components/Icons';
+import {Typography, styled} from '@mui/material';
 
 export const Home = () => {
   return (
     <HomeContainer>
       <Typography
-        variant="h1"
-        sx={{textAlign: 'center', fontSize: 38, fontWeight: 500}}
+        variant="h2"
+        sx={{textAlign: 'center', fontSize: 32, fontWeight: 'normal'}}
       >
-        Welcome to a Safe Place for Youth
+        Welcome to Home Unite Us
       </Typography>
-      <Typography variant="h2" sx={{textAlign: 'center', fontSize: 32}}>
-        Select a profile
-      </Typography>
-      <LinkRow>
-        <HomeLink to="/host" name="Host">
-          <HostIcon />
-        </HomeLink>
-        <HomeLink to="/coordinator" name="Admin">
-          <CoordinatorIcon />
-        </HomeLink>
-        <HomeLink to="/guest" name="Guest">
-          <GuestIcon />
-        </HomeLink>
-      </LinkRow>
     </HomeContainer>
   );
 };
@@ -41,11 +23,4 @@ const HomeContainer = styled('section')({
   alignItems: 'center',
   justifyContent: 'center',
   padding: 16,
-});
-
-const LinkRow = styled('div')({
-  display: 'flex',
-  justifyContent: 'center',
-  flexWrap: 'wrap',
-  gap: '2rem',
 });
