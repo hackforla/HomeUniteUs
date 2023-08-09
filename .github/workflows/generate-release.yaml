@@ -1,8 +1,8 @@
+name: Generate Release
 on:
   push:
     tags:
       - 'v*'
-name: Generate Release
 jobs:
   build:
     name: Create Release
