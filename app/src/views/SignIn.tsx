@@ -42,7 +42,7 @@ export const SignIn = () => {
       const code = location.search.split('?code=')[1];
       getToken({
         code,
-        callbackUri: 'http://localhost:4040/signin',
+        callbackUri: '/signin',
       })
         .unwrap()
         .then(response => {

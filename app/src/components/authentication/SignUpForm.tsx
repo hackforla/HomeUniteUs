@@ -102,7 +102,7 @@ export const SignUpForm = ({
         sx={{color: 'text.primary'}}
         // overrides the default react router link since we're hitting a redirect from the api
         component="a"
-        href={`/api/auth/google?redirect_uri=http://localhost:4040/signup/${type}`}
+        href={`/api/auth/google?redirect_uri=/signup/${type}`}
       >
         <GoogleIcon sx={{fontSize: 16, marginRight: 1}} /> Continue with Google
         {getTokenIsLoading ? (

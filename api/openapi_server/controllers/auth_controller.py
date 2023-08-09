@@ -309,12 +309,13 @@ def token():
 
     token_url = f"{cognito_client_url}/oauth2/token"
     auth = requests.auth.HTTPBasicAuth(client_id, client_secret)
+    redirect_uri = f"{ROOT_URL}{callback_uri}"
 
     params = {
       'grant_type': 'authorization_code',
       'client_id': client_id,
       'code': code,
-      'redirect_uri': callback_uri
+      'redirect_uri': redirect_uri
     }
 
     # get tokens from oauth2/token endpoint
@@ -492,8 +493,9 @@ def private(token_info):
 
 def google():
     redirect_uri = request.args['redirect_uri']
+    print(f"{cognito_client_url}/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+profile+phone+aws.cognito.signin.user.admin&redirect_uri={ROOT_URL}{redirect_uri}&identity_provider=Google")
 
-    return redirect(f"{cognito_client_url}/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+profile+phone+aws.cognito.signin.user.admin&redirect_uri={redirect_uri}&identity_provider=Google")
+    return redirect(f"{cognito_client_url}/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+profile+phone+aws.cognito.signin.user.admin&redirect_uri={ROOT_URL}{redirect_uri}&identity_provider=Google")
 
 def confirm_signup():
     code = request.args['code']
