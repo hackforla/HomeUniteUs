@@ -6,18 +6,22 @@ import pwValidate from '../../utils/PasswordValidationSchema';
 
 interface PasswordProps {
   password: string;
+  confirmPassword: string;
 }
 
-export const PasswordValidation = (password: PasswordProps) => {
+export const PasswordValidation = ({
+  password,
+  confirmPassword,
+}: PasswordProps) => {
   const [errorsLeft, setErrorsLeft] = useState<string[]>([]);
 
   useEffect(() => {
     const validatePwResults = async () => {
-      const validated = await pwValidate(password.password);
+      const validated = await pwValidate(password, confirmPassword);
       setErrorsLeft(validated ? Object.values(validated) : []);
     };
     validatePwResults();
-  }, [password]);
+  }, [password, confirmPassword]);
 
   const errors = errorsLeft[0] ? Object.keys(errorsLeft[0]) : [];
 
@@ -42,8 +46,13 @@ export const PasswordValidation = (password: PasswordProps) => {
       name: 'At least one special character',
       icon: errors.includes('special'),
     },
+    {
+      name: 'Passwords must match',
+      icon: errors.includes('match'),
+    },
   ];
 
+  console.log(errors);
   return (
     <Stack spacing={1}>
       <List>

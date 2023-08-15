@@ -1,4 +1,4 @@
-import {object, string} from 'yup';
+import {object, string, ref} from 'yup';
 
 export const validationSchema = object().shape({
   email: string().email('Invalid email').required('email is required'),
@@ -20,6 +20,11 @@ export const validationSchema = object().shape({
       },
     })
     .required({required: 'password is required'}),
+  confirmPassword: string()
+    .required('confirm password is required')
+    .oneOf([ref('password'), null], {
+      message: {match: 'Passwords do not match'},
+    }),
 });
 
 // formik requires errors object with keys from yup
@@ -28,8 +33,8 @@ interface ValidationErrors {
   [key: string]: string;
 }
 
-const pwValidate = (password: string) =>
-  validationSchema.fields.password
+const pwValidate = (password: string, confirmPassword: string) => ({
+  ...validationSchema.fields.password
     .validate(password, {abortEarly: false})
     .catch(({errors}) => {
       const validationErrors = errors.reduce(
@@ -41,6 +46,20 @@ const pwValidate = (password: string) =>
         {},
       );
       return Promise.resolve({errors: validationErrors});
-    });
+    }),
+  ...validationSchema.fields.confirmPassword
+    .validate(confirmPassword, {abortEarly: false})
+    .catch(({errors}) => {
+      const validationErrors = errors.reduce(
+        (acc: ValidationErrors, error: string) => {
+          const [key, value] = Object.entries(error)[0];
+          acc[key] = value;
+          return acc;
+        },
+        {},
+      );
+      return Promise.resolve({errors: validationErrors});
+    }),
+});
 
 export default pwValidate;

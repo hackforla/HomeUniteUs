@@ -96,7 +96,10 @@ export const NewPasswordForm = ({
           'aria-label': 'password',
         }}
       />
-      <PasswordValidation password={password} />
+      <PasswordValidation
+        password={password}
+        confirmPassword={confirmPassword}
+      />
       <Button variant="contained" size="large" type="submit" fullWidth>
         Change Password
       </Button>
