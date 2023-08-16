@@ -33,7 +33,9 @@ SECRET_KEY=env.get('SECRET_KEY')
 ROOT_URL=env.get('ROOT_URL')
 cognito_client_url = 'https://homeuniteus.auth.us-east-1.amazoncognito.com'
 
-
+if(ROOT_URL == None): 
+    raise Exception('ROOT_URL is not defined in .env file')
+    
 # Initialize Cognito clients
 userClient = boto3.client('cognito-idp', region_name=COGNITO_REGION, aws_access_key_id = COGNITO_ACCESS_ID, aws_secret_access_key = COGNITO_ACCESS_KEY)
 
