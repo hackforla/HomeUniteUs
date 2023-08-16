@@ -108,12 +108,16 @@ const AccountButton = styled(Button)<AccountButtonProps>(
     width: '25%',
     padding: '2rem',
     borderWidth: '3px',
-    backgroundColor: isSelected ? `${theme.palette.primary.main}40` : '#FFFFFF',
+    backgroundColor: isSelected
+      ? `${theme.palette.primary.main}40`
+      : theme.palette.white,
     color: 'black',
     transition: 'background-color 0.5s ease',
     '&:hover': {
       borderWidth: '3px',
-      backgroundColor: `${theme.palette.primary.main}10`,
+      backgroundColor: isSelected
+        ? `${theme.palette.primary.main}40`
+        : `${theme.palette.primary.main}10`,
     },
   }),
 );
