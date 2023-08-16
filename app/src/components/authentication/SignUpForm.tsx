@@ -21,12 +21,16 @@ interface SignUpFormProps {
   }: SignUpHostRequest | SignUpCoordinatorRequest) => Promise<void>;
   type: string;
   getTokenIsLoading: boolean;
+  signUpHostIsLoading: boolean;
+  signUpCoordinatorIsLoading: boolean;
 }
 
 export const SignUpForm = ({
   onSubmit,
   type,
   getTokenIsLoading,
+  signUpHostIsLoading,
+  signUpCoordinatorIsLoading,
 }: SignUpFormProps) => {
   const {
     handleSubmit,
@@ -88,10 +92,18 @@ export const SignUpForm = ({
         variant="contained"
         size="large"
         type="submit"
-        disabled={!isValid || !dirty}
+        disabled={
+          !isValid ||
+          !dirty ||
+          signUpHostIsLoading ||
+          signUpCoordinatorIsLoading
+        }
         fullWidth
       >
         Sign up
+        {signUpHostIsLoading || signUpCoordinatorIsLoading ? (
+          <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
+        ) : null}
       </Button>
       <Divider>or</Divider>
       <Button

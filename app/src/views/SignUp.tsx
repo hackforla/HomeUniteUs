@@ -30,8 +30,10 @@ export const SignUp = () => {
   const location = useLocation();
   const dispatch = useAppDispatch();
 
-  const [signUpHost] = useSignUpHostMutation();
-  const [signUpCoordinator] = useSignUpCoordinatorMutation();
+  const [signUpHost, {isLoading: signUpHostIsLoading}] =
+    useSignUpHostMutation();
+  const [signUpCoordinator, {isLoading: signUpCoordinatorIsLoading}] =
+    useSignUpCoordinatorMutation();
   const [getToken, {isLoading: getTokenIsLoading}] = useGetTokenMutation();
   // get type from params
   // const locationState = location.state as LocationState;
@@ -129,6 +131,8 @@ export const SignUp = () => {
         </Typography>
         <SignUpForm
           onSubmit={handleSignUp}
+          signUpHostIsLoading={signUpHostIsLoading}
+          signUpCoordinatorIsLoading={signUpCoordinatorIsLoading}
           getTokenIsLoading={getTokenIsLoading}
           // set as type or empty string
           type={type ? type : ''}
