@@ -11,6 +11,7 @@ import {ResestPasswordValues} from '../components/authentication/ResetPasswordCo
 import {useConfirmForgotPasswordMutation} from '../services/auth';
 import {getErrorMessage} from '../app/helpers';
 import {FormContainer, PasswordField} from '../components/authentication';
+import {PasswordValidation} from '../components/common/PasswordValidation';
 
 export const ResetPassword = () => {
   const {
@@ -21,6 +22,8 @@ export const ResetPassword = () => {
     setFieldTouched,
     handleSubmit,
     handleBlur,
+    isValid,
+    dirty,
   } = useFormikContext<ResestPasswordValues>();
 
   // access mutation state when hook is called from Formik provider
@@ -93,8 +96,14 @@ export const ResetPassword = () => {
               'aria-label': 'confirm new password',
             }}
           />
+          {password ? (
+            <PasswordValidation
+              password={password}
+              confirmPassword={confirmPassword}
+            />
+          ) : null}
           <Button
-            disabled={isLoading}
+            disabled={!isValid || !dirty || isLoading}
             fullWidth
             variant="contained"
             size="large"

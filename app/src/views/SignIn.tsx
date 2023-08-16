@@ -42,13 +42,13 @@ export const SignIn = () => {
       const code = location.search.split('?code=')[1];
       getToken({
         code,
-        callbackUri: 'http://localhost:4040/signin',
+        callbackUri: '/signin',
       })
         .unwrap()
         .then(response => {
           const {token, user} = response;
           dispatch(setCredentials({user, token}));
-          navigate('/');
+          navigate('/coordinator');
         })
         .catch(err => {
           if (isFetchBaseQueryError(err)) {
@@ -76,7 +76,7 @@ export const SignIn = () => {
       // navigate user to the page they tried to access before being redirected to login page
       // navigate(from, {replace: true});
       // navigate user to home page
-      navigate('/');
+      navigate('/coordinator');
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
         // you can access all properties of `FetchBaseQueryError` here
