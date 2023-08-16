@@ -75,7 +75,7 @@ Run the following commands in the shell, from the `api/` directory:
 python -m venv .venv          # Creates a virtual environment in the `.venv` directory
 source .venv/bin/activate     # Activate the virtual environment
 pip install --upgrade pip     # Upgrade pip to latest version
-pip install .[prod]           # Install openapi_server & prod dependencies into virtual env
+pip install ".[prod]"         # Install openapi_server & prod dependencies into virtual env
 gunicorn -w 4 "openapi_server.__main__:create_app()" # Launch production server!
 ```
 
