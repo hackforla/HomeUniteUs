@@ -117,17 +117,30 @@ def signUpHost():  # noqa: E501
               'url': ROOT_URL
           }
         )
-    except Exception as e:
-        code = e.response['Error']['Code']
-        message = e.response['Error']['Message']
-        status_code = e.response['ResponseMetadata']['HTTPStatusCode']
 
-        raise AuthError({
-                  "code": code, 
-                  "message": message
-              }, status_code)
+        return response
 
-    return response
+    except botocore.exceptions.ClientError as error:
+        match error.response['Error']['Code']:
+            case 'UsernameExistsException': 
+                msg = "A user with this email already exists."
+                raise AuthError({  "message": msg }, 400)
+            case 'NotAuthorizedException':
+                msg = "User is already confirmed."
+                raise AuthError({  "message": msg }, 400)
+            case 'InvalidPasswordException':
+                msg = "Password did not conform with policy"
+                raise AuthError({  "message": msg }, 400)
+            case 'TooManyRequestsException':
+                msg = "Too many requests made. Please wait before trying again."
+                raise AuthError({  "message": msg }, 400)
+            case _:
+                msg = "An unexpected error occurred."
+                raise AuthError({  "message": msg }, 400)
+    except botocore.excepts.ParameterValidationError as error:
+        msg = f"The parameters you provided are incorrect: {error}"
+        raise AuthError({"message": msg}, 500)
+    
 
 def signUpCoordinator():  # noqa: E501
     """Signup a new Coordinator
@@ -159,17 +172,31 @@ def signUpCoordinator():  # noqa: E501
               'url': ROOT_URL
           }
         )
-    except Exception as e:
-        code = e.response['Error']['Code']
-        message = e.response['Error']['Message']
-        status_code = e.response['ResponseMetadata']['HTTPStatusCode']
+    
+        return response
+    
+    except botocore.exceptions.ClientError as error:
+        match error.response['Error']['Code']:
+            case 'UsernameExistsException': 
+                msg = "A user with this email already exists."
+                raise AuthError({  "message": msg }, 400)
+            case 'NotAuthorizedException':
+                msg = "User is already confirmed."
+                raise AuthError({  "message": msg }, 400)
+            case 'InvalidPasswordException':
+                msg = "Password did not conform with policy"
+                raise AuthError({  "message": msg }, 400)
+            case 'TooManyRequestsException':
+                msg = "Too many requests made. Please wait before trying again."
+                raise AuthError({  "message": msg }, 400)
+            case _:
+                msg = "An unexpected error occurred."
+                raise AuthError({  "message": msg }, 400)
+    except botocore.excepts.ParameterValidationError as error:
+        msg = f"The parameters you provided are incorrect: {error}"
+        raise AuthError({"message": msg}, 500)
 
-        raise AuthError({
-                  "code": code, 
-                  "message": message
-              }, status_code)
-
-    return response
+        
 
 def signin():
     # Validate request data
