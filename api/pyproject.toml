@@ -1,6 +1,6 @@
 [build-system]
 # This pyproject.toml uses the setuptools tool as its package manager.
-requires = ["setuptools>=61.0", "setuptools-scm"]
+requires = ["setuptools>=68.0", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -21,6 +21,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
+    # alembic is a database migration tool provided by the SQLAlchemy project.
     # alembic does not use SemVer. Changes in the middle number represents a
     # "Significant Minor Release" that might be non-backward compatible.
     # https://alembic.sqlalchemy.org/en/latest/front.html#versioning-scheme
@@ -45,8 +46,8 @@ dependencies = [
     # help of the prance and openapi-spec-validator libraries, this code can pre-parse
     # the multi-file OpenAPI definitions into a flat structure that is passed to
     # the connexion framework.
-    "prance",
-    "openapi-spec-validator",
+    "prance==23.6.21.0",
+    "openapi-spec-validator==0.6.0",
 ]
 
 [project.urls]
