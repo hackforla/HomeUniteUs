@@ -1,5 +1,3 @@
-# TODO: Remove .env from docker container
-# TODO: Install openapi_server not as editable
 # TODO: Run the openapi_server with nginx as reverse proxy and gunicorn as WSGI server
 FROM python:3.10-alpine
 
@@ -10,14 +8,9 @@ WORKDIR /opt/HomeUniteUs/api
 
 COPY . .
 
-ARG PSEUDO_VERSION=1
-ENV SETUPTOOLS_SCM_PRETEND_VERSION_FOR_OPENAPI_SERVER=${PSEUDO_VERSION}
-RUN python3 -m pip install -e .
+RUN python -m pip install --upgrade pip
+RUN python -m pip install -r requirements-dev.txt
 
 EXPOSE 8080
-
-RUN export $(grep -v '^#' .env | xargs -d '\n')
-
-ENTRYPOINT ["python3"]
-
+ENTRYPOINT ["python"]
 CMD ["-m", "openapi_server"]

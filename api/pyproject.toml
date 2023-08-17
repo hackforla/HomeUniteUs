@@ -20,8 +20,43 @@ classifiers = [
     "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
     "Operating System :: OS Independent",
 ]
+
+# The dependencies listed here are the core dependencies of this application.
+#
+# For a reproducible build, auto-generated requirements files are also included
+# in this code's directory. The requirements files contain pinned versions of both
+# the core dependencies and the transitive dependencies (i.e. dependencies of dependencies)
+# of libraries used by this application.
+#
+# Additional core dependencies for variants of this project are declared below
+# in the [project.optional-dependencies] table.
+#
+# The requirements files are:
+# requirements.txt     - contains the pinned versions of the base set of dependencies
+# requirements-dev.txt - contains the pinned versions of the base dependencies and
+#                        tools/libraries for development purposes
+#
+# Instructions for updating dependencies:
+#
+# If a transitive dependency from a requirements file needs to be updated independent of the
+# core dependency it came from, then move it to this file under the respective variant.
+# Leave a comment that it was originally a transitive dependency and the reason its version
+# needed to be maintained.
+#
+# After updating the core dependencies in this file, recreate the auto-generated
+# requirements files using the pip-tools command "pip-compile" in a virtual
+# environment.
+#
+# 1. python -m venv .venv
+# 2. source .venv/bin/activate
+# 3. pip install pip-tools
+# 4. pip-compile --output-file=requirements.txt pyproject.toml
+# 5. pip-compile --extra=dev --output-file=requirements-dev.txt pyproject.toml
+#
 dependencies = [
     # alembic is a database migration tool provided by the SQLAlchemy project.
+    # alembic will include the sqlalchemy library that this project uses directly
+    # in its code base.
     # alembic does not use SemVer. Changes in the middle number represents a
     # "Significant Minor Release" that might be non-backward compatible.
     # https://alembic.sqlalchemy.org/en/latest/front.html#versioning-scheme
@@ -50,21 +85,32 @@ dependencies = [
     "openapi-spec-validator==0.6.0",
 ]
 
-[project.urls]
-"Homepage" = "https://github.com/hackforla/HomeUniteUs"
-"Bug Tracker" = "https://github.com/hackforla/HomeUniteUs/issues"
-
+# This project defines dependencies for different "variants" of this project.
+# The following dependencies area also the "core" dependencies of the variants.
+#
+# Instructions for updating dependencies:
+# Use the instructions as above in the project's core dependencies list.
+#
 [project.optional-dependencies]
-# This defines the "dev" extra dependency group. It installs dependencies
-# necessary for developers of this code.
+# This defines the "dev" extra dependency group.
+# It installs dependencies necessary for developers of this code.
 dev = [
-  # tox is used as this code's test runner. It has its own configuration file
-  # named `tox.ini`.
+  # tox builds and runs tests in an isolated environment.
+  # It has its own configuration file named `tox.ini`.
   "tox==4.6.4",
+
+  # pytest runs the tests implemented in this project.
+  "pytest==7.3.1",
+
+  # pytest-randomly will cause tests to be run in random order.
+  "pytest-randomly==3.12.0",
+
+  # Flask-Testing is included to help test Flask specific parts of this project.
+  "Flask-Testing==0.8.1",
 ]
 
-# This defines the "prod" extra dependency group. It installs dependencies
-# necessary for running this API in production.
+# This defines the "prod" extra dependency group.
+# It installs dependencies necessary for running this API in production.
 prod = [
   # This API requires a WSGI server to run in production. gunicorn is a WSGI
   # HTTP server that is used as an intermediary between a HTTP proxy and this
@@ -72,6 +118,10 @@ prod = [
   # environment.
   "gunicorn==21.2.0",
 ]
+
+[project.urls]
+"Homepage" = "https://github.com/hackforla/HomeUniteUs"
+"Bug Tracker" = "https://github.com/hackforla/HomeUniteUs/issues"
 
 [tool.setuptools.packages.find]
 # The find packages tool looks for files necessary for this API to run correctly.

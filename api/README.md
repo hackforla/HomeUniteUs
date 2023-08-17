@@ -18,7 +18,7 @@ Run `python -V` to check the Python version.
 
 ## Usage - Development
 
-For development purposes, run the following commands in the `api/` directory to get started:
+For development purposes, run the following commands in the `api` directory to get started:
 
 ```shell
 python -m venv .venv          # Creates a virtual environment in the `.venv` directory
@@ -31,12 +31,15 @@ venv\Scripts\activate.bat
 # Else if run PowerShell, then run the following command
 venv\Scripts\Activate.ps1
 
-pip install -e ".[dev]"       # Installs all of the dev dependencies and this code in editable mode
-alembic upgrade head          # Initiates or update the local database
-python -m openapi_server      # Runs this server
+pip install --upgrade pip
+pip install -r requirements-dev.txt  # Installs all of the dependencies for development
+alembic upgrade head                 # Initiates or update the local database
+python -m openapi_server             # Runs this server in developer mode
 ```
 
-If you're seeing error messages, this may be related to missing environment variables. In the `api/` directory, create a `.env` file and copy and paste the variable definitions from `.env.example`. Message a team member to receive the necessary values.
+The console output will provide the listening address that you can visit through your browser.
+
+If you're seeing error messages, this may be related to missing environment variables. In the `api` directory, create a `.env` file and copy and paste the variable definitions from `.env.example`. Message a team member to receive the necessary values.
 
 and open your browser to here:
 
@@ -52,9 +55,11 @@ http://localhost:8080/api/openapi.json
 
 ### Testing
 
-The `tox` tool was installed into your virtual environment using the `pip install -e ".[dev]"` above.
+The `tox` tool was installed into your virtual environment using the `pip install -r requirements-dev.txt` command from above.
 
 To launch the tests, run `tox`.
+
+`tox` will run the tests for this (`api`) project using `pytest` in an isolated virtual environment that is distinct from the virtual environment that you created following the instructions from [Usage - Development].
 
 ### Alembic migrations
 
@@ -69,19 +74,24 @@ While Flask does provide a built-in development server, it is not intended for p
 
 WSGI servers like `gunicorn` require the python module to be installed on the system, in order to properly import the application class. To run the server, use pip to install `openapi_server` and then start the application from `gunicorn`.
 
-Run the following commands in the shell, from the `api/` directory:
+Run the following commands in the shell, from the `api` directory:
 
 ```shell
-python -m venv .venv          # Creates a virtual environment in the `.venv` directory
-source .venv/bin/activate     # Activate the virtual environment
-pip install --upgrade pip     # Upgrade pip to latest version
-pip install ".[prod]"         # Install openapi_server & prod dependencies into virtual env
-gunicorn -w 4 "openapi_server.__main__:create_app()" # Launch production server!
+python -m venv .venv            # Creates a virtual environment in the `.venv` directory
+source .venv/bin/activate       # Activate the virtual environment
+pip install --upgrade pip       # Upgrade pip to latest version
+pip install -r requirements.txt # Install pinned versions of requirements into the virtual environment
+pip install ".[prod]"           # Install openapi_server & prod dependencies into the virtual environment
+gunicorn "openapi_server.__main__:create_app()" # Runs the API via gunicorn
 ```
 
-The console output will provide the listening address, that you can visit through your browser.
+`gunicorn` can listen on a HTTP port or communicate via a unix socket. See the [gunicorn deploy](https://docs.gunicorn.org/en/latest/deploy.html) documentation for options.
 
-## Running with Docker
+For this project, a `systemd` unit starts `gunicorn` with a unix socket that `nginx` uses to proxy requests to.
+
+## Using Docker
+
+### Running with Docker
 
 To run the server on a Docker container, please execute the following from the root directory:
 
@@ -93,7 +103,7 @@ docker build -t openapi_server .
 docker run -p 8080:8080 openapi_server
 ```
 
-## Running with Docker Compose
+### Running with Docker Compose
 
 If it's your first time running/building the containers run the following command from the root directory:
 
@@ -147,6 +157,26 @@ docker compose down -v
 
 This command will stop the containers and delete the volumes. Then you can run `docker compose up api --build` to build and start the containers again.
 
+### Testing in a Docker Container
+
+You can run the api test cases directly within the docker container. To do this, get the docker container Id by reviewing the output from `docker ps` or use the following Powershell or shell commands.
+
+```Powershell
+# Find the container id (result will be empty if container is not running)
+# (-q only display ids, -f filter output)
+$api_container_id = docker ps -qf "ancestor=homeuniteus-api"
+
+# Run api tests within the container
+docker exec $api_container_id pytest
+```
+
+```bash
+# Find the container id (result will be empty if container is not running)
+# (-q only display ids, -f filter output)
+
+# Run api tests within the container
+docker exec `docker ps -qf "ancestor=homeuniteus-api"` pytest
+```
 
 ## Configuration Profile
 For local development, you can create your own set of configurations by doing the following:
