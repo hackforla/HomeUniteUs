@@ -4,8 +4,6 @@ from __future__ import absolute_import
 
 from flask import json
 from six import BytesIO
-
-from openapi_server.models.api_response import ApiResponse  # noqa: E501
 from openapi_server.models.database import HousingProgramServiceProvider  # noqa: E501
 from openapi_server.test import BaseTestCase
 
