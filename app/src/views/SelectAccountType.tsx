@@ -25,6 +25,7 @@ export const SelectAccountType = () => {
           variant="outlined"
           size="large"
           name="coordinator"
+          isSelected={type === 'coordinator'}
           onClick={() => setType('coordinator')}
         >
           <CoordinatorIcon />
@@ -34,6 +35,7 @@ export const SelectAccountType = () => {
           variant="outlined"
           size="large"
           name="host"
+          isSelected={type === 'host'}
           onClick={() => {
             setType('host');
           }}
@@ -94,17 +96,28 @@ const AccountLabel = styled('div')({
   fontWeight: 'bold',
 });
 
-const AccountButton = styled(Button)(({theme}) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  height: '100%',
-  width: '25%',
-  padding: '2rem',
-  borderColor: theme.palette.primary.dark,
-  transition: 'border 0.6s',
-  '&:hover': {
-    border: '3px solid',
-    borderColor: theme.palette.primary.dark,
-  },
-  color: 'black',
-}));
+interface AccountButtonProps {
+  isSelected: boolean;
+}
+
+const AccountButton = styled(Button)<AccountButtonProps>(
+  ({isSelected, theme}) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    width: '25%',
+    padding: '2rem',
+    borderWidth: '3px',
+    backgroundColor: isSelected
+      ? `${theme.palette.primary.main}40`
+      : theme.palette.white,
+    color: 'black',
+    transition: 'background-color 0.5s ease',
+    '&:hover': {
+      borderWidth: '3px',
+      backgroundColor: isSelected
+        ? `${theme.palette.primary.main}40`
+        : `${theme.palette.primary.main}10`,
+    },
+  }),
+);

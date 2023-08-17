@@ -1,13 +1,14 @@
-import {Button, Container, Stack, Typography} from '@mui/material';
+import {Button, Stack, Typography} from '@mui/material';
 import React from 'react';
 import CheckCircleOutline from '@mui/icons-material/CheckCircleOutline';
+import {FormContainer} from '../components/authentication';
 
 export const EmailVerificationSuccess = () => {
   return (
-    <Container>
+    <FormContainer>
       <Stack gap={2} alignItems="center">
         <CheckCircleOutline sx={{fontSize: 64, color: 'success.main'}} />
-        <Typography sx={{textAlign: 'center'}} variant="h3">
+        <Typography variant="h4" fontWeight="600" textAlign="center">
           Email Verification Success
         </Typography>
         <Typography sx={{textAlign: 'center'}}>
@@ -17,6 +18,6 @@ export const EmailVerificationSuccess = () => {
           Sign in
         </Button>
       </Stack>
-    </Container>
+    </FormContainer>
   );
 };

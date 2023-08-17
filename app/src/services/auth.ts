@@ -122,7 +122,7 @@ const authApi = api.injectEndpoints({
       query: data => {
         const {code, callbackUri} = data;
         return {
-          url: `api/auth/token?callback_uri=${callbackUri}`,
+          url: `auth/token?callback_uri=${callbackUri}`,
           method: 'POST',
           withCredentials: true,
           body: {code},

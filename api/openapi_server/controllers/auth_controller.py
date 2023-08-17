@@ -33,7 +33,9 @@ SECRET_KEY=env.get('SECRET_KEY')
 ROOT_URL=env.get('ROOT_URL')
 cognito_client_url = 'https://homeuniteus.auth.us-east-1.amazoncognito.com'
 
-
+if(ROOT_URL == None): 
+    raise Exception('ROOT_URL is not defined in .env file')
+    
 # Initialize Cognito clients
 userClient = boto3.client('cognito-idp', region_name=COGNITO_REGION, aws_access_key_id = COGNITO_ACCESS_ID, aws_secret_access_key = COGNITO_ACCESS_KEY)
 
@@ -111,18 +113,34 @@ def signUpHost():  # noqa: E501
           SecretHash=secret_hash,
           Username=body['email'],
           Password=body['password'],
+          ClientMetadata={
+              'url': ROOT_URL
+          }
         )
-    except Exception as e:
-        code = e.response['Error']['Code']
-        message = e.response['Error']['Message']
-        status_code = e.response['ResponseMetadata']['HTTPStatusCode']
 
-        raise AuthError({
-                  "code": code, 
-                  "message": message
-              }, status_code)
+        return response
 
-    return response
+    except botocore.exceptions.ClientError as error:
+        match error.response['Error']['Code']:
+            case 'UsernameExistsException': 
+                msg = "A user with this email already exists."
+                raise AuthError({  "message": msg }, 400)
+            case 'NotAuthorizedException':
+                msg = "User is already confirmed."
+                raise AuthError({  "message": msg }, 400)
+            case 'InvalidPasswordException':
+                msg = "Password did not conform with policy"
+                raise AuthError({  "message": msg }, 400)
+            case 'TooManyRequestsException':
+                msg = "Too many requests made. Please wait before trying again."
+                raise AuthError({  "message": msg }, 400)
+            case _:
+                msg = "An unexpected error occurred."
+                raise AuthError({  "message": msg }, 400)
+    except botocore.excepts.ParameterValidationError as error:
+        msg = f"The parameters you provided are incorrect: {error}"
+        raise AuthError({"message": msg}, 500)
+    
 
 def signUpCoordinator():  # noqa: E501
     """Signup a new Coordinator
@@ -150,18 +168,35 @@ def signUpCoordinator():  # noqa: E501
           SecretHash=secret_hash,
           Username=body['email'],
           Password=body['password'],
+          ClientMetadata={
+              'url': ROOT_URL
+          }
         )
-    except Exception as e:
-        code = e.response['Error']['Code']
-        message = e.response['Error']['Message']
-        status_code = e.response['ResponseMetadata']['HTTPStatusCode']
+    
+        return response
+    
+    except botocore.exceptions.ClientError as error:
+        match error.response['Error']['Code']:
+            case 'UsernameExistsException': 
+                msg = "A user with this email already exists."
+                raise AuthError({  "message": msg }, 400)
+            case 'NotAuthorizedException':
+                msg = "User is already confirmed."
+                raise AuthError({  "message": msg }, 400)
+            case 'InvalidPasswordException':
+                msg = "Password did not conform with policy"
+                raise AuthError({  "message": msg }, 400)
+            case 'TooManyRequestsException':
+                msg = "Too many requests made. Please wait before trying again."
+                raise AuthError({  "message": msg }, 400)
+            case _:
+                msg = "An unexpected error occurred."
+                raise AuthError({  "message": msg }, 400)
+    except botocore.excepts.ParameterValidationError as error:
+        msg = f"The parameters you provided are incorrect: {error}"
+        raise AuthError({"message": msg}, 500)
 
-        raise AuthError({
-                  "code": code, 
-                  "message": message
-              }, status_code)
-
-    return response
+        
 
 def signin():
     # Validate request data
@@ -234,6 +269,9 @@ def resend_confirmation_code():
             ClientId=COGNITO_CLIENT_ID,
             SecretHash=secret_hash,
             Username=email,
+            ClientMetadata={
+              'url': ROOT_URL
+          }
         )
         message = "A confirmation code is being sent again."
         return {"message": message}, 200
@@ -300,12 +338,13 @@ def token():
 
     token_url = f"{cognito_client_url}/oauth2/token"
     auth = requests.auth.HTTPBasicAuth(client_id, client_secret)
+    redirect_uri = f"{ROOT_URL}{callback_uri}"
 
     params = {
       'grant_type': 'authorization_code',
       'client_id': client_id,
       'code': code,
-      'redirect_uri': callback_uri
+      'redirect_uri': redirect_uri
     }
 
     # get tokens from oauth2/token endpoint
@@ -483,8 +522,9 @@ def private(token_info):
 
 def google():
     redirect_uri = request.args['redirect_uri']
+    print(f"{cognito_client_url}/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+profile+phone+aws.cognito.signin.user.admin&redirect_uri={ROOT_URL}{redirect_uri}&identity_provider=Google")
 
-    return redirect(f"{cognito_client_url}/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+profile+phone+aws.cognito.signin.user.admin&redirect_uri={redirect_uri}&identity_provider=Google")
+    return redirect(f"{cognito_client_url}/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+profile+phone+aws.cognito.signin.user.admin&redirect_uri={ROOT_URL}{redirect_uri}&identity_provider=Google")
 
 def confirm_signup():
     code = request.args['code']
