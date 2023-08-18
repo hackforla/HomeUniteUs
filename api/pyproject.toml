@@ -60,7 +60,7 @@ dependencies = [
     # alembic does not use SemVer. Changes in the middle number represents a
     # "Significant Minor Release" that might be non-backward compatible.
     # https://alembic.sqlalchemy.org/en/latest/front.html#versioning-scheme
-    "alembic==1.11.1",
+    "alembic==1.10.2",
 
     # boto3 is used for connecting to AWS resources
     "boto3==1.22.10",
@@ -68,13 +68,13 @@ dependencies = [
     # connexion is the framework that this API is built on top of
     # The extra dependency swagger-ui causes the swagger UI to be available
     # at /api/ui.
-    "connexion [swagger-ui]==2.14.2",
+    "connexion [swagger-ui]==2.13.1",
 
     # psycopg2 allows alembic to communicate with PostgreSQL
-    "psycopg2-binary==2.9.6",
+    "psycopg2-binary==2.9.5",
 
     # python-dotenv allows the API to pull in external configuration from a .env file
-    "python-dotenv==1.0.0",
+    "python-dotenv==0.20.0",
 
     # The version of connexion that is in use does not parse multi-file OpenAPI
     # definitions like the ones found in the openapi directory. However, with the

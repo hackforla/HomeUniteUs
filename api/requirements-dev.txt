@@ -4,7 +4,7 @@
 #
 #    pip-compile --extra=dev --output-file=requirements-dev.txt pyproject.toml
 #
-alembic==1.11.1
+alembic==1.10.2
     # via openapi-server (pyproject.toml)
 attrs==23.1.0
     # via
@@ -34,7 +34,7 @@ clickclick==20.10.2
     # via connexion
 colorama==0.4.6
     # via tox
-connexion[swagger-ui]==2.14.2
+connexion[swagger-ui]==2.13.1
     # via openapi-server (pyproject.toml)
 coverage[toml]==7.3.0
     # via pytest-cov
@@ -115,7 +115,7 @@ pluggy==1.2.0
     #   tox
 prance==23.6.21.0
     # via openapi-server (pyproject.toml)
-psycopg2-binary==2.9.6
+psycopg2-binary==2.9.5
     # via openapi-server (pyproject.toml)
 pyproject-api==1.5.4
     # via tox
@@ -130,7 +130,7 @@ pytest-randomly==3.12.0
     # via openapi-server (pyproject.toml)
 python-dateutil==2.8.2
     # via botocore
-python-dotenv==1.0.0
+python-dotenv==0.20.0
     # via openapi-server (pyproject.toml)
 pyyaml==6.0.1
     # via

@@ -4,7 +4,7 @@
 #
 #    pip-compile --output-file=requirements.txt pyproject.toml
 #
-alembic==1.11.1
+alembic==1.10.2
     # via openapi-server (pyproject.toml)
 attrs==23.1.0
     # via
@@ -28,7 +28,7 @@ click==8.1.6
     #   flask
 clickclick==20.10.2
     # via connexion
-connexion[swagger-ui]==2.14.2
+connexion[swagger-ui]==2.13.1
     # via openapi-server (pyproject.toml)
 flask==2.2.5
     # via connexion
@@ -82,11 +82,11 @@ pathable==0.4.3
     # via jsonschema-spec
 prance==23.6.21.0
     # via openapi-server (pyproject.toml)
-psycopg2-binary==2.9.6
+psycopg2-binary==2.9.5
     # via openapi-server (pyproject.toml)
 python-dateutil==2.8.2
     # via botocore
-python-dotenv==1.0.0
+python-dotenv==0.20.0
     # via openapi-server (pyproject.toml)
 pyyaml==6.0.1
     # via
