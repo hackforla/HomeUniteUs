@@ -120,14 +120,14 @@ six==1.16.0
     #   prance
     #   python-dateutil
     #   rfc3339-validator
-sqlalchemy==2.0.20
-    # via alembic
+sqlalchemy==1.4.36
+    # via
+    #   alembic
+    #   openapi-server (pyproject.toml)
 swagger-ui-bundle==0.0.9
     # via connexion
 typing-extensions==4.7.1
-    # via
-    #   alembic
-    #   sqlalchemy
+    # via alembic
 urllib3==1.26.16
     # via
     #   botocore

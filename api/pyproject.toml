@@ -49,14 +49,12 @@ classifiers = [
 #
 # 1. python -m venv .venv
 # 2. source .venv/bin/activate
-# 3. pip install pip-tools
+# 3. pip install pip-tools (this is already included in requirements-dev.txt)
 # 4. pip-compile --output-file=requirements.txt pyproject.toml
 # 5. pip-compile --extra=dev --output-file=requirements-dev.txt pyproject.toml
 #
 dependencies = [
     # alembic is a database migration tool provided by the SQLAlchemy project.
-    # alembic will include the sqlalchemy library that this project uses directly
-    # in its code base.
     # alembic does not use SemVer. Changes in the middle number represents a
     # "Significant Minor Release" that might be non-backward compatible.
     # https://alembic.sqlalchemy.org/en/latest/front.html#versioning-scheme
@@ -70,11 +68,17 @@ dependencies = [
     # at /api/ui.
     "connexion [swagger-ui]==2.13.1",
 
-    # psycopg2 allows alembic to communicate with PostgreSQL
+    # psycopg2 allows SQLAlchemy to communicate with PostgreSQL
     "psycopg2-binary==2.9.5",
 
     # python-dotenv allows the API to pull in external configuration from a .env file
     "python-dotenv==0.20.0",
+
+    # SQLAlchemy is a SQL toolkit that this project uses for its
+    # Object Relational Mapper (ORM) capabilities. Although alembic would have
+    # included the latest version of SQLAlchemy as a transitive dependency, it is version
+    # pinned here because this project is built for this version not the latest 2.0 series.
+    "SQLAlchemy==1.4.36",
 
     # The version of connexion that is in use does not parse multi-file OpenAPI
     # definitions like the ones found in the openapi directory. However, with the
@@ -110,6 +114,9 @@ dev = [
 
   # Flask-Testing is included to help test Flask specific parts of this project.
   "Flask-Testing==0.8.1",
+
+  # pip-tools provides the tools pip-compile and pip-sync to help manage requirements files
+  "pip-tools",
 ]
 
 # This defines the "prod" extra dependency group.
