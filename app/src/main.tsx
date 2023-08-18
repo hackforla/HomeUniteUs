@@ -39,10 +39,12 @@ import {
   Settings,
   SelectAccountType,
   ConfirmSignUp,
+  GuestDocuments,
 } from './views';
 import {AccountVerification} from './views/AccountVerification';
 import {AppLayout, Header} from './components/common';
 import {ResetPasswordContext} from './components/authentication/ResetPasswordContext';
+import {DashboardLayout} from './components/layouts';
 
 function Profile() {
   return <div>Hello from profile</div>;
@@ -64,38 +66,6 @@ function HuuApp() {
           <Route path="/coord" element={<CoordinatorDashboard />} />
           <Route path="/hosts" element={<HostsList />} />
           <Route path="/settings" element={<Settings />} />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/host"
-            element={
-              <ProtectedRoute>
-                <HostApplicationTracker />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/guest"
-            element={
-              <ProtectedRoute>
-                <GuestApplicationTracker />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/coordinator"
-            element={
-              <ProtectedRoute>
-                <CoordinatorDashboard />
-              </ProtectedRoute>
-            }
-          />
           <Route path="/signin" element={<SignIn />} />
 
           <Route path="/signup" element={<SelectAccountType />} />
@@ -122,6 +92,41 @@ function HuuApp() {
           />
           <Route path="/new-password" element={<NewPassword />} />
         </Route>
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/guest"
+          element={
+            <ProtectedRoute>
+              <DashboardLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<GuestApplicationTracker />} />
+          <Route path="documents" element={<GuestDocuments />} />
+        </Route>
+        <Route
+          path="/host"
+          element={
+            <ProtectedRoute>
+              <HostApplicationTracker />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/coordinator"
+          element={
+            <ProtectedRoute>
+              <CoordinatorDashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );

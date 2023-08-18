@@ -16,3 +16,4 @@ export {ForgotPasswordCode} from './ForgotPasswordCode';
 export {ForgotPasswordSuccess} from './ForgotPasswordSuccess';
 export {Settings} from './Settings';
 export {ConfirmSignUp} from './ConfirmSignUp';
+export {GuestDocuments} from './GuestDocuments';

@@ -10,7 +10,7 @@ import ListItemText from '@mui/material/ListItemText';
 import TimelineOutlined from '@mui/icons-material/TimelineOutlined';
 import {Link} from '@mui/material';
 import {styled} from '@mui/system';
-import {useLocation} from 'react-router-dom';
+import {Outlet, useLocation} from 'react-router-dom';
 
 import {Header} from '../common';
 
@@ -21,11 +21,7 @@ const navItems = [
   {title: 'My Documents', icon: <TimelineOutlined />, href: '/guest/documents'},
 ];
 
-interface OwnProps {
-  children: React.ReactNode;
-}
-
-export function DashboardLayout({children}: OwnProps) {
+export function DashboardLayout() {
   const location = useLocation();
 
   return (
@@ -58,7 +54,7 @@ export function DashboardLayout({children}: OwnProps) {
       </StyledDrawer>
       <Box component="main" sx={{flexGrow: 1}}>
         <Toolbar />
-        {children}
+        <Outlet />
       </Box>
     </Box>
   );
@@ -75,26 +71,26 @@ const StyledList = styled(List)(({theme}) => ({
   gap: theme.spacing(3),
 }));
 
-const StyledListItemButton = styled(ListItemButton)<ListItemProps>(
-  ({isSelected, theme}) => ({
-    gap: 1,
-    borderRadius: theme.shape.borderRadius,
-    color: isSelected ? 'black' : 'white',
+const StyledListItemButton = styled(ListItemButton, {
+  shouldForwardProp: prop => prop !== 'isSelected',
+})<ListItemProps>(({isSelected, theme}) => ({
+  gap: 1,
+  borderRadius: theme.shape.borderRadius,
+  color: isSelected ? 'black' : 'white',
+  backgroundColor: isSelected ? 'white' : 'transparent',
+  boxShadow: isSelected ? '0px 4px 10px rgba(0, 0, 0, 0.25)' : 'none',
+  '&:hover': {
     backgroundColor: isSelected ? 'white' : 'transparent',
-    boxShadow: isSelected ? '0px 4px 10px rgba(0, 0, 0, 0.25)' : 'none',
-    '&:hover': {
-      backgroundColor: isSelected ? 'white' : 'transparent',
-    },
-  }),
-);
+  },
+}));
 
-const StyledListItemIcon = styled(ListItemIcon)<ListItemProps>(
-  ({isSelected, theme}) => ({
-    color: isSelected ? 'black' : 'white',
-    minWidth: 0,
-    marginRight: theme.spacing(1),
-  }),
-);
+const StyledListItemIcon = styled(ListItemIcon, {
+  shouldForwardProp: prop => prop !== 'isSelected',
+})<ListItemProps>(({isSelected, theme}) => ({
+  color: isSelected ? 'black' : 'white',
+  minWidth: 0,
+  marginRight: theme.spacing(1),
+}));
 
 const StyledDrawer = styled(Drawer)(({theme}) => ({
   width: drawerWidth,

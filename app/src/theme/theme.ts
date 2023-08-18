@@ -19,7 +19,7 @@ export const HomeUniteUsTheme = createTheme({
   palette: {
     primary: {
       dark: '#196ca0',
-      main: '#249BE5',
+      main: '#0057A1',
       600: '#36A3E7',
       light: '#4fafea',
       300: '#6ABBED',
