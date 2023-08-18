@@ -102,6 +102,9 @@ dev = [
   # pytest runs the tests implemented in this project.
   "pytest==7.3.1",
 
+  # pytest-cov will report the amount of test coverage implemented.
+  "pytest-cov==4.0.0",
+
   # pytest-randomly will cause tests to be run in random order.
   "pytest-randomly==3.12.0",
 

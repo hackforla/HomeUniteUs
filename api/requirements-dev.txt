@@ -36,6 +36,8 @@ colorama==0.4.6
     # via tox
 connexion[swagger-ui]==2.14.2
     # via openapi-server (pyproject.toml)
+coverage[toml]==7.3.0
+    # via pytest-cov
 distlib==0.3.7
     # via virtualenv
 exceptiongroup==1.1.3
@@ -120,7 +122,10 @@ pyproject-api==1.5.4
 pytest==7.3.1
     # via
     #   openapi-server (pyproject.toml)
+    #   pytest-cov
     #   pytest-randomly
+pytest-cov==4.0.0
+    # via openapi-server (pyproject.toml)
 pytest-randomly==3.12.0
     # via openapi-server (pyproject.toml)
 python-dateutil==2.8.2
@@ -165,6 +170,7 @@ swagger-ui-bundle==0.0.9
     # via connexion
 tomli==2.0.1
     # via
+    #   coverage
     #   pyproject-api
     #   pytest
     #   tox
