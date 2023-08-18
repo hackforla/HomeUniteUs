@@ -77,7 +77,15 @@ export const Header = (props: Props) => {
 
   return (
     <Box sx={{display: 'flex'}}>
-      <AppBar sx={{backgroundColor: 'white'}} component="nav">
+      <AppBar
+        position="fixed"
+        sx={{
+          backgroundColor: 'white',
+          zIndex: theme => theme.zIndex.drawer + 1,
+          boxShadow: 'none',
+        }}
+        component="nav"
+      >
         <Toolbar sx={{justifyContent: {xs: 'space-between'}}}>
           <IconButton
             color="primary"
