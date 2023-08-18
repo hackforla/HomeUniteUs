@@ -9,7 +9,7 @@ WORKDIR /opt/HomeUniteUs/api
 COPY . .
 
 RUN python -m pip install --upgrade pip
-RUN python -m pip install -r requirements-dev.txt
+RUN python -m pip install --no-cache-dir -r requirements-dev.txt
 
 EXPOSE 8080
 ENTRYPOINT ["python"]
