@@ -66,32 +66,9 @@ To launch the tests, run `tox`.
 When changing the database, you can automatically generate an alembic migration. Simply change the model however you want in `database.py`, run `alembic revision --autogenerate -m <name_of_migration>` to generate a new migration, and then run `alembic upgrade head` to upgrade your database to the latest revision.
 In the case of someone else adding a revision to the database, simply pull their changes to your repo and run `alembic upgrade head` to upgrade your local database to the latest revision.
 
-## Usage - Production
+### Using Docker
 
-A WSGI server is needed to run our application. A WSGI (Web Server Gateway Interface) server is a bridge between a web server and web applications. The server handles requests, invokes the web application, translates responses back to HTTP, and also manages concurrency to ensure the server can handle multiple requests simultaneously.
-
-While Flask does provide a built-in development server, it is not intended for production use. Therefore, we utilize a third-party, production-grade WSGI server to manage our application. Various options exist, but we've chosen `gunicorn`. `gunicorn` does not support Windows, but you can use another WSGI server like `waitress` if Windows support is needed.
-
-WSGI servers like `gunicorn` require the python module to be installed on the system, in order to properly import the application class. To run the server, use pip to install `openapi_server` and then start the application from `gunicorn`.
-
-Run the following commands in the shell, from the `api` directory:
-
-```shell
-python -m venv .venv            # Creates a virtual environment in the `.venv` directory
-source .venv/bin/activate       # Activate the virtual environment
-pip install --upgrade pip       # Upgrade pip to latest version
-pip install -r requirements.txt # Install pinned versions of requirements into the virtual environment
-pip install ".[prod]"           # Install openapi_server & prod dependencies into the virtual environment
-gunicorn "openapi_server.__main__:create_app()" # Runs the API via gunicorn
-```
-
-`gunicorn` can listen on a HTTP port or communicate via a unix socket. See the [gunicorn deploy](https://docs.gunicorn.org/en/latest/deploy.html) documentation for options.
-
-For this project, a `systemd` unit starts `gunicorn` with a unix socket that `nginx` uses to proxy requests to.
-
-## Using Docker
-
-### Running with Docker
+#### Running with Docker
 
 To run the server on a Docker container, please execute the following from the root directory:
 
@@ -103,7 +80,7 @@ docker build -t openapi_server .
 docker run -p 8080:8080 openapi_server
 ```
 
-### Running with Docker Compose
+#### Running with Docker Compose
 
 If it's your first time running/building the containers run the following command from the root directory:
 
@@ -157,7 +134,7 @@ docker compose down -v
 
 This command will stop the containers and delete the volumes. Then you can run `docker compose up api --build` to build and start the containers again.
 
-### Testing in a Docker Container
+#### Testing in a Docker Container
 
 You can run the api test cases directly within the docker container. To do this, get the docker container Id by reviewing the output from `docker ps` or use the following Powershell or shell commands.
 
@@ -178,7 +155,7 @@ docker exec $api_container_id pytest
 docker exec `docker ps -qf "ancestor=homeuniteus-api"` pytest
 ```
 
-## Configuration Profile
+### Configuration Profile
 For local development, you can create your own set of configurations by doing the following:
 - Add the variable below to your `.env` located in `/api`.
 ```
@@ -198,7 +175,7 @@ current_app.config['CONFIG']
 ```
 If you create any new configuration properties, please add an associative enum to `/api/configs/configuration_properties.py`.
 
-## Debugging
+### Debugging
 
 For Visual Studio Code users:
 - Set breakpoint(s).
@@ -225,3 +202,31 @@ For Visual Studio Code users:
         }
 ```
 - Go to `openapi_server/__main__.py` and select "Run" -> "Start with Debugging".
+
+## Usage - Production
+
+A WSGI server is needed to run our application. A WSGI (Web Server Gateway Interface) server is a bridge between a web server and web applications. The server handles requests, invokes the web application, translates responses back to HTTP, and also manages concurrency to ensure the server can handle multiple requests simultaneously.
+
+While Flask does provide a built-in development server, it is not intended for production use. Therefore, we utilize a third-party, production-grade WSGI server to manage our application. Various options exist, but we've chosen `gunicorn`. `gunicorn` does not support Windows, but you can use another WSGI server like `waitress` if Windows support is needed.
+
+WSGI servers like `gunicorn` require the python module to be installed on the system, in order to properly import the application class. The general method to run the server with `gunicorn` has the following form:
+
+```bash
+# The string tells gunicorn where to obtain the application object to run.
+# In this case, the application object is constructed and returned by the `create_app`
+# function defined in the `__main__.py` module.
+gunicorn "openapi_server.__main__:create_app()"
+```
+
+`gunicorn` can communicate over a network socket or a unix socket. See the [gunicorn deploy](https://docs.gunicorn.org/en/latest/deploy.html) documentation for options.
+
+### Deployment
+
+The demo environment is an AWS EC2 instance running Ubuntu. On the Ubuntu EC2 instance, `systemd` manages the services required to run the frontend application, backend application, HTTP server/proxy, and database:
+
+1. `postgresql.service` - Runs the PostgreSQL database
+2. `nginx.service` - handles HTTPS termination, serves this API and the front-end application
+3. `homeuniteus-api.service` - runs this API via `gunicorn` with a unix socket that `nginx` uses
+
+For this API, a GitHub deployment workflow (found in .github/workflows) creates a Python `sdist` (Source Distribution) containing only the required files necessary for deployment, uploads it, unpacks it, installs the API, and restarts the `homeuniteus-api`.
+

@@ -14,7 +14,7 @@ This project is part of a larger initiative at Hack for LA around creating a sha
 
 ## Technology Overview
 
-The HomeUniteUs project is structured as a multi-[docker](https://docs.docker.com/) container application, with secret-protected access to networked resources. The project contains three containers, whose activities are coordinated using the `docker compose` configuration outlined in `docker-compose.yml`. The three containers are:
+The HomeUniteUs project is structured as a multi-[docker](https://docs.docker.com/) container application (for local development and testing), with secret-protected access to networked resources. The project contains three containers, whose activities are coordinated using the `docker compose` configuration outlined in `docker-compose.yml`. The three containers are:
 
 1. `app`: A frontend [React](https://reactjs.org/docs/getting-started.html) app developed using [TypeScript](https://www.typescriptlang.org/).
    * We use [Redux](https://redux.js.org/) to manage client state, with the [Redux Toolkit](https://redux-toolkit.js.org/) to simplify development.
@@ -28,6 +28,8 @@ The HomeUniteUs project is structured as a multi-[docker](https://docs.docker.co
 3. `db`: A [PostgreSQL](https://www.postgresql.org/) database container.
    * The database is stored as a docker volume, `db-data`.
    * If the volume is not found during spin-up, then an empty database volume will be created.
+
+In the production environment, each of these services along with `nginx` are deployed onto an EC2 instance and managed as `systemd` service units instead of with Docker.
 
 ## Build Instructions
 
