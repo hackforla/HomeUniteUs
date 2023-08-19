@@ -142,7 +142,7 @@ const AvatarDropdownMenu = () => {
     try {
       await signOut().unwrap();
       appDispatch(setCredentials({user: null, token: null}));
-      navigate('/signin');
+      navigate('/');
     } catch (err) {
       console.log(err);
     }
