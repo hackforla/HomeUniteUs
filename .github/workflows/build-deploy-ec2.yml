@@ -8,34 +8,36 @@ jobs:
       run:
         shell: bash
         working-directory: ./api
-    strategy:
-      matrix:
-        python-version: ["3.10"]
+    outputs:
+      sdist: ${{ steps.package.outputs.sdist }}
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.10'
           cache: 'pip'
-#      - name: Install Python dependencies
+      - name: Upgrade pip
+        run: python -m pip install --upgrade pip
+#      - name: Install API dev Dependencies
 #        run: |
-#          python -m pip install --upgrade pip
 #          pip install -r requirements-dev.txt
 #      - name: Test with tox
 #        run: |
+#          # Use tox because it is configured to test against the same package type being deployed
 #          tox
       - name: Build API Deployment Package
+        id: package
         run: |
           python -m pip install build
-          python -m build --sdist
-          mv dist/openapi_server*.tar.gz dist/openapi_server.tar.gz
+          SDIST=$(python -m build --sdist | perl -n -e '/^Successfully built (.*)\.tar\.gz$/ && print $1')
+          [ -n "$SDIST" ] && echo "sdist=$SDIST" >> "$GITHUB_OUTPUT"
       - name: Archive API Deployment Package
         uses: actions/upload-artifact@v3
         with:
           name: api
           path: api/dist
-          retention-days: 1
+          retention-days: 7
   build-app:
     runs-on: ubuntu-latest
     defaults:
@@ -51,7 +53,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          # cache: 'npm'
+          cache: 'npm'
       - name: Run npm CI
         run: npm ci
       - name: Build app
@@ -70,7 +72,7 @@ jobs:
         with:
           name: app
           path: app/dist
-          retention-days: 1
+          retention-days: 7
   deploy-api-app:
     needs: [build-api, build-app]
     runs-on: ubuntu-latest
@@ -92,23 +94,33 @@ jobs:
           # /home/ubuntu/github-deploy/app contains the frontend app source
       - name: Configure EC2
         uses: appleboy/ssh-action@v1.0.0
+        env:
+          SDIST: ${{needs.build-api.outputs.sdist}}
         with:
           host: homeunite.us
           username: ubuntu
           key: ${{ secrets.HUU_EC2_SSH_KEY }}
           script_stop: true
+          envs: SDIST
           script: |
-            cd ~/github-deploy/api
-            tar xf openapi_server.tar.gz
-            cd openapi_server-*
-            source /opt/homeuniteus/homeuniteusenv/bin/activate
+            # TODO: Run database migration scripts
+            cd /home/ubuntu
+            ./create_archive.bash
+
+            # Update database
+
+            # Deploy API
+            cd /home/ubuntu/github-deploy/api
+            source /opt/dev.homeunite.us/dev-huu-env/bin/activate
             pip uninstall -y -r <(pip freeze)
             pip install --upgrade pip
-            pip install -r requirements.txt
-            pip install ".[prod]"
+            pip install -r <(tar xfO $SDIST.tar.gz $SDIST/requirements.txt)
+            pip install "$SDIST.tar.gz[prod]"
             deactivate
-            rm -rf ~/github-deploy/api/*
-            sudo systemctl restart homeuniteus.service
-            cd ~/github-deploy/app
-            sudo rsync -a * /var/www/test.homeunite.us/html/
-            rm -r *
+            sudo systemctl restart dev-homeuniteus-api.service
+            rm -rf /home/ubuntu/github-deploy/api/*
+
+            # Deploy front-end app
+            cd /home/ubuntu/github-deploy/app
+            sudo rsync -a * /var/www/dev.homeunite.us/html/
+            rm -r /home/ubuntu/github-deploy/app/*

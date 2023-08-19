@@ -1,10 +1,10 @@
 [build-system]
-# This pyproject.toml uses the setuptools tool as its package manager.
+# This pyproject.toml uses the setuptools tool as its build backend.
 requires = ["setuptools>=68.0", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "openapi_server"
+name = "homeuniteus-api"
 # The version of this project is determined dynamically using the
 # setuptools-scm tool. Its configuration is defined in the
 # [tool.setuptools_scm] table.
@@ -28,7 +28,7 @@ classifiers = [
 # the core dependencies and the transitive dependencies (i.e. dependencies of dependencies)
 # of libraries used by this application.
 #
-# Additional core dependencies for variants of this project are declared below
+# Additional core dependencies for variants (e.g. dev and prod) of this project are declared below
 # in the [project.optional-dependencies] table.
 #
 # The requirements files are:
@@ -41,17 +41,18 @@ classifiers = [
 # If a transitive dependency from a requirements file needs to be updated independent of the
 # core dependency it came from, then move it to this file under the respective variant.
 # Leave a comment that it was originally a transitive dependency and the reason its version
-# needed to be maintained.
+# needed to be maintained as a core dependency.
 #
 # After updating the core dependencies in this file, recreate the auto-generated
 # requirements files using the pip-tools command "pip-compile" in a virtual
-# environment.
+# environment:
 #
 # 1. python -m venv .venv
 # 2. source .venv/bin/activate
-# 3. pip install pip-tools (this is already included in requirements-dev.txt)
+# 3. pip install pip-tools (OPTIONAL STEP: this is already included in requirements-dev.txt)
 # 4. pip-compile --output-file=requirements.txt pyproject.toml
 # 5. pip-compile --extra=dev --output-file=requirements-dev.txt pyproject.toml
+# 6. Commit this file (pyproject.toml), requirements.txt, and requirements-dev.txt to the git repo
 #
 dependencies = [
     # alembic is a database migration tool provided by the SQLAlchemy project.
@@ -64,8 +65,7 @@ dependencies = [
     "boto3==1.22.10",
 
     # connexion is the framework that this API is built on top of
-    # The extra dependency swagger-ui causes the swagger UI to be available
-    # at /api/ui.
+    # The extra dependency swagger-ui causes the swagger UI to be available at /api/ui.
     "connexion [swagger-ui]==2.13.1",
 
     # psycopg2 allows SQLAlchemy to communicate with PostgreSQL
@@ -90,7 +90,7 @@ dependencies = [
 ]
 
 # This project defines dependencies for different "variants" of this project.
-# The following dependencies area also the "core" dependencies of the variants.
+# The following dependencies are also the "core" dependencies of the variants.
 #
 # Instructions for updating dependencies:
 # Use the instructions as above in the project's core dependencies list.
@@ -134,18 +134,14 @@ prod = [
 "Bug Tracker" = "https://github.com/hackforla/HomeUniteUs/issues"
 
 [tool.setuptools.packages.find]
-# The find packages tool looks for files necessary for this API to run correctly.
-# By default, all of the Python files are included.
-# The where parameter tells the tool where to start looking for files.
-# In this case, all of the files in the directory this file is in will be searched.
-where = ["."]
-
-[tool.setuptools.package-data]
-# The OpenAPI definitions need to be included in the build.
-# The definitions are bundled together during startup and given to
-# connexion to implement and route traffic to the controllers in this
-# repository.
-"*" = ["openapi_server/*.yaml"]
+# The find packages tool looks for import packages and modules to include in a distribution package.
+# The `where` parameter tells the tool where to start looking for them.
+# Since this project is using a flat-layout structure with multiple top-level packages,
+# automatic discovery is does not work "to prevent common errors such as accidentally
+# publishing code not meant for distribution".
+# For this project, the top-level packages (alembic, configs, openapi_server) are allowed
+# to be included in a distribution package.
+where = ["alembic", "configs", "openapi_server"]
 
 [tool.setuptools_scm]
 # The setuptools_scm tool uses this project's git repository to version the build.
