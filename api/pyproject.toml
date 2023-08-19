@@ -134,14 +134,17 @@ prod = [
 "Bug Tracker" = "https://github.com/hackforla/HomeUniteUs/issues"
 
 [tool.setuptools.packages.find]
-# The find packages tool looks for import packages and modules to include in a distribution package.
+# The find packages tool looks for import packages and modules to include in an installation.
 # The `where` parameter tells the tool where to start looking for them.
 # Since this project is using a flat-layout structure with multiple top-level packages,
 # automatic discovery is does not work "to prevent common errors such as accidentally
 # publishing code not meant for distribution".
 # For this project, the top-level packages (alembic, configs, openapi_server) are allowed
-# to be included in a distribution package.
-where = ["alembic", "configs", "openapi_server"]
+# to be included in an installation.
+# The "." in the `where` key is a work-around to automatically discover them.
+# The exclude ensures that the "tests" package is not included in an installation.
+where = ["."]
+exclude = ["tests"]
 
 [tool.setuptools_scm]
 # The setuptools_scm tool uses this project's git repository to version the build.
