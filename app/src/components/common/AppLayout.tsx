@@ -12,6 +12,7 @@ export const AppLayout = () => {
         sx={{
           minHeight: '100vh',
           width: '100vw',
+          overflowY: 'scroll',
         }}
       >
         <Toolbar />
