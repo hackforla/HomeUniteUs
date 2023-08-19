@@ -113,7 +113,7 @@ jobs:
             # Deploy API
             cd /home/ubuntu/github-deploy/api
             source /opt/dev.homeunite.us/dev-huu-env/bin/activate
-            pip uninstall -y -r <(pip freeze)
+            pip uninstall -y -r <(pip freeze) || echo "Nothing to uninstall"
             pip install --upgrade pip
             pip install -r <(tar xfO $SDIST.tar.gz $SDIST/requirements.txt)
             pip install "$SDIST.tar.gz[prod]"
