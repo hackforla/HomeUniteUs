@@ -1,7 +1,7 @@
 name: Generate Release
 on:
   push:
-    tags:
+    branches:
       - 'v*'
 jobs:
   build:
