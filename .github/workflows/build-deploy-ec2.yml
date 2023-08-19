@@ -54,6 +54,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+          cache-dependency-path: app/package-lock.json
       - name: Run npm CI
         run: npm ci
       - name: Build app
