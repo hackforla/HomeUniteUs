@@ -8,7 +8,6 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
@@ -79,20 +78,12 @@ export const Header = (props: Props) => {
     <Box sx={{display: 'flex'}}>
       <AppBar sx={{backgroundColor: 'white'}} component="nav">
         <Toolbar sx={{justifyContent: {xs: 'space-between'}}}>
-          <IconButton
-            color="primary"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{mr: 2, display: {sm: 'none'}}}
-          >
-            <MenuIcon />
-          </IconButton>
           <Stack direction="row" gap={1} sx={{alignItems: 'center'}}>
             <img
               style={{width: '40px', height: '40px'}}
               src={logo}
               alt="Home Unite Us logo"
+              onClick={handleDrawerToggle}
             />
           </Stack>
           <Stack direction="row" gap={1} sx={{alignItems: 'center'}}>
