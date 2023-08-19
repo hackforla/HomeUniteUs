@@ -45,7 +45,10 @@ export function DashboardLayout() {
                   <StyledListItemIcon isSelected={isSelected}>
                     {icon}
                   </StyledListItemIcon>
-                  <ListItemText primary={title} />
+                  <ListItemText
+                    sx={{[`& .MuiListItemText-primary`]: {fontWeight: 'bold'}}}
+                    primary={title}
+                  />
                 </StyledListItemButton>
               </ListItem>
             );

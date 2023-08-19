@@ -3,18 +3,6 @@ import ReactDOM from 'react-dom/client';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import './index.css';
 
-/*
-  import 'core-js/stable';
-  import 'regenerator-runtime/runtime';
-  import * as React from 'react';
-  import * as ReactDOM from 'react-dom';
-  import {BrowserRouter, Route, Routes} from 'react-router-dom';
-  import {Provider} from 'react-redux';
-  import {CssBaseline} from '@mui/material';
-  import {ThemeProvider} from '@mui/material/styles';
-  import {StyledEngineProvider} from '@mui/material/styles';
-*/
-
 import {CssBaseline, StyledEngineProvider, ThemeProvider} from '@mui/material';
 import {Provider} from 'react-redux';
 import {setupStore} from './app/store';
@@ -91,15 +79,31 @@ function HuuApp() {
             element={<EmailVerificationError />}
           />
           <Route path="/new-password" element={<NewPassword />} />
+          <Route
+            path="/host"
+            element={
+              <ProtectedRoute>
+                <HostApplicationTracker />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/coordinator"
+            element={
+              <ProtectedRoute>
+                <CoordinatorDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
         </Route>
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-          }
-        />
         <Route
           path="/guest"
           element={
@@ -111,22 +115,6 @@ function HuuApp() {
           <Route index element={<GuestApplicationTracker />} />
           <Route path="documents" element={<GuestDocuments />} />
         </Route>
-        <Route
-          path="/host"
-          element={
-            <ProtectedRoute>
-              <HostApplicationTracker />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/coordinator"
-          element={
-            <ProtectedRoute>
-              <CoordinatorDashboard />
-            </ProtectedRoute>
-          }
-        />
       </Routes>
     </>
   );
