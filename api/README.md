@@ -226,7 +226,10 @@ The demo environment is an AWS EC2 instance running Ubuntu. On the Ubuntu EC2 in
 
 1. `postgresql.service` - Runs the PostgreSQL database
 2. `nginx.service` - handles HTTPS termination, serves this API and the front-end application
-3. `homeuniteus-api.service` - runs this API via `gunicorn` with a unix socket that `nginx` uses
+3. `dev-homeuniteus-api.service` - runs this API via `gunicorn` with a unix socket that `nginx` uses
+4. `pgAdmin.service` - runs the pgAdmin4 application for developers to check the database contents
 
-For this API, a GitHub deployment workflow (found in .github/workflows) creates a Python `sdist` (Source Distribution) containing only the required files necessary for deployment, uploads it, unpacks it, installs the API, and restarts the `homeuniteus-api`.
+For this API, a GitHub deployment workflow (found in .github/workflows) creates a Python `sdist` (Source Distribution) containing only the required files necessary for deployment, uploads it, installs the API, and restarts the `dev-homeuniteus-api` service.
+
+The Swagger UI for the API on the demo environment is at https://dev.homeunite.us/api/ui
 
