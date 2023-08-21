@@ -5,7 +5,6 @@ import pytest
 from openapi_server.models.database import DataAccessLayer
 from openapi_server.repositories.service_provider_repository import HousingProviderRepository
 
-
 @pytest.fixture
 def empty_housing_repo() -> HousingProviderRepository:
     '''
@@ -116,3 +115,6 @@ def test_update_existing_service_provider(housing_repo_5_entries: HousingProvide
 def test_update_nonexistent_provider(housing_repo_5_entries: HousingProviderRepository):
     returned_provider = housing_repo_5_entries.update_service_provider(9999, "Failed Update Name")
     assert returned_provider is None
+
+def test_provider_count(housing_repo_5_entries: HousingProviderRepository):
+    assert housing_repo_5_entries.provider_count() == 5
