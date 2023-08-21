@@ -1,12 +1,8 @@
 # coding: utf-8
-
 from __future__ import absolute_import
 
 from flask import json
-from six import BytesIO
-from openapi_server.models.database import HousingProgramServiceProvider  # noqa: E501
 from openapi_server.test import BaseTestCase
-
 
 class TestServiceProviderController(BaseTestCase):
     """ServiceProviderController integration test stubs"""
@@ -16,7 +12,19 @@ class TestServiceProviderController(BaseTestCase):
 
         Create a housing program service provider
         """
-        response = self.create_service_provider()
+        housing_program_service_provider = {
+  "provider_name" : "provider_name"
+}
+        headers = { 
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+        response = self.client.open(
+            '/api/serviceProviders',
+            method='POST',
+            headers=headers,
+            data=json.dumps(housing_program_service_provider),
+            content_type='application/json')
         self.assertStatus(response, 201,
                        'Response body is : ' + response.data.decode('utf-8'))
 
@@ -68,11 +76,9 @@ class TestServiceProviderController(BaseTestCase):
             '/api/serviceProviders',
             method='GET',
             headers=headers)
-        response_str = response.data.decode('utf-8')  
         self.assert200(response,
-                       f"Response body is : {response_str}")
-        decoded_response = json.loads(response_str)
-        assert len(decoded_response) == expected_provider_count
+                       f"Response body is : {response.json}")
+        assert len(response.json) == expected_provider_count
 
     def test_update_service_provider(self):
         """Test case for update_service_provider

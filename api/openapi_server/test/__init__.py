@@ -2,36 +2,33 @@ import logging
 from pathlib import Path
 
 import connexion
-from flask import json
 from flask_testing import TestCase
 from typing import List
-from werkzeug.test import TestResponse
 
 from openapi_server.encoder import JSONEncoder
-from openapi_server.models import database
+from openapi_server.models.database import DataAccessLayer
 from openapi_server.__main__ import get_bundled_specs
+from openapi_server.repositories.service_provider_repository import HousingProviderRepository
 
 
 class BaseTestCase(TestCase):
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.cached_engine = None
-        self.tmp_testing_database = Path("testinghomeuniteus.db")
-        
-
     def create_app(self):
         '''
-        Create a temporary, empty database for testing purposes and setup
-        a new instance of our Flask App for testing purposes.
-        '''
-        # Cache a reference to the current engine, so we can restore the previous
-        # DataAccessLayer once our test is complete
-        self.cached_engine = database.DataAccessLayer._engine
+        Create a temporary, empty database for testing purposes and return
+        a new instance of our Flask App to the base class for testing purposes.
 
-        database.DataAccessLayer._engine = None 
-        database.DataAccessLayer.get_engine(f"sqlite:///./{self.tmp_testing_database}")
-        database.DataAccessLayer.db_init()
+        The base class will never start the Flask App. It instead create a
+        mock self.client class that is used to simulate requests to the WSGI server.
+
+        https://flask.palletsprojects.com/en/2.2.x/testing/
+        https://werkzeug.palletsprojects.com/en/2.3.x/test/
+        '''
+        # Create a temporary, memory only database. This temp db will be
+        # automatically destroyed when the refcount drops to zero
+        DataAccessLayer._engine = None
+        DataAccessLayer._conn_string = "sqlite:///:memory:"
+        DataAccessLayer.db_init()
 
         logging.getLogger('connexion.operation').setLevel('ERROR')
         app = connexion.App(__name__)
@@ -39,44 +36,30 @@ class BaseTestCase(TestCase):
         app.add_api(get_bundled_specs(Path('openapi_server/openapi/openapi.yaml')),
                 arguments={'title': 'Home Unite Us'},
                 pythonic_params=True)   
-        return app.app
+        return app.app      
     
     def tearDown(self):
         '''
         Delete our temporary testing database and restore the DataAccessLayer
         to its state before our test case ran.
         '''
-        database.DataAccessLayer._engine = self.cached_engine
-        self.tmp_testing_database.unlink(missing_ok=True)
+        test_engine, DataAccessLayer._engine = DataAccessLayer._engine, None
+        test_engine.dispose()
 
-    def create_service_provider(self) -> TestResponse:
-        housing_program_service_provider = {
-  "provider_name" : "provider_name"
-}
-        headers = { 
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-        }
-        return self.client.open(
-            '/api/serviceProviders',
-            method='POST',
-            headers=headers,
-            data=json.dumps(housing_program_service_provider),
-            content_type='application/json')
-    
     def populate_test_database(self, num_entries) -> List[int]:
         '''
         Add num_entries rows to the test database and return the
         created Ids. Fail test if any of the creation requests
         fails.
+
+        Note: Providers are created using SQLAlchemy commands, 
+        not API requests.
         '''
         ids = []
-        for _ in range(num_entries):
-            create_response = self.create_service_provider()
-            raw_response = create_response.data.decode('utf-8')
-            self.assertStatus(create_response, 201,
-                       f"Test setup failure! Received response {raw_response}")
-            deserialized_response = json.loads(raw_response)
-            ids.append(deserialized_response["id"])
+        repo = HousingProviderRepository(DataAccessLayer.get_engine())
+        for i in range(num_entries):
+            provider = repo.create_service_provider(f"Provider No {i}")
+            assert provider is not None, f"Failed to create Provider No {i}!"
+            ids.append(provider.id)
         return ids
 
