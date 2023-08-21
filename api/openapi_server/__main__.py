@@ -29,7 +29,7 @@ def get_bundled_specs(main_file: Path) -> Dict[str, Any]:
 
     Args:
         main_file (Path): Path to a api specification .yaml file
-    
+
     Returns:
         Dict[str, Any]: Parsed specification file, stored in a dict
     '''
@@ -38,6 +38,14 @@ def get_bundled_specs(main_file: Path) -> Dict[str, Any]:
 
     return parser.specification
 
+def get_version():
+    from importlib.metadata import version, PackageNotFoundError
+
+    try:
+        return version("homeuniteus-api")
+    except PackageNotFoundError:
+        # package is not installed
+        return "0.1.0.dev0"
 
 def create_app():
     '''
@@ -59,9 +67,9 @@ def create_app():
     api_spec_path = connexion_app.get_root_path() / Path('./openapi/openapi.yaml')
     parsed_specs = get_bundled_specs(api_spec_path)
 
-    connexion_app.add_api(parsed_specs,
-                arguments={'title': 'Home Unite Us'},
-                pythonic_params=True)
+    parsed_specs['info']['version'] = get_version()
+
+    connexion_app.add_api(parsed_specs, pythonic_params=True)
     connexion_app.add_error_handler(AuthError, handle_auth_error)
 
     ENV_FILE = find_dotenv()
