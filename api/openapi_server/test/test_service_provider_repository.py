@@ -1,170 +1,118 @@
 # Third Party
-from unittest.mock import MagicMock
+import pytest
 
 # Local
-from openapi_server.models.service_provider import ServiceProvider
-from openapi_server.models.service_provider_with_id import ServiceProviderWithId
-from openapi_server.models import database as db
+from openapi_server.models.database import DataAccessLayer
 from openapi_server.repositories.service_provider_repository import HousingProviderRepository
 
-class TestHousingProviderRepository:
 
-    def test_create_provider(self):
-        expected_provider = ServiceProvider("test_name")
-        expected_row = db.HousingProgramServiceProvider(
-            provider_name=expected_provider.to_dict()["provider_name"]
-        )
-        expected_row.id = 1
-        mock_session = MagicMock()
-        repo = HousingProviderRepository(None)
+@pytest.fixture
+def empty_housing_repo() -> HousingProviderRepository:
+    '''
+    SetUp and TearDown an empty housing repository for 
+    testing purposes.
+    '''
+    DataAccessLayer._engine = None
+    DataAccessLayer._conn_string = "sqlite:///:memory:"
+    DataAccessLayer.db_init()
 
-        repo._get_session = lambda: mock_session
-        repo._generate_row = lambda _ : expected_row
+    yield HousingProviderRepository(DataAccessLayer.get_engine())
+    
+    test_engine, DataAccessLayer._engine = DataAccessLayer._engine, None 
+    test_engine.dispose()
 
-        actual = repo.create_service_provider(expected_provider.to_dict())
+@pytest.fixture
+def housing_repo_5_entries(empty_housing_repo: HousingProviderRepository) -> HousingProviderRepository:
+    '''
+    SetUp and TearDown a housing repository with five service providers. 
+    The providers will have ids [1-5] and names Provider 1...Provider5
+    '''
+    for i in range(1, 6):
+        new = empty_housing_repo.create_service_provider(f"Provider {i}")
+        assert new is not None, f"Test Setup Failure! Failed to create provider {i}"
+        assert new.id == i, "The test ids are expected to go from 1-5"
+    yield empty_housing_repo
 
-        assert expected_provider.provider_name == actual.provider_name
-        assert expected_row.id == actual.id
-        mock_session.add.assert_called_with(expected_row)
-        mock_session.commit.assert_called_once()
-        mock_session.close.assert_called_once()
+def test_empty_db_count(empty_housing_repo: HousingProviderRepository):
+    '''
+    Test our test setup, to ensure that newly created repos are in fact empty.
+    '''
+    assert empty_housing_repo.provider_count() == 0
 
-    def test_delete_service_provider_no_result(self):
-        expected_id = 1
-        repo = HousingProviderRepository(None)
+def test_create_provider(empty_housing_repo: HousingProviderRepository):
+    '''
+    Test creating a new provider within an empty database.
+    '''
+    EXPECTED_NAME = "MyFancyProvider"
 
-        mock_session = MagicMock()
-        mock_query = MagicMock()
+    newProvider = empty_housing_repo.create_service_provider(EXPECTED_NAME)
+    
+    assert newProvider is not None, "Repo create method failed"
+    assert newProvider.id == 1, "Expected id 1 since this is the first created provider"
+    assert newProvider.provider_name == EXPECTED_NAME, "Created provider name did not match request"
 
-        mock_query.first.return_value = None
-        mock_query.delete.return_value = 0
-        repo._get_session = lambda: mock_session
-        repo._get_query_by_id = lambda x, y: mock_query
+def test_delete_nonexistent_provider(empty_housing_repo: HousingProviderRepository):
+    '''
+    Attempt to delete a service provider that does 
+    not exist. Verify that the deletion gracefully
+    fails.
+    '''
+    assert empty_housing_repo.delete_service_provider(42) == False
 
-        row_deleted = repo.delete_service_provider(expected_id)
-        
-        assert row_deleted == False
-        mock_query.first.assert_called_once()
-        mock_query.delete.assert_not_called()
-        mock_session.commit.assert_not_called()
-        mock_session.close.assert_called_once()
+def test_delete_newly_created_provider(empty_housing_repo: HousingProviderRepository):
+    '''
+    Test creating and then deleting a new service provider, without error.
+    '''
+    new = empty_housing_repo.create_service_provider("Doomed Provider")
+    assert new is not None, "Test setup failure! Initial create failed."
+    assert empty_housing_repo.delete_service_provider(new.id)
 
-    def test_delete_service_provider_some_result(self):
-        expected_id = 1
-        repo = HousingProviderRepository(None)
-        mock_session = MagicMock()
-        mock_query = MagicMock()
+def test_get_existing_provider_by_id(housing_repo_5_entries: HousingProviderRepository):
+    '''
+    Test getting a provider by id.
+    '''
+    for i in range(1, 6):
+        provider = housing_repo_5_entries.get_service_provider_by_id(i)
+        assert provider.provider_name == f"Provider {i}"
+        assert provider.id == i
 
-        mock_query.first.return_value = True
-        mock_query.delete.return_value = 1
-        repo._get_session = lambda: mock_session
-        repo._get_query_by_id = lambda x, y: mock_query
+def test_get_all_providers(housing_repo_5_entries: HousingProviderRepository):
+    '''
+    Test getting all available service providers
+    '''
+    all = housing_repo_5_entries.get_service_providers()
+    assert all is not None
+    assert len(all) == 5
+    
+    for i in range(1, 6):
+        provider = all[i-1]
+        assert provider.id == i
+        assert provider.provider_name == f"Provider {i}"
 
-        row_deleted = repo.delete_service_provider(expected_id)
+def test_get_all_providers_empty_db(empty_housing_repo: HousingProviderRepository):
+    all = empty_housing_repo.get_service_providers()
+    assert all is not None
+    assert len(all) == 0
 
-        assert row_deleted == True
-        mock_query.first.assert_called_once()
-        mock_query.delete.assert_called_once()
-        mock_session.commit.assert_called_once()
-        mock_session.close.assert_called_once()
-        
-    def test_get_service_provider_by_id_some_result(self):
-        expected_provider = ServiceProvider("test_name")
-        expected_id = 1
-        repo = HousingProviderRepository(None)
-        expected_row = db.HousingProgramServiceProvider(
-            provider_name=expected_provider.to_dict()["provider_name"]
-        )
-        expected_row.id = expected_id
-        mock_session = MagicMock()
+def test_get_nonexisting_provider_by_id(housing_repo_5_entries: HousingProviderRepository):
+    failed_get = housing_repo_5_entries.get_service_provider_by_id(42)
+    assert failed_get is None
 
-        mock_session.get.return_value = expected_row
-        repo._get_session = lambda: mock_session
+def test_update_existing_service_provider(housing_repo_5_entries: HousingProviderRepository):
+    UPDATED_NAME = "Rad New Name"
+    UPDATED_ID = 3
+    returned_provider = housing_repo_5_entries.update_service_provider(UPDATED_NAME, UPDATED_ID)
+    retrieved_provider = housing_repo_5_entries.get_service_provider_by_id(UPDATED_ID)
 
-        actual = repo.get_service_provider_by_id(expected_id)
+    assert retrieved_provider is not None 
+    assert retrieved_provider is not None
 
-        assert expected_id == actual.id
-        assert expected_provider.provider_name == actual.provider_name
-        mock_session.close.assert_called_once()
+    assert returned_provider.id == UPDATED_ID
+    assert returned_provider.provider_name == UPDATED_NAME
 
+    assert retrieved_provider.id == UPDATED_ID
+    assert retrieved_provider.provider_name == UPDATED_NAME 
 
-    def test_get_service_provider_by_id_no_result(self):
-        repo = HousingProviderRepository(None)
-        expected_row = None
-        mock_session = MagicMock()
-
-        mock_session.get.return_value = expected_row
-        repo._get_session = lambda: mock_session
-
-        actual = repo.get_service_provider_by_id(1)
-
-        assert None == actual
-        mock_session.close.assert_called_once()
-
-    def test_get_service_providers_some_result(self):
-        repo = HousingProviderRepository(None)
-        mock_session = MagicMock()
-        mock_query = MagicMock()
-        provider1 = ServiceProviderWithId(1, "taylor")
-        provider2 = ServiceProviderWithId(2, "swift")
-        expected_providers = [provider1, provider2]
-
-        mock_session.query.return_value = mock_query
-        mock_query.all.return_value = expected_providers
-        repo._get_session = lambda: mock_session
-
-        actual = repo.get_service_providers()
-
-        assert expected_providers == actual
-        mock_session.close.assert_called_once()
-
-    def test_get_service_providers_no_result(self):
-        repo = HousingProviderRepository(None)
-        mock_session = MagicMock()
-
-        repo._get_session = lambda: mock_session
-        mock_session.query.all.return_value = None
-
-        actual = repo.get_service_providers()
-
-        assert [] == actual 
-        mock_session.close.assert_called_once()
-
-    def test_update_service_provider_some_result(self):
-        repo = HousingProviderRepository(None)
-        expected_provider = ServiceProviderWithId(1, "drake")
-        mock_session = MagicMock()
-        mock_result = MagicMock()
-        mock_query = MagicMock()
-
-        repo._get_session = lambda: mock_session
-        mock_session.query.return_value = mock_result
-        mock_result.filter.return_value = mock_query
-        mock_query.first.return_value = True
-
-        actual = repo.update_service_provider(expected_provider.to_dict(), expected_provider.id)
-
-        assert expected_provider == actual
-        mock_query.first.assert_called_once()
-        mock_query.update.assert_called_once_with(expected_provider.to_dict())
-        mock_session.commit.assert_called_once()
-        mock_session.close.assert_called_once()
-
-    def test_update_service_provider_no_result(self):
-        repo = HousingProviderRepository(None)
-        mock_session = MagicMock()
-        mock_result = MagicMock()
-        mock_query = MagicMock()
-
-        repo._get_session = lambda: mock_session
-        mock_session.query.return_value = mock_result
-        mock_result.filter.return_value = mock_query
-        mock_query.first.return_value = None
-
-        actual = repo.update_service_provider({}, 0)
-
-        assert None == actual
-        mock_query.first.assert_called_once()
-        mock_query.update.assert_not_called()
-        mock_session.commit.assert_not_called()
-        mock_session.close.assert_called_once()
+def test_update_nonexistent_provider(housing_repo_5_entries: HousingProviderRepository):
+    returned_provider = housing_repo_5_entries.update_service_provider(9999, "Failed Update Name")
+    assert returned_provider is None
