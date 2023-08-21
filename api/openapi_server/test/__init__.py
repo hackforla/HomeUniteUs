@@ -29,6 +29,7 @@ class BaseTestCase(TestCase):
         DataAccessLayer._engine = None
         DataAccessLayer._conn_string = "sqlite:///:memory:"
         DataAccessLayer.db_init()
+        self.provider_repo = HousingProviderRepository(DataAccessLayer.get_engine())
 
         logging.getLogger('connexion.operation').setLevel('ERROR')
         app = connexion.App(__name__)
@@ -43,6 +44,7 @@ class BaseTestCase(TestCase):
         Delete our temporary testing database and restore the DataAccessLayer
         to its state before our test case ran.
         '''
+        self.provider_repo = None
         test_engine, DataAccessLayer._engine = DataAccessLayer._engine, None
         test_engine.dispose()
 
@@ -56,10 +58,11 @@ class BaseTestCase(TestCase):
         not API requests.
         '''
         ids = []
-        repo = HousingProviderRepository(DataAccessLayer.get_engine())
         for i in range(num_entries):
-            provider = repo.create_service_provider(f"Provider No {i}")
-            assert provider is not None, f"Failed to create Provider No {i}!"
+            provider = self.provider_repo.create_service_provider(f"Provider No {i}")
+            assert provider is not None, (
+                f"Test setup failure. Failed to create Provider No {i}."
+                "Cannot perform endpoint test!")
             ids.append(provider.id)
         return ids
 
