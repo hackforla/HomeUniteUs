@@ -1,7 +1,6 @@
 # coding: utf-8
 from __future__ import absolute_import
 
-from flask import json
 from openapi_server.test import BaseTestCase
 
 class TestServiceProviderController(BaseTestCase):
@@ -13,20 +12,13 @@ class TestServiceProviderController(BaseTestCase):
         Create a housing program service provider
         """
         housing_program_service_provider = {
-  "provider_name" : "provider_name"
-}
-        headers = { 
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
+            "provider_name" : "provider_name"
         }
-        response = self.client.open(
+        response = self.client.post(
             '/api/serviceProviders',
-            method='POST',
-            headers=headers,
-            data=json.dumps(housing_program_service_provider),
-            content_type='application/json')
-        self.assertStatus(response, 201,
-                       'Response body is : ' + response.data.decode('utf-8'))
+            json=housing_program_service_provider)
+        self.assertStatus(response, 201, 
+                          f'Response body is: {response.get_data(as_text=True)}')
 
     def test_delete_service_provider(self):
         """Test case for delete_service_provider
@@ -35,15 +27,9 @@ class TestServiceProviderController(BaseTestCase):
         """
         # Test database is empty at start. Create an entry to delete
         ids = self.populate_test_database(num_entries=1)
-        headers = { 
-            'Accept': 'application/json',
-        }
-        response = self.client.open(
-            f'/api/serviceProviders/{ids[0]}',
-            method='DELETE',
-            headers=headers)
-        self.assert200(response,
-                       'Response body is : ' + response.data.decode('utf-8'))
+        response = self.client.delete(f'/api/serviceProviders/{ids[0]}')
+        self.assert200(response, 
+                       f'Response body is: {response.get_data(as_text=True)}')
 
     def test_get_service_provider_by_id(self):
         """Test case for get_service_provider_by_id
@@ -51,15 +37,9 @@ class TestServiceProviderController(BaseTestCase):
         Get details about a housing program service provider from an ID
         """
         ids = self.populate_test_database(num_entries=8)
-        headers = { 
-            'Accept': 'application/json',
-        }
-        response = self.client.open(
-            f"/api/serviceProviders/{ids[3]}",
-            method='GET',
-            headers=headers)
+        response = self.client.get(f"/api/serviceProviders/{ids[3]}")
         self.assert200(response,
-                       'Response body is : ' + response.data.decode('utf-8'))
+                       f'Response body is : {response.get_data(as_text=True)}')
 
     def test_get_service_providers(self):
         """Test case for get_service_providers
@@ -72,10 +52,7 @@ class TestServiceProviderController(BaseTestCase):
         headers = { 
             'Accept': 'application/json',
         }
-        response = self.client.open(
-            '/api/serviceProviders',
-            method='GET',
-            headers=headers)
+        response = self.client.get('/api/serviceProviders')
         self.assert200(response,
                        f"Response body is : {response.json}")
         assert len(response.json) == expected_provider_count
@@ -87,17 +64,10 @@ class TestServiceProviderController(BaseTestCase):
         """
         ids = self.populate_test_database(num_entries=1)
         housing_program_service_provider = {
-  "provider_name" : "provider_name"
-}
-        headers = { 
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
+            "provider_name" : "provider_name"
         }
-        response = self.client.open(
+        response = self.client.put(
             f"/api/serviceProviders/{ids[0]}",
-            method='PUT',
-            headers=headers,
-            data=json.dumps(housing_program_service_provider),
-            content_type='application/json')
+            json=housing_program_service_provider)
         self.assert200(response,
-                       'Response body is : ' + response.data.decode('utf-8'))
+                       f'Response body is: {response.get_data(as_text=True)}')
