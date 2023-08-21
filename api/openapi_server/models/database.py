@@ -209,6 +209,13 @@ class Host(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
 
+class HostSchema(Schema):
+    id = fields.Int(missing=None)
+    name = fields.Str(required=True)
+
+hostSchema = HostSchema()
+hostsSchema = HostSchema(many=True)
+
 class HostHousehold(Base):
     __tablename__ = "host_household"
 
