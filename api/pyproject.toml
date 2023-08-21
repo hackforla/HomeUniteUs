@@ -142,9 +142,7 @@ prod = [
 # For this project, the top-level packages (alembic, configs, openapi_server) are allowed
 # to be included in an installation.
 # The "." in the `where` key is a work-around to automatically discover them.
-# The exclude ensures that the "tests" package is not included in an installation.
 where = ["."]
-exclude = ["tests"]
 
 [tool.setuptools_scm]
 # The setuptools_scm tool uses this project's git repository to version the build.
