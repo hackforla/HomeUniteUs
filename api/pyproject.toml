@@ -38,10 +38,22 @@ classifiers = [
 #
 # Instructions for updating dependencies:
 #
+# If a transitive dependency needs to be updated but not managed as a core dependency,
+# (for example, updating a patch version or minor version) then use the
+# `pip-compile --upgrade-package TEXT` command for all requirements files and commit the results.
+#
+# Sample:
+# 1. python -m venv .venv
+# 2. source .venv/bin/activate
+# 4. pip-compile --upgrade-package <PACKAGE> requirements.txt
+# 5. pip-compile --upgrade-package <PACKAGE> --extra=dev requirements-dev.txt
+# 6. Commit this file (pyproject.toml), requirements.txt, and requirements-dev.txt to the git repo
+#
 # If a transitive dependency from a requirements file needs to be updated independent of the
 # core dependency it came from, then move it to this file under the respective variant.
 # Leave a comment that it was originally a transitive dependency and the reason its version
-# needed to be maintained as a core dependency.
+# needed to be maintained as a core dependency. For example, the dependency now has a new
+# major version available but this API is only been tested with the previous version.
 #
 # After updating the core dependencies in this file, recreate the auto-generated
 # requirements files using the pip-tools command "pip-compile" in a virtual
@@ -50,8 +62,8 @@ classifiers = [
 # 1. python -m venv .venv
 # 2. source .venv/bin/activate
 # 3. pip install pip-tools (OPTIONAL STEP: this is already included in requirements-dev.txt)
-# 4. pip-compile --output-file=requirements.txt pyproject.toml
-# 5. pip-compile --extra=dev --output-file=requirements-dev.txt pyproject.toml
+# 4. pip-compile --output-file=requirements.txt --strip-extras pyproject.toml
+# 5. pip-compile --extra=dev --output-file=requirements-dev.txt --strip-extras pyproject.toml
 # 6. Commit this file (pyproject.toml), requirements.txt, and requirements-dev.txt to the git repo
 #
 dependencies = [
@@ -64,7 +76,9 @@ dependencies = [
     # boto3 is used for connecting to AWS resources
     "boto3==1.22.10",
 
-    # connexion is the framework that this API is built on top of
+    # This API is built on top of the connexion web framework.
+    # connexion implements routing, validation, security, and parameter passing based on the
+    # OpenAPI specification that is defined in the `openapi_server/openapi` directory.
     # The extra dependency swagger-ui causes the swagger UI to be available at /api/ui.
     "connexion [swagger-ui]==2.13.1",
 

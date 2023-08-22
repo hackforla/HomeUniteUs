@@ -18,6 +18,8 @@ Run `python -V` to check the Python version.
 
 ## Usage - Development
 
+### Getting Started
+
 For development purposes, run the following commands in the `api` directory to get started:
 
 ```shell
@@ -59,12 +61,29 @@ The `tox` tool was installed into your virtual environment using the `pip instal
 
 To launch the tests, run `tox`.
 
-`tox` will run the tests for this (`api`) project using `pytest` in an isolated virtual environment that is distinct from the virtual environment that you created following the instructions from [Usage - Development].
+`tox` will run the tests for this (`api`) project using `pytest` in an isolated virtual environment that is distinct from the virtual environment that you created following the instructions from [Usage - Development](#usage---development).
 
 ### Alembic migrations
 
 When changing the database, you can automatically generate an alembic migration. Simply change the model however you want in `database.py`, run `alembic revision --autogenerate -m <name_of_migration>` to generate a new migration, and then run `alembic upgrade head` to upgrade your database to the latest revision.
 In the case of someone else adding a revision to the database, simply pull their changes to your repo and run `alembic upgrade head` to upgrade your local database to the latest revision.
+
+### Dependency Management
+
+Core dependencies of this project are listed in `pyproject.toml` under the `[project]` table's `dependencies` key. Additionally, this project has two extra variants, `dev` and `prod`, that add to the core dependencies. The `dev` extra variant installs dependencies for developers. The `prod` extra variant installs dependencies for production.
+
+To aid in testing and building a reproducible, predictable, and deterministic API, this project also includes auto-generated requirements files that contains a list of all core and transitive dependencies with pinned versions. These files are:
+
+* `requirements.txt` for a base set dependencies
+* `requirements-dev.txt` that also includes developer dependencies
+
+Developers will use `pip install -r requirements-dev.txt` in their own Python virtual environment when working on this API.
+
+These files are auto-generated using the `pip-tools` command line tool `pip-compile`. That tool reads the core dependencies listed `pyproject.toml` then writes the generated list of pinned versions for all of the core and transitive dependencies to a requirements file. The instructions for updating dependencies is in `pyproject.toml`.
+
+#### Keeping dependencies in sync
+
+When switching branches or pulling changes, use the `pip-sync requirements-dev.txt` command to keep your virtual environment synchronized with the latest requirements file.
 
 ### Using Docker
 
