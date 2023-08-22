@@ -162,3 +162,4 @@ where = ["."]
 # The setuptools_scm tool uses this project's git repository to version the build.
 # The git repository is located in the parent directory relative to this file.
 root = ".."
+tag_regex = "^(?:[\\w-]+-)?[vV](?P<version>[vV]?\\d+(?:\\.\\d+){0,2}[^\\+]*)(?:\\+.*)?$"
