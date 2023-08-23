@@ -1,6 +1,7 @@
 name: Build and Deploy to EC2
-#on: workflow_dispatch
-on: pull_request
+# workflow_dispatch means this workflow is manually triggered.
+# The user will select the branch or tag from the GitHub UI to run this workflow against.
+on: workflow_dispatch
 jobs:
   build-api:
     runs-on: ubuntu-latest
