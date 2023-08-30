@@ -19,3 +19,7 @@ node --version
 7. From the ``app/`` directory run ``npm run dev`` to start a development server at ``http://127.0.0.1:4040/``
 
 The setup for the front end application is now complete and you should see the website running in your browser at the listed port.
+
+## Testing
+
+Within this (`app`) directory, run the command: `npm test`.
