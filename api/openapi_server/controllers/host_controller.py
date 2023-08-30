@@ -1,6 +1,7 @@
 from flask import Response
 
-from openapi_server.models.database import hostSchema, hostsSchema, Host, DataAccessLayer
+from openapi_server.models.database import Host, DataAccessLayer
+from openapi_server.models.schema import hostSchema, hostsSchema
 
 # create host in database
 def create_host(body: dict) -> Response:
@@ -8,7 +9,6 @@ def create_host(body: dict) -> Response:
         new_host = Host(name = body["name"])
         session.add(new_host)
         session.commit()
-        _ = new_host.id
         return hostSchema.dump(new_host), 201
 
 def get_hosts() -> Response:

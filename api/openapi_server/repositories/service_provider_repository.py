@@ -41,9 +41,7 @@ class HousingProviderRepository:
                 )
                 session.add(newProvider)
                 session.commit()
-                session.flush()
-                # primary keys are lazy loaded by default
-                _ = newProvider.id
+                session.refresh(newProvider)
                 return newProvider
             
         return None
@@ -90,7 +88,7 @@ class HousingProviderRepository:
             if provider_to_update:
                 provider_to_update.provider_name = new_name
                 session.commit()
-                _ = provider_to_update.id
+                session.refresh(provider_to_update)
                 return provider_to_update
         return None
     

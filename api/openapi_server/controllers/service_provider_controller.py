@@ -3,7 +3,7 @@ from flask import Response
 
 # Local
 from openapi_server.repositories.service_provider_repository import HousingProviderRepository
-from openapi_server.models.database import housingProgramServiceProviderSchema, housingProgramServiceProviderListSchema
+from openapi_server.models.schema import housingProgramServiceProviderSchema, housingProgramServiceProviderListSchema
 
 housing_provider_repository = HousingProviderRepository()
 

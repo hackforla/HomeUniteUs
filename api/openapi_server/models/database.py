@@ -3,7 +3,6 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, LargeBinary
-from marshmallow import Schema, fields
 from os import environ as env
 
 DATABASE_URL = env.get('DATABASE_URL')
@@ -150,13 +149,6 @@ class HousingProgramServiceProvider(Base):
 
     def __repr__(self):
         return f"HousingProgramServiceProvider(id={id},provider_name='{self.provider_name}')"
-    
-class HousingProgramServiceProviderSchema(Schema):
-    id = fields.Int(missing=None)
-    provider_name = fields.Str(required=True)
-
-housingProgramServiceProviderSchema = HousingProgramServiceProviderSchema()
-housingProgramServiceProviderListSchema = HousingProgramServiceProviderSchema(many=True)
 
 class HousingProgram(Base):
     __tablename__ = "housing_program"  
@@ -208,14 +200,6 @@ class Host(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
-
-class HostSchema(Schema):
-    id = fields.Int(missing=None)
-    name = fields.Str(required=True)
-
-hostSchema = HostSchema()
-hostsSchema = HostSchema(many=True)
-
 class HostHousehold(Base):
     __tablename__ = "host_household"
 

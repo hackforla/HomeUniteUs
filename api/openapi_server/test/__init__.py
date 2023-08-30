@@ -35,7 +35,6 @@ class BaseTestCase(TestCase):
         app = connexion.App(__name__)
         app.app.json_encoder = JSONEncoder
         app.add_api(get_bundled_specs(Path('openapi_server/openapi/openapi.yaml')),
-                arguments={'title': 'Home Unite Us'},
                 pythonic_params=True)   
         return app.app      
     
