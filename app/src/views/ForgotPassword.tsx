@@ -85,6 +85,7 @@ export const ForgotPassword = () => {
         <Typography variant="h4">Forgot Password</Typography>
         <Stack
           component="form"
+          title="Forgot Password"
           sx={{width: '100%', alignItems: 'flex-start'}}
           onSubmit={handleSubmit}
           spacing={4}

@@ -106,6 +106,7 @@ export const ForgotPasswordCode = () => {
         </Box>
         <Stack
           component="form"
+          title="Forgot Password Code"
           spacing={4}
           sx={{alignItems: 'center'}}
           onSubmit={handleSubmit}
