@@ -1,0 +1,165 @@
+[build-system]
+# This pyproject.toml uses the setuptools tool as its build backend.
+requires = ["setuptools>=68.0", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "homeuniteus-api"
+# The version of this project is determined dynamically using the
+# setuptools-scm tool. Its configuration is defined in the
+# [tool.setuptools_scm] table.
+dynamic = ["version"]
+authors = [
+    { name="Home Unite Us", email=" homeuniteus@hackforla.org" },
+]
+description = "Web API for Home Unite Us"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
+    "Operating System :: OS Independent",
+]
+
+# The dependencies listed here are the core dependencies of this application.
+#
+# For a reproducible build, auto-generated requirements files are also included
+# in this code's directory. The requirements files contain pinned versions of both
+# the core dependencies and the transitive dependencies (i.e. dependencies of dependencies)
+# of libraries used by this application.
+#
+# Additional core dependencies for variants (e.g. dev and prod) of this project are declared below
+# in the [project.optional-dependencies] table.
+#
+# The requirements files are:
+# requirements.txt     - contains the pinned versions of the base set of dependencies
+# requirements-dev.txt - contains the pinned versions of the base dependencies and
+#                        tools/libraries for development purposes
+#
+# Instructions for updating dependencies:
+#
+# If a transitive dependency needs to be updated but not managed as a core dependency,
+# (for example, updating a patch version or minor version) then use the
+# `pip-compile --upgrade-package TEXT` command for all requirements files and commit the results.
+#
+# Sample:
+# 1. python -m venv .venv
+# 2. source .venv/bin/activate
+# 4. pip-compile --upgrade-package <PACKAGE> requirements.txt
+# 5. pip-compile --upgrade-package <PACKAGE> --extra=dev requirements-dev.txt
+# 6. Commit this file (pyproject.toml), requirements.txt, and requirements-dev.txt to the git repo
+#
+# If a transitive dependency from a requirements file needs to be updated independent of the
+# core dependency it came from, then move it to this file under the respective variant.
+# Leave a comment that it was originally a transitive dependency and the reason its version
+# needed to be maintained as a core dependency. For example, the dependency now has a new
+# major version available but this API is only been tested with the previous version.
+#
+# After updating the core dependencies in this file, recreate the auto-generated
+# requirements files using the pip-tools command "pip-compile" in a virtual
+# environment:
+#
+# 1. python -m venv .venv
+# 2. source .venv/bin/activate
+# 3. pip install pip-tools (OPTIONAL STEP: this is already included in requirements-dev.txt)
+# 4. pip-compile --output-file=requirements.txt --strip-extras pyproject.toml
+# 5. pip-compile --extra=dev --output-file=requirements-dev.txt --strip-extras pyproject.toml
+# 6. Commit this file (pyproject.toml), requirements.txt, and requirements-dev.txt to the git repo
+#
+dependencies = [
+    # alembic is a database migration tool provided by the SQLAlchemy project.
+    # alembic does not use SemVer. Changes in the middle number represents a
+    # "Significant Minor Release" that might be non-backward compatible.
+    # https://alembic.sqlalchemy.org/en/latest/front.html#versioning-scheme
+    "alembic==1.10.2",
+
+    # boto3 is used for connecting to AWS resources
+    "boto3==1.22.10",
+
+    # This API is built on top of the connexion web framework.
+    # connexion implements routing, validation, security, and parameter passing based on the
+    # OpenAPI specification that is defined in the `openapi_server/openapi` directory.
+    # The extra dependency swagger-ui causes the swagger UI to be available at /api/ui.
+    "connexion [swagger-ui]==2.13.1",
+
+    # psycopg2 allows SQLAlchemy to communicate with PostgreSQL
+    "psycopg2-binary==2.9.5",
+
+    # python-dotenv allows the API to pull in external configuration from a .env file
+    "python-dotenv==0.20.0",
+
+    # SQLAlchemy is a SQL toolkit that this project uses for its
+    # Object Relational Mapper (ORM) capabilities. Although alembic would have
+    # included the latest version of SQLAlchemy as a transitive dependency, it is version
+    # pinned here because this project is built for this version not the latest 2.0 series.
+    "SQLAlchemy==1.4.36",
+
+    # The version of connexion that is in use does not parse multi-file OpenAPI
+    # definitions like the ones found in the openapi directory. However, with the
+    # help of the prance and openapi-spec-validator libraries, this code can pre-parse
+    # the multi-file OpenAPI definitions into a flat structure that is passed to
+    # the connexion framework.
+    "prance==23.6.21.0",
+    "openapi-spec-validator==0.6.0",
+]
+
+# This project defines dependencies for different "variants" of this project.
+# The following dependencies are also the "core" dependencies of the variants.
+#
+# Instructions for updating dependencies:
+# Use the instructions as above in the project's core dependencies list.
+#
+[project.optional-dependencies]
+# This defines the "dev" extra dependency group.
+# It installs dependencies necessary for developers of this code.
+dev = [
+  # tox builds and runs tests in an isolated environment.
+  # It has its own configuration file named `tox.ini`.
+  "tox==4.6.4",
+
+  # pytest runs the tests implemented in this project.
+  "pytest==7.3.1",
+
+  # pytest-cov will report the amount of test coverage implemented.
+  "pytest-cov==4.0.0",
+
+  # pytest-randomly will cause tests to be run in random order.
+  "pytest-randomly==3.12.0",
+
+  # Flask-Testing is included to help test Flask specific parts of this project.
+  "Flask-Testing==0.8.1",
+
+  # pip-tools provides the tools pip-compile and pip-sync to help manage requirements files
+  "pip-tools",
+]
+
+# This defines the "prod" extra dependency group.
+# It installs dependencies necessary for running this API in production.
+prod = [
+  # This API requires a WSGI server to run in production. gunicorn is a WSGI
+  # HTTP server that is used as an intermediary between a HTTP proxy and this
+  # application. It can be installed as an extra dependency in a production-like
+  # environment.
+  "gunicorn==21.2.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/hackforla/HomeUniteUs"
+"Bug Tracker" = "https://github.com/hackforla/HomeUniteUs/issues"
+
+[tool.setuptools.packages.find]
+# The find packages tool looks for import packages and modules to include in an installation.
+# The `where` parameter tells the tool where to start looking for them.
+# Since this project is using a flat-layout structure with multiple top-level packages,
+# automatic discovery is does not work "to prevent common errors such as accidentally
+# publishing code not meant for distribution".
+# For this project, the top-level packages (alembic, configs, openapi_server) are allowed
+# to be included in an installation.
+# The "." in the `where` key is a work-around to automatically discover them.
+where = ["."]
+
+[tool.setuptools_scm]
+# The setuptools_scm tool uses this project's git repository to version the build.
+# The git repository is located in the parent directory relative to this file.
+root = ".."
+tag_regex = "^(?:[\\w-]+-)?[vV]?(?P<version>[vV]?\\d+(?:\\.\\d+){0,2}[^\\+]*)(?:\\+.*)?$"
