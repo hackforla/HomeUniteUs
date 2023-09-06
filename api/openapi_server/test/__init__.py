@@ -29,7 +29,7 @@ class BaseTestCase(TestCase):
         DataAccessLayer._engine = None
         DataAccessLayer._conn_string = "sqlite:///:memory:"
         DataAccessLayer.db_init()
-        self.provider_repo = HousingProviderRepository(DataAccessLayer.get_engine())
+        self.provider_repo = HousingProviderRepository()
 
         logging.getLogger('connexion.operation').setLevel('ERROR')
         app = connexion.App(__name__)

@@ -4,23 +4,9 @@ from typing import Optional, List
 from sqlalchemy.orm import Session
 
 # Local
-from openapi_server.models import database as db
-from openapi_server.models.database import HousingProgramServiceProvider
-from openapi_server.models.database import DataAccessLayer
+from openapi_server.models.database import HousingProgramServiceProvider, DataAccessLayer
 
 class HousingProviderRepository:
-    
-    def __init__(self, db_engine=None):
-        """Instantiate HousingProviderRepository
-
-        :param db_engine: persistence layer instance
-        :type db_engine: Engine
-
-        :rtype: None
-        """
-        if db_engine is None:
-            db_engine = db.DataAccessLayer.get_engine()
-        self.db_engine = db_engine
 
     def create_service_provider(self, provider_name: str) -> Optional[HousingProgramServiceProvider]:
         """

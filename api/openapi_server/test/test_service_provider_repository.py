@@ -15,7 +15,7 @@ def empty_housing_repo() -> HousingProviderRepository:
     DataAccessLayer._conn_string = "sqlite:///:memory:"
     DataAccessLayer.db_init()
 
-    yield HousingProviderRepository(DataAccessLayer.get_engine())
+    yield HousingProviderRepository()
     
     test_engine, DataAccessLayer._engine = DataAccessLayer._engine, None 
     test_engine.dispose()
