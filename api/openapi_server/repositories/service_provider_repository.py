@@ -31,18 +31,18 @@ class HousingProviderRepository:
         if the service provider already exists.
         """
         with DataAccessLayer.session() as session:
-            existingProvider = session.query(HousingProgramServiceProvider).filter(
+            existing_provider = session.query(HousingProgramServiceProvider).filter(
                 HousingProgramServiceProvider.provider_name == provider_name
             ).one_or_none()
 
-            if existingProvider is None:
-                newProvider = HousingProgramServiceProvider(
+            if existing_provider is None:
+                new_provider = HousingProgramServiceProvider(
                     provider_name = provider_name
                 )
-                session.add(newProvider)
+                session.add(new_provider)
                 session.commit()
-                session.refresh(newProvider)
-                return newProvider
+                session.refresh(new_provider)
+                return new_provider
             
         return None
     
@@ -97,6 +97,6 @@ class HousingProviderRepository:
             return lcl_session.query(HousingProgramServiceProvider).count()
         
         if existing_session is None:
-            with DataAccessLayer.session() as newSession:
-                return count(newSession) 
+            with DataAccessLayer.session() as session:
+                return count(session) 
         return count(existing_session)

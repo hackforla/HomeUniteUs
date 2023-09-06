@@ -1,7 +1,7 @@
 from flask import Response
 
 from openapi_server.models.database import Host, DataAccessLayer
-from openapi_server.models.schema import hostSchema, hostsSchema
+from openapi_server.models.schema import host_schema, hosts_schema
 
 # create host in database
 def create_host(body: dict) -> Response:
@@ -9,9 +9,9 @@ def create_host(body: dict) -> Response:
         new_host = Host(name = body["name"])
         session.add(new_host)
         session.commit()
-        return hostSchema.dump(new_host), 201
+        return host_schema.dump(new_host), 201
 
 def get_hosts() -> Response:
     with DataAccessLayer.session() as session:
         all_hosts = session.query(Host).all()
-        return hostsSchema.dump(all_hosts), 200
+        return hosts_schema.dump(all_hosts), 200

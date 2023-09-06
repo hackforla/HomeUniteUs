@@ -8,7 +8,7 @@ class HousingProgramServiceProviderSchema(Schema):
     id = fields.Int(missing=None)
     provider_name = fields.Str(required=True)
 
-hostSchema = HostSchema()
-hostsSchema = HostSchema(many=True)
-housingProgramServiceProviderSchema = HousingProgramServiceProviderSchema()
-housingProgramServiceProviderListSchema = HousingProgramServiceProviderSchema(many=True)
+host_schema = HostSchema()
+hosts_schema = HostSchema(many=True)
+service_provider_schema = HousingProgramServiceProviderSchema()
+service_provider_list_schema = HousingProgramServiceProviderSchema(many=True)
