@@ -9,12 +9,9 @@ from os import environ as env
 from dotenv import load_dotenv, find_dotenv
 from flask import redirect, request, session
 from openapi_server.exceptions import AuthError
-from openapi_server.models import database as db
+from openapi_server.models.database import DataAccessLayer, User
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
-from functools import wraps
-
-db_engine = db.DataAccessLayer.get_engine()
 
 # Load .env file
 ENV_FILE = find_dotenv()
@@ -96,8 +93,8 @@ def signUpHost():  # noqa: E501
     secret_hash = get_secret_hash(body['email'])
 
     # Signup user
-    with Session(db_engine) as session:
-        user = db.User(email=body['email'])
+    with DataAccessLayer.session() as session:
+        user = User(email=body['email'])
         session.add(user)
         try:
             session.commit()
@@ -151,8 +148,8 @@ def signUpCoordinator():  # noqa: E501
     secret_hash = get_secret_hash(body['email'])
 
     # Signup user
-    with Session(db_engine) as session:
-        user = db.User(email=body['email'])
+    with DataAccessLayer.session() as session:
+        user = User(email=body['email'])
         session.add(user)
         try:
             session.commit()
@@ -367,9 +364,9 @@ def token():
     # create user object from user data
     user = get_user_attr(user_data)
 
-    with Session(db_engine) as db_session:
-        db_user = db.User(email=user['email'])
-        if db_session.query(db.User.id).filter_by(email=user["email"]).first() is None:
+    with DataAccessLayer.session() as db_session:
+        db_user = User(email=user['email'])
+        if db_session.query(User.id).filter_by(email=user["email"]).first() is None:
             db_session.add(db_user)
             db_session.commit()
 

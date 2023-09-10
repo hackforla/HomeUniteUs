@@ -1,140 +1,88 @@
+from typing import Optional, List
+
 # Third Party
 from sqlalchemy.orm import Session
 
 # Local
-from openapi_server.models.service_provider_with_id import ServiceProviderWithId
-from openapi_server.models.service_provider import ServiceProvider
-from openapi_server.models import database as db
+from openapi_server.models.database import HousingProgramServiceProvider, DataAccessLayer
 
 class HousingProviderRepository:
-    
-    def __init__(self, db_engine=None):
-        """Instantiate HousingProviderRepository
 
-        :param db_engine: persistence layer instance
-        :type db_engine: Engine
-
-        :rtype: None
+    def create_service_provider(self, provider_name: str) -> Optional[HousingProgramServiceProvider]:
         """
-        if db_engine is None:
-            db_engine = db.DataAccessLayer.get_engine()
-        self.db_engine = db_engine
+        Create a housing program service provider, if it
+        is not already in the database. 
 
-    def create_service_provider(self, provider):
-        """Create a housing program service provider
-
-        :param provider: provider to create. 
-        :type provider: ServiceProvider
-
-        :rtype: ServiceProviderWithId
+        Return the newly created service provider. Return None
+        if the service provider already exists.
         """
-        session = self._get_session()
-        row = self._generate_row(provider)
+        with DataAccessLayer.session() as session:
+            existing_provider = session.query(HousingProgramServiceProvider).filter(
+                HousingProgramServiceProvider.provider_name == provider_name
+            ).one_or_none()
 
-        session.add(row)
-        session.commit()
-        provider["id"] = row.id
-
-        session.close()
-        return ServiceProviderWithId.from_dict(provider)
+            if existing_provider is None:
+                new_provider = HousingProgramServiceProvider(
+                    provider_name = provider_name
+                )
+                session.add(new_provider)
+                session.commit()
+                session.refresh(new_provider)
+                return new_provider
+            
+        return None
     
-    def delete_service_provider(self, provider_id):
+    def delete_service_provider(self, provider_id: int) -> bool:
         """Delete a service provider. Return false if the
         service provider is not found. Return true otherwise.
 
-        :param provider_id: The ID of the service provider to read, update or delete
-        :type provider_id: int
+        :param provider_id: The ID of the service provider to delete.
+        """
+        with DataAccessLayer.session() as session:
+            provider = session.query(HousingProgramServiceProvider).get(provider_id)
+            if provider:
+                session.delete(provider)
+                session.commit()
+                return True
 
-        :rtype: bool
-        """  
-        num_rows_deleted = 0
-        session = self._get_session()
-        query = self._get_query_by_id(session, provider_id)
-        if query.first() != None:
-            num_rows_deleted = query.delete()
-            session.commit()
-        
-        session.close()
-        return bool(num_rows_deleted > 0)
+        return False
 
-    def get_service_provider_by_id(self, provider_id): 
+    def get_service_provider_by_id(self, provider_id: int) -> Optional[HousingProgramServiceProvider]: 
         """Get details about a housing program service provider from an ID
 
-        # noqa: E501
-
         :param provider_id: The ID of the service provider to read, update or delete
         :type provider_id: int
-
-        :rtype: ServiceProviderWithId
         """
-        session = self._get_session()
-        result = None
-
-        row = session.get(
-                db.HousingProgramServiceProvider, provider_id)
-        if row != None:
-            provider = ServiceProvider(
-                provider_name=row.provider_name).to_dict()
+        with DataAccessLayer.session() as session:
+            return session.query(HousingProgramServiceProvider).get(provider_id)
             
-            provider["id"] = row.id
-            result = ServiceProviderWithId.from_dict(provider)
-
-        session.close()
-        return result
-            
-    def get_service_providers(self):
-        """Get a list of housing program service providers.
-
-        :rtype: List[ServiceProviderWithId]
+    def get_service_providers(self) -> List[HousingProgramServiceProvider]:
         """
-        providers = []        
-        session = self._get_session()
-        table = session.query(db.HousingProgramServiceProvider).all()
-
-        for row in table:
-            provider = ServiceProvider(
-                provider_name=row.provider_name).to_dict()
-            
-            provider["id"] = row.id
-            providers.append(ServiceProviderWithId.from_dict(provider))
-
-        session.close()
-        return providers
-
-    
-    def update_service_provider(self, provider, provider_id):  
-        """Update a housing program service provider
-
-        :param provider: provider to create. 
-        :type provider: ServiceProvider
-
-        :param provider_id: The ID of the service provider to read, update or delete
-        :type provider_id: int
-
-        :rtype: ServiceProviderWithId
+        Get a list of all housing program service providers.
         """
-        result = None
-        session = self._get_session()
-        query = session.query(
-                db.HousingProgramServiceProvider).filter(
-                    db.HousingProgramServiceProvider.id == provider_id)
-        if query.first() != None:
-            query.update(provider)
-            session.commit()
-            provider["id"] = provider_id
-            result = ServiceProviderWithId.from_dict(provider)
-        session.close()
-        return result
+        with DataAccessLayer.session() as session:
+            return session.query(HousingProgramServiceProvider).all()
+
+    def update_service_provider(self, new_name: str, provider_id: int) -> Optional[HousingProgramServiceProvider]:  
+        """
+        Update a housing program service provider with
+        id 'provider_id'. Return the updated service provider
+        if update is successful, otherwise return None.
+        """
+        with DataAccessLayer.session() as session:
+            provider_to_update = session.query(HousingProgramServiceProvider).get(provider_id)
+            if provider_to_update:
+                provider_to_update.provider_name = new_name
+                session.commit()
+                session.refresh(provider_to_update)
+                return provider_to_update
+        return None
     
-    def _get_session(self):
-        return Session(self.db_engine)
-    
-    def _generate_row(self, provider):
-        return db.HousingProgramServiceProvider(
-            provider_name=provider["provider_name"]
-        )
-    
-    def _get_query_by_id(self, session, id):
-        return session.query(
-                db.HousingProgramServiceProvider).filter(
-                    db.HousingProgramServiceProvider.id == id)
+    def provider_count(self, existing_session: Session = None):
+        def count(lcl_session: Session):
+            return lcl_session.query(HousingProgramServiceProvider).count()
+        
+        if existing_session is None:
+            with DataAccessLayer.session() as session:
+                return count(session) 
+        return count(existing_session)
