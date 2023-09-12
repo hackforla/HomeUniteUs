@@ -1,6 +1,10 @@
 export {AccountVerification} from './AccountVerification';
 export {CoordinatorDashboard} from './CoordinatorDashboard';
 export {GuestApplicationTracker} from './GuestApplicationTracker';
+export {GuestSettings} from './GuestSettings';
+export {GuestContacts} from './GuestContacts';
+export {GuestTasks} from './GuestTasks';
+export {GuestDocuments} from './GuestDocuments';
 export {Home} from './Home';
 export {HostApplicationTracker} from './HostApplicationTracker';
 export {HostsList} from './HostsList';
@@ -16,4 +20,3 @@ export {ForgotPasswordCode} from './ForgotPasswordCode';
 export {ForgotPasswordSuccess} from './ForgotPasswordSuccess';
 export {Settings} from './Settings';
 export {ConfirmSignUp} from './ConfirmSignUp';
-export {GuestDocuments} from './GuestDocuments';

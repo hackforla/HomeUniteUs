@@ -28,11 +28,14 @@ import {
   SelectAccountType,
   ConfirmSignUp,
   GuestDocuments,
+  GuestContacts,
+  GuestTasks,
+  GuestSettings,
 } from './views';
 import {AccountVerification} from './views/AccountVerification';
 import {AppLayout, Header} from './components/common';
 import {ResetPasswordContext} from './components/authentication/ResetPasswordContext';
-import {DashboardLayout} from './components/layouts';
+import {DashboardLayout} from './components/layout';
 
 function Profile() {
   return <div>Hello from profile</div>;
@@ -114,6 +117,9 @@ function HuuApp() {
         >
           <Route index element={<GuestApplicationTracker />} />
           <Route path="documents" element={<GuestDocuments />} />
+          <Route path="contacts" element={<GuestContacts />} />
+          <Route path="tasks" element={<GuestTasks />} />
+          <Route path="settings" element={<GuestSettings />} />
         </Route>
       </Routes>
     </>
