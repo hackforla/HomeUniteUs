@@ -10,7 +10,9 @@ import logo from '../../img/favicon.png';
 import {useSignOutMutation} from '../../services/auth';
 import {useAppDispatch} from '../../app/hooks/store';
 import {setCredentials} from '../../app/authSlice';
+
 import {Link, useNavigate} from 'react-router-dom';
+import {styled} from '@mui/system';
 
 const userName = 'Hank Hill';
 
@@ -26,7 +28,7 @@ interface OwnProps {
   onClick: () => void;
 }
 
-export const UserHeader = ({onClick}: OwnProps) => {
+export const AuthenticatedHeader = ({onClick}: OwnProps) => {
   return (
     <Box sx={{display: 'flex'}}>
       <AppBar
@@ -43,15 +45,11 @@ export const UserHeader = ({onClick}: OwnProps) => {
             aria-label="open drawer"
             edge="start"
             onClick={onClick}
-            sx={{mr: 2, display: {sm: 'none'}}}
+            sx={{mr: 2, height: '40px', width: '40px', display: {sm: 'none'}}}
           >
             <MenuIcon />
           </IconButton>
-          <img
-            style={{width: '40px', height: '40px'}}
-            src={logo}
-            alt="Home Unite Us logo"
-          />
+          <StyledLogo src={logo} alt="Home Unite Us logo" />
           <Stack direction="row" gap={1} sx={{alignItems: 'center'}}>
             <AvatarDropdownMenu />
           </Stack>
@@ -60,6 +58,14 @@ export const UserHeader = ({onClick}: OwnProps) => {
     </Box>
   );
 };
+
+const StyledLogo = styled('img')(({theme}) => ({
+  width: '40px',
+  height: '40px',
+  [theme.breakpoints.down('sm')]: {
+    display: 'none',
+  },
+}));
 
 const AvatarDropdownMenu = () => {
   const [signOut] = useSignOutMutation();

@@ -17,7 +17,7 @@ import {Link} from '@mui/material';
 import {styled} from '@mui/system';
 import {Outlet, useLocation} from 'react-router-dom';
 
-import {UserHeader} from '../common';
+import {AuthenticatedHeader} from '../common';
 
 const DRAWER_WIDTH = 209;
 const MOBILE_DRAWER_WIDTH = 296;
@@ -76,7 +76,7 @@ export function DashboardLayout({window}: OwnProps) {
 
   return (
     <Box sx={{display: 'flex'}}>
-      <UserHeader onClick={handleDrawerToggle} />
+      <AuthenticatedHeader onClick={handleDrawerToggle} />
       <StyledDrawer width={DRAWER_WIDTH} variant="permanent">
         <Toolbar />
         <StyledList>{navListItems}</StyledList>
@@ -126,19 +126,27 @@ const StyledListItemButton = styled(ListItemButton, {
   border: '1px solid transparent',
   gap: 1,
   borderRadius: theme.shape.borderRadius,
-  color: isSelected ? 'black' : 'white',
-  backgroundColor: isSelected ? 'white' : 'transparent',
+  color: isSelected
+    ? theme.palette.text.primary
+    : theme.palette.primary.contrastText,
+  backgroundColor: isSelected
+    ? theme.palette.primary.contrastText
+    : 'transparent',
   boxShadow: isSelected ? '0px 4px 10px rgba(0, 0, 0, 0.25)' : 'none',
   '&:hover': {
-    backgroundColor: isSelected ? 'white' : 'transparent',
-    border: `1px solid #ffffff`,
+    backgroundColor: isSelected
+      ? theme.palette.primary.contrastText
+      : 'transparent',
+    border: `1px solid ${theme.palette.primary.contrastText}}`,
   },
 }));
 
 const StyledListItemIcon = styled(ListItemIcon, {
   shouldForwardProp: prop => prop !== 'isSelected',
 })<ListItemProps>(({isSelected, theme}) => ({
-  color: isSelected ? 'black' : 'white',
+  color: isSelected
+    ? theme.palette.text.primary
+    : theme.palette.primary.contrastText,
   minWidth: 0,
   marginRight: theme.spacing(1),
 }));
