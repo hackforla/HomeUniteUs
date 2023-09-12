@@ -77,7 +77,13 @@ export function DashboardLayout({window}: OwnProps) {
   return (
     <Box sx={{display: 'flex'}}>
       <AuthenticatedHeader onClick={handleDrawerToggle} />
-      <StyledDrawer width={DRAWER_WIDTH} variant="permanent">
+      <StyledDrawer
+        width={DRAWER_WIDTH}
+        variant="permanent"
+        sx={{
+          display: {xs: 'none', sm: 'block'},
+        }}
+      >
         <Toolbar />
         <StyledList>{navListItems}</StyledList>
       </StyledDrawer>
@@ -86,6 +92,9 @@ export function DashboardLayout({window}: OwnProps) {
         variant="temporary"
         open={mobileOpen}
         onClose={handleDrawerToggle}
+        sx={{
+          display: {xs: 'bloack', sm: 'none'},
+        }}
         ModalProps={{
           keepMounted: true, // Better open performance on mobile.
         }}
