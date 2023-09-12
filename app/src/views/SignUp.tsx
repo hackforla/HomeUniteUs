@@ -1,28 +1,41 @@
 import React from 'react';
-import {useNavigate, useLocation} from 'react-router-dom';
-import {Stack, Typography, styled, Dialog, DialogTitle} from '@mui/material';
+import {
+  IconButton,
+  Alert,
+  Typography,
+  Stack,
+  Divider,
+  Link,
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
+import {useNavigate, useLocation, useParams} from 'react-router-dom';
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
 import {SignUpForm} from '../components/authentication/SignUpForm';
 import {
   SignUpHostRequest,
+  SignUpCoordinatorRequest,
   useSignUpHostMutation,
+  useSignUpCoordinatorMutation,
   useGetTokenMutation,
 } from '../services/auth';
-// import {LocationState} from './SignIn';
-import logo from '../img/favicon.png';
 import {isErrorWithMessage, isFetchBaseQueryError} from '../app/helpers';
+import {FormContainer} from '../components/authentication';
 
 export const SignUp = () => {
-  const [dialogOpen, setDialogOpen] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState('');
-
+  const {type} = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  const [signUp] = useSignUpHostMutation();
-  const [getToken] = useGetTokenMutation();
+
+  const [signUpHost, {isLoading: signUpHostIsLoading}] =
+    useSignUpHostMutation();
+  const [signUpCoordinator, {isLoading: signUpCoordinatorIsLoading}] =
+    useSignUpCoordinatorMutation();
+  const [getToken, {isLoading: getTokenIsLoading}] = useGetTokenMutation();
+  // get type from params
   // const locationState = location.state as LocationState;
 
   // Save location from which user was redirected to login page
@@ -33,13 +46,13 @@ export const SignUp = () => {
       const code = location.search.split('?code=')[1];
       getToken({
         code,
-        callbackUri: 'http://localhost:4040/signup',
+        callbackUri: `/signup/${type}`,
       })
         .unwrap()
         .then(response => {
           const {token, user} = response;
           dispatch(setCredentials({user, token}));
-          navigate('/');
+          navigate('/coordinator');
         })
         .catch(err => {
           if (isFetchBaseQueryError(err)) {
@@ -54,18 +67,26 @@ export const SignUp = () => {
     }
   }, [location]);
 
-  const handleClose = () => {
-    setDialogOpen(false);
-  };
-
-  const handleSignUp = async ({email, password}: SignUpHostRequest) => {
+  const handleSignUp = async ({
+    email,
+    password,
+  }: SignUpHostRequest | SignUpCoordinatorRequest) => {
     try {
-      await signUp({
-        email,
-        password,
-      }).unwrap();
+      if (type === 'host') {
+        await signUpHost({
+          email,
+          password,
+        }).unwrap();
+      }
 
-      setDialogOpen(true);
+      if (type === 'coordinator') {
+        await signUpCoordinator({
+          email,
+          password,
+        }).unwrap();
+      }
+
+      navigate(`/signup/success?email=${email}`);
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
         // you can access all properties of `FetchBaseQueryError` here
@@ -79,66 +100,51 @@ export const SignUp = () => {
   };
 
   return (
-    <>
-      <PageContainer>
-        <FormContainer gap={2}>
-          <Logo src={logo} alt="Home Unite Us logo" />
-          <FormHeader variant="h4">Sign up for an account</FormHeader>
-          <SignUpForm
-            onSubmit={handleSignUp}
-            errorMessage={errorMessage}
-            setErrorMessage={setErrorMessage}
-          />
-        </FormContainer>
-      </PageContainer>
-      <EmailVerificationDialog open={dialogOpen} handleClose={handleClose} />
-    </>
+    <FormContainer>
+      <Stack
+        py={2}
+        spacing={4}
+        sx={{justifyContent: 'center', alignItems: 'center', width: '100%'}}
+      >
+        {errorMessage ? (
+          <Alert
+            sx={{width: '100%'}}
+            severity="error"
+            action={
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                size="small"
+                onClick={() => {
+                  setErrorMessage('');
+                }}
+              >
+                <CloseIcon fontSize="inherit" />
+              </IconButton>
+            }
+          >
+            {errorMessage}
+          </Alert>
+        ) : null}
+        <Typography variant="h4" fontWeight="600">
+          Create Account
+        </Typography>
+        <SignUpForm
+          onSubmit={handleSignUp}
+          signUpHostIsLoading={signUpHostIsLoading}
+          signUpCoordinatorIsLoading={signUpCoordinatorIsLoading}
+          getTokenIsLoading={getTokenIsLoading}
+          // set as type or empty string
+          type={type ? type : ''}
+        />
+        <Divider sx={{width: '100%'}} />
+        <Stack direction="row" justifyContent="flex-end" gap={0.5}>
+          <Typography>Already an account?</Typography>
+          <Link underline="always" href="/signin">
+            Sign in
+          </Link>
+        </Stack>
+      </Stack>
+    </FormContainer>
   );
 };
-
-interface EmailVerificationDialogProps {
-  open: boolean;
-  handleClose: () => void;
-}
-
-const EmailVerificationDialog = ({
-  open,
-  handleClose,
-}: EmailVerificationDialogProps) => {
-  return (
-    <Dialog onClose={handleClose} open={open}>
-      <DialogTitle>
-        We have sent a link to your email. Please verify your email address
-      </DialogTitle>
-    </Dialog>
-  );
-};
-
-const Logo = styled('img')({
-  width: '100px',
-  height: '100px',
-});
-
-const PageContainer = styled('div')(({theme}) => ({
-  backgroundColor: theme.palette.grey[100],
-  display: 'flex',
-  flex: 1,
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: '2rem 0',
-}));
-
-const FormContainer = styled(Stack)(({theme}) => ({
-  maxWidth: '550px',
-  alignItems: 'center',
-  padding: '2rem',
-  border: '1px solid #e0e0e0',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: '#fff',
-  margin: '0 16px',
-}));
-
-const FormHeader = styled(Typography)({
-  textAlign: 'center',
-  fontWeight: 600,
-});

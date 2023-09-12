@@ -30,8 +30,8 @@ export const SignIn = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [signIn] = useSignInMutation();
-  const [getToken] = useGetTokenMutation();
+  const [signIn, {isLoading: signInIsLoading}] = useSignInMutation();
+  const [getToken, {isLoading: getTokenIsLoading}] = useGetTokenMutation();
   // const locationState = location.state as LocationState;
 
   // Save location from which user was redirected to login page
@@ -42,13 +42,13 @@ export const SignIn = () => {
       const code = location.search.split('?code=')[1];
       getToken({
         code,
-        callbackUri: 'http://localhost:4040/signin',
+        callbackUri: '/signin',
       })
         .unwrap()
         .then(response => {
           const {token, user} = response;
           dispatch(setCredentials({user, token}));
-          navigate('/');
+          navigate('/coordinator');
         })
         .catch(err => {
           if (isFetchBaseQueryError(err)) {
@@ -76,7 +76,7 @@ export const SignIn = () => {
       // navigate user to the page they tried to access before being redirected to login page
       // navigate(from, {replace: true});
       // navigate user to home page
-      navigate('/');
+      navigate('/coordinator');
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
         // you can access all properties of `FetchBaseQueryError` here
@@ -119,7 +119,11 @@ export const SignIn = () => {
         <Typography variant="h4" fontWeight="600">
           Sign in
         </Typography>
-        <SignInForm onSubmit={handleSignIn} />
+        <SignInForm
+          onSubmit={handleSignIn}
+          signInIsLoading={signInIsLoading}
+          getTokenIsLoading={getTokenIsLoading}
+        />
         <Divider sx={{width: '100%'}} />
         <Stack direction="row" alignItems="center" gap={0.5}>
           <Typography variant="body2">New user?</Typography>

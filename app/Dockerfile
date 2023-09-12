@@ -22,8 +22,10 @@ FROM nginx
 # Copy client build to runtime image
 COPY --from=builder /app/dist /usr/share/nginx/html/
 
-# Override default configuration
-COPY nginx.conf /etc/nginx/nginx.conf
+# Override default configuration if available
+RUN if [ -e "nginx.conf" ]; then \
+        cp nginx.conf /etc/nginx/nginx.conf; \
+    fi
 
 # Default nginx runs on port 80, but we will 
 #    publish to a different port at Docker 

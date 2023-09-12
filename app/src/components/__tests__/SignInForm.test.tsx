@@ -8,7 +8,11 @@ const prepare = () => {
 
   render(
     <BrowserRouter>
-      <SignInForm onSubmit={onSubmit} />
+      <SignInForm
+        onSubmit={onSubmit}
+        signInIsLoading={false}
+        getTokenIsLoading={false}
+      />
     </BrowserRouter>,
   );
 

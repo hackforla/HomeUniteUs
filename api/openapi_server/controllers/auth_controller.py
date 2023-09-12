@@ -1,5 +1,6 @@
 import connexion
 import boto3
+import botocore
 import hmac
 import base64
 import requests
@@ -8,12 +9,9 @@ from os import environ as env
 from dotenv import load_dotenv, find_dotenv
 from flask import redirect, request, session
 from openapi_server.exceptions import AuthError
-from openapi_server.models import database as db
+from openapi_server.models.database import DataAccessLayer, User
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
-from functools import wraps
-
-db_engine = db.DataAccessLayer.get_engine()
 
 # Load .env file
 ENV_FILE = find_dotenv()
@@ -32,7 +30,9 @@ SECRET_KEY=env.get('SECRET_KEY')
 ROOT_URL=env.get('ROOT_URL')
 cognito_client_url = 'https://homeuniteus.auth.us-east-1.amazoncognito.com'
 
-
+if(ROOT_URL == None): 
+    raise Exception('ROOT_URL is not defined in .env file')
+    
 # Initialize Cognito clients
 userClient = boto3.client('cognito-idp', region_name=COGNITO_REGION, aws_access_key_id = COGNITO_ACCESS_ID, aws_secret_access_key = COGNITO_ACCESS_KEY)
 
@@ -93,8 +93,8 @@ def signUpHost():  # noqa: E501
     secret_hash = get_secret_hash(body['email'])
 
     # Signup user
-    with Session(db_engine) as session:
-        user = db.User(email=body['email'])
+    with DataAccessLayer.session() as session:
+        user = User(email=body['email'])
         session.add(user)
         try:
             session.commit()
@@ -110,18 +110,34 @@ def signUpHost():  # noqa: E501
           SecretHash=secret_hash,
           Username=body['email'],
           Password=body['password'],
+          ClientMetadata={
+              'url': ROOT_URL
+          }
         )
-    except Exception as e:
-        code = e.response['Error']['Code']
-        message = e.response['Error']['Message']
-        status_code = e.response['ResponseMetadata']['HTTPStatusCode']
 
-        raise AuthError({
-                  "code": code, 
-                  "message": message
-              }, status_code)
+        return response
 
-    return response
+    except botocore.exceptions.ClientError as error:
+        match error.response['Error']['Code']:
+            case 'UsernameExistsException': 
+                msg = "A user with this email already exists."
+                raise AuthError({  "message": msg }, 400)
+            case 'NotAuthorizedException':
+                msg = "User is already confirmed."
+                raise AuthError({  "message": msg }, 400)
+            case 'InvalidPasswordException':
+                msg = "Password did not conform with policy"
+                raise AuthError({  "message": msg }, 400)
+            case 'TooManyRequestsException':
+                msg = "Too many requests made. Please wait before trying again."
+                raise AuthError({  "message": msg }, 400)
+            case _:
+                msg = "An unexpected error occurred."
+                raise AuthError({  "message": msg }, 400)
+    except botocore.excepts.ParameterValidationError as error:
+        msg = f"The parameters you provided are incorrect: {error}"
+        raise AuthError({"message": msg}, 500)
+    
 
 def signUpCoordinator():  # noqa: E501
     """Signup a new Coordinator
@@ -132,8 +148,8 @@ def signUpCoordinator():  # noqa: E501
     secret_hash = get_secret_hash(body['email'])
 
     # Signup user
-    with Session(db_engine) as session:
-        user = db.User(email=body['email'])
+    with DataAccessLayer.session() as session:
+        user = User(email=body['email'])
         session.add(user)
         try:
             session.commit()
@@ -149,18 +165,35 @@ def signUpCoordinator():  # noqa: E501
           SecretHash=secret_hash,
           Username=body['email'],
           Password=body['password'],
+          ClientMetadata={
+              'url': ROOT_URL
+          }
         )
-    except Exception as e:
-        code = e.response['Error']['Code']
-        message = e.response['Error']['Message']
-        status_code = e.response['ResponseMetadata']['HTTPStatusCode']
+    
+        return response
+    
+    except botocore.exceptions.ClientError as error:
+        match error.response['Error']['Code']:
+            case 'UsernameExistsException': 
+                msg = "A user with this email already exists."
+                raise AuthError({  "message": msg }, 400)
+            case 'NotAuthorizedException':
+                msg = "User is already confirmed."
+                raise AuthError({  "message": msg }, 400)
+            case 'InvalidPasswordException':
+                msg = "Password did not conform with policy"
+                raise AuthError({  "message": msg }, 400)
+            case 'TooManyRequestsException':
+                msg = "Too many requests made. Please wait before trying again."
+                raise AuthError({  "message": msg }, 400)
+            case _:
+                msg = "An unexpected error occurred."
+                raise AuthError({  "message": msg }, 400)
+    except botocore.excepts.ParameterValidationError as error:
+        msg = f"The parameters you provided are incorrect: {error}"
+        raise AuthError({"message": msg}, 500)
 
-        raise AuthError({
-                  "code": code, 
-                  "message": message
-              }, status_code)
-
-    return response
+        
 
 def signin():
     # Validate request data
@@ -214,6 +247,47 @@ def signin():
     }
 
 
+def resend_confirmation_code():
+    '''
+    Resends the registration confirmation code to the specified user (identified by email).
+    '''
+
+    if connexion.request.is_json:
+        body = connexion.request.get_json()
+
+    if "email" not in body:
+        raise AuthError({"message": "email invalid"}, 400)
+
+    secret_hash = get_secret_hash(body['email'])
+
+    try:
+        email = body['email']
+        userClient.resend_confirmation_code(
+            ClientId=COGNITO_CLIENT_ID,
+            SecretHash=secret_hash,
+            Username=email,
+            ClientMetadata={
+              'url': ROOT_URL
+          }
+        )
+        message = "A confirmation code is being sent again."
+        return {"message": message}, 200
+    except botocore.exceptions.ClientError as error:
+        match error.response['Error']['Code']:
+            case 'UserNotFoundException':
+                msg = "User not found. Confirmation not sent."
+                raise AuthError({"message": msg}, 400)
+            case 'TooManyRequestsException':
+                msg = "Too many attempts to resend confirmation in a short amount of time."
+                raise AuthError({"message": msg}, 429)
+            case _:
+                msg = error.response['Error']['Message']
+                raise AuthError({"message": msg}, 500)
+    except botocore.exceptions.ParamValidationError as error:
+        msg = f"The parameters you provided are incorrect: {error}"
+        raise AuthError({"message": msg}, 500)
+
+
 def confirm():
     # Validate request data
     if connexion.request.is_json:
@@ -261,12 +335,13 @@ def token():
 
     token_url = f"{cognito_client_url}/oauth2/token"
     auth = requests.auth.HTTPBasicAuth(client_id, client_secret)
+    redirect_uri = f"{ROOT_URL}{callback_uri}"
 
     params = {
       'grant_type': 'authorization_code',
       'client_id': client_id,
       'code': code,
-      'redirect_uri': callback_uri
+      'redirect_uri': redirect_uri
     }
 
     # get tokens from oauth2/token endpoint
@@ -289,9 +364,9 @@ def token():
     # create user object from user data
     user = get_user_attr(user_data)
 
-    with Session(db_engine) as db_session:
-        db_user = db.User(email=user['email'])
-        if db_session.query(db.User.id).filter_by(email=user["email"]).first() is None:
+    with DataAccessLayer.session() as db_session:
+        db_user = User(email=user['email'])
+        if db_session.query(User.id).filter_by(email=user["email"]).first() is None:
             db_session.add(db_user)
             db_session.commit()
 
@@ -444,8 +519,9 @@ def private(token_info):
 
 def google():
     redirect_uri = request.args['redirect_uri']
+    print(f"{cognito_client_url}/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+profile+phone+aws.cognito.signin.user.admin&redirect_uri={ROOT_URL}{redirect_uri}&identity_provider=Google")
 
-    return redirect(f"{cognito_client_url}/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+profile+phone+aws.cognito.signin.user.admin&redirect_uri={redirect_uri}&identity_provider=Google")
+    return redirect(f"{cognito_client_url}/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+profile+phone+aws.cognito.signin.user.admin&redirect_uri={ROOT_URL}{redirect_uri}&identity_provider=Google")
 
 def confirm_signup():
     code = request.args['code']

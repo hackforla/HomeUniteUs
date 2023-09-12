@@ -5,15 +5,12 @@ import boto3
 from openapi_server.controllers.auth_controller import get_token_auth_header
 
 from os import environ as env
-from openapi_server.models import database as db
+from openapi_server.models.database import DataAccessLayer, User
 from dotenv import load_dotenv, find_dotenv
 from flask import session
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from openapi_server.exceptions import AuthError
-
-
-db_engine = db.DataAccessLayer.get_engine()
 
 # Load .env file
 ENV_FILE = find_dotenv()
@@ -50,8 +47,8 @@ def delete(user_id: string):
               }, 401)
     
     # delete user from database
-    with Session(db_engine) as db_session:
-        db_session.query(db.User).filter_by(id=user_id).delete()
+    with DataAccessLayer.session() as db_session:
+        db_session.query(User).filter_by(id=user_id).delete()
         try:
             db_session.commit()
         except IntegrityError:
