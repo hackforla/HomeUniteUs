@@ -34,6 +34,11 @@ export const HomeUniteUsTheme = createTheme({
   shape: {
     borderRadius: 4,
   },
+  mixins: {
+    toolbar: {
+      minHeight: 52,
+    },
+  },
 });
 
 // Add component overrides to theme
