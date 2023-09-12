@@ -7,11 +7,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import DashboardOutlined from '@mui/icons-material/DashboardOutlined';
-import TaskOutlined from '@mui/icons-material/TaskOutlined';
-import DocumentScannerOutlined from '@mui/icons-material/DocumentScannerOutlined';
-import ContactsOutlined from '@mui/icons-material/ContactsOutlined';
-import SettingsOutlined from '@mui/icons-material/SettingsOutlined';
 
 import {Link} from '@mui/material';
 import {styled} from '@mui/system';
@@ -22,23 +17,16 @@ import {AuthenticatedHeader} from '../common';
 const DRAWER_WIDTH = 209;
 const MOBILE_DRAWER_WIDTH = 296;
 
-const navItems = [
-  {title: 'Dashboard', icon: <DashboardOutlined />, href: '/guest'},
-  {title: 'My Tasks', icon: <TaskOutlined />, href: '/guest/tasks'},
-  {
-    title: 'My Documents',
-    icon: <DocumentScannerOutlined />,
-    href: '/guest/documents',
-  },
-  {title: 'My Contacts', icon: <ContactsOutlined />, href: '/guest/contacts'},
-  {title: 'Settings', icon: <SettingsOutlined />, href: '/guest/settings'},
-];
-
 interface OwnProps {
   window?: () => Window;
+  navItems: {
+    title: string;
+    icon: React.ReactNode;
+    href: string;
+  }[];
 }
 
-export function DashboardLayout({window}: OwnProps) {
+export function DashboardLayout({window, navItems}: OwnProps) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const location = useLocation();
