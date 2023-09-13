@@ -97,7 +97,13 @@ export const TaskAccordion = ({title, status, tasks}: OwnProps) => {
           {status === 'complete' && <CheckCircleOutlined color="success" />}
           <Typography sx={{fontWeight: 'medium'}}>{title}</Typography>
         </Stack>
-        <Typography sx={{marginRight: 2, fontWeight: 'medium'}}>
+        <Typography
+          sx={{
+            marginRight: 2,
+            fontWeight: 'medium',
+            fontSize: {xs: '12px', md: '14px'},
+          }}
+        >
           {completedTasks.length} of {tasks.length} tasks
         </Typography>
       </AccordionSummary>
