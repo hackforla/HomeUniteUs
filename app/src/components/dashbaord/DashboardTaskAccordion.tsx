@@ -99,7 +99,9 @@ export const TaskAccordion = ({title, status, tasks}: OwnProps) => {
         </Stack>
         <Typography
           sx={{
-            marginRight: 2,
+            width: 'min-content',
+            whiteSpace: 'nowrap',
+            marginRight: {xs: 1, md: 2},
             fontWeight: 'medium',
             fontSize: {xs: '12px', md: '14px'},
           }}
