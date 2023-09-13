@@ -6,12 +6,12 @@ import {
   AccordionDetails,
   Stack,
   Box,
-  useTheme,
   Divider,
 } from '@mui/material';
 import KeyboardArrowDownOutlined from '@mui/icons-material/KeyboardArrowDownOutlined';
 import CheckCircleOutlined from '@mui/icons-material/CheckCircleOutlined';
 import LockIcon from '@mui/icons-material/Lock';
+import {styled} from '@mui/system';
 
 import {Task} from '../../views/GuestApplicationTracker';
 import {DashboardTask} from './DashboardTask';
@@ -25,8 +25,6 @@ interface OwnProps {
 export const TaskAccordion = ({title, status, tasks}: OwnProps) => {
   const [isExpanded, setIsExpanded] = useState(() => status === 'in-progress');
 
-  const theme = useTheme();
-
   const handleChange = () => {
     setIsExpanded(prev => !prev);
   };
@@ -34,81 +32,30 @@ export const TaskAccordion = ({title, status, tasks}: OwnProps) => {
   const completedTasks = tasks.filter(task => task.status === 'complete');
 
   return (
-    <Accordion
+    <StyledAccordion
       onChange={handleChange}
       expanded={isExpanded}
-      sx={{
-        boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)',
-        borderRadius: '4px',
-        '&:before': {
-          display: 'none',
-        },
-      }}
       elevation={0}
     >
-      <AccordionSummary
-        sx={{
-          padding: '4px 32px',
-          '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
-            transform: 'rotate(-90deg)',
-          },
-          '&:before': {
-            display: 'none',
-          },
-        }}
+      <StyledAccordionSummary
         expandIcon={<KeyboardArrowDownOutlined />}
         aria-controls="panel1d-content"
         id="panel1d-header"
       >
         <Stack sx={{flexDirection: 'row', marginRight: 'auto', gap: 2}}>
-          {status === 'in-progress' && (
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '20px',
-                width: '20px',
-                backgroundColor: theme.palette.primary.main,
-                borderRadius: '50%',
-                color: theme.palette.primary.contrastText,
-                fontSize: '12px',
-              }}
-            >
-              1
-            </Box>
-          )}
+          {status === 'in-progress' && <StyledStepLocked>1</StyledStepLocked>}
           {status === 'locked' && (
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '20px',
-                width: '20px',
-                backgroundColor: 'rgba(0, 0, 0, 0.38)',
-                borderRadius: '50%',
-                color: 'rgba(0, 0, 0, 0.54)',
-              }}
-            >
+            <StyledStepNumber>
               <LockIcon sx={{height: 12}} />
-            </Box>
+            </StyledStepNumber>
           )}
           {status === 'complete' && <CheckCircleOutlined color="success" />}
           <Typography sx={{fontWeight: 'medium'}}>{title}</Typography>
         </Stack>
-        <Typography
-          sx={{
-            width: 'min-content',
-            whiteSpace: 'nowrap',
-            marginRight: {xs: 1, md: 2},
-            fontWeight: 'medium',
-            fontSize: {xs: '12px', md: '14px'},
-          }}
-        >
+        <StyledTasksCompleted>
           {completedTasks.length} of {tasks.length} tasks
-        </Typography>
-      </AccordionSummary>
+        </StyledTasksCompleted>
+      </StyledAccordionSummary>
       <Divider />
       <AccordionDetails sx={{padding: 0}}>
         {tasks.map(({title, description, status}, index) => {
@@ -122,6 +69,57 @@ export const TaskAccordion = ({title, status, tasks}: OwnProps) => {
           );
         })}
       </AccordionDetails>
-    </Accordion>
+    </StyledAccordion>
   );
 };
+
+const StyledAccordion = styled(Accordion)({
+  boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)',
+  borderRadius: '4px',
+  '&:before': {
+    display: 'none',
+  },
+});
+
+const StyledAccordionSummary = styled(AccordionSummary)({
+  padding: '4px 32px',
+  '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+    transform: 'rotate(-90deg)',
+  },
+  '&:before': {
+    display: 'none',
+  },
+});
+
+const Step = styled(Box)({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '20px',
+  width: '20px',
+  borderRadius: '50%',
+});
+
+const StyledStepNumber = styled(Step)({
+  backgroundColor: 'rgba(0, 0, 0, 0.38)',
+  color: 'rgba(0, 0, 0, 0.54)',
+});
+
+const StyledStepLocked = styled(Step)(({theme}) => ({
+  backgroundColor: theme.palette.primary.main,
+  color: theme.palette.primary.contrastText,
+}));
+
+const StyledTasksCompleted = styled(Typography)(({theme}) => ({
+  width: 'min-content',
+  whiteSpace: 'nowrap',
+  fontWeight: 'medium',
+  [theme.breakpoints.up('xs')]: {
+    marginRight: theme.spacing(1),
+    fontSize: '12px',
+  },
+  [theme.breakpoints.up('md')]: {
+    marginRight: theme.spacing(2),
+    fontSize: '14px',
+  },
+}));
