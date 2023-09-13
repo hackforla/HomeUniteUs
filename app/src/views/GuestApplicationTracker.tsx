@@ -1,5 +1,62 @@
 import {Divider, Box, Typography, Stack, useTheme} from '@mui/material';
 import {styled} from '@mui/system';
+import {TaskAccordion} from '../components/dashbaord/DashboardTaskAccordion';
+
+export interface Task {
+  title: string;
+  status: 'in-progress' | 'complete' | 'locked';
+  tasks: {
+    title: string;
+    status: 'in-progress' | 'complete' | 'locked';
+    description: string;
+  }[];
+}
+
+const tasks: Task[] = [
+  {
+    title: 'Application and Onboarding',
+    status: 'complete',
+    tasks: [
+      {
+        title: 'Application',
+        status: 'complete',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      },
+      {
+        title: 'Application',
+        status: 'complete',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      },
+    ],
+  },
+  {
+    title: 'Host Matching',
+    status: 'in-progress',
+    tasks: [
+      {
+        title: 'Application',
+        status: 'in-progress',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      },
+      {
+        title: 'Application',
+        status: 'locked',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      },
+    ],
+  },
+  {
+    title: 'Match Finalized',
+    status: 'locked',
+    tasks: [
+      {
+        title: 'Application',
+        status: 'locked',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      },
+    ],
+  },
+];
 
 export function GuestApplicationTracker() {
   const theme = useTheme();
@@ -38,18 +95,16 @@ export function GuestApplicationTracker() {
         </Typography>
         <Divider sx={{mb: 1}} />
         <Stack spacing={2}>
-          <Box
-            sx={{backgroundColor: 'dodgerblue', width: '100%', height: '200px'}}
-          ></Box>
-          <Box
-            sx={{backgroundColor: 'dodgerblue', width: '100%', height: '200px'}}
-          ></Box>
-          <Box
-            sx={{backgroundColor: 'dodgerblue', width: '100%', height: '200px'}}
-          ></Box>
-          <Box
-            sx={{backgroundColor: 'dodgerblue', width: '100%', height: '150px'}}
-          ></Box>
+          {tasks.map(({title, status, tasks}, index) => {
+            return (
+              <TaskAccordion
+                key={`task-accordion-${index}`}
+                title={title}
+                status={status}
+                tasks={tasks}
+              />
+            );
+          })}
         </Stack>
       </Box>
       <Box
