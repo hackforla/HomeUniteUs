@@ -16,20 +16,18 @@ import {styled} from '@mui/system';
 import {Task} from '../../views/GuestApplicationTracker';
 import {DashboardTask} from './DashboardTask';
 
-interface OwnProps {
-  title: Task['title'];
-  status: Task['status'];
-  tasks: Task['tasks'];
-}
-
-export const TaskAccordion = ({title, status, tasks}: OwnProps) => {
+export const TaskAccordion = ({
+  title,
+  status,
+  subTasks,
+}: Pick<Task, 'title' | 'status' | 'subTasks'>) => {
   const [isExpanded, setIsExpanded] = useState(() => status === 'in-progress');
 
   const handleChange = () => {
     setIsExpanded(prev => !prev);
   };
 
-  const completedTasks = tasks.filter(task => task.status === 'complete');
+  const completedTasks = subTasks.filter(task => task.status === 'complete');
 
   return (
     <StyledAccordion
@@ -53,12 +51,12 @@ export const TaskAccordion = ({title, status, tasks}: OwnProps) => {
           <Typography sx={{fontWeight: 'medium'}}>{title}</Typography>
         </Stack>
         <StyledTasksCompleted fontWeight="medium">
-          {completedTasks.length} of {tasks.length} tasks
+          {completedTasks.length} of {subTasks.length} tasks
         </StyledTasksCompleted>
       </StyledAccordionSummary>
       <Divider />
       <AccordionDetails sx={{padding: 0}}>
-        {tasks.map(({title, description, status}, index) => {
+        {subTasks.map(({title, description, status}, index) => {
           return (
             <DashboardTask
               key={`${title}-${index}`}

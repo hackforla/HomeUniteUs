@@ -2,21 +2,25 @@ import {Divider, Box, Typography, Stack, useTheme} from '@mui/material';
 import {styled} from '@mui/system';
 import {TaskAccordion} from '../components/dashbaord/DashboardTaskAccordion';
 
+export type TaskStatus = 'in-progress' | 'complete' | 'locked';
+
+export interface SubTask {
+  title: string;
+  status: TaskStatus;
+  description: string;
+}
+
 export interface Task {
   title: string;
-  status: 'in-progress' | 'complete' | 'locked';
-  tasks: {
-    title: string;
-    status: 'in-progress' | 'complete' | 'locked';
-    description: string;
-  }[];
+  status: TaskStatus;
+  subTasks: SubTask[];
 }
 
 const tasks: Task[] = [
   {
     title: 'Application and Onboarding',
     status: 'in-progress',
-    tasks: [
+    subTasks: [
       {
         title: 'Application',
         status: 'complete',
@@ -39,7 +43,7 @@ const tasks: Task[] = [
   {
     title: 'Host Matching',
     status: 'locked',
-    tasks: [
+    subTasks: [
       {
         title: 'Application',
         status: 'locked',
@@ -55,7 +59,7 @@ const tasks: Task[] = [
   {
     title: 'Match Finalized',
     status: 'locked',
-    tasks: [
+    subTasks: [
       {
         title: 'Application',
         status: 'locked',
@@ -102,13 +106,13 @@ export function GuestApplicationTracker() {
         </Typography>
         <Divider sx={{mb: 1}} />
         <Stack spacing={2}>
-          {tasks.map(({title, status, tasks}, index) => {
+          {tasks.map(({title, status, subTasks}, index) => {
             return (
               <TaskAccordion
                 key={`task-accordion-${index}`}
                 title={title}
                 status={status}
-                tasks={tasks}
+                subTasks={subTasks}
               />
             );
           })}

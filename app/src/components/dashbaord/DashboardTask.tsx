@@ -2,14 +2,13 @@ import {Stack, Box, Typography, Button} from '@mui/material';
 import CheckCircleOutlined from '@mui/icons-material/CheckCircleOutlined';
 import LockIcon from '@mui/icons-material/Lock';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import {SubTask} from '../../views/GuestApplicationTracker';
 
-interface OwnProps {
-  title: string;
-  description: string;
-  status: 'in-progress' | 'complete' | 'locked';
-}
-
-export const DashboardTask = ({title, description, status}: OwnProps) => {
+export const DashboardTask = ({
+  title,
+  description,
+  status,
+}: Pick<SubTask, 'title' | 'description' | 'status'>) => {
   const statusIcons = {
     'in-progress': <AccessTimeIcon sx={{color: '#FFC700'}} />,
     complete: <CheckCircleOutlined color="success" />,
