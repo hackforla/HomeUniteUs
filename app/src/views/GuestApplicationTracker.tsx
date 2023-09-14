@@ -4,13 +4,28 @@ import {TaskAccordion} from '../components/dashbaord/DashboardTaskAccordion';
 
 export type TaskStatus = 'in-progress' | 'complete' | 'locked';
 
+export type TaskIds =
+  | 'application_and_onboarding'
+  | 'host_matching'
+  | 'host_match_finalization';
+
+export type SubTaskIds =
+  | 'submit_application'
+  | 'interview_with_coordinator'
+  | 'attend_training_session'
+  | 'match_with_host'
+  | 'initial_host_meeting'
+  | 'sign_agreement';
+
 export interface SubTask {
+  id: SubTaskIds;
   title: string;
   status: TaskStatus;
   description: string;
 }
 
 export interface Task {
+  id: TaskIds;
   title: string;
   status: TaskStatus;
   subTasks: SubTask[];
@@ -18,21 +33,25 @@ export interface Task {
 
 const tasks: Task[] = [
   {
+    id: 'application_and_onboarding',
     title: 'Application and Onboarding',
     status: 'in-progress',
     subTasks: [
       {
+        id: 'submit_application',
         title: 'Application',
         status: 'complete',
         description:
           'Start your guest application to move on to the next step.',
       },
       {
+        id: 'interview_with_coordinator',
         title: 'Coordinator Interview',
         status: 'in-progress',
         description: 'Meet with your Coordinator to share more about yourself.',
       },
       {
+        id: 'attend_training_session',
         title: 'Training Session',
         status: 'locked',
         description:
@@ -41,27 +60,32 @@ const tasks: Task[] = [
     ],
   },
   {
+    id: 'host_matching',
     title: 'Host Matching',
     status: 'locked',
     subTasks: [
       {
-        title: 'Application',
+        id: 'match_with_host',
+        title: 'Match with a Host',
         status: 'locked',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
       },
       {
-        title: 'Application',
+        id: 'initial_host_meeting',
+        title: 'Meeting with Host',
         status: 'locked',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
       },
     ],
   },
   {
+    id: 'host_match_finalization',
     title: 'Match Finalized',
     status: 'locked',
     subTasks: [
       {
-        title: 'Application',
+        id: 'sign_agreement',
+        title: 'Sign Agreement',
         status: 'locked',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
       },
@@ -106,10 +130,10 @@ export function GuestApplicationTracker() {
         </Typography>
         <Divider sx={{mb: 1}} />
         <Stack spacing={2}>
-          {tasks.map(({title, status, subTasks}, index) => {
+          {tasks.map(({id, title, status, subTasks}) => {
             return (
               <TaskAccordion
-                key={`task-accordion-${index}`}
+                key={id}
                 title={title}
                 status={status}
                 subTasks={subTasks}

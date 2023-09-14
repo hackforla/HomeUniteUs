@@ -56,10 +56,11 @@ export const TaskAccordion = ({
       </StyledAccordionSummary>
       <Divider />
       <AccordionDetails sx={{padding: 0}}>
-        {subTasks.map(({title, description, status}, index) => {
+        {subTasks.map(({id, title, description, status}) => {
           return (
             <DashboardTask
-              key={`${title}-${index}`}
+              key={id}
+              id={id}
               title={title}
               description={description}
               status={status}
