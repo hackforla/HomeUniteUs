@@ -9,6 +9,13 @@ export type TaskIds =
   | 'host_matching'
   | 'host_match_finalization';
 
+export interface Task {
+  id: TaskIds;
+  title: string;
+  status: TaskStatus;
+  subTasks: SubTask[];
+}
+
 export type SubTaskIds =
   | 'submit_application'
   | 'interview_with_coordinator'
@@ -22,13 +29,6 @@ export interface SubTask {
   title: string;
   status: TaskStatus;
   description: string;
-}
-
-export interface Task {
-  id: TaskIds;
-  title: string;
-  status: TaskStatus;
-  subTasks: SubTask[];
 }
 
 const tasks: Task[] = [
