@@ -42,7 +42,7 @@ export const TaskAccordion = ({title, status, tasks}: OwnProps) => {
         aria-controls="panel1d-content"
         id="panel1d-header"
       >
-        <Stack sx={{flexDirection: 'row', marginRight: 'auto', gap: 2}}>
+        <Stack direction="row" sx={{marginRight: 'auto', gap: 2}}>
           {status === 'in-progress' && <StyledStepLocked>1</StyledStepLocked>}
           {status === 'locked' && (
             <StyledStepNumber>
@@ -52,7 +52,7 @@ export const TaskAccordion = ({title, status, tasks}: OwnProps) => {
           {status === 'complete' && <CheckCircleOutlined color="success" />}
           <Typography sx={{fontWeight: 'medium'}}>{title}</Typography>
         </Stack>
-        <StyledTasksCompleted>
+        <StyledTasksCompleted fontWeight="medium">
           {completedTasks.length} of {tasks.length} tasks
         </StyledTasksCompleted>
       </StyledAccordionSummary>
@@ -108,12 +108,12 @@ const StyledStepNumber = styled(Step)({
 const StyledStepLocked = styled(Step)(({theme}) => ({
   backgroundColor: theme.palette.primary.main,
   color: theme.palette.primary.contrastText,
+  fontSize: '12px',
 }));
 
 const StyledTasksCompleted = styled(Typography)(({theme}) => ({
   width: 'min-content',
   whiteSpace: 'nowrap',
-  fontWeight: 'medium',
   [theme.breakpoints.up('xs')]: {
     marginRight: theme.spacing(1),
     fontSize: '12px',

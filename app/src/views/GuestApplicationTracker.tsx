@@ -15,27 +15,34 @@ export interface Task {
 const tasks: Task[] = [
   {
     title: 'Application and Onboarding',
-    status: 'complete',
+    status: 'in-progress',
     tasks: [
       {
         title: 'Application',
         status: 'complete',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        description:
+          'Start your guest application to move on to the next step.',
       },
       {
-        title: 'Application',
-        status: 'complete',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        title: 'Coordinator Interview',
+        status: 'in-progress',
+        description: 'Meet with your Coordinator to share more about yourself.',
+      },
+      {
+        title: 'Training Session',
+        status: 'locked',
+        description:
+          'Complete a training session to prepare you for the host home experience.',
       },
     ],
   },
   {
     title: 'Host Matching',
-    status: 'in-progress',
+    status: 'locked',
     tasks: [
       {
         title: 'Application',
-        status: 'in-progress',
+        status: 'locked',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
       },
       {

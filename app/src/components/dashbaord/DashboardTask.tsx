@@ -10,15 +10,15 @@ interface OwnProps {
 }
 
 export const DashboardTask = ({title, description, status}: OwnProps) => {
+  const statusIcons = {
+    'in-progress': <AccessTimeIcon sx={{color: '#FFC700'}} />,
+    complete: <CheckCircleOutlined color="success" />,
+    locked: <LockIcon sx={{color: 'rgba(0, 0, 0, 0.38)'}} />,
+  };
+
   return (
     <Stack sx={{flexDirection: 'row', px: 4, py: 3, width: '100%'}}>
-      <Box sx={{mr: 2}}>
-        {status === 'complete' && <CheckCircleOutlined color="success" />}
-        {status === 'locked' && (
-          <LockIcon sx={{color: 'rgba(0, 0, 0, 0.38)'}} />
-        )}
-        {status === 'in-progress' && <AccessTimeIcon sx={{color: '#FFC700'}} />}
-      </Box>
+      <Box sx={{mr: 2}}>{statusIcons[status]}</Box>
       <Stack
         sx={{
           flex: 1,
