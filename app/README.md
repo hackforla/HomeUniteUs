@@ -22,7 +22,7 @@ The setup for the front end application is now complete and you should see the w
 
 ## Testing
 
-Within this (`app`) directory, run the command: `npm test`.
+Within this (`app`) directory, run the command: `npm test`. This command runs the `vitest`, a Vite-native unit test framework.
 
 ## Configuration
 
@@ -34,10 +34,11 @@ For production builds, vite preforms a string replacement on the `import.meta.en
 
 The table below describes the environment variables that are used by this app:
 
-| Variable          | Required? | Example                    | Description                                                                                                                                                                                                                                                                    |
-|-------------------|-----------|----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `VITE_HUU_API_BASE_URL` | YES       | http://localhost:4040/api/ | The HUU API's base URL. In a development environment (mode is 'development'): if this variable is not defined, then `http://localhost:4040/api/` will be used by default. In non-development environment: if this variable is not defined, then the build will throw an error. |
-|                   |           |                            |                                                                                                                                                                                                                                                                                |
+| Variable | Required? | Example | Description |
+|----------|-----------|---------|-------------|
+| `VITE_HUU_API_BASE_URL` | YES | http://localhost:4040/api/ | The HUU API's base URL. In a development environment (mode is 'development' or 'test'): if this variable is not defined, then `http://localhost:4040/api/` will be used by default. In non-development environment: if this variable is not defined, then the build will throw an error. |
+|          |           |         |             |
+
 ## Production
 
 This application is statically compiled using `npm run build`. The files created by the build command are placed in a `dist` directory. Those files are then placed into a directory served by `Nginx`. The configuration environment variables are expected to exist prior to building this application.
