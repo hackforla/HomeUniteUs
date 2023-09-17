@@ -15,7 +15,7 @@ export const ProtectedRoute = ({children}: {children: JSX.Element}) => {
   // redirect to login page if user is not authenticated
   // save location from which user was redirected to login page
   if (!user) {
-    return <Navigate to="/" state={{from: location}} replace />;
+    return <Navigate to="/signin" state={{from: location}} replace />;
   }
 
   // render children if user is authenticated
