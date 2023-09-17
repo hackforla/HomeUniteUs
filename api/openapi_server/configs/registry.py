@@ -1,7 +1,8 @@
 from enum import Enum, auto
-from typing import Type, Union
+from typing import Union
+from dotenv import load_dotenv, find_dotenv
 
-from huu_config import HUUConfig
+from .huu_config import HUUConfig
 
 class HUUConfigRegistry(Enum):
     DEVELOPMENT = auto()
@@ -10,7 +11,7 @@ class HUUConfigRegistry(Enum):
 
     @classmethod
     def available_environments(cls) -> str:
-        return ",".join((env.name for env in cls))
+        return ",".join((env.name.lower() for env in cls))
     
     @classmethod
     def from_string(cls, parse_str: str) -> 'HUUConfigRegistry':
@@ -26,15 +27,20 @@ class HUUConfigRegistry(Enum):
         if isinstance(env, str):
             env = cls.from_string(env)
 
+        env_file = find_dotenv()
+        if env_file:
+            # Load variables from a .env file and store as environment vars
+            load_dotenv(env_file)
+
         match env:
             case HUUConfigRegistry.DEVELOPMENT:
-                from development import DevelopmentHUUConfig
+                from .development import DevelopmentHUUConfig
                 return DevelopmentHUUConfig()
             case HUUConfigRegistry.STAGING:
-                from staging import StagingHUUConfig
+                from .staging import StagingHUUConfig
                 return StagingHUUConfig()
             case HUUConfigRegistry.PRODUCTION:
-                from production import ProductionHUUConfig
+                from .production import ProductionHUUConfig
                 return ProductionHUUConfig()
             case _:
                 raise EnvironmentError(f"{env} does not have a registered "

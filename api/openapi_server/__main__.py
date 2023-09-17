@@ -1,21 +1,18 @@
 # Standard Lib
-from os import environ as env
+import os
 from pathlib import Path
 from typing import Dict, Any
 
 # Third Party
 import connexion
-from dotenv import load_dotenv, find_dotenv, get_key
 import prance
 
 # Local
 from openapi_server import encoder
 from openapi_server.models.database import DataAccessLayer
 from openapi_server.exceptions import AuthError, handle_auth_error
-from configs.configs import compile_config
-from configs.config_properties import ConfigProperties as cp
-
-
+from openapi_server.configs.registry import HUUConfigRegistry
+from openapi_server.configs.huu_config import HUUConfig
 DataAccessLayer.db_init()
 
 
@@ -47,7 +44,7 @@ def get_version():
         # package is not installed
         return "0.1.0.dev0"
 
-def create_app():
+def create_app(test_config: HUUConfig = None):
     '''
     Creates a configured application that is ready to be run.
 
@@ -59,6 +56,17 @@ def create_app():
     be loaded by a WSGI server in a production-like environment with
     `openapi_server.__main__:create_app()`.
     '''
+
+    if (test_config):
+        conf = test_config
+    else: 
+        app_environment = os.getenv("ENV")
+        if not app_environment:
+            raise EnvironmentError("The ENV variable or a test configuration must be provided. This variable "
+                                "is used to select the application configuration "
+                                "at runtime. Available options are "
+                                f"{HUUConfigRegistry.available_environments()}")
+        conf = HUUConfigRegistry.load_config(app_environment)
 
     # `connexion.App` is aliased to `connexion.FlaskApp` (as of connexion v2.13.1)
     # which is the connexion layer built on top of Flask. So we think of it as
@@ -72,34 +80,19 @@ def create_app():
     connexion_app.add_api(parsed_specs, pythonic_params=True)
     connexion_app.add_error_handler(AuthError, handle_auth_error)
 
-    ENV_FILE = find_dotenv()
-    if ENV_FILE:
-        load_dotenv(ENV_FILE)
-    SECRET_KEY = env.get("SECRET_KEY")
-    env_config_profile = get_key(find_dotenv(), "CONFIG_PROFILE")
-
     # The underlying instance of Flask is stored in `connexion_app.app`.
     # This is an instance of `flask.Flask`.
     flask_app = connexion_app.app
     flask_app.json_encoder = encoder.JSONEncoder
-    flask_app.secret_key = SECRET_KEY
-
-    # Below, the Flask configuration handler is loaded with the
-    # application configuration settings
-    flask_app.config.from_object(compile_config(env_config_profile))
+    flask_app.config.from_object(conf)
 
     return connexion_app
 
 
 if __name__ == "__main__":
-    # This will/should be only run in a development environment
-
-    connexion_app = create_app()
-    flask_app = connexion_app.app
-
-    connexion_app.run(
-        host=flask_app.config[cp.HOST.name],
-        port=flask_app.config[cp.PORT.name],
-        debug=flask_app.config[cp.DEBUG.name],
-        use_reloader=flask_app.config[cp.USE_RELOADER.name],
+    dev_config = HUUConfigRegistry.load_config(HUUConfigRegistry.DEVELOPMENT)
+    create_app(dev_config).run(
+        host=dev_config.HOST,
+        port=dev_config.PORT,
+        load_dotenv=False
     )

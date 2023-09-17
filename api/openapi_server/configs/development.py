@@ -1,15 +1,11 @@
 from dataclasses import dataclass
-from huu_config import HUUConfig
+from .huu_config import HUUConfig
 
 @dataclass(frozen=True)
 class DevelopmentHUUConfig(HUUConfig):
-    FLASK_ENV: str = 'development'
     FLASK_DEBUG: bool = True
-    # We currently default to a publicly available 
-    # server, but this has some security risks 
-    # especially since we are not using https
     PORT: int = 8080
-    HOST: str = "0.0.0.0"
+    HOST: str = "127.0.0.1"
     TESTING: bool = False
     USE_RELOADER: bool = True
     SECRET_KEY: str = "unsecurekey"

@@ -1,12 +1,13 @@
 import os
-from dataclasses import dataclass, fields
-from typing import TypeAlias
+from dataclasses import dataclass, field, fields
+from typing import Any
 
-SecretStr: TypeAlias = str
-"""
-Used to identify configuration secrets. Secrets must be loaded from the
-environment. Attempts to hard code these values will throw an exception.
-"""
+def secret_str_field() -> field:
+    """
+    Used to identify configuration secrets. Secrets must be loaded from the
+    environment. Attempts to hard code these values will throw an exception.
+    """
+    return field(default='', metadata={'is_secret': True})
 
 @dataclass(frozen=True)
 class HUUConfig:
@@ -15,21 +16,16 @@ class HUUConfig:
 
     Environment variables from the system can override all preset values.
     """
-    FLASK_ENV: str
     FLASK_DEBUG: bool
     TESTING: bool
     SECRET_KEY: str
     ROOT_URL: str
     DATABASE_URL: str
 
-    # Define convenience aliases for FLASK_ENV and FLASK_DEBUG.
-    # These two configuration options are treated specially by Flask. They must 
-    # be loaded as environment variables before constructing the Flask 
+    # Define convenience aliases for FLASK_DEBUG.
+    # This configuration option is treated specially by Flask. It must 
+    # be loaded as an environment variable before constructing the Flask 
     # application instance in order to work properly
-
-    @property 
-    def ENV(self):
-        return self.ENV
 
     @property 
     def DEBUG(self):
@@ -47,11 +43,25 @@ class HUUConfig:
         for field in fields(self):
             env_value = os.environ.get(field.name)
             if env_value is not None:
-                expected_type = type(getattr(self, field.name))
-                cast_value = expected_type(env_value)
+                cast_value = self.parse_env_variable(field, env_value)
                 object.__setattr__(self, field.name, cast_value)
 
         self.post_validate()
+
+    @staticmethod
+    def parse_env_variable(field: field, env_var: str) -> Any:
+        if (field.type == str):
+            return env_var
+        elif (field.type == bool):
+            return env_var.lower() not in {"0", "false"}
+        elif (field.type == int):
+            try:
+                return int(env_var)
+            except ValueError:
+                raise ValueError(f"Failed to parse {field.name}. "
+                                 "This env var must be set to a valid integer")
+        else:
+            raise NotImplementedError("Unrecognized configuration field type")
 
     def pre_validate(self):
         '''
@@ -63,10 +73,10 @@ class HUUConfig:
         in a ValueError here.
         '''
         for field in fields(self):
-            if (field.type is SecretStr):
+            if (field.metadata.get("is_secret")):
                 value = getattr(self, field.name)
                 if (value != ''):
-                    raise ValueError("Secret fields cannot have hard-coded values. "
+                    raise ValueError(f"Secret field {field.name} cannot have hard-coded values. "
                                     "These must be loaded directly from an "
                                     "environment variable.")
                 if (os.environ.get(field.name) is None):
