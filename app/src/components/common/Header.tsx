@@ -101,8 +101,6 @@ export const Header = (props: Props) => {
               style={{width: '40px', height: '40px'}}
               src={logo}
               alt="Home Unite Us logo"
-              onClick={handleDrawerToggle}
-              role="button"
             />
           </Stack>
           <Stack direction="row" gap={1} sx={{alignItems: 'center'}}>
