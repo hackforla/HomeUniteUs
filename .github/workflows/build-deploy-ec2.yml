@@ -1,15 +1,21 @@
 name: Build and Deploy to EC2
 # workflow_dispatch means this workflow is manually triggered.
 # The user will select the branch or tag from the GitHub UI to run this workflow against.
-on: workflow_dispatch
+on:
+  workflow_dispatch:
 jobs:
+  run-tests:
+    uses: ./.github/workflows/run-tests.yml
   build-api:
     runs-on: ubuntu-latest
+    needs: run-tests
     defaults:
       run:
         shell: bash
         working-directory: ./api
     outputs:
+      # sdist is a variable that will contain the filename of the API build package
+      # It will be used in the deployment job to know which file to deploy.
       sdist: ${{ steps.package.outputs.sdist }}
     steps:
       - uses: actions/checkout@main
@@ -23,16 +29,11 @@ jobs:
           cache: 'pip'
       - name: Upgrade pip
         run: python -m pip install --upgrade pip
-#      - name: Install API dev Dependencies
-#        run: |
-#          pip install -r requirements-dev.txt
-#      - name: Test with tox
-#        run: |
-#          # Use tox because it is configured to test against the same package type being deployed
-#          tox
       - name: Build API Deployment Package
         id: package
         run: |
+          # It is designed that if $SDIST does not exists then this job will fail.
+          # $SDIST is used to set this workflow's sdist variable for use in the deploy job
           python -m pip install build
           SDIST=$(python -m build --sdist | perl -n -e '/^Successfully built (.*)\.tar\.gz$/ && print $1')
           [ -n "$SDIST" ] && echo "sdist=$SDIST" >> "$GITHUB_OUTPUT"
@@ -44,34 +45,27 @@ jobs:
           retention-days: 7
   build-app:
     runs-on: ubuntu-latest
+    needs: run-tests
     defaults:
       run:
         shell: bash
         working-directory: ./app
-    strategy:
-      matrix:
-        node-version: [16.x]
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 16.x
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: "16.x"
           cache: 'npm'
           cache-dependency-path: app/package-lock.json
       - name: Run npm CI
         run: npm ci
       - name: Build app
+        env:
+          # This environment variable is read by the app during the build
+          # It is a required variable to set the API url in the app
+          VITE_HUU_API_BASE_URL: ${{ vars.VITE_HUU_API_BASE_URL }}
         run: npm run build
-     # - name: Test app
-     #   run: npm run test
-     # - name: Run E2E tests
-     #   uses: cypress-io/github-action@v5
-     #   with:
-     #     install: false
-     #     start: npm run dev
-     #     working-directory: ./app
-     #     wait-on: http://localhost:4040
       - name: Archive App
         uses: actions/upload-artifact@v3
         with:

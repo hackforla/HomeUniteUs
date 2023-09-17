@@ -88,21 +88,21 @@ describe('ResetPassword page', () => {
     setup();
 
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
-    waitFor(() => expect(screen.queryByRole('form')).toBeInTheDocument());
+    expect(screen.getByTitle('Reset Password')).toBeInTheDocument();
   });
 
   test('should dispaly an error message when the email is missing', () => {
     setup({email: ''});
 
-    expect(screen.queryByRole('form')).not.toBeInTheDocument();
-    waitFor(() => expect(screen.queryByRole('alert')).toBeInTheDocument());
+    expect(screen.queryByTitle('Reset Password')).not.toBeInTheDocument();
+    expect(screen.getByRole('alert')).toBeInTheDocument();
   });
 
   test('should dispaly an error message when the code is missing', () => {
     setup({code: ''});
 
-    expect(screen.queryByRole('form')).not.toBeInTheDocument();
-    waitFor(() => expect(screen.queryByRole('alert')).toBeInTheDocument());
+    expect(screen.queryByTitle('Reset Password')).not.toBeInTheDocument();
+    expect(screen.getByRole('alert')).toBeInTheDocument();
   });
 
   test('Submits form with all data and matching password', async () => {
@@ -130,7 +130,7 @@ describe('ResetPassword page', () => {
     );
   });
 
-  test('displays error message returned from server', async () => {
+  test('displays error message returned from server', () => {
     const errorMessage = 'There was an error';
     serviceMocks.isError = true;
     serviceMocks.error = errorMessage;
@@ -141,12 +141,12 @@ describe('ResetPassword page', () => {
     expect(screen.getByRole('alert')).toHaveTextContent(errorMessage);
   });
 
-  test('Submit button is disabled and shows spinner when loading', async () => {
+  test('Submit button is disabled and shows spinner when loading', () => {
     serviceMocks.isLoading = true;
     setup();
 
     const submitButton = screen.getByRole('button', {name: /submit/i});
     expect(submitButton).toBeDisabled();
-    expect(screen.queryByRole('progressbar')).toBeInTheDocument();
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
   });
 });

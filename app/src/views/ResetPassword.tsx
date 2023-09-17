@@ -64,6 +64,7 @@ export const ResetPassword = () => {
         <Typography variant="h4">Reset Password</Typography>
         <Stack
           component="form"
+          title="Reset Password"
           spacing={4}
           sx={{width: '100%', alignItems: 'flex-start'}}
           onSubmit={handleSubmit}
