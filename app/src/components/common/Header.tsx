@@ -5,6 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import {Stack} from '@mui/material';
 import logo from '../../img/favicon.png';
+import {useLocation} from 'react-router-dom';
 
 const navItems = [
   {title: 'Login', href: '/signin'},
@@ -13,6 +14,7 @@ const navItems = [
 //start from lowest level items and work my way up to avoid removing important items
 export const Header = () => {
   //change component and file name
+  const location = useLocation();
   const pathsToHideNavItems = ['/signin', '/signup'];
 
   const shouldHideItems = pathsToHideNavItems.includes(location.pathname);
