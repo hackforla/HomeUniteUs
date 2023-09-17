@@ -13,12 +13,9 @@ const navItems = [
 //start from lowest level items and work my way up to avoid removing important items
 export const Header = () => {
   //change component and file name
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  mobileOpen;
+  const pathsToHideNavItems = ['/signin', '/signup'];
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(prevState => !prevState);
-  };
+  const shouldHideItems = pathsToHideNavItems.includes(location.pathname);
 
   return (
     <Box sx={{display: 'flex'}}>
@@ -37,27 +34,27 @@ export const Header = () => {
               style={{width: '40px', height: '40px'}}
               src={logo}
               alt="Home Unite Us logo"
-              onClick={handleDrawerToggle}
-              role="button"
             />
           </Stack>
-          <Stack direction="row" gap={1} sx={{alignItems: 'center'}}>
-            <Box sx={{display: {xs: 'none', sm: 'flex'}}}>
-              {navItems.map(({title, href}) => {
-                const variant = title === 'Sign Up' ? 'contained' : 'text';
-                return (
-                  <Button
-                    variant={variant}
-                    href={href}
-                    color="primary"
-                    key={title}
-                  >
-                    {title}
-                  </Button>
-                );
-              })}
-            </Box>
-          </Stack>
+          {!shouldHideItems ? (
+            <Stack direction="row" gap={1} sx={{alignItems: 'center'}}>
+              <Box sx={{display: 'flex'}}>
+                {navItems.map(({title, href}) => {
+                  const variant = title === 'Sign Up' ? 'contained' : 'text';
+                  return (
+                    <Button
+                      variant={variant}
+                      href={href}
+                      color="primary"
+                      key={title}
+                    >
+                      {title}
+                    </Button>
+                  );
+                })}
+              </Box>
+            </Stack>
+          ) : null}
         </Toolbar>
       </AppBar>
     </Box>
