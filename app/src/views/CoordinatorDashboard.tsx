@@ -10,6 +10,7 @@ import {
   useTheme,
 } from '@mui/material';
 import {UiPlaceholder} from '../components/common/UiPlaceholder';
+import {AuthenticatedHeader} from '../components/common';
 
 interface CoordinatorDashboardProps {}
 interface CoordinatorDashboardNavProps {}
@@ -125,6 +126,7 @@ export function CoordinatorDashboardDetailsPanel() {
 export function CoordinatorDashboard(props: CoordinatorDashboardProps) {
   return (
     <Grid sx={{display: 'flex', flex: 1}} container>
+      <AuthenticatedHeader onClick={() => null} />
       <Grid item xs={2}>
         <CoordinatorDashboardNav />
       </Grid>

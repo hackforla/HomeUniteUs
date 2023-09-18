@@ -91,14 +91,6 @@ function HuuApp() {
             }
           />
           <Route
-            path="/coordinator"
-            element={
-              <ProtectedRoute>
-                <CoordinatorDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
             path="/profile"
             element={
               <ProtectedRoute>
@@ -121,6 +113,14 @@ function HuuApp() {
           <Route path="tasks" element={<GuestTasks />} />
           <Route path="settings" element={<GuestSettings />} />
         </Route>
+        <Route
+          path="/coordinator"
+          element={
+            <ProtectedRoute>
+              <CoordinatorDashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );

@@ -11,9 +11,8 @@ const navItems = [
   {title: 'Login', href: '/signin'},
   {title: 'Sign Up', href: '/signup'},
 ];
-//start from lowest level items and work my way up to avoid removing important items
+
 export const Header = () => {
-  //change component and file name
   const location = useLocation();
   const pathsToHideNavItems = ['/signin', '/signup'];
 
