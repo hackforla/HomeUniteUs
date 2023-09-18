@@ -29,6 +29,8 @@ export interface SubTask {
   title: string;
   status: TaskStatus;
   description: string;
+  buttonTitle: string;
+  route: string;
 }
 
 const tasks: Task[] = [
@@ -43,12 +45,16 @@ const tasks: Task[] = [
         status: 'complete',
         description:
           'Start your guest application to move on to the next step.',
+        buttonTitle: 'Start Application',
+        route: '/guest-application',
       },
       {
         id: 'interview_with_coordinator',
         title: 'Coordinator Interview',
         status: 'in-progress',
         description: 'Meet with your Coordinator to share more about yourself.',
+        buttonTitle: 'Schedule interview',
+        route: '/schedule',
       },
       {
         id: 'attend_training_session',
@@ -56,6 +62,8 @@ const tasks: Task[] = [
         status: 'locked',
         description:
           'Complete a training session to prepare you for the host home experience.',
+        buttonTitle: 'Schedule training',
+        route: '/schedule',
       },
     ],
   },
@@ -69,12 +77,16 @@ const tasks: Task[] = [
         title: 'Match with a Host',
         status: 'locked',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        buttonTitle: 'Find hosts',
+        route: '/match',
       },
       {
         id: 'initial_host_meeting',
         title: 'Meeting with Host',
         status: 'locked',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        buttonTitle: 'Schedule meeting',
+        route: '/schedule',
       },
     ],
   },
@@ -88,6 +100,8 @@ const tasks: Task[] = [
         title: 'Sign Agreement',
         status: 'locked',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        buttonTitle: 'Sign agreement',
+        route: '/schedule',
       },
     ],
   },

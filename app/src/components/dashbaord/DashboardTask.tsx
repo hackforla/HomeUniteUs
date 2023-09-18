@@ -2,42 +2,32 @@ import {Stack, Box, Typography, Button} from '@mui/material';
 import CheckCircleOutlined from '@mui/icons-material/CheckCircleOutlined';
 import LockIcon from '@mui/icons-material/Lock';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import {SubTask, SubTaskIds} from '../../views/GuestApplicationTracker';
+import {useNavigate} from 'react-router-dom';
 
-const doSomething = () => {
-  console.log('do something');
-};
+import {SubTask} from '../../views/GuestApplicationTracker';
 
-interface TaskInfo {
-  title: string;
-  onClick?: () => void;
-}
-
-const taskInfo: {[key in SubTaskIds]: TaskInfo} = {
-  submit_application: {
-    title: 'Application',
-    onClick: doSomething,
-  },
-  interview_with_coordinator: {
-    title: 'Start Application',
-    onClick: doSomething,
-  },
-  attend_training_session: {title: 'Start Application', onClick: doSomething},
-  match_with_host: {title: 'Start Application', onClick: doSomething},
-  initial_host_meeting: {title: 'Start Application', onClick: doSomething},
-  sign_agreement: {title: 'Start Application', onClick: doSomething},
-};
+export type DashboardTaskProps = Pick<
+  SubTask,
+  'title' | 'description' | 'status' | 'buttonTitle' | 'route'
+>;
 
 export const DashboardTask = ({
-  id,
   title,
   description,
   status,
-}: Pick<SubTask, 'id' | 'title' | 'description' | 'status'>) => {
+  buttonTitle,
+  route,
+}: DashboardTaskProps) => {
+  const navigate = useNavigate();
+
   const statusIcons = {
     'in-progress': <AccessTimeIcon sx={{color: '#FFC700'}} />,
     complete: <CheckCircleOutlined color="success" />,
     locked: <LockIcon sx={{color: 'rgba(0, 0, 0, 0.38)'}} />,
+  };
+
+  const handleClick = () => {
+    navigate(route);
   };
 
   return (
@@ -63,9 +53,9 @@ export const DashboardTask = ({
               size="medium"
               variant="contained"
               disabled={status === 'complete'}
-              onClick={taskInfo[id].onClick}
+              onClick={handleClick}
             >
-              {taskInfo[id].title}
+              {buttonTitle}
             </Button>
           ) : (
             <Typography>Upcomining</Typography>
