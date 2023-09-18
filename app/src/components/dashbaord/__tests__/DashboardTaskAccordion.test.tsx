@@ -1,5 +1,5 @@
 import {BrowserRouter} from 'react-router-dom';
-import {render, screen} from '../../../utils/test/test-utils';
+import {render, screen, within} from '../../../utils/test/test-utils';
 import {TaskAccordion, TaskAccordionProps} from '../DashboardTaskAccordion';
 
 const task: TaskAccordionProps = {
@@ -47,8 +47,13 @@ const setup = (props?: Partial<TaskAccordionProps>) => {
     </BrowserRouter>,
   );
 
+  const accordion = screen.getByRole('button', {
+    name: /application and onboarding/i,
+  });
+
   return {
     props: values,
+    accordion,
   };
 };
 
@@ -68,10 +73,18 @@ describe('DashboardTaskAccordion', () => {
     ).toBeInTheDocument();
   });
 
-  it('should render a list of subtasks', () => {
-    setup();
-    expect(screen.getByTestId('tasks')).toBeInTheDocument();
-    screen.debug();
+  it('should render the subtasks', () => {
+    const {props} = setup();
+
+    props.subTasks.forEach(({title}) => {
+      expect(screen.getByText(title)).toBeInTheDocument();
+    });
+  });
+
+  it('should be expanded on render when in progress', () => {
+    const {accordion} = setup();
+
+    expect(accordion).toHaveAttribute('aria-expanded', 'true');
   });
 
   it('should render the step number when in progress', () => {
@@ -80,12 +93,16 @@ describe('DashboardTaskAccordion', () => {
   });
 
   it('should render a lock icon when locked', () => {
-    setup({status: 'locked'});
-    expect(screen.getByTestId('LockIcon')).toBeInTheDocument();
+    const {accordion} = setup({status: 'locked'});
+
+    expect(within(accordion).getByTestId('LockIcon')).toBeInTheDocument();
   });
 
   it('should render a check icon when complete', () => {
-    setup({status: 'complete'});
-    expect(screen.getByTestId('CheckCircleOutlinedIcon')).toBeInTheDocument();
+    const {accordion} = setup({status: 'complete'});
+
+    expect(
+      within(accordion).getByTestId('CheckCircleOutlinedIcon'),
+    ).toBeInTheDocument();
   });
 });

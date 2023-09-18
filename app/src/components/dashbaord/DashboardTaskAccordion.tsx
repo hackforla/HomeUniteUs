@@ -43,8 +43,8 @@ export const TaskAccordion = ({
     >
       <StyledAccordionSummary
         expandIcon={<KeyboardArrowDownOutlined />}
-        aria-controls="panel1d-content"
-        id="panel1d-header"
+        aria-controls={`panel${stepNumber}-content`}
+        id={`panel${stepNumber}-header`}
       >
         <Stack direction="row" sx={{marginRight: 'auto', gap: 2}}>
           {status === 'in-progress' && (
