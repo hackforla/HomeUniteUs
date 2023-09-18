@@ -144,10 +144,11 @@ export function GuestApplicationTracker() {
         </Typography>
         <Divider sx={{mb: 1}} />
         <Stack spacing={2}>
-          {tasks.map(({id, title, status, subTasks}) => {
+          {tasks.map(({id, title, status, subTasks}, index) => {
             return (
               <TaskAccordion
                 key={id}
+                stepNumber={index + 1}
                 title={title}
                 status={status}
                 subTasks={subTasks}

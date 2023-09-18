@@ -16,11 +16,17 @@ import {styled} from '@mui/system';
 import {Task} from '../../views/GuestApplicationTracker';
 import {DashboardTask} from './DashboardTask';
 
+export interface TaskAccordionProps
+  extends Pick<Task, 'title' | 'status' | 'subTasks'> {
+  stepNumber: number;
+}
+
 export const TaskAccordion = ({
+  stepNumber,
   title,
   status,
   subTasks,
-}: Pick<Task, 'title' | 'status' | 'subTasks'>) => {
+}: TaskAccordionProps) => {
   const [isExpanded, setIsExpanded] = useState(() => status === 'in-progress');
 
   const handleChange = () => {
@@ -41,7 +47,11 @@ export const TaskAccordion = ({
         id="panel1d-header"
       >
         <Stack direction="row" sx={{marginRight: 'auto', gap: 2}}>
-          {status === 'in-progress' && <StyledStepLocked>1</StyledStepLocked>}
+          {status === 'in-progress' && (
+            <StyledStepLocked data-testid="stepNumber">
+              {stepNumber}
+            </StyledStepLocked>
+          )}
           {status === 'locked' && (
             <StyledStepNumber>
               <LockIcon sx={{height: 12}} />
@@ -55,7 +65,7 @@ export const TaskAccordion = ({
         </StyledTasksCompleted>
       </StyledAccordionSummary>
       <Divider />
-      <AccordionDetails sx={{padding: 0}}>
+      <AccordionDetails data-testid="tasks" sx={{padding: 0}}>
         {subTasks.map(
           ({id, title, description, status, buttonTitle, route}) => {
             return (

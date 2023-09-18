@@ -1,3 +1,4 @@
+import {BrowserRouter} from 'react-router-dom';
 import {fireEvent, render, screen} from '../../../utils/test/test-utils';
 import {DashboardTask, DashboardTaskProps} from '../DashboardTask';
 
@@ -25,12 +26,20 @@ function setup(props?: Partial<DashboardTaskProps>) {
     ...props,
   };
 
-  render(<DashboardTask {...values} />);
+  render(
+    <BrowserRouter>
+      <DashboardTask {...values} />
+    </BrowserRouter>,
+  );
 
   return {props: values};
 }
 
 describe('DashboardTask', () => {
+  afterEach(() => {
+    vi.resetAllMocks();
+  });
+
   it('should render information about the task', () => {
     const {props} = setup();
 
