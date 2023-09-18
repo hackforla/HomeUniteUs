@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import {Box, Typography} from '@mui/material';
 import * as React from 'react';
+import {AuthenticatedHeader} from '../components/common';
 
 interface HostApplicationTrackerProps {}
 
@@ -26,5 +28,12 @@ function reducer(
 
 export function HostApplicationTracker(props: HostApplicationTrackerProps) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
-  return <h1>Host application tracker</h1>;
+  return (
+    <Box>
+      <AuthenticatedHeader onClick={() => null} />
+      <Typography variant="h6" sx={{paddingTop: '60px'}}>
+        Host Application Tracker
+      </Typography>
+    </Box>
+  );
 }

@@ -125,7 +125,7 @@ export function CoordinatorDashboardDetailsPanel() {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function CoordinatorDashboard(props: CoordinatorDashboardProps) {
   return (
-    <Grid sx={{display: 'flex', flex: 1}} container>
+    <Grid sx={{display: 'flex', flex: 1, minHeight: '100vh'}} container>
       <AuthenticatedHeader onClick={() => null} />
       <Grid item xs={2}>
         <CoordinatorDashboardNav />

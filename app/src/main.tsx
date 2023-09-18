@@ -83,14 +83,6 @@ function HuuApp() {
           />
           <Route path="/new-password" element={<NewPassword />} />
           <Route
-            path="/host"
-            element={
-              <ProtectedRoute>
-                <HostApplicationTracker />
-              </ProtectedRoute>
-            }
-          />
-          <Route
             path="/profile"
             element={
               <ProtectedRoute>
@@ -118,6 +110,14 @@ function HuuApp() {
           element={
             <ProtectedRoute>
               <CoordinatorDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/host"
+          element={
+            <ProtectedRoute>
+              <HostApplicationTracker />
             </ProtectedRoute>
           }
         />
