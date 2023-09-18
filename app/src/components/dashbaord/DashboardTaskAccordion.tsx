@@ -46,7 +46,10 @@ export const TaskAccordion = ({
         aria-controls={`panel${stepNumber}-content`}
         id={`panel${stepNumber}-header`}
       >
-        <Stack direction="row" sx={{marginRight: 'auto', gap: 2}}>
+        <Stack
+          direction="row"
+          sx={{marginRight: 'auto', gap: 2, alignItems: 'center'}}
+        >
           {status === 'in-progress' && (
             <StyledStepLocked data-testid="stepNumber">
               {stepNumber}
@@ -95,6 +98,10 @@ const StyledAccordion = styled(Accordion)({
 
 const StyledAccordionSummary = styled(AccordionSummary)({
   padding: '4px 32px',
+  alignItems: 'center',
+  '& .MuiAccordionSummary-content': {
+    alignItems: 'center',
+  },
   '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
     transform: 'rotate(-90deg)',
   },
