@@ -61,9 +61,9 @@ export const Header = (props: Props) => {
       </Typography>
       <Divider />
       <List>
-        {navItems.map(({title}) => (
+        {navItems.map(({title, href}) => (
           <ListItem key={title} disablePadding>
-            <ListItemButton sx={{textAlign: 'center'}}>
+            <ListItemButton sx={{textAlign: 'center'}} href={href}>
               <ListItemText primary={title} />
             </ListItemButton>
           </ListItem>
