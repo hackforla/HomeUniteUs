@@ -24,7 +24,7 @@ class BaseTestCase(TestCase):
         self.provider_repo = HousingProviderRepository()
 
         logging.getLogger('connexion.operation').setLevel('ERROR')
-        return create_app(DebugTestConfig()).flask_app
+        return create_app(DebugTestConfig()).app
     
     def tearDown(self):
         '''

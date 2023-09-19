@@ -88,4 +88,5 @@ class HUUConfig:
         Validate the final configuration options, after overwriting
         the options using the process environment variables.
         '''
-        pass
+        if not self.ROOT_URL:
+            raise ValueError('ROOT_URL is not defined in the application configuration.')

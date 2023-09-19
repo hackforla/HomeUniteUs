@@ -1,68 +1,66 @@
 import os
+import hmac
+import base64
 from pathlib import Path
 from typing import Dict, Any
 from importlib.metadata import version, PackageNotFoundError
 
 import prance
 from flask import Flask
-from flask.config import Config
-from connexion.apps.flask_app import FlaskApp
+from connexion.apps.flask_app import (
+    FlaskApp, 
+    FlaskJSONEncoder, 
+    NumberConverter, 
+    IntegerConverter
+)
 
 from .models.database import DataAccessLayer
 from .exceptions import AuthError, handle_auth_error
 from .configs.registry import HUUConfigRegistry, HUUConfig
 
-class HUUApp(FlaskApp):
-    def __init__(self, app_package_name: str, api_spec_rel_path: Path, *args, **kwargs):
-        super().__init__(app_package_name, *args, **kwargs)
-        self.app: Flask
+class HUUFlaskApp(Flask):
+    '''
+    The HUUFlaskApp can be accessed anywhere that the Flask application context
+    is active, by using the Flask `current_app` proxy.
+    '''
+    def __init__(self,*args, **kwargs):
+        super().__init__(*args, **kwargs)
         self._boto_client = None
-
-        api_spec_path = self.get_root_path() / api_spec_rel_path
-        parsed_specs = self._get_bundled_specs(api_spec_path)
-        parsed_specs['info']['version'] = self.get_version()
-
-        self.add_api(parsed_specs, pythonic_params=True)
-
-    @property 
-    def connexion_app(self) -> 'FlaskApp':
-        return self
-    
-    @property 
-    def flask_app(self) -> Flask:
-        return self.app
-    
-    @property
-    def config(self) -> Config:
-        return self.flask_app.config
 
     @property 
     def environment(self) -> str:
-        return self.app.config["ENV"]
+        return self.config["ENV"]
     
     @property 
     def is_debug_app(self) -> bool:
-        return self.app.config["DEBUG"]
+        return self.config["DEBUG"]
     
     @property
+    def root_url(self) -> str:
+        return self.config["ROOT_URL"]
+
+    @property
     def supports_aws_cognito(self) -> bool:
-        return all(key in self.app.config for key in [
+        return all(key in self.config for key in [
             "COGNITO_REGION",
             "COGNITO_ACCESS_ID",
             "COGNITO_ACCESS_KEY"
         ])
-
-    @property
-    def boto_client(self):
-        if self._boto_client:
-            return self._boto_client
-        
+    
+    def assert_support_aws_cognito(self):
         if not self.supports_aws_cognito():
             raise NotImplementedError("The current application configuration does "
                                       "not support AWS cognito. In the future we will "
                                       "mock this functionality to enable for all "
                                       "configurations. This feature is planned "
                                       "in Issue #577")
+    
+    @property
+    def boto_client(self):
+        if self._boto_client:
+            return self._boto_client
+        
+        self.assert_support_aws_cognito()
         
         import boto3
         self._boto_client = boto3.client('cognito-idp', 
@@ -71,6 +69,32 @@ class HUUApp(FlaskApp):
                                          aws_secret_access_key=self.app.config["COGNITO_ACCESS_KEY"]
                                         )
         return self._boto_client
+    
+    def calc_cognito_hash(self, username: str) -> str:
+        self.assert_support_aws_cognito()
+        message = username + self.config["COGNITO_CLIENT_ID"]
+        secret = bytearray(self.config["COGNITO_CLIENT_SECRET"], 'utf-8')
+        dig = hmac.new(secret, msg=message.encode('utf-8'), digestmod='sha256').digest()
+        return base64.b64encode(dig).decode()
+
+class HUUConnexionApp(FlaskApp):
+    def __init__(self, app_package_name: str, api_spec_rel_path: Path, *args, **kwargs):
+        super().__init__(app_package_name, *args, **kwargs)
+
+        api_spec_path = self.get_root_path() / api_spec_rel_path
+        parsed_specs = self._get_bundled_specs(api_spec_path)
+        parsed_specs['info']['version'] = self._get_version()
+
+        self.add_api(parsed_specs, pythonic_params=True)
+
+    def create_app(self) -> HUUFlaskApp:
+        # Do not call super() here. We are overriding the default
+        # connexion create_app method, to return our HUUFlaskApp type
+        app = HUUFlaskApp(self.import_name, **self.server_args)
+        app.json_encoder = FlaskJSONEncoder
+        app.url_map.converters['float'] = NumberConverter
+        app.url_map.converters['int'] = IntegerConverter
+        return app
          
     @staticmethod
     def _get_bundled_specs(spec_file: Path) -> Dict[str, Any]:
@@ -93,12 +117,12 @@ class HUUApp(FlaskApp):
         return parser.specification
     
     @staticmethod
-    def get_version():
+    def _get_version():
         try:
             return version("homeuniteus-api")
         except PackageNotFoundError:
             # package is not installed
-            return "0.1.0.dev0"
+            return "0.1.0.dev0" 
         
 def create_app(test_config: HUUConfig = None):
     '''
@@ -123,10 +147,11 @@ def create_app(test_config: HUUConfig = None):
                                 f"{HUUConfigRegistry.available_environments()}")
         config = HUUConfigRegistry.load_config(app_environment)
 
-    app = HUUApp(__name__, './openapi/openapi.yaml')
-    app.config.from_object(config)
-    
-    DataAccessLayer.db_init(app.config["DATABASE_URL"])        
-    app.add_error_handler(AuthError, handle_auth_error)
+    connexion_app = HUUConnexionApp(__name__, './openapi/openapi.yaml')
+    connexion_app.add_error_handler(AuthError, handle_auth_error)
 
-    return app
+    flask_app = connexion_app.app
+    flask_app.config.from_object(config)
+    DataAccessLayer.db_init(flask_app.config["DATABASE_URL"])        
+    
+    return connexion_app

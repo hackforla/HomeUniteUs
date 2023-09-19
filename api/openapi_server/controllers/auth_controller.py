@@ -1,46 +1,20 @@
 import connexion
 import boto3
 import botocore
-import hmac
-import base64
 import requests
 
-from os import environ as env
-from dotenv import load_dotenv, find_dotenv
-from flask import redirect, request, session
+from flask import (
+    redirect, 
+    request, 
+    session, 
+    current_app # type: openapi_server.app.HUUFlaskApp
+)
 from openapi_server.exceptions import AuthError
 from openapi_server.models.database import DataAccessLayer, User
-from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
-# Load .env file
-ENV_FILE = find_dotenv()
-if ENV_FILE:
-    load_dotenv(ENV_FILE)
 
-# Define env variables
-COGNITO_REGION=env.get('COGNITO_REGION')
-COGNITO_CLIENT_ID=env.get('COGNITO_CLIENT_ID')
-COGNITO_CLIENT_SECRET=env.get('COGNITO_CLIENT_SECRET')
-COGNITO_USER_POOL_ID=env.get('COGNITO_USER_POOL_ID')
-COGNITO_REDIRECT_URI = env.get('COGNITO_REDIRECT_URI')
-COGNITO_ACCESS_ID = env.get('COGNITO_ACCESS_ID')
-COGNITO_ACCESS_KEY = env.get('COGNITO_ACCESS_KEY')
-SECRET_KEY=env.get('SECRET_KEY')
-ROOT_URL=env.get('ROOT_URL')
 cognito_client_url = 'https://homeuniteus.auth.us-east-1.amazoncognito.com'
-
-if(ROOT_URL == None): 
-    raise Exception('ROOT_URL is not defined in .env file')
-    
-# Initialize Cognito clients
-userClient = boto3.client('cognito-idp', region_name=COGNITO_REGION, aws_access_key_id = COGNITO_ACCESS_ID, aws_secret_access_key = COGNITO_ACCESS_KEY)
-
-# Get secret hash
-def get_secret_hash(username):
-    message = username + COGNITO_CLIENT_ID
-    dig = hmac.new(bytearray(COGNITO_CLIENT_SECRET, 'utf-8'), msg=message.encode('utf-8'), digestmod='sha256').digest()
-    return base64.b64encode(dig).decode()
 
 # Get user attributes from Cognito response
 def get_user_attr(user_data):
@@ -90,7 +64,7 @@ def signUpHost():  # noqa: E501
     if connexion.request.is_json:
         body = connexion.request.get_json()
 
-    secret_hash = get_secret_hash(body['email'])
+    secret_hash = current_app.calc_secret_hash(body['email'])
 
     # Signup user
     with DataAccessLayer.session() as session:
@@ -105,13 +79,13 @@ def signUpHost():  # noqa: E501
             }, 422)
 
     try:
-        response = userClient.sign_up(
-          ClientId=COGNITO_CLIENT_ID,
+        response = current_app.boto_client.sign_up(
+          ClientId=current_app.config['COGNITO_CLIENT_ID'],
           SecretHash=secret_hash,
           Username=body['email'],
           Password=body['password'],
           ClientMetadata={
-              'url': ROOT_URL
+              'url': current_app.root_url
           }
         )
 
@@ -145,7 +119,7 @@ def signUpCoordinator():  # noqa: E501
     if connexion.request.is_json:
         body = connexion.request.get_json()
 
-    secret_hash = get_secret_hash(body['email'])
+    secret_hash = current_app.calc_secret_hash(body['email'])
 
     # Signup user
     with DataAccessLayer.session() as session:
@@ -160,13 +134,13 @@ def signUpCoordinator():  # noqa: E501
             }, 422)
 
     try:
-        response = userClient.sign_up(
-          ClientId=COGNITO_CLIENT_ID,
+        response = current_app.boto_client.sign_up(
+          ClientId=current_app.config['COGNITO_CLIENT_ID'],
           SecretHash=secret_hash,
           Username=body['email'],
           Password=body['password'],
           ClientMetadata={
-              'url': ROOT_URL
+              'url': current_app.root_url
           }
         )
     
@@ -200,12 +174,12 @@ def signin():
     if connexion.request.is_json:
         body = connexion.request.get_json()
 
-    secret_hash = get_secret_hash(body['email'])
+    secret_hash = current_app.calc_secret_hash(body['email'])
 
     # initiate authentication
     try:
-        response = userClient.initiate_auth(
-            ClientId=COGNITO_CLIENT_ID,
+        response = current_app.boto_client.initiate_auth(
+            ClientId=current_app.config['COGNITO_CLIENT_ID'],
             AuthFlow='USER_PASSWORD_AUTH',
             AuthParameters={
                 'USERNAME': body['email'],
@@ -226,13 +200,13 @@ def signin():
     if(response.get('ChallengeName') and response['ChallengeName'] == 'NEW_PASSWORD_REQUIRED'):
         userId = response['ChallengeParameters']['USER_ID_FOR_SRP']
         sessionId = response['Session']
-        return redirect(f"{ROOT_URL}/create-password?userId={userId}&sessionId={sessionId}")              
+        return redirect(f"{current_app.root_url}/create-password?userId={userId}&sessionId={sessionId}")              
 
     access_token = response['AuthenticationResult']['AccessToken']
     refresh_token = response['AuthenticationResult']['RefreshToken']
 
     # retrieve user data
-    user_data = userClient.get_user(AccessToken=access_token)
+    user_data = current_app.boto_client.get_user(AccessToken=access_token)
 
     # create user object from user data
     user = get_user_attr(user_data)
@@ -258,16 +232,16 @@ def resend_confirmation_code():
     if "email" not in body:
         raise AuthError({"message": "email invalid"}, 400)
 
-    secret_hash = get_secret_hash(body['email'])
+    secret_hash = current_app.calc_secret_hash(body['email'])
 
     try:
         email = body['email']
-        userClient.resend_confirmation_code(
-            ClientId=COGNITO_CLIENT_ID,
+        current_app.boto_client.resend_confirmation_code(
+            ClientId=current_app.config['COGNITO_CLIENT_ID'],
             SecretHash=secret_hash,
             Username=email,
             ClientMetadata={
-              'url': ROOT_URL
+              'url': current_app.root_url
           }
         )
         message = "A confirmation code is being sent again."
@@ -293,11 +267,11 @@ def confirm():
     if connexion.request.is_json:
         body = connexion.request.get_json()
     
-    secret_hash = get_secret_hash(body['email'])
+    secret_hash = current_app.calc_secret_hash(body['email'])
 
     try:
-        response = userClient.confirm_sign_up(
-            ClientId=COGNITO_CLIENT_ID,
+        response = current_app.boto_client.confirm_sign_up(
+            ClientId=current_app.config['COGNITO_CLIENT_ID'],
             SecretHash=secret_hash,
             Username=body['email'],
             ConfirmationCode=body['code'],
@@ -316,7 +290,7 @@ def signout():
     access_token = get_token_auth_header()
 
     # Signout user
-    response = userClient.global_sign_out(
+    response = current_app.boto_client.global_sign_out(
         AccessToken=access_token
     )
 
@@ -329,13 +303,13 @@ def signout():
 def token():
     # get code from body
     code = request.get_json()['code']
-    client_id = COGNITO_CLIENT_ID
-    client_secret = COGNITO_CLIENT_SECRET
+    client_id = current_app.config['COGNITO_CLIENT_ID']
+    client_secret = current_app.config['COGNITO_CLIENT_SECRET']
     callback_uri = request.args['callback_uri']
 
     token_url = f"{cognito_client_url}/oauth2/token"
     auth = requests.auth.HTTPBasicAuth(client_id, client_secret)
-    redirect_uri = f"{ROOT_URL}{callback_uri}"
+    redirect_uri = f"{current_app.root_url}{callback_uri}"
 
     params = {
       'grant_type': 'authorization_code',
@@ -352,7 +326,7 @@ def token():
 
     # retrieve user data
     try:
-        user_data = userClient.get_user(AccessToken=access_token)
+        user_data = current_app.boto_client.get_user(AccessToken=access_token)
     except Exception as e:
         code = e.response['Error']['Code']
         message = e.response['Error']['Message']
@@ -392,12 +366,12 @@ def current_session():
 
     # Refresh tokens
     try:
-        response = userClient.initiate_auth(
-            ClientId=COGNITO_CLIENT_ID,
+        response = current_app.boto_client.initiate_auth(
+            ClientId=current_app.config['COGNITO_CLIENT_ID'],
             AuthFlow='REFRESH_TOKEN',
             AuthParameters={
                 'REFRESH_TOKEN': refreshToken,
-                'SECRET_HASH': COGNITO_CLIENT_SECRET
+                'SECRET_HASH': current_app.config['COGNITO_CLIENT_SECRET']
             }
         )
     except Exception as e:
@@ -411,7 +385,7 @@ def current_session():
     accessToken = response['AuthenticationResult']['AccessToken']
 
     # retrieve user data
-    user_data = userClient.get_user(AccessToken=accessToken)
+    user_data = current_app.boto_client.get_user(AccessToken=accessToken)
 
     # create user object from user data
     user = get_user_attr(user_data)
@@ -434,12 +408,12 @@ def refresh():
 
     # Refresh tokens
     try:
-        response = userClient.initiate_auth(
-            ClientId=COGNITO_CLIENT_ID,
+        response = current_app.boto_client.initiate_auth(
+            ClientId=current_app.config['COGNITO_CLIENT_ID'],
             AuthFlow='REFRESH_TOKEN',
             AuthParameters={
                 'REFRESH_TOKEN': refreshToken,
-                'SECRET_HASH': COGNITO_CLIENT_SECRET
+                'SECRET_HASH': current_app.config['COGNITO_CLIENT_SECRET']
             }
         )
     except Exception as e:
@@ -462,12 +436,12 @@ def forgot_password():
     if connexion.request.is_json:
         body = connexion.request.get_json()
 
-    secret_hash = get_secret_hash(body['email'])
+    secret_hash = current_app.calc_secret_hash(body['email'])
     
     # call forgot password method
     try:
-        response = userClient.forgot_password(
-            ClientId=COGNITO_CLIENT_ID,
+        response = current_app.boto_client.forgot_password(
+            ClientId=current_app.config['COGNITO_CLIENT_ID'],
             SecretHash=secret_hash,
             Username=body['email']
         )
@@ -486,12 +460,12 @@ def confirm_forgot_password():
     if connexion.request.is_json:
         body = connexion.request.get_json()
 
-    secret_hash = get_secret_hash(body['email'])
+    secret_hash = current_app.calc_secret_hash(body['email'])
 
     # call forgot password method
     try:
-        response = userClient.confirm_forgot_password(
-            ClientId=COGNITO_CLIENT_ID,
+        response = current_app.boto_client.confirm_forgot_password(
+            ClientId=current_app.config['COGNITO_CLIENT_ID'],
             SecretHash=secret_hash,
             Username=body['email'],
             ConfirmationCode=body['code'],
@@ -518,29 +492,31 @@ def private(token_info):
     return {'message': 'Success - private'}
 
 def google():
+    client_id = current_app.config['COGNITO_CLIENT_ID']
+    root_url = current_app.root_url
     redirect_uri = request.args['redirect_uri']
-    print(f"{cognito_client_url}/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+profile+phone+aws.cognito.signin.user.admin&redirect_uri={ROOT_URL}{redirect_uri}&identity_provider=Google")
+    print(f"{cognito_client_url}/oauth2/authorize?client_id={client_id}&response_type=code&scope=email+openid+profile+phone+aws.cognito.signin.user.admin&redirect_uri={root_url}{redirect_uri}&identity_provider=Google")
 
-    return redirect(f"{cognito_client_url}/oauth2/authorize?client_id={COGNITO_CLIENT_ID}&response_type=code&scope=email+openid+profile+phone+aws.cognito.signin.user.admin&redirect_uri={ROOT_URL}{redirect_uri}&identity_provider=Google")
+    return redirect(f"{cognito_client_url}/oauth2/authorize?client_id={client_id}&response_type=code&scope=email+openid+profile+phone+aws.cognito.signin.user.admin&redirect_uri={root_url}{redirect_uri}&identity_provider=Google")
 
 def confirm_signup():
     code = request.args['code']
     email = request.args['email']
     client_id = request.args['clientId']
 
-    secret_hash = get_secret_hash(email)
+    secret_hash = current_app.calc_secret_hash(email)
 
     try:
-        userClient.confirm_sign_up(
+        current_app.boto_client.confirm_sign_up(
             ClientId=client_id,
             SecretHash=secret_hash,
             Username=email,
             ConfirmationCode=code
         )
 
-        return redirect(f"{ROOT_URL}/email-verification-success")
+        return redirect(f"{current_app.root_url}/email-verification-success")
     except Exception as e:
-        return redirect(f"{ROOT_URL}/email-verification-error")
+        return redirect(f"{current_app.root_url}/email-verification-error")
 
 # What comes first invite or adding the user 
 #Do I have an oauth token
@@ -558,8 +534,8 @@ def invite():
 
         email = body['email']
 
-        response = userClient.admin_create_user(
-            UserPoolId=COGNITO_USER_POOL_ID,
+        response = current_app.boto_client.admin_create_user(
+            UserPoolId=current_app.config['COGNITO_USER_POOL_ID'],
             Username=email,
             UserAttributes=[
             {
@@ -580,7 +556,4 @@ def invite():
 
         raise AuthError({
                   "message": msg
-              }, 500)  
-
-
-
+              }, 500)
