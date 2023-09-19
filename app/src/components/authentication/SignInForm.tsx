@@ -18,7 +18,7 @@ interface SignInFormProps {
   getTokenIsLoading: boolean;
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
 }
-
+// use utils pw validation schema instead?
 const validationSchema = object({
   email: string().email().required('email is required'),
   password: string()
