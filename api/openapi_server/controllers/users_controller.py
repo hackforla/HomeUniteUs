@@ -8,6 +8,7 @@ from os import environ as env
 from openapi_server.models.database import DataAccessLayer, User
 from dotenv import load_dotenv, find_dotenv
 from flask import session
+from sqlalchemy import delete
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from openapi_server.exceptions import AuthError
@@ -29,7 +30,7 @@ SECRET_KEY=env.get('SECRET_KEY')
 userClient = boto3.client('cognito-idp', region_name=COGNITO_REGION)
 
 
-def delete(user_id: string):
+def delete_user(user_id: string):
     # get access token from header
     access_token = get_token_auth_header()
 
@@ -48,7 +49,9 @@ def delete(user_id: string):
     
     # delete user from database
     with DataAccessLayer.session() as db_session:
-        db_session.query(User).filter_by(id=user_id).delete()
+        db_session.execute(
+            delete(User).where(User.id==user_id)
+        )
         try:
             db_session.commit()
         except IntegrityError:
