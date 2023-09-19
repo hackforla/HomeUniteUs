@@ -19,9 +19,9 @@ class HousingProviderRepository:
         if the service provider already exists.
         """
         with DataAccessLayer.session() as session:
-            existing_provider = session.query(HousingProgramServiceProvider).filter(
+            existing_provider = session.execute(select(HousingProgramServiceProvider).filter(
                 HousingProgramServiceProvider.provider_name == provider_name
-            ).one_or_none()
+            )).scalar_one_or_none()
 
             if existing_provider is None:
                 new_provider = HousingProgramServiceProvider(
