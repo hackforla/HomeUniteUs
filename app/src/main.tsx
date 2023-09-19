@@ -37,10 +37,6 @@ import {AppLayout, Header} from './components/common';
 import {ResetPasswordContext} from './components/authentication/ResetPasswordContext';
 import {GuestDashboardlayout} from './components/layout/GuestDashboardlayout';
 
-function Profile() {
-  return <div>Hello from profile</div>;
-}
-
 function HuuApp() {
   const [session] = useSessionMutation();
 
@@ -82,14 +78,6 @@ function HuuApp() {
             element={<EmailVerificationError />}
           />
           <Route path="/new-password" element={<NewPassword />} />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
         </Route>
         <Route
           path="/guest"
