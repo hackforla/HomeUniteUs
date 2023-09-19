@@ -3,13 +3,7 @@ import {
   initialValues,
   validationSchema,
 } from '../../components/authentication/ResetPasswordContext';
-import {
-  render,
-  screen,
-  waitFor,
-  fireEvent,
-  waitForElementToBeRemoved,
-} from '../../utils/test/test-utils';
+import {render, screen, fireEvent} from '../../utils/test/test-utils';
 import {ForgotPasswordCode} from '../ForgotPasswordCode';
 import {BrowserRouter} from 'react-router-dom';
 import {Formik} from 'formik';
@@ -48,18 +42,18 @@ describe('ForgotPasswordCode page', () => {
     vi.resetAllMocks();
   });
 
-  test('should display the form when the email is present', async () => {
+  test('should display the form when the email is present', () => {
     setup();
 
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
-    waitFor(() => expect(screen.getByRole('form')).toBeInTheDocument());
+    expect(screen.getByTitle('Forgot Password Code')).toBeInTheDocument();
   });
 
-  test('should dispaly an error message when the email is missing', async () => {
+  test('should dispaly an error message when the email is missing', () => {
     setup({email: ''});
 
-    expect(screen.queryByRole('form')).not.toBeInTheDocument();
-    waitFor(() => expect(screen.getByRole('alert')).toBeInTheDocument());
+    expect(screen.queryByTitle('Forgot Password Code')).not.toBeInTheDocument();
+    expect(screen.getByRole('alert')).toBeInTheDocument();
   });
 
   describe('If the code is invalid', () => {
@@ -97,15 +91,12 @@ describe('ForgotPasswordCode page', () => {
 
     test('display an error message', async () => {
       server.use(
-        rest.post(
-          'http://localhost:4040/api/auth/forgot_password',
-          (req, res, ctx) => {
-            return res(
-              ctx.status(400),
-              ctx.json({message: 'There was an error'}),
-            );
-          },
-        ),
+        rest.post(/.*\/api\/auth\/forgot_password$/, (req, res, ctx) => {
+          return res(
+            ctx.status(400),
+            ctx.json({message: 'There was an error'}),
+          );
+        }),
       );
 
       setup();
@@ -114,7 +105,7 @@ describe('ForgotPasswordCode page', () => {
       fireEvent.click(resendButton);
       expect(resendButton).toBeDisabled();
 
-      await waitForElementToBeRemoved(() => screen.queryByRole('progressbar'));
+      await screen.findByRole('alert');
 
       expect(screen.getByTestId(/error/i)).toBeInTheDocument();
       expect(screen.getByRole('alert')).toBeInTheDocument();
