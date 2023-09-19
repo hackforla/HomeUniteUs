@@ -5,7 +5,6 @@ import connexion
 from flask_testing import TestCase
 from typing import List
 
-from openapi_server.encoder import JSONEncoder
 from openapi_server.models.database import DataAccessLayer
 from openapi_server.__main__ import get_bundled_specs
 from openapi_server.repositories.service_provider_repository import HousingProviderRepository
@@ -33,7 +32,6 @@ class BaseTestCase(TestCase):
 
         logging.getLogger('connexion.operation').setLevel('ERROR')
         app = connexion.App(__name__)
-        app.app.json_encoder = JSONEncoder
         app.add_api(get_bundled_specs(Path('openapi_server/openapi/openapi.yaml')),
                 pythonic_params=True)   
         return app.app      

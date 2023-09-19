@@ -36,12 +36,8 @@ click==8.1.7
 clickclick==20.10.2
     # via connexion
 colorama==0.4.6
-    # via
-    #   build
-    #   click
-    #   pytest
-    #   tox
-connexion==2.13.1
+    # via tox
+connexion==2.14.2
     # via homeuniteus-api (pyproject.toml)
 coverage==7.3.0
     # via pytest-cov
@@ -134,7 +130,7 @@ pyproject-api==1.5.4
     # via tox
 pyproject-hooks==1.0.0
     # via build
-pytest==7.3.1
+pytest==7.4.2
     # via
     #   homeuniteus-api (pyproject.toml)
     #   pytest-cov
@@ -204,7 +200,7 @@ urllib3==1.26.16
     #   requests
 virtualenv==20.24.3
     # via tox
-werkzeug==2.3.7
+werkzeug==2.2.3
     # via
     #   connexion
     #   flask
