@@ -33,10 +33,7 @@ const validationSchema = object({
       /^(?=.*[A-Z])/,
       'password must contain at least one uppercase character',
     )
-    .matches(
-      /^(?=.*[!@#%&])/,
-      'password must contain at least one special character',
-    ),
+    .matches(/\W|_/g, 'password must contain at least one special character'),
 });
 
 export const SignInForm = ({
