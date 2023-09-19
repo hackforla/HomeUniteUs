@@ -3,9 +3,6 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, LargeBinary
-from os import environ as env
-
-DATABASE_URL = env.get('DATABASE_URL')
 
 Base = declarative_base()
 
@@ -245,19 +242,10 @@ class DataAccessLayer:
     _conn_string: str = DATABASE_URL if DATABASE_URL else "sqlite:///./homeuniteus.db"
 
     @classmethod
-    def db_init(cls, conn_string=None):
-        Base.metadata.create_all(bind=cls.get_engine(conn_string))
-    
-    @classmethod
-    def connect(cls):
-        return cls.get_engine().connect()
-    
-    @classmethod
-    def get_engine(cls, conn_string=None) -> Engine:
-        if cls._engine == None:
-            cls._engine = create_engine(conn_string or cls._conn_string, echo=True, future=True)
-        return cls._engine
+    def db_init(cls, conn_string):
+        cls._engine = create_engine(conn_string, echo=True, future=True)
+        Base.metadata.create_all(bind=cls._engine)
 
     @classmethod 
     def session(cls) -> Session:
-        return Session(cls.get_engine())
+        return Session(cls._engine)
