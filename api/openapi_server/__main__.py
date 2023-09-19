@@ -9,7 +9,6 @@ from dotenv import load_dotenv, find_dotenv, get_key
 import prance
 
 # Local
-from openapi_server import encoder
 from openapi_server.models.database import DataAccessLayer
 from openapi_server.exceptions import AuthError, handle_auth_error
 from configs.configs import compile_config
@@ -81,7 +80,6 @@ def create_app():
     # The underlying instance of Flask is stored in `connexion_app.app`.
     # This is an instance of `flask.Flask`.
     flask_app = connexion_app.app
-    flask_app.json_encoder = encoder.JSONEncoder
     flask_app.secret_key = SECRET_KEY
 
     # Below, the Flask configuration handler is loaded with the
