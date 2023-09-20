@@ -73,7 +73,7 @@ export const TaskAccordion = ({
           ({id, title, description, status, buttonTitle, route}) => {
             return (
               <DashboardTask
-                key={id}
+                key={`subtask-${id}`}
                 title={title}
                 description={description}
                 status={status}
