@@ -1,6 +1,6 @@
 delete:
   description: Delete a specific user
-  operationId: delete
+  operationId: delete_user
   tags:
     - users
   parameters:
