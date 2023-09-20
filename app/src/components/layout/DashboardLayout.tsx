@@ -69,7 +69,7 @@ export function DashboardLayout({window, navItems}: OwnProps) {
         width={DRAWER_WIDTH}
         variant="permanent"
         sx={{
-          display: {xs: 'none', sm: 'block'},
+          display: {xs: 'none', md: 'block'},
         }}
       >
         <Toolbar />
@@ -81,7 +81,7 @@ export function DashboardLayout({window, navItems}: OwnProps) {
         open={mobileOpen}
         onClose={handleDrawerToggle}
         sx={{
-          display: {xs: 'bloack', sm: 'none'},
+          display: {xs: 'block', md: 'none'},
         }}
         ModalProps={{
           keepMounted: true, // Better open performance on mobile.

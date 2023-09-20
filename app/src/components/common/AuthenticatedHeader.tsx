@@ -45,7 +45,7 @@ export const AuthenticatedHeader = ({onClick}: OwnProps) => {
             aria-label="open drawer"
             edge="start"
             onClick={onClick}
-            sx={{mr: 2, height: '40px', width: '40px', display: {sm: 'none'}}}
+            sx={{mr: 2, height: '40px', width: '40px', display: {md: 'none'}}}
           >
             <MenuIcon />
           </IconButton>
@@ -62,7 +62,7 @@ export const AuthenticatedHeader = ({onClick}: OwnProps) => {
 const StyledLogo = styled('img')(({theme}) => ({
   width: '40px',
   height: '40px',
-  [theme.breakpoints.down('sm')]: {
+  [theme.breakpoints.down('md')]: {
     display: 'none',
   },
 }));
