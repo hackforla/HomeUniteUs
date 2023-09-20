@@ -1,6 +1,6 @@
 import {Divider, Box, Typography, Stack, useTheme} from '@mui/material';
 import {styled} from '@mui/system';
-import {TaskAccordion} from '../components/dashbaord/DashboardTaskAccordion';
+import {TaskAccordion} from '../components/dashboard/DashboardTaskAccordion';
 
 export type TaskStatus = 'in-progress' | 'complete' | 'locked';
 
