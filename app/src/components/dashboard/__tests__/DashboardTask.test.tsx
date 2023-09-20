@@ -21,8 +21,8 @@ function setup(props?: Partial<DashboardTaskProps>) {
     title: 'Application',
     status: 'in-progress',
     description: 'Start your guest application to move on to the next step.',
-    buttonTitle: 'Start Application',
-    route: '/guest-application',
+    buttonText: 'Start Application',
+    url: '/guest-application',
     ...props,
   };
 
@@ -50,13 +50,13 @@ describe('DashboardTask', () => {
   describe('when the task is in progress', () => {
     it('should render a button to start the task', () => {
       const {props} = setup();
-      const button = screen.getByRole('button', {name: props.buttonTitle});
+      const button = screen.getByRole('button', {name: props.buttonText});
 
       expect(button).toBeInTheDocument();
       expect(button).not.toBeDisabled();
 
       fireEvent.click(button);
-      expect(navigate).toHaveBeenCalledWith(props.route);
+      expect(navigate).toHaveBeenCalledWith(props.url);
     });
 
     it('should render clock icon', () => {
@@ -69,7 +69,7 @@ describe('DashboardTask', () => {
   describe('when the task is complete', () => {
     it('should render a disabled button', () => {
       const {props} = setup({status: 'complete'});
-      const button = screen.getByRole('button', {name: props.buttonTitle});
+      const button = screen.getByRole('button', {name: props.buttonText});
 
       expect(button).toBeInTheDocument();
       expect(button).toBeDisabled();
@@ -87,7 +87,7 @@ describe('DashboardTask', () => {
       const {props} = setup({status: 'locked'});
 
       expect(
-        screen.queryByRole('button', {name: props.buttonTitle}),
+        screen.queryByRole('button', {name: props.buttonText}),
       ).not.toBeInTheDocument();
       expect(screen.getByText('Upcomining')).toBeInTheDocument();
     });
