@@ -18,16 +18,16 @@ import {DashboardTask} from './DashboardTask';
 
 export interface TaskAccordionProps
   extends Pick<Task, 'title' | 'status' | 'subTasks'> {
-  stepNumber: number;
+  taskOrder: number;
 }
 
 export const TaskAccordion = ({
-  stepNumber,
+  taskOrder,
   title,
   status,
   subTasks,
 }: TaskAccordionProps) => {
-  const [isExpanded, setIsExpanded] = useState(() => status === 'in-progress');
+  const [isExpanded, setIsExpanded] = useState(() => status === 'inProgress');
 
   const handleChange = () => {
     setIsExpanded(prev => !prev);
@@ -43,16 +43,16 @@ export const TaskAccordion = ({
     >
       <StyledAccordionSummary
         expandIcon={<KeyboardArrowDownOutlined />}
-        aria-controls={`panel${stepNumber}-content`}
-        id={`panel${stepNumber}-header`}
+        aria-controls={`panel${taskOrder}-content`}
+        id={`panel${taskOrder}-header`}
       >
         <Stack
           direction="row"
           sx={{marginRight: 'auto', gap: 2, alignItems: 'center'}}
         >
-          {status === 'in-progress' && (
+          {status === 'inProgress' && (
             <StyledStepLocked data-testid="stepNumber">
-              {stepNumber}
+              {taskOrder}
             </StyledStepLocked>
           )}
           {status === 'locked' && (

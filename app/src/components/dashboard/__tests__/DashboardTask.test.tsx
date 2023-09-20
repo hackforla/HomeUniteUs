@@ -19,7 +19,7 @@ vi.mock('react-router-dom', async () => {
 function setup(props?: Partial<DashboardTaskProps>) {
   const values: DashboardTaskProps = {
     title: 'Application',
-    status: 'in-progress',
+    status: 'inProgress',
     description: 'Start your guest application to move on to the next step.',
     buttonText: 'Start Application',
     url: '/guest-application',

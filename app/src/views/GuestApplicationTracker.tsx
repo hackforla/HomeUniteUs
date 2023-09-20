@@ -2,7 +2,7 @@ import {Divider, Box, Typography, Stack, useTheme} from '@mui/material';
 import {styled} from '@mui/system';
 import {TaskAccordion} from '../components/dashboard/DashboardTaskAccordion';
 
-export type TaskStatus = 'in-progress' | 'complete' | 'locked';
+export type TaskStatus = 'inProgress' | 'complete' | 'locked';
 
 export interface Task {
   id: number;
@@ -24,7 +24,7 @@ const tasks: Task[] = [
   {
     id: 1,
     title: 'Application and Onboarding',
-    status: 'in-progress',
+    status: 'inProgress',
     subTasks: [
       {
         id: 1,
@@ -38,7 +38,7 @@ const tasks: Task[] = [
       {
         id: 2,
         title: 'Coordinator Interview',
-        status: 'in-progress',
+        status: 'inProgress',
         description: 'Meet with your Coordinator to share more about yourself.',
         buttonText: 'Schedule interview',
         url: '/schedule',
@@ -135,7 +135,7 @@ export function GuestApplicationTracker() {
             return (
               <TaskAccordion
                 key={`tastk-${id}`}
-                stepNumber={index + 1}
+                taskOrder={index + 1}
                 title={title}
                 status={status}
                 subTasks={subTasks}
