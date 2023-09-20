@@ -16,8 +16,8 @@ export interface SubTask {
   title: string;
   status: TaskStatus;
   description: string;
-  buttonTitle: string;
-  route: string;
+  buttonText: string;
+  url: string;
 }
 
 const tasks: Task[] = [
@@ -32,16 +32,16 @@ const tasks: Task[] = [
         status: 'complete',
         description:
           'Start your guest application to move on to the next step.',
-        buttonTitle: 'Start Application',
-        route: '/guest-application',
+        buttonText: 'Start Application',
+        url: '/guest-application',
       },
       {
         id: 2,
         title: 'Coordinator Interview',
         status: 'in-progress',
         description: 'Meet with your Coordinator to share more about yourself.',
-        buttonTitle: 'Schedule interview',
-        route: '/schedule',
+        buttonText: 'Schedule interview',
+        url: '/schedule',
       },
       {
         id: 3,
@@ -49,8 +49,8 @@ const tasks: Task[] = [
         status: 'locked',
         description:
           'Complete a training session to prepare you for the host home experience.',
-        buttonTitle: 'Schedule training',
-        route: '/schedule',
+        buttonText: 'Schedule training',
+        url: '/schedule',
       },
     ],
   },
@@ -64,16 +64,16 @@ const tasks: Task[] = [
         title: 'Match with a Host',
         status: 'locked',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        buttonTitle: 'Find hosts',
-        route: '/match',
+        buttonText: 'Find hosts',
+        url: '/match',
       },
       {
         id: 5,
         title: 'Meeting with Host',
         status: 'locked',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        buttonTitle: 'Schedule meeting',
-        route: '/schedule',
+        buttonText: 'Schedule meeting',
+        url: '/schedule',
       },
     ],
   },
@@ -87,8 +87,8 @@ const tasks: Task[] = [
         title: 'Sign Agreement',
         status: 'locked',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        buttonTitle: 'Sign agreement',
-        route: '/schedule',
+        buttonText: 'Sign agreement',
+        url: '/schedule',
       },
     ],
   },

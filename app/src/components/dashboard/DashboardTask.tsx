@@ -8,15 +8,15 @@ import {SubTask} from '../../views/GuestApplicationTracker';
 
 export type DashboardTaskProps = Pick<
   SubTask,
-  'title' | 'description' | 'status' | 'buttonTitle' | 'route'
+  'title' | 'description' | 'status' | 'buttonText' | 'url'
 >;
 
 export const DashboardTask = ({
   title,
   description,
   status,
-  buttonTitle,
-  route,
+  buttonText,
+  url,
 }: DashboardTaskProps) => {
   const navigate = useNavigate();
 
@@ -27,7 +27,7 @@ export const DashboardTask = ({
   };
 
   const handleClick = () => {
-    navigate(route);
+    navigate(url);
   };
 
   return (
@@ -55,7 +55,7 @@ export const DashboardTask = ({
               disabled={status === 'complete'}
               onClick={handleClick}
             >
-              {buttonTitle}
+              {buttonText}
             </Button>
           ) : (
             <Typography>Upcomining</Typography>
