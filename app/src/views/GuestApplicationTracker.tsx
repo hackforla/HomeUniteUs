@@ -177,7 +177,7 @@ const StyledPageContainer = styled(Box, {
   backgroundColor: theme.palette.grey[50],
   overflowY: 'scroll',
   display: 'grid',
-  padding: theme.spacing(3),
+  padding: `${theme.spacing(6)} ${theme.spacing(3)}`,
   [theme.breakpoints.up('sm')]: {
     gridTemplateColumns: 'repeat(4, 1fr)',
   },
