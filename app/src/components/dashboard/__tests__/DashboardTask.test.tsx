@@ -1,5 +1,5 @@
 import {BrowserRouter} from 'react-router-dom';
-import {fireEvent, render, screen} from '../../../utils/test/test-utils';
+import {render, screen, userEvent} from '../../../utils/test/test-utils';
 import {DashboardTask, DashboardTaskProps} from '../DashboardTask';
 
 const {navigate} = vi.hoisted(() => {
@@ -48,14 +48,16 @@ describe('DashboardTask', () => {
   });
 
   describe('when the task is in progress', () => {
-    it('should render a button to start the task', () => {
+    it('should render a button to start the task', async () => {
+      const user = userEvent.setup();
+
       const {props} = setup();
       const button = screen.getByRole('button', {name: props.buttonText});
 
       expect(button).toBeInTheDocument();
       expect(button).not.toBeDisabled();
 
-      fireEvent.click(button);
+      await user.click(button);
       expect(navigate).toHaveBeenCalledWith(props.url);
     });
 
