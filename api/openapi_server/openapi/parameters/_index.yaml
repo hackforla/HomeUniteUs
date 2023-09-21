@@ -8,3 +8,11 @@ ProviderId:
     type: integer
     format: int64
   style: simple
+Email:
+  name: user_email
+  description: The email of the user to retrieve
+  in: path
+  required: true
+  schema:
+    type: string
+  style: simple

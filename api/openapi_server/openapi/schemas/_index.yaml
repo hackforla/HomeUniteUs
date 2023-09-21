@@ -104,3 +104,47 @@ IntakeResponseValue:
   required:
     - response_text
     - intake_question
+User:
+  type: object
+  properties:
+    id:
+      format: int64
+      type: integer
+    first_name:
+      title: first_name
+      type: string
+    last_name:
+      title: last_name
+      type: string
+    email:
+      title: email
+      type: string
+    email_confirmed:
+      title: email_confirmed
+      type: boolean
+    password_hash:
+      title: password
+      type: string
+    date_created:
+      title: date_created
+      type: string
+      format: date-time
+    is_admin:
+      title: is_admin
+      type: boolean
+    is_host:
+      title: is_host
+      type: boolean
+    is_guest:
+      title: is_guest
+      type: boolean
+  required:
+    - id
+    - first_name
+    - last_name
+    - email
+    - email_confirmed
+    - date_created
+    - is_admin
+    - is_host
+    - is_guest

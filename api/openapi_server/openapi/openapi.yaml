@@ -7,7 +7,9 @@ info:
 servers:
   - url: http://homeunite.us/api
 paths:
-  /users/{userId}:
+  /users/email/{user_email}:
+    $ref: "./paths/usersEmail.yaml"
+  /users/id/{userId}:
     $ref: "./paths/users.yaml"
   /serviceProviders:
     $ref: "./paths/serviceProviders.yaml"

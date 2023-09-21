@@ -1,8 +1,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, relationship
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, LargeBinary
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, LargeBinary, Boolean
 from os import environ as env
 
 DATABASE_URL = env.get('DATABASE_URL')
@@ -10,9 +10,43 @@ DATABASE_URL = env.get('DATABASE_URL')
 Base = declarative_base()
 
 class User(Base):
-    __tablename__ = "user"
+    __tablename__ = 'user'
+
     id = Column(Integer, primary_key=True, index=True)
-    email = Column(String, nullable=False, unique=True)
+    first_name = Column(String(80))
+    last_name = Column(String(80))
+    email = Column(String, unique=True, index=True)
+    email_confirmed = Column(Boolean, default=False)
+    password_hash = Column(String)
+    date_created = Column(DateTime)
+    is_admin = Column(Boolean, default=False)
+    is_host = Column(Boolean, default=False)
+    is_guest = Column(Boolean, default=False)
+
+    tasks = relationship("Task", backref="user")
+
+class Task(Base):
+    __tablename__ = 'task'
+
+    id = Column(Integer, primary_key=True, index=True)
+    guest_id = Column(Integer, ForeignKey("user.id"))
+    title = Column(String(80))
+    status = Column(String(80))
+
+    subtasks = relationship("Subtask", backref="task")
+
+class Subtask(Base):
+    __tablename__ = 'subtask'
+
+    id = Column(Integer, primary_key=True, index=True)
+    guest_id = Column(Integer, ForeignKey("user.id"))
+    task_id = Column(Integer, ForeignKey("task.id"))
+    status = Column(String(80))
+
+# class User(Base):
+#     __tablename__ = "user"
+#     id = Column(Integer, primary_key=True, index=True)
+#     email = Column(String, nullable=False, unique=True)
 
 
 class ApplicantType(Base):

@@ -1,0 +1,18 @@
+get:
+  description: Get user by email
+  operationId: get_user_by_email
+  tags:
+    - users by email
+  parameters:
+    - $ref: "../parameters/_index.yaml#/Email"
+  responses:
+    "200":
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            $ref: "../schemas/_index.yaml#/User"
+    default:
+      description: Unexpected error
+      $ref: "../responses/_index.yaml#/UnexpectedError"
+  x-openapi-router-controller: openapi_server.controllers.users_controller
