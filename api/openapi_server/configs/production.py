@@ -1,28 +1,21 @@
 from dataclasses import dataclass
 import re
 
-from .huu_config import HUUConfig, secret_str_field
+from .staging import StagingHUUConfig
 
 @dataclass(frozen=True)
-class ProductionHUUConfig(HUUConfig):
+class ProductionHUUConfig(StagingHUUConfig):
     FLASK_DEBUG: bool = False
     TESTING: bool = False 
-    SECRET_KEY: str = secret_str_field()
-    DATABASE_URL: str = ''
     ROOT_URL: str = 'homeunite.us'
-    COGNITO_CLIENT_ID: str = secret_str_field()
-    COGNITO_CLIENT_SECRET: str = secret_str_field()
-    COGNITO_REGION: str = secret_str_field()
-    COGNITO_REDIRECT_URI: str = secret_str_field()
-    COGNITO_USER_POOL_ID: str = secret_str_field()
-    COGNITO_ACCESS_ID: str = secret_str_field()
-    COGNITO_ACCESS_KEY: str = secret_str_field()
 
     def post_validate(self):
         super().post_validate()
         self.validate_secret_key(self.FLASK_SECRET_KEY)
         if (self.FLASK_DEBUG):
-            raise ValueError("Debug mode is not supported by the current configuration")
+            raise ValueError("Debug mode is not supported by the production configuration.")
+        if (self.TESTING):
+            raise ValueError("Testing is not supported by the production configuration.")
         if (not self.DATABASE_URL):
             raise ValueError("DATABASE_URL must be specified as an environment variable.")
 
