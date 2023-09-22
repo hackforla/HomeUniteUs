@@ -1,3 +1,4 @@
+import pytest
 import logging
 from typing import List
 
@@ -9,6 +10,7 @@ from openapi_server.app import create_app
 
 from .app_config import DebugTestConfig, ReleaseTestConfig
 
+@pytest.mark.usefixtures("pass_app_config")
 class BaseTestCase(TestCase):
 
     def create_app(self):
@@ -24,7 +26,7 @@ class BaseTestCase(TestCase):
         self.provider_repo = HousingProviderRepository()
 
         logging.getLogger('connexion.operation').setLevel('ERROR')
-        return create_app(DebugTestConfig()).app
+        return create_app(self.app_config).app
     
     def tearDown(self):
         '''
