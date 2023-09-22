@@ -237,9 +237,6 @@ class ProgramCaseStatusLog(Base):
 
 class DataAccessLayer:
     _engine: Engine = None
-    
-    # temporary local sqlite DB, replace with conn str for postgres container port for real e2e
-    _conn_string: str = DATABASE_URL if DATABASE_URL else "sqlite:///./homeuniteus.db"
 
     @classmethod
     def db_init(cls, conn_string):
