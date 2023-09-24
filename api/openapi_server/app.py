@@ -4,6 +4,7 @@ import base64
 from pathlib import Path
 from typing import Dict, Any
 from importlib.metadata import version, PackageNotFoundError
+from dotenv import load_dotenv, find_dotenv
 
 import prance
 from flask import Flask
@@ -139,6 +140,11 @@ def create_app(test_config: HUUConfig = None):
     if test_config:
         config = test_config
     else:
+        env_file = find_dotenv()
+        if env_file:
+            # Load variables from a .env file and store as environment vars
+            load_dotenv(env_file)
+
         app_environment = os.getenv("ENV")
         if not app_environment:
             raise EnvironmentError("The ENV variable or a test configuration must be provided. This variable "

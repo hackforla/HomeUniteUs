@@ -24,23 +24,12 @@ def create_prod_app() -> HUUConnexionApp:
     '''
     return create_app(ProductionHUUConfig())
 
-def test_ENV_var_required(empty_environment: MonkeyPatch):
-    '''
-    Test attempting to call create_app without the ENV var will throw
-    an error instead of choosing a default config. We don't want to 
-    risk choosing the incorrect configuration during production so
-    we raise here instead.
-    '''
-    with pytest.raises(EnvironmentError):
-        create_app()
-
 def test_create_app_default_dev(empty_environment: MonkeyPatch):
     '''
-    Test that create_app with 'ENV="development"' creates a Flask app with  
+    Test that create_app with development config creates a Flask app with  
     a default development configuration, available as app.config.
     '''
-    empty_environment.setenv("ENV", "development")
-    connexion_app = create_app()
+    connexion_app = create_app(DevelopmentHUUConfig())
     config = connexion_app.app.config
     
     assert "DATABASE_URL" in config

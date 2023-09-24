@@ -1,6 +1,5 @@
 from enum import Enum, auto
 from typing import Union
-from dotenv import load_dotenv, find_dotenv
 
 from openapi_server.configs.huu_config import HUUConfig
 
@@ -26,11 +25,6 @@ class HUUConfigRegistry(Enum):
     def load_config(cls, env: Union['HUUConfigRegistry', str]) -> HUUConfig:
         if isinstance(env, str):
             env = cls.from_string(env)
-
-        env_file = find_dotenv()
-        if env_file:
-            # Load variables from a .env file and store as environment vars
-            load_dotenv(env_file)
 
         match env:
             case HUUConfigRegistry.DEVELOPMENT:

@@ -3,6 +3,7 @@ from openapi_server.configs.huu_config import HUUConfig
 
 @dataclass(frozen=True)
 class DevelopmentHUUConfig(HUUConfig):
+    ENV: str = "development"
     FLASK_DEBUG: bool = True
     PORT: int = 8080
     HOST: str = "127.0.0.1"

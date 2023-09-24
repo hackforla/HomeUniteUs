@@ -1,13 +1,23 @@
 from dataclasses import dataclass
 import re
 
-from openapi_server.configs.staging import StagingHUUConfig
+from openapi_server.configs.huu_config import HUUConfig, secret_str_field
 
 @dataclass(frozen=True)
-class ProductionHUUConfig(StagingHUUConfig):
+class ProductionHUUConfig(HUUConfig):
+    ENV: str = "production"
     FLASK_DEBUG: bool = False
     TESTING: bool = False 
-    ROOT_URL: str = 'homeunite.us'
+    SECRET_KEY: str = secret_str_field()
+    DATABASE_URL: str = ""
+    ROOT_URL: str = "homeunite.us"
+    COGNITO_CLIENT_ID: str = secret_str_field()
+    COGNITO_CLIENT_SECRET: str = secret_str_field()
+    COGNITO_REGION: str = secret_str_field()
+    COGNITO_REDIRECT_URI: str = secret_str_field()
+    COGNITO_USER_POOL_ID: str = secret_str_field()
+    COGNITO_ACCESS_ID: str = secret_str_field()
+    COGNITO_ACCESS_KEY: str = secret_str_field()
 
     def post_validate(self):
         super().post_validate()

@@ -1,10 +1,15 @@
-from openapi_server.configs.registry import HUUConfigRegistry
 from openapi_server.app import create_app
 
 if __name__ == "__main__":
-    dev_config = HUUConfigRegistry.load_config(HUUConfigRegistry.DEVELOPMENT)
-    create_app(dev_config).run(
-        host=dev_config.HOST,
-        port=dev_config.PORT,
+    connexion_app = create_app()
+    flask_app = connexion_app.app
+    if flask_app.environment == "production":
+        raise EnvironmentError("The production configuration must be run on a "
+                               "production server. Connexion's app.run() method "
+                               "starts a development server that should be used "
+                               "for testing purposes only.")
+    connexion_app.run(
+        host=flask_app.config["HOST"],
+        port=flask_app.config["PORT"],
         load_dotenv=False
     )
