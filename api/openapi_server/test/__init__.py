@@ -8,8 +8,6 @@ from openapi_server.models.database import DataAccessLayer
 from openapi_server.repositories.service_provider_repository import HousingProviderRepository
 from openapi_server.app import create_app
 
-from .app_config import DebugTestConfig, ReleaseTestConfig
-
 @pytest.mark.usefixtures("pass_app_config")
 class BaseTestCase(TestCase):
 

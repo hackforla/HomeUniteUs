@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from .huu_config import HUUConfig, secret_str_field
+from openapi_server.configs.huu_config import HUUConfig, secret_str_field
 
 @dataclass(frozen=True)
 class StagingHUUConfig(HUUConfig):

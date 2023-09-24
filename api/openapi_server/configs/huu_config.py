@@ -90,3 +90,5 @@ class HUUConfig:
         '''
         if not self.ROOT_URL:
             raise ValueError('ROOT_URL is not defined in the application configuration.')
+        if not self.DATABASE_URL:
+            raise ValueError('DATABASE_URL is not defined in the application configuration.')

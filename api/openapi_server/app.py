@@ -14,9 +14,9 @@ from connexion.apps.flask_app import (
     IntegerConverter
 )
 
-from .models.database import DataAccessLayer
-from .exceptions import AuthError, handle_auth_error
-from .configs.registry import HUUConfigRegistry, HUUConfig
+from openapi_server.models.database import DataAccessLayer
+from openapi_server.exceptions import AuthError, handle_auth_error
+from openapi_server.configs.registry import HUUConfigRegistry, HUUConfig
 
 class HUUFlaskApp(Flask):
     '''

@@ -6,7 +6,6 @@ from openapi_server.configs.staging import StagingHUUConfig
 
 @dataclass(frozen=True)
 class DebugTestConfig(DevelopmentHUUConfig):
-    FLASK_ENV: str = 'debug-test'
     TESTING: bool = True
     FLASK_DEBUG: bool = True
     DATABASE_URL: str = 'sqlite:///:memory:'
@@ -18,12 +17,11 @@ class DebugTestConfig(DevelopmentHUUConfig):
             # by monkeypatching the environment, and setting the
             # monkeypatched variables to the current value
             for field in fields(self):
-                m.setenv(field.name, getattr(self, field.name))
+                m.setenv(field.name, str(getattr(self, field.name)))
             super().__post_init__()
 
 @dataclass(frozen=True)
 class ReleaseTestConfig(StagingHUUConfig):
-    FLASK_ENV: str = 'release-test'
     TESTING: bool = True
     FLASK_DEBUG: bool = False
-    DATABASE_URL='sqlite:///:memory:'
+    DATABASE_URL: str = 'sqlite:///:memory:'

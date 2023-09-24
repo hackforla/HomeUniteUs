@@ -1,5 +1,4 @@
 import connexion
-import boto3
 import botocore
 import requests
 

@@ -1,5 +1,5 @@
 import pytest
-from .app_config import DebugTestConfig, ReleaseTestConfig
+from openapi_server.test.app_config import DebugTestConfig, ReleaseTestConfig
 
 def pytest_addoption(parser: pytest.Parser) -> None:
     '''
