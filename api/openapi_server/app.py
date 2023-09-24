@@ -65,13 +65,13 @@ class HUUFlaskApp(Flask):
         
         import boto3
         self._boto_client = boto3.client('cognito-idp', 
-                                         region_name=self.app.config["COGNITO_REGION"], 
-                                         aws_access_key_id=self.app.config["COGNITO_ACCESS_ID"],
-                                         aws_secret_access_key=self.app.config["COGNITO_ACCESS_KEY"]
+                                         region_name=self.config["COGNITO_REGION"], 
+                                         aws_access_key_id=self.config["COGNITO_ACCESS_ID"],
+                                         aws_secret_access_key=self.config["COGNITO_ACCESS_KEY"]
                                         )
         return self._boto_client
     
-    def calc_cognito_hash(self, username: str) -> str:
+    def calc_secret_hash(self, username: str) -> str:
         self.assert_support_aws_cognito()
         message = username + self.config["COGNITO_CLIENT_ID"]
         secret = bytearray(self.config["COGNITO_CLIENT_SECRET"], 'utf-8')
