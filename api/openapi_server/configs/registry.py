@@ -17,9 +17,9 @@ class HUUConfigRegistry(Enum):
         try:
             return cls[parse_str.upper()]
         except KeyError:
-            raise EnvironmentError(f"{parse_str} is not a valid environment. \
-                                   Select one of the available options: \
-                                   {cls.available_environments()}")
+            raise EnvironmentError(f"{parse_str} is not a valid environment. "
+                                   "Select one of the available options: "
+                                   f"{cls.available_environments()}")
         
     @classmethod
     def load_config(cls, env: Union['HUUConfigRegistry', str]) -> HUUConfig:
