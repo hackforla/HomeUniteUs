@@ -1,3 +1,5 @@
+import os
+
 from pytest import MonkeyPatch
 from dataclasses import dataclass, fields
 
@@ -14,10 +16,9 @@ class DebugTestConfig(DevelopmentHUUConfig):
         with MonkeyPatch().context() as m:
             # The base config class reads the values from the
             # environment. Prevent this behavior for test cases
-            # by monkeypatching the environment, and setting the
-            # monkeypatched variables to the current value
-            for field in fields(self):
-                m.setenv(field.name, str(getattr(self, field.name)))
+            # by clearing the environment using monkeypatching
+            for env_var in os.environ.keys():
+                m.delenv(env_var)
             super().__post_init__()
 
 @dataclass(frozen=True)

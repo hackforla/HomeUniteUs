@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 import re
 
-from .staging import StagingHUUConfig
+from openapi_server.configs.staging import StagingHUUConfig
 
 @dataclass(frozen=True)
 class ProductionHUUConfig(StagingHUUConfig):
@@ -11,7 +11,7 @@ class ProductionHUUConfig(StagingHUUConfig):
 
     def post_validate(self):
         super().post_validate()
-        self.validate_secret_key(self.FLASK_SECRET_KEY)
+        self.validate_secret_key(self.SECRET_KEY)
         if (self.FLASK_DEBUG):
             raise ValueError("Debug mode is not supported by the production configuration.")
         if (self.TESTING):

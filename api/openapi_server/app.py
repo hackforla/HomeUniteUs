@@ -48,7 +48,7 @@ class HUUFlaskApp(Flask):
         ])
     
     def assert_support_aws_cognito(self):
-        if not self.supports_aws_cognito():
+        if not self.supports_aws_cognito:
             raise NotImplementedError("The current application configuration does "
                                       "not support AWS cognito. In the future we will "
                                       "mock this functionality to enable for all "

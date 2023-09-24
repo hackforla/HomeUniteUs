@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from .huu_config import HUUConfig
+from openapi_server.configs.huu_config import HUUConfig
 
 @dataclass(frozen=True)
 class DevelopmentHUUConfig(HUUConfig):

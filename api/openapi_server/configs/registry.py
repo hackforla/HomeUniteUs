@@ -2,7 +2,7 @@ from enum import Enum, auto
 from typing import Union
 from dotenv import load_dotenv, find_dotenv
 
-from .huu_config import HUUConfig
+from openapi_server.configs.huu_config import HUUConfig
 
 class HUUConfigRegistry(Enum):
     DEVELOPMENT = auto()

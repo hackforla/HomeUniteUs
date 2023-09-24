@@ -53,7 +53,10 @@ class HUUConfig:
         if (field.type == str):
             return env_var
         elif (field.type == bool):
-            return env_var.lower() not in {"0", "false"}
+            if env_var == '':
+                raise ValueError(f"Failed to parse {field.name}. " 
+                                 "Boolean vars must not be an empty string")
+            return env_var.strip().lower() not in {"0", "false"}
         elif (field.type == int):
             try:
                 return int(env_var)
