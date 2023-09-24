@@ -1,5 +1,3 @@
-import os
-
 import pytest
 from pytest import MonkeyPatch
 from sqlalchemy.engine import make_url
@@ -8,28 +6,6 @@ from openapi_server.app import create_app, HUUFlaskApp, HUUConnexionApp
 from openapi_server.configs.production import ProductionHUUConfig
 from openapi_server.configs.development import DevelopmentHUUConfig
 from openapi_server.models.database import DataAccessLayer 
-
-@pytest.fixture
-def empty_environment(monkeypatch: MonkeyPatch) -> MonkeyPatch:
-    for env_var in os.environ.keys():
-        monkeypatch.delenv(env_var)
-    return monkeypatch
-
-@pytest.fixture
-def fake_prod_env(empty_environment: MonkeyPatch) -> MonkeyPatch:
-    empty_environment.setenv("ENV", "production")
-    empty_environment.setenv("FLASK_DEBUG", "False")
-    empty_environment.setenv("TESTING", "False")
-    empty_environment.setenv("SECRET_KEY", "A completely made up fake secret !@#$12234")
-    empty_environment.setenv("DATABASE_URL", "sqlite:///:memory:")
-    empty_environment.setenv("COGNITO_CLIENT_ID", "Totally fake client id")
-    empty_environment.setenv("COGNITO_CLIENT_SECRET", "Yet another fake secret12")
-    empty_environment.setenv("COGNITO_REGION", "Not even the region actually exists")
-    empty_environment.setenv("COGNITO_REDIRECT_URI", "Redirect your way back to writing more test cases")
-    empty_environment.setenv("COGNITO_USER_POOL_ID", "Water's warm. IDs are fake")
-    empty_environment.setenv("COGNITO_ACCESS_ID", "If you need fake access, use this ID")
-    empty_environment.setenv("COGNITO_ACCESS_KEY", "WARNING: This is a real-ly fake key 12345a6sdf")
-    return empty_environment
 
 def create_dev_app() -> HUUConnexionApp:
     '''
