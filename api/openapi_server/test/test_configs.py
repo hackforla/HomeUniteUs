@@ -35,8 +35,7 @@ def test_create_app_default_dev(empty_environment: MonkeyPatch):
     assert "DATABASE_URL" in config
     assert "PORT" in config 
     assert "HOST" in config 
-    assert "TESTING" in config 
-    assert "USE_RELOADER" in config
+    assert "TESTING" in config
     assert "SECRET_KEY" in config
     assert "ROOT_URL" in config 
     

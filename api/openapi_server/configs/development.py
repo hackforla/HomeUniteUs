@@ -8,7 +8,6 @@ class DevelopmentHUUConfig(HUUConfig):
     PORT: int = 8080
     HOST: str = "127.0.0.1"
     TESTING: bool = False
-    USE_RELOADER: bool = True
     SECRET_KEY: str = "unsecurekey"
     ROOT_URL: str = "http://localhost:4040"
     DATABASE_URL: str = "sqlite:///./homeuniteus.db"

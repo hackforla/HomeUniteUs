@@ -19,3 +19,8 @@ class StagingHUUConfig(HUUConfig):
     COGNITO_USER_POOL_ID: str = secret_str_field()
     COGNITO_ACCESS_ID: str = secret_str_field()
     COGNITO_ACCESS_KEY: str = secret_str_field()
+
+    def post_validate(self):
+        super().post_validate()
+        if (self.PORT < 0 or self.PORT > 65535):
+            raise ValueError("Port must be in the range 0-65535.")
