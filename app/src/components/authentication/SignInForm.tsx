@@ -18,22 +18,10 @@ interface SignInFormProps {
   getTokenIsLoading: boolean;
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
 }
-// use utils pw validation schema instead?
+
 const validationSchema = object({
   email: string().email().required('email is required'),
-  password: string()
-    .required('password is required')
-    .matches(/^(?=.*[0-9])/, 'password must contain at least one number')
-    .min(8, 'password must be at least 8 characters')
-    .matches(
-      /^(?=.*[a-z])/,
-      'password must contain at least one lowercase character',
-    )
-    .matches(
-      /^(?=.*[A-Z])/,
-      'password must contain at least one uppercase character',
-    )
-    .matches(/\W|_/g, 'password must contain at least one special character'),
+  password: string().required('password is required'),
 });
 
 export const SignInForm = ({

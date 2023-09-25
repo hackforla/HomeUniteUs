@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is the *Home Unite Us* web API server.
+This is the _Home Unite Us_ web API server.
 
 This server uses the [Connexion](https://github.com/zalando/connexion) framework on top of Flask.
 
@@ -74,8 +74,8 @@ Core dependencies of this project are listed in `pyproject.toml` under the `[pro
 
 To aid in testing and building a reproducible, predictable, and deterministic API, this project also includes auto-generated requirements files that contains a list of all core and transitive dependencies with pinned versions. These files are:
 
-* `requirements.txt` for a base set dependencies
-* `requirements-dev.txt` that also includes developer dependencies
+- `requirements.txt` for a base set dependencies
+- `requirements-dev.txt` that also includes developer dependencies
 
 Developers will use `pip install -r requirements-dev.txt` in their own Python virtual environment when working on this API.
 
@@ -175,28 +175,37 @@ docker exec `docker ps -qf "ancestor=homeuniteus-api"` pytest
 ```
 
 ### Configuration Profile
+
 For local development, you can create your own set of configurations by doing the following:
+
 - Add the variable below to your `.env` located in `/api`.
+
 ```
 CONFIG_PROFILE="personal"
 ```
+
 - Create the file `personal.py` at `/api/configs` with the following,
+
 ```
 from configs.configs import Config
 class PersonalConfig(Config):
     # Example config to override HOST
     HOST = 8082
 ```
+
 To reference configs in other modules you can do the following if it doesn't exist already,
+
 ```
 from flask import current_app
 current_app.config['CONFIG']
 ```
+
 If you create any new configuration properties, please add an associative enum to `/api/configs/configuration_properties.py`.
 
 ### Debugging
 
 For Visual Studio Code users:
+
 - Set breakpoint(s).
 - Add the following config below to `api/openapi_server/.vscode/launch.json` and replace "absolute path to folder" accordingly.
 
@@ -220,6 +229,7 @@ For Visual Studio Code users:
             ],
         }
 ```
+
 - Go to `openapi_server/__main__.py` and select "Run" -> "Start with Debugging".
 
 ## Usage - Production
@@ -251,4 +261,3 @@ The demo environment is an AWS EC2 instance running Ubuntu. On the Ubuntu EC2 in
 For this API, a GitHub deployment workflow (found in .github/workflows) creates a Python `sdist` (Source Distribution) containing only the required files necessary for deployment, uploads it, installs the API, and restarts the `dev-homeuniteus-api` service.
 
 The Swagger UI for the API on the demo environment is at https://dev.homeunite.us/api/ui
-
