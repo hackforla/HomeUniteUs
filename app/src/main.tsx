@@ -35,7 +35,7 @@ import {
 import {AccountVerification} from './views/AccountVerification';
 import {AppLayout, Header} from './components/common';
 import {ResetPasswordContext} from './components/authentication/ResetPasswordContext';
-import {GuestDashboardlayout} from './components/layout/GuestDashboardlayout';
+import {GuestDashboardlayout} from './components/layout/GuestDashboardLayout';
 
 function Profile() {
   return <div>Hello from profile</div>;

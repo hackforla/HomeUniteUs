@@ -1,7 +1,9 @@
 import {Divider, Box, Typography, Stack, useTheme} from '@mui/material';
 import {styled} from '@mui/system';
-import {TaskAccordion} from '../components/dashboard/DashboardTaskAccordion';
-import {CoordinatorContact} from '../components/dashboard/CoordinatorContact';
+import {
+  DashboardTaskAccordion,
+  CoordinatorContact,
+} from '../components/dashboard';
 
 export type TaskStatus = 'inProgress' | 'complete' | 'locked';
 
@@ -141,7 +143,7 @@ export function GuestApplicationTracker() {
         <Stack spacing={2}>
           {tasks.map(({id, title, status, subTasks}, index) => {
             return (
-              <TaskAccordion
+              <DashboardTaskAccordion
                 key={`tastk-${id}`}
                 taskOrder={index + 1}
                 title={title}

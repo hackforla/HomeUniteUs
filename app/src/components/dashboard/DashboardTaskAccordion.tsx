@@ -21,7 +21,7 @@ export interface TaskAccordionProps
   taskOrder: number;
 }
 
-export const TaskAccordion = ({
+export const DashboardTaskAccordion = ({
   taskOrder,
   title,
   status,
