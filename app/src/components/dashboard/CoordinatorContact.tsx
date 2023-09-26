@@ -29,17 +29,17 @@ export const CoordinatorContact = ({
         <Typography sx={{fontSize: 20, fontWeight: 'medium'}}>
           {name}
         </Typography>
-        <Typography sx={{fontSize: 14}} color="GrayText">
+        <Typography sx={{fontSize: 14, color: 'text.secondary'}}>
           Coordinator
         </Typography>
         <Stack direction="row" sx={{alignItems: 'center', gap: 1}}>
-          <EmailOutlined sx={{fontSize: 16, color: 'GrayText'}} />
+          <EmailOutlined sx={{fontSize: 16, color: 'text.secondary'}} />
           <StyledLink rel="noopener noreferrer" href={`mailto:${email}`}>
             {email}
           </StyledLink>
         </Stack>
         <Stack direction="row" sx={{alignItems: 'center', gap: 1}}>
-          <PhoneOutlined sx={{fontSize: 16, color: 'GrayText'}} />
+          <PhoneOutlined sx={{fontSize: 16, color: 'text.secondary'}} />
           <StyledLink rel="noopener noreferrer" href={`tel:${phone}`}>
             {phone}
           </StyledLink>
@@ -56,6 +56,7 @@ const StyledContainer = styled(Stack)(({theme}) => ({
   padding: '16px',
   alignItems: 'center',
   justifyContent: 'center',
+  backgroundColor: theme.palette.common.white,
 }));
 
 const StyledImageContainer = styled(Box)(({theme}) => ({
@@ -67,8 +68,8 @@ const StyledImageContainer = styled(Box)(({theme}) => ({
   alignItems: 'center',
 }));
 
-const StyledLink = styled('a')({
+const StyledLink = styled('a')(({theme}) => ({
   fontSize: 14,
-  color: 'GrayText',
+  color: theme.palette.text.secondary,
   textDecorationColor: 'inherit',
-});
+}));
