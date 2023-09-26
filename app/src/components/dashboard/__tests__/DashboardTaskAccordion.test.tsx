@@ -3,34 +3,34 @@ import {render, screen, within} from '../../../utils/test/test-utils';
 import {TaskAccordion, TaskAccordionProps} from '../DashboardTaskAccordion';
 
 const task: TaskAccordionProps = {
-  stepNumber: 1,
+  taskOrder: 1,
   title: 'Application and Onboarding',
-  status: 'in-progress',
+  status: 'inProgress',
   subTasks: [
     {
-      id: 'submit_application',
+      id: 1,
       title: 'Application',
       status: 'complete',
       description: 'Start your guest application to move on to the next step.',
-      buttonTitle: 'Start Application',
-      route: '/guest-application',
+      buttonText: 'Start Application',
+      url: '/guest-application',
     },
     {
-      id: 'interview_with_coordinator',
+      id: 2,
       title: 'Coordinator Interview',
-      status: 'in-progress',
+      status: 'inProgress',
       description: 'Meet with your Coordinator to share more about yourself.',
-      buttonTitle: 'Schedule interview',
-      route: '/schedule',
+      buttonText: 'Schedule interview',
+      url: '/schedule',
     },
     {
-      id: 'attend_training_session',
+      id: 3,
       title: 'Training Session',
       status: 'locked',
       description:
         'Complete a training session to prepare you for the host home experience.',
-      buttonTitle: 'Schedule training',
-      route: '/schedule',
+      buttonText: 'Schedule training',
+      url: '/schedule',
     },
   ],
 };

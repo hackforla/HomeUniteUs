@@ -18,16 +18,16 @@ import {DashboardTask} from './DashboardTask';
 
 export interface TaskAccordionProps
   extends Pick<Task, 'title' | 'status' | 'subTasks'> {
-  stepNumber: number;
+  taskOrder: number;
 }
 
 export const TaskAccordion = ({
-  stepNumber,
+  taskOrder,
   title,
   status,
   subTasks,
 }: TaskAccordionProps) => {
-  const [isExpanded, setIsExpanded] = useState(() => status === 'in-progress');
+  const [isExpanded, setIsExpanded] = useState(() => status === 'inProgress');
 
   const handleChange = () => {
     setIsExpanded(prev => !prev);
@@ -43,16 +43,16 @@ export const TaskAccordion = ({
     >
       <StyledAccordionSummary
         expandIcon={<KeyboardArrowDownOutlined />}
-        aria-controls={`panel${stepNumber}-content`}
-        id={`panel${stepNumber}-header`}
+        aria-controls={`panel${taskOrder}-content`}
+        id={`panel${taskOrder}-header`}
       >
         <Stack
           direction="row"
           sx={{marginRight: 'auto', gap: 2, alignItems: 'center'}}
         >
-          {status === 'in-progress' && (
+          {status === 'inProgress' && (
             <StyledStepLocked data-testid="stepNumber">
-              {stepNumber}
+              {taskOrder}
             </StyledStepLocked>
           )}
           {status === 'locked' && (
@@ -69,20 +69,18 @@ export const TaskAccordion = ({
       </StyledAccordionSummary>
       <Divider />
       <AccordionDetails data-testid="tasks" sx={{padding: 0}}>
-        {subTasks.map(
-          ({id, title, description, status, buttonTitle, route}) => {
-            return (
-              <DashboardTask
-                key={id}
-                title={title}
-                description={description}
-                status={status}
-                buttonTitle={buttonTitle}
-                route={route}
-              />
-            );
-          },
-        )}
+        {subTasks.map(({id, title, description, status, buttonText, url}) => {
+          return (
+            <DashboardTask
+              key={`subtask-${id}`}
+              title={title}
+              description={description}
+              status={status}
+              buttonText={buttonText}
+              url={url}
+            />
+          );
+        })}
       </AccordionDetails>
     </StyledAccordion>
   );

@@ -8,26 +8,27 @@ import {SubTask} from '../../views/GuestApplicationTracker';
 
 export type DashboardTaskProps = Pick<
   SubTask,
-  'title' | 'description' | 'status' | 'buttonTitle' | 'route'
+  'title' | 'description' | 'status' | 'buttonText' | 'url'
 >;
 
 export const DashboardTask = ({
   title,
   description,
   status,
-  buttonTitle,
-  route,
+  buttonText,
+  url,
 }: DashboardTaskProps) => {
   const navigate = useNavigate();
 
   const statusIcons = {
-    'in-progress': <AccessTimeIcon sx={{color: '#FFC700'}} />,
+    inProgress: <AccessTimeIcon sx={{color: '#FFC700'}} />,
     complete: <CheckCircleOutlined color="success" />,
     locked: <LockIcon sx={{color: 'rgba(0, 0, 0, 0.38)'}} />,
   };
 
   const handleClick = () => {
-    navigate(route);
+    console.log('clicked');
+    navigate(url);
   };
 
   return (
@@ -47,7 +48,7 @@ export const DashboardTask = ({
         <Stack
           sx={{width: '177px', justifyContent: 'center', alignItems: 'center'}}
         >
-          {status === 'in-progress' || status === 'complete' ? (
+          {status === 'inProgress' || status === 'complete' ? (
             <Button
               fullWidth
               size="medium"
@@ -55,7 +56,7 @@ export const DashboardTask = ({
               disabled={status === 'complete'}
               onClick={handleClick}
             >
-              {buttonTitle}
+              {buttonText}
             </Button>
           ) : (
             <Typography>Upcomining</Typography>

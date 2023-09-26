@@ -1,5 +1,5 @@
 import {BrowserRouter} from 'react-router-dom';
-import {fireEvent, render, screen} from '../../../utils/test/test-utils';
+import {render, screen, userEvent} from '../../../utils/test/test-utils';
 import {DashboardTask, DashboardTaskProps} from '../DashboardTask';
 
 const {navigate} = vi.hoisted(() => {
@@ -19,10 +19,10 @@ vi.mock('react-router-dom', async () => {
 function setup(props?: Partial<DashboardTaskProps>) {
   const values: DashboardTaskProps = {
     title: 'Application',
-    status: 'in-progress',
+    status: 'inProgress',
     description: 'Start your guest application to move on to the next step.',
-    buttonTitle: 'Start Application',
-    route: '/guest-application',
+    buttonText: 'Start Application',
+    url: '/guest-application',
     ...props,
   };
 
@@ -48,15 +48,17 @@ describe('DashboardTask', () => {
   });
 
   describe('when the task is in progress', () => {
-    it('should render a button to start the task', () => {
+    it('should render a button to start the task', async () => {
+      const user = userEvent.setup();
+
       const {props} = setup();
-      const button = screen.getByRole('button', {name: props.buttonTitle});
+      const button = screen.getByRole('button', {name: props.buttonText});
 
       expect(button).toBeInTheDocument();
       expect(button).not.toBeDisabled();
 
-      fireEvent.click(button);
-      expect(navigate).toHaveBeenCalledWith(props.route);
+      await user.click(button);
+      expect(navigate).toHaveBeenCalledWith(props.url);
     });
 
     it('should render clock icon', () => {
@@ -69,7 +71,7 @@ describe('DashboardTask', () => {
   describe('when the task is complete', () => {
     it('should render a disabled button', () => {
       const {props} = setup({status: 'complete'});
-      const button = screen.getByRole('button', {name: props.buttonTitle});
+      const button = screen.getByRole('button', {name: props.buttonText});
 
       expect(button).toBeInTheDocument();
       expect(button).toBeDisabled();
@@ -87,7 +89,7 @@ describe('DashboardTask', () => {
       const {props} = setup({status: 'locked'});
 
       expect(
-        screen.queryByRole('button', {name: props.buttonTitle}),
+        screen.queryByRole('button', {name: props.buttonText}),
       ).not.toBeInTheDocument();
       expect(screen.getByText('Upcomining')).toBeInTheDocument();
     });

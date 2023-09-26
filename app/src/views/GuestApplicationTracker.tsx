@@ -3,106 +3,93 @@ import {styled} from '@mui/system';
 import {TaskAccordion} from '../components/dashboard/DashboardTaskAccordion';
 import {CoordinatorContact} from '../components/dashboard/CoordinatorContact';
 
-export type TaskStatus = 'in-progress' | 'complete' | 'locked';
-
-export type TaskIds =
-  | 'application_and_onboarding'
-  | 'host_matching'
-  | 'host_match_finalization';
+export type TaskStatus = 'inProgress' | 'complete' | 'locked';
 
 export interface Task {
-  id: TaskIds;
+  id: number;
   title: string;
   status: TaskStatus;
   subTasks: SubTask[];
 }
 
-export type SubTaskIds =
-  | 'submit_application'
-  | 'interview_with_coordinator'
-  | 'attend_training_session'
-  | 'match_with_host'
-  | 'initial_host_meeting'
-  | 'sign_agreement';
-
 export interface SubTask {
-  id: SubTaskIds;
+  id: number;
   title: string;
   status: TaskStatus;
   description: string;
-  buttonTitle: string;
-  route: string;
+  buttonText: string;
+  url: string;
 }
 
 const tasks: Task[] = [
   {
-    id: 'application_and_onboarding',
+    id: 1,
     title: 'Application and Onboarding',
-    status: 'in-progress',
+    status: 'inProgress',
     subTasks: [
       {
-        id: 'submit_application',
+        id: 1,
         title: 'Application',
         status: 'complete',
         description:
           'Start your guest application to move on to the next step.',
-        buttonTitle: 'Start Application',
-        route: '/guest-application',
+        buttonText: 'Start Application',
+        url: '/guest-application',
       },
       {
-        id: 'interview_with_coordinator',
+        id: 2,
         title: 'Coordinator Interview',
-        status: 'in-progress',
+        status: 'inProgress',
         description: 'Meet with your Coordinator to share more about yourself.',
-        buttonTitle: 'Schedule interview',
-        route: '/schedule',
+        buttonText: 'Schedule interview',
+        url: '/schedule',
       },
       {
-        id: 'attend_training_session',
+        id: 3,
         title: 'Training Session',
         status: 'locked',
         description:
           'Complete a training session to prepare you for the host home experience.',
-        buttonTitle: 'Schedule training',
-        route: '/schedule',
+        buttonText: 'Schedule training',
+        url: '/schedule',
       },
     ],
   },
   {
-    id: 'host_matching',
+    id: 2,
     title: 'Host Matching',
     status: 'locked',
     subTasks: [
       {
-        id: 'match_with_host',
+        id: 4,
         title: 'Match with a Host',
         status: 'locked',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        buttonTitle: 'Find hosts',
-        route: '/match',
+        buttonText: 'Find hosts',
+        url: '/match',
       },
       {
-        id: 'initial_host_meeting',
+        id: 5,
         title: 'Meeting with Host',
         status: 'locked',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        buttonTitle: 'Schedule meeting',
-        route: '/schedule',
+        buttonText: 'Schedule meeting',
+        url: '/schedule',
       },
     ],
   },
   {
-    id: 'host_match_finalization',
+    id: 3,
     title: 'Match Finalized',
     status: 'locked',
     subTasks: [
       {
-        id: 'sign_agreement',
+        id: 6,
         title: 'Sign Agreement',
         status: 'locked',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        buttonTitle: 'Sign agreement',
-        route: '/schedule',
+        buttonText: 'Sign agreement',
+        url: '/schedule',
       },
     ],
   },
@@ -155,8 +142,8 @@ export function GuestApplicationTracker() {
           {tasks.map(({id, title, status, subTasks}, index) => {
             return (
               <TaskAccordion
-                key={id}
-                stepNumber={index + 1}
+                key={`tastk-${id}`}
+                taskOrder={index + 1}
                 title={title}
                 status={status}
                 subTasks={subTasks}
@@ -201,7 +188,7 @@ const StyledPageContainer = styled(Box, {
   backgroundColor: theme.palette.grey[50],
   overflowY: 'scroll',
   display: 'grid',
-  padding: theme.spacing(3),
+  padding: `${theme.spacing(6)} ${theme.spacing(3)}`,
   [theme.breakpoints.up('sm')]: {
     gridTemplateColumns: 'repeat(4, 1fr)',
   },
