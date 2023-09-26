@@ -1,5 +1,98 @@
 import {Divider, Box, Typography, Stack, useTheme} from '@mui/material';
 import {styled} from '@mui/system';
+import {TaskAccordion} from '../components/dashboard/DashboardTaskAccordion';
+
+export type TaskStatus = 'inProgress' | 'complete' | 'locked';
+
+export interface Task {
+  id: number;
+  title: string;
+  status: TaskStatus;
+  subTasks: SubTask[];
+}
+
+export interface SubTask {
+  id: number;
+  title: string;
+  status: TaskStatus;
+  description: string;
+  buttonText: string;
+  url: string;
+}
+
+const tasks: Task[] = [
+  {
+    id: 1,
+    title: 'Application and Onboarding',
+    status: 'inProgress',
+    subTasks: [
+      {
+        id: 1,
+        title: 'Application',
+        status: 'complete',
+        description:
+          'Start your guest application to move on to the next step.',
+        buttonText: 'Start Application',
+        url: '/guest-application',
+      },
+      {
+        id: 2,
+        title: 'Coordinator Interview',
+        status: 'inProgress',
+        description: 'Meet with your Coordinator to share more about yourself.',
+        buttonText: 'Schedule interview',
+        url: '/schedule',
+      },
+      {
+        id: 3,
+        title: 'Training Session',
+        status: 'locked',
+        description:
+          'Complete a training session to prepare you for the host home experience.',
+        buttonText: 'Schedule training',
+        url: '/schedule',
+      },
+    ],
+  },
+  {
+    id: 2,
+    title: 'Host Matching',
+    status: 'locked',
+    subTasks: [
+      {
+        id: 4,
+        title: 'Match with a Host',
+        status: 'locked',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        buttonText: 'Find hosts',
+        url: '/match',
+      },
+      {
+        id: 5,
+        title: 'Meeting with Host',
+        status: 'locked',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        buttonText: 'Schedule meeting',
+        url: '/schedule',
+      },
+    ],
+  },
+  {
+    id: 3,
+    title: 'Match Finalized',
+    status: 'locked',
+    subTasks: [
+      {
+        id: 6,
+        title: 'Sign Agreement',
+        status: 'locked',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+        buttonText: 'Sign agreement',
+        url: '/schedule',
+      },
+    ],
+  },
+];
 
 export function GuestApplicationTracker() {
   const theme = useTheme();
@@ -38,18 +131,17 @@ export function GuestApplicationTracker() {
         </Typography>
         <Divider sx={{mb: 1}} />
         <Stack spacing={2}>
-          <Box
-            sx={{backgroundColor: 'dodgerblue', width: '100%', height: '200px'}}
-          ></Box>
-          <Box
-            sx={{backgroundColor: 'dodgerblue', width: '100%', height: '200px'}}
-          ></Box>
-          <Box
-            sx={{backgroundColor: 'dodgerblue', width: '100%', height: '200px'}}
-          ></Box>
-          <Box
-            sx={{backgroundColor: 'dodgerblue', width: '100%', height: '150px'}}
-          ></Box>
+          {tasks.map(({id, title, status, subTasks}, index) => {
+            return (
+              <TaskAccordion
+                key={`tastk-${id}`}
+                taskOrder={index + 1}
+                title={title}
+                status={status}
+                subTasks={subTasks}
+              />
+            );
+          })}
         </Stack>
       </Box>
       <Box
@@ -85,7 +177,7 @@ const StyledPageContainer = styled(Box, {
   backgroundColor: theme.palette.grey[50],
   overflowY: 'scroll',
   display: 'grid',
-  padding: theme.spacing(3),
+  padding: `${theme.spacing(6)} ${theme.spacing(3)}`,
   [theme.breakpoints.up('sm')]: {
     gridTemplateColumns: 'repeat(4, 1fr)',
   },
