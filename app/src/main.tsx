@@ -31,11 +31,13 @@ import {
   GuestContacts,
   GuestTasks,
   GuestSettings,
+  CoordinatorDashboardNew,
 } from './views';
 import {AccountVerification} from './views/AccountVerification';
 import {AppLayout, Header} from './components/common';
 import {ResetPasswordContext} from './components/authentication/ResetPasswordContext';
 import {GuestDashboardlayout} from './components/layout/GuestDashboardlayout';
+import {CoordinatorDashboardLayout} from './components/layout';
 
 function Profile() {
   return <div>Hello from profile</div>;
@@ -91,14 +93,6 @@ function HuuApp() {
             }
           />
           <Route
-            path="/coordinator"
-            element={
-              <ProtectedRoute>
-                <CoordinatorDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
             path="/profile"
             element={
               <ProtectedRoute>
@@ -106,6 +100,16 @@ function HuuApp() {
               </ProtectedRoute>
             }
           />
+        </Route>
+        <Route
+          path="/coordinator"
+          element={
+            <ProtectedRoute>
+              <CoordinatorDashboardLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<CoordinatorDashboardNew />} />
         </Route>
         <Route
           path="/guest"
