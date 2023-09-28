@@ -12,7 +12,7 @@ from openapi_server.exceptions import AuthError
 from openapi_server.models.database import DataAccessLayer, User
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.future import select
+from sqlalchemy import select
 
 # Load .env file
 ENV_FILE = find_dotenv()

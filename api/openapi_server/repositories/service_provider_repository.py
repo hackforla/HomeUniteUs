@@ -1,9 +1,8 @@
 from typing import Optional, List
 
 # Third Party
-from sqlalchemy import func
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
-from sqlalchemy.future import select
 
 # Local
 from openapi_server.models.database import HousingProgramServiceProvider, DataAccessLayer
@@ -63,6 +62,8 @@ class HousingProviderRepository:
         Get a list of all housing program service providers.
         """
         with DataAccessLayer.session() as session:
+            result = session.execute(select(HousingProgramServiceProvider)).scalars()
+            scalar = session.scalars(select(HousingProgramServiceProvider)).all()
             return session.execute(select(HousingProgramServiceProvider)).scalars().all()
 
     def update_service_provider(self, new_name: str, provider_id: int) -> Optional[HousingProgramServiceProvider]:  

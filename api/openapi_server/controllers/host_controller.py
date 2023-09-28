@@ -2,7 +2,7 @@ from flask import Response
 
 from openapi_server.models.database import Host, DataAccessLayer
 from openapi_server.models.schema import host_schema, hosts_schema
-from sqlalchemy.future import select
+from sqlalchemy import select
 
 # create host in database
 def create_host(body: dict) -> Response:
