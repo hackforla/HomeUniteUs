@@ -80,7 +80,7 @@ dependencies = [
     # connexion implements routing, validation, security, and parameter passing based on the
     # OpenAPI specification that is defined in the `openapi_server/openapi` directory.
     # The extra dependency swagger-ui causes the swagger UI to be available at /api/ui.
-    "connexion [swagger-ui]==2.13.1",
+    "connexion [swagger-ui]==2.14.2",
 
     # psycopg2 allows SQLAlchemy to communicate with PostgreSQL
     "psycopg2-binary==2.9.5",
@@ -121,7 +121,7 @@ dev = [
   "tox==4.6.4",
 
   # pytest runs the tests implemented in this project.
-  "pytest==7.3.1",
+  "pytest==7.4.2",
 
   # pytest-cov will report the amount of test coverage implemented.
   "pytest-cov==4.0.0",
