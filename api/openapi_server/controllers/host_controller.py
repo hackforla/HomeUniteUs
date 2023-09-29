@@ -14,5 +14,5 @@ def create_host(body: dict) -> Response:
 
 def get_hosts() -> Response:
     with DataAccessLayer.session() as session:
-        all_hosts = session.execute(select(Host)).scalars().all()
+        all_hosts = session.scalars(select(Host)).all()
         return hosts_schema.dump(all_hosts), 200

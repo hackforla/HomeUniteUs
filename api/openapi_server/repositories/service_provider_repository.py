@@ -62,9 +62,7 @@ class HousingProviderRepository:
         Get a list of all housing program service providers.
         """
         with DataAccessLayer.session() as session:
-            result = session.execute(select(HousingProgramServiceProvider)).scalars()
-            scalar = session.scalars(select(HousingProgramServiceProvider)).all()
-            return session.execute(select(HousingProgramServiceProvider)).scalars().all()
+            return session.scalars(select(HousingProgramServiceProvider)).all()
 
     def update_service_provider(self, new_name: str, provider_id: int) -> Optional[HousingProgramServiceProvider]:  
         """
