@@ -179,10 +179,8 @@ six==1.16.0
     #   prance
     #   python-dateutil
     #   rfc3339-validator
-sqlalchemy==1.4.36
-    # via
-    #   alembic
-    #   homeuniteus-api (pyproject.toml)
+sqlalchemy==2.0.20
+    # via alembic
 swagger-ui-bundle==0.0.9
     # via connexion
 tomli==2.0.1
@@ -197,7 +195,9 @@ tomli==2.0.1
 tox==4.6.4
     # via homeuniteus-api (pyproject.toml)
 typing-extensions==4.7.1
-    # via alembic
+    # via
+    #   alembic
+    #   sqlalchemy
 urllib3==1.26.16
     # via
     #   botocore
