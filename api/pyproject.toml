@@ -145,6 +145,7 @@ prod = [
 "Bug Tracker" = "https://github.com/hackforla/HomeUniteUs/issues"
 
 [tool.setuptools.packages.find]
+exclude = ["tests*"]
 # The find packages tool looks for import packages and modules to include in an installation.
 # The `where` parameter tells the tool where to start looking for them.
 # Since this project is using a flat-layout structure with multiple top-level packages,
