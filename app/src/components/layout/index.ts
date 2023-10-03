@@ -1,2 +1,2 @@
 export {DashboardLayout} from './DashboardLayout';
-export {GuestDashboardLayout} from './GuestLayout';
+export {GuestDashboardLayout} from './GuestDashboardLayout';

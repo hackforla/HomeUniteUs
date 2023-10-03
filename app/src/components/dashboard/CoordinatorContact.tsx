@@ -9,8 +9,6 @@ interface CoordinatorContactProps {
   phone: string;
 }
 
-console.log('pass tests');
-
 export const CoordinatorContact = ({
   image,
   name,
