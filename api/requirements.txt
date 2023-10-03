@@ -131,7 +131,7 @@ typing-extensions==4.7.1
     # via
     #   alembic
     #   sqlalchemy
-urllib3==1.26.16
+urllib3==1.26.17
     # via
     #   botocore
     #   requests
