@@ -36,8 +36,10 @@ import {
 import {AccountVerification} from './views/AccountVerification';
 import {AppLayout, Header} from './components/common';
 import {ResetPasswordContext} from './components/authentication/ResetPasswordContext';
-import {GuestDashboardlayout} from './components/layout/GuestDashboardlayout';
-import {CoordinatorDashboardLayout} from './components/layout';
+import {
+  CoordinatorDashboardLayout,
+  GuestDashboardLayout,
+} from './components/layout';
 
 function Profile() {
   return <div>Hello from profile</div>;
@@ -115,7 +117,7 @@ function HuuApp() {
           path="/guest"
           element={
             <ProtectedRoute>
-              <GuestDashboardlayout />
+              <GuestDashboardLayout />
             </ProtectedRoute>
           }
         >

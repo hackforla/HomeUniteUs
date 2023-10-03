@@ -29,6 +29,7 @@
     "@emotion/styled": "^11.9.3",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.6",
+    "@mui/x-data-grid": "^6.15.0",
     "@reduxjs/toolkit": "^1.8.3",
     "formik": "^2.2.9",
     "react": "^18.2.0",
@@ -39,6 +40,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",
+    "@faker-js/faker": "^8.1.0",
     "@rtk-query/codegen-openapi": "^1.0.0-alpha.1",
     "@storybook/addon-actions": "^6.5.9",
     "@storybook/addon-essentials": "^6.5.9",
