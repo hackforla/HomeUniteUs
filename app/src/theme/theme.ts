@@ -1,5 +1,6 @@
 import {createTheme} from '@mui/material/styles';
 import {componentOverrides} from './overrides';
+import {Shadows} from '@mui/material/styles/shadows';
 
 declare module '@mui/material/styles' {
   interface Theme {
@@ -15,7 +16,9 @@ declare module '@mui/material/styles' {
   }
 }
 
-export const HomeUniteUsTheme = createTheme({
+export let HomeUniteUsTheme = createTheme();
+
+HomeUniteUsTheme = createTheme({
   palette: {
     primary: {
       dark: '#196ca0',
@@ -34,6 +37,15 @@ export const HomeUniteUsTheme = createTheme({
       secondary: '#777777',
     },
   },
+  shadows: [
+    // composing shadows from the default theme. 25 shadows are required
+    ...HomeUniteUsTheme.shadows.slice(0, 19),
+    // add custom shadows here
+    '0px 4px 10px rgba(0, 0, 0, 0.25)',
+    // spread the rest of the default shadows, make sure to decrement from this array if adding more shadows.
+    // I chose the 20th shadow since I believe these are less commonly used and didn't want to override shadows that are used in other components
+    ...HomeUniteUsTheme.shadows.slice(20),
+  ] as Shadows,
   shape: {
     borderRadius: 4,
   },

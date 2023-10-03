@@ -1,6 +1,6 @@
 import {EmailOutlined, PhoneOutlined} from '@mui/icons-material';
 import {Box, Stack, Typography} from '@mui/material';
-import {styled} from '@mui/system';
+import {styled} from '@mui/material/styles';
 
 interface CoordinatorContactProps {
   image: string;
@@ -52,7 +52,7 @@ export const CoordinatorContact = ({
 };
 
 const StyledContainer = styled(Stack)(({theme}) => ({
-  boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)',
+  boxShadow: theme.shadows[19],
   borderRadius: '4px',
   gap: theme.spacing(3),
   padding: '16px',
