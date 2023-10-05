@@ -187,6 +187,8 @@ const StyledTab = styled(Tab)(({theme}) => ({
   fontSize: theme.typography.pxToRem(24),
   color: theme.palette.text.secondary,
   minHeight: 'auto',
+  padding: theme.spacing(2, 4),
+  borderRadius: `${theme.shape.borderRadius}px ${theme.shape.borderRadius}px 0 0`,
   '&.Mui-selected': {
     color: theme.palette.text.primary,
     backgroundColor: '#E8E8E8',
