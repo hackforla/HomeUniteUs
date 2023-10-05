@@ -30,7 +30,7 @@ import {
   GuestContacts,
   GuestTasks,
   GuestSettings,
-  CoordinatorDashboardNew,
+  CoordinatorDashboard,
 } from './views';
 import {AccountVerification} from './views/AccountVerification';
 import {AppLayout, Header} from './components/common';
@@ -109,7 +109,7 @@ function HuuApp() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<CoordinatorDashboardNew />} />
+          <Route index element={<CoordinatorDashboard />} />
         </Route>
         <Route
           path="/guest"

@@ -1,6 +1,5 @@
 export {AccountVerification} from './AccountVerification';
 export {CoordinatorDashboard} from './CoordinatorDashboard';
-export {CoordinatorDashboardNew} from './CoordinatorDashboardNew';
 export {GuestApplicationTracker} from './GuestApplicationTracker';
 export {GuestSettings} from './GuestSettings';
 export {GuestContacts} from './GuestContacts';

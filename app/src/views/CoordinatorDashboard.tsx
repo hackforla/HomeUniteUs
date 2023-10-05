@@ -1,141 +1,231 @@
-import * as React from 'react';
-import {Home, Settings, ShowChart} from '@mui/icons-material';
+import {useState} from 'react';
 import {
+  Container,
   Box,
-  Grid,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  useTheme,
+  Tabs,
+  Tab,
+  Typography,
+  Pagination,
+  Stack,
 } from '@mui/material';
-import {UiPlaceholder} from '../components/common/UiPlaceholder';
-import {GuestInviteButton} from '../components/common/GuestInviteButton';
+import {
+  DataGrid,
+  GridRowsProp,
+  GridColDef,
+  gridPageCountSelector,
+  gridPageSelector,
+  useGridApiContext,
+  useGridSelector,
+} from '@mui/x-data-grid';
+import {faker} from '@faker-js/faker';
+import {styled} from '@mui/material/styles';
 
-interface CoordinatorDashboardProps {}
-interface CoordinatorDashboardNavProps {}
-interface CoordinatorDashboardNavItemProps {
-  name: string;
-}
+import {GuestInviteButton} from '../components/common';
 
-interface CoordinatorDashboardChildNavItemProps {
-  name: string;
-}
+const buildRow = () => {
+  return {
+    id: faker.string.uuid(),
+    applicant: faker.person.fullName(),
+    type: faker.helpers.arrayElement(['Guest', 'Host']),
+    status: faker.helpers.arrayElement(['In Progress', 'Complete']),
+    coordinator: faker.helpers.arrayElement([
+      faker.person.fullName(),
+      'Unassigned',
+    ]),
+    updated: faker.date.past().toLocaleDateString(),
+    notes: faker.lorem.words({min: 0, max: 15}),
+  };
+};
+const rows: GridRowsProp = Array.from(Array(30), () => buildRow());
 
-const tabOptions = [
-  'Overview',
-  'Applications',
-  'Guests',
-  'Hosts',
-  'Matches',
-  'Holding Zone',
+const columns: GridColDef[] = [
+  {field: 'applicant', headerName: 'Applicant', flex: 1},
+  {field: 'type', headerName: 'Type', flex: 1},
+  {field: 'status', headerName: 'Status', flex: 1},
+  {field: 'coordinator', headerName: 'Coordinator', flex: 1},
+  {field: 'updated', headerName: 'Updated', flex: 1},
+  {
+    field: 'notes',
+    headerName: 'Notes',
+    editable: true,
+    resizable: true,
+    flex: 1,
+  },
 ];
 
-export function CoordinatorDashboardNavItem(
-  props: React.PropsWithChildren<CoordinatorDashboardNavItemProps>,
-) {
-  return (
-    <ListItem button key={props.name}>
-      <ListItemIcon>{props.children}</ListItemIcon>
-      <ListItemText primary={props.name} />
-    </ListItem>
-  );
+function a11yProps(index: number) {
+  return {
+    id: `dashboard-tabs-${index}`,
+    'aria-controls': `dashboard-2-${index}`,
+  };
 }
 
-export function CoordinatorDashboardChildNavItem({
-  name,
-}: CoordinatorDashboardChildNavItemProps) {
-  return (
-    <ListItem button key={name}>
-      <ListItemText sx={{paddingLeft: '3.6rem'}} primary={name} />
-    </ListItem>
-  );
-}
+export const CoordinatorDashboard = () => {
+  const [value, setValue] = useState(0);
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function CoordinatorDashboardNav(props: CoordinatorDashboardNavProps) {
-  const theme = useTheme();
-  return (
-    <Box
-      sx={{
-        paddingTop: '2rem',
-        borderRight: `1px solid ${theme.palette.grey[300]}`,
-        height: '100%',
-      }}
-      component="nav"
-    >
-      <Box role="presentation">
-        <List>
-          <CoordinatorDashboardNavItem name="Home">
-            <Home />
-          </CoordinatorDashboardNavItem>
-          {tabOptions.map(name => {
-            return <CoordinatorDashboardChildNavItem key={name} name={name} />;
-          })}
-          <CoordinatorDashboardNavItem name="Activity">
-            <ShowChart />
-          </CoordinatorDashboardNavItem>
-          <CoordinatorDashboardNavItem name="Settings">
-            <Settings />
-          </CoordinatorDashboardNavItem>
-        </List>
-      </Box>
-    </Box>
-  );
-}
+  const data = rows.filter(row => {
+    if (value === 0) {
+      return row;
+    } else if (value === 1) {
+      return row.type === 'Guest';
+    } else if (value === 2) {
+      return row.type === 'Host';
+    }
+  });
 
-export function CoordinatorDashboardContentPanel() {
-  const theme = useTheme();
+  const totalGuests = rows.filter(row => row.type === 'Guest').length;
+  const totalHosts = rows.filter(row => row.type === 'Host').length;
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
 
   return (
-    <Box
-      sx={{
-        padding: '2rem',
-        height: '100%',
-        width: '100%',
-      }}
-    >
-      <Box
-        sx={{
-          backgroundColor: theme.palette.grey[300],
-          height: '100%',
-          width: '100%',
-        }}
-      ></Box>
-    </Box>
-  );
-}
-
-export function CoordinatorDashboardDetailsPanel() {
-  const theme = useTheme();
-  return (
-    <Box
-      sx={{
-        height: '100%',
-        width: '100%',
-        padding: '2rem',
-        borderLeft: `1px solid ${theme.palette.grey[300]}`,
-      }}
-    >
-      <UiPlaceholder name="Details Panel" />
-    </Box>
-  );
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function CoordinatorDashboard(props: CoordinatorDashboardProps) {
-  return (
-    <Grid sx={{display: 'flex', flex: 1}} container>
-      <Grid item xs={2}>
-        <CoordinatorDashboardNav />
-      </Grid>
-      <Grid item xs={8}>
-        <CoordinatorDashboardContentPanel />
-      </Grid>
-      <Grid item xs={2}>
+    <Container sx={{my: 6}}>
+      <Stack
+        sx={{width: '100%', mb: 4.5}}
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Typography variant="h1" sx={{fontSize: 36, fontWeight: 'bold'}}>
+          Dashboard
+        </Typography>
         <GuestInviteButton />
-        <CoordinatorDashboardDetailsPanel />
-      </Grid>
-    </Grid>
+      </Stack>
+
+      <Box>
+        <StyledTabs
+          value={value}
+          onChange={handleChange}
+          aria-label="dashboard-tabs"
+        >
+          <StyledTab
+            icon={
+              <StyledUserCount>
+                <Typography fontSize="14px" fontWeight="bold">
+                  {rows.length}
+                </Typography>
+              </StyledUserCount>
+            }
+            iconPosition="end"
+            label="All"
+            {...a11yProps(0)}
+          />
+          <StyledTab
+            icon={
+              <StyledUserCount>
+                <Typography fontSize="14px" fontWeight="bold">
+                  {totalGuests}
+                </Typography>
+              </StyledUserCount>
+            }
+            iconPosition="end"
+            label="Guests"
+            {...a11yProps(1)}
+          />
+          <StyledTab
+            icon={
+              <StyledUserCount>
+                <Typography fontSize="14px" fontWeight="bold">
+                  {totalHosts}
+                </Typography>
+              </StyledUserCount>
+            }
+            iconPosition="end"
+            label="Hosts"
+            {...a11yProps(2)}
+          />
+        </StyledTabs>
+      </Box>
+      <StyledDataGrid
+        sx={{width: '100%', flex: 1}}
+        checkboxSelection
+        disableRowSelectionOnClick
+        rows={data}
+        columns={columns}
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 10,
+            },
+          },
+        }}
+        slots={{
+          pagination: CustomPagination,
+        }}
+      />
+    </Container>
   );
-}
+};
+
+const CustomPagination = () => {
+  const apiRef = useGridApiContext();
+  const page = useGridSelector(apiRef, gridPageSelector);
+  const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+
+  return (
+    <Pagination
+      page={page + 1}
+      count={pageCount}
+      onChange={(event: React.ChangeEvent<unknown>, value: number) =>
+        apiRef.current.setPage(value - 1)
+      }
+    />
+  );
+};
+
+const StyledTabs = styled(Tabs)({
+  '& .MuiTabs-indicator': {
+    display: 'none',
+  },
+});
+
+const StyledTab = styled(Tab)(({theme}) => ({
+  textTransform: 'none',
+  fontWeight: 'medium',
+  fontSize: theme.typography.pxToRem(24),
+  color: theme.palette.text.secondary,
+  minHeight: 'auto',
+  '&.Mui-selected': {
+    color: theme.palette.text.primary,
+    backgroundColor: '#E8E8E8',
+
+    '& .MuiTab-iconWrapper': {
+      backgroundColor: theme.palette.text.secondary,
+      color: theme.palette.primary.contrastText,
+      border: 'none',
+    },
+  },
+  '&.Mui-focusVisible': {
+    backgroundColor: '#F8F8F8',
+  },
+  '.MuiTab-iconWrapper': {
+    marginLeft: theme.spacing(2),
+  },
+}));
+
+const StyledUserCount = styled(Stack)(({theme}) => ({
+  border: `2px solid ${theme.palette.text.secondary}`,
+  borderRadius: '50%',
+  height: '24px',
+  width: '24px',
+  justifyContent: 'center',
+}));
+
+const StyledDataGrid = styled(DataGrid)({
+  border: 'none',
+  '& .MuiDataGrid-main': {
+    border: '1px solid #E8E8E8',
+    borderRadius: '0 0 4px 4px',
+  },
+  '& .MuiDataGrid-columnHeaders': {
+    backgroundColor: '#E8E8E8',
+    borderRadius: 0,
+  },
+  '& .MuiDataGrid-footerContainer': {
+    border: 'none',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
