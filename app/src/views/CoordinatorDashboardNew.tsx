@@ -147,7 +147,7 @@ export const CoordinatorDashboardNew = () => {
   );
 };
 
-function CustomPagination() {
+const CustomPagination = () => {
   const apiRef = useGridApiContext();
   const page = useGridSelector(apiRef, gridPageSelector);
   const pageCount = useGridSelector(apiRef, gridPageCountSelector);
@@ -161,7 +161,7 @@ function CustomPagination() {
       }
     />
   );
-}
+};
 
 const StyledTabs = styled(Tabs)({
   '& .MuiTabs-indicator': {
@@ -177,6 +177,12 @@ const StyledTab = styled(Tab)(({theme}) => ({
   '&.Mui-selected': {
     color: theme.palette.text.primary,
     backgroundColor: '#E8E8E8',
+
+    '& .MuiTab-iconWrapper': {
+      backgroundColor: theme.palette.text.secondary,
+      color: theme.palette.primary.contrastText,
+      border: 'none',
+    },
   },
   '&.Mui-focusVisible': {
     backgroundColor: '#F8F8F8',
