@@ -10,7 +10,7 @@ import {
   useTheme,
 } from '@mui/material';
 import {UiPlaceholder} from '../components/common/UiPlaceholder';
-import {GuestInviteButton} from '../components/common/guestInvite';
+import {GuestInviteButton} from '../components/common/GuestInviteButton';
 
 interface CoordinatorDashboardProps {}
 interface CoordinatorDashboardNavProps {}

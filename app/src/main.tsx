@@ -10,7 +10,6 @@ import {ProtectedRoute} from './components/authentication/ProtectedRoute';
 import {useSessionMutation} from './services/auth';
 import {HomeUniteUsTheme} from './theme';
 import {
-  CoordinatorDashboard,
   GuestApplicationTracker,
   Home,
   HostApplicationTracker,
@@ -58,7 +57,6 @@ function HuuApp() {
       <Routes>
         <Route element={<AppLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/coord" element={<CoordinatorDashboard />} />
           <Route path="/hosts" element={<HostsList />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/signin" element={<SignIn />} />

@@ -20,6 +20,8 @@ import {
 import {faker} from '@faker-js/faker';
 import {styled} from '@mui/material/styles';
 
+import {GuestInviteButton} from '../components/common';
+
 const buildRow = () => {
   return {
     id: faker.string.uuid(),
@@ -80,9 +82,18 @@ export const CoordinatorDashboardNew = () => {
 
   return (
     <Container sx={{my: 6}}>
-      <Typography variant="h1" sx={{fontSize: 36, fontWeight: 'bold', mb: 4.5}}>
-        Dashboard
-      </Typography>
+      <Stack
+        sx={{width: '100%', mb: 4.5}}
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Typography variant="h1" sx={{fontSize: 36, fontWeight: 'bold'}}>
+          Dashboard
+        </Typography>
+        <GuestInviteButton />
+      </Stack>
+
       <Box>
         <StyledTabs
           value={value}
@@ -128,6 +139,7 @@ export const CoordinatorDashboardNew = () => {
         </StyledTabs>
       </Box>
       <StyledDataGrid
+        sx={{width: '100%', flex: 1}}
         checkboxSelection
         disableRowSelectionOnClick
         rows={data}
@@ -171,9 +183,10 @@ const StyledTabs = styled(Tabs)({
 
 const StyledTab = styled(Tab)(({theme}) => ({
   textTransform: 'none',
-  fontWeight: theme.typography.fontWeightRegular,
+  fontWeight: 'medium',
   fontSize: theme.typography.pxToRem(24),
   color: theme.palette.text.secondary,
+  minHeight: 'auto',
   '&.Mui-selected': {
     color: theme.palette.text.primary,
     backgroundColor: '#E8E8E8',
