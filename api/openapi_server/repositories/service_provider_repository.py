@@ -1,6 +1,7 @@
 from typing import Optional, List
 
 # Third Party
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 # Local
@@ -17,9 +18,9 @@ class HousingProviderRepository:
         if the service provider already exists.
         """
         with DataAccessLayer.session() as session:
-            existing_provider = session.query(HousingProgramServiceProvider).filter(
+            existing_provider = session.execute(select(HousingProgramServiceProvider).filter(
                 HousingProgramServiceProvider.provider_name == provider_name
-            ).one_or_none()
+            )).scalar_one_or_none()
 
             if existing_provider is None:
                 new_provider = HousingProgramServiceProvider(
@@ -39,7 +40,7 @@ class HousingProviderRepository:
         :param provider_id: The ID of the service provider to delete.
         """
         with DataAccessLayer.session() as session:
-            provider = session.query(HousingProgramServiceProvider).get(provider_id)
+            provider = session.get(HousingProgramServiceProvider, provider_id)
             if provider:
                 session.delete(provider)
                 session.commit()
@@ -54,14 +55,14 @@ class HousingProviderRepository:
         :type provider_id: int
         """
         with DataAccessLayer.session() as session:
-            return session.query(HousingProgramServiceProvider).get(provider_id)
+            return session.get(HousingProgramServiceProvider, provider_id)
             
     def get_service_providers(self) -> List[HousingProgramServiceProvider]:
         """
         Get a list of all housing program service providers.
         """
         with DataAccessLayer.session() as session:
-            return session.query(HousingProgramServiceProvider).all()
+            return session.scalars(select(HousingProgramServiceProvider)).all()
 
     def update_service_provider(self, new_name: str, provider_id: int) -> Optional[HousingProgramServiceProvider]:  
         """
@@ -70,7 +71,7 @@ class HousingProviderRepository:
         if update is successful, otherwise return None.
         """
         with DataAccessLayer.session() as session:
-            provider_to_update = session.query(HousingProgramServiceProvider).get(provider_id)
+            provider_to_update = session.get(HousingProgramServiceProvider, provider_id)
             if provider_to_update:
                 provider_to_update.provider_name = new_name
                 session.commit()
@@ -80,7 +81,7 @@ class HousingProviderRepository:
     
     def provider_count(self, existing_session: Session = None):
         def count(lcl_session: Session):
-            return lcl_session.query(HousingProgramServiceProvider).count()
+            return lcl_session.scalar(select(func.count(HousingProgramServiceProvider.id)))
         
         if existing_session is None:
             with DataAccessLayer.session() as session:

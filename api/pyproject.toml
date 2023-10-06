@@ -88,12 +88,6 @@ dependencies = [
     # python-dotenv allows the API to pull in external configuration from a .env file
     "python-dotenv==0.20.0",
 
-    # SQLAlchemy is a SQL toolkit that this project uses for its
-    # Object Relational Mapper (ORM) capabilities. Although alembic would have
-    # included the latest version of SQLAlchemy as a transitive dependency, it is version
-    # pinned here because this project is built for this version not the latest 2.0 series.
-    "SQLAlchemy==1.4.36",
-
     # The version of connexion that is in use does not parse multi-file OpenAPI
     # definitions like the ones found in the openapi directory. However, with the
     # help of the prance and openapi-spec-validator libraries, this code can pre-parse
@@ -151,6 +145,7 @@ prod = [
 "Bug Tracker" = "https://github.com/hackforla/HomeUniteUs/issues"
 
 [tool.setuptools.packages.find]
+exclude = ["tests*"]
 # The find packages tool looks for import packages and modules to include in an installation.
 # The `where` parameter tells the tool where to start looking for them.
 # Since this project is using a flat-layout structure with multiple top-level packages,

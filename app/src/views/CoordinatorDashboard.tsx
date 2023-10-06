@@ -10,6 +10,7 @@ import {
   useTheme,
 } from '@mui/material';
 import {UiPlaceholder} from '../components/common/UiPlaceholder';
+import {GuestInviteButton} from '../components/common/guestInvite';
 
 interface CoordinatorDashboardProps {}
 interface CoordinatorDashboardNavProps {}
@@ -132,6 +133,7 @@ export function CoordinatorDashboard(props: CoordinatorDashboardProps) {
         <CoordinatorDashboardContentPanel />
       </Grid>
       <Grid item xs={2}>
+        <GuestInviteButton />
         <CoordinatorDashboardDetailsPanel />
       </Grid>
     </Grid>

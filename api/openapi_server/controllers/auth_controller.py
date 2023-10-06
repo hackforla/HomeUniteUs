@@ -11,6 +11,7 @@ from flask import (
 from openapi_server.exceptions import AuthError
 from openapi_server.models.database import DataAccessLayer, User
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import select
 
 
 cognito_client_url = 'https://homeuniteus.auth.us-east-1.amazoncognito.com'
@@ -339,7 +340,10 @@ def token():
 
     with DataAccessLayer.session() as db_session:
         db_user = User(email=user['email'])
-        if db_session.query(User.id).filter_by(email=user["email"]).first() is None:
+        user_id = db_session.execute(
+            select(User.id).filter_by(email=user["email"])
+        ).first()
+        if user_id is None:
             db_session.add(db_user)
             db_session.commit()
 

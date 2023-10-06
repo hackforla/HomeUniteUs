@@ -1,7 +1,7 @@
 # coding: utf-8
 from __future__ import absolute_import
 
-from openapi_server.test import BaseTestCase
+from tests import BaseTestCase
 
 class TestServiceProviderController(BaseTestCase):
     """ServiceProviderController integration test stubs"""
