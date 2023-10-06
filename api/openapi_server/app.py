@@ -92,7 +92,6 @@ class HUUConnexionApp(FlaskApp):
         # Do not call super() here. We are overriding the default
         # connexion create_app method, to return our HUUFlaskApp type
         app = HUUFlaskApp(self.import_name, **self.server_args)
-        app.json_encoder = FlaskJSONEncoder
         app.url_map.converters['float'] = NumberConverter
         app.url_map.converters['int'] = IntegerConverter
         return app
