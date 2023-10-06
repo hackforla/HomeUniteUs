@@ -32,7 +32,7 @@ export const NewPassword = () => {
         session_id,
       }).unwrap();
 
-      navigate('/');
+      navigate('/guest');
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
         // you can access all properties of `FetchBaseQueryError` here
@@ -74,6 +74,10 @@ export const NewPassword = () => {
         ) : null}
         <Typography variant="h4" fontWeight="600">
           New Password
+        </Typography>
+        <Typography color="text.secondary">
+          Welcome! Before we get started please create a new password for your
+          account.
         </Typography>
         <NewPasswordForm
           onSubmit={handleNewPassword}

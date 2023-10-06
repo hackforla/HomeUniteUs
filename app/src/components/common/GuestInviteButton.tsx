@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {object, string} from 'yup';
 import {useFormik} from 'formik';
 import {
-  Box,
+  Stack,
   Button,
   TextField,
   Dialog,
@@ -13,26 +13,27 @@ import {
 import {useInviteGuestMutation} from '../../services/coordinator';
 
 export const validationSchema = object({
-  fullName: string().required('name is required'),
+  firstName: string().required('first name is required'),
+  lastName: string().required('last name is required'),
   email: string().email().required('email is required'),
 });
 
 export const GuestInviteButton = () => {
   const [open, setOpen] = useState(false);
+
   const [inviteGuest] = useInviteGuestMutation();
   const {
     handleSubmit,
     handleChange,
     handleBlur,
-    values: {fullName, email},
+    values: {firstName, lastName, email},
     touched,
     errors,
-    isValid,
-    dirty,
     resetForm,
   } = useFormik({
     initialValues: {
-      fullName: '',
+      firstName: '',
+      lastName: '',
       email: '',
     },
     validationSchema,
@@ -42,11 +43,13 @@ export const GuestInviteButton = () => {
       resetForm();
     },
   });
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
     resetForm();
   };
+
   return (
     <>
       <Button
@@ -67,40 +70,45 @@ export const GuestInviteButton = () => {
       >
         <DialogTitle>Invite a Guest</DialogTitle>
         <DialogContent dividers>
-          <Box
+          <Stack
+            direction="column"
+            sx={{gap: 2}}
             component="form"
+            id="guest-invite-form"
             onSubmit={handleSubmit}
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-            }}
           >
             <TextField
-              id="outlined-name-input"
-              label="Full Name"
-              type="FullName"
-              name="fullName"
-              value={fullName}
+              id="first-name-input"
+              label="First Name"
+              name="firstName"
+              value={firstName}
               onBlur={handleBlur}
               onChange={handleChange}
-              error={touched.fullName && Boolean(errors.fullName)}
-              helperText={errors.fullName}
+              error={touched.firstName && Boolean(errors.firstName)}
+              helperText={errors.firstName}
             />
             <TextField
-              id="outlined-email-input"
+              id="last-name-input"
+              label="Last Name"
+              name="lastName"
+              value={lastName}
+              onBlur={handleBlur}
+              onChange={handleChange}
+              error={touched.lastName && Boolean(errors.lastName)}
+              helperText={errors.lastName}
+            />
+            <TextField
+              id="email-input"
               label="Email"
               type="email"
               name="email"
-              sx={{
-                marginTop: '1em',
-              }}
               value={email}
               onChange={handleChange}
               onBlur={handleBlur}
               error={touched.email && Boolean(errors.email)}
               helperText={errors.email}
             />
-          </Box>
+          </Stack>
         </DialogContent>
         <DialogActions
           sx={{
@@ -111,10 +119,10 @@ export const GuestInviteButton = () => {
             Cancel
           </Button>
           <Button
+            form="guest-invite-form"
             variant="contained"
             type="submit"
             color="primary"
-            disabled={!isValid || !dirty}
           >
             Send Invite
           </Button>

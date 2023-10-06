@@ -60,7 +60,6 @@ function HuuApp() {
           <Route path="/hosts" element={<HostsList />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/signin" element={<SignIn />} />
-
           <Route path="/signup" element={<SelectAccountType />} />
           <Route path="/signup/:type" element={<SignUp />} />
           <Route path="/signup/success" element={<ConfirmSignUp />} />
@@ -83,7 +82,7 @@ function HuuApp() {
             path="/email-verification-error"
             element={<EmailVerificationError />}
           />
-          <Route path="/new-password" element={<NewPassword />} />
+          <Route path="/create-password" element={<NewPassword />} />
           <Route
             path="/host"
             element={
@@ -101,6 +100,8 @@ function HuuApp() {
             }
           />
         </Route>
+
+        {/* coordinator routes */}
         <Route
           path="/coordinator"
           element={
@@ -111,6 +112,8 @@ function HuuApp() {
         >
           <Route index element={<CoordinatorDashboard />} />
         </Route>
+
+        {/* guest routes */}
         <Route
           path="/guest"
           element={
