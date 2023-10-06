@@ -553,38 +553,69 @@ def invite():
     get_token_auth_header()
 
     if connexion.request.is_json:
-        body = connexion.request.get_json()
-
-    if "email" not in body:
-        raise AuthError({"message": "email invalid"},400)       
+        body = connexion.request.get_json()     
         
     try:
-
         email = body['email']
-
         response = userClient.admin_create_user(
             UserPoolId=COGNITO_USER_POOL_ID,
             Username=email,
-            UserAttributes=[
-            {
-                'Name': "email",
-                'Value': email
-            }
-            ],
-            DesiredDeliveryMediums=["EMAIL"])
+            ClientMetadata={
+                'url': ROOT_URL
+            },
+            DesiredDeliveryMediums=["EMAIL"]
+        )
 
         return response
 
-    except Exception as e:
-        
-        msg = "Invite could not be sent"
-        
-        if e.response != None:
-            msg = e.response['Error']['Message']
+    except botocore.exceptions.ClientError as error:
+        match error.response['Error']['Code']:
+            case 'UserNotFoundException':
+                msg = "User not found. Confirmation not sent."
+                raise AuthError({"message": msg}, 400)
+            case _:
+                msg = error.response['Error']['Message']
+                raise AuthError({"message": msg}, 500)
+    except botocore.exceptions.ParamValidationError as error:
+        msg = f"The parameters you provided are incorrect: {error}"
+        raise AuthError({"message": msg}, 500)
 
-        raise AuthError({
-                  "message": msg
-              }, 500)  
+def confirm_invite():
+    
+    email = request.args['email']
+    password = request.args['password']
+    secret_hash = get_secret_hash(email)
+    
+    try:
+        response = userClient.initiate_auth(
+            ClientId=COGNITO_CLIENT_ID,
+            AuthFlow='USER_PASSWORD_AUTH',
+            AuthParameters={
+                'USERNAME': email,
+                'PASSWORD': password,
+                'SECRET_HASH': secret_hash
+            }
+        )
+        
+        if response.get('ChallengeName') == 'NEW_PASSWORD_REQUIRED':
+            userId = response['ChallengeParameters']['USER_ID_FOR_SRP']
+            sessionId = response['Session']
+
+            return redirect(f"{ROOT_URL}/create-password?userId={userId}&sessionId={sessionId}")
+        else:
+            return redirect(f"{ROOT_URL}/create-password?error=There was an unexpected error. Please try again.")
+
+    except botocore.exceptions.ClientError as error:
+        match error.response['Error']['Code']:
+            case 'UserNotFoundException':
+                msg = "User not found. Confirmation not sent."
+                raise AuthError({"message": msg}, 400)
+            case _:
+                msg = error.response['Error']['Message']
+                raise AuthError({"message": msg}, 500)
+    except botocore.exceptions.ParamValidationError as error:
+        msg = f"The parameters you provided are incorrect: {error}"
+        raise AuthError({"message": msg}, 500)
 
 
 
