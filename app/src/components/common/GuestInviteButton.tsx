@@ -9,8 +9,11 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Typography,
+  Box,
 } from '@mui/material';
 import {useInviteGuestMutation} from '../../services/coordinator';
+import {CheckOutlined, EmailOutlined} from '@mui/icons-material';
 
 export const validationSchema = object({
   firstName: string().required('first name is required'),
@@ -19,7 +22,7 @@ export const validationSchema = object({
 });
 
 export const GuestInviteButton = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const [inviteGuest] = useInviteGuestMutation();
   const {
@@ -50,6 +53,8 @@ export const GuestInviteButton = () => {
     resetForm();
   };
 
+  const success = true;
+
   return (
     <>
       <Button
@@ -70,49 +75,53 @@ export const GuestInviteButton = () => {
       >
         <DialogTitle>Invite a Guest</DialogTitle>
         <DialogContent dividers>
-          <Stack
-            direction="column"
-            sx={{gap: 2}}
-            component="form"
-            id="guest-invite-form"
-            onSubmit={handleSubmit}
-          >
-            <TextField
-              id="first-name-input"
-              label="First Name"
-              name="firstName"
-              value={firstName}
-              onBlur={handleBlur}
-              onChange={handleChange}
-              error={touched.firstName && Boolean(errors.firstName)}
-              helperText={errors.firstName}
-            />
-            <TextField
-              id="last-name-input"
-              label="Last Name"
-              name="lastName"
-              value={lastName}
-              onBlur={handleBlur}
-              onChange={handleChange}
-              error={touched.lastName && Boolean(errors.lastName)}
-              helperText={errors.lastName}
-            />
-            <TextField
-              id="email-input"
-              label="Email"
-              type="email"
-              name="email"
-              value={email}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={touched.email && Boolean(errors.email)}
-              helperText={errors.email}
-            />
-          </Stack>
+          {success ? (
+            <SuccessMessage />
+          ) : (
+            <Stack
+              direction="column"
+              sx={{gap: 2}}
+              component="form"
+              id="guest-invite-form"
+              onSubmit={handleSubmit}
+            >
+              <TextField
+                id="first-name-input"
+                label="First Name"
+                name="firstName"
+                value={firstName}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                error={touched.firstName && Boolean(errors.firstName)}
+                helperText={touched.firstName && errors.firstName}
+              />
+              <TextField
+                id="last-name-input"
+                label="Last Name"
+                name="lastName"
+                value={lastName}
+                onBlur={handleBlur}
+                onChange={handleChange}
+                error={touched.lastName && Boolean(errors.lastName)}
+                helperText={touched.lastName && errors.lastName}
+              />
+              <TextField
+                id="email-input"
+                label="Email"
+                type="email"
+                name="email"
+                value={email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                error={touched.email && Boolean(errors.email)}
+                helperText={touched.email && errors.email}
+              />
+            </Stack>
+          )}
         </DialogContent>
         <DialogActions
           sx={{
-            marginRight: '1em',
+            marginRight: 2,
           }}
         >
           <Button variant="text" color="inherit" onClick={handleClose}>
@@ -129,5 +138,41 @@ export const GuestInviteButton = () => {
         </DialogActions>
       </Dialog>
     </>
+  );
+};
+
+const SuccessMessage = () => {
+  return (
+    <Stack justifyContent="center" alignItems="center">
+      <Box sx={{position: 'relative'}}>
+        <Box
+          sx={{
+            position: 'absolute',
+            right: 0,
+            top: 0,
+            backgroundColor: 'success.main',
+            borderRadius: 50,
+            height: 24,
+            width: 24,
+          }}
+        >
+          <CheckOutlined sx={{color: 'primary.contrastText'}} />
+        </Box>
+        <EmailOutlined
+          sx={{width: '84px', height: '84px', color: 'text.secondary'}}
+        />
+      </Box>
+      <Typography
+        textAlign="center"
+        variant="h3"
+        fontSize="32px"
+        fontWeight="600"
+      >
+        Your invite has been sent!
+      </Typography>
+      <Typography textAlign="center" color="text.secondary">
+        An invitation has been sent to the email provided.
+      </Typography>
+    </Stack>
   );
 };

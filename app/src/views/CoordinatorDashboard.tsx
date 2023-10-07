@@ -48,7 +48,6 @@ const columns: GridColDef[] = [
     field: 'notes',
     headerName: 'Notes',
     editable: true,
-    resizable: true,
     flex: 1,
   },
 ];
