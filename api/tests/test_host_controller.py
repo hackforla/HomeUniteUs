@@ -1,4 +1,5 @@
 from tests import BaseTestCase
+import pytest
 
 # Local
 from openapi_server.models.database import DataAccessLayer, Host
