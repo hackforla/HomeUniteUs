@@ -85,8 +85,4 @@ class TestHostController(BaseTestCase):
         for i in range(1, len(response.json) + 1):
             assert response.json[i - 1]['name'] == f"host{i}"
             assert response.json[i - 1]['id'] == i
-
             
-      
-
-        

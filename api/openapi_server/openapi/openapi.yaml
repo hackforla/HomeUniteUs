@@ -78,4 +78,3 @@ components:
           type: string
       title: ApiResponse
       type: object
-        

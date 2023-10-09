@@ -113,6 +113,3 @@ HostResponse:
     name:
       title: name
       type: string
-    
-    
-
