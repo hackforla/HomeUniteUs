@@ -104,3 +104,15 @@ IntakeResponseValue:
   required:
     - response_text
     - intake_question
+HostResponse: 
+  type: object
+  properties:
+    id:
+      title: id
+      type: integer
+    name:
+      title: name
+      type: string
+    
+    
+
