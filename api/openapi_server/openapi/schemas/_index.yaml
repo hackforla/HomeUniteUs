@@ -113,3 +113,6 @@ HostResponse:
     name:
       title: name
       type: string
+  required:
+    - id
+    - name
