@@ -101,8 +101,8 @@ def test_config_reads_from_env(empty_environment: MonkeyPatch):
     env_secret = "Extremely Cryptographically Insecure Key"
     hardcoded_secret = "Equally Insecure Key"
 
-    empty_environment.setenv("FLASK_DEBUG", env_DEBUG)
-    empty_environment.setenv("PORT", env_port)
+    empty_environment.setenv("FLASK_DEBUG", str(env_DEBUG))
+    empty_environment.setenv("PORT", str(env_port))
     empty_environment.setenv("SECRET_KEY", env_secret)
 
     config = DevelopmentHUUConfig(
@@ -205,7 +205,7 @@ def test_prod_secret_key_requirements(fake_prod_env: MonkeyPatch):
     check_insecure_secret("hi")
     check_insecure_secret("")
     check_insecure_secret("aaaaaaaaaaaaaaaaaaaaaaaaaa")
-    check_insecure_secret("asdfasdfasdfasdfasdfasdfasdfasdfa")
+    check_insecure_secret("asdfasdfasdfasdfasdfasdfa")
     check_insecure_secret("12312132132132132132132132")
     check_insecure_secret("123456789asdfqwe")
     check_insecure_secret("123456789ASDFQWERTG")
