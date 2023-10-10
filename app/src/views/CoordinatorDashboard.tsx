@@ -1,13 +1,5 @@
 import {useState} from 'react';
-import {
-  Container,
-  Box,
-  Tabs,
-  Tab,
-  Typography,
-  Pagination,
-  Stack,
-} from '@mui/material';
+import {Box, Tabs, Tab, Typography, Pagination, Stack} from '@mui/material';
 import {
   DataGrid,
   GridRowsProp,
@@ -39,16 +31,19 @@ const buildRow = () => {
 const rows: GridRowsProp = Array.from(Array(30), () => buildRow());
 
 const columns: GridColDef[] = [
-  {field: 'applicant', headerName: 'Applicant', flex: 1},
-  {field: 'type', headerName: 'Type', flex: 1},
-  {field: 'status', headerName: 'Status', flex: 1},
+  {
+    field: 'applicant',
+    headerName: 'Applicant',
+    flex: 1,
+  },
+  {field: 'type', headerName: 'Type'},
+  {field: 'status', headerName: 'Status'},
   {field: 'coordinator', headerName: 'Coordinator', flex: 1},
   {field: 'updated', headerName: 'Updated', flex: 1},
   {
     field: 'notes',
     headerName: 'Notes',
     editable: true,
-    resizable: true,
     flex: 1,
   },
 ];
@@ -81,81 +76,91 @@ export const CoordinatorDashboard = () => {
   };
 
   return (
-    <Container sx={{my: 6}}>
-      <Stack
-        sx={{width: '100%', mb: 4.5}}
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        <Typography variant="h1" sx={{fontSize: 36, fontWeight: 'bold'}}>
-          Dashboard
-        </Typography>
-        <GuestInviteButton />
-      </Stack>
-
-      <Box>
-        <StyledTabs
-          value={value}
-          onChange={handleChange}
-          aria-label="dashboard-tabs"
-        >
-          <StyledTab
-            icon={
-              <StyledUserCount>
-                <Typography fontSize="14px" fontWeight="bold">
-                  {rows.length}
-                </Typography>
-              </StyledUserCount>
-            }
-            iconPosition="end"
-            label="All"
-            {...a11yProps(0)}
-          />
-          <StyledTab
-            icon={
-              <StyledUserCount>
-                <Typography fontSize="14px" fontWeight="bold">
-                  {totalGuests}
-                </Typography>
-              </StyledUserCount>
-            }
-            iconPosition="end"
-            label="Guests"
-            {...a11yProps(1)}
-          />
-          <StyledTab
-            icon={
-              <StyledUserCount>
-                <Typography fontSize="14px" fontWeight="bold">
-                  {totalHosts}
-                </Typography>
-              </StyledUserCount>
-            }
-            iconPosition="end"
-            label="Hosts"
-            {...a11yProps(2)}
-          />
-        </StyledTabs>
-      </Box>
-      <StyledDataGrid
-        sx={{width: '100%', flex: 1}}
-        checkboxSelection
-        disableRowSelectionOnClick
-        rows={data}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: {
-              pageSize: 10,
-            },
+    <StyledPageContainer>
+      <Box
+        sx={{
+          display: 'grid',
+          gridColumn: {
+            sm: '1 / 5',
+            md: '1 / 9',
+            lg: '2 / 12',
           },
         }}
-        slots={{
-          pagination: CustomPagination,
-        }}
-      />
-    </Container>
+      >
+        <Stack
+          sx={{width: '100%', mb: 4.5}}
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Typography variant="h1" sx={{fontSize: 36, fontWeight: 'bold'}}>
+            Dashboard
+          </Typography>
+          <GuestInviteButton />
+        </Stack>
+
+        <Box>
+          <StyledTabs
+            value={value}
+            onChange={handleChange}
+            aria-label="dashboard-tabs"
+          >
+            <StyledTab
+              icon={
+                <StyledUserCount>
+                  <Typography fontSize="14px" fontWeight="bold">
+                    {rows.length}
+                  </Typography>
+                </StyledUserCount>
+              }
+              iconPosition="end"
+              label="All"
+              {...a11yProps(0)}
+            />
+            <StyledTab
+              icon={
+                <StyledUserCount>
+                  <Typography fontSize="14px" fontWeight="bold">
+                    {totalGuests}
+                  </Typography>
+                </StyledUserCount>
+              }
+              iconPosition="end"
+              label="Guests"
+              {...a11yProps(1)}
+            />
+            <StyledTab
+              icon={
+                <StyledUserCount>
+                  <Typography fontSize="14px" fontWeight="bold">
+                    {totalHosts}
+                  </Typography>
+                </StyledUserCount>
+              }
+              iconPosition="end"
+              label="Hosts"
+              {...a11yProps(2)}
+            />
+          </StyledTabs>
+        </Box>
+        <StyledDataGrid
+          checkboxSelection
+          disableRowSelectionOnClick
+          rows={data}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: 10,
+              },
+            },
+          }}
+          slots={{
+            pagination: CustomPagination,
+          }}
+        />
+      </Box>
+    </StyledPageContainer>
   );
 };
 
@@ -174,6 +179,22 @@ const CustomPagination = () => {
     />
   );
 };
+
+const StyledPageContainer = styled(Box)(({theme}) => ({
+  backgroundColor: theme.palette.grey[50],
+  display: 'grid',
+  padding: `${theme.spacing(6)} ${theme.spacing(2)}`,
+  [theme.breakpoints.up('sm')]: {
+    gridTemplateColumns: 'repeat(4, 1fr)',
+  },
+  [theme.breakpoints.up('md')]: {
+    gridTemplateColumns: 'repeat(8, 1fr)',
+  },
+  [theme.breakpoints.up('lg')]: {
+    gridTemplateColumns: 'repeat(12, 1fr)',
+  },
+  gridAutoRows: 'min-content',
+}));
 
 const StyledTabs = styled(Tabs)({
   '& .MuiTabs-indicator': {
@@ -217,6 +238,7 @@ const StyledUserCount = styled(Stack)(({theme}) => ({
 
 const StyledDataGrid = styled(DataGrid)({
   border: 'none',
+  width: '100%',
   '& .MuiDataGrid-main': {
     border: '1px solid #E8E8E8',
     borderRadius: '0 0 4px 4px',
