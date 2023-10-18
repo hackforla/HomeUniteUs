@@ -19,7 +19,7 @@ services:
     volumes:
       - ./api:/usr/src/app
     ports:
-      - "8080:8080"
+      - "8090:8090"
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/huu
     links:

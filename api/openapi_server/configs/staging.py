@@ -10,7 +10,7 @@ class StagingHUUConfig(HUUConfig):
     SECRET_KEY: str = secret_str_field()
     DATABASE_URL: str = "sqlite:///./homeuniteus.db"
     ROOT_URL: str = "dev.homeunite.us"
-    PORT: int = 8080
+    PORT: int = 8090
     HOST: str = "127.0.0.1"
     COGNITO_CLIENT_ID: str = secret_str_field()
     COGNITO_CLIENT_SECRET: str = secret_str_field()
