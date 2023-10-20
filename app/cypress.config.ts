@@ -10,4 +10,9 @@ export default defineConfig({
       bundler: 'vite',
     },
   },
+  env: {
+    USE_MOCK: true,
+    REAL_EMAIL: "put-your-real-user-here@aol.com",
+    REAL_PASSWORD: "Quantum-encrypted-p@ssw0rd-here"
+  }
 });
