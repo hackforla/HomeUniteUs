@@ -28,8 +28,7 @@ export type CreateHostApiArg = {
   };
 };
 export type ApiResponse = {
-  code?: number;
-  message?: string;
-  type?: string;
+  id?: number;
+  name?: string;
 };
 export const {useGetHostsQuery, useCreateHostMutation} = injectedRtkApi;
