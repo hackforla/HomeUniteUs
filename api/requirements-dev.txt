@@ -204,7 +204,7 @@ urllib3==1.26.18
     #   requests
 virtualenv==20.24.3
     # via tox
-werkzeug==2.2.3
+werkzeug==3.0.1
     # via
     #   connexion
     #   flask
