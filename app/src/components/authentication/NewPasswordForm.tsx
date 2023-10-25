@@ -8,8 +8,8 @@ import {PasswordValidation} from '../common/PasswordValidation';
 
 interface NewPasswordFormProps {
   onSubmit: ({password, confirmPassword}: NewPasswordRequest) => Promise<void>;
-  session_id: string | null;
-  user_id: string | null;
+  sessionId: string | null;
+  userId: string | null;
 }
 
 const validationSchema = object({
@@ -36,8 +36,8 @@ const validationSchema = object({
 
 export const NewPasswordForm = ({
   onSubmit,
-  user_id,
-  session_id,
+  userId,
+  sessionId,
 }: NewPasswordFormProps) => {
   const {
     handleSubmit,
@@ -50,8 +50,8 @@ export const NewPasswordForm = ({
     initialValues: {
       password: '',
       confirmPassword: '',
-      session_id: session_id,
-      user_id: user_id,
+      sessionId,
+      userId,
     },
     validationSchema,
     onSubmit: values => {
@@ -83,7 +83,7 @@ export const NewPasswordForm = ({
       />
       <PasswordField
         fullWidth
-        label="ConfirmPassword"
+        label="Confirm password"
         id="confirmPassword"
         name="confirmPassword"
         autoComplete="current-password"
@@ -96,7 +96,10 @@ export const NewPasswordForm = ({
           'aria-label': 'password',
         }}
       />
-      <PasswordValidation password={password} />
+      <PasswordValidation
+        confirmPassword={confirmPassword}
+        password={password}
+      />
       <Button variant="contained" size="large" type="submit" fullWidth>
         Change Password
       </Button>

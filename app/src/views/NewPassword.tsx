@@ -12,8 +12,8 @@ export const NewPassword = () => {
   const [errorMessage, setErrorMessage] = React.useState('');
 
   const [searchParams] = useSearchParams();
-  const session_id = searchParams.get('session_id');
-  const user_id = searchParams.get('user_id');
+  const session_id = searchParams.get('sessionId');
+  const user_id = searchParams.get('userId');
 
   const navigate = useNavigate();
   const [newPassword] = useNewPasswordMutation();
@@ -21,15 +21,15 @@ export const NewPassword = () => {
   const handleNewPassword = async ({
     password,
     confirmPassword,
-    user_id,
-    session_id,
+    userId,
+    sessionId,
   }: NewPasswordRequest) => {
     try {
       await newPassword({
         password,
         confirmPassword,
-        user_id,
-        session_id,
+        userId,
+        sessionId,
       }).unwrap();
 
       navigate('/guest');
@@ -81,8 +81,8 @@ export const NewPassword = () => {
         </Typography>
         <NewPasswordForm
           onSubmit={handleNewPassword}
-          session_id={session_id}
-          user_id={user_id}
+          sessionId={session_id}
+          userId={user_id}
         />
       </Stack>
     </FormContainer>
