@@ -11,6 +11,7 @@ import {
   DialogTitle,
   Typography,
   Box,
+  CircularProgress,
 } from '@mui/material';
 import {useInviteGuestMutation} from '../../services/coordinator';
 import {CheckOutlined, EmailOutlined} from '@mui/icons-material';
@@ -24,7 +25,7 @@ export const validationSchema = object({
 export const GuestInviteButton = () => {
   const [open, setOpen] = useState(true);
 
-  const [inviteGuest] = useInviteGuestMutation();
+  const [inviteGuest, {isLoading, isSuccess}] = useInviteGuestMutation();
   const {
     handleSubmit,
     handleChange,
@@ -41,7 +42,6 @@ export const GuestInviteButton = () => {
     },
     validationSchema,
     onSubmit: values => {
-      setOpen(false);
       inviteGuest(values);
       resetForm();
     },
@@ -50,10 +50,7 @@ export const GuestInviteButton = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    resetForm();
   };
-
-  const success = true;
 
   return (
     <>
@@ -73,77 +70,87 @@ export const GuestInviteButton = () => {
         maxWidth="xs"
         disablePortal
       >
-        <DialogTitle>Invite a Guest</DialogTitle>
-        <DialogContent dividers>
-          {success ? (
-            <SuccessMessage />
-          ) : (
-            <Stack
-              direction="column"
-              sx={{gap: 2}}
-              component="form"
-              id="guest-invite-form"
-              onSubmit={handleSubmit}
+        {isSuccess ? (
+          <SuccessMessage close={handleClose} />
+        ) : (
+          <>
+            <DialogTitle>Invite a Guest</DialogTitle>
+            <DialogContent dividers>
+              <Stack
+                direction="column"
+                sx={{gap: 2}}
+                component="form"
+                id="guest-invite-form"
+                onSubmit={handleSubmit}
+              >
+                <TextField
+                  id="first-name-input"
+                  label="First Name"
+                  name="firstName"
+                  value={firstName}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  error={touched.firstName && Boolean(errors.firstName)}
+                  helperText={touched.firstName && errors.firstName}
+                />
+                <TextField
+                  id="last-name-input"
+                  label="Last Name"
+                  name="lastName"
+                  value={lastName}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  error={touched.lastName && Boolean(errors.lastName)}
+                  helperText={touched.lastName && errors.lastName}
+                />
+                <TextField
+                  id="email-input"
+                  label="Email"
+                  type="email"
+                  name="email"
+                  value={email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={touched.email && Boolean(errors.email)}
+                  helperText={touched.email && errors.email}
+                />
+              </Stack>
+            </DialogContent>
+            <DialogActions
+              sx={{
+                marginRight: 2,
+              }}
             >
-              <TextField
-                id="first-name-input"
-                label="First Name"
-                name="firstName"
-                value={firstName}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                error={touched.firstName && Boolean(errors.firstName)}
-                helperText={touched.firstName && errors.firstName}
-              />
-              <TextField
-                id="last-name-input"
-                label="Last Name"
-                name="lastName"
-                value={lastName}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                error={touched.lastName && Boolean(errors.lastName)}
-                helperText={touched.lastName && errors.lastName}
-              />
-              <TextField
-                id="email-input"
-                label="Email"
-                type="email"
-                name="email"
-                value={email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={touched.email && Boolean(errors.email)}
-                helperText={touched.email && errors.email}
-              />
-            </Stack>
-          )}
-        </DialogContent>
-        <DialogActions
-          sx={{
-            marginRight: 2,
-          }}
-        >
-          <Button variant="text" color="inherit" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button
-            form="guest-invite-form"
-            variant="contained"
-            type="submit"
-            color="primary"
-          >
-            Send Invite
-          </Button>
-        </DialogActions>
+              <Button variant="text" color="inherit" onClick={handleClose}>
+                Cancel
+              </Button>
+              <Button
+                form="guest-invite-form"
+                variant="contained"
+                type="submit"
+                color="primary"
+                disabled={isLoading}
+              >
+                Send Invite
+                {isLoading ? (
+                  <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
+                ) : null}
+              </Button>
+            </DialogActions>
+          </>
+        )}
       </Dialog>
     </>
   );
 };
 
-const SuccessMessage = () => {
+interface SuccessMessageProps {
+  close: () => void;
+}
+
+const SuccessMessage = ({close}: SuccessMessageProps) => {
   return (
-    <Stack justifyContent="center" alignItems="center">
+    <Stack sx={{padding: '24px'}} justifyContent="center" alignItems="center">
       <Box sx={{position: 'relative'}}>
         <Box
           sx={{
@@ -173,6 +180,14 @@ const SuccessMessage = () => {
       <Typography textAlign="center" color="text.secondary">
         An invitation has been sent to the email provided.
       </Typography>
+      <Button
+        onClick={close}
+        sx={{mt: '24px'}}
+        variant="contained"
+        size="large"
+      >
+        Done
+      </Button>
     </Stack>
   );
 };
