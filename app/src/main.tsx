@@ -36,6 +36,7 @@ import {AccountVerification} from './views/AccountVerification';
 import {AppLayout, Header} from './components/common';
 import {ResetPasswordContext} from './components/authentication/ResetPasswordContext';
 import {GuestDashboardLayout} from './components/layout';
+import {GuestApplicationContext} from './components/common/GuestApplicationContext';
 
 function Profile() {
   return <div>Hello from profile</div>;
@@ -120,6 +121,10 @@ function HuuApp() {
           <Route path="contacts" element={<GuestContacts />} />
           <Route path="tasks" element={<GuestTasks />} />
           <Route path="settings" element={<GuestSettings />} />
+          <Route
+            path="application"
+            element={<GuestApplicationContext />}
+          ></Route>
         </Route>
       </Routes>
     </>
