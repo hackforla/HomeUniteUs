@@ -1,6 +1,6 @@
 const LOGIN_PAGES_URL_PATTERN: RegExp = /\/(coordinator|host|guest)/;
 const SIGNIN_PAGE_URL: string = Cypress.config().baseUrl + '/signin';
-const PROTECTED_PATHS: string[] = ['/guest', '/host', '/coordinator'] //profile?
+const PROTECTED_PATHS: string[] = ['/guest', '/host', '/coordinator', '/profile']
 
 function loginUsingUI(password: string, email: string) {
   cy.findByRole('textbox', {name: /email/i}).type(email);
@@ -133,7 +133,13 @@ describe('Authentication', () => {
       });
     });
   
-    it('should receive a session cookie at signin and send cookie with requests', function() {      
+    it('should receive a session cookie at signin and send cookie with requests', function() {
+      if (Cypress.env('USE_MOCK')) {
+        // Mocking the exact cookie update behavior is difficult
+        // Leave this test for real credentials
+        this.skip();
+      }
+
       cy.getCookie('session').should('not.exist');
 
       cy.visit('/signin'); 
