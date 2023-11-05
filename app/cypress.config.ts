@@ -12,7 +12,9 @@ export default defineConfig({
   },
   env: {
     USE_MOCK: true,
-    REAL_EMAIL: "put-your-real-user-here@aol.com",
-    REAL_PASSWORD: "Quantum-encrypted-p@ssw0rd-here"
+    // If mocking is disabled, then you must pass in 
+    // the email and password as a system environment
+    // variable using $env:CYPRESS_REAL_EMAIL and 
+    // $env:CYPRESS_REAL_PASSWORD
   }
 });
