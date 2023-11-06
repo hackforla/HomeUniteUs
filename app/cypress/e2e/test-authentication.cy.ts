@@ -26,22 +26,31 @@ describe('Authentication', () => {
         return LOGIN_PAGES_URL_PATTERN.test(window.location.pathname);
       }
 
+      const isUserPassCorrect = (user: string, pass: string) => {
+        return user == this.email && pass == this.password;
+      }
+
       if (Cypress.env('USE_MOCK')) {
         const oneHourFromNow = new Date();
         oneHourFromNow.setHours(oneHourFromNow.getHours() + 1);
         const cookieExpiration = oneHourFromNow.toUTCString();
         
-        cy.intercept('POST', '/api/auth/signin', {
-            statusCode: 200,
+        cy.intercept('POST', '/api/auth/signin', (req) => {
+          const { email, password } = req.body;
+          req.reply({
+            statusCode: isUserPassCorrect(email, password) ? 200 : 401,
             headers: {
-                'Set-Cookie': `session=fake_session_value; expires=${cookieExpiration}; path=/`
+              'Set-Cookie': `session=fake_session_value; expires=${cookieExpiration}; path=/`
             },
-            body: {
+            body: isUserPassCorrect(email, password) ? {
               "token": "fake.jwt.token",
               "user": {
                 "email": "test@gmail.com"
               }
+            } : {
+              "error": "Authentication failed"
             }
+          });
           }).as('signin');
         cy.intercept('POST', '/api/auth/signout', {
             statusCode: 200,
@@ -107,6 +116,20 @@ describe('Authentication', () => {
       }
     });
 
+    it('should block signin when incorrect email/pass used', function() {
+      cy.visit('/signin');
+
+      loginUsingUI('1_pp#FXo;h$i~', 'inbox827@example.com');
+      cy.wait('@signin').its('response.statusCode').should('be.within', 400, 499);
+      cy.url().should('eq', SIGNIN_PAGE_URL);
+
+      // Check protected paths still protected after our failed login attempt
+      for (const path of PROTECTED_PATHS) {
+        cy.visit(path);
+        cy.url().should('eq', SIGNIN_PAGE_URL);
+      }
+    });
+
     it('should prevent navigation to authenticated pages before signin', function() {
       for (const path of PROTECTED_PATHS) {
         cy.visit(path);
@@ -126,7 +149,7 @@ describe('Authentication', () => {
         signinURL = url;
       });
 
-      cy.wait(750);
+      cy.wait(1000);
       
       cy.url().then((url) => {
         expect(url).to.equal(signinURL, 'Signin page redirected shortly after signin!');
@@ -143,13 +166,15 @@ describe('Authentication', () => {
       cy.getCookie('session').should('not.exist');
 
       cy.visit('/signin'); 
-
+      // Expect 401 since we don't have a JWT
       cy.wait('@session')
         .its('response.statusCode')
         .should('eq', 401);
+      // Expect 400 since the refresh cookie is a required 
+      // request parameter
       cy.wait('@refresh')
         .its('response.statusCode')
-        .should('eq', 401);
+        .should('eq', 400);
       
       cy.findByRole('textbox', {name: /email/i}).type(this.email);
       cy.get('#password').type(this.password);
