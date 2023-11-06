@@ -13,6 +13,7 @@ from openapi_server.models.database import DataAccessLayer, User
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import select
 
+from botocore.exceptions import ClientError
 
 cognito_client_url = 'https://homeuniteus.auth.us-east-1.amazoncognito.com'
 
@@ -167,13 +168,7 @@ def signUpCoordinator():  # noqa: E501
         msg = f"The parameters you provided are incorrect: {error}"
         raise AuthError({"message": msg}, 500)
 
-        
-
-def signin():
-    # Validate request data
-    if connexion.request.is_json:
-        body = connexion.request.get_json()
-
+def signin(body: dict):
     secret_hash = current_app.calc_secret_hash(body['email'])
 
     # initiate authentication
@@ -187,15 +182,8 @@ def signin():
                 'SECRET_HASH': secret_hash
             }
         )
-    except Exception as e:
-        code = e.response['Error']['Code']
-        message = e.response['Error']['Message']
-        status_code = e.response['ResponseMetadata']['HTTPStatusCode']
-
-        raise AuthError({
-                  "code": code, 
-                  "message": message
-              }, status_code)
+    except ClientError as e:
+        raise AuthError(e.response["Error"], 401)
     
     if(response.get('ChallengeName') and response['ChallengeName'] == 'NEW_PASSWORD_REQUIRED'):
         userId = response['ChallengeParameters']['USER_ID_FOR_SRP']
