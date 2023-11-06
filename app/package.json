@@ -31,6 +31,7 @@
     "@mui/material": "^5.8.6",
     "@reduxjs/toolkit": "^1.8.3",
     "formik": "^2.2.9",
+    "node": "^18.18.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.2",

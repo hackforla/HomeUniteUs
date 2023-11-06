@@ -28,10 +28,10 @@ jobs:
       - name: Install API dev Dependencies
         run: |
           pip install -r requirements-dev.txt
-#      - name: Test with tox
-#        run: |
-#          # Use tox because it is configured to test against the same package type being deployed
-#          tox
+  #      - name: Test with tox
+  #        run: |
+  #          # Use tox because it is configured to test against the same package type being deployed
+  #          tox
   test-app:
     runs-on: ubuntu-latest
     defaults:
@@ -40,10 +40,10 @@ jobs:
         working-directory: ./app
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js 16.x
+      - name: Use Node.js 18.x
         uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
+          node-version: '18.x'
           cache: 'npm'
           cache-dependency-path: app/package-lock.json
       - name: Run npm CI
