@@ -1,4 +1,4 @@
-// currently, esnext cannot read json directly
+// currently, esnext cannot read json directly without createRequire
 import semver from 'semver';
 import {createRequire} from 'node:module';
 const require = createRequire(import.meta.url);
