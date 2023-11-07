@@ -5,7 +5,7 @@
     "lib": ["es6", "DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
     "skipLibCheck": true,
-    "esModuleInterop": false,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -24,6 +24,6 @@
     ],
     "baseUrl": "http://localhost:3000"
   },
-  "include": ["src", "*.ts"],
+  "include": ["src", "*.ts", "check-node-version.mjs"],
   "references": [{"path": "./tsconfig.node.json"}]
 }
