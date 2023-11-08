@@ -69,6 +69,7 @@ export const Header = () => {
           </IconButton>
         </Toolbar>
         <StyledDrawer
+          anchor="right"
           container={container}
           variant="temporary"
           open={mobileOpen}
