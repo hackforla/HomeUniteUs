@@ -1,7 +1,6 @@
 import {Formik} from 'formik';
 import {useState} from 'react';
 import {Outlet} from 'react-router-dom';
-import FormButtons from './GuestApplicationButtons';
 
 export interface formInputValues {
   fullName: string;
@@ -62,9 +61,10 @@ export const GuestApplicationContext = () => {
     <Formik
       initialValues={initialValues}
       onSubmit={() => console.log('Parent wrapper submit')}
+      step={step}
+      setStep={setStep}
     >
       <Outlet />
-      <FormButtons step={step} setStep={setStep} />
     </Formik>
   );
 };
