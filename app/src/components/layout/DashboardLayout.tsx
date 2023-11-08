@@ -93,7 +93,7 @@ export function DashboardLayout({window, navItems}: OwnProps) {
           <StyledList>{navListItems}</StyledList>
         </Box>
       </StyledDrawer>
-      <Box component="main" sx={{flexGrow: 1}}>
+      <Box component="main" sx={{flex: 1}}>
         <Toolbar />
         <Outlet />
       </Box>
