@@ -16,7 +16,7 @@ export const NewPassword = () => {
   const user_id = searchParams.get('userId');
 
   const navigate = useNavigate();
-  const [newPassword] = useNewPasswordMutation();
+  const [newPassword, {isLoading}] = useNewPasswordMutation();
 
   const handleNewPassword = async ({
     password,
@@ -83,6 +83,7 @@ export const NewPassword = () => {
           onSubmit={handleNewPassword}
           sessionId={session_id}
           userId={user_id}
+          isLoading={isLoading}
         />
       </Stack>
     </FormContainer>

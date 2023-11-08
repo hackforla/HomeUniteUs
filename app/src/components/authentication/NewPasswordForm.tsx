@@ -1,4 +1,4 @@
-import {Button, Stack} from '@mui/material';
+import {Button, Stack, CircularProgress} from '@mui/material';
 import {useFormik} from 'formik';
 import {object, string, ref} from 'yup';
 
@@ -10,6 +10,7 @@ interface NewPasswordFormProps {
   onSubmit: ({password, confirmPassword}: NewPasswordRequest) => Promise<void>;
   sessionId: string | null;
   userId: string | null;
+  isLoading: boolean;
 }
 
 const validationSchema = object({
@@ -38,6 +39,7 @@ export const NewPasswordForm = ({
   onSubmit,
   userId,
   sessionId,
+  isLoading,
 }: NewPasswordFormProps) => {
   const {
     handleSubmit,
@@ -83,7 +85,7 @@ export const NewPasswordForm = ({
       />
       <PasswordField
         fullWidth
-        label="Confirm password"
+        label="Confirm Password"
         id="confirmPassword"
         name="confirmPassword"
         autoComplete="current-password"
@@ -96,12 +98,17 @@ export const NewPasswordForm = ({
           'aria-label': 'password',
         }}
       />
-      <PasswordValidation
-        confirmPassword={confirmPassword}
-        password={password}
-      />
+      {password ? (
+        <PasswordValidation
+          confirmPassword={confirmPassword}
+          password={password}
+        />
+      ) : null}
       <Button variant="contained" size="large" type="submit" fullWidth>
-        Change Password
+        Submit
+        {isLoading ? (
+          <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
+        ) : null}
       </Button>
     </Stack>
   );
