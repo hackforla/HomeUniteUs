@@ -7,16 +7,16 @@ post:
         schema:
           type: object
           properties:
-            email:
+            userId:
               type: string
             password:
               type: string
-            session:
+            sessionId:
               type: string
           required:
-            - email
+            - userId
             - password
-            - session
+            - sessionId
   responses:
     "200":
       content:

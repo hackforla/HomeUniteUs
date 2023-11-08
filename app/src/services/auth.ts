@@ -158,7 +158,7 @@ const authApi = api.injectEndpoints({
     }),
     newPassword: build.mutation<void, NewPasswordRequest>({
       query: credentials => ({
-        url: 'auth/initial_invite',
+        url: 'auth/initialInvite',
         method: 'POST',
         withCredentials: true,
         body: credentials,
