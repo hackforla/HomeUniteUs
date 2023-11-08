@@ -21,7 +21,7 @@ export interface TaskAccordionProps
   taskOrder: number;
 }
 
-export const TaskAccordion = ({
+export const DashboardTaskAccordion = ({
   taskOrder,
   title,
   status,
@@ -86,13 +86,13 @@ export const TaskAccordion = ({
   );
 };
 
-const StyledAccordion = styled(Accordion)({
-  boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.25)',
+const StyledAccordion = styled(Accordion)(({theme}) => ({
+  boxShadow: theme.shadows[19],
   borderRadius: '4px',
   '&:before': {
     display: 'none',
   },
-});
+}));
 
 const StyledAccordionSummary = styled(AccordionSummary)({
   padding: '4px 32px',

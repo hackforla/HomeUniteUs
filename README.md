@@ -33,7 +33,7 @@ In the production environment, each of these services along with `nginx` are dep
 
 ## Build Instructions
 
-Before you can build the project, you will require a `.env` file containing access keys to the application third party services. Please message a team member on the [#home-unite-us slack channel](https://hackforla.slack.com/archives/CRWUG7X0C) once you've completed onboarding.
+Before you can build the project, you will require a `.env` file containing access keys to the application third party services. Please message a team member on the [#home-unite-us slack channel](https://hackforla.slack.com/archives/CRWUG7X0C) once you've completed onboarding. See the [api](./api/README.md) and [app](./app/README.md) READMEs for more information about the required and optional environment variables.
 
 Since this project is dockerized, you can choose to either build the backend and frontend apps as docker containers or directly onto your local machine. This guide will focus on docker builds, but full local build and deployment instructions can be found in the [api](./api/README.md) and [app](./app/README.md) READMEs.
 
