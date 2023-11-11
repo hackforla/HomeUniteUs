@@ -20,12 +20,7 @@ export const NextStepButton = ({
   }
 
   return (
-    <Button
-      fullWidth
-      size="medium"
-      variant="contained"
-      onClick={nextStepAndSave}
-    >
+    <Button size="medium" variant="contained" onClick={nextStepAndSave}>
       Continue
     </Button>
   );
@@ -48,7 +43,12 @@ export const PrevStepButton = ({
     console.log(step);
   }
   return (
-    <Button fullWidth size="medium" variant="contained" onClick={prevStep}>
+    <Button
+      size="medium"
+      variant="outlined"
+      onClick={prevStep}
+      sx={{color: 'black'}}
+    >
       Back
     </Button>
   );
@@ -62,7 +62,12 @@ export const SaveAndExitButton = () => {
     console.log('save and exit feature button');
   }
   return (
-    <Button fullWidth size="medium" variant="contained" onClick={saveAndExit}>
+    <Button
+      size="medium"
+      onClick={saveAndExit}
+      variant="text"
+      sx={{color: 'black'}}
+    >
       Save and Exit
     </Button>
   );
