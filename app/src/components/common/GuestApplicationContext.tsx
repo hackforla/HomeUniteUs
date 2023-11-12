@@ -3,6 +3,12 @@ import {Formik} from 'formik';
 import {useState} from 'react';
 import {Outlet} from 'react-router-dom';
 import ProgressBar from './ProgressBar';
+import {
+  NextStepButton,
+  PrevStepButton,
+  SaveAndExitButton,
+} from './GuestApplicationButtons';
+import {GuestApplicationSchema} from '../../utils/GuestApplicationSchema';
 
 export interface formInputValues {
   fullName: string;
@@ -67,10 +73,16 @@ export const GuestApplicationContext = () => {
       onSubmit={() => console.log('Parent wrapper submit')}
       step={step}
       setStep={setStep}
+      validationSchema={GuestApplicationSchema[step - 1]} //schema array is index of 0 hence -1
     >
       <Stack padding={2} spacing={2}>
         <ProgressBar progressBarValue={progressBarValue} />
         <Outlet />
+        <Stack gap={2}>
+          <NextStepButton step={step} setStep={setStep} />
+          <PrevStepButton step={step} setStep={setStep} />
+          <SaveAndExitButton />
+        </Stack>
       </Stack>
     </Formik>
   );

@@ -3,21 +3,20 @@ import {array, date, object, string} from 'yup';
 export const GuestApplicationSchema = [
   //validation is based on step
   object({
-    fullName: string().required(),
-    dateOfBirth: date()
-      .required()
-      .default(() => new Date()),
-    gender: string().required(),
+    fullName: string().required('Name is required'),
+    dateOfBirth: date().required('Date of Birth is required').max(new Date()),
+    gender: string().required('Select an option'),
   }),
   object({
-    email: string().email(),
+    email: string().email().required('Email is required'),
     phoneNumber: string()
       .required()
       .matches(
         /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
         'Phone number is not valid.',
-      ),
-    contactPrefrence: string().required(),
+      )
+      .required('Phone number is required'),
+    contactPrefrence: string().required('Select an option'),
   }),
   object({
     nameOfGuestArray: array().of(
@@ -32,45 +31,45 @@ export const GuestApplicationSchema = [
     ),
   }),
   object({
-    currentlyEmployed: string().required(),
+    currentlyEmployed: string().required('Select an option'),
     employmentSearch: string().when('currentlyEmployed', {
       is: (currentlyEmployed: string) => currentlyEmployed === 'No',
-      then: string().required(),
+      then: string().required('Field is required'),
     }),
     employmentDescription: string().when('currentlyEmployed', {
       is: (currentlyEmployed: string) => currentlyEmployed === 'Yes',
-      then: string().required(),
+      then: string().required('Field is required'),
     }),
   }),
   object({
-    educationEnrollment: string().required(),
+    educationEnrollment: string().required('Select an option'),
     educationEnrollmentSearch: string().when('educationEnrollment', {
       is: (educationEnrollment: string) => educationEnrollment === 'No',
-      then: string().required(),
+      then: string().required('Field is required'),
     }),
     educationProgramName: string().when('educationEnrollment', {
       is: (educationEnrollment: string) => educationEnrollment === 'Yes',
-      then: string().required(),
+      then: string().required('Field is required'),
     }),
   }),
   object({
-    multilingual: string().required(),
+    multilingual: string().required('Select an option'),
     spokenLanguages: string().when('multilingual', {
       is: (multilingual: string) => multilingual === 'Yes',
-      then: string().required(),
+      then: string().required('Field is required'),
     }),
   }),
   object({
-    cigarettesUse: string().required(),
-    alcoholUse: string().required(),
-    otherSubstanceUse: string().required(),
+    cigarettesUse: string().required('Select an option'),
+    alcoholUse: string().required('Select an option'),
+    otherSubstanceUse: string().required('Select an option'),
   }),
   object({
-    mentalIllness: string().required(),
+    mentalIllness: string().required('Select an option'),
   }),
   object({
-    programGoals: string().required(),
-    hostRelationshipGoal: string().required(),
-    potentialChallenges: string().required(),
+    programGoals: string().required('Field is required'),
+    hostRelationshipGoal: string().required('Field is required'),
+    potentialChallenges: string().required('Field is required'),
   }),
 ];
