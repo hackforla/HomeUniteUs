@@ -47,7 +47,7 @@ export const PrevStepButton = ({
       size="medium"
       variant="outlined"
       onClick={prevStep}
-      sx={{color: 'black'}}
+      sx={{color: 'black', border: 2, borderColor: 'primary.main'}}
     >
       Back
     </Button>
