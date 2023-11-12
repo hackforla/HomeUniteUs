@@ -9,14 +9,24 @@ function saveData() {
 export const NextStepButton = ({
   step,
   setStep,
+  TOTALPAGES,
+  nextPage,
 }: {
   step: number;
   setStep: (setStep: number) => void;
+  TOTALPAGES: number;
+  nextPage: string;
 }) => {
+  const navigate = useNavigate();
+  const lastPage = TOTALPAGES - 1;
   function nextStepAndSave() {
-    setStep(step + 1);
-    console.log('saved and going next step feature not made yet');
-    console.log(step);
+    saveData();
+    if (step < lastPage) {
+      navigate(nextPage);
+      setStep(step + 1);
+    } else if (step === lastPage) {
+      navigate('/guest'); //change to review file
+    }
   }
 
   return (
@@ -29,18 +39,20 @@ export const NextStepButton = ({
 export const PrevStepButton = ({
   step,
   setStep,
+  prevPage,
 }: {
   step: number;
   setStep: (setStep: number) => void;
+  prevPage: string;
 }) => {
   const navigate = useNavigate();
   function prevStep() {
     if (step > 1) {
       setStep(step - 1);
+      navigate(prevPage);
     } else {
       navigate('/guest');
     }
-    console.log(step);
   }
   return (
     <Button
@@ -59,7 +71,6 @@ export const SaveAndExitButton = () => {
   function saveAndExit() {
     saveData();
     navigate('/guest');
-    console.log('save and exit feature button');
   }
   return (
     <Button

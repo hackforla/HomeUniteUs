@@ -79,8 +79,17 @@ export const GuestApplicationContext = () => {
         <ProgressBar progressBarValue={progressBarValue} />
         <Outlet />
         <Stack gap={2}>
-          <NextStepButton step={step} setStep={setStep} />
-          <PrevStepButton step={step} setStep={setStep} />
+          <NextStepButton
+            step={step}
+            setStep={setStep}
+            TOTALPAGES={TOTALPAGES}
+            nextPage={'/guest'}
+          />
+          <PrevStepButton
+            step={step}
+            setStep={setStep}
+            prevPage={'/coordinator'}
+          />
           <SaveAndExitButton />
         </Stack>
       </Stack>
