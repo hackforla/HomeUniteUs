@@ -1,13 +1,8 @@
 import {Stack} from '@mui/material';
 import {Formik} from 'formik';
 import {useState} from 'react';
-import {Outlet} from 'react-router-dom';
+import {Outlet, useOutletContext} from 'react-router-dom';
 import ProgressBar from './ProgressBar';
-import {
-  NextStepButton,
-  PrevStepButton,
-  SaveAndExitButton,
-} from './GuestApplicationButtons';
 import {GuestApplicationSchema} from '../../utils/GuestApplicationSchema';
 
 export interface formInputValues {
@@ -35,6 +30,12 @@ export interface formInputValues {
   hostRelationshipGoal: string;
   potentialChallenges: string;
 }
+
+type stepperTypes = {
+  step: number;
+  TOTALPAGES: number;
+  setStep: (setStep: number) => void;
+};
 
 export const initialValues = {
   fullName: '',
@@ -71,28 +72,16 @@ export const GuestApplicationContext = () => {
     <Formik
       initialValues={initialValues}
       onSubmit={() => console.log('Parent wrapper submit')}
-      step={step}
-      setStep={setStep}
       validationSchema={GuestApplicationSchema[step - 1]} //schema array is index of 0 hence -1
     >
       <Stack padding={2} spacing={2}>
         <ProgressBar progressBarValue={progressBarValue} />
-        <Outlet />
-        <Stack gap={2}>
-          <NextStepButton
-            step={step}
-            setStep={setStep}
-            TOTALPAGES={TOTALPAGES}
-            nextPage={'/guest'}
-          />
-          <PrevStepButton
-            step={step}
-            setStep={setStep}
-            prevPage={'/coordinator'}
-          />
-          <SaveAndExitButton />
-        </Stack>
+        <Outlet context={{step, setStep, TOTALPAGES} satisfies stepperTypes} />
       </Stack>
     </Formik>
   );
 };
+
+export function stepContext() {
+  return useOutletContext<stepperTypes>();
+}

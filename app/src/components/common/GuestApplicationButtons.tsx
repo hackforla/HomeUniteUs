@@ -30,7 +30,12 @@ export const NextStepButton = ({
   }
 
   return (
-    <Button size="medium" variant="contained" onClick={nextStepAndSave}>
+    <Button
+      fullWidth
+      size="medium"
+      variant="contained"
+      onClick={nextStepAndSave}
+    >
       Continue
     </Button>
   );
@@ -56,6 +61,7 @@ export const PrevStepButton = ({
   }
   return (
     <Button
+      fullWidth
       size="medium"
       variant="outlined"
       onClick={prevStep}
@@ -74,6 +80,7 @@ export const SaveAndExitButton = () => {
   }
   return (
     <Button
+      fullWidth
       size="medium"
       onClick={saveAndExit}
       variant="text"
