@@ -1,112 +1,60 @@
 import {Button, Stack} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 
-function saveData() {
-  //add logic to save current data
-  console.log('data saving features not implemented');
-}
-
-export const NextStepButton = ({
+export const NavButtons = ({
   step,
   setStep,
   TOTALPAGES,
-  nextPage,
 }: {
   step: number;
   setStep: (setStep: number) => void;
   TOTALPAGES: number;
-  nextPage: string;
 }) => {
+  const stepToRouteMapping: any = {
+    1: '',
+    2: 'tester2',
+  };
   const navigate = useNavigate();
   const lastPage = TOTALPAGES - 1;
-  function nextStepAndSave() {
-    saveData();
-    if (step < lastPage) {
-      navigate(nextPage);
-      setStep(step + 1);
-    } else if (step === lastPage) {
-      navigate('/guest'); //change to review file
-    }
+
+  function saveData() {
+    //add logic to save current data
+    console.log('data saving features not implemented');
   }
 
-  return (
-    <Button
-      fullWidth
-      size="medium"
-      variant="contained"
-      onClick={nextStepAndSave}
-    >
-      Continue
-    </Button>
-  );
-};
-
-export const PrevStepButton = ({
-  step,
-  setStep,
-  prevPage,
-}: {
-  step: number;
-  setStep: (setStep: number) => void;
-  prevPage: string;
-}) => {
-  const navigate = useNavigate();
+  function nextStep() {
+    saveData();
+    const newStep = step + 1;
+    if (newStep < lastPage) {
+      setStep(newStep);
+      navigate(stepToRouteMapping[newStep]);
+    } else if (newStep === lastPage) {
+      navigate('/guest'); // change to review file
+    }
+  }
   function prevStep() {
+    const newStep = step - 1;
     if (step > 1) {
-      setStep(step - 1);
-      navigate(prevPage);
+      setStep(newStep);
+      navigate(stepToRouteMapping[newStep]);
     } else {
       navigate('/guest');
     }
   }
-  return (
-    <Button
-      fullWidth
-      size="medium"
-      variant="outlined"
-      onClick={prevStep}
-      sx={{color: 'black', border: 2, borderColor: 'primary.main'}}
-    >
-      Back
-    </Button>
-  );
-};
-
-export const SaveAndExitButton = () => {
-  const navigate = useNavigate();
   function saveAndExit() {
     saveData();
     navigate('/guest');
   }
   return (
-    <Button
-      fullWidth
-      size="medium"
-      onClick={saveAndExit}
-      variant="text"
-      sx={{color: 'black'}}
-    >
-      Save and Exit
-    </Button>
-  );
-};
-
-export const navButtons = () => {
-  return (
-    <Stack>
-      <Button
-        fullWidth
-        size="medium"
-        variant="contained"
-        /* onClick={nextStep} */
-      >
+    <Stack gap={2}>
+      <Button fullWidth size="medium" variant="contained" onClick={nextStep}>
         Continue
       </Button>
       <Button
         fullWidth
         size="medium"
         variant="outlined"
-        /* onClick={prevStep} */
+        onClick={prevStep}
         sx={{color: 'black', border: 2, borderColor: 'primary.main'}}
       >
         Back
@@ -114,7 +62,7 @@ export const navButtons = () => {
       <Button
         fullWidth
         size="medium"
-        /* onClick={saveAndExit} */
+        onClick={saveAndExit}
         variant="text"
         sx={{color: 'black'}}
       >
