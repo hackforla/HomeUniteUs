@@ -12,9 +12,11 @@ import {
   Typography,
   Box,
   CircularProgress,
+  Alert,
 } from '@mui/material';
 import {useInviteGuestMutation} from '../../services/coordinator';
 import {CheckOutlined, EmailOutlined} from '@mui/icons-material';
+import {isFetchBaseQueryError, isErrorWithMessage} from '../../app/helpers';
 
 export const validationSchema = object({
   firstName: string().required('first name is required'),
@@ -23,9 +25,10 @@ export const validationSchema = object({
 });
 
 export const GuestInviteButton = () => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const [inviteGuest, {isLoading, isSuccess}] = useInviteGuestMutation();
+  const [inviteGuest, {isLoading, isSuccess, reset}] = useInviteGuestMutation();
   const {
     handleSubmit,
     handleChange,
@@ -42,14 +45,30 @@ export const GuestInviteButton = () => {
     },
     validationSchema,
     onSubmit: values => {
-      inviteGuest(values);
-      resetForm();
+      inviteGuest(values)
+        .unwrap()
+        .then(() => {
+          setErrorMessage(null);
+        })
+        .catch(err => {
+          if (isFetchBaseQueryError(err)) {
+            // you can access all properties of `FetchBaseQueryError` here
+            const errMsg = err.data.message;
+            setErrorMessage(errMsg);
+          } else if (isErrorWithMessage(err)) {
+            // you can access a string 'message' property here
+            setErrorMessage(err.message);
+          }
+        });
     },
   });
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
+    setErrorMessage(null);
+    resetForm();
+    reset();
   };
 
   return (
@@ -71,7 +90,7 @@ export const GuestInviteButton = () => {
         disablePortal
       >
         {isSuccess ? (
-          <SuccessMessage close={handleClose} />
+          <SuccessMessage handleClose={handleClose} />
         ) : (
           <>
             <DialogTitle>Invite a Guest</DialogTitle>
@@ -83,6 +102,9 @@ export const GuestInviteButton = () => {
                 id="guest-invite-form"
                 onSubmit={handleSubmit}
               >
+                {errorMessage ? (
+                  <Alert severity="error">{errorMessage}</Alert>
+                ) : null}
                 <TextField
                   id="first-name-input"
                   label="First Name"
@@ -145,10 +167,10 @@ export const GuestInviteButton = () => {
 };
 
 interface SuccessMessageProps {
-  close: () => void;
+  handleClose: () => void;
 }
 
-const SuccessMessage = ({close}: SuccessMessageProps) => {
+const SuccessMessage = ({handleClose}: SuccessMessageProps) => {
   return (
     <Stack sx={{padding: '24px'}} justifyContent="center" alignItems="center">
       <Box sx={{position: 'relative'}}>
@@ -181,7 +203,7 @@ const SuccessMessage = ({close}: SuccessMessageProps) => {
         An invitation has been sent to the email provided.
       </Typography>
       <Button
-        onClick={close}
+        onClick={handleClose}
         sx={{mt: '24px'}}
         variant="contained"
         size="large"
