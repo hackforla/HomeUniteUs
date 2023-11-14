@@ -1,4 +1,4 @@
-import {Button} from '@mui/material';
+import {Button, Stack} from '@mui/material';
 import {useNavigate} from 'react-router-dom';
 
 function saveData() {
@@ -88,5 +88,38 @@ export const SaveAndExitButton = () => {
     >
       Save and Exit
     </Button>
+  );
+};
+
+export const navButtons = () => {
+  return (
+    <Stack>
+      <Button
+        fullWidth
+        size="medium"
+        variant="contained"
+        /* onClick={nextStep} */
+      >
+        Continue
+      </Button>
+      <Button
+        fullWidth
+        size="medium"
+        variant="outlined"
+        /* onClick={prevStep} */
+        sx={{color: 'black', border: 2, borderColor: 'primary.main'}}
+      >
+        Back
+      </Button>
+      <Button
+        fullWidth
+        size="medium"
+        /* onClick={saveAndExit} */
+        variant="text"
+        sx={{color: 'black'}}
+      >
+        Save and Exit
+      </Button>
+    </Stack>
   );
 };
