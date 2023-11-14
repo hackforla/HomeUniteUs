@@ -14,6 +14,7 @@ export const NewPassword = () => {
   const [searchParams] = useSearchParams();
   const session_id = searchParams.get('sessionId');
   const user_id = searchParams.get('userId');
+  const error = searchParams.get('error');
 
   const navigate = useNavigate();
   const [newPassword, {isLoading}] = useNewPasswordMutation();
@@ -44,6 +45,16 @@ export const NewPassword = () => {
       }
     }
   };
+
+  if (error) {
+    return (
+      <FormContainer>
+        <Alert sx={{width: '100%'}} severity="error">
+          {error}
+        </Alert>
+      </FormContainer>
+    );
+  }
 
   return (
     <FormContainer>

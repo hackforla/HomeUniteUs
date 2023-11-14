@@ -606,16 +606,21 @@ def confirm_invite():
             return redirect(f"{ROOT_URL}/create-password?error=There was an unexpected error. Please try again.")
 
     except botocore.exceptions.ClientError as error:
+        print(error)
+        msg = ''
         match error.response['Error']['Code']:
+            case 'NotAuthorizedException':
+                msg = "Incorrect username or password. Your inviation link may be invalid."
             case 'UserNotFoundException':
                 msg = "User not found. Confirmation not sent."
-                raise AuthError({"message": msg}, 400)
+            case 'TooManyRequestsException':
+                msg = "Too many attempts to use invite in a short amount of time."
             case _:
                 msg = error.response['Error']['Message']
-                raise AuthError({"message": msg}, 500)
+        return redirect(f"{ROOT_URL}/create-password?error={msg}")
     except botocore.exceptions.ParamValidationError as error:
         msg = f"The parameters you provided are incorrect: {error}"
-        raise AuthError({"message": msg}, 500)
+        return redirect(f"{ROOT_URL}/create-password?error={msg}")
 
 
 
