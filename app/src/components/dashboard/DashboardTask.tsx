@@ -27,7 +27,6 @@ export const DashboardTask = ({
   };
 
   const handleClick = () => {
-    console.log('clicked');
     navigate(url);
   };
 
