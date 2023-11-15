@@ -20,7 +20,22 @@ Run `python -V` to check the Python version.
 
 ### Getting Started
 
-For development purposes, run the following commands in the `api` directory to get started:
+#### Configuration
+
+The API application configuration must be specified before running the application. Configuration variables can be specified either as environment variables, or as entries within a `.env` file located within the `api` directory. To get started, copy the values from one of these configurations into a `.env` file:
+
+- `.env.dev.example`
+  - [Recommended] This is the easiest configuration to use. It enables debugging, and mocks third party API calls so no secrets are needed to run the API.
+- `.env.staging.example`
+  - This configuration strips all mocking from the application, but allows debugging and other testing related features.
+- `.env.prod.example`
+  - This configuration strips all mocking and strictly validates the configuration to ensure that debugging is disabled and that the deployment is production-ready.
+
+Using the `staging` or `production` configurations will require access to deployment secrets. If access to these secrets are needed to test a feature locally then you can request the secrets in the HUU slack channel.
+
+#### Setup and Run
+
+Once the `.env` file has been configured using the instructions outlined above, run the following commands in the `api` directory to install the required development dependencies and run the application.
 
 ```shell
 python -m venv .venv          # Creates a virtual environment in the `.venv` directory
@@ -61,7 +76,7 @@ The `tox` tool was installed into your virtual environment using the `pip instal
 
 To launch the tests, run `tox`.
 
-`tox` will run the tests for this (`api`) project using `pytest` in an isolated virtual environment that is distinct from the virtual environment that you created following the instructions from [Usage - Development](#usage---development).
+`tox` will run the tests for this (`api`) project using `pytest` in an isolated virtual environment that is distinct from the virtual environment that you created following the instructions from [Usage - Development](#usage---development). By default `tox` will invoke `pytest` in `debug` mode, which uses 3rd party API mocking. The test cases can optionally be run without mocking by testing the application in `release` mode, using `tox -e releasetest` or `pytest --mode=release`.
 
 ### Alembic migrations
 
@@ -145,7 +160,7 @@ SELECT * FROM public.user;
 
 to end the session just type `\q`.
 
-If you want to clear the databse and start from scratch you can run:
+If you want to clear the database and start from scratch you can run:
 
 ```
 docker compose down -v
@@ -204,33 +219,27 @@ If you create any new configuration properties, please add an associative enum t
 
 ### Debugging
 
+Debugging is enabled when using the `development` configuration. It can also be enabled on the `staging` configuration by setting the `FLASK_DEBUG` environment variable to `True`, or adding a `FLASK_DEBUG=True` to your local `.env` file. When debugging is enabled, the API server will automatically reload each time you save a change to the source code.
+
 For Visual Studio Code users:
 
 - Set breakpoint(s).
 - Add the following config below to `api/openapi_server/.vscode/launch.json` and replace "absolute path to folder" accordingly.
 
-```
+```json
 {
-          "name": "Python: Connexion",
-            "type": "python",
-            "request": "launch",
-            "module": "connexion",
-            "cwd": "${workspaceFolder}",
-            "env": {
-                "FLASK_APP": "openapi_server.__main__.py",
-                "FLASK_ENV": "development",
-                "FLASK_DEBUG": "1"
-            },
-            "args": [
-                "run",
-                "< absolute path to folder >/openapi_server",
-                "--port",
-                "8080"
-            ],
-        }
+  "name": "Openapi_server module",
+  "type": "python",
+  "request": "launch",
+  "module": "openapi_server",
+  "justMyCode": false,
+  "cwd": "${workspaceFolder}/api"
+}
 ```
 
 - Go to `openapi_server/__main__.py` and select "Run" -> "Start with Debugging".
+
+With this configuration selecting "Run" -> "Start with Debugging" will start the API with the debugger enabled.
 
 ## Usage - Production
 

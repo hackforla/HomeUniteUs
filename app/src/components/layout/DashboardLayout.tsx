@@ -93,7 +93,7 @@ export function DashboardLayout({window, navItems}: OwnProps) {
           <StyledList>{navListItems}</StyledList>
         </Box>
       </StyledDrawer>
-      <Box component="main" sx={{flexGrow: 1}}>
+      <Box component="main" sx={{flex: 1}}>
         <Toolbar />
         <Outlet />
       </Box>
@@ -112,7 +112,7 @@ interface DrawerProps {
 const StyledList = styled(List)(({theme}) => ({
   display: 'flex',
   flexDirection: 'column',
-  padding: `${theme.spacing(5)} ${theme.spacing(2)} 0 ${theme.spacing(2)}`,
+  padding: `${theme.spacing(6)} ${theme.spacing(2)} 0 ${theme.spacing(2)}`,
   gap: theme.spacing(3),
   boxSizing: 'border-box',
 }));
