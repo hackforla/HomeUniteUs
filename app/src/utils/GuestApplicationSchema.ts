@@ -1,14 +1,20 @@
+import {parse, isDate} from 'date-fns';
 import {array, date, object, string} from 'yup';
 
 export const GuestApplicationSchema = [
   //validation is based on step
   object({
     fullName: string().required('Name is required'),
-    dateOfBirth: date().required('Date of Birth is required').max(new Date()),
+    dateOfBirth: date()
+      .transform(parseDateString)
+      .typeError('Please use correct format')
+      .required('Date of Birth is required')
+      .min(new Date('01/01/1900'), 'Set a valid date')
+      .max(new Date(), 'Date cannot be in the future'),
     gender: string().required('Select an option'),
   }),
   object({
-    email: string().email().required('Email is required'),
+    email: string().email('Invalid email format').required('Email is required'),
     phoneNumber: string()
       .required()
       .matches(
@@ -73,3 +79,11 @@ export const GuestApplicationSchema = [
     potentialChallenges: string().required('Field is required'),
   }),
 ];
+
+function parseDateString(value: string, originalValue: string) {
+  const parsedDate = isDate(originalValue)
+    ? originalValue
+    : parse(originalValue, 'MM/dd/yyyy', new Date());
+
+  return parsedDate;
+}
