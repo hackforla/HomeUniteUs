@@ -1,22 +1,18 @@
 import {Button, Stack} from '@mui/material';
+import {useFormikContext} from 'formik';
 import {useNavigate} from 'react-router-dom';
 
 export const NavButtons = ({
   step,
   setStep,
-  TOTALPAGES,
+  stepToRouteMapping,
 }: {
   step: number;
   setStep: (setStep: number) => void;
-  TOTALPAGES: number;
+  stepToRouteMapping: {[key: number]: string};
 }) => {
-  const stepToRouteMapping: any = {
-    1: '',
-    2: 'tester2',
-  };
   const navigate = useNavigate();
-  const lastPage = TOTALPAGES - 1;
-
+  const {isValid} = useFormikContext();
   function saveData() {
     //add logic to save current data
     console.log('data saving features not implemented');
@@ -25,11 +21,11 @@ export const NavButtons = ({
   function nextStep() {
     saveData();
     const newStep = step + 1;
-    if (newStep < lastPage) {
+    if (stepToRouteMapping[newStep] !== undefined && isValid) {
       setStep(newStep);
       navigate(stepToRouteMapping[newStep]);
-    } else if (newStep === lastPage) {
-      navigate('/guest'); // change to review file
+    } else {
+      alert('Form not complete!');
     }
   }
   function prevStep() {
