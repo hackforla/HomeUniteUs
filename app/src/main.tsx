@@ -10,7 +10,6 @@ import {ProtectedRoute} from './components/authentication/ProtectedRoute';
 import {useSessionMutation} from './services/auth';
 import {HomeUniteUsTheme} from './theme';
 import {
-  CoordinatorDashboard,
   GuestApplicationTracker,
   Home,
   HostApplicationTracker,
@@ -31,11 +30,15 @@ import {
   GuestContacts,
   GuestTasks,
   GuestSettings,
+  CoordinatorDashboard,
 } from './views';
 import {AccountVerification} from './views/AccountVerification';
 import {AppLayout, Header} from './components/common';
 import {ResetPasswordContext} from './components/authentication/ResetPasswordContext';
-import {GuestDashboardLayout} from './components/layout';
+import {
+  CoordinatorDashboardLayout,
+  GuestDashboardLayout,
+} from './components/layout';
 
 function Profile() {
   return <div>Hello from profile</div>;
@@ -54,7 +57,6 @@ function HuuApp() {
       <Routes>
         <Route element={<AppLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/coord" element={<CoordinatorDashboard />} />
           <Route path="/hosts" element={<HostsList />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/signin" element={<SignIn />} />
@@ -91,14 +93,6 @@ function HuuApp() {
             }
           />
           <Route
-            path="/coordinator"
-            element={
-              <ProtectedRoute>
-                <CoordinatorDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
             path="/profile"
             element={
               <ProtectedRoute>
@@ -106,6 +100,16 @@ function HuuApp() {
               </ProtectedRoute>
             }
           />
+        </Route>
+        <Route
+          path="/coordinator"
+          element={
+            <ProtectedRoute>
+              <CoordinatorDashboardLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<CoordinatorDashboard />} />
         </Route>
         <Route
           path="/guest"
