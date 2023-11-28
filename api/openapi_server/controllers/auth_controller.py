@@ -473,10 +473,10 @@ def confirm_forgot_password():
     return response
 
 def user(token_info):
-    user = get_user_attr(token_info)
-
     return {
-      "user": user
+      "user": {
+          "email": token_info["Username"]
+      }
     }
 
 def private(token_info):

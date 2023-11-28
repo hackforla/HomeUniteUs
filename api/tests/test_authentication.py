@@ -1,5 +1,6 @@
 import string
-from tests import TestsWithMockingDisabled
+import re
+from tests import TestsWithMockingDisabled, BaseTestCase
 
 def strip_punctuation(text):
     return text.translate(str.maketrans('', '', string.punctuation))
@@ -72,3 +73,111 @@ class TestAuthenticationEndpoints(TestsWithMockingDisabled):
         )
         self.assert401(response)
         assert "invalid access token" in response.json['message'].lower()
+
+class TestAuthenticationEndpoints2(BaseTestCase):
+    '''
+    This suite of testcases will work with and without AWS Cognito mocking
+    enable. The plan is to eventually merge with TestAuthenticationEndpoints.
+    '''
+    
+    def test_incorrect_JWT_fail_auth(self):
+        '''
+        Attempts to use an incorrect JWT with the user endpoint returns
+        and authentication error.
+        '''
+        response = self.client.get(
+            'api/auth/user',
+            headers={"Authorization": "Bearer fake_jwt_token_here"}
+        )
+        self.assert401(response)
+        assert re.search(r"invalid.*token", response.json['message'], flags=re.IGNORECASE)
+
+    def test_signup_unconfirmed(self):
+        '''
+        Test that unconfirmed accounts cannot be used to login to the API.
+        '''
+        email = 'inbox928@placeholder.org'
+        password = 'Fakepass%^&7!asdf'
+        signup_response = self.client.post(
+            '/api/auth/signup/host',
+            json = {
+                'email': email,
+                'password': password
+            }
+        )
+
+        self.assert200(signup_response, "Signup attempt failed")
+        assert not signup_response.json["UserConfirmed"], "Newly signed up user was already confirmed!"
+
+        signin_response = self.client.post(
+            '/api/auth/signin',
+            json = {
+                'email': email,
+                'password': password
+            }
+        )
+        self.assert401(signin_response, "Signin should fail since user is unconfirmed!")
+        assert signin_response.json["Code"] == "UserNotConfirmedException"
+
+    def test_signup_confirmed(self):
+        '''
+        Test that confirmed accounts can be used to login to the API.
+        '''
+        email = 'inbox928@placeholder.org'
+        password = 'Fakepass%^&7!asdf'
+        
+        self.signup_user(email, password)
+        self.confirm_user(email)
+        
+        signin_response = self.client.post(
+            '/api/auth/signin',
+            json = {
+                'email': email,
+                'password': password
+            }
+        )
+        self.assert200(signin_response, "Signup attempt failed")
+        assert "token" in signin_response.json, "Signin succeeded but no token provided"
+        assert len(signin_response.json["token"]) > 0
+
+    def test_weak_passwords_rejected(self):
+        '''
+        Test that attempting to signup a new user with a password
+        that does not meet AWS Cognito password complexity requirements
+        returns a valid error.
+        '''
+        email = 'inbox928@placeholder.org'
+        password = 'weakpa55'
+        signup_response = self.client.post(
+            '/api/auth/signup/host',
+            json = {
+                'email': email,
+                'password': password
+            }
+        )
+
+        self.assert400(signup_response, "The weak password worked for signup!")
+        assert "password did not conform with policy" in signup_response.json["message"].lower()
+
+    def test_basic_auth_flow(self):
+        '''
+        Create a new user, confirm it, and login using the 
+        /signin endpoint, and use the returned JWT to access 
+        a protected endpoint.
+        '''
+        email = 'inbox928@placeholder.org'
+        password = 'Fake4!@#$2589FFF'
+
+        self.signup_user(email, password)
+        self.confirm_user(email)
+        jwt = self.login(email, password)
+
+        assert jwt is not None, 'Login failed'
+        response = self.client.get(
+            'api/auth/user',
+            headers={"Authorization": f"Bearer {jwt}"}
+        )
+        self.assert200(response, '/user authentication failed')
+        assert 'user' in response.json
+        assert 'email' in response.json['user']
+        assert response.json['user']['email'] == email
