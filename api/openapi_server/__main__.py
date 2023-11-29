@@ -18,7 +18,7 @@ if __name__ == "__main__":
             with temporary_aws_userpool(flask_app.boto_client) as client_config:
                 flask_app.configure_userpool(client_config)
                 run_app()
-    elif flask_app.environment == "staging" & flask_app.is_test_app():
+    elif (flask_app.environment == "staging") and flask_app.is_test_app:
         # Use the real AWS Cognito service, but a temporary user pool
         with temporary_aws_userpool(flask_app.boto_client) as client_config:
             flask_app.configure_userpool(client_config)

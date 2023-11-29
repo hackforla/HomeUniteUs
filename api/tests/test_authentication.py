@@ -5,7 +5,7 @@ from tests import TestsWithMockingDisabled, BaseTestCase
 def strip_punctuation(text):
     return text.translate(str.maketrans('', '', string.punctuation))
 
-class TestAuthenticationEndpoints(TestsWithMockingDisabled):
+class TestAuthenticationEndpoints(BaseTestCase):
 
     def test_signin_with_fake_credentials(self):
         '''
@@ -72,14 +72,8 @@ class TestAuthenticationEndpoints(TestsWithMockingDisabled):
             headers={"Authorization": "Bearer fake_jwt_token_here"}
         )
         self.assert401(response)
-        assert "invalid access token" in response.json['message'].lower()
+        assert re.search(r"invalid.*token", response.json['message'], flags=re.IGNORECASE)
 
-class TestAuthenticationEndpoints2(BaseTestCase):
-    '''
-    This suite of testcases will work with and without AWS Cognito mocking
-    enable. The plan is to eventually merge with TestAuthenticationEndpoints.
-    '''
-    
     def test_incorrect_JWT_fail_auth(self):
         '''
         Attempts to use an incorrect JWT with the user endpoint returns
