@@ -1,6 +1,9 @@
 import {BrowserRouter} from 'react-router-dom';
 import {render, screen, within} from '../../../utils/test/test-utils';
-import {TaskAccordion, TaskAccordionProps} from '../DashboardTaskAccordion';
+import {
+  DashboardTaskAccordion,
+  TaskAccordionProps,
+} from '../DashboardTaskAccordion';
 
 const task: TaskAccordionProps = {
   taskOrder: 1,
@@ -43,7 +46,7 @@ const setup = (props?: Partial<TaskAccordionProps>) => {
 
   render(
     <BrowserRouter>
-      <TaskAccordion {...values} />
+      <DashboardTaskAccordion {...values} />
     </BrowserRouter>,
   );
 
