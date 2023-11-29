@@ -1,9 +1,11 @@
 import {Stack} from '@mui/material';
 import {Formik} from 'formik';
-import {useState} from 'react';
-import {Outlet, useOutletContext} from 'react-router-dom';
+import {useEffect, useState} from 'react';
+import {Outlet} from 'react-router-dom';
 import ProgressBar from './ProgressBar';
 import {GuestApplicationSchema} from '../../utils/GuestApplicationSchema';
+import {NavButtons} from './GuestApplicationButtons';
+import {useNavigate} from 'react-router-dom';
 
 export interface formInputValues {
   fullName: string;
@@ -30,13 +32,10 @@ export interface formInputValues {
   hostRelationshipGoal: string;
   potentialChallenges: string;
 }
-
-type stepperTypes = {
-  step: number;
-  TOTALPAGES: number;
-  setStep: (setStep: number) => void;
+export const stepToRouteMapping: {[key: number]: string} = {
+  1: '',
+  2: 'tester2',
 };
-
 export const initialValues = {
   fullName: '',
   dateOfBirth: '',
@@ -64,24 +63,46 @@ export const initialValues = {
 };
 
 export const GuestApplicationContext = () => {
-  const TOTALPAGES = 10;
-  const [step, setStep] = useState<number>(1);
+  const TOTALPAGES = 10; /*Once all forms are made and added to "stepToRouteMapping", make this number change based on "stepToRouteMapping"*/
+  const storedStep = localStorage.getItem('currentStep');
+  const initialStep = storedStep ? parseInt(storedStep, 10) : 1;
+  const [step, setStep] = useState<number>(initialStep);
   const progressBarValue = (step / TOTALPAGES) * 100;
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    navigate(stepToRouteMapping[step]);
+  }, []);
+  useEffect(() => {
+    localStorage.setItem('currentStep', step.toString());
+  }, [step]);
 
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={() => console.log('Parent wrapper submit')}
-      validationSchema={GuestApplicationSchema[step - 1]} //schema array is index of 0 hence -1
+      validationSchema={GuestApplicationSchema[step - 1]}
     >
-      <Stack padding={2} spacing={2}>
-        <ProgressBar progressBarValue={progressBarValue} />
-        <Outlet context={{step, setStep, TOTALPAGES} satisfies stepperTypes} />
+      <Stack
+        padding={2}
+        spacing={2}
+        height="100vh"
+        justifyContent="space-between"
+      >
+        <Stack>
+          <ProgressBar progressBarValue={progressBarValue} />
+        </Stack>
+        <Stack>
+          <Outlet />
+        </Stack>
+        <Stack>
+          <NavButtons
+            step={step}
+            setStep={setStep}
+            stepToRouteMapping={stepToRouteMapping}
+          />
+        </Stack>
       </Stack>
     </Formik>
   );
 };
-
-export function stepContext() {
-  return useOutletContext<stepperTypes>();
-}
