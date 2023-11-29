@@ -129,7 +129,7 @@ dev = [
   # pip-tools provides the tools pip-compile and pip-sync to help manage requirements files
   "pip-tools",
 
-  "moto[cognito-idp]",
+  "moto[cognitoidp]",
 ]
 
 # This defines the "prod" extra dependency group.
