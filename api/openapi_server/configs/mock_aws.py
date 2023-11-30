@@ -1,81 +1,92 @@
-from contextlib import contextmanager
 import uuid
 
-from openapi_server.configs.cognito_config import AWSCognitoClientConfig, AWSCognitoConfig
-
-@contextmanager
-def aws_mocking():
+class AWSTemporaryUserpool():
     '''
-    Provide a context with AWS Cognito mocking enabled.
-    All calls to AWS Cognito will be mocked out, and tokens
-    will not be authenticated.
+    Provide a temporary user pool for development and testing purposes.
+
+    The provided userpool is empty. If mocking is enabled then changes to
+    the userpool will be destroyed when the application exists. If mocking
+    is not disabled then destroy() must be called to remove the temporary
+    user data from AWS Cognito. It is recommended to use the context manager
+    to avoid accidentally persisting development data on AWS.
+    '''
+
+    def __init__(self, flask_app):
+        self.app = flask_app
+
+    def create(self):
+        unique_poolname = f"TestUserPool{str(uuid.uuid4())}"
+        mock_pool_resp = self.app.boto_client.create_user_pool(
+            PoolName=unique_poolname
+        )
+        mock_pool_id = mock_pool_resp['UserPool']['Id']
+
+        client_response = self.app.boto_client.create_user_pool_client(
+            UserPoolId=mock_pool_id,
+            ClientName="MockUserPoolClient",
+            GenerateSecret=True,
+            ExplicitAuthFlows=[
+                'ALLOW_USER_PASSWORD_AUTH',  # Enable USER_PASSWORD_AUTH flow
+                'ALLOW_REFRESH_TOKEN_AUTH'   # You can add other auth flows as needed
+            ]
+        )
+        self.app.config["COGNITO_USER_POOL_ID"] = mock_pool_id
+        self.app.config["COGNITO_CLIENT_ID"]  = client_response['UserPoolClient']['ClientId']
+        self.app.config["COGNITO_CLIENT_SECRET"] = client_response['UserPoolClient']['ClientSecret'] 
+        print("Created fake temporary userpool")
+
+    def destroy(self):
+        self.app.boto_client.delete_user_pool_client(
+            UserPoolId=self.app.config["COGNITO_USER_POOL_ID"],
+            ClientId=self.app.config["COGNITO_CLIENT_ID"]
+        )
+        self.app.boto_client.delete_user_pool(
+            UserPoolId=self.app.config["COGNITO_USER_POOL_ID"]
+        )
+        print("Destroyed fake temporary userpool")
+
+    def __enter__(self):
+        self.create() 
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.destroy()
+
+class AWSMockService():
+    '''
+    Start and stop AWS Cognito mocking using moto.
 
     The mocking service will stop when the context exits. The
     mocked AWS Cognito requests will not persist outside of the context.
-    
-    Yields:
-        AWSCognitoConfig: Configuration with mocked AWS credentials.
     '''
-    from moto import mock_cognitoidp
-    
-    mock_aws_service = mock_cognitoidp()
-    mock_aws_service.start()
-    print("Started AWS Cognito mocking service")
 
-    try:
-        yield AWSCognitoConfig(
-            "us-east-1", 
-            mock_aws_service.FAKE_KEYS['AWS_ACCESS_KEY_ID'], 
-            mock_aws_service.FAKE_KEYS['AWS_SECRET_ACCESS_KEY'])
-    finally:
-        mock_aws_service.stop()
-        print("Stopped AWS Cognito mocking service")
+    def __init__(self, flask_app):
+        from moto import mock_cognitoidp
+        self.userpool = AWSTemporaryUserpool(flask_app)
+        self.mock_service = mock_cognitoidp()
+        self.app = flask_app
 
-@contextmanager
-def temporary_aws_userpool(boto_client):
-    '''
-    Provide a context with a temporary AWS user pool. The
-    yielded client_id can be used to modify the provided 
-    user pool.
+    def start(self):
+        self.mock_service.start()
+        self.app._boto_client = None
+        self.app.config["COGNITO_REGION"] = "us-east-1"
+        self.app.config["COGNITO_ACCESS_ID"] = self.mock_service.FAKE_KEYS['AWS_ACCESS_KEY_ID']
+        self.app.config["COGNITO_ACCESS_KEY"] = self.mock_service.FAKE_KEYS['AWS_SECRET_ACCESS_KEY']
+        self.userpool.create()
 
-    This user pool can be used with a real or mocked 
-    AWS Cognito service. The user pool will be 
-    deleted when the context exits.
+        print("Started mock AWS Cognito service")
 
-    Args:
-        boto_client: Boto3 client configured for Cognito.
+    def stop(self):
+        self.userpool.destroy()
+        self.mock_service.stop()
+        self.app.config["COGNITO_REGION"] = None
+        self.app.config["COGNITO_ACCESS_ID"] = None
+        self.app.config["COGNITO_ACCESS_KEY"] = None
+        self.app._boto_client = None
+        
+        print("Stopped mock AWS Cognito service")
 
-    Yields:
-        AWSCognitoClientConfig: The configuration of the created user pool client.
-    '''
-    unique_poolname = f"TestUserPool{str(uuid.uuid4())}"
-    mock_pool_resp = boto_client.create_user_pool(
-        PoolName=unique_poolname
-    )
-    mock_pool_id = mock_pool_resp['UserPool']['Id']
+    def __enter__(self):
+        self.start() 
 
-    client_response = boto_client.create_user_pool_client(
-        UserPoolId=mock_pool_id,
-        ClientName="MockUserPoolClient",
-        GenerateSecret=True,
-        ExplicitAuthFlows=[
-            'ALLOW_USER_PASSWORD_AUTH',  # Enable USER_PASSWORD_AUTH flow
-            'ALLOW_REFRESH_TOKEN_AUTH'   # You can add other auth flows as needed
-        ]
-    )
-    client_id = client_response['UserPoolClient']['ClientId']
-    client_secret = client_response['UserPoolClient']['ClientSecret'] 
-    print("Using a fake temporary userpool")
-    try:
-        yield AWSCognitoClientConfig(
-            UserPoolId=mock_pool_id,
-            ClientID=client_id,
-            ClientSecret=client_secret
-        )
-    finally:
-        boto_client.delete_user_pool_client(
-            UserPoolId=mock_pool_id,
-            ClientId=client_id
-        )
-        boto_client.delete_user_pool(UserPoolId=mock_pool_id)
-        print("Destroyed the fake temporary userpool")
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.stop()

@@ -18,7 +18,6 @@ from connexion.apps.flask_app import (
 from openapi_server.models.database import DataAccessLayer
 from openapi_server.exceptions import AuthError, handle_auth_error
 from openapi_server.configs.registry import HUUConfigRegistry, HUUConfig
-from openapi_server.configs.cognito_config import AWSCognitoConfig, AWSCognitoClientConfig
 
 class HUUFlaskApp(Flask):
     '''
@@ -30,8 +29,8 @@ class HUUFlaskApp(Flask):
         self._boto_client = None
 
     @property 
-    def environment(self) -> str:
-        return self.config["ENV"]
+    def environment(self) -> HUUConfigRegistry:
+        return HUUConfigRegistry.from_string(self.config["ENV"])
     
     @property 
     def is_debug_app(self) -> bool:
@@ -45,25 +44,6 @@ class HUUFlaskApp(Flask):
     def root_url(self) -> str:
         return self.config["ROOT_URL"]
 
-    @property
-    def supports_aws_cognito(self) -> bool:
-        return all(key in self.config for key in [
-            "COGNITO_REGION",
-            "COGNITO_ACCESS_ID",
-            "COGNITO_ACCESS_KEY"
-        ])
-    
-    def configure_botoclient(self, config: AWSCognitoConfig):
-        self.config["COGNITO_REGION"] = config.Region
-        self.config["COGNITO_ACCESS_ID"] = config.Access_ID
-        self.config["COGNITO_ACCESS_KEY"] = config.Access_Key
-        self._boto_client = None
-
-    def configure_userpool(self, config: AWSCognitoClientConfig):
-        self.config["COGNITO_CLIENT_ID"] = config.ClientID
-        self.config["COGNITO_CLIENT_SECRET"] = config.ClientSecret
-        self.config["COGNITO_USER_POOL_ID"] = config.UserPoolId
-    
     @property
     def boto_client(self):
         if self._boto_client:

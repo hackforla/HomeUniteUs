@@ -7,7 +7,7 @@ from pytest import MonkeyPatch
 from openapi_server.configs.staging import StagingHUUConfig
 from openapi_server.configs.development import DevelopmentHUUConfig
 from openapi_server.app import create_app
-from openapi_server.configs.mock_aws import aws_mocking, temporary_aws_userpool
+from openapi_server.configs.mock_aws import AWSMockService, AWSTemporaryUserpool
 from openapi_server.models.database import DataAccessLayer
 from openapi_server.repositories.service_provider_repository import HousingProviderRepository
 
@@ -41,6 +41,7 @@ def pytest_configure(config: pytest.Config) -> None:
                 FLASK_DEBUG=True,
                 DATABASE_URL = 'sqlite:///:memory:'
             )
+            config.mock_aws = True
     elif mode == 'release':
         # Load configuration from the environment, to allow the use of 
         # secrets, and disable the mocking of any resources 
@@ -53,6 +54,7 @@ def pytest_configure(config: pytest.Config) -> None:
             FLASK_DEBUG=True,
             DATABASE_URL = 'sqlite:///:memory:'
         )
+        config.mock_aws = False
     else:
         raise KeyError(f"pytest application configuration mode {mode} not"
                    "recognized. Only debug and release modes supported.")
@@ -63,14 +65,23 @@ def pytest_configure(config: pytest.Config) -> None:
 def app_config(request):
     return request.config.app_config
 
-@pytest.fixture(scope='class')
-def pass_app_config(request):
-    '''
-    Attach the pytest configuration to the decorated class as a field. 
-    This fixutre is needed to pass pytest configurations to 
-    unittest.TestCase classes.
-    '''
-    setattr(request.cls, 'app_config', request.config.app_config)
+@pytest.fixture()
+def app(pytestconfig):
+    flask_app = create_app(pytestconfig.app_config).app
+
+    # Tests will never operate on real user data, so provide a 
+    # temporary userpool even if mocking is disabled
+    app_environment_cls = AWSMockService if pytestconfig.mock_aws else AWSTemporaryUserpool
+
+    with app_environment_cls(flask_app):
+        yield flask_app
+
+    test_engine, DataAccessLayer._engine = DataAccessLayer._engine, None
+    test_engine.dispose()
+
+@pytest.fixture()
+def client(app):
+    return app.test_client()
 
 @pytest.fixture
 def empty_environment(monkeypatch: MonkeyPatch) -> MonkeyPatch:
@@ -102,61 +113,3 @@ def fake_prod_env(empty_environment: MonkeyPatch) -> MonkeyPatch:
     empty_environment.setenv("COGNITO_ACCESS_ID", "If you need fake access, use this ID")
     empty_environment.setenv("COGNITO_ACCESS_KEY", "WARNING: This is a real-ly fake key 12345a6sdf")
     return empty_environment
-
-@pytest.fixture()
-def app(pytestconfig):
-    flask_app = create_app(pytestconfig.app_config).app
-
-    mocking_context = None 
-    if isinstance(pytestconfig.app_config, DevelopmentHUUConfig):
-        mocking_context = aws_mocking()
-        config = mocking_context.__enter__()
-        flask_app.configure_botoclient(config)
-    userpool_context = temporary_aws_userpool(flask_app.boto_client)
-    client_config = userpool_context.__enter__()
-    flask_app.configure_userpool(client_config)
-
-    yield flask_app
-
-    try:
-        userpool_context.__exit__(None, None, None)
-    finally:
-        if mocking_context:
-            mocking_context.__exit__(None, None, None)
-
-    test_engine, DataAccessLayer._engine = DataAccessLayer._engine, None
-    test_engine.dispose()
-
-@pytest.fixture()
-def client(app):
-    return app.test_client()
-
-@pytest.fixture()
-def create_user(app) -> Callable[[str, str], None]:
-    '''
-    Return a method that will signup and confirm 
-    a user each time it is called. Fail test if the 
-    user signup fails.
-    '''
-    def _signup_user(email: str, password: str) -> None:
-        signup_response = app.test_client().post(
-            '/api/auth/signup/host',
-            json = {
-                'email': email,
-                'password': password
-            }
-        )
-        assert signup_response.status_code == 200, f"User factory failed to signup user: {signup_response.json['message']}"
-
-    def _confirm_user(email: str) -> None:
-        confirm_response = app.boto_client.admin_confirm_sign_up(
-            UserPoolId=app.config["COGNITO_USER_POOL_ID"],
-            Username=email
-        )
-        assert confirm_response['ResponseMetadata']['HTTPStatusCode'] == 200, f"User factory failed to confirm user"
-
-    def _factory(email: str, password: str):
-        _signup_user(email, password)
-        _confirm_user(email)
-
-    return _factory

@@ -1,6 +1,8 @@
 import string
 import re
 
+from tests.setup_utils import create_user
+
 def strip_punctuation(text):
     return text.translate(str.maketrans('', '', string.punctuation))
 
@@ -108,13 +110,13 @@ def test_signup_unconfirmed(client):
     assert signin_response.status_code == 401, "Signin should fail since user is unconfirmed!"
     assert signin_response.json["Code"] == "UserNotConfirmedException"
 
-def test_signup_confirmed(client, create_user):
+def test_signup_confirmed(client):
     '''
     Test that confirmed accounts can be used to login to the API.
     '''
     EMAIL = 'inbox928@placeholder.org'
     PASSWORD = 'Fakepass%^&7!asdf'
-    create_user(EMAIL, PASSWORD)
+    create_user(client, EMAIL, PASSWORD)
     
     signin_response = client.post(
         '/api/auth/signin',
@@ -146,7 +148,7 @@ def test_weak_passwords_rejected(client):
     assert signup_response.status_code == 400, "The weak password worked for signup!"
     assert "password did not conform with policy" in signup_response.json["message"].lower()
 
-def test_basic_auth_flow(client, create_user):
+def test_basic_auth_flow(client):
     '''
     Create a new user, confirm it, and login using the 
     /signin endpoint, and use the returned JWT to access 
@@ -154,7 +156,7 @@ def test_basic_auth_flow(client, create_user):
     '''
     EMAIL = 'inbox928@placeholder.org'
     PASSWORD = 'Fake4!@#$2589FFF'
-    create_user(EMAIL, PASSWORD)
+    create_user(client, EMAIL, PASSWORD)
 
     response = client.post(
         '/api/auth/signin',

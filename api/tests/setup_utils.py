@@ -20,3 +20,29 @@ def populate_test_database(num_entries) -> List[int]:
             "Cannot perform endpoint test!")
         ids.append(provider.id)
     return ids
+
+def create_user(test_client, email: str, password: str) -> None:
+    '''
+    Signup and confirm a new user. Fail the test if the 
+    signup or confirm operation fails.
+    '''
+    app = test_client.application
+    def _signup_user(email: str, password: str) -> None:
+        signup_response = app.test_client().post(
+            '/api/auth/signup/host',
+            json = {
+                'email': email,
+                'password': password
+            }
+        )
+        assert signup_response.status_code == 200, f"User factory failed to signup user: {signup_response.json['message']}"
+
+    def _confirm_user(email: str) -> None:
+        confirm_response = app.boto_client.admin_confirm_sign_up(
+            UserPoolId=app.config["COGNITO_USER_POOL_ID"],
+            Username=email
+        )
+        assert confirm_response['ResponseMetadata']['HTTPStatusCode'] == 200, f"User factory failed to confirm user"
+
+    _signup_user(email, password)
+    _confirm_user(email)
