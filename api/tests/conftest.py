@@ -105,8 +105,6 @@ def fake_prod_env(empty_environment: MonkeyPatch) -> MonkeyPatch:
 
 @pytest.fixture()
 def app(pytestconfig):
-    # gotta remove this!
-    provider_repo = HousingProviderRepository()
     flask_app = create_app(pytestconfig.app_config).app
 
     mocking_context = None 
@@ -126,7 +124,6 @@ def app(pytestconfig):
         if mocking_context:
             mocking_context.__exit__(None, None, None)
 
-    provider_repo = None
     test_engine, DataAccessLayer._engine = DataAccessLayer._engine, None
     test_engine.dispose()
 
