@@ -1,4 +1,4 @@
-import {Stack} from '@mui/material';
+import {Box, Stack} from '@mui/material';
 import {Formik} from 'formik';
 import {useEffect, useState} from 'react';
 import {Outlet} from 'react-router-dom';
@@ -34,7 +34,6 @@ export interface formInputValues {
 }
 export const stepToRouteMapping: {[key: number]: string} = {
   1: '',
-  2: 'tester2',
 };
 export const initialValues = {
   fullName: '',
@@ -83,16 +82,16 @@ export const GuestApplicationContext = () => {
       onSubmit={() => console.log('Parent wrapper submit')}
       validationSchema={GuestApplicationSchema[step - 1]}
     >
-      <Stack
-        padding={2}
-        spacing={2}
-        height="100vh"
-        justifyContent="space-between"
-      >
+      <Box padding={2} gap={0} height={'95vh'}>
         <Stack>
           <ProgressBar progressBarValue={progressBarValue} />
         </Stack>
-        <Stack>
+        <Stack
+          marginTop={2}
+          overflow={'scroll'}
+          minHeight={'72%'}
+          maxHeight={'72%'}
+        >
           <Outlet />
         </Stack>
         <Stack>
@@ -102,7 +101,7 @@ export const GuestApplicationContext = () => {
             stepToRouteMapping={stepToRouteMapping}
           />
         </Stack>
-      </Stack>
+      </Box>
     </Formik>
   );
 };
