@@ -1,3 +1,4 @@
+import re
 import uuid
 
 class AWSTemporaryUserpool():
@@ -13,6 +14,17 @@ class AWSTemporaryUserpool():
 
     def __init__(self, flask_app):
         self.app = flask_app
+        self.tmp_userpool_id = None 
+        self.tmp_client_id = None
+
+    @staticmethod
+    def is_temp_pool(poolname: str) -> bool:
+        '''
+        Return True if the AWS cognito poolname 
+        matches the format of a temporary userpool.
+        '''
+        regex = re.compile(f"^TestUserPool[0-9a-fA-F]{{8}}-[0-9a-fA-F]{{4}}-[0-9a-fA-F]{{4}}-[0-9a-fA-F]{{4}}-[0-9a-fA-F]{{12}}$")
+        return bool(re.match(regex, poolname))
 
     def create(self):
         unique_poolname = f"TestUserPool{str(uuid.uuid4())}"
@@ -30,19 +42,24 @@ class AWSTemporaryUserpool():
                 'ALLOW_REFRESH_TOKEN_AUTH'   # You can add other auth flows as needed
             ]
         )
-        self.app.config["COGNITO_USER_POOL_ID"] = mock_pool_id
-        self.app.config["COGNITO_CLIENT_ID"]  = client_response['UserPoolClient']['ClientId']
+
+        self.tmp_userpool_id = mock_pool_id 
+        self.tmp_client_id = client_response['UserPoolClient']['ClientId']
+        self.app.config["COGNITO_USER_POOL_ID"] = self.tmp_userpool_id
+        self.app.config["COGNITO_CLIENT_ID"]  = self.tmp_client_id
         self.app.config["COGNITO_CLIENT_SECRET"] = client_response['UserPoolClient']['ClientSecret'] 
         print("Created fake temporary userpool")
 
     def destroy(self):
         self.app.boto_client.delete_user_pool_client(
-            UserPoolId=self.app.config["COGNITO_USER_POOL_ID"],
-            ClientId=self.app.config["COGNITO_CLIENT_ID"]
+            UserPoolId=self.tmp_userpool_id,
+            ClientId=self.tmp_client_id
         )
         self.app.boto_client.delete_user_pool(
-            UserPoolId=self.app.config["COGNITO_USER_POOL_ID"]
+            UserPoolId=self.tmp_userpool_id
         )
+        self.tmp_userpool_id = None 
+        self.tmp_client_id = None
         print("Destroyed fake temporary userpool")
 
     def __enter__(self):

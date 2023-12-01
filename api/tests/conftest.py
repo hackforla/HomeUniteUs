@@ -1,7 +1,6 @@
 import os
 
 import pytest
-from typing import Callable
 from pytest import MonkeyPatch
 
 from openapi_server.configs.staging import StagingHUUConfig
@@ -9,7 +8,6 @@ from openapi_server.configs.development import DevelopmentHUUConfig
 from openapi_server.app import create_app
 from openapi_server.configs.mock_aws import AWSMockService, AWSTemporaryUserpool
 from openapi_server.models.database import DataAccessLayer
-from openapi_server.repositories.service_provider_repository import HousingProviderRepository
 
 def pytest_addoption(parser: pytest.Parser) -> None:
     '''
@@ -64,6 +62,10 @@ def pytest_configure(config: pytest.Config) -> None:
 @pytest.fixture(scope="session")
 def app_config(request):
     return request.config.app_config
+
+@pytest.fixture(scope="session")
+def is_mocking(pytestconfig):
+    return pytestconfig.mock_aws
 
 @pytest.fixture()
 def app(pytestconfig):
