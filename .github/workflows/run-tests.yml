@@ -38,6 +38,7 @@ jobs:
           COGNITO_REGION: ${{ secrets.COGNITO_REGION }}
           COGNITO_ACCESS_ID: ${{ secrets.COGNITO_ACCESS_ID }}
           COGNITO_ACCESS_KEY: ${{ secrets.COGNITO_ACCESS_KEY }}
+          SECRET_KEY: ${{ env.SECRET_KEY }}
         run: |
           tox -e releasetest
   test-app:
