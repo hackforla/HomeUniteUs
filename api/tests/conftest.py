@@ -1,6 +1,7 @@
 import os
 
 import pytest
+import secrets
 from pytest import MonkeyPatch
 
 from openapi_server.configs.staging import StagingHUUConfig
@@ -55,6 +56,7 @@ def pytest_configure(config: pytest.Config) -> None:
             m.setenv("COGNITO_CLIENT_SECRET", "Yet another fake secret12")
             m.setenv("COGNITO_REDIRECT_URI", "Redirect your way back to writing more test cases")
             m.setenv("COGNITO_USER_POOL_ID", "Water's warm. IDs are fake")
+            m.setenv("SECRET_KEY", secrets.token_urlsafe(32))
             app_config = StagingHUUConfig(
                 TESTING=True,
                 FLASK_DEBUG=True,
