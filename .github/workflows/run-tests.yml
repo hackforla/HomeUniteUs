@@ -32,7 +32,7 @@ jobs:
           # Use tox because it is configured to test against the same package type being deployed
           tox
       - name: Generate Random SECRET_KEY
-        run: echo "SECRET_KEY=$(openssl rand -base64 32)" >> $GITHUB_ENV
+        run: echo "SECRET_KEY=$(openssl rand -base64 32)" >> $SECRET_KEY
       - name: Run release tests with mocking disabled, using tox
         env:
           COGNITO_REGION: ${{ secrets.COGNITO_REGION }}
