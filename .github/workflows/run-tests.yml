@@ -27,10 +27,17 @@ jobs:
       - name: Install API dev Dependencies
         run: |
           pip install -r requirements-dev.txt
-      - name: Test with tox
+      - name: Run development tests with mocking enabled, using tox
         run: |
           # Use tox because it is configured to test against the same package type being deployed
           tox
+      - name: Run release tests with mocking disabled, using tox
+        env:
+          COGNITO_REGION: ${{ secrets.COGNITO_REGION }}
+          COGNITO_ACCESS_ID: ${{ secrets.COGNITO_ACCESS_ID }}
+          COGNITO_ACCESS_KEY: ${{ secrets.COGNITO_ACCESS_KEY }}
+        run: |
+          tox -e releasetest
   test-app:
     runs-on: ubuntu-latest
     defaults:

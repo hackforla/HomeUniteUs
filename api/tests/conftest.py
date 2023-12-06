@@ -47,11 +47,19 @@ def pytest_configure(config: pytest.Config) -> None:
         dot_env = find_dotenv()
         if dot_env:
             load_dotenv(dot_env)
-        app_config = StagingHUUConfig(
-            TESTING=True,
-            FLASK_DEBUG=True,
-            DATABASE_URL = 'sqlite:///:memory:'
-        )
+        with MonkeyPatch().context() as m:
+            # The real userpool should never be used while testing
+            # Our test infrastructure will create temporary user
+            # pools for each test.
+            m.setenv("COGNITO_CLIENT_ID", "Totally fake client id")
+            m.setenv("COGNITO_CLIENT_SECRET", "Yet another fake secret12")
+            m.setenv("COGNITO_REDIRECT_URI", "Redirect your way back to writing more test cases")
+            m.setenv("COGNITO_USER_POOL_ID", "Water's warm. IDs are fake")
+            app_config = StagingHUUConfig(
+                TESTING=True,
+                FLASK_DEBUG=True,
+                DATABASE_URL = 'sqlite:///:memory:'
+            )
         config.mock_aws = False
     else:
         raise KeyError(f"pytest application configuration mode {mode} not"
