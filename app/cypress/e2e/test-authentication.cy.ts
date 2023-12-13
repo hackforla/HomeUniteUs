@@ -144,8 +144,8 @@ describe('Authentication', () => {
       cy.wait('@signin').its('response.statusCode').should('be.within', 200, 299);
 
       let signinURL: string;
-      cy.url().then((url) => {
-        expect(url).to.match(LOGIN_PAGES_URL_PATTERN, 'The URL should end with /coordinator, /host, or /guest');
+      cy.url().should(url => {
+        expect(url).to.match(LOGIN_PAGES_URL_PATTERN);
         signinURL = url;
       });
 
