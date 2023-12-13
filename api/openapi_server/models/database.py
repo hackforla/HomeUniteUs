@@ -1,13 +1,7 @@
-from unicodedata import name
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.engine import Engine
+from sqlalchemy.orm import Session, declarative_base
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, LargeBinary
-from sqlalchemy import text
-
-from os import environ as env
-
-DATABASE_URL = env.get('DATABASE_URL')
 
 Base = declarative_base()
 
@@ -143,7 +137,6 @@ class MatchFailure(Base):
     match_result = Column(Integer, ForeignKey('match_result.id'), nullable=False)
     failed_condition = Column(Integer, ForeignKey('match_fail_condition.id'), nullable=False)
 
-
 class HousingProgramServiceProvider(Base):
     __tablename__ = "housing_program_service_provider"  
 
@@ -153,14 +146,12 @@ class HousingProgramServiceProvider(Base):
     def __repr__(self):
         return f"HousingProgramServiceProvider(id={id},provider_name='{self.provider_name}')"
 
-
 class HousingProgram(Base):
     __tablename__ = "housing_program"  
 
     id = Column(Integer, primary_key=True, index=True)
     program_name = Column(String, nullable=False)
     service_provider = Column(Integer, ForeignKey('housing_program_service_provider.id'), nullable=False)
-
 
 class IntakeQuestionSet(Base):
     __tablename__ = "intake_question_set"
@@ -205,7 +196,6 @@ class Host(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
-
 class HostHousehold(Base):
     __tablename__ = "host_household"
 
@@ -245,21 +235,13 @@ class ProgramCaseStatusLog(Base):
     dest_status = Column(Integer, ForeignKey('case_status.id'), nullable=False)
 
 class DataAccessLayer:
-    _engine = None
-
-    # temporary local sqlite DB, replace with conn str for postgres container port for real e2e
-    _conn_string = DATABASE_URL if DATABASE_URL else "sqlite:///./homeuniteus.db"
+    _engine: Engine = None
 
     @classmethod
-    def db_init(cls, conn_string=None):
-        Base.metadata.create_all(bind=cls.get_engine(conn_string))
-    
-    @classmethod
-    def connect(cls):
-        return cls.get_engine().connect()
-    
-    @classmethod
-    def get_engine(cls, conn_string=None):
-        if cls._engine == None:
-            cls._engine = create_engine(conn_string or cls._conn_string, echo=True, future=True)
-        return cls._engine
+    def db_init(cls, conn_string):
+        cls._engine = create_engine(conn_string, echo=True, future=True)
+        Base.metadata.create_all(bind=cls._engine)
+
+    @classmethod 
+    def session(cls) -> Session:
+        return Session(cls._engine)

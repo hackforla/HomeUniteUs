@@ -77,7 +77,15 @@ export const Header = (props: Props) => {
 
   return (
     <Box sx={{display: 'flex'}}>
-      <AppBar sx={{backgroundColor: 'white'}} component="nav">
+      <AppBar
+        position="fixed"
+        sx={{
+          backgroundColor: 'white',
+          zIndex: theme => theme.zIndex.drawer + 1,
+          boxShadow: 'none',
+        }}
+        component="nav"
+      >
         <Toolbar sx={{justifyContent: {xs: 'space-between'}}}>
           <IconButton
             color="primary"
@@ -93,6 +101,8 @@ export const Header = (props: Props) => {
               style={{width: '40px', height: '40px'}}
               src={logo}
               alt="Home Unite Us logo"
+              onClick={handleDrawerToggle}
+              role="button"
             />
           </Stack>
           <Stack direction="row" gap={1} sx={{alignItems: 'center'}}>

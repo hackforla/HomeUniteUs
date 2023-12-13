@@ -14,7 +14,7 @@ This project is part of a larger initiative at Hack for LA around creating a sha
 
 ## Technology Overview
 
-The HomeUniteUs project is structured as a multi-[docker](https://docs.docker.com/) container application, with secret-protected access to networked resources. The project contains three containers, whose activities are coordinated using the `docker compose` configuration outlined in `docker-compose.yml`. The three containers are:
+The HomeUniteUs project is structured as a multi-[docker](https://docs.docker.com/) container application (for local development and testing), with secret-protected access to networked resources. The project contains three containers, whose activities are coordinated using the `docker compose` configuration outlined in `docker-compose.yml`. The three containers are:
 
 1. `app`: A frontend [React](https://reactjs.org/docs/getting-started.html) app developed using [TypeScript](https://www.typescriptlang.org/).
    * We use [Redux](https://redux.js.org/) to manage client state, with the [Redux Toolkit](https://redux-toolkit.js.org/) to simplify development.
@@ -29,11 +29,13 @@ The HomeUniteUs project is structured as a multi-[docker](https://docs.docker.co
    * The database is stored as a docker volume, `db-data`.
    * If the volume is not found during spin-up, then an empty database volume will be created.
 
+In the production environment, each of these services along with `nginx` are deployed onto an EC2 instance and managed as `systemd` service units instead of with Docker.
+
 ## Build Instructions
 
-Before you can build the project, you will require a `.env` file containing access keys to the application third party services. Please message a team member on the [#home-unite-us slack channel](https://hackforla.slack.com/archives/CRWUG7X0C) once you've completed onboarding.
+Before you can build the project, you will require a `.env` file containing access keys to the application third party services. Please message a team member on the [#home-unite-us slack channel](https://hackforla.slack.com/archives/CRWUG7X0C) once you've completed onboarding. See the [api](./api/README.md) and [app](./app/README.md) READMEs for more information about the required and optional environment variables.
 
-Since this project is dockerized, you can choose to either build the backend and frontend apps as docker containers or directly onto your local machine. This guide will focus on docker builds, but full local build and deployment instructions can be found on the [api](./api/README.md) and [app](./app/README.md) READMEs.
+Since this project is dockerized, you can choose to either build the backend and frontend apps as docker containers or directly onto your local machine. This guide will focus on docker builds, but full local build and deployment instructions can be found in the [api](./api/README.md) and [app](./app/README.md) READMEs.
 
 Also note that the code in this repo *should* build without issue on Linux, Windows, and MacOS. We do, however, utilize some Linux-only tools during deployment and primarily target the Linux platform.
 
@@ -48,24 +50,11 @@ Building with Docker is the simplest option, and debugging applications within t
 
 #### Instructions
 
-1. Place a copy of the `.env` file in the `\app` directory
-2. Place a copy of the `.env` file in the `\api` directory
+1. Place a copy of the `.env` file in the `app` directory
+2. Place a copy of the `.env` file in the `api` directory
 3. Build all three containers by running the `docker compose up` shell command from the root directory:
 4. Verify there are no build errors, and open `localhost:4040` in any browser, to see the application
 
-#### Testing
+## Testing Instructions
 
-You can run the api test cases directly within the docker container. To do this, however, you'll need to find the find the docker container Id. You can do this by reviewing the output from `docker ps` or use the following Powershell commands.
-
-```Powershell
-# Find the container ids 
-# (-a show all containers, -q only display ids, -f filter output)
-$api_container_id = docker ps -aqf "name=homeuniteus-api"
-
-# Install the additional testing requirements before running api tests
-docker exec -it $api_container_id pip install -r test-requirements.txt
-# Run api tests
-docker exec $api_container_id pytest
-```
-
-Running the `app` tests will require building the application locally, and invoking the `npm test` command within the `\app` directory.
+Testing instructions for each application are in the [api](./api/README.md) and [app](./app/README.md) README files.

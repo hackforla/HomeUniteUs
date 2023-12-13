@@ -3,18 +3,6 @@ import ReactDOM from 'react-dom/client';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import './index.css';
 
-/*
-  import 'core-js/stable';
-  import 'regenerator-runtime/runtime';
-  import * as React from 'react';
-  import * as ReactDOM from 'react-dom';
-  import {BrowserRouter, Route, Routes} from 'react-router-dom';
-  import {Provider} from 'react-redux';
-  import {CssBaseline} from '@mui/material';
-  import {ThemeProvider} from '@mui/material/styles';
-  import {StyledEngineProvider} from '@mui/material/styles';
-*/
-
 import {CssBaseline, StyledEngineProvider, ThemeProvider} from '@mui/material';
 import {Provider} from 'react-redux';
 import {setupStore} from './app/store';
@@ -22,7 +10,6 @@ import {ProtectedRoute} from './components/authentication/ProtectedRoute';
 import {useSessionMutation} from './services/auth';
 import {HomeUniteUsTheme} from './theme';
 import {
-  CoordinatorDashboard,
   GuestApplicationTracker,
   Home,
   HostApplicationTracker,
@@ -39,10 +26,19 @@ import {
   Settings,
   SelectAccountType,
   ConfirmSignUp,
+  GuestDocuments,
+  GuestContacts,
+  GuestTasks,
+  GuestSettings,
+  CoordinatorDashboard,
 } from './views';
 import {AccountVerification} from './views/AccountVerification';
 import {AppLayout, Header} from './components/common';
 import {ResetPasswordContext} from './components/authentication/ResetPasswordContext';
+import {
+  CoordinatorDashboardLayout,
+  GuestDashboardLayout,
+} from './components/layout';
 
 function Profile() {
   return <div>Hello from profile</div>;
@@ -61,41 +57,8 @@ function HuuApp() {
       <Routes>
         <Route element={<AppLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/coord" element={<CoordinatorDashboard />} />
           <Route path="/hosts" element={<HostsList />} />
           <Route path="/settings" element={<Settings />} />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/host"
-            element={
-              <ProtectedRoute>
-                <HostApplicationTracker />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/guest"
-            element={
-              <ProtectedRoute>
-                <GuestApplicationTracker />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/coordinator"
-            element={
-              <ProtectedRoute>
-                <CoordinatorDashboard />
-              </ProtectedRoute>
-            }
-          />
           <Route path="/signin" element={<SignIn />} />
 
           <Route path="/signup" element={<SelectAccountType />} />
@@ -121,6 +84,46 @@ function HuuApp() {
             element={<EmailVerificationError />}
           />
           <Route path="/new-password" element={<NewPassword />} />
+          <Route
+            path="/host"
+            element={
+              <ProtectedRoute>
+                <HostApplicationTracker />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+        </Route>
+        <Route
+          path="/coordinator"
+          element={
+            <ProtectedRoute>
+              <CoordinatorDashboardLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<CoordinatorDashboard />} />
+        </Route>
+        <Route
+          path="/guest"
+          element={
+            <ProtectedRoute>
+              <GuestDashboardLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<GuestApplicationTracker />} />
+          <Route path="documents" element={<GuestDocuments />} />
+          <Route path="contacts" element={<GuestContacts />} />
+          <Route path="tasks" element={<GuestTasks />} />
+          <Route path="settings" element={<GuestSettings />} />
         </Route>
       </Routes>
     </>
