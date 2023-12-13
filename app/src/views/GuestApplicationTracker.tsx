@@ -1,6 +1,9 @@
 import {Divider, Box, Typography, Stack, useTheme} from '@mui/material';
 import {styled} from '@mui/system';
-import {TaskAccordion} from '../components/dashboard/DashboardTaskAccordion';
+import {
+  DashboardTaskAccordion,
+  CoordinatorContact,
+} from '../components/dashboard';
 
 export type TaskStatus = 'inProgress' | 'complete' | 'locked';
 
@@ -94,6 +97,13 @@ const tasks: Task[] = [
   },
 ];
 
+const coordinatorInfo = {
+  image: 'https://placekitten.com/100/100',
+  name: 'John Doe',
+  email: 'johndoe@email.com',
+  phone: '555-555-5555',
+};
+
 export function GuestApplicationTracker() {
   const theme = useTheme();
   const toolbarHeight = Number(theme.mixins.toolbar.minHeight);
@@ -111,7 +121,7 @@ export function GuestApplicationTracker() {
           mb: 5,
         }}
       >
-        <Typography sx={{fontSize: 24}} variant="h3">
+        <Typography sx={{fontSize: 24, fontWeight: 'medium'}} variant="h3">
           Welcome, Jane Doe
         </Typography>
         <Divider />
@@ -126,14 +136,14 @@ export function GuestApplicationTracker() {
           },
         }}
       >
-        <Typography sx={{fontSize: 20}} variant="h4">
+        <Typography sx={{fontSize: 20, fontWeight: 'medium'}} variant="h4">
           My Tasks
         </Typography>
         <Divider sx={{mb: 1}} />
         <Stack spacing={2}>
           {tasks.map(({id, title, status, subTasks}, index) => {
             return (
-              <TaskAccordion
+              <DashboardTaskAccordion
                 key={`tastk-${id}`}
                 taskOrder={index + 1}
                 title={title}
@@ -153,13 +163,16 @@ export function GuestApplicationTracker() {
         }}
       >
         <Box>
-          <Typography sx={{fontSize: 20}} variant="h4">
+          <Typography sx={{fontSize: 20, fontWeight: 'medium'}} variant="h4">
             Contacts
           </Typography>
           <Divider sx={{mb: 1}} />
-          <Box
-            sx={{backgroundColor: 'dodgerblue', width: '100%', height: '200px'}}
-          ></Box>
+          <CoordinatorContact
+            image={coordinatorInfo.image}
+            name={coordinatorInfo.name}
+            email={coordinatorInfo.email}
+            phone={coordinatorInfo.phone}
+          />
         </Box>
       </Box>
     </StyledPageContainer>
