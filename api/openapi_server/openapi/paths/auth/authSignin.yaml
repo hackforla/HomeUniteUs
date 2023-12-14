@@ -1,6 +1,6 @@
 post:
   description: Sign in a user
-  operationId: signin
+  operationId: sign_in
   requestBody:
     content:
       application/json:

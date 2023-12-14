@@ -168,7 +168,7 @@ def signUpCoordinator():  # noqa: E501
         msg = f"The parameters you provided are incorrect: {error}"
         raise AuthError({"message": msg}, 500)
 
-def signin(body: dict):
+def sign_in(body: dict):
     secret_hash = current_app.calc_secret_hash(body['email'])
 
     # initiate authentication
