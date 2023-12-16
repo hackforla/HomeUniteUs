@@ -10,7 +10,6 @@ import {ProtectedRoute} from './components/authentication/ProtectedRoute';
 import {useSessionMutation} from './services/auth';
 import {HomeUniteUsTheme} from './theme';
 import {
-  CoordinatorDashboard,
   GuestApplicationTracker,
   Home,
   HostApplicationTracker,
@@ -31,11 +30,15 @@ import {
   GuestContacts,
   GuestTasks,
   GuestSettings,
+  CoordinatorDashboard,
 } from './views';
 import {AccountVerification} from './views/AccountVerification';
 import {AppLayout, Header} from './components/common';
 import {ResetPasswordContext} from './components/authentication/ResetPasswordContext';
-import {GuestDashboardlayout} from './components/layout/GuestDashboardlayout';
+import {
+  CoordinatorDashboardLayout,
+  GuestDashboardLayout,
+} from './components/layout';
 
 function HuuApp() {
   const [session] = useSessionMutation();
@@ -77,12 +80,13 @@ function HuuApp() {
             element={<EmailVerificationError />}
           />
           <Route path="/new-password" element={<NewPassword />} />
+          <Route index element={<CoordinatorDashboard />} />
         </Route>
         <Route
           path="/guest"
           element={
             <ProtectedRoute>
-              <GuestDashboardlayout />
+              <GuestDashboardLayout />
             </ProtectedRoute>
           }
         >
@@ -96,10 +100,12 @@ function HuuApp() {
           path="/coordinator"
           element={
             <ProtectedRoute>
-              <CoordinatorDashboard />
+              <CoordinatorDashboardLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route index element={<CoordinatorDashboard />} />
+        </Route>
         <Route
           path="/host"
           element={

@@ -18,6 +18,6 @@ const navItems = [
   {title: 'Settings', icon: <SettingsOutlined />, href: '/guest/settings'},
 ];
 
-export const GuestDashboardlayout = () => {
+export const GuestDashboardLayout = () => {
   return <DashboardLayout navItems={navItems} />;
 };
