@@ -30,7 +30,7 @@ export function HostApplicationTracker(props: HostApplicationTrackerProps) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   return (
     <Box>
-      <AuthenticatedHeader onClick={() => null} />
+      <AuthenticatedHeader />
       <Typography variant="h6" sx={{paddingTop: '60px'}}>
         Host Application Tracker
       </Typography>
