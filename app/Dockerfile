@@ -10,9 +10,6 @@ COPY . ./
 # client package install
 RUN npm install
 
-# secrets
-COPY .env .
-
 # generate bundles from source
 RUN npm run build
 
