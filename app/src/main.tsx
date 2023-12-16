@@ -40,10 +40,6 @@ import {
   GuestDashboardLayout,
 } from './components/layout';
 
-function Profile() {
-  return <div>Hello from profile</div>;
-}
-
 function HuuApp() {
   const [session] = useSessionMutation();
 
@@ -84,31 +80,6 @@ function HuuApp() {
             element={<EmailVerificationError />}
           />
           <Route path="/new-password" element={<NewPassword />} />
-          <Route
-            path="/host"
-            element={
-              <ProtectedRoute>
-                <HostApplicationTracker />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-        </Route>
-        <Route
-          path="/coordinator"
-          element={
-            <ProtectedRoute>
-              <CoordinatorDashboardLayout />
-            </ProtectedRoute>
-          }
-        >
           <Route index element={<CoordinatorDashboard />} />
         </Route>
         <Route
@@ -125,6 +96,24 @@ function HuuApp() {
           <Route path="tasks" element={<GuestTasks />} />
           <Route path="settings" element={<GuestSettings />} />
         </Route>
+        <Route
+          path="/coordinator"
+          element={
+            <ProtectedRoute>
+              <CoordinatorDashboardLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<CoordinatorDashboard />} />
+        </Route>
+        <Route
+          path="/host"
+          element={
+            <ProtectedRoute>
+              <HostApplicationTracker />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );
