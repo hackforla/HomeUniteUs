@@ -1,0 +1,73 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+  pull_request:
+    types: [opened, synchronize, closed]
+  workflow_dispatch:
+    inputs:
+      test:
+        type: boolean
+        description: 'Run tests'
+        required: true
+        default: true
+      deploy:
+        type: boolean
+        description: 'Deploy application'
+        required: true
+        default: false
+jobs:
+  build-api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker/setup-buildx-action@v1
+      - name: Build API Image
+        run: docker build -t api:latest ./api
+      - name: Save API Image
+        run: docker save api:latest -o api_image.tar
+      - uses: actions/upload-artifact@v3
+        with:
+          name: api_image
+          path: api_image.tar
+          retention-days: 7
+  build-app:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: docker/setup-buildx-action@v1
+      - name: Build Image
+        run: docker build -t app:latest ./app
+      - name: Save Image
+        run: docker save app:latest -o app_image.tar
+      - uses: actions/upload-artifact@v3
+        with:
+          name: app_image
+          path: app_image.tar
+          retention-days: 7
+  test-api:
+    runs-on: ubuntu-latest
+    needs: [build-api]
+    if: >-
+      github.event_name == 'push' ||
+      github.event.pull_request ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.test)
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download API Image Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: api_image
+          path: .
+      - name: Load API Image
+        run: docker load -i api_image.tar
+      - name: Run Debug Tests
+        run: docker run api:latest pytest    
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: >-
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy)
+    steps:
+      - uses: actions/checkout@v2

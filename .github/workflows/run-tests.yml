@@ -1,9 +1,5 @@
 name: Run API and App Tests
 on:
-  push:
-  pull_request:
-    branches: [main]
-  # This is also a reusable workflow that can be called from other workflows
   workflow_call:
 jobs:
   test-api:

@@ -12,5 +12,5 @@ RUN python -m pip install --upgrade pip
 RUN python -m pip install --no-cache-dir -r requirements-dev.txt
 
 EXPOSE 8080
-ENTRYPOINT ["python"]
-CMD ["-m", "openapi_server"]
+ENTRYPOINT ["/bin/sh", "-c"]
+CMD ["python -m openapi_server"]
