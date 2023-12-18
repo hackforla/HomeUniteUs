@@ -104,7 +104,9 @@ jobs:
         run: |
           docker run --network huu-test-network -d --name frontend_nomock --env VITE_HUU_API_BASE_URL=http://backend:api app:latest-test "npx vite --host"
           docker run --network huu-test-network -d --name backend --env HOST=0.0.0.0 api:latest
-          docker run --network huu-test-network --name cypress_tests_nomock --env CYPRESS_BASE_URL="http://frontend_nomock:4040" --env CYPRESS_USE_MOCK=false --env CYPRESS_REAL_EMAIL="nottarealemail@gmail.com" --env CYPRESS_REAL_PASSWORD="totallyfake" app:latest-test "npx cypress run"
+          sleep 10
+          docker exec backend curl http://localhost:8080/api/auth/signup/host -H "accept: application/json" -H "Content-Type: application/json" -d '{\"email\": \"nottarealemail@gmail.com\", \"password\": \"alskdf454$Adfa\"}'
+          docker run --network huu-test-network --name cypress_tests_nomock --env CYPRESS_BASE_URL="http://frontend_nomock:4040" --env CYPRESS_USE_MOCK=false --env CYPRESS_REAL_EMAIL='nottarealemail@gmail.com' --env CYPRESS_REAL_PASSWORD='alskdf454$Adfa' app:latest-test "npx cypress run"
       - name: Wait for Test to Complete
         run: |
           while true; do
