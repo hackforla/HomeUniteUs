@@ -98,12 +98,25 @@ jobs:
       - name: Test with mocking
         run: |
           docker network create huu-test-network
-          docker run --network huu-test-network -d --name frontend --env VITE_HUU_API_BASE_URL=http://backend:api app:latest-test "npx vite --host"
-          docker run --network huu-test-network --name cypress_tests --env CYPRESS_BASE_URL="http://frontend:4040" --env CYPRESS_USE_MOCK=true app:latest-test "npx cypress run"
+          docker run --network huu-test-network -d --name frontend_mock --env VITE_HUU_API_BASE_URL=http://backend:api app:latest-test "npx vite --host"
+          docker run --network huu-test-network --name cypress_tests_mock --env CYPRESS_BASE_URL="http://frontend_mock:4040" --env CYPRESS_USE_MOCK=true app:latest-test "npx cypress run"
       - name: Test without mocking
         run: |
+          docker run --network huu-test-network -d --name frontend_nomock --env VITE_HUU_API_BASE_URL=http://backend:api app:latest-test "npx vite --host"
           docker run --network huu-test-network -d --name backend --env HOST=0.0.0.0 api:latest
-          docker run --network huu-test-network --name cypress_tests --env CYPRESS_BASE_URL="http://frontend:4040" --env CYPRESS_USE_MOCK=false --env CYPRESS_REAL_EMAIL="nottarealemail@gmail.com" --env CYPRESS_REAL_PASSWORD="totallyfake" app:latest-test "npx cypress run"
+          docker run --network huu-test-network --name cypress_tests_nomock --env CYPRESS_BASE_URL="http://frontend_nomock:4040" --env CYPRESS_USE_MOCK=false --env CYPRESS_REAL_EMAIL="nottarealemail@gmail.com" --env CYPRESS_REAL_PASSWORD="totallyfake" app:latest-test "npx cypress run"
+      - name: Wait for Test to Complete
+        run: |
+          while true; do
+            mock_status=$(docker container inspect -f '{{.State.Running}}' cypress_tests_mock)
+            nomock_status=$(docker container inspect -f '{{.State.Running}}' cypress_tests_nomock)
+
+            if [ "$mock_status" = "false" ] && [ "$nomock_status" = "false" ]; then
+              break
+            fi
+
+            sleep 5
+          done
       - name: Stop Backend and Frontend Containers
         if: always()
         run: |
