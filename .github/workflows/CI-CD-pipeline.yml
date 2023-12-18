@@ -72,7 +72,7 @@ jobs:
       - name: Run Debug Tests
         run: docker run api:latest pytest
       - name: Run Release Tests
-        run: docker run api:latest "pytest --mode=release"
+        run: docker run --env COGNITO_REGION --env COGNITO_ACCESS_ID --env COGNITO_ACCESS_KEY api:latest "pytest --mode=release"
   test-app:
     runs-on: ubuntu-latest
     needs: [build-app, build-api]
@@ -88,18 +88,23 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           env: USE_MOCK=true
-          start: docker run -p 8080:8080 -e VITE_HUU_API_BASE_URL=http://127.0.0.1:8080/api app:latest
+          start: docker run -p 8080:8080 -e VITE_HUU_API_BASE_URL=http://127.0.0.1:8080/api app:latest-test "npm run dev"
           wait-on: 'http://localhost:8080'
-      - name: Cypress no mocking test run
-        uses: cypress-io/github-action@v6
-        with:
-          env: USE_MOCK=false
-          start: |
-            docker run -p 4040:4040 api:latest "python -m openapi_server"
-            docker run -p 8080:8080 -e VITE_HUU_API_BASE_URL=http://127.0.0.1:8080/api app:latest
-          wait-on: |
-            'http://localhost:4040'
-            'http://localhost:8080'
+      - name: Launch networked test application
+        run: |
+          docker network create huu-test-network
+          docker run --network huu-test-network -d --rm --name backend --env HOST=0.0.0.0 api:latest
+          docker run --network huu-test-network -d --rm --name frontend --env VITE_HUU_API_BASE_URL=http://backend:api app:latest-test "npx vite --host"
+          docker run --network huu-test-network -d --name cypress_tests --env CYPRESS_BASE_URL="http:frontend:4040" --env CYPRESS_REAL_EMAIL="nottarealemail@gmail.com" --env CYPRESS_REAL_PASSWORD="totallyfake" app:latest-test "npx cypress run"
+      - name: Wait for Test to Complete
+        run: |
+          while [ $(docker container inspect -f '{{.State.Running}}' cypress_tests) = "true" ]; do
+            sleep 5
+          done
+      - name: Stop Backend and Frontend Containers
+        if: always()
+        run: |
+          docker stop backend frontend
   deploy:
     runs-on: ubuntu-latest
     needs: [build-api, build-app]
