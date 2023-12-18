@@ -98,9 +98,9 @@ jobs:
       - name: Launch networked test application
         run: |
           docker network create huu-test-network
-          docker run --network huu-test-network -d --rm --name backend --env HOST=0.0.0.0 api:latest
-          docker run --network huu-test-network -d --rm --name frontend --env VITE_HUU_API_BASE_URL=http://backend:api app:latest-test "npx vite --host"
-          docker run --network huu-test-network -d --name cypress_tests --env CYPRESS_BASE_URL="http:frontend:4040" --env CYPRESS_REAL_EMAIL="nottarealemail@gmail.com" --env CYPRESS_REAL_PASSWORD="totallyfake" app:latest-test "npx cypress run"
+          docker run --network huu-test-network -d --name backend --env HOST=0.0.0.0 api:latest
+          docker run --network huu-test-network -d --name frontend --env VITE_HUU_API_BASE_URL=http://backend:api app:latest-test "npx vite --host"
+          docker run --network huu-test-network --name cypress_tests --env CYPRESS_BASE_URL="http:frontend:4040" --env CYPRESS_REAL_EMAIL="nottarealemail@gmail.com" --env CYPRESS_REAL_PASSWORD="totallyfake" app:latest-test "npx cypress run"
       - name: Wait for Test to Complete
         run: |
           while [ $(docker container inspect -f '{{.State.Running}}' cypress_tests) = "true" ]; do
