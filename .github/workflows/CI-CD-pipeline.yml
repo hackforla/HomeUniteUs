@@ -61,6 +61,10 @@ jobs:
       github.event_name == 'push' ||
       github.event.pull_request ||
       (github.event_name == 'workflow_dispatch' && github.event.inputs.test)
+    env:
+      COGNITO_REGION: ${{ secrets.COGNITO_REGION }}
+      COGNITO_ACCESS_ID: ${{ secrets.COGNITO_ACCESS_ID }}
+      COGNITO_ACCESS_KEY: ${{ secrets.COGNITO_ACCESS_KEY }}
     steps:
       - name: Download API Image Artifact
         uses: actions/download-artifact@v3
@@ -77,19 +81,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build-app, build-api]
     steps:
-      - name: Download API Image Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: api_image
-          path: .
-      - name: Load API Image
-        run: docker load -i api_image.tar
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
-        with:
-          env: USE_MOCK=true
-          start: docker run -p 8080:8080 -e VITE_HUU_API_BASE_URL=http://127.0.0.1:8080/api app:latest-test "npm run dev"
-          wait-on: 'http://localhost:8080'
       - name: Launch networked test application
         run: |
           docker network create huu-test-network
