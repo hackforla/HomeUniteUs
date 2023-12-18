@@ -94,7 +94,7 @@ jobs:
       - name: Load Images
         run: |
           docker load -i api_image.tar
-          docker load -i app_image.tar
+          docker load -i app_test_image.tar
       - name: Launch networked test application
         run: |
           docker network create huu-test-network
