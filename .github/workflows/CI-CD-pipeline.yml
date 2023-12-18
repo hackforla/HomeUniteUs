@@ -89,7 +89,7 @@ jobs:
       - name: Download App Images
         uses: actions/download-artifact@v3
         with:
-          name: app_image
+          name: app_test_image
           path: .
       - name: Load Images
         run: |
