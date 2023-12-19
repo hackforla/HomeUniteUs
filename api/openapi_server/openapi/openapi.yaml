@@ -47,6 +47,14 @@ paths:
     $ref: "./paths/auth/authInitialInvite.yaml"
   /auth/invite:
     $ref: "./paths/auth/authInvite.yaml"
+  /health:
+      get:
+        operationId: openapi_server.controllers.admin_controller.health
+        summary: Health Check
+        description: Returns the health status of the API.
+        responses:
+          '200':
+            description: API is healthy.
 components:
   securitySchemes:
     jwt:

@@ -58,3 +58,10 @@ def initial_sign_in_reset_password():
         'token': access_token,
         'user': user
     }
+
+def health():
+    '''
+    The health check endpoint always returns a successful status code.
+    This is useful for determining whether the API startup was successful.
+    '''
+    return 'API is healthy 😎', 200
