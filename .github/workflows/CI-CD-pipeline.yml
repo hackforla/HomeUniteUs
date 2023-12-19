@@ -102,7 +102,7 @@ jobs:
           docker run --network huu-test-network --name cypress_tests_mock --env CYPRESS_BASE_URL="http://frontend_mock:4040" --env CYPRESS_USE_MOCK=true app:latest-test "npx cypress run"
       - name: Test without mocking
         run: |
-          docker run --network huu-test-network -d --name backend --env HOST=0.0.0.0 api:latest
+          docker run --network huu-test-network -d --name backend --env ENV='development' --env HOST=0.0.0.0 api:latest
           docker run --network huu-test-network -d --name frontend_nomock --env VITE_HUU_API_BASE_URL=http://backend:api app:latest-test "npx vite --host"
           sleep 10
           docker exec backend curl http://localhost:8080/api/auth/signup/host -H "accept: application/json" -H "Content-Type: application/json" -d '{\"email\": \"nottarealemail@gmail.com\", \"password\": \"alskdf454$Adfa\"}'
