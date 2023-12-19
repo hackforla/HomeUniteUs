@@ -23,6 +23,7 @@ WORKDIR /app
 COPY --from=builder /app .
 RUN npx cypress install
 ENTRYPOINT ["/bin/sh", "-c"]
+CMD ["npx vite --host"]
 
 # Runtime image
 FROM nginx as production

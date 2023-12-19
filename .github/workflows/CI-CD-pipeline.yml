@@ -20,10 +20,10 @@ jobs:
   build-api:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: docker/setup-buildx-action@v1
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
       - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -36,27 +36,35 @@ jobs:
   build-app:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: docker/setup-buildx-action@v1
-      - name: Build Testing Image
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and Push Testing Image
         run: |
-          docker build --build-arg VITE_HUU_API_BASE_URL=http://127.0.0.1:8080/api --target development --tag app:latest-test ./app
-          docker save app:latest-test -o app_test_image.tar
+          IMAGE_NAME=ghcr.io/hackforla/homeuniteus/app:latest-test
+          docker build --build-arg VITE_HUU_API_BASE_URL=http://127.0.0.1:8080/api --target development --tag $IMAGE_NAME ./app
+          docker push $IMAGE_NAME
       - name: Build Production Image
         run: |
-          docker build --build-arg VITE_HUU_API_BASE_URL=http://127.0.0.1:8080/api --target production --tag app:latest ./app
-          docker save app:latest -o app_image.tar
-      - uses: actions/upload-artifact@v3
-        with:
-          name: app_test_image
-          path: app_test_image.tar
-          retention-days: 7
-      - uses: actions/upload-artifact@v3
-        with:
-          name: app_image
-          path: app_image.tar
-          retention-days: 7
-  test-api:
+          IMAGE_NAME=ghcr.io/hackforla/homeuniteus/app:latest
+          docker build --build-arg VITE_HUU_API_BASE_URL=http://127.0.0.1:8080/api --target development --tag $IMAGE_NAME ./app
+          docker push $IMAGE_NAME
+  test-api-mock:
+    runs-on: ubuntu-latest
+    needs: [build-api]
+    if: >-
+      github.event_name == 'push' ||
+      github.event.pull_request ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.test)
+    steps:
+      - name: Run Tests With 3rd Party Service Mocking
+        run: docker run ghcr.io/hackforla/homeuniteus/api:latest pytest
+  test-api-nomock:
     runs-on: ubuntu-latest
     needs: [build-api]
     if: >-
@@ -68,75 +76,59 @@ jobs:
       COGNITO_ACCESS_ID: ${{ secrets.COGNITO_ACCESS_ID }}
       COGNITO_ACCESS_KEY: ${{ secrets.COGNITO_ACCESS_KEY }}
     steps:
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Pull API Image
-        run: docker pull ghcr.io/hackforla/homeuniteus/api:latest
-      - name: Run Debug Tests
-        run: docker run ghcr.io/hackforla/homeuniteus/api:latest pytest
-      - name: Run Release Tests
+      - name: Run Tests Without Mocking
         run: docker run --env COGNITO_REGION --env COGNITO_ACCESS_ID --env COGNITO_ACCESS_KEY ghcr.io/hackforla/homeuniteus/api:latest "pytest --mode=release"
-  test-app:
+  test-app-mock:
     runs-on: ubuntu-latest
     needs: [build-app, build-api]
+    if: >-
+      github.event_name == 'push' ||
+      github.event.pull_request ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.test)
+    services:
+      frontend:
+        image: ghcr.io/hackforla/homeuniteus/app:latest-test
+        env:
+          VITE_HUU_API_BASE_URL: http://127.0.0.1:8080/api
     steps:
-      - name: Download API Images
-        uses: actions/download-artifact@v3
-        with:
-          name: api_image
-          path: .
-      - name: Download App Images
-        uses: actions/download-artifact@v3
-        with:
-          name: app_test_image
-          path: .
-      - name: Load Images
+      - name: Run Tests With Backend Mocking
+        run: docker run --env CYPRESS_BASE_URL --env CYPRESS_USE_MOCK app:latest-test "npx cypress run"
+        env:
+          CYPRESS_BASE_URL: http://frontend:4040
+          CYPRESS_USE_MOCK: true
+  test-app-nomock:
+    runs-on: ubuntu-latest
+    needs: [build-app, build-api]
+    if: >-
+      github.event_name == 'push' ||
+      github.event.pull_request ||
+      (github.event_name == 'workflow_dispatch' && github.event.inputs.test)
+    services:
+      backend:
+        image: ghcr.io/hackforla/homeuniteus/api:latest
+        env:
+          ENV: development
+          HOST: 0.0.0.0
+      frontend:
+        image: ghcr.io/hackforla/homeuniteus/app:latest-test
+        env:
+          VITE_HUU_API_BASE_URL: http://backend:8080/api
+    steps:
+      - name: Add Test User
         run: |
-          docker load -i api_image.tar
-          docker load -i app_test_image.tar
-      - name: Test with mocking
-        run: |
-          docker network create huu-test-network
-          docker run --network huu-test-network -d --name frontend_mock --env VITE_HUU_API_BASE_URL=http://backend:api app:latest-test "npx vite --host"
-          docker run --network huu-test-network --name cypress_tests_mock --env CYPRESS_BASE_URL="http://frontend_mock:4040" --env CYPRESS_USE_MOCK=true app:latest-test "npx cypress run"
+          curl http://backend:8080/api/auth/signup/host -H "accept: application/json" -H "Content-Type: application/json" -d "{\"email\": \"nottarealemail@gmail.com\", \"password\": \"alskdf454#Adfa\"}"
       - name: Test without mocking
-        run: |
-          docker run --network huu-test-network -d --name backend --env ENV='development' --env HOST=0.0.0.0 api:latest
-          docker run --network huu-test-network -d --name frontend_nomock --env VITE_HUU_API_BASE_URL=http://backend:api app:latest-test "npx vite --host"
-          sleep 10
-          docker exec backend curl http://localhost:8080/api/auth/signup/host -H "accept: application/json" -H "Content-Type: application/json" -d "{\"email\": \"nottarealemail@gmail.com\", \"password\": \"alskdf454#Adfa\"}"
-          docker run --network huu-test-network --name cypress_tests_nomock --env CYPRESS_BASE_URL="http://frontend_nomock:4040" --env CYPRESS_USE_MOCK=false --env CYPRESS_REAL_EMAIL='nottarealemail@gmail.com' --env CYPRESS_REAL_PASSWORD='alskdf454#Adfa' app:latest-test "npx cypress run"
-      - name: Wait for Test to Complete
-        run: |
-          while true; do
-            mock_status=$(docker container inspect -f '{{.State.Running}}' cypress_tests_mock)
-            nomock_status=$(docker container inspect -f '{{.State.Running}}' cypress_tests_nomock)
-
-            if [ "$mock_status" = "false" ] && [ "$nomock_status" = "false" ]; then
-              break
-            fi
-
-            sleep 5
-          done
-      - name: Print microservice logs
-        if: always()
-        run: |
-          docker logs frontend_mock
-          docker logs backend
-          docker logs frontend_nomock
-      - name: Stop Backend and Frontend Containers
-        if: always()
-        run: |
-          docker stop backend frontend_mock frontend_nomock
+        run: docker run --env CYPRESS_BASE_URL --env CYPRESS_USE_MOCK --env CYPRESS_REAL_EMAIL --env CYPRESS_REAL_PASSWORD app:latest-test "npx cypress run"
+        env:
+          CYPRESS_BASE_URL: http://frontend:4040
+          CYPRESS_USE_MOCK: false
+          CYPRESS_REAL_EMAIL: nottarealemail@gmail.com
+          CYPRESS_REAL_PASSWORD: alskdf454#Adfa
   deploy:
     runs-on: ubuntu-latest
-    needs: [build-api, build-app, test-app]
+    needs: [build-api, build-app, test-api-mock, test-api-nomock, test-app-mock, test-app-nomock]
     if: >-
       (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
       (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy)
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
