@@ -30,7 +30,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and Push API Image
         run: |
-          IMAGE_NAME=ghcr.io/${{ github.repository }}/api:latest
+          IMAGE_NAME=ghcr.io/hackforla/homeuniteus/api:latest
           docker build -t $IMAGE_NAME ./api
           docker push $IMAGE_NAME
   test-api-gh-repo:
@@ -52,9 +52,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Pull API Image
-        run: docker pull ghcr.io/${{ github.repository }}/api:latest
+        run: docker pull ghcr.io/hackforla/homeuniteus/api:latest
       - name: Run Debug Tests
-        run: docker run ghcr.io/${{ github.repository }}/api:latest pytest
+        run: docker run ghcr.io/hackforla/homeuniteus/api:latest pytest
       - name: Run Release Tests
         run: docker run --env COGNITO_REGION --env COGNITO_ACCESS_ID --env COGNITO_ACCESS_KEY ghcr.io/${{ github.repository }}/api:latest "pytest --mode=release"
   build-api:
@@ -145,7 +145,7 @@ jobs:
           docker run --network huu-test-network -d --name backend --env ENV='development' --env HOST=0.0.0.0 api:latest
           docker run --network huu-test-network -d --name frontend_nomock --env VITE_HUU_API_BASE_URL=http://backend:api app:latest-test "npx vite --host"
           sleep 10
-          docker exec backend curl http://localhost:8080/api/auth/signup/host -H "accept: application/json" -H "Content-Type: application/json" -d '{\"email\": \"nottarealemail@gmail.com\", \"password\": \"alskdf454$Adfa\"}'
+          docker exec backend curl http://localhost:8080/api/auth/signup/host -H "accept: application/json" -H "Content-Type: application/json" -d "{\"email\": \"nottarealemail@gmail.com\", \"password\": \"alskdf454$Adfa\"}"
           docker run --network huu-test-network --name cypress_tests_nomock --env CYPRESS_BASE_URL="http://frontend_nomock:4040" --env CYPRESS_USE_MOCK=false --env CYPRESS_REAL_EMAIL='nottarealemail@gmail.com' --env CYPRESS_REAL_PASSWORD='alskdf454$Adfa' app:latest-test "npx cypress run"
       - name: Wait for Test to Complete
         run: |
