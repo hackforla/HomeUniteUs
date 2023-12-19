@@ -56,7 +56,7 @@ jobs:
       - name: Run Debug Tests
         run: docker run ghcr.io/hackforla/homeuniteus/api:latest pytest
       - name: Run Release Tests
-        run: docker run --env COGNITO_REGION --env COGNITO_ACCESS_ID --env COGNITO_ACCESS_KEY ghcr.io/${{ github.repository }}/api:latest "pytest --mode=release"
+        run: docker run --env COGNITO_REGION --env COGNITO_ACCESS_ID --env COGNITO_ACCESS_KEY ghcr.io/hackforla/homeuniteus/api:latest "pytest --mode=release"
   build-api:
     runs-on: ubuntu-latest
     steps:
