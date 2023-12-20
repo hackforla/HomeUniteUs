@@ -1,11 +1,7 @@
 name: Build and Deploy to EC2
-# workflow_dispatch means this workflow is manually triggered.
-# The user will select the branch or tag from the GitHub UI to run this workflow against.
 on:
-  workflow_dispatch:
+  workflow_call:
 jobs:
-  run-tests:
-    uses: ./.github/workflows/run-tests.yml
   build-api:
     runs-on: ubuntu-latest
     needs: run-tests

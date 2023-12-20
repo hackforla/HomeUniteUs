@@ -52,8 +52,7 @@ jobs:
       - name: Build Production Image
         run: |
           IMAGE_NAME=ghcr.io/hackforla/homeuniteus/app:latest
-          ENCODED_KEY=$(echo -n "${{ secrets.HUU_EC2_SSH_KEY }}" | base64)
-          docker build --build-arg VITE_HUU_API_BASE_URL=http://127.0.0.1:8080/api --build-arg ENV_KEY="$ENCODED_KEY" --target production --tag $IMAGE_NAME ./app
+          docker build --build-arg VITE_HUU_API_BASE_URL=http://127.0.0.1:8080/api --target production --tag $IMAGE_NAME ./app
           docker push $IMAGE_NAME
   test-api-mock:
     runs-on: ubuntu-latest
@@ -132,6 +131,13 @@ jobs:
         image: ghcr.io/hackforla/homeuniteus/app:latest-test
         env:
           VITE_HUU_API_BASE_URL: http://backend:8080/api
+    container:
+      image: ghcr.io/hackforla/homeuniteus/app:latest-test
+      env:
+          CYPRESS_BASE_URL: http://frontend:4040
+          CYPRESS_USE_MOCK: false
+          CYPRESS_REAL_EMAIL: nottarealemail@gmail.com
+          CYPRESS_REAL_PASSWORD: alskdf454#Adfa
     steps:
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -143,17 +149,12 @@ jobs:
         run: |
           curl http://backend:8080/api/auth/signup/host -H "accept: application/json" -H "Content-Type: application/json" -d "{\"email\": \"nottarealemail@gmail.com\", \"password\": \"alskdf454#Adfa\"}"
       - name: Test without mocking
-        run: docker run --env CYPRESS_BASE_URL --env CYPRESS_USE_MOCK --env CYPRESS_REAL_EMAIL --env CYPRESS_REAL_PASSWORD ghcr.io/hackforla/homeuniteus/app:latest-test "npx cypress run"
-        env:
-          CYPRESS_BASE_URL: http://frontend:4040
-          CYPRESS_USE_MOCK: false
-          CYPRESS_REAL_EMAIL: nottarealemail@gmail.com
-          CYPRESS_REAL_PASSWORD: alskdf454#Adfa
+        run: npx cypress run
   deploy:
-    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' && github.event.inputs.deploy
     needs: [build-api, build-app, test-api-mock, test-api-nomock, test-app-mock, test-app-nomock]
-    if: >-
-      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
-      (github.event_name == 'workflow_dispatch' && github.event.inputs.deploy)
-    steps:
-      - uses: actions/checkout@v4
+    # Our deployment process is not dockerized. This means we need to rebuild the API and 
+    # App as packages that can be installed onto the ec2 instance.
+    # In the future we may consider simply pulling the api:latest and app:latest images
+    # from the container repository and swapping the runtime containers.
+    uses: ./.github/workflows/build-deploy-ec2.yml

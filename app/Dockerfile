@@ -15,7 +15,7 @@ RUN npm install
 # generate bundles from source
 RUN npm run build
 
-# Testing image
+# Testing image (consider cypress/included images to get cypress installed by default)
 FROM cypress/base as development
 WORKDIR /app
 RUN apt-get update && apt-get install -y curl
@@ -30,9 +30,7 @@ CMD ["npx vite --host"]
 
 # Runtime image
 FROM nginx as production
-ARG ENV_KEY
 
-ENV ENV_KEY=${ENV_KEY}
 # Copy client build to runtime image
 COPY --from=builder /app/dist /usr/share/nginx/html/
 
