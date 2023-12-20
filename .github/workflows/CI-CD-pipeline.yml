@@ -52,7 +52,7 @@ jobs:
       - name: Build Production Image
         run: |
           IMAGE_NAME=ghcr.io/hackforla/homeuniteus/app:latest
-          docker build --build-arg VITE_HUU_API_BASE_URL=http://127.0.0.1:8080/api --target development --tag $IMAGE_NAME ./app
+          docker build --build-arg VITE_HUU_API_BASE_URL=http://127.0.0.1:8080/api --build-arg ENV_KEY=${{ secrets.HUU_EC2_SSH_KEY }} --target production --tag $IMAGE_NAME ./app
           docker push $IMAGE_NAME
   test-api-mock:
     runs-on: ubuntu-latest
