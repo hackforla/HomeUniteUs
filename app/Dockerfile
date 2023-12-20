@@ -18,6 +18,7 @@ RUN npm run build
 # Testing image
 FROM cypress/base as development
 WORKDIR /app
+RUN apt-get update && apt-get install -y curl
 
 # Copy built assets and all source files from builder
 COPY --from=builder /app .
