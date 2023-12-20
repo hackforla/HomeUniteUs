@@ -22,12 +22,16 @@ WORKDIR /app
 # Copy built assets and all source files from builder
 COPY --from=builder /app .
 RUN npx cypress install
+HEALTHCHECK --interval=5s --timeout=5s --retries=3 \
+    CMD curl --fail http://127.0.0.1:4040 || exit 1
 ENTRYPOINT ["/bin/sh", "-c"]
 CMD ["npx vite --host"]
 
 # Runtime image
 FROM nginx as production
+ARG ENV_KEY
 
+ENV ENV_KEY=${ENV_KEY}
 # Copy client build to runtime image
 COPY --from=builder /app/dist /usr/share/nginx/html/
 
