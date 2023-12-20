@@ -2,9 +2,8 @@ name: Build and Deploy to EC2
 on:
   workflow_call:
 jobs:
-  build-api:
+  build-api-deploy:
     runs-on: ubuntu-latest
-    needs: run-tests
     defaults:
       run:
         shell: bash
@@ -39,9 +38,8 @@ jobs:
           name: api
           path: api/dist
           retention-days: 7
-  build-app:
+  build-app-deploy:
     runs-on: ubuntu-latest
-    needs: run-tests
     defaults:
       run:
         shell: bash
