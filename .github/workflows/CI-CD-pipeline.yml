@@ -53,7 +53,7 @@ jobs:
         run: |
           IMAGE_NAME=ghcr.io/hackforla/homeuniteus/app:latest
           ENCODED_KEY=$(echo -n "${{ secrets.HUU_EC2_SSH_KEY }}" | base64)
-          docker build --build-arg VITE_HUU_API_BASE_URL=http://127.0.0.1:8080/api --build-arg ENV_KEY=$ENCODED_KEY --target production --tag $IMAGE_NAME ./app
+          docker build --build-arg VITE_HUU_API_BASE_URL=http://127.0.0.1:8080/api --build-arg ENV_KEY="$ENCODED_KEY" --target production --tag $IMAGE_NAME ./app
           docker push $IMAGE_NAME
   test-api-mock:
     runs-on: ubuntu-latest
