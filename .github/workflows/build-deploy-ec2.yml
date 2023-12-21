@@ -67,7 +67,7 @@ jobs:
           path: app/dist
           retention-days: 7
   deploy-api-app:
-    needs: [build-api, build-app]
+    needs: [build-api-deploy, build-app-deploy]
     runs-on: ubuntu-latest
     steps:
       - name: Download all workflow run artifacts
