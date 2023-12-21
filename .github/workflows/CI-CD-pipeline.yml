@@ -139,12 +139,6 @@ jobs:
           CYPRESS_REAL_EMAIL: nottarealemail@gmail.com
           CYPRESS_REAL_PASSWORD: alskdf454#Adfa
     steps:
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Add Test User
         run: |
           curl http://backend:8080/api/auth/signup/host -H "accept: application/json" -H "Content-Type: application/json" -d "{\"email\": \"nottarealemail@gmail.com\", \"password\": \"alskdf454#Adfa\"}"
