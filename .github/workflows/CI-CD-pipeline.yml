@@ -102,18 +102,17 @@ jobs:
         image: ghcr.io/hackforla/homeuniteus/app:latest-test
         env:
           VITE_HUU_API_BASE_URL: http://127.0.0.1:8080/api
-    steps:
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Run Tests With Backend Mocking
-        run: docker run --env CYPRESS_BASE_URL --env CYPRESS_USE_MOCK ghcr.io/hackforla/homeuniteus/app:latest-test "npx cypress run"
-        env:
+    container:
+      image: ghcr.io/hackforla/homeuniteus/app:latest-test
+      options: --entrypoint /bin/bash --no-healthcheck
+      env:
           CYPRESS_BASE_URL: http://frontend:4040
           CYPRESS_USE_MOCK: true
+    steps:
+      - name: Run Tests With Backend Mocking
+        run: |
+          cd /app
+          npx cypress run
   test-app-nomock:
     runs-on: ubuntu-latest
     needs: [build-app, build-api]
@@ -144,10 +143,8 @@ jobs:
         run: |
           curl http://backend:8080/api/auth/signup/host -H "accept: application/json" -H "Content-Type: application/json" -d "{\"email\": \"nottarealemail@gmail.com\", \"password\": \"alskdf454#Adfa\"}"
       - name: Test without mocking
-        run: |
-          cd /app
-          ls
-          npx cypress run
+        run: npx cypress run
+        working-directory: /app
   deploy:
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.deploy
     needs: [build-api, build-app, test-api-mock, test-api-nomock, test-app-mock, test-app-nomock]
