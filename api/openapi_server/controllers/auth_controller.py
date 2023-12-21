@@ -250,11 +250,7 @@ def resend_confirmation_code():
         raise AuthError({"message": msg}, 500)
 
 
-def confirm():
-    # Validate request data
-    if connexion.request.is_json:
-        body = connexion.request.get_json()
-    
+def confirm_sign_up(body: dict):   
     secret_hash = current_app.calc_secret_hash(body['email'])
 
     try:
@@ -489,25 +485,6 @@ def google():
     print(f"{cognito_client_url}/oauth2/authorize?client_id={client_id}&response_type=code&scope=email+openid+profile+phone+aws.cognito.signin.user.admin&redirect_uri={root_url}{redirect_uri}&identity_provider=Google")
 
     return redirect(f"{cognito_client_url}/oauth2/authorize?client_id={client_id}&response_type=code&scope=email+openid+profile+phone+aws.cognito.signin.user.admin&redirect_uri={root_url}{redirect_uri}&identity_provider=Google")
-
-def confirm_signup():
-    code = request.args['code']
-    email = request.args['email']
-    client_id = request.args['clientId']
-
-    secret_hash = current_app.calc_secret_hash(email)
-
-    try:
-        current_app.boto_client.confirm_sign_up(
-            ClientId=client_id,
-            SecretHash=secret_hash,
-            Username=email,
-            ConfirmationCode=code
-        )
-
-        return redirect(f"{current_app.root_url}/email-verification-success")
-    except Exception as e:
-        return redirect(f"{current_app.root_url}/email-verification-error")
 
 # What comes first invite or adding the user 
 #Do I have an oauth token

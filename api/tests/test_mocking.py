@@ -3,7 +3,8 @@ import json
 import requests
 from pathlib import Path
 
-from openapi_server.configs.mock_aws import AWSMockService, AWSTemporaryUserpool
+from openapi_server.configs.mock_aws import AWSTemporaryUserpool
+from tests.setup_utils import signup_user
 
 def get_user_pools(boto_client):
     """Helper function to count the number of user pools."""
@@ -171,3 +172,28 @@ def get_json_from_url(url):
     # Raises an HTTPError if the response was an unsuccessful status code
     response.raise_for_status()  
     return response.json()
+
+def test_signup_confirmation(client, is_mocking):
+    '''
+    Test that the signup confirmation works with any confirmation
+    code when authentication mocking is enabled. 
+
+    When mocking is disabled a real confirmation code will be 
+    required, so the confirmation should fail.
+    '''
+    email = 'nottaemail@gmail.com'
+    signup_user(client.application, email, 'Passw0rd!')
+
+    response = client.post(
+        '/api/auth/confirm',
+        json = {
+            'email': email,
+            'code': 'fakeCode'
+        }
+    )
+    
+    if is_mocking:
+        assert response.status_code == 200
+    else:
+        assert response.status_code == 401
+        assert "invalid code" in response.json["message"].lower()
