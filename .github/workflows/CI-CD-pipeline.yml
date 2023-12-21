@@ -133,6 +133,7 @@ jobs:
           VITE_HUU_API_BASE_URL: http://backend:8080/api
     container:
       image: ghcr.io/hackforla/homeuniteus/app:latest-test
+      options: --entrypoint /bin/bash --no-healthcheck
       env:
           CYPRESS_BASE_URL: http://frontend:4040
           CYPRESS_USE_MOCK: false
@@ -143,7 +144,9 @@ jobs:
         run: |
           curl http://backend:8080/api/auth/signup/host -H "accept: application/json" -H "Content-Type: application/json" -d "{\"email\": \"nottarealemail@gmail.com\", \"password\": \"alskdf454#Adfa\"}"
       - name: Test without mocking
-        run: npx cypress run
+        run: |
+          ls
+          npx cypress run
   deploy:
     if: github.event_name == 'workflow_dispatch' && github.event.inputs.deploy
     needs: [build-api, build-app, test-api-mock, test-api-nomock, test-app-mock, test-app-nomock]
