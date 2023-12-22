@@ -18,17 +18,13 @@ if __name__ == "__main__":
             with AWSMockService(flask_app):
                 run_app()
         case HUUConfigRegistry.STAGING:
-            if flask_app.is_test_app:
-                # Use the real AWS Cognito service, but a temporary user pool
-                with AWSTemporaryUserpool(flask_app):
-                    run_app()
-            else:
-                # Use the real AWS Cognito service, and real user data
+            # Use the real AWS Cognito service, but a temporary user pool
+            with AWSTemporaryUserpool(flask_app):
                 run_app()
         case HUUConfigRegistry.PRODUCTION:
-            raise EnvironmentError("The production configuration must be run on a "
-                               "production server. Connexion's app.run() method "
-                               "starts a development server that should be used "
-                               "for testing purposes only.")
+            print("WARNING: Connexion's app.run() method starts a development "
+                  "server that should be used for testing purposes only.")
+            # Use the real AWS Cognito service, and real user data
+            run_app()
         case _:
             raise EnvironmentError("Unrecognized configuration")
