@@ -32,11 +32,13 @@ const tasks: Task[] = [
       {
         id: 1,
         title: 'Application',
-        status: 'complete',
+        // changed this to allow route to guest application (John)
+        // status: 'complete',
+        status: 'inProgress',
         description:
           'Start your guest application to move on to the next step.',
         buttonText: 'Start Application',
-        url: '/guest-application',
+        url: 'guest-application',
       },
       {
         id: 2,
