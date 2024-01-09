@@ -4,6 +4,7 @@ from typing import List
 
 from flask_testing import TestCase
 
+from openapi_server.configs.development import DevelopmentHUUConfig
 from openapi_server.models.database import DataAccessLayer
 from openapi_server.repositories.service_provider_repository import HousingProviderRepository
 from openapi_server.app import create_app
@@ -53,3 +54,11 @@ class BaseTestCase(TestCase):
             ids.append(provider.id)
         return ids
 
+class TestsWithMockingDisabled(BaseTestCase):
+    '''
+    This test suite will be skipped if mocking is enabled.
+    '''
+    def setUp(self):
+        if isinstance(self.app_config, DevelopmentHUUConfig):
+            pytest.skip("This test suite is only enabled when mocking is disabled")
+        super().setUpClass()
