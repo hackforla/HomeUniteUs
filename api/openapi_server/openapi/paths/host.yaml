@@ -9,7 +9,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../openapi.yaml#/components/schemas/ApiResponse"
+            $ref: "../schemas/_index.yaml#/HostResponse"
   x-openapi-router-controller: openapi_server.controllers.host_controller
 post:
   summary: Create a host
@@ -28,9 +28,9 @@ post:
             - name
   responses:
     "200":
-      description: Succes created host
+      description: Success created host
       content:
         application/json:
           schema:
-            $ref: "../openapi.yaml#/components/schemas/ApiResponse"
+            $ref: "../schemas/_index.yaml#/HostResponse"
   x-openapi-router-controller: openapi_server.controllers.host_controller

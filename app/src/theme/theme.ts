@@ -1,3 +1,4 @@
+import type {} from '@mui/x-data-grid/themeAugmentation';
 import {createTheme} from '@mui/material/styles';
 import {componentOverrides} from './overrides';
 import {Shadows} from '@mui/material/styles/shadows';
