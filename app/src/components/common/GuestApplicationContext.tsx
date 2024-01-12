@@ -1,5 +1,5 @@
 import {Box, Stack} from '@mui/material';
-import {Formik} from 'formik';
+import {Formik, useFormikContext} from 'formik';
 import {useEffect, useState} from 'react';
 import {Outlet} from 'react-router-dom';
 import ProgressBar from './ProgressBar';
@@ -34,6 +34,7 @@ export interface formInputValues {
 }
 export const stepToRouteMapping: {[key: number]: string} = {
   1: '',
+  2: 'Tester2',
 };
 export const initialValues = {
   fullName: '',
@@ -68,6 +69,7 @@ export const GuestApplicationContext = () => {
   const [step, setStep] = useState<number>(initialStep);
   const progressBarValue = (step / TOTALPAGES) * 100;
   const navigate = useNavigate();
+  const {isValid} = useFormikContext();
 
   useEffect(() => {
     navigate(stepToRouteMapping[step]);
@@ -75,6 +77,33 @@ export const GuestApplicationContext = () => {
   useEffect(() => {
     localStorage.setItem('currentStep', step.toString());
   }, [step]);
+  function saveData() {
+    //add logic to save current data
+    console.log('data saving features not implemented');
+  }
+  function nextStep() {
+    saveData();
+    const newStep = step + 1;
+    if (stepToRouteMapping[newStep] !== undefined && isValid) {
+      setStep(newStep);
+      navigate(stepToRouteMapping[newStep]);
+    } else {
+      alert('Form not complete!');
+    }
+  }
+  function prevStep() {
+    const newStep = step - 1;
+    if (step > 1) {
+      setStep(newStep);
+      navigate(stepToRouteMapping[newStep]);
+    } else {
+      navigate('/guest');
+    }
+  }
+  function saveAndExit() {
+    saveData();
+    navigate('/guest');
+  }
 
   return (
     <Formik
@@ -96,9 +125,9 @@ export const GuestApplicationContext = () => {
         </Stack>
         <Stack>
           <NavButtons
-            step={step}
-            setStep={setStep}
-            stepToRouteMapping={stepToRouteMapping}
+            next={nextStep}
+            prev={prevStep}
+            saveAndExit={saveAndExit}
           />
         </Stack>
       </Box>
