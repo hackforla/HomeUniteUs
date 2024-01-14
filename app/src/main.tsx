@@ -41,10 +41,6 @@ import {
 } from './components/layout';
 import {GuestApplicationContext} from './components/common/GuestApplicationContext';
 
-function Profile() {
-  return <div>Hello from profile</div>;
-}
-
 function HuuApp() {
   const [session] = useSessionMutation();
 
@@ -85,31 +81,6 @@ function HuuApp() {
             element={<EmailVerificationError />}
           />
           <Route path="/new-password" element={<NewPassword />} />
-          <Route
-            path="/host"
-            element={
-              <ProtectedRoute>
-                <HostApplicationTracker />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-        </Route>
-        <Route
-          path="/coordinator"
-          element={
-            <ProtectedRoute>
-              <CoordinatorDashboardLayout />
-            </ProtectedRoute>
-          }
-        >
           <Route index element={<CoordinatorDashboard />} />
         </Route>
         <Route
@@ -130,6 +101,24 @@ function HuuApp() {
             element={<GuestApplicationContext />}
           ></Route>
         </Route>
+        <Route
+          path="/coordinator"
+          element={
+            <ProtectedRoute>
+              <CoordinatorDashboardLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<CoordinatorDashboard />} />
+        </Route>
+        <Route
+          path="/host"
+          element={
+            <ProtectedRoute>
+              <HostApplicationTracker />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );

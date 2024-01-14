@@ -22,7 +22,33 @@ The setup for the front end application is now complete and you should see the w
 
 ## Testing
 
-Within this (`app`) directory, run the command: `npm test`. This command runs the `vitest`, a Vite-native unit test framework.
+The frontend app leverages two different testing frameworks.
+
+### Component testing
+
+Isolated component-level tests are written using [vitest](https://vitest.dev/guide/why.html), a Vite-native test framework that is optimized for testing the individual units of code in isolation, typically functions and components, rather than the entire application with full user interactions.
+
+Existing tests can be executed by running `npm test` within the (`app`) directory. New tests can be added within files with the `.test.tsx` or `.test.ts` extension. We store our test cases alongside the associated source code files, within `__test__` subdirectories.
+
+### End-to-end (e2e) testing
+
+Integrated browser based tests are written using [Cypress](https://docs.cypress.io/guides/overview/why-cypress). `Cypress` allows you to write tests that interact with our web application in the same way that a user would, by running tests in a real browser against an actual backend.
+
+By default we mock out backend integration by intercepting and simulating responses from the backend, however the mocking can be removed if real user credentials are provided as environment variables.
+
+```pwsh
+cd app
+# Launch app before testing
+npm run dev
+# Run tests with mocking. The backend does not need to be running.
+npm run cypress:open
+# Run tests without mocking, using a real user account
+$env:CYPRESS_REAL_EMAIL = "put-your-real-user-here@aol.com"
+$env:CYPRESS_REAL_PASSWORD = "Quantum-encrypted-p@ssw0rd-here"
+npm run cypress:open:nomock
+```
+
+If the e2e tests are not working as expected then verify the `cypress.config.ts` `defineConfig.e2e.baseUrl` matches the deployed app's base url.
 
 ## Configuration
 
@@ -36,7 +62,7 @@ The table below describes the environment variables that are used by this app:
 
 | Variable | Required? | Example | Description |
 |----------|-----------|---------|-------------|
-| `VITE_HUU_API_BASE_URL` | YES | http://localhost:4040/api/ | The HUU API's base URL. In a development environment (mode is 'development' or 'test'): if this variable is not defined, then `http://localhost:4040/api/` will be used by default. In non-development environment: if this variable is not defined, then the build will throw an error. |
+| `VITE_HUU_API_BASE_URL` | YES | http://localhost:8080/api/ | The HUU API's base URL. In a development environment (mode is 'development' or 'test'): if this variable is not defined, then `http://localhost:4040/api/` will be used by default. In non-development environment: if this variable is not defined, then the build will throw an error. |
 |          |           |         |             |
 
 ## Production
