@@ -40,8 +40,6 @@ import {
   GuestDashboardLayout,
 } from './components/layout';
 import {GuestApplicationContext} from './components/common/GuestApplicationContext';
-import {Tester1} from './views/GuestAppFormTest1';
-import {Tester2} from './views/GuestAppFormTester2';
 
 function Profile() {
   return <div>Hello from profile</div>;
@@ -127,10 +125,10 @@ function HuuApp() {
           <Route path="contacts" element={<GuestContacts />} />
           <Route path="tasks" element={<GuestTasks />} />
           <Route path="settings" element={<GuestSettings />} />
-          <Route path="application" element={<GuestApplicationContext />}>
-            <Route index element={<Tester1 />} />
-            <Route path="tester2" element={<Tester2 />} />
-          </Route>
+          <Route
+            path="application"
+            element={<GuestApplicationContext />}
+          ></Route>
         </Route>
       </Routes>
     </>
