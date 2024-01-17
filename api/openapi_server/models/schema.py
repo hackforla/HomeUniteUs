@@ -1,6 +1,6 @@
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
-from api.openapi_server.models.database import *
+from openapi_server.models.database import *
 
 
 class UserSchema(SQLAlchemyAutoSchema):
@@ -205,6 +205,7 @@ class ProgramCaseStatusLogSchema(SQLAlchemyAutoSchema):
         include_relationships = True
         load_instance = True
 
-
+host_schema = HostSchema()
+hosts_schema = HostSchema(many=True)
 service_provider_schema = HousingProgramServiceProviderSchema()
 service_provider_list_schema = HousingProgramServiceProviderSchema(many=True)

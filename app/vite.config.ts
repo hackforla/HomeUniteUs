@@ -11,7 +11,7 @@ function huuApiBaseUrl(envHuuApiBaseUrl: string, mode: string): URL | never {
     return new URL(envHuuApiBaseUrl);
   } catch {
     if (mode == 'development' || mode == 'test') {
-      return new URL('http://localhost:4040/api/');
+      return new URL('http://localhost:8080/api/');
     } else {
       throw new Error('VITE_HUU_API_BASE_URL is not configured with a URL');
     }
