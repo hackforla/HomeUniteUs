@@ -80,7 +80,6 @@ function HuuApp() {
             element={<EmailVerificationError />}
           />
           <Route path="/new-password" element={<NewPassword />} />
-          <Route index element={<CoordinatorDashboard />} />
         </Route>
         <Route
           path="/guest"
