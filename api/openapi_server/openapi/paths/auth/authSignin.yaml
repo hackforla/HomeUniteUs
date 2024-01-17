@@ -1,6 +1,6 @@
 post:
   description: Sign in a user
-  operationId: signin
+  operationId: sign_in
   requestBody:
     content:
       application/json:
@@ -9,6 +9,7 @@ post:
           properties:
             email:
               type: string
+              format: email
             password:
               type: string
           required:
@@ -16,11 +17,32 @@ post:
             - password
   responses:
     '200':
+      description: Successful login
       content:
         application/json:
           schema:
-            $ref: '../../openapi.yaml#/components/schemas/ApiResponse'
-      description: successful operation
+            type: object
+            properties:
+              token:
+                type: string
+                description: Access token for the authenticated session
+              user:
+                type: object
+                properties:
+                  email:
+                    type: string
+                    format: email
+                    description: Email of the authenticated user
+            required:
+              - token
+              - user
+      headers:
+        Set-Cookie:
+          description: Session cookie for the authenticated user
+          schema:
+            type: string
+    '401':
+      description: Authentication failed
   tags:
     - auth
   x-openapi-router-controller: openapi_server.controllers.auth_controller

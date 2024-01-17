@@ -1,13 +1,15 @@
 get:
   description: Get current session and user information
   operationId: current_session
+  parameters:
+    - $ref: '../../parameters/_index.yaml#/SessionCookie'
   responses:
     "200":
-      content:
-        application/json:
-          schema:
-            $ref: "../../openapi.yaml#/components/schemas/ApiResponse"
       description: successful operation
+    "401":
+      description: "Session refresh failed"
   tags:
     - auth
   x-openapi-router-controller: openapi_server.controllers.auth_controller
+  security:
+    - jwt: []

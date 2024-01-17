@@ -25,7 +25,7 @@ function getInitials(name: string) {
 }
 
 interface OwnProps {
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 export const AuthenticatedHeader = ({onClick}: OwnProps) => {
@@ -41,14 +41,18 @@ export const AuthenticatedHeader = ({onClick}: OwnProps) => {
         component="nav"
       >
         <Toolbar sx={{justifyContent: {xs: 'space-between'}}}>
-          <IconButton
-            aria-label="open drawer"
-            edge="start"
-            onClick={onClick}
-            sx={{mr: 2, height: '40px', width: '40px', display: {md: 'none'}}}
-          >
-            <MenuIcon />
-          </IconButton>
+          {onClick ? (
+            <IconButton
+              aria-label="open drawer"
+              edge="start"
+              onClick={onClick}
+              sx={{mr: 2, height: '40px', width: '40px', display: {md: 'none'}}}
+            >
+              <MenuIcon />
+            </IconButton>
+          ) : (
+            <div style={{width: '40px'}}></div>
+          )}
           <StyledLogo src={logo} alt="Home Unite Us logo" />
           <Stack direction="row" gap={1} sx={{alignItems: 'center'}}>
             <AvatarDropdownMenu />
