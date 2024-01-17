@@ -33,9 +33,6 @@ import {
   CoordinatorDashboard,
 } from './views';
 
-import {Welcome} from './views/guestApplicationForm/Welcome';
-import {Expectations} from './views/guestApplicationForm/Expectations';
-
 import {AccountVerification} from './views/AccountVerification';
 import {AppLayout, Header} from './components/common';
 import {ResetPasswordContext} from './components/authentication/ResetPasswordContext';
@@ -43,6 +40,9 @@ import {
   CoordinatorDashboardLayout,
   GuestDashboardLayout,
 } from './components/layout';
+import {GuestApplicationContext} from './components/common/GuestApplicationContext';
+import {Welcome} from './views/guestApplicationForm/Welcome';
+import {Expectations} from './views/guestApplicationForm/Expectations';
 import {BasicInfo} from './views/guestApplicationForm/BasicInfo';
 
 function Profile() {
@@ -130,9 +130,11 @@ function HuuApp() {
           <Route path="tasks" element={<GuestTasks />} />
           <Route path="settings" element={<GuestSettings />} />
 
-          <Route path="guest-application" element={<Welcome />}></Route>
-          <Route path="expectations" element={<Expectations />}></Route>
-          <Route path="basic_info" element={<BasicInfo />}></Route>
+          <Route path="application" element={<GuestApplicationContext />}>
+            <Route path="welcome" element={<Welcome />} />
+            <Route path="expectations" element={<Expectations />} />
+            <Route path="basic" element={<BasicInfo />} />
+          </Route>
         </Route>
       </Routes>
     </>

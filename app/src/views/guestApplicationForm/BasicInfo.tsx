@@ -1,17 +1,15 @@
-import {Button, Stack, TextField, Typography, MenuItem} from '@mui/material';
-
+import {Stack, TextField, Typography, MenuItem} from '@mui/material';
 import React from 'react';
-import {useNavigate} from 'react-router-dom';
 import {FormContainer} from '../../components/authentication';
+import {formInputValues} from '../../components/common/GuestApplicationContext';
+import {useFormikContext} from 'formik';
 
 export const BasicInfo = () => {
-  // const [errorMessage, setErrorMessage] = React.useState('');
-  const navigate = useNavigate();
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    navigate('/');
-  };
+  const {
+    values: {fullName, dateOfBirth, gender},
+    handleChange,
+    handleBlur,
+  } = useFormikContext<formInputValues>();
 
   const genders = [
     'Woman',
@@ -29,18 +27,23 @@ export const BasicInfo = () => {
         <Typography variant="h5" sx={{fontWeight: 'bold'}}>
           Basic Information
         </Typography>
+
         <Stack
           component="form"
           title="Basic Info Page"
           sx={{width: '100%', alignItems: 'flex-start'}}
-          onSubmit={handleSubmit}
           spacing={4}
         >
           <TextField
             fullWidth
+            name="fullName"
             label="Full Name"
-            id="fullWidth"
-            type="number"
+            value={fullName}
+            placeholder="name"
+            id="name"
+            type="text"
+            onChange={handleChange}
+            onBlur={handleBlur}
             InputLabelProps={{
               shrink: true,
             }}
@@ -49,18 +52,13 @@ export const BasicInfo = () => {
           <TextField
             fullWidth
             label="Date of Birth"
-            id="fullWidth"
-            type="number"
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-
-          <TextField
-            fullWidth
-            label="Full Name"
-            id="fullWidth"
-            type="number"
+            value={dateOfBirth}
+            name="dateOfBirth"
+            placeholder="mm/dd/yyyy"
+            id="dateofbirth"
+            type="text"
+            onChange={handleChange}
+            onBlur={handleBlur}
             InputLabelProps={{
               shrink: true,
             }}
@@ -69,9 +67,13 @@ export const BasicInfo = () => {
           <TextField
             fullWidth
             label="Gender Identity"
+            value={gender}
+            name="gender"
             id="outlined-select-currency"
             defaultValue="Select"
             select
+            onChange={handleChange}
+            onBlur={handleBlur}
             InputLabelProps={{
               shrink: true,
             }}
@@ -82,21 +84,7 @@ export const BasicInfo = () => {
               </MenuItem>
             ))}
           </TextField>
-
-          <Button fullWidth variant="contained" size="large" type="submit">
-            Continue
-          </Button>
-
-          <Button href="../expectations" fullWidth variant="outlined">
-            Back
-          </Button>
         </Stack>
-        <Typography
-          variant="subtitle1"
-          sx={{textAlign: 'center', fontWeight: 'bold'}}
-        >
-          Save and Exit Application
-        </Typography>
       </Stack>
     </FormContainer>
   );
