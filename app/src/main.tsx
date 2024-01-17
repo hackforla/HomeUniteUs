@@ -51,8 +51,8 @@ function HuuApp() {
   return (
     <>
       <Routes>
-        <Route element={<AppLayout />}>
-          <Route path="/" element={<Home />} />
+        <Route path="/" element={<AppLayout />}>
+          <Route index element={<Home />} />
           <Route path="/hosts" element={<HostsList />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/signin" element={<SignIn />} />
