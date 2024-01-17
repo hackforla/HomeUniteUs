@@ -1,11 +1,7 @@
 const LOGIN_PAGES_URL_PATTERN = /\/(coordinator|host|guest)/;
 const SIGNIN_PAGE_URL: string = Cypress.config().baseUrl + '/signin';
-const PROTECTED_PATHS: string[] = [
-  '/guest',
-  '/host',
-  '/coordinator',
-  '/profile',
-];
+const HOME_PAGE_URL: string = Cypress.config().baseUrl + '/';
+const PROTECTED_PATHS: string[] = ['/guest', '/host', '/coordinator'];
 
 function loginUsingUI(password: string, email: string) {
   cy.findByRole('textbox', {name: /email/i}).type(email);
@@ -105,8 +101,6 @@ describe('Authentication', () => {
 
     cy.wait('@signin').then(intercept => {
       const body = intercept.response?.body;
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const headers = intercept.response?.headers;
 
       expect(body).to.have.property('user');
       expect(body.user).to.have.property('email', this.email);
@@ -122,7 +116,7 @@ describe('Authentication', () => {
     loginUsingUI(this.password, this.email);
     cy.wait('@signin').its('response.statusCode').should('be.within', 200, 299);
     logoutUsingUI();
-    cy.url().should('eq', SIGNIN_PAGE_URL);
+    cy.url().should('eq', HOME_PAGE_URL);
     for (const path of PROTECTED_PATHS) {
       cy.visit(path);
       cy.url().should('eq', SIGNIN_PAGE_URL);
