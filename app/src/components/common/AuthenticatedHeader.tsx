@@ -8,8 +8,6 @@ import Typography from '@mui/material/Typography';
 import {Tooltip, Avatar, Menu, MenuItem, Stack} from '@mui/material';
 import logo from '../../img/favicon.png';
 import {useSignOutMutation} from '../../services/auth';
-import {useAppDispatch} from '../../app/hooks/store';
-import {setCredentials} from '../../app/authSlice';
 
 import {Link, useNavigate} from 'react-router-dom';
 import {styled} from '@mui/system';
@@ -73,7 +71,6 @@ const StyledLogo = styled('img')(({theme}) => ({
 
 const AvatarDropdownMenu = () => {
   const [signOut] = useSignOutMutation();
-  const appDispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
@@ -83,7 +80,6 @@ const AvatarDropdownMenu = () => {
   const handleSignOut = async () => {
     try {
       await signOut().unwrap();
-      appDispatch(setCredentials({user: null, token: null}));
       navigate('/');
     } catch (err) {
       console.log(err);
