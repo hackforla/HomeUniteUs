@@ -5,7 +5,7 @@ from openapi_server.configs.huu_config import HUUConfig
 class DevelopmentHUUConfig(HUUConfig):
     ENV: str = "development"
     FLASK_DEBUG: bool = True
-    PORT: int = 8090
+    PORT: int = 8080
     HOST: str = "127.0.0.1"
     TESTING: bool = False
     SECRET_KEY: str = "unsecurekey"
