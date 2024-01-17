@@ -156,9 +156,6 @@ describe('Authentication', () => {
       signinURL = url;
     });
 
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(1000);
-
     cy.url().then(url => {
       expect(url).to.equal(
         signinURL,
@@ -227,8 +224,7 @@ describe('Authentication', () => {
     loginUsingUI(this.password, this.email);
     cy.url().should('match', LOGIN_PAGES_URL_PATTERN);
     cy.reload();
-    // eslint-disable-next-line cypress/no-unnecessary-waiting
-    cy.wait(500);
+
     cy.url().should('match', LOGIN_PAGES_URL_PATTERN);
   });
 });
