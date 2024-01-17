@@ -30,7 +30,7 @@ services:
     build:
       context: ./app
     ports:
-      - "8080:80"
+      - "4040:80"
     depends_on:
       - api
 volumes:
