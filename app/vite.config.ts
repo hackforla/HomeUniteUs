@@ -46,7 +46,7 @@ export default defineConfig(({mode}) => {
       port: 4040,
       proxy: {
         '/api': {
-          target: apiBaseUrl.origin
+          target: apiBaseUrl.origin,
         },
       },
     },
