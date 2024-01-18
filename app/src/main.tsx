@@ -78,7 +78,7 @@ function HuuApp() {
             path="/email-verification-error"
             element={<EmailVerificationError />}
           />
-          <Route path="/new-password" element={<NewPassword />} />
+          <Route path="/create-password" element={<NewPassword />} />
         </Route>
 
         {/* guest routes */}
