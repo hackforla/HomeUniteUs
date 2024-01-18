@@ -11,7 +11,7 @@ function huuApiBaseUrl(envHuuApiBaseUrl: string, mode: string): URL | never {
     return new URL(envHuuApiBaseUrl);
   } catch {
     if (mode == 'development' || mode == 'test') {
-      return new URL('http://localhost:4040/api/');
+      return new URL('http://localhost:8080/api/');
     } else {
       throw new Error('VITE_HUU_API_BASE_URL is not configured with a URL');
     }
@@ -34,22 +34,19 @@ export default defineConfig(({mode}) => {
   // However, they are explicitly loaded here to handle the required variables.
   // Otherwise, vite will replace undefined environment variables with `{}.VITE_<rest of variable>`.
   const env = loadEnv(mode, process.cwd());
+  const apiBaseUrl = huuApiBaseUrl(env.VITE_HUU_API_BASE_URL, mode);
 
   return {
     define: {
       // ensures this is defined for vite to replace
-      'import.meta.env.VITE_HUU_API_BASE_URL': JSON.stringify(
-        huuApiBaseUrl(env.VITE_HUU_API_BASE_URL, mode),
-      ),
+      'import.meta.env.VITE_HUU_API_BASE_URL': JSON.stringify(apiBaseUrl),
     },
     plugins: [react()],
     server: {
       port: 4040,
       proxy: {
         '/api': {
-          target: 'http://localhost:8080',
-          changeOrigin: true,
-          secure: false,
+          target: apiBaseUrl.origin,
         },
       },
     },

@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "ESNext",
+    "baseUrl": "./",
     "useDefineForClassFields": true,
     "lib": ["es6", "DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
@@ -21,8 +22,7 @@
       "@testing-library/jest-dom",
       "cypress",
       "@testing-library/cypress"
-    ],
-    "baseUrl": "http://localhost:3000"
+    ]
   },
   "include": ["src", "*.ts"],
   "references": [{"path": "./tsconfig.node.json"}]

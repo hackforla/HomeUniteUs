@@ -1,13 +1,13 @@
 get:
   description: Check for refresh token and current session
   operationId: refresh
+  parameters:
+    - $ref: '../../parameters/_index.yaml#/SessionCookie'
   responses:
     "200":
-      content:
-        application/json:
-          schema:
-            $ref: "../../openapi.yaml#/components/schemas/ApiResponse"
       description: successful operation
+    "401":
+      description: "Session authentication failed"
   tags:
     - auth
   x-openapi-router-controller: openapi_server.controllers.auth_controller

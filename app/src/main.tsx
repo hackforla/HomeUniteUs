@@ -45,10 +45,6 @@ import {Welcome} from './views/guestApplicationForm/Welcome';
 import {Expectations} from './views/guestApplicationForm/Expectations';
 import {BasicInfo} from './views/guestApplicationForm/BasicInfo';
 
-function Profile() {
-  return <div>Hello from profile</div>;
-}
-
 function HuuApp() {
   const [session] = useSessionMutation();
 
@@ -89,31 +85,6 @@ function HuuApp() {
             element={<EmailVerificationError />}
           />
           <Route path="/new-password" element={<NewPassword />} />
-          <Route
-            path="/host"
-            element={
-              <ProtectedRoute>
-                <HostApplicationTracker />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-        </Route>
-        <Route
-          path="/coordinator"
-          element={
-            <ProtectedRoute>
-              <CoordinatorDashboardLayout />
-            </ProtectedRoute>
-          }
-        >
           <Route index element={<CoordinatorDashboard />} />
         </Route>
         <Route
@@ -136,6 +107,24 @@ function HuuApp() {
             <Route path="basic" element={<BasicInfo />} />
           </Route>
         </Route>
+        <Route
+          path="/coordinator"
+          element={
+            <ProtectedRoute>
+              <CoordinatorDashboardLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<CoordinatorDashboard />} />
+        </Route>
+        <Route
+          path="/host"
+          element={
+            <ProtectedRoute>
+              <HostApplicationTracker />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );
