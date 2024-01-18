@@ -3,7 +3,12 @@ import {
   initialValues,
   validationSchema,
 } from '../../components/authentication/ResetPasswordContext';
-import {render, screen, fireEvent} from '../../utils/test/test-utils';
+import {
+  render,
+  screen,
+  fireEvent,
+  userEvent,
+} from '../../utils/test/test-utils';
 import {ForgotPasswordCode} from '../ForgotPasswordCode';
 import {BrowserRouter} from 'react-router-dom';
 import {Formik} from 'formik';
@@ -81,7 +86,7 @@ describe('ForgotPasswordCode page', () => {
       setup();
       const resendButton = screen.getByRole('button', {name: /resend/i});
 
-      fireEvent.click(resendButton);
+      await userEvent.click(resendButton);
 
       await screen.findByRole('alert');
 
