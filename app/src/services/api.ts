@@ -10,7 +10,7 @@ import {RootState} from '../app/store';
 
 // Create base query
 const baseQuery = fetchBaseQuery({
-  baseUrl: '/api',
+  baseUrl: `${import.meta.env.VITE_HUU_API_BASE_URL}`,
   prepareHeaders: (headers, {getState}) => {
     // get token from state
     const token = (getState() as RootState).auth.token;

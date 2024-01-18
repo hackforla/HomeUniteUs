@@ -12,7 +12,8 @@ import {
 import {ForgotPasswordCode} from '../ForgotPasswordCode';
 import {BrowserRouter} from 'react-router-dom';
 import {Formik} from 'formik';
-import {server, rest} from '../../utils/test/server';
+import {server} from '../../utils/test/server';
+import {HttpResponse, http} from 'msw';
 
 const {navigate} = vi.hoisted(() => {
   return {
@@ -93,21 +94,25 @@ describe('ForgotPasswordCode page', () => {
       expect(screen.getByTestId(/success/i)).toBeInTheDocument();
       expect(screen.getByRole('alert')).toBeInTheDocument();
     });
-
     test('display an error message', async () => {
       server.use(
-        rest.post(/.*\/api\/auth\/forgot_password$/, (req, res, ctx) => {
-          return res(
-            ctx.status(400),
-            ctx.json({message: 'There was an error'}),
-          );
-        }),
+        http.post(
+          `${import.meta.env.VITE_HUU_API_BASE_URL}/auth/forgot_password`,
+          () => {
+            return HttpResponse.json(
+              {
+                message: 'Invalid email address',
+              },
+              {status: 400},
+            );
+          },
+        ),
       );
 
       setup();
       const resendButton = screen.getByRole('button', {name: /resend/i});
 
-      fireEvent.click(resendButton);
+      await userEvent.click(resendButton);
       expect(resendButton).toBeDisabled();
 
       await screen.findByRole('alert');

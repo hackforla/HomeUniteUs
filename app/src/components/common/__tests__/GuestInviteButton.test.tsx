@@ -1,9 +1,15 @@
 import {BrowserRouter} from 'react-router-dom';
 import {describe} from 'vitest';
 import {faker} from '@faker-js/faker';
-import {fireEvent, render, screen} from '../../../utils/test/test-utils';
+import {
+  fireEvent,
+  render,
+  screen,
+  userEvent,
+} from '../../../utils/test/test-utils';
 import {GuestInviteButton} from '../GuestInviteButton';
-import {server, rest} from '../../../utils/test/server';
+import {server} from '../../../utils/test/server';
+import {HttpResponse, http} from 'msw';
 
 function createGuest() {
   return {
@@ -107,8 +113,13 @@ describe('<GuestInviteButton />', () => {
     const message = 'There was an error sending the invite.';
 
     server.use(
-      rest.post(/.*\/api\/auth\/invite$/, (req, res, ctx) => {
-        return res(ctx.status(400), ctx.json({message}));
+      http.post(`${import.meta.env.VITE_HUU_API_BASE_URL}/auth/invite`, () => {
+        return HttpResponse.json(
+          {
+            message,
+          },
+          {status: 400},
+        );
       }),
     );
 
@@ -116,10 +127,10 @@ describe('<GuestInviteButton />', () => {
     const {firstName, lastName, email} = createGuest();
     const {firstNameInput, lastNameInput, emailInput, submitButton} =
       openDialog();
-    fireEvent.change(firstNameInput, {target: {value: firstName}});
-    fireEvent.change(lastNameInput, {target: {value: lastName}});
-    fireEvent.change(emailInput, {target: {value: email}});
-    fireEvent.click(submitButton);
+    await userEvent.type(firstNameInput, firstName);
+    await userEvent.type(lastNameInput, lastName);
+    await userEvent.type(emailInput, email);
+    await userEvent.click(submitButton);
 
     await screen.findByRole('alert', {hidden: true});
     expect(screen.getByText(message)).toBeInTheDocument();
