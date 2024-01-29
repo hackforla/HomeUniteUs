@@ -8,8 +8,13 @@ const engines = packageJson.engines;
 const version = engines.node;
 if (!semver.satisfies(process.version, version)) {
   console.log(
-    `Required node version ${version} not satisfied with current version ${process.version}.`,
+    `Required node version ${version} is not satisfied with current version ${process.version}. Please upgrade to minimum node version for this app.`,
   );
   process.exit(1);
+} else {
+  console.log(
+    `Required node version ${version} is satisfied with current version ${process.version} and ready to proceed`,
+  );
 }
+
 export {};
