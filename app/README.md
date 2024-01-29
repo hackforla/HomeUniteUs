@@ -34,12 +34,11 @@ None of the environment variables are required or given a default value unless e
 
 For production builds, vite preforms a string replacement on the `import.meta.env.VITE_<rest of variable>` string with the value of the environment variable. If the variable is not required, doesn't get assigned a default value, and it is not defined before running the `npm run build` command, then `vite` will replace the `import.meta.env.VITE_<rest of variable>` string with `{}.VITE_<rest of variable>`. So be aware of potential bugs for missing environment variables.
 
-The table below describes the environment variables that are used by this app:
-
-| Variable                | Required? | Example                    | Description                                                                                                                                                                                                                                                                              |
-| ----------------------- | --------- | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `VITE_HUU_API_BASE_URL` | YES       | http://localhost:4040/api/ | The HUU API's base URL. In a development environment (mode is 'development' or 'test'): if this variable is not defined, then `http://localhost:4040/api/` will be used by default. In non-development environment: if this variable is not defined, then the build will throw an error. |
-|                         |           |                            |                                                                                                                                                                                                                                                                                          |
+<!-- prettier-ignore -->
+| Variable | Required? | Example | Description |
+|----------|-----------|---------|-------------|
+| `VITE_HUU_API_BASE_URL` | YES | http://localhost:4040/api/ | The HUU API's base URL. In a development environment (mode is 'development' or 'test'): if this variable is not defined, then `http://localhost:4040/api/` will be used by default. In non-development environment: if this variable is not defined, then the build will throw an error. |
+|          |           |         |             |
 
 ## Production
 
