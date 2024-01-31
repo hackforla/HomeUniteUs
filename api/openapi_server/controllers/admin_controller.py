@@ -14,34 +14,27 @@ def initial_sign_in_reset_password():
     Returns: 
         Response object or exception
     """
-    try:
-        # check for json in request body. If not Json throws an error
-        if connexion.request.is_json:
-            body = connexion.request.get_json()
-        else:
-            raise AuthError({"message": "bad response from server"},500)
+    body = connexion.request.get_json()
+    userId = body['userId']
+    password = body['password']
+    sessionId = body['sessionId']
 
-        if "email" not in body:
-            raise AuthError({"message": "bad response, no email"},500)
-        
-        if "password" not in body:
-            raise AuthError({"message": "bad response, no password"},500)
-        
-        secret_hash = current_app.calc_secret_hash(body['email'])
+    try:        
+        secret_hash = current_app.calc_secret_hash(userId)
     
         # call forgot password method
         response = current_app.boto_client.respond_to_auth_challenge(
             ClientId=current_app.config['COGNITO_CLIENT_ID'],
             ChallengeName = 'NEW_PASSWORD_REQUIRED',
-            Session=body['session'],
+            Session=sessionId,
             ChallengeResponses = {
-                'NEW_PASSWORD':body['password'] ,
-                'USERNAME':body['email'],
-                'SECRET_HASH':secret_hash
+                'NEW_PASSWORD': password ,
+                'USERNAME': userId,
+                'SECRET_HASH': secret_hash
             },
             
         )
-    except Exception as e:
+    except Exception as e:  
         print(e)
         raise AuthError({"message": "failed to change password"}, 500) from e
     

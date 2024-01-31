@@ -3,8 +3,8 @@ import {
   screen,
   userEvent,
   fireEvent,
-} from '../../utils/test/test-utils';
-import {CodeField} from '../authentication';
+} from '../../../utils/test/test-utils';
+import {CodeField} from '..';
 
 describe('CodeField', () => {
   it('should render 6 text fields', () => {
