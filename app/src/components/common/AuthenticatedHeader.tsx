@@ -8,8 +8,6 @@ import Typography from '@mui/material/Typography';
 import {Tooltip, Avatar, Menu, MenuItem, Stack} from '@mui/material';
 import logo from '../../img/favicon.png';
 import {useSignOutMutation} from '../../services/auth';
-import {useAppDispatch} from '../../app/hooks/store';
-import {setCredentials} from '../../app/authSlice';
 
 import {Link, useNavigate} from 'react-router-dom';
 import {styled} from '@mui/system';
@@ -25,7 +23,7 @@ function getInitials(name: string) {
 }
 
 interface OwnProps {
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 export const AuthenticatedHeader = ({onClick}: OwnProps) => {
@@ -41,14 +39,18 @@ export const AuthenticatedHeader = ({onClick}: OwnProps) => {
         component="nav"
       >
         <Toolbar sx={{justifyContent: {xs: 'space-between'}}}>
-          <IconButton
-            aria-label="open drawer"
-            edge="start"
-            onClick={onClick}
-            sx={{mr: 2, height: '40px', width: '40px', display: {md: 'none'}}}
-          >
-            <MenuIcon />
-          </IconButton>
+          {onClick ? (
+            <IconButton
+              aria-label="open drawer"
+              edge="start"
+              onClick={onClick}
+              sx={{mr: 2, height: '40px', width: '40px', display: {md: 'none'}}}
+            >
+              <MenuIcon />
+            </IconButton>
+          ) : (
+            <div style={{width: '40px'}}></div>
+          )}
           <StyledLogo src={logo} alt="Home Unite Us logo" />
           <Stack direction="row" gap={1} sx={{alignItems: 'center'}}>
             <AvatarDropdownMenu />
@@ -69,7 +71,6 @@ const StyledLogo = styled('img')(({theme}) => ({
 
 const AvatarDropdownMenu = () => {
   const [signOut] = useSignOutMutation();
-  const appDispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
@@ -79,8 +80,7 @@ const AvatarDropdownMenu = () => {
   const handleSignOut = async () => {
     try {
       await signOut().unwrap();
-      appDispatch(setCredentials({user: null, token: null}));
-      navigate('/signin');
+      navigate('/');
     } catch (err) {
       console.log(err);
     }

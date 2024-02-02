@@ -27,7 +27,6 @@ export const DashboardTask = ({
   };
 
   const handleClick = () => {
-    console.log('clicked');
     navigate(url);
   };
 
@@ -43,7 +42,7 @@ export const DashboardTask = ({
       >
         <Stack sx={{flex: 1}}>
           <Typography sx={{fontWeight: 'medium'}}>{title}</Typography>
-          <Typography sx={{color: '#999999'}}>{description}</Typography>
+          <Typography sx={{color: 'text.secondary'}}>{description}</Typography>
         </Stack>
         <Stack
           sx={{width: '177px', justifyContent: 'center', alignItems: 'center'}}

@@ -1,21 +1,20 @@
+import pytest
 import logging
-from pathlib import Path
-
-import connexion
-from flask_testing import TestCase
 from typing import List
 
+from flask_testing import TestCase
+
+from openapi_server.configs.development import DevelopmentHUUConfig
 from openapi_server.models.database import DataAccessLayer
-from openapi_server.__main__ import get_bundled_specs
 from openapi_server.repositories.service_provider_repository import HousingProviderRepository
+from openapi_server.app import create_app
 
-
+@pytest.mark.usefixtures("pass_app_config")
 class BaseTestCase(TestCase):
 
     def create_app(self):
         '''
-        Create a temporary, empty database for testing purposes and return
-        a new instance of our Flask App to the base class for testing purposes.
+        Create a instance of our Flask App, configured for testing purposes.
 
         The base class will never start the Flask App. It instead create a
         mock self.client class that is used to simulate requests to the WSGI server.
@@ -23,18 +22,10 @@ class BaseTestCase(TestCase):
         https://flask.palletsprojects.com/en/2.2.x/testing/
         https://werkzeug.palletsprojects.com/en/2.3.x/test/
         '''
-        # Create a temporary, memory only database. This temp db will be
-        # automatically destroyed when the refcount drops to zero
-        DataAccessLayer._engine = None
-        DataAccessLayer._conn_string = "sqlite:///:memory:"
-        DataAccessLayer.db_init()
         self.provider_repo = HousingProviderRepository()
 
         logging.getLogger('connexion.operation').setLevel('ERROR')
-        app = connexion.App(__name__)
-        app.add_api(get_bundled_specs(Path('openapi_server/openapi/openapi.yaml')),
-                pythonic_params=True)   
-        return app.app      
+        return create_app(self.app_config).app
     
     def tearDown(self):
         '''
@@ -63,3 +54,11 @@ class BaseTestCase(TestCase):
             ids.append(provider.id)
         return ids
 
+class TestsWithMockingDisabled(BaseTestCase):
+    '''
+    This test suite will be skipped if mocking is enabled.
+    '''
+    def setUp(self):
+        if isinstance(self.app_config, DevelopmentHUUConfig):
+            pytest.skip("This test suite is only enabled when mocking is disabled")
+        super().setUpClass()

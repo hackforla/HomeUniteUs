@@ -1,7 +1,6 @@
 name: Run API and App Tests
 on:
   push:
-    branches: [main]
   pull_request:
     branches: [main]
   # This is also a reusable workflow that can be called from other workflows
@@ -28,10 +27,10 @@ jobs:
       - name: Install API dev Dependencies
         run: |
           pip install -r requirements-dev.txt
-  #      - name: Test with tox
-  #        run: |
-  #          # Use tox because it is configured to test against the same package type being deployed
-  #          tox
+      - name: Test with tox
+        run: |
+          # Use tox because it is configured to test against the same package type being deployed
+          tox
   test-app:
     runs-on: ubuntu-latest
     defaults:

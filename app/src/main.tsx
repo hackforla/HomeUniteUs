@@ -10,7 +10,6 @@ import {ProtectedRoute} from './components/authentication/ProtectedRoute';
 import {useSessionMutation} from './services/auth';
 import {HomeUniteUsTheme} from './theme';
 import {
-  CoordinatorDashboard,
   GuestApplicationTracker,
   Home,
   HostApplicationTracker,
@@ -31,15 +30,15 @@ import {
   GuestContacts,
   GuestTasks,
   GuestSettings,
+  CoordinatorDashboard,
 } from './views';
 import {AccountVerification} from './views/AccountVerification';
 import {AppLayout, Header} from './components/common';
 import {ResetPasswordContext} from './components/authentication/ResetPasswordContext';
-import {GuestDashboardlayout} from './components/layout/GuestDashboardlayout';
-
-function Profile() {
-  return <div>Hello from profile</div>;
-}
+import {
+  CoordinatorDashboardLayout,
+  GuestDashboardLayout,
+} from './components/layout';
 
 function HuuApp() {
   const [session] = useSessionMutation();
@@ -52,9 +51,8 @@ function HuuApp() {
   return (
     <>
       <Routes>
-        <Route element={<AppLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/coord" element={<CoordinatorDashboard />} />
+        <Route path="/" element={<AppLayout />}>
+          <Route index element={<Home />} />
           <Route path="/hosts" element={<HostsList />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/signin" element={<SignIn />} />
@@ -82,36 +80,12 @@ function HuuApp() {
             element={<EmailVerificationError />}
           />
           <Route path="/new-password" element={<NewPassword />} />
-          <Route
-            path="/host"
-            element={
-              <ProtectedRoute>
-                <HostApplicationTracker />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/coordinator"
-            element={
-              <ProtectedRoute>
-                <CoordinatorDashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
         </Route>
         <Route
           path="/guest"
           element={
             <ProtectedRoute>
-              <GuestDashboardlayout />
+              <GuestDashboardLayout />
             </ProtectedRoute>
           }
         >
@@ -121,6 +95,24 @@ function HuuApp() {
           <Route path="tasks" element={<GuestTasks />} />
           <Route path="settings" element={<GuestSettings />} />
         </Route>
+        <Route
+          path="/coordinator"
+          element={
+            <ProtectedRoute>
+              <CoordinatorDashboardLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<CoordinatorDashboard />} />
+        </Route>
+        <Route
+          path="/host"
+          element={
+            <ProtectedRoute>
+              <HostApplicationTracker />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );
