@@ -57,10 +57,10 @@ def pytest_configure(config: pytest.Config) -> None:
             m.setenv("COGNITO_REDIRECT_URI", "Redirect your way back to writing more test cases")
             m.setenv("COGNITO_USER_POOL_ID", "Water's warm. IDs are fake")
             m.setenv("SECRET_KEY", secrets.token_urlsafe(32))
+            m.setenv("DATABASE_URL", "sqlite:///:memory:")
             app_config = StagingHUUConfig(
                 TESTING=True,
-                FLASK_DEBUG=True,
-                DATABASE_URL = 'sqlite:///:memory:'
+                FLASK_DEBUG=True
             )
         config.mock_aws = False
     else:
