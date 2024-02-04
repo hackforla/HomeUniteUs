@@ -18,9 +18,8 @@ if __name__ == "__main__":
             with AWSMockService(flask_app):
                 run_app()
         case HUUConfigRegistry.STAGING:
-            # Use the real AWS Cognito service, but a temporary user pool
-            with AWSTemporaryUserpool(flask_app):
-                run_app()
+            # Use the real AWS Cognito service, and real user pool
+            run_app()
         case HUUConfigRegistry.PRODUCTION:
             print("WARNING: Connexion's app.run() method starts a development "
                   "server that should be used for testing purposes only.")
