@@ -72,9 +72,10 @@ def test_incorrect_JWT_fail_auth(client):
     assert response.status_code == 401
     assert re.search(r"invalid.*token", response.json['message'], flags=re.IGNORECASE)
 
-def test_signup_unconfirmed(client):
+def test_signup_unconfirmed(client, is_mocking):
     '''
     Test that unconfirmed accounts cannot be used to login to the API.
+    Mocked users are automatically confirmed.
     '''
     email = 'inbox928@placeholder.org'
     password = 'Fakepass%^&7!asdf'
@@ -87,7 +88,10 @@ def test_signup_unconfirmed(client):
     )
 
     assert signup_response.status_code == 200, "Signup attempt failed"
-    assert not signup_response.json["UserConfirmed"], "Newly signed up user was already confirmed!"
+    expect_user_confirmed = is_mocking
+    assert signup_response.json["UserConfirmed"] == expect_user_confirmed, (
+        "When using the real AWS service newly signed up users should not be confirmed. "
+        "Mocked users, however, should be auto-confirmed for convenience.")
 
     signin_response = client.post(
         '/api/auth/signin',
@@ -96,9 +100,14 @@ def test_signup_unconfirmed(client):
             'password': password
         }
     )
-
-    assert signin_response.status_code == 401, "Signin should fail since user is unconfirmed!"
-    assert signin_response.json["Code"] == "UserNotConfirmedException"
+    
+    if expect_user_confirmed:
+        assert signin_response.status_code == 200, "Mocked users should be able to signin without confirmation."
+        assert "token" in signin_response.json, "Signin succeeded but no token provided"
+    else:
+        assert signin_response.status_code == 401, (
+            "When using the real AWS service signin should fail since user is unconfirmed. ")
+        assert signin_response.json["Code"] == "UserNotConfirmedException"
 
 def test_signup_confirmed(client):
     '''

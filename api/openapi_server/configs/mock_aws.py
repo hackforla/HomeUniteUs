@@ -1,5 +1,8 @@
 import re
 import uuid
+import json
+
+from flask import request
 
 class AWSTemporaryUserpool():
     '''
@@ -48,7 +51,7 @@ class AWSTemporaryUserpool():
         self.app.config["COGNITO_USER_POOL_ID"] = self.tmp_userpool_id
         self.app.config["COGNITO_CLIENT_ID"]  = self.tmp_client_id
         self.app.config["COGNITO_CLIENT_SECRET"] = client_response['UserPoolClient']['ClientSecret'] 
-        print("Created fake temporary userpool")
+        self.app.logger.info("Created fake temporary userpool")
 
     def destroy(self):
         self.app.boto_client.delete_user_pool_client(
@@ -60,7 +63,7 @@ class AWSTemporaryUserpool():
         )
         self.tmp_userpool_id = None 
         self.tmp_client_id = None
-        print("Destroyed fake temporary userpool")
+        self.app.logger.info("Destroyed fake temporary userpool")
 
     def __enter__(self):
         self.create() 
@@ -81,6 +84,33 @@ class AWSMockService():
         self.userpool = AWSTemporaryUserpool(flask_app)
         self.mock_service = mock_cognitoidp()
         self.app = flask_app
+        self.app.after_request(self.auto_signup_user)
+
+    def auto_signup_user(self, response):
+        '''
+        Automatically verify new users while using a temporary
+        user pool.
+        '''
+        # The alternative approaches are to use a lambda pre-signup 
+        # trigger to automatically verify new users, or to include
+        # conditional login within our endpoint. The lambda approach
+        # requires more overhead, and conditional logic within the endpoint
+        # risks adding a bug to the production code.
+        if ('signup' in request.endpoint.lower()) and 200 <= response.status_code < 300:
+            email = request.json['email']
+            confirm_response = self.app.boto_client.admin_confirm_sign_up(
+                UserPoolId=self.app.config["COGNITO_USER_POOL_ID"],
+                Username=email
+            )
+            if confirm_response['ResponseMetadata']['HTTPStatusCode'] == 200:
+                new_response = response.get_json()
+                new_response['UserConfirmed'] = True
+                response.data = json.dumps(new_response)
+                self.app.logger.info(f"Auto-confirmed new user: {email}")
+            else:
+                self.app.logger.warning(f"Failed to auto-confirm new user: {email}")
+
+        return response
 
     def start(self):
         self.mock_service.start()
@@ -90,7 +120,7 @@ class AWSMockService():
         self.app.config["COGNITO_ACCESS_KEY"] = self.mock_service.FAKE_KEYS['AWS_SECRET_ACCESS_KEY']
         self.userpool.create()
 
-        print("Started mock AWS Cognito service")
+        self.app.logger.info("Started mock AWS Cognito service")
 
     def stop(self):
         self.userpool.destroy()
@@ -100,7 +130,7 @@ class AWSMockService():
         self.app.config["COGNITO_ACCESS_KEY"] = None
         self.app._boto_client = None
         
-        print("Stopped mock AWS Cognito service")
+        self.app.logger.info("Stopped mock AWS Cognito service")
 
     def __enter__(self):
         self.start() 
