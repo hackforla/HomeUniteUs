@@ -343,43 +343,12 @@ def token():
 
 
 def current_session():
-    refreshToken = session.get('refresh_token')
-    username = session.get('username')
-    if None in (refreshToken, username):
-        raise AuthError({
-            'code': 'session_expired',
-            'message': 'Session not found'
-        }, 401)
-
-    # Refresh tokens
-    try:
-        response = current_app.boto_client.initiate_auth(
-            ClientId=current_app.config['COGNITO_CLIENT_ID'],
-            AuthFlow='REFRESH_TOKEN',
-            AuthParameters={
-                'REFRESH_TOKEN': refreshToken,
-                'SECRET_HASH': current_app.calc_secret_hash(username)
-            }
-        )
-    except Exception as e:
-        code = e.response['Error']['Code']
-        message = e.response['Error']['Message']
-        raise AuthError({
-                  "code": code, 
-                  "message": message
-              }, 401)
-
-    accessToken = response['AuthenticationResult']['AccessToken']
-    # retrieve user data
-    user_data = current_app.boto_client.get_user(AccessToken=accessToken)
-    # create user object from user data
-    user = get_user_attr(user_data)
-    # return user data json
     return {
-        'token': accessToken,
-        'user': user
+        'token': refresh().get('refresh_token'),
+        'user': {
+            'email': session.get('username')
+        }
     }
-
 
 def refresh():
     refreshToken = session.get('refresh_token')

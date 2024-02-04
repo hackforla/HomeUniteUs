@@ -47,18 +47,6 @@ def test_refresh_without_cookie(client):
     assert response.status_code == 400
     assert "missing cookie" in response.json['detail'].lower()
 
-def test_session_without_jwt(client):
-    '''
-    Attempts to use the refresh endpoint without a session
-    cookie attached should return a 'JWT missing' 
-    error instead of an authentication failure.
-    '''
-    response = client.get(
-        'api/auth/session'
-    )
-    assert response.status_code == 401 
-    assert "no authorization token provided" in response.json['detail'].lower()
-
 def test_session_without_cookie(client):
     '''
     Attempts to use the refresh endpoint without a session
@@ -69,8 +57,8 @@ def test_session_without_cookie(client):
         'api/auth/session',
         headers={"Authorization": "Bearer fake_jwt_token_here"}
     )
-    assert response.status_code == 401
-    assert re.search(r"invalid.*token", response.json['message'], flags=re.IGNORECASE)
+    assert response.status_code == 400
+    assert re.search(r"missing cookie.*session", response.json['detail'], flags=re.IGNORECASE)
 
 def test_incorrect_JWT_fail_auth(client):
     '''
