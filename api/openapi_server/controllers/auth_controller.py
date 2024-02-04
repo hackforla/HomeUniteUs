@@ -201,6 +201,7 @@ def signin(body: dict):
 
     # set refresh token cookie
     session['refresh_token'] = refresh_token
+    session['username'] = user_data['Username']
 
     # return user data json
     return {
@@ -385,22 +386,21 @@ def current_session():
 
 
 def refresh():
-    # Get refresh token from cookie
     refreshToken = session.get('refresh_token')
-    if refreshToken is None:
+    username = session.get('username')
+    if None in (refreshToken, username):
         raise AuthError({
-            'code': 'invalid_request',
-            'message': 'Refresh token not found'
+            'code': 'session_expired',
+            'message': 'Session not found'
         }, 401)
 
-    # Refresh tokens
     try:
         response = current_app.boto_client.initiate_auth(
             ClientId=current_app.config['COGNITO_CLIENT_ID'],
             AuthFlow='REFRESH_TOKEN',
             AuthParameters={
                 'REFRESH_TOKEN': refreshToken,
-                'SECRET_HASH': current_app.config['COGNITO_CLIENT_SECRET']
+                'SECRET_HASH': current_app.calc_secret_hash(session.get("username"))
             }
         )
     except Exception as e:
