@@ -1,7 +1,9 @@
 import string
 import re
+import pytest
+from werkzeug.http import parse_cookie
 
-from tests.setup_utils import create_user
+from tests.setup_utils import create_user, create_and_signin_user
 
 def strip_punctuation(text):
     return text.translate(str.maketrans('', '', string.punctuation))
@@ -180,3 +182,46 @@ def test_basic_auth_flow(client):
     assert 'user' in response.json
     assert 'email' in response.json['user']
     assert response.json['user']['email'] == EMAIL
+
+def test_signin_returns_session_cookie(client):
+    '''
+    Test that the /signin endpoint returns a session cookie. 
+    The session cookie stores the refresh token.
+    '''
+    EMAIL = 'inbox928@placeholder.org'
+    PASSWORD = 'Fake4!@#$2589FFF'
+    create_user(client, EMAIL, PASSWORD)
+    response = client.post(
+        '/api/auth/signin',
+        json = {
+            'email': EMAIL,
+            'password': PASSWORD
+        }
+    )
+
+    assert response.status_code == 200, "Signin failed"
+    all_cookies = map(parse_cookie, response.headers.getlist("Set-Cookie"))
+    session_cookie_filter = filter(lambda cookie: "session" in cookie, all_cookies)
+    session_cookie = next(session_cookie_filter)
+    assert len(session_cookie["session"]) > 0, "Session cookie is empty" 
+    with pytest.raises(StopIteration):
+        # Only one session cookie should be available
+        next(session_cookie_filter)
+
+def test_refresh_endpoint(client):
+    '''
+    Test refreshing a JWT using the /refresh endpoint.
+    '''
+    EMAIL = 'inbox928@placeholder.org'
+    PASSWORD = 'Fake4!@#$2589FFF'
+    jwt = create_and_signin_user(client, EMAIL, PASSWORD)
+
+    # The test_client automatically attaches the session cookie to the request
+    # The session cookie stores the refresh token.
+    response = client.get(
+        'api/auth/refresh',
+    )
+
+    assert response.status_code == 200, f"refresh failed: {response.json}"
+    assert 'token' in response.json, 'refresh succeeded but token field missing from response'
+    # assert jwt != response.json['token'], 'refresh succeeded but returned the same jwt'
