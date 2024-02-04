@@ -214,7 +214,7 @@ def test_refresh_endpoint(client):
     '''
     EMAIL = 'inbox928@placeholder.org'
     PASSWORD = 'Fake4!@#$2589FFF'
-    jwt = create_and_signin_user(client, EMAIL, PASSWORD)
+    create_and_signin_user(client, EMAIL, PASSWORD)
 
     # The test_client automatically attaches the session cookie to the request
     # The session cookie stores the refresh token.
@@ -224,4 +224,21 @@ def test_refresh_endpoint(client):
 
     assert response.status_code == 200, f"refresh failed: {response.json}"
     assert 'token' in response.json, 'refresh succeeded but token field missing from response'
-    # assert jwt != response.json['token'], 'refresh succeeded but returned the same jwt'
+
+def test_session_endpoint(client):
+    '''
+    Test refreshing a JWT using the /session endpoint.
+    '''
+    EMAIL = 'inbox928@placeholder.org'
+    PASSWORD = 'Fake4!@#$2589FFF'
+    jwt = create_and_signin_user(client, EMAIL, PASSWORD)
+
+    # The test_client automatically attaches the session cookie to the request
+    # The session cookie stores the refresh token.
+    response = client.get(
+        'api/auth/session',
+        headers={"Authorization": f"Bearer {jwt}"}
+    )
+
+    assert response.status_code == 200, f"session failed: {response.json}"
+    assert 'token' in response.json, 'session succeeded but token field missing from response'
