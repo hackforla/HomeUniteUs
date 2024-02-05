@@ -62,11 +62,13 @@ export const initialValues = {
 };
 
 export const GuestApplicationContext = () => {
-  const TOTALPAGES = 10; /*Once all forms are made and added to "stepToRouteMapping", make this number change based on "stepToRouteMapping"*/
-  const storedStep = localStorage.getItem('currentStep');
-  const initialStep = storedStep ? parseInt(storedStep, 10) : 1;
-  const [step, setStep] = useState<number>(initialStep);
-  const progressBarValue = (step / TOTALPAGES) * 100;
+  const TOTAL_PAGES = 10; /*Once all forms are made and added to "stepToRouteMapping", make this number change based on "stepToRouteMapping"*/
+  const [step, setStep] = useState<number>(() => {
+    const storedStep = localStorage.getItem('currentStep');
+    const initialStep = storedStep ? parseInt(storedStep, 10) : 1;
+    return initialStep;
+  });
+  const progressBarValue = (step / TOTAL_PAGES) * 100;
   const navigate = useNavigate();
 
   useEffect(() => {
