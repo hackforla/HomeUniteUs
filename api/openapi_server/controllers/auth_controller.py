@@ -140,10 +140,7 @@ def signin(body: dict):
 
     # retrieve user data
     user_data = current_app.boto_client.get_user(AccessToken=access_token)
-
-    # create user object from user data
-    user = get_user_attr(user_data)
-
+    
     # set refresh token cookie
     session['refresh_token'] = refresh_token
     session['username'] = user_data['Username']
@@ -151,7 +148,9 @@ def signin(body: dict):
     # return user data json
     return {
         'token': access_token,
-        'user': user
+        'user': {
+            'email': body['email']
+        }
     }
 
 
