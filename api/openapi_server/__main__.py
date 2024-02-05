@@ -1,5 +1,5 @@
 from openapi_server.app import create_app
-from openapi_server.configs.mock_aws import AWSMockService, AWSTemporaryUserpool
+from openapi_server.configs.mock_aws import AWSMockService
 from openapi_server.configs.registry import HUUConfigRegistry
 
 if __name__ == "__main__":

@@ -59,15 +59,10 @@ def get_token_auth_header():
     token = parts[1]
     return token
 
-def signUpHost():  # noqa: E501
-    """Signup a new Host
-    """
-    if connexion.request.is_json:
-        body = connexion.request.get_json()
-
+def signUpHost(body: dict):
+    """Signup a new Host"""
     secret_hash = current_app.calc_secret_hash(body['email'])
 
-    # Signup user
     with DataAccessLayer.session() as session:
         user = User(email=body['email'])
         session.add(user)
@@ -114,59 +109,9 @@ def signUpHost():  # noqa: E501
         raise AuthError({"message": msg}, 500)
     
 
-def signUpCoordinator():  # noqa: E501
-    """Signup a new Coordinator
-    """
-    if connexion.request.is_json:
-        body = connexion.request.get_json()
-
-    secret_hash = current_app.calc_secret_hash(body['email'])
-
-    # Signup user
-    with DataAccessLayer.session() as session:
-        user = User(email=body['email'])
-        session.add(user)
-        try:
-            session.commit()
-        except IntegrityError:
-            session.rollback()
-            raise AuthError({
-                "message": "A user with this email already exists."
-            }, 422)
-
-    try:
-        response = current_app.boto_client.sign_up(
-          ClientId=current_app.config['COGNITO_CLIENT_ID'],
-          SecretHash=secret_hash,
-          Username=body['email'],
-          Password=body['password'],
-          ClientMetadata={
-              'url': current_app.root_url
-          }
-        )
-    
-        return response
-    
-    except botocore.exceptions.ClientError as error:
-        match error.response['Error']['Code']:
-            case 'UsernameExistsException': 
-                msg = "A user with this email already exists."
-                raise AuthError({  "message": msg }, 400)
-            case 'NotAuthorizedException':
-                msg = "User is already confirmed."
-                raise AuthError({  "message": msg }, 400)
-            case 'InvalidPasswordException':
-                msg = "Password did not conform with policy"
-                raise AuthError({  "message": msg }, 400)
-            case 'TooManyRequestsException':
-                msg = "Too many requests made. Please wait before trying again."
-                raise AuthError({  "message": msg }, 400)
-            case _:
-                msg = "An unexpected error occurred."
-                raise AuthError({  "message": msg }, 400)
-    except botocore.excepts.ParameterValidationError as error:
-        msg = f"The parameters you provided are incorrect: {error}"
-        raise AuthError({"message": msg}, 500)
+def signUpCoordinator(body: dict):  # noqa: E501
+    """Signup a new Coordinator"""
+    return signUpHost(body)
 
 def signin(body: dict):
     secret_hash = current_app.calc_secret_hash(body['email'])

@@ -72,15 +72,11 @@ def test_incorrect_JWT_fail_auth(client):
     assert response.status_code == 401
     assert re.search(r"invalid.*token", response.json['message'], flags=re.IGNORECASE)
 
-def test_signup_unconfirmed(client, is_mocking):
-    '''
-    Test that unconfirmed accounts cannot be used to login to the API.
-    Mocked users are automatically confirmed.
-    '''
+def _signup_unconfirmed(signup_endpoint, client, is_mocking):
     email = 'inbox928@placeholder.org'
     password = 'Fakepass%^&7!asdf'
     signup_response = client.post(
-        '/api/auth/signup/host',
+        signup_endpoint,
         json = {
             'email': email,
             'password': password
@@ -108,6 +104,22 @@ def test_signup_unconfirmed(client, is_mocking):
         assert signin_response.status_code == 401, (
             "When using the real AWS service signin should fail since user is unconfirmed. ")
         assert signin_response.json["Code"] == "UserNotConfirmedException"
+
+def test_signup_unconfirmed_host(client, is_mocking):
+    '''
+    Use the host signup endpoint to 
+    test that unconfirmed accounts cannot be used to login to the API.
+    Mocked users are automatically confirmed.
+    '''
+    _signup_unconfirmed('/api/auth/signup/host', client, is_mocking)
+
+def test_signup_unconfirmed_coordinator(client, is_mocking):
+    '''
+    Use the coordinator signup endpoint to 
+    test that unconfirmed accounts cannot be used to login to the API.
+    Mocked users are automatically confirmed.
+    '''
+    _signup_unconfirmed('/api/auth/signup/coordinator', client, is_mocking)
 
 def test_signup_confirmed(client):
     '''

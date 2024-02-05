@@ -5,6 +5,8 @@ import json
 from flask import request
 
 from openapi_server.exceptions import AuthError
+from openapi_server.controllers.admin_controller import removeUser
+from openapi_server.controllers.auth_controller import signUpHost
 
 class AWSTemporaryUserpool():
     '''
@@ -72,98 +74,6 @@ class AWSTemporaryUserpool():
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.destroy()
-
-from flask import (
-    request, 
-    current_app # type: openapi_server.app.HUUFlaskApp
-)
-from openapi_server.exceptions import AuthError
-from openapi_server.models.database import DataAccessLayer, User
-from sqlalchemy.exc import IntegrityError
-
-import connexion
-import botocore
-def signUpHost(body):  # noqa: E501
-    secret_hash = current_app.calc_secret_hash(body['email'])
-
-    # Signup user
-    with DataAccessLayer.session() as session:
-        user = User(email=body['email'])
-        session.add(user)
-        try:
-            session.commit()
-        except IntegrityError:
-            session.rollback()
-            raise AuthError({
-                "message": "A user with this email already exists."
-            }, 422)
-
-    try:
-        response = current_app.boto_client.sign_up(
-          ClientId=current_app.config['COGNITO_CLIENT_ID'],
-          SecretHash=secret_hash,
-          Username=body['email'],
-          Password=body['password'],
-          ClientMetadata={
-              'url': current_app.root_url
-          }
-        )
-
-        return response
-
-    except botocore.exceptions.ClientError as error:
-        match error.response['Error']['Code']:
-            case 'UsernameExistsException': 
-                msg = "A user with this email already exists."
-                raise AuthError({  "message": msg }, 400)
-            case 'NotAuthorizedException':
-                msg = "User is already confirmed."
-                raise AuthError({  "message": msg }, 400)
-            case 'InvalidPasswordException':
-                msg = "Password did not conform with policy"
-                raise AuthError({  "message": msg }, 400)
-            case 'TooManyRequestsException':
-                msg = "Too many requests made. Please wait before trying again."
-                raise AuthError({  "message": msg }, 400)
-            case _:
-                msg = "An unexpected error occurred."
-                raise AuthError({  "message": msg }, 400)
-    except botocore.excepts.ParameterValidationError as error:
-        msg = f"The parameters you provided are incorrect: {error}"
-        raise AuthError({"message": msg}, 500)
-    
-def removeUser(body: dict):
-    '''
-    Remove a user from the user pool
-    '''   
-    with DataAccessLayer.session() as session:
-        user = session.query(User).filter_by(email=body['email']).first()
-        if user:
-            session.delete(user)
-        try:
-            session.commit()
-        except IntegrityError:
-            session.rollback()
-            # Since we're deleting, an IntegrityError might indicate a different problem
-            # Adjust the error message accordingly
-            raise AuthError({
-                "message": "Could not delete the user due to a database integrity constraint."
-            }, 422)
-        
-    try:
-        response = current_app.boto_client.admin_delete_user(
-            UserPoolId=current_app.config['COGNITO_USER_POOL_ID'],
-            Username=body['email']
-        )
-        return response
-    except botocore.exceptions.ClientError as error:
-        match error.response['Error']['Code']:
-            case 'UserNotFoundException':
-                msg = "User not found. Could not delete user."
-                raise AuthError({"message": msg}, 400)
-            case _:
-                msg = error.response['Error']['Message']
-                raise AuthError({"message": msg}, 500)
 
 class AWSMockService():
     '''
