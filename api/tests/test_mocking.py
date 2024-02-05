@@ -3,8 +3,8 @@ import json
 import requests
 from pathlib import Path
 
-from openapi_server.configs.mock_aws import AWSTemporaryUserpool
-from tests.setup_utils import signup_user
+from openapi_server.configs.mock_aws import AWSTemporaryUserpool, AWSMockService
+from tests.setup_utils import signup_user, signin_user
 
 def get_user_pools(boto_client):
     """Helper function to count the number of user pools."""
@@ -197,3 +197,12 @@ def test_signup_confirmation(client, is_mocking):
     else:
         assert response.status_code == 401
         assert "invalid code" in response.json["message"].lower()
+
+def test_mock_config_includes_test_users(client, is_mocking):
+    '''
+    Test that the mock configuration includes test users.
+    '''
+    if not is_mocking:
+        pytest.skip("Test only applies to mock configurations")
+    for user in AWSMockService.TEST_USERS:
+        signin_user(client, user["email"], user["password"])

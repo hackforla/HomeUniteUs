@@ -4,6 +4,8 @@ import json
 
 from flask import request
 
+from openapi_server.exceptions import AuthError
+
 class AWSTemporaryUserpool():
     '''
     Provide a temporary user pool for development and testing purposes.
@@ -71,6 +73,98 @@ class AWSTemporaryUserpool():
     def __exit__(self, exc_type, exc_value, traceback):
         self.destroy()
 
+from flask import (
+    request, 
+    current_app # type: openapi_server.app.HUUFlaskApp
+)
+from openapi_server.exceptions import AuthError
+from openapi_server.models.database import DataAccessLayer, User
+from sqlalchemy.exc import IntegrityError
+
+import connexion
+import botocore
+def signUpHost(body):  # noqa: E501
+    secret_hash = current_app.calc_secret_hash(body['email'])
+
+    # Signup user
+    with DataAccessLayer.session() as session:
+        user = User(email=body['email'])
+        session.add(user)
+        try:
+            session.commit()
+        except IntegrityError:
+            session.rollback()
+            raise AuthError({
+                "message": "A user with this email already exists."
+            }, 422)
+
+    try:
+        response = current_app.boto_client.sign_up(
+          ClientId=current_app.config['COGNITO_CLIENT_ID'],
+          SecretHash=secret_hash,
+          Username=body['email'],
+          Password=body['password'],
+          ClientMetadata={
+              'url': current_app.root_url
+          }
+        )
+
+        return response
+
+    except botocore.exceptions.ClientError as error:
+        match error.response['Error']['Code']:
+            case 'UsernameExistsException': 
+                msg = "A user with this email already exists."
+                raise AuthError({  "message": msg }, 400)
+            case 'NotAuthorizedException':
+                msg = "User is already confirmed."
+                raise AuthError({  "message": msg }, 400)
+            case 'InvalidPasswordException':
+                msg = "Password did not conform with policy"
+                raise AuthError({  "message": msg }, 400)
+            case 'TooManyRequestsException':
+                msg = "Too many requests made. Please wait before trying again."
+                raise AuthError({  "message": msg }, 400)
+            case _:
+                msg = "An unexpected error occurred."
+                raise AuthError({  "message": msg }, 400)
+    except botocore.excepts.ParameterValidationError as error:
+        msg = f"The parameters you provided are incorrect: {error}"
+        raise AuthError({"message": msg}, 500)
+    
+def removeUser(body: dict):
+    '''
+    Remove a user from the user pool
+    '''   
+    with DataAccessLayer.session() as session:
+        user = session.query(User).filter_by(email=body['email']).first()
+        if user:
+            session.delete(user)
+        try:
+            session.commit()
+        except IntegrityError:
+            session.rollback()
+            # Since we're deleting, an IntegrityError might indicate a different problem
+            # Adjust the error message accordingly
+            raise AuthError({
+                "message": "Could not delete the user due to a database integrity constraint."
+            }, 422)
+        
+    try:
+        response = current_app.boto_client.admin_delete_user(
+            UserPoolId=current_app.config['COGNITO_USER_POOL_ID'],
+            Username=body['email']
+        )
+        return response
+    except botocore.exceptions.ClientError as error:
+        match error.response['Error']['Code']:
+            case 'UserNotFoundException':
+                msg = "User not found. Could not delete user."
+                raise AuthError({"message": msg}, 400)
+            case _:
+                msg = error.response['Error']['Message']
+                raise AuthError({"message": msg}, 500)
+
 class AWSMockService():
     '''
     Start and stop AWS Cognito mocking using moto.
@@ -79,17 +173,79 @@ class AWSMockService():
     mocked AWS Cognito requests will not persist outside of the context.
     '''
 
+    TEST_USERS = [
+        {
+            "email": "test@test.com",
+            "password": "Test!123"
+        },
+        {
+            "email": "testhost@test.com",
+            "password": "Test!123"
+        },
+        {
+            "email": "testcoordinator@test.com",
+            "password": "Test!123"
+        }
+    ]
+
     def __init__(self, flask_app):
         from moto import mock_cognitoidp
         self.userpool = AWSTemporaryUserpool(flask_app)
         self.mock_service = mock_cognitoidp()
         self.app = flask_app
-        self.app.after_request(self.auto_signup_user)
+        self.app.after_request(self.auto_signup_user_after_request)
+        self.app.before_request(self.create_test_users)
+        self.test_users_created = False
 
-    def auto_signup_user(self, response):
+    def create_test_users(self):
         '''
-        Automatically verify new users while using a temporary
-        user pool.
+        Create a set of test users before the first request is made.
+        '''
+        if self.test_users_created == True:
+            return
+        
+        for user in AWSMockService.TEST_USERS:
+            email = user["email"]
+
+            try:
+                removeUser({"email": email})
+            except AuthError:
+                # This error is expected if the local database
+                # Does not have the test user yet. We can ignore it.
+                pass
+
+            try:
+                signUpHost({
+                    "email": email,
+                    "password": user["password"]
+                })
+                self._auto_signup_user(email)
+                self.app.logger.info(f"Created test user: {email}")
+            except AuthError as e:
+                self.app.logger.warning(f"Failed to create test user: {email}: {e.error}")
+
+        self.test_users_created = True
+
+    def _auto_signup_user(self, email) -> bool:
+        '''
+        Auto-confirm a new user. Return True if successful and
+        false otherwise.
+        '''
+        confirm_response = self.app.boto_client.admin_confirm_sign_up(
+            UserPoolId=self.app.config["COGNITO_USER_POOL_ID"],
+            Username=email
+        )
+        if confirm_response['ResponseMetadata']['HTTPStatusCode'] == 200:
+            self.app.logger.info(f"Auto-confirmed new user: {email}")
+            return True
+        else:
+            self.app.logger.warning(f"Failed to auto-confirm new user: {email}")
+            return False
+
+    def auto_signup_user_after_request(self, response):
+        '''
+        Automatically verify new users by listening for signup 
+        requests and confirming the user if the signup was successful.
         '''
         # The alternative approaches are to use a lambda pre-signup 
         # trigger to automatically verify new users, or to include
@@ -98,18 +254,10 @@ class AWSMockService():
         # risks adding a bug to the production code.
         if ('signup' in request.endpoint.lower()) and 200 <= response.status_code < 300:
             email = request.json['email']
-            confirm_response = self.app.boto_client.admin_confirm_sign_up(
-                UserPoolId=self.app.config["COGNITO_USER_POOL_ID"],
-                Username=email
-            )
-            if confirm_response['ResponseMetadata']['HTTPStatusCode'] == 200:
+            if self._auto_signup_user(email):
                 new_response = response.get_json()
                 new_response['UserConfirmed'] = True
                 response.data = json.dumps(new_response)
-                self.app.logger.info(f"Auto-confirmed new user: {email}")
-            else:
-                self.app.logger.warning(f"Failed to auto-confirm new user: {email}")
-
         return response
 
     def start(self):

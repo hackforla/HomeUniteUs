@@ -47,12 +47,11 @@ def create_user(test_client, email: str, password: str) -> None:
     signup_user(app, email, password)
     confirm_user(app, email)
 
-def create_and_signin_user(test_client, email: str, password: str) -> (str, str):
+def signin_user(test_client, email: str, password: str) -> str:
     '''
-    Signup, confirm, and signin a new user. Return the JWT.
-    Fail the test if the signup, confirm, or signin operation fails.
+    Signin a user and return the JWT. Fail the test if the 
+    signin operation fails.
     '''
-    create_user(test_client, email, password)
     response = test_client.post(
         '/api/auth/signin',
         json = {
@@ -63,3 +62,11 @@ def create_and_signin_user(test_client, email: str, password: str) -> (str, str)
     assert response.status_code == 200, "Signin failed"
     assert "token" in response.json, "Signin succeeded but no token provided"
     return response.json['token']
+
+def create_and_signin_user(test_client, email: str, password: str) -> (str, str):
+    '''
+    Signup, confirm, and signin a new user. Return the JWT.
+    Fail the test if the signup, confirm, or signin operation fails.
+    '''
+    create_user(test_client, email, password)
+    return signin_user(test_client, email, password)
