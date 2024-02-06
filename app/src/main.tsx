@@ -39,6 +39,7 @@ import {
   CoordinatorDashboardLayout,
   GuestDashboardLayout,
 } from './components/layout';
+import {GuestApplicationContext} from './components/common/GuestApplicationContext';
 
 function HuuApp() {
   const [session] = useSessionMutation();
@@ -95,6 +96,10 @@ function HuuApp() {
           <Route path="contacts" element={<GuestContacts />} />
           <Route path="tasks" element={<GuestTasks />} />
           <Route path="settings" element={<GuestSettings />} />
+          <Route
+            path="application"
+            element={<GuestApplicationContext />}
+          ></Route>
         </Route>
         <Route
           path="/coordinator"
