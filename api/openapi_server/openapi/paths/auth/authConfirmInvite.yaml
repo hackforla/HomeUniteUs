@@ -1,0 +1,24 @@
+get:
+  description: Confirms user invite by signing them in using the link sent to their email
+  operationId: confirm_invite
+  parameters:
+    - name: email
+      in: query
+      schema:
+        type: string
+      required: true
+    - name: password
+      in: query
+      schema:
+        type: string
+      required: true
+  responses:
+    "200":
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ApiResponse"
+      description: successful operation
+  tags:
+    - auth
+  x-openapi-router-controller: openapi_server.controllers.auth_controller
