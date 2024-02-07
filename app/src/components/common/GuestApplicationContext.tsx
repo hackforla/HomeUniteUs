@@ -64,11 +64,13 @@ export const initialValues = {
 };
 
 export const GuestApplicationContext = () => {
-  const TOTALPAGES = 10; /*Once all forms are made and added to "stepToRouteMapping", make this number change based on "stepToRouteMapping"*/
-  const storedStep = localStorage.getItem('currentStep');
-  const initialStep = storedStep ? parseInt(storedStep, 10) : 1;
-  const [step, setStep] = useState<number>(initialStep);
-  const progressBarValue = (step / TOTALPAGES) * 100;
+  const TOTAL_PAGES = 10; /*Once all forms are made and added to "stepToRouteMapping", make this number change based on "stepToRouteMapping"*/
+  const [step, setStep] = useState<number>(() => {
+    const storedStep = localStorage.getItem('currentStep');
+    const initialStep = storedStep ? parseInt(storedStep, 10) : 1;
+    return initialStep;
+  });
+  const progressBarValue = (step / TOTAL_PAGES) * 100;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -77,6 +79,33 @@ export const GuestApplicationContext = () => {
   useEffect(() => {
     localStorage.setItem('currentStep', step.toString());
   }, [step]);
+  function saveData() {
+    //add logic to save current data
+    console.log('data saving features not implemented');
+  }
+  function nextStep() {
+    saveData();
+    const newStep = step + 1;
+    if (stepToRouteMapping[newStep] !== undefined) {
+      setStep(newStep);
+      navigate(stepToRouteMapping[newStep]);
+    } else {
+      alert('Form not complete!');
+    }
+  }
+  function prevStep() {
+    const newStep = step - 1;
+    if (step > 1) {
+      setStep(newStep);
+      navigate(stepToRouteMapping[newStep]);
+    } else {
+      navigate('/guest');
+    }
+  }
+  function saveAndExit() {
+    saveData();
+    navigate('/guest');
+  }
 
   return (
     <Formik
@@ -98,9 +127,9 @@ export const GuestApplicationContext = () => {
         </Stack>
         <Stack>
           <NavButtons
-            step={step}
-            setStep={setStep}
-            stepToRouteMapping={stepToRouteMapping}
+            next={nextStep}
+            prev={prevStep}
+            saveAndExit={saveAndExit}
           />
         </Stack>
       </Box>
