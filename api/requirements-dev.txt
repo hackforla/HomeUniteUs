@@ -50,7 +50,7 @@ connexion==2.14.2
     # via homeuniteus-api (pyproject.toml)
 coverage==7.3.0
     # via pytest-cov
-cryptography==41.0.7
+cryptography==42.0.0
     # via
     #   moto
     #   python-jose
