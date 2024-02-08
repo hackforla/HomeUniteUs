@@ -59,8 +59,7 @@ def get_token_auth_header():
     token = parts[1]
     return token
 
-def signUpHost(body: dict):
-    """Signup a new Host"""
+def sign_up(body: dict):
     secret_hash = current_app.calc_secret_hash(body['email'])
 
     with DataAccessLayer.session() as session:
@@ -108,10 +107,13 @@ def signUpHost(body: dict):
         msg = f"The parameters you provided are incorrect: {error}"
         raise AuthError({"message": msg}, 500)
     
+def signUpHost(body: dict):
+    """Signup a new Host"""
+    return sign_up(body)
 
 def signUpCoordinator(body: dict):  # noqa: E501
     """Signup a new Coordinator"""
-    return signUpHost(body)
+    return sign_up(body)
 
 def signin(body: dict):
     secret_hash = current_app.calc_secret_hash(body['email'])
