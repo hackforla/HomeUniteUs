@@ -1,10 +1,14 @@
 import os
 
 import pytest
+import secrets
 from pytest import MonkeyPatch
 
 from openapi_server.configs.staging import StagingHUUConfig
 from openapi_server.configs.development import DevelopmentHUUConfig
+from openapi_server.app import create_app
+from openapi_server.configs.mock_aws import AWSMockService, AWSTemporaryUserpool
+from openapi_server.models.database import DataAccessLayer
 
 def pytest_addoption(parser: pytest.Parser) -> None:
     '''
@@ -36,6 +40,7 @@ def pytest_configure(config: pytest.Config) -> None:
                 FLASK_DEBUG=True,
                 DATABASE_URL = 'sqlite:///:memory:'
             )
+            config.mock_aws = True
     elif mode == 'release':
         # Load configuration from the environment, to allow the use of 
         # secrets, and disable the mocking of any resources 
@@ -43,25 +48,52 @@ def pytest_configure(config: pytest.Config) -> None:
         dot_env = find_dotenv()
         if dot_env:
             load_dotenv(dot_env)
-        app_config = StagingHUUConfig(
-            TESTING=True,
-            FLASK_DEBUG=True,
-            DATABASE_URL = 'sqlite:///:memory:'
-        )
+        with MonkeyPatch().context() as m:
+            # The real userpool should never be used while testing
+            # Our test infrastructure will create temporary user
+            # pools for each test.
+            m.setenv("COGNITO_CLIENT_ID", "Totally fake client id")
+            m.setenv("COGNITO_CLIENT_SECRET", "Yet another fake secret12")
+            m.setenv("COGNITO_REDIRECT_URI", "Redirect your way back to writing more test cases")
+            m.setenv("COGNITO_USER_POOL_ID", "Water's warm. IDs are fake")
+            m.setenv("SECRET_KEY", secrets.token_urlsafe(32))
+            m.setenv("DATABASE_URL", "sqlite:///:memory:")
+            app_config = StagingHUUConfig(
+                TESTING=True,
+                FLASK_DEBUG=True
+            )
+        config.mock_aws = False
     else:
         raise KeyError(f"pytest application configuration mode {mode} not"
                    "recognized. Only debug and release modes supported.")
     
     config.app_config = app_config
 
-@pytest.fixture(scope='class')
-def pass_app_config(request):
-    '''
-    Attach the pytest configuration to the decorated class as a field. 
-    This fixutre is needed to pass pytest configurations to 
-    unittest.TestCase classes.
-    '''
-    setattr(request.cls, 'app_config', request.config.app_config)
+@pytest.fixture(scope="session")
+def app_config(request):
+    return request.config.app_config
+
+@pytest.fixture(scope="session")
+def is_mocking(pytestconfig):
+    return pytestconfig.mock_aws
+
+@pytest.fixture()
+def app(pytestconfig):
+    flask_app = create_app(pytestconfig.app_config).app
+
+    # Tests will never operate on real user data, so provide a 
+    # temporary userpool even if mocking is disabled
+    app_environment_cls = AWSMockService if pytestconfig.mock_aws else AWSTemporaryUserpool
+
+    with app_environment_cls(flask_app):
+        yield flask_app
+
+    test_engine, DataAccessLayer._engine = DataAccessLayer._engine, None
+    test_engine.dispose()
+
+@pytest.fixture()
+def client(app):
+    return app.test_client()
 
 @pytest.fixture
 def empty_environment(monkeypatch: MonkeyPatch) -> MonkeyPatch:
