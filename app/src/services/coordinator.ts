@@ -1,7 +1,8 @@
 import {api} from './api';
 
 export interface InviteGuestRequest {
-  fullName: string;
+  firstName: string;
+  lastName: string;
   email: string;
 }
 

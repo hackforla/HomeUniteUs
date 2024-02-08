@@ -12,7 +12,7 @@ export default defineConfig({
   },
   env: {
     USE_MOCK: true,
-    // If mocking is disabled, then you must pass in 
+    // If mocking is disabled, then you must pass in
     // the email and password as a system environment
     // using $env:CYPRESS_REAL_EMAIL and $env:CYPRESS_REAL_PASSWORD
     // If mocking is enabled, then this test account

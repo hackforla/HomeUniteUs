@@ -5,8 +5,9 @@ from werkzeug.http import parse_cookie
 
 from tests.setup_utils import create_user, create_and_signin_user
 
+
 def strip_punctuation(text):
-    return text.translate(str.maketrans('', '', string.punctuation))
+    return text.translate(str.maketrans("", "", string.punctuation))
 
 def test_signin_with_fake_credentials(client):
     response = client.post(
