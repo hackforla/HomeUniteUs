@@ -39,6 +39,7 @@ import {
   CoordinatorDashboardLayout,
   GuestDashboardLayout,
 } from './components/layout';
+import {GuestApplicationContext} from './components/common/GuestApplicationContext';
 
 function HuuApp() {
   const [session] = useSessionMutation();
@@ -51,12 +52,11 @@ function HuuApp() {
   return (
     <>
       <Routes>
-        <Route element={<AppLayout />}>
-          <Route path="/" element={<Home />} />
+        <Route path="/" element={<AppLayout />}>
+          <Route index element={<Home />} />
           <Route path="/hosts" element={<HostsList />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/signin" element={<SignIn />} />
-
           <Route path="/signup" element={<SelectAccountType />} />
           <Route path="/signup/:type" element={<SignUp />} />
           <Route path="/signup/success" element={<ConfirmSignUp />} />
@@ -79,9 +79,10 @@ function HuuApp() {
             path="/email-verification-error"
             element={<EmailVerificationError />}
           />
-          <Route path="/new-password" element={<NewPassword />} />
-          <Route index element={<CoordinatorDashboard />} />
+          <Route path="/create-password" element={<NewPassword />} />
         </Route>
+
+        {/* guest routes */}
         <Route
           path="/guest"
           element={
@@ -95,6 +96,10 @@ function HuuApp() {
           <Route path="contacts" element={<GuestContacts />} />
           <Route path="tasks" element={<GuestTasks />} />
           <Route path="settings" element={<GuestSettings />} />
+          <Route
+            path="application"
+            element={<GuestApplicationContext />}
+          ></Route>
         </Route>
         <Route
           path="/coordinator"

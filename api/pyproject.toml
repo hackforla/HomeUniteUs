@@ -123,11 +123,10 @@ dev = [
   # pytest-randomly will cause tests to be run in random order.
   "pytest-randomly==3.12.0",
 
-  # Flask-Testing is included to help test Flask specific parts of this project.
-  "Flask-Testing==0.8.1",
-
   # pip-tools provides the tools pip-compile and pip-sync to help manage requirements files
   "pip-tools",
+
+  "moto[cognitoidp]",
 ]
 
 # This defines the "prod" extra dependency group.

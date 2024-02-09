@@ -12,27 +12,28 @@ export const NewPassword = () => {
   const [errorMessage, setErrorMessage] = React.useState('');
 
   const [searchParams] = useSearchParams();
-  const session_id = searchParams.get('session_id');
-  const user_id = searchParams.get('user_id');
+  const session_id = searchParams.get('sessionId');
+  const user_id = searchParams.get('userId');
+  const errorParam = searchParams.get('error');
 
   const navigate = useNavigate();
-  const [newPassword] = useNewPasswordMutation();
+  const [newPassword, {isLoading}] = useNewPasswordMutation();
 
   const handleNewPassword = async ({
     password,
     confirmPassword,
-    user_id,
-    session_id,
+    userId,
+    sessionId,
   }: NewPasswordRequest) => {
     try {
       await newPassword({
         password,
         confirmPassword,
-        user_id,
-        session_id,
+        userId,
+        sessionId,
       }).unwrap();
 
-      navigate('/');
+      navigate('/guest');
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
         // you can access all properties of `FetchBaseQueryError` here
@@ -44,6 +45,16 @@ export const NewPassword = () => {
       }
     }
   };
+
+  if (errorParam) {
+    return (
+      <FormContainer>
+        <Alert sx={{width: '100%'}} severity="error">
+          {errorParam}
+        </Alert>
+      </FormContainer>
+    );
+  }
 
   return (
     <FormContainer>
@@ -75,10 +86,15 @@ export const NewPassword = () => {
         <Typography variant="h4" fontWeight="600">
           New Password
         </Typography>
+        <Typography color="text.secondary">
+          Welcome! Before we get started please create a new password for your
+          account.
+        </Typography>
         <NewPasswordForm
           onSubmit={handleNewPassword}
-          session_id={session_id}
-          user_id={user_id}
+          sessionId={session_id}
+          userId={user_id}
+          isLoading={isLoading}
         />
       </Stack>
     </FormContainer>
