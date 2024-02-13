@@ -19,5 +19,5 @@ export default defineConfig({
     // will be autocreated by the backend.
     REAL_EMAIL: 'test@test.com',
     REAL_PASSWORD: 'Test!123',
-  }
+  },
 });

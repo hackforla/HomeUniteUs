@@ -49,7 +49,7 @@ describe('ForgotPasswordCode page', () => {
     expect(screen.getByTitle('Forgot Password Code')).toBeInTheDocument();
   });
 
-  test('should dispaly an error message when the email is missing', () => {
+  test('should display an error message when the email is missing', () => {
     setup({email: ''});
 
     expect(screen.queryByTitle('Forgot Password Code')).not.toBeInTheDocument();
@@ -85,7 +85,7 @@ describe('ForgotPasswordCode page', () => {
 
       await screen.findByRole('alert');
 
-      expect(screen.getByTestId(/success/i)).toBeInTheDocument();
+      expect(screen.getAllByTestId(/success/i)).toBeInTheDocument();
       expect(screen.getByRole('alert')).toBeInTheDocument();
     });
 

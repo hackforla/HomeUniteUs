@@ -4,7 +4,7 @@ const injectedRtkApi = api.injectEndpoints({
     getHosts: build.query<GetHostsApiResponse, void>({
       query: () => ({url: `/host`}),
       providesTags: (result = []) => [
-        ...result.map(({id}) => ({type: 'Hosts', id} as const)),
+        ...result.map(({id}) => ({type: 'Hosts', id}) as const),
         {type: 'Hosts' as const, id: 'LIST'},
       ],
     }),

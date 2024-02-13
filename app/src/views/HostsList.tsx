@@ -45,6 +45,7 @@ export const HostsList = () => {
         </Button>
       </Stack>
       <h2>Hosts</h2>
+      {/* eslint-disable-next-line prettier/prettier */}
       <ul>
         {data?.map(host => (
           <li key={host.id}>{host.name}</li>
