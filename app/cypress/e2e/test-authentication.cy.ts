@@ -174,12 +174,8 @@ describe('Authentication', () => {
     cy.getCookie('session').should('not.exist');
 
     cy.visit('/signin');
-    // Expect 401 since we don't have a JWT
-    cy.wait('@session').its('response.statusCode').should('eq', 401);
-    // Expect 400 since the refresh cookie is a required
-    // request parameter
-    cy.wait('@refresh').its('response.statusCode').should('eq', 400);
-
+    // Expect 400 since we don't have a session cookie
+    cy.wait('@session').its('response.statusCode').should('eq', 400);
     cy.findByRole('textbox', {name: /email/i}).type(this.email);
     cy.get('#password').type(this.password);
     cy.contains('button', 'Sign in').click();
