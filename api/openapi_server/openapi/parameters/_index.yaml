@@ -8,3 +8,10 @@ ProviderId:
     type: integer
     format: int64
   style: simple
+SessionCookie:
+      in: cookie
+      name: session
+      schema:
+        type: string
+      required: true
+      description: Session ID provided in a session cookie.

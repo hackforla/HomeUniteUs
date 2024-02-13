@@ -1,7 +1,7 @@
 import {BrowserRouter} from 'react-router-dom';
 import {describe, vi} from 'vitest';
-import {fireEvent, render, screen} from '../../utils/test/test-utils';
-import {SignInForm} from '../authentication/SignInForm';
+import {fireEvent, render, screen} from '../../../utils/test/test-utils';
+import {SignInForm} from '../SignInForm';
 
 const prepare = () => {
   const onSubmit = vi.fn();
