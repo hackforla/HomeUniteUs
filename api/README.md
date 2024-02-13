@@ -189,57 +189,9 @@ docker exec $api_container_id pytest
 docker exec `docker ps -qf "ancestor=homeuniteus-api"` pytest
 ```
 
-### Configuration Profile
-
-For local development, you can create your own set of configurations by doing the following:
-
-- Add the variable below to your `.env` located in `/api`.
-
-```
-CONFIG_PROFILE="personal"
-```
-
-- Create the file `personal.py` at `/api/configs` with the following,
-
-```
-from configs.configs import Config
-class PersonalConfig(Config):
-    # Example config to override HOST
-    HOST = 8082
-```
-
-To reference configs in other modules you can do the following if it doesn't exist already,
-
-```
-from flask import current_app
-current_app.config['CONFIG']
-```
-
-If you create any new configuration properties, please add an associative enum to `/api/configs/configuration_properties.py`.
-
 ### Debugging
 
 Debugging is enabled when using the `development` configuration. It can also be enabled on the `staging` configuration by setting the `FLASK_DEBUG` environment variable to `True`, or adding a `FLASK_DEBUG=True` to your local `.env` file. When debugging is enabled, the API server will automatically reload each time you save a change to the source code.
-
-For Visual Studio Code users:
-
-- Set breakpoint(s).
-- Add the following config below to `api/openapi_server/.vscode/launch.json` and replace "absolute path to folder" accordingly.
-
-```json
-{
-  "name": "Openapi_server module",
-  "type": "python",
-  "request": "launch",
-  "module": "openapi_server",
-  "justMyCode": false,
-  "cwd": "${workspaceFolder}/api"
-}
-```
-
-- Go to `openapi_server/__main__.py` and select "Run" -> "Start with Debugging".
-
-With this configuration selecting "Run" -> "Start with Debugging" will start the API with the debugger enabled.
 
 ## Usage - Production
 
