@@ -40,8 +40,8 @@ export interface SignInRequest {
 export interface NewPasswordRequest {
   password: string;
   confirmPassword: string;
-  user_id: string | null;
-  session_id: string | null;
+  userId: string | null;
+  sessionId: string | null;
 }
 
 export interface SignOutResponse {
@@ -146,7 +146,7 @@ const authApi = api.injectEndpoints({
     }),
     newPassword: build.mutation<void, NewPasswordRequest>({
       query: credentials => ({
-        url: 'auth/initial_invite',
+        url: 'auth/initialInvite',
         method: 'POST',
         withCredentials: true,
         body: credentials,
