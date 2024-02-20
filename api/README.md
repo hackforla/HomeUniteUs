@@ -194,7 +194,7 @@ docker exec `docker ps -qf "ancestor=homeuniteus-api"` pytest
 Debugging is enabled when using the `development` configuration. It can also be enabled on the `staging` configuration by setting the `FLASK_DEBUG` environment variable to `True`, or adding a `FLASK_DEBUG=True` to your local `.env` file. When debugging is enabled, the API server will automatically reload each time you save a change to the source code.
 
 ## Usage - Production
-
+ 
 A WSGI server is needed to run our application. A WSGI (Web Server Gateway Interface) server is a bridge between a web server and web applications. The server handles requests, invokes the web application, translates responses back to HTTP, and also manages concurrency to ensure the server can handle multiple requests simultaneously.
 
 While Flask does provide a built-in development server, it is not intended for production use. Therefore, we utilize a third-party, production-grade WSGI server to manage our application. Various options exist, but we've chosen `gunicorn`. `gunicorn` does not support Windows, but you can use another WSGI server like `waitress` if Windows support is needed.
