@@ -18,6 +18,8 @@ interface SignUpFormProps {
   onSubmit: ({
     email,
     password,
+    firstName,
+    lastName,
   }: SignUpHostRequest | SignUpCoordinatorRequest) => Promise<void>;
   type: string;
   getTokenIsLoading: boolean;
@@ -53,8 +55,6 @@ export const SignUpForm = ({
       onSubmit(values);
     },
   });
-  console.log(errors);
-
   // Add the user type field to Formik data and send it to the server in the form of a string (?). This will require updates to the types and data fetching hooks, as well as the OpenAPI spec for the signup route.
 
   return (
