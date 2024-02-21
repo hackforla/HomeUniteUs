@@ -10,7 +10,7 @@ import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
 import {SignUpHostRequest, SignUpCoordinatorRequest} from '../../services/auth';
 import {PasswordValidation} from '../common/PasswordValidation';
-import {validationSchema} from '../../utils/PasswordValidationSchema';
+import {signUpVaildationSchema} from '../../utils/PasswordValidationSchema';
 import {PasswordField} from './PasswordField';
 
 interface SignUpFormProps {
@@ -48,11 +48,12 @@ export const SignUpForm = ({
       email: '',
       password: '',
     },
-    validationSchema: validationSchema,
+    validationSchema: signUpVaildationSchema,
     onSubmit: values => {
       onSubmit(values);
     },
   });
+  console.log(errors);
 
   // Add the user type field to Formik data and send it to the server in the form of a string (?). This will require updates to the types and data fetching hooks, as well as the OpenAPI spec for the signup route.
 
