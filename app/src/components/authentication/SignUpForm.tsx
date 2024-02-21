@@ -13,7 +13,7 @@ import {PasswordValidation} from '../common/PasswordValidation';
 import {signUpVaildationSchema} from '../../utils/PasswordValidationSchema';
 import {PasswordField} from './PasswordField';
 
-interface SignUpFormProps {
+export interface SignUpFormProps {
   // sign up according to host/coordinator
   onSubmit: ({
     email,
