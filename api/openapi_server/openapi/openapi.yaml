@@ -47,6 +47,8 @@ paths:
     $ref: "./paths/auth/authInitialInvite.yaml"
   /auth/invite:
     $ref: "./paths/auth/authInvite.yaml"
+  /auth/confirmInvite:
+    $ref: "./paths/auth/authConfirmInvite.yaml"
 components:
   securitySchemes:
     jwt:

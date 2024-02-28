@@ -74,7 +74,7 @@ export const PasswordValidation = ({
           {confirmPassword !== password && errors.length > 0 ? (
             <RemoveRoundedIcon />
           ) : null}
-          match
+          Passwords must match
         </ListItem>
       ) : null}
     </List>

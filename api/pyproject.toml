@@ -80,19 +80,13 @@ dependencies = [
     # connexion implements routing, validation, security, and parameter passing based on the
     # OpenAPI specification that is defined in the `openapi_server/openapi` directory.
     # The extra dependency swagger-ui causes the swagger UI to be available at /api/ui.
-    "connexion [swagger-ui]==2.13.1",
+    "connexion [swagger-ui]==2.14.2",
 
     # psycopg2 allows SQLAlchemy to communicate with PostgreSQL
     "psycopg2-binary==2.9.5",
 
     # python-dotenv allows the API to pull in external configuration from a .env file
     "python-dotenv==0.20.0",
-
-    # SQLAlchemy is a SQL toolkit that this project uses for its
-    # Object Relational Mapper (ORM) capabilities. Although alembic would have
-    # included the latest version of SQLAlchemy as a transitive dependency, it is version
-    # pinned here because this project is built for this version not the latest 2.0 series.
-    "SQLAlchemy==1.4.36",
 
     # The version of connexion that is in use does not parse multi-file OpenAPI
     # definitions like the ones found in the openapi directory. However, with the
@@ -121,7 +115,7 @@ dev = [
   "tox==4.6.4",
 
   # pytest runs the tests implemented in this project.
-  "pytest==7.3.1",
+  "pytest==7.4.2",
 
   # pytest-cov will report the amount of test coverage implemented.
   "pytest-cov==4.0.0",
@@ -129,11 +123,10 @@ dev = [
   # pytest-randomly will cause tests to be run in random order.
   "pytest-randomly==3.12.0",
 
-  # Flask-Testing is included to help test Flask specific parts of this project.
-  "Flask-Testing==0.8.1",
-
   # pip-tools provides the tools pip-compile and pip-sync to help manage requirements files
   "pip-tools",
+
+  "moto[cognitoidp]",
 ]
 
 # This defines the "prod" extra dependency group.
@@ -151,6 +144,7 @@ prod = [
 "Bug Tracker" = "https://github.com/hackforla/HomeUniteUs/issues"
 
 [tool.setuptools.packages.find]
+exclude = ["tests*"]
 # The find packages tool looks for import packages and modules to include in an installation.
 # The `where` parameter tells the tool where to start looking for them.
 # Since this project is using a flat-layout structure with multiple top-level packages,

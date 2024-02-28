@@ -16,8 +16,9 @@ const navItems = [
   },
   {title: 'My Contacts', icon: <ContactsOutlined />, href: '/guest/contacts'},
   {title: 'Settings', icon: <SettingsOutlined />, href: '/guest/settings'},
+  {title: 'Application', icon: <TaskOutlined />, href: '/guest/application'},
 ];
 
-export const GuestDashboardlayout = () => {
+export const GuestDashboardLayout = () => {
   return <DashboardLayout navItems={navItems} />;
 };

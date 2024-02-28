@@ -40,8 +40,8 @@ export interface SignInRequest {
 export interface NewPasswordRequest {
   password: string;
   confirmPassword: string;
-  user_id: string | null;
-  session_id: string | null;
+  userId: string | null;
+  sessionId: string | null;
 }
 
 export interface SignOutResponse {
@@ -88,9 +88,6 @@ const authApi = api.injectEndpoints({
       query: credentials => ({
         url: '/auth/signup/host',
         method: 'POST',
-        headers: {
-          'Access-Control-Allow-Origin': 'http://localhost:4040',
-        },
         withCredentials: true,
         body: credentials,
       }),
@@ -100,9 +97,6 @@ const authApi = api.injectEndpoints({
       query: credentials => ({
         url: '/auth/signup/coordinator',
         method: 'POST',
-        headers: {
-          'Access-Control-Allow-Origin': 'http://localhost:4040',
-        },
         withCredentials: true,
         body: credentials,
       }),
@@ -111,9 +105,6 @@ const authApi = api.injectEndpoints({
       query: credentials => ({
         url: 'auth/signin',
         method: 'POST',
-        headers: {
-          'Access-Control-Allow-Origin': 'http://localhost:4040',
-        },
         withCredentials: true,
         body: credentials,
       }),
@@ -133,9 +124,6 @@ const authApi = api.injectEndpoints({
       query: credentials => ({
         url: 'auth/verify',
         method: 'POST',
-        headers: {
-          'Access-Control-Allow-Origin': 'http://localhost:4040',
-        },
         withCredentials: true,
         body: credentials,
       }),
@@ -158,7 +146,7 @@ const authApi = api.injectEndpoints({
     }),
     newPassword: build.mutation<void, NewPasswordRequest>({
       query: credentials => ({
-        url: 'auth/initial_invite',
+        url: 'auth/initialInvite',
         method: 'POST',
         withCredentials: true,
         body: credentials,
@@ -174,9 +162,6 @@ const authApi = api.injectEndpoints({
       query: () => ({
         url: 'auth/private',
         method: 'GET',
-        headers: {
-          'Access-Control-Allow-Origin': 'http://localhost:4040',
-        },
         withCredentials: true,
       }),
     }),
@@ -184,9 +169,6 @@ const authApi = api.injectEndpoints({
       query: () => ({
         url: 'auth/session',
         method: 'GET',
-        headers: {
-          'Access-Control-Allow-Origin': 'http://localhost:4040',
-        },
         withCredentials: true,
       }),
     }),
@@ -194,9 +176,6 @@ const authApi = api.injectEndpoints({
       query: () => ({
         url: 'auth/user',
         method: 'GET',
-        headers: {
-          'Access-Control-Allow-Origin': 'http://localhost:4040',
-        },
         withCredentials: true,
       }),
     }),
@@ -207,9 +186,6 @@ const authApi = api.injectEndpoints({
       query: body => ({
         url: 'auth/resend_confirmation_code',
         method: 'POST',
-        headers: {
-          'Access-Control-Allow-Origin': 'http://localhost:4040',
-        },
         body,
         withCredentials: true,
       }),
