@@ -3,7 +3,3 @@ data
 **/.db
 .DS_Store
 .vscode
-docker-compose.yml
-api/openapi_server/configs/development.py
-api/openapi_server/configs/staging.py
-app/vite.config.ts
