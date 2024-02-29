@@ -9,7 +9,20 @@ export const BasicInfo = () => {
     values: {fullName, dateOfBirth, gender},
     handleChange,
     handleBlur,
+    errors,
+    touched,
+    validateForm,
+    setFieldTouched,
   } = useFormikContext<formInputValues>();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formErrors = await validateForm();
+    if (formErrors.fullName) {
+      setFieldTouched('fullName', true);
+      return;
+    }
+  };
 
   const genders = [
     'Woman',
@@ -33,6 +46,7 @@ export const BasicInfo = () => {
           title="Basic Info Page"
           sx={{width: '100%', alignItems: 'flex-start'}}
           spacing={4}
+          onSubmit={handleSubmit}
         >
           <TextField
             fullWidth
@@ -47,6 +61,8 @@ export const BasicInfo = () => {
             InputLabelProps={{
               shrink: true,
             }}
+            error={touched.fullName && Boolean(errors.fullName)}
+            helperText={touched.fullName && errors.fullName}
           />
 
           <TextField
@@ -62,6 +78,8 @@ export const BasicInfo = () => {
             InputLabelProps={{
               shrink: true,
             }}
+            error={touched.dateOfBirth && Boolean(errors.dateOfBirth)}
+            helperText={touched.dateOfBirth && errors.dateOfBirth}
           />
 
           <TextField
@@ -69,7 +87,7 @@ export const BasicInfo = () => {
             label="Gender Identity"
             value={gender}
             name="gender"
-            id="outlined-select-currency"
+            id="gender"
             defaultValue="Select"
             select
             onChange={handleChange}
@@ -77,6 +95,8 @@ export const BasicInfo = () => {
             InputLabelProps={{
               shrink: true,
             }}
+            error={touched.gender && Boolean(errors.gender)}
+            helperText={touched.gender && errors.gender}
           >
             {genders.map(option => (
               <MenuItem key={option} value={option}>

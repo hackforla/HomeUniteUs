@@ -36,6 +36,7 @@ export const stepToRouteMapping: {[key: number]: string} = {
   1: 'welcome',
   2: 'expectations',
   3: 'basic',
+  4: 'contact',
 };
 export const initialValues = {
   fullName: '',
@@ -70,6 +71,7 @@ export const GuestApplicationContext = () => {
     const initialStep = storedStep ? parseInt(storedStep, 10) : 1;
     return initialStep;
   });
+
   const progressBarValue = (step / TOTAL_PAGES) * 100;
   const navigate = useNavigate();
 
