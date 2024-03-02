@@ -2,7 +2,6 @@ import {Box, Stack} from '@mui/material';
 import {Formik} from 'formik';
 import {useEffect, useState} from 'react';
 import {Outlet} from 'react-router-dom';
-import ProgressBar from './ProgressBar';
 import {GuestApplicationSchema} from '../../utils/GuestApplicationSchema';
 import {NavButtons} from './GuestApplicationButtons';
 import {useNavigate} from 'react-router-dom';
@@ -62,13 +61,11 @@ export const initialValues = {
 };
 
 export const GuestApplicationContext = () => {
-  const TOTAL_PAGES = 10; /*Once all forms are made and added to "stepToRouteMapping", make this number change based on "stepToRouteMapping"*/
   const [step, setStep] = useState<number>(() => {
     const storedStep = localStorage.getItem('currentStep');
     const initialStep = storedStep ? parseInt(storedStep, 10) : 1;
     return initialStep;
   });
-  const progressBarValue = (step / TOTAL_PAGES) * 100;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -112,9 +109,6 @@ export const GuestApplicationContext = () => {
       validationSchema={GuestApplicationSchema[step - 1]}
     >
       <Box padding={2} gap={0} height={'95vh'}>
-        <Stack>
-          <ProgressBar progressBarValue={progressBarValue} />
-        </Stack>
         <Stack
           marginTop={2}
           overflow={'scroll'}
