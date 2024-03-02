@@ -32,7 +32,9 @@ export interface formInputValues {
   potentialChallenges: string;
 }
 export const stepToRouteMapping: {[key: number]: string} = {
-  1: '',
+  0: 'welcome',
+  1: 'expectations',
+  2: 'basic',
 };
 export const initialValues = {
   fullName: '',
@@ -61,19 +63,12 @@ export const initialValues = {
 };
 
 export const GuestApplicationContext = () => {
-  const [step, setStep] = useState<number>(() => {
-    const storedStep = localStorage.getItem('currentStep');
-    const initialStep = storedStep ? parseInt(storedStep, 10) : 1;
-    return initialStep;
-  });
+  const [step, setStep] = useState<number>(0);
   const navigate = useNavigate();
 
   useEffect(() => {
     navigate(stepToRouteMapping[step]);
   }, []);
-  useEffect(() => {
-    localStorage.setItem('currentStep', step.toString());
-  }, [step]);
   function saveData() {
     //add logic to save current data
     console.log('data saving features not implemented');
@@ -106,7 +101,7 @@ export const GuestApplicationContext = () => {
     <Formik
       initialValues={initialValues}
       onSubmit={() => console.log('Parent wrapper submit')}
-      validationSchema={GuestApplicationSchema[step - 1]}
+      validationSchema={GuestApplicationSchema[step]}
     >
       <Box padding={2} gap={0} height={'95vh'}>
         <Stack
