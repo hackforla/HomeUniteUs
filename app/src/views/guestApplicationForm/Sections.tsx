@@ -1,6 +1,6 @@
-import {Box, Stack, Typography} from '@mui/material';
+import {Stack, Typography} from '@mui/material';
 import {FormContainer} from '../../components/authentication/FormContainer';
-import {CircleOutlined} from '@mui/icons-material';
+import {SectionBox} from '../../components/common/SectionBox';
 
 export const Sections = () => {
   return (
@@ -22,22 +22,11 @@ export const Sections = () => {
           </Typography>
         </Stack>
         <Stack sx={{display: 'flex', gap: 1}}>
-          <Box
-            sx={{
-              borderRadius: 2,
-              backgroundColor: 'white',
-              height: 56,
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              paddingInline: 3,
-            }}
-          >
-            <Typography sx={{fontSize: 16, fontWeight: 'medium'}}>
-              Basic Information
-            </Typography>
-            <CircleOutlined color="action" />
-          </Box>
+          <SectionBox
+            complete={true}
+            innerText={'Basic Information'}
+            route={'basic'}
+          />
         </Stack>
       </Stack>
     </FormContainer>
