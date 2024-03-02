@@ -1,5 +1,5 @@
 import {Stack, Typography} from '@mui/material';
-import {FormContainer} from 'src/components/authentication';
+import {FormContainer} from '../../components/authentication/FormContainer';
 
 export const Sections = () => {
   return (
@@ -8,10 +8,15 @@ export const Sections = () => {
         spacing={4}
         sx={{justifyContent: 'center', alignItems: 'center', width: '100%'}}
       >
-        <Stack sx={{justifyContent: 'space-between'}}>
-          <Typography variant="h4">Sections</Typography>
-          <Typography variant="h6">0 of 11</Typography>
-        </Stack>
+        <Typography variant="h4" sx={{fontWeight: 'bold'}}>
+          Profile Sections
+        </Typography>
+        <Stack
+          component="form"
+          title="Sections Page"
+          sx={{width: '100%', alignItems: 'flex-start'}}
+          spacing={4}
+        ></Stack>
       </Stack>
     </FormContainer>
   );

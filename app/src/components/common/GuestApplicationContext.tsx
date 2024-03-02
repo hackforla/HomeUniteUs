@@ -1,4 +1,4 @@
-import {Box, Stack} from '@mui/material';
+import {Box, Stack, useTheme} from '@mui/material';
 import {Formik} from 'formik';
 import {useEffect, useState} from 'react';
 import {Outlet} from 'react-router-dom';
@@ -32,9 +32,10 @@ export interface formInputValues {
   potentialChallenges: string;
 }
 export const stepToRouteMapping: {[key: number]: string} = {
-  0: 'welcome',
-  1: 'expectations',
-  2: 'basic',
+  0: 'sections',
+  1: 'welcome',
+  2: 'expectations',
+  3: 'basic',
 };
 export const initialValues = {
   fullName: '',
@@ -65,6 +66,7 @@ export const initialValues = {
 export const GuestApplicationContext = () => {
   const [step, setStep] = useState<number>(0);
   const navigate = useNavigate();
+  const theme = useTheme();
 
   useEffect(() => {
     navigate(stepToRouteMapping[step]);
@@ -103,7 +105,12 @@ export const GuestApplicationContext = () => {
       onSubmit={() => console.log('Parent wrapper submit')}
       validationSchema={GuestApplicationSchema[step]}
     >
-      <Box padding={2} gap={0} height={'95vh'}>
+      <Box
+        padding={2}
+        gap={0}
+        height={'95vh'}
+        sx={{backgroundColor: theme.palette.grey[50]}}
+      >
         <Stack
           marginTop={2}
           overflow={'scroll'}
