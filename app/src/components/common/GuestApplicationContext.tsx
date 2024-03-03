@@ -5,6 +5,7 @@ import {Outlet} from 'react-router-dom';
 import {GuestApplicationSchema} from '../../utils/GuestApplicationSchema';
 import {NavButtons} from './GuestApplicationButtons';
 import {useNavigate} from 'react-router-dom';
+import {Sections} from '../../views/guestApplicationForm/Sections';
 
 export interface formInputValues {
   fullName: string;
@@ -65,6 +66,7 @@ export const initialValues = {
 
 export const GuestApplicationContext = () => {
   const [step, setStep] = useState<number>(0);
+  const [showSections, setShowSections] = useState<boolean>(false);
   const navigate = useNavigate();
   const theme = useTheme();
 
@@ -94,9 +96,9 @@ export const GuestApplicationContext = () => {
       navigate('/guest');
     }
   }
-  function saveAndExit() {
-    saveData();
-    navigate('/guest');
+  function openSections() {
+    setShowSections(true);
+    console.log('Open sections');
   }
 
   return (
@@ -123,9 +125,24 @@ export const GuestApplicationContext = () => {
           <NavButtons
             next={nextStep}
             prev={prevStep}
-            saveAndExit={saveAndExit}
+            openSections={openSections}
           />
         </Stack>
+        {showSections && (
+          <Stack
+            sx={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundColor: theme.palette.grey[50], // Adjust the overlay background color and opacity
+              zIndex: 1000,
+            }}
+          >
+            <Sections />
+          </Stack>
+        )}
       </Box>
     </Formik>
   );
