@@ -24,6 +24,51 @@ const appSections: section[] = [
     innerText: 'Basic Information',
     route: '/basic',
   },
+  {
+    complete: false,
+    innerText: 'Other Guests/Pets',
+    route: '/basic',
+  },
+  {
+    complete: false,
+    innerText: 'Employment Information',
+    route: '/basic',
+  },
+  {
+    complete: false,
+    innerText: 'Education',
+    route: '/basic',
+  },
+  {
+    complete: false,
+    innerText: 'Language Proficiency',
+    route: '/basic',
+  },
+  {
+    complete: false,
+    innerText: 'Substance Use',
+    route: '/basic',
+  },
+  {
+    complete: false,
+    innerText: 'Mental Health',
+    route: '/basic',
+  },
+  {
+    complete: false,
+    innerText: 'Interest in Being a Guest',
+    route: '/basic',
+  },
+  {
+    complete: false,
+    innerText: 'About You',
+    route: '/basic',
+  },
+  {
+    complete: false,
+    innerText: 'Review',
+    route: '/basic',
+  },
 ];
 
 export const Sections = () => {

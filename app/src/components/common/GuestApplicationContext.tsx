@@ -33,10 +33,18 @@ export interface formInputValues {
   potentialChallenges: string;
 }
 export const stepToRouteMapping: {[key: number]: string} = {
-  0: 'sections',
-  1: 'welcome',
-  2: 'expectations',
-  3: 'basic',
+  0: 'welcome',
+  1: 'expectations',
+  2: 'basic',
+  3: 'guestAndPets',
+  4: 'employment',
+  5: 'education',
+  6: 'language',
+  7: 'substanceUse',
+  8: 'mentalHealth',
+  9: 'interests',
+  10: 'about',
+  11: 'review',
 };
 export const initialValues = {
   fullName: '',

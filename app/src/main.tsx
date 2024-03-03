@@ -40,6 +40,10 @@ import {
   GuestDashboardLayout,
 } from './components/layout';
 import {GuestApplicationContext} from './components/common/GuestApplicationContext';
+import {Welcome} from './views/guestApplicationForm/Welcome';
+import {Expectations} from './views/guestApplicationForm/Expectations';
+import {BasicInfo} from './views/guestApplicationForm/BasicInfo';
+import {Sections} from './views/guestApplicationForm/Sections';
 
 function HuuApp() {
   const [session] = useSessionMutation();
@@ -96,10 +100,21 @@ function HuuApp() {
           <Route path="contacts" element={<GuestContacts />} />
           <Route path="tasks" element={<GuestTasks />} />
           <Route path="settings" element={<GuestSettings />} />
-          <Route
-            path="application"
-            element={<GuestApplicationContext />}
-          ></Route>
+          <Route path="application" element={<GuestApplicationContext />}>
+            <Route path="sections" element={<Sections />} />
+            <Route path="welcome" element={<Welcome />} />
+            <Route path="expectations" element={<Expectations />} />
+            <Route path="basic" element={<BasicInfo />} />
+            <Route path="guestAndPets" element={<BasicInfo />} />
+            <Route path="employment" element={<BasicInfo />} />
+            <Route path="education" element={<BasicInfo />} />
+            <Route path="language" element={<BasicInfo />} />
+            <Route path="substanceUse" element={<BasicInfo />} />
+            <Route path="mentalHealth" element={<BasicInfo />} />
+            <Route path="interests" element={<BasicInfo />} />
+            <Route path="about" element={<BasicInfo />} />
+            <Route path="review" element={<BasicInfo />} />
+          </Route>
         </Route>
         <Route
           path="/coordinator"
