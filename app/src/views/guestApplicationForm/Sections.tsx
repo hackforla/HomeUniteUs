@@ -2,6 +2,30 @@ import {Stack, Typography} from '@mui/material';
 import {FormContainer} from '../../components/authentication/FormContainer';
 import {SectionBox} from '../../components/common/SectionBox';
 
+export interface section {
+  complete: boolean;
+  innerText: string;
+  route: string;
+}
+
+const appSections: section[] = [
+  {
+    complete: false,
+    innerText: 'Welcome',
+    route: '/welcome',
+  },
+  {
+    complete: true,
+    innerText: 'Guest Minimum expectations',
+    route: '/expectations',
+  },
+  {
+    complete: false,
+    innerText: 'Basic Information',
+    route: '/basic',
+  },
+];
+
 export const Sections = () => {
   return (
     <FormContainer>
@@ -22,11 +46,16 @@ export const Sections = () => {
           </Typography>
         </Stack>
         <Stack sx={{display: 'flex', gap: 1}}>
-          <SectionBox
-            complete={true}
-            innerText={'Basic Information'}
-            route={'basic'}
-          />
+          {appSections.map(({complete, innerText, route}, index) => {
+            return (
+              <SectionBox
+                key={index} // change to route possibly?
+                complete={complete}
+                innerText={innerText}
+                route={route}
+              />
+            );
+          })}
         </Stack>
       </Stack>
     </FormContainer>
