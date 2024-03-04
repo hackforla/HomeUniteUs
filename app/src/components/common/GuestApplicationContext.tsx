@@ -32,20 +32,6 @@ export interface formInputValues {
   hostRelationshipGoal: string;
   potentialChallenges: string;
 }
-export const stepToRouteMapping: {[key: number]: string} = {
-  0: 'welcome',
-  1: 'expectations',
-  2: 'basic',
-  3: 'guestAndPets',
-  4: 'employment',
-  5: 'education',
-  6: 'language',
-  7: 'substanceUse',
-  8: 'mentalHealth',
-  9: 'interests',
-  10: 'about',
-  11: 'review',
-};
 export const initialValues = {
   fullName: '',
   dateOfBirth: '',
@@ -71,6 +57,70 @@ export const initialValues = {
   hostRelationshipGoal: '',
   potentialChallenges: '',
 };
+export const stepToRouteMapping: {
+  [key: number]: {complete: boolean; innerText: string; route: string};
+} = {
+  0: {
+    complete: true,
+    innerText: 'Welcome',
+    route: 'welcome',
+  },
+  1: {
+    complete: false,
+    innerText: 'Expectations',
+    route: 'expectations',
+  },
+  2: {
+    complete: false,
+    innerText: 'Basic',
+    route: 'basic',
+  },
+  3: {
+    complete: false,
+    innerText: 'Guest and Pets',
+    route: 'guestAndPets',
+  },
+  4: {
+    complete: false,
+    innerText: 'Employment',
+    route: 'employment',
+  },
+  5: {
+    complete: false,
+    innerText: 'Education',
+    route: 'education',
+  },
+  6: {
+    complete: false,
+    innerText: 'Language',
+    route: 'language',
+  },
+  7: {
+    complete: false,
+    innerText: 'Substance Use',
+    route: 'substanceUse',
+  },
+  8: {
+    complete: false,
+    innerText: 'Mental Health',
+    route: 'mentalHealth',
+  },
+  9: {
+    complete: false,
+    innerText: 'Interests',
+    route: 'interests',
+  },
+  10: {
+    complete: false,
+    innerText: 'About',
+    route: 'about',
+  },
+  11: {
+    complete: false,
+    innerText: 'Review',
+    route: 'review',
+  },
+};
 
 export const GuestApplicationContext = () => {
   const [step, setStep] = useState<number>(0);
@@ -79,7 +129,7 @@ export const GuestApplicationContext = () => {
   const theme = useTheme();
 
   useEffect(() => {
-    navigate(stepToRouteMapping[step]);
+    navigate(stepToRouteMapping[step].route);
   }, []);
   function saveData() {
     //add logic to save current data
@@ -90,7 +140,7 @@ export const GuestApplicationContext = () => {
     const newStep = step + 1;
     if (stepToRouteMapping[newStep] !== undefined) {
       setStep(newStep);
-      navigate(stepToRouteMapping[newStep]);
+      navigate(stepToRouteMapping[newStep].route);
     } else {
       alert('Form not complete!');
     }
@@ -99,7 +149,7 @@ export const GuestApplicationContext = () => {
     const newStep = step - 1;
     if (step > 0) {
       setStep(newStep);
-      navigate(stepToRouteMapping[newStep]);
+      navigate(stepToRouteMapping[newStep].route);
     } else {
       navigate('/guest');
     }
