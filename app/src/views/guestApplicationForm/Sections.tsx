@@ -2,76 +2,17 @@ import {Stack, Typography} from '@mui/material';
 import {FormContainer} from '../../components/authentication/FormContainer';
 import {SectionBox} from '../../components/common/SectionBox';
 
-export interface section {
-  complete: boolean;
-  innerText: string;
-  route: string;
-}
-
-const appSections: section[] = [
-  {
-    complete: false,
-    innerText: 'Welcome',
-    route: '/welcome',
-  },
-  {
-    complete: true,
-    innerText: 'Guest Minimum expectations',
-    route: '/expectations',
-  },
-  {
-    complete: false,
-    innerText: 'Basic Information',
-    route: '/basic',
-  },
-  {
-    complete: false,
-    innerText: 'Other Guests/Pets',
-    route: '/basic',
-  },
-  {
-    complete: false,
-    innerText: 'Employment Information',
-    route: '/basic',
-  },
-  {
-    complete: false,
-    innerText: 'Education',
-    route: '/basic',
-  },
-  {
-    complete: false,
-    innerText: 'Language Proficiency',
-    route: '/basic',
-  },
-  {
-    complete: false,
-    innerText: 'Substance Use',
-    route: '/basic',
-  },
-  {
-    complete: false,
-    innerText: 'Mental Health',
-    route: '/basic',
-  },
-  {
-    complete: false,
-    innerText: 'Interest in Being a Guest',
-    route: '/basic',
-  },
-  {
-    complete: false,
-    innerText: 'About You',
-    route: '/basic',
-  },
-  {
-    complete: false,
-    innerText: 'Review',
-    route: '/basic',
-  },
-];
-
-export const Sections = () => {
+export const Sections = ({
+  setStep,
+  stepToRouteMapping,
+  setShowSections,
+}: {
+  setStep: React.Dispatch<React.SetStateAction<number>>;
+  stepToRouteMapping: {
+    [key: number]: {complete: boolean; innerText: string; route: string};
+  };
+  setShowSections: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   return (
     <FormContainer>
       <Stack sx={{width: '100%', paddingBlock: 3}}>
@@ -93,16 +34,18 @@ export const Sections = () => {
           </Typography>
         </Stack>
         <Stack sx={{display: 'flex', gap: 1}}>
-          {appSections.map(({complete, innerText, route}, index) => {
-            return (
+          {Object.values(stepToRouteMapping).map(
+            ({complete, innerText}, index) => (
               <SectionBox
                 key={index}
                 complete={complete}
                 innerText={innerText}
-                route={route}
+                setStep={setStep}
+                routeStep={index}
+                setShowSections={setShowSections}
               />
-            );
-          })}
+            ),
+          )}
         </Stack>
       </Stack>
     </FormContainer>

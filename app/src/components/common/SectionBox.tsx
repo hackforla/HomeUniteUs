@@ -1,20 +1,22 @@
 import {CheckCircleOutlined, CircleOutlined} from '@mui/icons-material';
 import {Box, Typography} from '@mui/material';
-import {useNavigate} from 'react-router-dom';
 
 export const SectionBox = ({
   complete,
   innerText,
-  route,
+  routeStep,
+  setStep,
+  setShowSections,
 }: {
   complete: boolean;
   innerText: string;
-  route: string;
+  routeStep: number;
+  setStep: React.Dispatch<React.SetStateAction<number>>;
+  setShowSections: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const navigate = useNavigate();
-
   const handleClick = () => {
-    navigate(route);
+    setStep(routeStep);
+    setShowSections(false);
   };
   return (
     <Box

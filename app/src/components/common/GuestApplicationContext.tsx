@@ -130,7 +130,7 @@ export const GuestApplicationContext = () => {
 
   useEffect(() => {
     navigate(stepToRouteMapping[step].route);
-  }, []);
+  }, [step]);
   function saveData() {
     //add logic to save current data
     console.log('data saving features not implemented');
@@ -140,7 +140,6 @@ export const GuestApplicationContext = () => {
     const newStep = step + 1;
     if (stepToRouteMapping[newStep] !== undefined) {
       setStep(newStep);
-      navigate(stepToRouteMapping[newStep].route);
     } else {
       alert('Form not complete!');
     }
@@ -149,7 +148,6 @@ export const GuestApplicationContext = () => {
     const newStep = step - 1;
     if (step > 0) {
       setStep(newStep);
-      navigate(stepToRouteMapping[newStep].route);
     } else {
       navigate('/guest');
     }
@@ -173,7 +171,11 @@ export const GuestApplicationContext = () => {
               zIndex: 1000,
             }}
           >
-            <Sections />
+            <Sections
+              setStep={setStep}
+              stepToRouteMapping={stepToRouteMapping}
+              setShowSections={setShowSections}
+            />
           </Stack>
         ) : (
           <Box

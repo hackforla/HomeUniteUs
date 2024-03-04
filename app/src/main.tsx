@@ -34,7 +34,6 @@ import {
   Welcome,
   Expectations,
   BasicInfo,
-  Sections,
   GuestAndPets,
   Employment,
   Education,
@@ -110,7 +109,6 @@ function HuuApp() {
           <Route path="tasks" element={<GuestTasks />} />
           <Route path="settings" element={<GuestSettings />} />
           <Route path="application" element={<GuestApplicationContext />}>
-            <Route path="sections" element={<Sections />} />
             <Route path="welcome" element={<Welcome />} />
             <Route path="expectations" element={<Expectations />} />
             <Route path="basic" element={<BasicInfo />} />
