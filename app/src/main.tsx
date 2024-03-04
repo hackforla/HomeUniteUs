@@ -31,16 +31,6 @@ import {
   GuestTasks,
   GuestSettings,
   CoordinatorDashboard,
-} from './views';
-import {AccountVerification} from './views/AccountVerification';
-import {AppLayout, Header} from './components/common';
-import {ResetPasswordContext} from './components/authentication/ResetPasswordContext';
-import {
-  CoordinatorDashboardLayout,
-  GuestDashboardLayout,
-} from './components/layout';
-import {GuestApplicationContext} from './components/common/GuestApplicationContext';
-import {
   Welcome,
   Expectations,
   BasicInfo,
@@ -54,7 +44,15 @@ import {
   Language,
   About,
   Review,
-} from './views/guestApplicationForm';
+} from './views';
+import {AccountVerification} from './views/AccountVerification';
+import {AppLayout, Header} from './components/common';
+import {ResetPasswordContext} from './components/authentication/ResetPasswordContext';
+import {
+  CoordinatorDashboardLayout,
+  GuestDashboardLayout,
+} from './components/layout';
+import {GuestApplicationContext} from './components/common/GuestApplicationContext';
 
 function HuuApp() {
   const [session] = useSessionMutation();
