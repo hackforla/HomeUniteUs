@@ -97,7 +97,7 @@ export const GuestApplicationContext = () => {
   }
   function prevStep() {
     const newStep = step - 1;
-    if (step > 1) {
+    if (step > 0) {
       setStep(newStep);
       navigate(stepToRouteMapping[newStep]);
     } else {
@@ -115,43 +115,41 @@ export const GuestApplicationContext = () => {
       onSubmit={() => console.log('Parent wrapper submit')}
       validationSchema={GuestApplicationSchema[step]}
     >
-      <Box
-        padding={2}
-        gap={0}
-        height={'95vh'}
-        sx={{backgroundColor: theme.palette.grey[50]}}
-      >
-        <Stack
-          marginTop={2}
-          overflow={'scroll'}
-          minHeight={'72%'}
-          maxHeight={'72%'}
-        >
-          <Outlet />
-        </Stack>
-        <Stack>
-          <NavButtons
-            next={nextStep}
-            prev={prevStep}
-            openSections={openSections}
-          />
-        </Stack>
-        {showSections && (
+      <Stack>
+        {showSections ? (
           <Stack
             sx={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              backgroundColor: theme.palette.grey[50], // Adjust the overlay background color and opacity
+              backgroundColor: theme.palette.grey[50],
               zIndex: 1000,
             }}
           >
             <Sections />
           </Stack>
+        ) : (
+          <Box
+            padding={2}
+            gap={0}
+            height={'95vh'}
+            sx={{backgroundColor: theme.palette.grey[50]}}
+          >
+            <Stack
+              marginTop={2}
+              overflow={'scroll'}
+              minHeight={'72%'}
+              maxHeight={'72%'}
+            >
+              <Outlet />
+            </Stack>
+            <Stack>
+              <NavButtons
+                next={nextStep}
+                prev={prevStep}
+                openSections={openSections}
+              />
+            </Stack>
+          </Box>
         )}
-      </Box>
+      </Stack>
     </Formik>
   );
 };

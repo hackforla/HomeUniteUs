@@ -69,22 +69,12 @@ const appSections: section[] = [
     innerText: 'Review',
     route: '/basic',
   },
-  {
-    complete: false,
-    innerText: 'Review',
-    route: '/basic',
-  },
-  {
-    complete: false,
-    innerText: 'Review',
-    route: '/basic',
-  },
 ];
 
 export const Sections = () => {
   return (
     <FormContainer>
-      <Stack spacing={4} sx={{width: '100%'}}>
+      <Stack sx={{width: '100%', paddingBlock: 3}}>
         <Stack
           sx={{
             display: 'flex',
@@ -93,7 +83,9 @@ export const Sections = () => {
             alignItems: 'center',
           }}
         >
-          <Typography sx={{fontSize: 20, fontWeight: 'medium'}}>
+          <Typography
+            sx={{fontSize: 20, fontWeight: 'medium', marginBottom: 1}}
+          >
             Profile Sections
           </Typography>
           <Typography sx={{fontSize: 14, fontWeight: 'medium'}}>
@@ -104,7 +96,7 @@ export const Sections = () => {
           {appSections.map(({complete, innerText, route}, index) => {
             return (
               <SectionBox
-                key={index} // change to route possibly?
+                key={index}
                 complete={complete}
                 innerText={innerText}
                 route={route}
