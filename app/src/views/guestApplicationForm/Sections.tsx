@@ -1,16 +1,22 @@
-import {Stack, Typography} from '@mui/material';
+import {Box, Stack, Typography} from '@mui/material';
 import {FormContainer} from '../../components/authentication/FormContainer';
-import {SectionBox} from '../../components/common/SectionBox';
+import {CheckCircleOutlined, CircleOutlined} from '@mui/icons-material';
 
 export const Sections = ({
   setStep,
   stepToRouteMapping,
+  setShowSections,
 }: {
   setStep: React.Dispatch<React.SetStateAction<number>>;
   stepToRouteMapping: {
     [key: number]: {complete: boolean; innerText: string; route: string};
   };
+  setShowSections: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
+  const handleClick = (index: number) => {
+    setStep(index);
+    setShowSections(false);
+  };
   return (
     <FormContainer>
       <Stack sx={{width: '100%', paddingBlock: 3}}>
@@ -34,13 +40,28 @@ export const Sections = ({
         <Stack sx={{display: 'flex', gap: 1}}>
           {Object.values(stepToRouteMapping).map(
             ({complete, innerText}, index) => (
-              <SectionBox
+              <Box
                 key={index}
-                complete={complete}
-                innerText={innerText}
-                setStep={setStep}
-                routeStep={index}
-              />
+                onClick={() => handleClick(index)}
+                sx={{
+                  borderRadius: 2,
+                  backgroundColor: complete ? '#EAF2EA' : 'white',
+                  height: 56,
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  paddingInline: 3,
+                }}
+              >
+                <Typography sx={{fontSize: 16, fontWeight: 'medium'}}>
+                  {innerText}
+                </Typography>
+                {complete ? (
+                  <CheckCircleOutlined color="success" />
+                ) : (
+                  <CircleOutlined color="action" />
+                )}
+              </Box>
             ),
           )}
         </Stack>
