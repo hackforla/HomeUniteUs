@@ -57,7 +57,7 @@ export const initialValues = {
   hostRelationshipGoal: '',
   potentialChallenges: '',
 };
-export const stepToRouteMapping: {
+export const contentPerSection: {
   [key: number]: {complete: boolean; innerText: string; route: string};
 } = {
   0: {
@@ -129,7 +129,7 @@ export const GuestApplicationContext = () => {
   const theme = useTheme();
 
   useEffect(() => {
-    navigate(stepToRouteMapping[step].route);
+    navigate(contentPerSection[step].route);
   }, [step]);
   function saveData() {
     //add logic to save current data
@@ -138,7 +138,7 @@ export const GuestApplicationContext = () => {
   function nextStep() {
     saveData();
     const newStep = step + 1;
-    if (stepToRouteMapping[newStep] !== undefined) {
+    if (contentPerSection[newStep] !== undefined) {
       setStep(newStep);
     } else {
       alert('end of form');
@@ -173,7 +173,7 @@ export const GuestApplicationContext = () => {
           >
             <Sections
               setStep={setStep}
-              stepToRouteMapping={stepToRouteMapping}
+              contentPerSection={contentPerSection}
               setShowSections={setShowSections}
             />
           </Stack>

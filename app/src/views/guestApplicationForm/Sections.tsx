@@ -4,11 +4,11 @@ import {CheckCircleOutlined, CircleOutlined} from '@mui/icons-material';
 
 export const Sections = ({
   setStep,
-  stepToRouteMapping,
+  contentPerSection,
   setShowSections,
 }: {
   setStep: React.Dispatch<React.SetStateAction<number>>;
-  stepToRouteMapping: {
+  contentPerSection: {
     [key: number]: {complete: boolean; innerText: string; route: string};
   };
   setShowSections: React.Dispatch<React.SetStateAction<boolean>>;
@@ -38,14 +38,14 @@ export const Sections = ({
           </Typography>
         </Stack>
         <Stack sx={{display: 'flex', gap: 1}}>
-          {Object.values(stepToRouteMapping).map(
+          {Object.values(contentPerSection).map(
             ({complete, innerText}, index) => (
               <Box
                 key={index}
                 onClick={() => handleClick(index)}
                 sx={{
                   borderRadius: 2,
-                  backgroundColor: complete ? '#EAF2EA' : 'white',
+                  backgroundColor: complete ? '#EAF2EA' : '#ffffff',
                   height: 56,
                   display: 'flex',
                   justifyContent: 'space-between',
