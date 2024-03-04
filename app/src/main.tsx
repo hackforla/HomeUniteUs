@@ -40,10 +40,21 @@ import {
   GuestDashboardLayout,
 } from './components/layout';
 import {GuestApplicationContext} from './components/common/GuestApplicationContext';
-import {Welcome} from './views/guestApplicationForm/Welcome';
-import {Expectations} from './views/guestApplicationForm/Expectations';
-import {BasicInfo} from './views/guestApplicationForm/BasicInfo';
-import {Sections} from './views/guestApplicationForm/Sections';
+import {
+  Welcome,
+  Expectations,
+  BasicInfo,
+  Sections,
+  GuestAndPets,
+  Employment,
+  Education,
+  SubstanceUse,
+  MentalHealth,
+  Interests,
+  Language,
+  About,
+  Review,
+} from './views/guestApplicationForm';
 
 function HuuApp() {
   const [session] = useSessionMutation();
@@ -105,15 +116,15 @@ function HuuApp() {
             <Route path="welcome" element={<Welcome />} />
             <Route path="expectations" element={<Expectations />} />
             <Route path="basic" element={<BasicInfo />} />
-            <Route path="guestAndPets" element={<BasicInfo />} />
-            <Route path="employment" element={<BasicInfo />} />
-            <Route path="education" element={<BasicInfo />} />
-            <Route path="language" element={<BasicInfo />} />
-            <Route path="substanceUse" element={<BasicInfo />} />
-            <Route path="mentalHealth" element={<BasicInfo />} />
-            <Route path="interests" element={<BasicInfo />} />
-            <Route path="about" element={<BasicInfo />} />
-            <Route path="review" element={<BasicInfo />} />
+            <Route path="guestAndPets" element={<GuestAndPets />} />
+            <Route path="employment" element={<Employment />} />
+            <Route path="education" element={<Education />} />
+            <Route path="language" element={<Language />} />
+            <Route path="substanceUse" element={<SubstanceUse />} />
+            <Route path="mentalHealth" element={<MentalHealth />} />
+            <Route path="interests" element={<Interests />} />
+            <Route path="about" element={<About />} />
+            <Route path="review" element={<Review />} />
           </Route>
         </Route>
         <Route

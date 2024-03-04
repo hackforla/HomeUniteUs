@@ -69,6 +69,16 @@ const appSections: section[] = [
     innerText: 'Review',
     route: '/basic',
   },
+  {
+    complete: false,
+    innerText: 'Review',
+    route: '/basic',
+  },
+  {
+    complete: false,
+    innerText: 'Review',
+    route: '/basic',
+  },
 ];
 
 export const Sections = () => {
