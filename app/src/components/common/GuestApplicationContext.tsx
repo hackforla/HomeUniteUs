@@ -130,6 +130,7 @@ export const GuestApplicationContext = () => {
 
   useEffect(() => {
     navigate(stepToRouteMapping[step].route);
+    setShowSections(false);
   }, [step]);
   function saveData() {
     //add logic to save current data
@@ -174,7 +175,6 @@ export const GuestApplicationContext = () => {
             <Sections
               setStep={setStep}
               stepToRouteMapping={stepToRouteMapping}
-              setShowSections={setShowSections}
             />
           </Stack>
         ) : (

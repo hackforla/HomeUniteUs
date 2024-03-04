@@ -5,13 +5,11 @@ import {SectionBox} from '../../components/common/SectionBox';
 export const Sections = ({
   setStep,
   stepToRouteMapping,
-  setShowSections,
 }: {
   setStep: React.Dispatch<React.SetStateAction<number>>;
   stepToRouteMapping: {
     [key: number]: {complete: boolean; innerText: string; route: string};
   };
-  setShowSections: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   return (
     <FormContainer>
@@ -42,7 +40,6 @@ export const Sections = ({
                 innerText={innerText}
                 setStep={setStep}
                 routeStep={index}
-                setShowSections={setShowSections}
               />
             ),
           )}

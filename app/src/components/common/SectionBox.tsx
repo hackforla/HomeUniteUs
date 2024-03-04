@@ -6,17 +6,14 @@ export const SectionBox = ({
   innerText,
   routeStep,
   setStep,
-  setShowSections,
 }: {
   complete: boolean;
   innerText: string;
   routeStep: number;
   setStep: React.Dispatch<React.SetStateAction<number>>;
-  setShowSections: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const handleClick = () => {
     setStep(routeStep);
-    setShowSections(false);
   };
   return (
     <Box
