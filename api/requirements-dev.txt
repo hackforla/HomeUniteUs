@@ -113,6 +113,7 @@ marshmallow==3.20.1
     # via homeuniteus-api (pyproject.toml)
 moto==4.2.10
     # via homeuniteus-api (pyproject.toml)
+marshmallow_sqlalchemy==0.30.0
 openapi-schema-validator==0.6.0
     # via openapi-spec-validator
 openapi-spec-validator==0.6.0
