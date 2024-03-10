@@ -10,14 +10,16 @@ import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
 import {SignUpHostRequest, SignUpCoordinatorRequest} from '../../services/auth';
 import {PasswordValidation} from '../common/PasswordValidation';
-import {validationSchema} from '../../utils/PasswordValidationSchema';
+import {signUpVaildationSchema} from '../../utils/PasswordValidationSchema';
 import {PasswordField} from './PasswordField';
 
-interface SignUpFormProps {
+export interface SignUpFormProps {
   // sign up according to host/coordinator
   onSubmit: ({
     email,
     password,
+    firstName,
+    lastName,
   }: SignUpHostRequest | SignUpCoordinatorRequest) => Promise<void>;
   type: string;
   getTokenIsLoading: boolean;
@@ -35,7 +37,7 @@ export const SignUpForm = ({
   const {
     handleSubmit,
     handleChange,
-    values: {email, password},
+    values: {firstName, lastName, email, password},
     handleBlur,
     touched,
     errors,
@@ -43,15 +45,16 @@ export const SignUpForm = ({
     dirty,
   } = useFormik({
     initialValues: {
+      firstName: '',
+      lastName: '',
       email: '',
       password: '',
     },
-    validationSchema: validationSchema,
+    validationSchema: signUpVaildationSchema,
     onSubmit: values => {
       onSubmit(values);
     },
   });
-
   // Add the user type field to Formik data and send it to the server in the form of a string (?). This will require updates to the types and data fetching hooks, as well as the OpenAPI spec for the signup route.
 
   return (
@@ -61,6 +64,30 @@ export const SignUpForm = ({
       spacing={4}
       sx={{width: '100%'}}
     >
+      <TextField
+        fullWidth
+        autoComplete="username"
+        id="firstName"
+        name="firstName"
+        label="First name"
+        value={firstName}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        error={touched.firstName && Boolean(errors.firstName)}
+        helperText={touched.firstName && errors.firstName}
+      />
+      <TextField
+        fullWidth
+        autoComplete="username"
+        id="lastName"
+        name="lastName"
+        label="Last name"
+        value={lastName}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        error={touched.lastName && Boolean(errors.lastName)}
+        helperText={touched.lastName && errors.lastName}
+      />
       <TextField
         fullWidth
         autoComplete="username"
