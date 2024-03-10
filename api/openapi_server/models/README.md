@@ -2,6 +2,9 @@
 
 ```mermaid
 classDiagram
+class alembic_version{
+   *VARCHAR<32> version_num NOT NULL
+}
 class host{
    *INTEGER id NOT NULL
    VARCHAR name NOT NULL
