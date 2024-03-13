@@ -57,6 +57,8 @@ flask==2.2.5
     # via
     #   connexion
     #   flask-testing
+flask-cors==4.0.0
+    # via flask-cors
 flask-testing==0.8.1
     # via homeuniteus-api (pyproject.toml)
 greenlet==2.0.2
