@@ -1,6 +1,6 @@
 name: Run API and App Tests
 on:
-  push:
+  # push:
   pull_request:
     branches: [main]
   # This is also a reusable workflow that can be called from other workflows
@@ -50,7 +50,7 @@ jobs:
       - name: Use Node.js 16.x
         uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
+          node-version: '16.x'
           cache: 'npm'
           cache-dependency-path: app/package-lock.json
       - name: Run npm CI
