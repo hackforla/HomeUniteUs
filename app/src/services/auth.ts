@@ -14,6 +14,8 @@ export interface SignUpHostResponse {
 }
 
 export interface SignUpHostRequest {
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
 }
@@ -23,6 +25,8 @@ export interface SignUpCoordinatorResponse {
 }
 
 export interface SignUpCoordinatorRequest {
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
 }

@@ -44,6 +44,7 @@ import {
   About,
   Review,
 } from './views';
+
 import {AccountVerification} from './views/AccountVerification';
 import {AppLayout, Header} from './components/common';
 import {ResetPasswordContext} from './components/authentication/ResetPasswordContext';
