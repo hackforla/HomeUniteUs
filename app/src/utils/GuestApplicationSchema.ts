@@ -2,6 +2,8 @@ import {parse, isDate} from 'date-fns';
 import {array, date, object, string} from 'yup';
 
 export const GuestApplicationSchema = [
+  null,
+  null,
   //validation is based on step
   object({
     fullName: string().required('Name is required'),
