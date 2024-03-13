@@ -11,10 +11,13 @@ attrs==23.1.0
     #   jsonschema
     #   referencing
 boto3==1.22.10
-    # via homeuniteus-api (pyproject.toml)
+    # via
+    #   homeuniteus-api (pyproject.toml)
+    #   moto
 botocore==1.25.13
     # via
     #   boto3
+    #   moto
     #   s3transfer
 build==0.10.0
     # via pip-tools
@@ -22,6 +25,8 @@ cachetools==5.3.1
     # via tox
 certifi==2023.7.22
     # via requests
+cffi==1.16.0
+    # via cryptography
 chardet==5.2.0
     # via
     #   prance
@@ -36,7 +41,7 @@ click==8.1.7
 clickclick==20.10.2
     # via connexion
 colorama==0.4.6
-    # via 
+    # via
     #   build
     #   click
     #   pytest
@@ -45,8 +50,16 @@ connexion==2.14.2
     # via homeuniteus-api (pyproject.toml)
 coverage==7.3.0
     # via pytest-cov
+cryptography==41.0.7
+    # via
+    #   moto
+    #   python-jose
 distlib==0.3.7
     # via virtualenv
+ecdsa==0.18.0
+    # via
+    #   moto
+    #   python-jose
 exceptiongroup==1.1.3
     # via pytest
 filelock==3.12.2
@@ -61,6 +74,7 @@ flask-cors==4.0.0
     # via flask-cors
 flask-testing==0.8.1
     # via homeuniteus-api (pyproject.toml)
+    # via connexion
 greenlet==2.0.2
     # via sqlalchemy
 idna==3.4
@@ -76,6 +90,7 @@ itsdangerous==2.1.2
 jinja2==3.1.2
     # via
     #   flask
+    #   moto
     #   swagger-ui-bundle
 jmespath==1.0.1
     # via
@@ -103,6 +118,9 @@ markupsafe==2.1.3
     #   werkzeug
 marshmallow==3.20.1
     # via homeuniteus-api (pyproject.toml)
+moto==4.2.10
+    # via homeuniteus-api (pyproject.toml)
+marshmallow_sqlalchemy==0.30.0
 openapi-schema-validator==0.6.0
     # via openapi-spec-validator
 openapi-spec-validator==0.6.0
@@ -132,6 +150,12 @@ prance==23.6.21.0
     # via homeuniteus-api (pyproject.toml)
 psycopg2-binary==2.9.5
     # via homeuniteus-api (pyproject.toml)
+pyasn1==0.5.1
+    # via
+    #   python-jose
+    #   rsa
+pycparser==2.21
+    # via cffi
 pyproject-api==1.5.4
     # via tox
 pyproject-hooks==1.0.0
@@ -146,14 +170,19 @@ pytest-cov==4.0.0
 pytest-randomly==3.12.0
     # via homeuniteus-api (pyproject.toml)
 python-dateutil==2.8.2
-    # via botocore
+    # via
+    #   botocore
+    #   moto
 python-dotenv==0.20.0
     # via homeuniteus-api (pyproject.toml)
+python-jose==3.3.0
+    # via moto
 pyyaml==6.0.1
     # via
     #   clickclick
     #   connexion
     #   jsonschema-spec
+    #   responses
 referencing==0.30.2
     # via
     #   jsonschema
@@ -163,13 +192,19 @@ requests==2.31.0
     # via
     #   connexion
     #   jsonschema-spec
+    #   moto
     #   prance
+    #   responses
+responses==0.24.1
+    # via moto
 rfc3339-validator==0.1.4
     # via openapi-schema-validator
 rpds-py==0.9.2
     # via
     #   jsonschema
     #   referencing
+rsa==4.9
+    # via python-jose
 ruamel-yaml==0.17.32
     # via prance
 ruamel-yaml-clib==0.2.7
@@ -178,6 +213,7 @@ s3transfer==0.5.2
     # via boto3
 six==1.16.0
     # via
+    #   ecdsa
     #   prance
     #   python-dateutil
     #   rfc3339-validator
@@ -204,14 +240,18 @@ urllib3==1.26.18
     # via
     #   botocore
     #   requests
+    #   responses
 virtualenv==20.24.3
     # via tox
 werkzeug==2.2.3
     # via
     #   connexion
     #   flask
+    #   moto
 wheel==0.41.2
     # via pip-tools
+xmltodict==0.13.0
+    # via moto
 
 # The following packages are considered to be unsafe in a requirements file:
 # pip

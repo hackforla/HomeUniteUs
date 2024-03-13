@@ -56,16 +56,6 @@ def test_flask_app_override(empty_environment: MonkeyPatch):
     assert isinstance(connexion_app, HUUConnexionApp)
     assert isinstance(connexion_app.app, HUUFlaskApp)
 
-def test_dev_app_disables_AWS_Cognito(empty_environment: MonkeyPatch):
-    app = create_app(DevelopmentHUUConfig()).app 
-    assert not app.supports_aws_cognito
-    with pytest.raises(NotImplementedError):
-        app.boto_client
-
-def test_prod_app_enables_AWS_Cognito(fake_prod_env: MonkeyPatch):
-    app = create_app(ProductionHUUConfig()).app
-    assert app.supports_aws_cognito
-
 def test_missing_secret_throws_err(fake_prod_env: MonkeyPatch):
     '''
     Test that failing to set a configuration field that is marked as a 

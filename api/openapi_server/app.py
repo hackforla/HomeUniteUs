@@ -7,13 +7,13 @@ from importlib.metadata import version, PackageNotFoundError
 from dotenv import load_dotenv, find_dotenv
 
 import prance
+import boto3
 from flask import Flask
 from flask_cors import CORS
 from connexion.apps.flask_app import (
-    FlaskApp,
-    FlaskJSONEncoder,
-    NumberConverter,
-    IntegerConverter,
+    FlaskApp, 
+    NumberConverter, 
+    IntegerConverter
 )
 
 from openapi_server.models.database import DataAccessLayer
@@ -31,58 +31,35 @@ class HUUFlaskApp(Flask):
         super().__init__(*args, **kwargs)
         self._boto_client = None
 
-    @property
-    def environment(self) -> str:
-        return self.config["ENV"]
-
-    @property
+    @property 
+    def environment(self) -> HUUConfigRegistry:
+        return HUUConfigRegistry.from_string(self.config["ENV"])
+    
+    @property 
     def is_debug_app(self) -> bool:
         return self.config["DEBUG"]
 
+    @property
+    def is_test_app(self) -> bool: 
+        return self.config["TESTING"]
+    
     @property
     def root_url(self) -> str:
         return self.config["ROOT_URL"]
 
     @property
-    def supports_aws_cognito(self) -> bool:
-        return all(
-            key in self.config
-            for key in [
-                "COGNITO_REGION",
-                "COGNITO_ACCESS_ID",
-                "COGNITO_ACCESS_KEY",
-            ]
-        )
-
-    def assert_support_aws_cognito(self):
-        if not self.supports_aws_cognito:
-            raise NotImplementedError(
-                "The current application configuration does "
-                "not support AWS cognito. In the future we will "
-                "mock this functionality to enable for all "
-                "configurations. This feature is planned "
-                "in Issue #577"
-            )
-
-    @property
     def boto_client(self):
         if self._boto_client:
             return self._boto_client
-
-        self.assert_support_aws_cognito()
-
-        import boto3
-
-        self._boto_client = boto3.client(
-            "cognito-idp",
-            region_name=self.config["COGNITO_REGION"],
-            aws_access_key_id=self.config["COGNITO_ACCESS_ID"],
-            aws_secret_access_key=self.config["COGNITO_ACCESS_KEY"],
-        )
+        
+        self._boto_client = boto3.client('cognito-idp', 
+                                         region_name=self.config["COGNITO_REGION"], 
+                                         aws_access_key_id=self.config["COGNITO_ACCESS_ID"],
+                                         aws_secret_access_key=self.config["COGNITO_ACCESS_KEY"]
+                                        )
         return self._boto_client
 
     def calc_secret_hash(self, username: str) -> str:
-        self.assert_support_aws_cognito()
         message = username + self.config["COGNITO_CLIENT_ID"]
         secret = bytearray(self.config["COGNITO_CLIENT_SECRET"], "utf-8")
         dig = hmac.new(
@@ -139,8 +116,7 @@ class HUUConnexionApp(FlaskApp):
             return version("homeuniteus-api")
         except PackageNotFoundError:
             # package is not installed
-            return "0.1.0.dev0"
-
+            return "0.1.0.dev0" 
 
 def create_app(test_config: HUUConfig = None):
     """
@@ -178,7 +154,8 @@ def create_app(test_config: HUUConfig = None):
     connexion_app.add_error_handler(AuthError, handle_auth_error)
 
     flask_app = connexion_app.app
-    flask_app.config.from_object(config)
-    DataAccessLayer.db_init(flask_app.config["DATABASE_URL"])
+    flask_app.config.from_object(config)       
 
+    DataAccessLayer.db_init(flask_app.config["DATABASE_URL"])        
+    
     return connexion_app
