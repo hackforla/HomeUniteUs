@@ -9,7 +9,6 @@ from dotenv import load_dotenv, find_dotenv
 import prance
 import boto3
 from flask import Flask
-from flask_cors import CORS
 from connexion.apps.flask_app import (
     FlaskApp, 
     NumberConverter, 
@@ -149,7 +148,6 @@ def create_app(test_config: HUUConfig = None):
         config = HUUConfigRegistry.load_config(app_environment)
 
     connexion_app = HUUConnexionApp(__name__, "./openapi/openapi.yaml")
-    CORS(connexion_app.app)
 
     connexion_app.add_error_handler(AuthError, handle_auth_error)
 

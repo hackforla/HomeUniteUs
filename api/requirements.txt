@@ -36,8 +36,6 @@ connexion==2.14.2
     #   homeuniteus-api (pyproject.toml)
 flask==2.2.5
     # via connexion
-flask-cors==4.0.0
-    # via flask-cors
 greenlet==2.0.2
     # via sqlalchemy
 idna==3.4
