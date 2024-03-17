@@ -2,7 +2,10 @@ import os
 
 import pytest
 import secrets
+from collections.abc import Generator
 from pytest import MonkeyPatch
+import sqlalchemy
+from sqlalchemy.orm import Session
 
 from openapi_server.configs.staging import StagingHUUConfig
 from openapi_server.configs.development import DevelopmentHUUConfig
@@ -89,6 +92,33 @@ def app(pytestconfig):
         yield flask_app
 
     test_engine, DataAccessLayer._engine = DataAccessLayer._engine, None
+    test_engine.dispose()
+
+@pytest.fixture
+def alembic_engine():
+    '''
+    Override the pytest-alembic default engine to use an in-memory
+    database at the base revision.
+    '''
+    return sqlalchemy.create_engine("sqlite:///:memory:")
+
+@pytest.fixture()
+def empty_db_session(alembic_runner, alembic_engine) -> Generator[Session, None, None]:
+    '''
+    SetUp and TearDown an empty in-memory database for 
+    database repository tests.
+    
+    This fixture does not initialize the full application.
+    '''
+    # Upgrade the database to the current head revision
+    # This applies all of our alembic migration scripts
+    # to the empty database
+    alembic_runner.migrate_up_to("heads")
+    DataAccessLayer._engine = alembic_engine
+
+    yield DataAccessLayer.session()
+    
+    test_engine, DataAccessLayer._engine = DataAccessLayer._engine, None 
     test_engine.dispose()
 
 @pytest.fixture()

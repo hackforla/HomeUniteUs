@@ -15,7 +15,20 @@ down_revision = 'ec8b1c17739a'
 branch_labels = None
 depends_on = None
 
-def upgrade() -> None:   
+def upgrade() -> None:
+    '''
+    1. Add Two tables:
+        1. role - Store available application user roles
+        2. user_role - Relationship table that matches users with their role (user.id, role.id)
+    2. Prepopulate the role table with four role types: Admin, Host, Guest, Coordinator
+    3. Update the user table to add the first, middle, and last name fields.
+      * All existing users will be given the first, last name "UNKNOWN"
+    4. Assign all existing users to the Guest role.
+    5. Drop the host table. 
+      * There is no way to map host users back to the user table. We would need a user id foreign 
+        key, or at least an email address.
+    
+    '''
     role_table = op.create_table('role',
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('name', sa.String(), nullable=False),
