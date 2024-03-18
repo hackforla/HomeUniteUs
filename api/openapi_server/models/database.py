@@ -6,11 +6,6 @@ from sqlalchemy.exc import SQLAlchemyError
 
 Base = declarative_base()
 
-user_roles = Table('user_roles', Base.metadata,
-    Column('user_id', Integer, ForeignKey('user.id'), primary_key=True),
-    Column('role_id', Integer, ForeignKey('role.id'), primary_key=True)
-)
-
 class User(Base):
     __tablename__ = "user"
     id = Column(Integer, primary_key=True, index=True)
@@ -18,13 +13,14 @@ class User(Base):
     first_name = Column(String(255), nullable=False)
     middle_name = Column(String(255), nullable=True)
     last_name = Column(String(255), nullable=False)
-    roles = relationship("Role", secondary=user_roles, back_populates="users")
+    role_id = Column(Integer, ForeignKey('role.id'), nullable=False)
+    role = relationship("Role", back_populates="users")
 
 class Role(Base):
     __tablename__ = "role"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
-    users = relationship("User", secondary=user_roles, back_populates="roles")
+    users = relationship("User", back_populates="role")
 
 class HousingProgramServiceProvider(Base):
     __tablename__ = "housing_program_service_provider"  
