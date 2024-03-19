@@ -43,6 +43,10 @@ class DataAccessLayer:
 
     @classmethod
     def db_init(cls, conn_string):
+        # Check that a database engine is not already set. The test project will 
+        # hook into the DataAccessLayer to create a test project database engine.
+        if cls._engine: return
+
         cls._engine = create_engine(conn_string, echo=True, future=True)
         Base.metadata.create_all(bind=cls._engine)
 

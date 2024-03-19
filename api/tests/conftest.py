@@ -81,7 +81,7 @@ def is_mocking(pytestconfig):
     return pytestconfig.mock_aws
 
 @pytest.fixture()
-def app(pytestconfig):
+def app(pytestconfig, empty_db_session):
     flask_app = create_app(pytestconfig.app_config).app
 
     # Tests will never operate on real user data, so provide a 
@@ -90,9 +90,6 @@ def app(pytestconfig):
 
     with app_environment_cls(flask_app):
         yield flask_app
-
-    test_engine, DataAccessLayer._engine = DataAccessLayer._engine, None
-    test_engine.dispose()
 
 @pytest.fixture
 def alembic_engine():

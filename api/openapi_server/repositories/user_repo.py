@@ -1,3 +1,5 @@
+from typing import List
+
 from openapi_server.models.database import User, Role
 from openapi_server.models.user_roles import UserRole
 
@@ -33,3 +35,6 @@ class UserRepository:
     
     def get_user(self, email: str) -> User:
         return self.session.query(User).filter_by(email=email).first()
+    
+    def get_users_with_role(self, role: UserRole) -> List[User]:
+        return self.session.query(User).filter_by(role=self._get_role(role))

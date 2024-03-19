@@ -49,15 +49,28 @@ ServiceProviders:
   type: array
   items:
     $ref: '#/ServiceProviderWithId'
-HostResponse: 
+RoleSchema:
   type: object
   properties:
-    id:
-      title: id
-      type: integer
     name:
-      title: name
       type: string
   required:
-    - id
     - name
+UserSchema:
+  type: object
+  properties:
+    email:
+      type: string 
+      format: email
+    first_name:
+      type: string
+    middle_name:
+      type: string
+    last_name:
+      type: string
+    role: 
+      $ref: '#/RoleSchema'
+  required:
+    - email
+    - first_name 
+    - last_name
