@@ -10,6 +10,8 @@ from flask import (
 )
 from openapi_server.exceptions import AuthError
 from openapi_server.models.database import DataAccessLayer, User
+from openapi_server.repositories.user_repo import UserRepository
+from openapi_server.models.user_roles import UserRole
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy import select
 
@@ -59,19 +61,18 @@ def get_token_auth_header():
     token = parts[1]
     return token
 
-def sign_up(body: dict):
+def sign_up(body: dict, role: UserRole):
     secret_hash = current_app.calc_secret_hash(body['email'])
 
     with DataAccessLayer.session() as session:
-        user = User(email=body['email'])
-        session.add(user)
-        try:
-            session.commit()
-        except IntegrityError:
-            session.rollback()
-            raise AuthError({
-                "message": "A user with this email already exists."
-            }, 422)
+        user_repo = UserRepository(session)
+        user_repo.add_user(
+            email=body['email'],
+            role=role,
+            first_name="Unknown",
+            middle_name=None,
+            last_name="Unknown"
+        )
 
     try:
         response = current_app.boto_client.sign_up(
@@ -107,13 +108,16 @@ def sign_up(body: dict):
         msg = f"The parameters you provided are incorrect: {error}"
         raise AuthError({"message": msg}, 500)
     
+def signUpAdmin(body: dict):
+    return sign_up(body, UserRole.ADMIN)
+
 def signUpHost(body: dict):
     """Signup a new Host"""
-    return sign_up(body)
+    return sign_up(body, UserRole.HOST)
 
 def signUpCoordinator(body: dict):  # noqa: E501
     """Signup a new Coordinator"""
-    return sign_up(body)
+    return sign_up(body, UserRole.COORDINATOR)
 
 def sign_in(body: dict):
     secret_hash = current_app.calc_secret_hash(body['email'])

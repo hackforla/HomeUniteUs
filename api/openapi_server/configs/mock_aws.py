@@ -6,7 +6,7 @@ from flask import request
 
 from openapi_server.exceptions import AuthError
 from openapi_server.controllers.admin_controller import removeUser
-from openapi_server.controllers.auth_controller import signUpHost
+from openapi_server.controllers.auth_controller import signUpAdmin
 
 class AWSTemporaryUserpool():
     '''
@@ -125,7 +125,7 @@ class AWSMockService():
                 pass
 
             try:
-                signUpHost({
+                signUpAdmin({
                     "email": email,
                     "password": user["password"]
                 })
