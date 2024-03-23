@@ -24,7 +24,7 @@ def create_prod_app() -> HUUConnexionApp:
     '''
     return create_app(ProductionHUUConfig())
 
-def test_create_app_default_dev(empty_environment: MonkeyPatch):
+def test_create_app_default_dev(empty_db_session, empty_environment: MonkeyPatch):
     '''
     Test that create_app with development config creates a Flask app with  
     a default development configuration, available as app.config.
@@ -47,7 +47,7 @@ def test_create_app_default_dev(empty_environment: MonkeyPatch):
     assert config["PORT"] > 0 and config["PORT"] <= 65535
     assert config["ROOT_URL"]
 
-def test_flask_app_override(empty_environment: MonkeyPatch):
+def test_flask_app_override(empty_db_session, empty_environment: MonkeyPatch):
     '''
     Test that the create_app properly overrides the connexion app constructor
     to return our custom application type that contains global configuration.
@@ -79,7 +79,7 @@ def test_hardcoding_secret_throws_err(fake_prod_env: MonkeyPatch):
     check_with_hardcoded_secret(COGNITO_ACCESS_ID="My Hard Coded Fake Secret")
     check_with_hardcoded_secret(COGNITO_ACCESS_KEY="My Hard Coded Fake Secret")
     
-def test_config_reads_from_env(empty_environment: MonkeyPatch):
+def test_config_reads_from_env(empty_db_session, empty_environment: MonkeyPatch):
     '''
     Test that hard-coded values are overwritten using values from the system
     environment variables. 
@@ -121,7 +121,7 @@ def test_invalid_port_throws(empty_environment: MonkeyPatch):
     with pytest.raises(ValueError):
         create_dev_app()
 
-def test_env_var_bool_parsing(empty_environment: MonkeyPatch):
+def test_env_var_bool_parsing(empty_db_session, empty_environment: MonkeyPatch):
     def check_bool_parsing(actual: str, expected: bool, msg: str):
         empty_environment.setenv("FLASK_DEBUG", actual)
         assert create_dev_app().app.config["FLASK_DEBUG"] == expected, msg
