@@ -21,14 +21,26 @@ def populate_test_database(num_entries) -> List[int]:
         ids.append(provider.id)
     return ids
 
-def signup_user(app, email: str, password: str) -> None:
+def signup_user(app, email: str, password: str, firstName: str = None,
+                middleName: str = None, lastName: str = None) -> None:
+    if not firstName: firstName = "firstName"
+    if not lastName: lastName = "lastName"
+    if not middleName: middleName = ""
+
     signup_response = app.test_client().post(
         '/api/auth/signup/host',
         json = {
             'email': email,
-            'password': password
+            'password': password,
+            'firstName': firstName,
+            'middleName': middleName,
+            'lastName': lastName
         }
     )
+    # Currently the signup returns different response structures for auth 
+    # errors and "Bad Request" errors. Ideally the structure of the response
+    # would always be the same where there is an error. 
+    assert signup_response.status_code != 400, f"User factory failed to signup user: {signup_response.status}, {signup_response.text}"
     assert signup_response.status_code == 200, f"User factory failed to signup user: {signup_response.json['message']}"
 
 def confirm_user(app, email: str) -> None:

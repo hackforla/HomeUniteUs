@@ -74,3 +74,13 @@ UserSchema:
     - email
     - firstName 
     - lastName
+UserSignupSchema:
+  type: object
+  allOf:
+    - $ref: '#/UserSchema'
+    - type: object
+      properties:
+        password: 
+          type: string
+      required:
+        - password

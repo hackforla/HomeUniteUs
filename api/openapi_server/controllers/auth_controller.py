@@ -64,15 +64,18 @@ def get_token_auth_header():
 def sign_up(body: dict, role: UserRole):
     secret_hash = current_app.calc_secret_hash(body['email'])
 
-    with DataAccessLayer.session() as session:
-        user_repo = UserRepository(session)
-        user_repo.add_user(
-            email=body['email'],
-            role=role,
-            first_name="Unknown",
-            middle_name=None,
-            last_name="Unknown"
-        )
+    try:
+        with DataAccessLayer.session() as session:
+            user_repo = UserRepository(session)
+            user_repo.add_user(
+                email=body['email'],
+                role=role,
+                firstName="Unknown",
+                middleName=None,
+                lastName="Unknown"
+            )
+    except Exception as error:
+        raise AuthError({"message": str(error)}, 400)
 
     try:
         response = current_app.boto_client.sign_up(

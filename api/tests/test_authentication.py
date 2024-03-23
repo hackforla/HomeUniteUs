@@ -36,6 +36,44 @@ def test_signin_without_email_format(client):
     assert response.status_code == 400
     assert "is not a email" in strip_punctuation(response.json["detail"].lower())
 
+@pytest.mark.parametrize('endpoint', ['/api/auth/signup/host','/api/auth/signup/coordinator'])
+def test_signup_with_missing_fields(client, endpoint):
+    '''
+    Attempts to login without all required fields returns 
+    a bad request error.
+    '''
+    BAD_SIGNUP_REQUESTS = [
+        {
+            'email': 'inbox928@placeholder.org',
+            'password': 'Fakepass%^&7!asdf'
+        },
+        {
+            'email': 'inbox928@placeholder.org',
+            'password': 'Fakepass%^&7!asdf',
+            'firstName': 'Josh'
+        },
+        {
+            'email': 'inbox928@placeholder.org',
+            'password': 'Fakepass%^&7!asdf',
+            'lastName': 'Josh'
+        },
+        {
+            'email': 'inbox928@placeholder.org',
+            'firstName': 'Josh',
+            'lastName': 'Douglas'
+        },
+        {
+            'password': 'Fakepass%^&7!asdf',
+            'firstName': 'Josh',
+            'lastName': 'Douglas'
+        }
+    ]
+
+    for req in BAD_SIGNUP_REQUESTS:
+        response = client.post(endpoint, json = req)
+        assert response.status_code == 400, req
+        assert 'detail' in response.json and 'required property' in response.json['detail'], req
+
 def test_refresh_without_cookie(client):
     '''
     Attempts to use the refresh endpoint without a session
@@ -80,7 +118,9 @@ def _signup_unconfirmed(signup_endpoint, client, is_mocking):
         signup_endpoint,
         json = {
             'email': email,
-            'password': password
+            'password': password,
+            "firstName": "valid name",
+            "lastName": "valid name"
         }
     )
 
@@ -153,7 +193,9 @@ def test_weak_passwords_rejected(client):
         '/api/auth/signup/host',
         json = {
             'email': email,
-            'password': password
+            'password': password,
+            'firstName': 'unqiue',
+            'lastName': 'name'
         }
     )
 
