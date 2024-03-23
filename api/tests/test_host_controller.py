@@ -2,38 +2,25 @@ from openapi_server.models.database import User, DataAccessLayer
 from openapi_server.repositories.user_repo import UserRepository
 from openapi_server.models.user_roles import UserRole
 
-def test_create_host(client):
+def test_signup_host(client):
     """
-    Test creating a new host using a 
-    simulated post request. Verify that the 
-    response is correct, and that the app 
-    database was properly updated.
+    Test creating a new host using a simulated post request. Verify that the 
+    response is correct, and that the app database was properly updated.
     """
     
     NEW_HOST = {
         "email" : "test@email.com",
-        "firstName" : "Josh",
-        "middleName" : "Ray",
-        "lastName" : "Douglas"
+        "password": "Test!@123",
+        "firstName": "Josh",
+        "middleName": "Ray",
+        "lastName": "Douglas"
     }
     response = client.post(
-        '/api/host',
+        '/api/auth/signup/host',
         json=NEW_HOST)
     
-    assert response.status_code == 201, f'Response body is: {response.json}'
-    assert 'email' in response.json
-    assert 'firstName' in response.json
-    assert 'middleName' in response.json
-    assert 'lastName' in response.json
-    assert 'role' in response.json
-    assert 'name' in response.json['role']
+    assert response.status_code == 200, f'Response body is: {response.json}'
 
-    assert response.json['email'] == NEW_HOST['email']
-    assert response.json['firstName'] == NEW_HOST['firstName']
-    assert response.json['middleName'] == NEW_HOST['middleName']
-    assert response.json['lastName'] == NEW_HOST['lastName']
-    assert response.json['role']['name'] == UserRole.HOST.value
-    
     # Make sure the database was updated to persist the values
     with DataAccessLayer.session() as session:
         user_repo = UserRepository(session)
@@ -44,31 +31,7 @@ def test_create_host(client):
         assert test_host.middleName == NEW_HOST['middleName']
         assert test_host.lastName == NEW_HOST['lastName']
         assert test_host.role.name == UserRole.HOST.value
-
-def test_create_host_empty_body(client):
-    """
-    Test creating a new host with an empty JSON body.
-    This should return an error response.
-    """
-
-    response = client.post(
-        '/api/host',
-        json={})
-
-    assert response.status_code == 400 
     
-
-def test_create_host_invalid_data(client):
-    """
-    Test creating a new host with invalid data in the request body.
-    This should return an error response (e.g., 400 Bad Request).
-    """
-    invalid_host_data = {"invalid_field": "value"}
-
-    response = client.post('/api/host', json=invalid_host_data)
-    assert response.status_code == 400
-
-
 def test_get_hosts(client): 
     """
     Test that get_hosts returns all hosts available in the database. The endpoint

@@ -66,6 +66,8 @@ def test_signup_with_missing_fields(client, endpoint):
             'password': 'Fakepass%^&7!asdf',
             'firstName': 'Josh',
             'lastName': 'Douglas'
+        }, 
+        {
         }
     ]
 
@@ -210,7 +212,9 @@ def test_basic_auth_flow(client):
     '''
     EMAIL = 'inbox928@placeholder.org'
     PASSWORD = 'Fake4!@#$2589FFF'
-    create_user(client, EMAIL, PASSWORD)
+    FIRST_NAME = "PNAU"
+    LAST_NAME = "Hyperbolic"
+    create_user(client, EMAIL, PASSWORD, firstName=FIRST_NAME, lastName=LAST_NAME)
 
     response = client.post(
         '/api/auth/signin',
@@ -234,6 +238,9 @@ def test_basic_auth_flow(client):
     assert 'user' in response.json
     assert 'email' in response.json['user']
     assert response.json['user']['email'] == EMAIL
+    assert response.json['user']['firstName'] == FIRST_NAME
+    assert response.json['user']['middleName'] == ''
+    assert response.json['user']['lastName'] == LAST_NAME
 
 def test_signin_returns_session_cookie(client):
     '''

@@ -12,7 +12,7 @@ from openapi_server.exceptions import AuthError
 from openapi_server.models.database import DataAccessLayer, User
 from openapi_server.repositories.user_repo import UserRepository
 from openapi_server.models.user_roles import UserRole
-from sqlalchemy.exc import IntegrityError
+from openapi_server.models.schema import user_schema
 from sqlalchemy import select
 
 from botocore.exceptions import ClientError
@@ -65,14 +65,14 @@ def sign_up(body: dict, role: UserRole):
     secret_hash = current_app.calc_secret_hash(body['email'])
 
     try:
-        with DataAccessLayer.session() as session:
-            user_repo = UserRepository(session)
+        with DataAccessLayer.session() as db_session:
+            user_repo = UserRepository(db_session)
             user_repo.add_user(
                 email=body['email'],
                 role=role,
-                firstName="Unknown",
-                middleName=None,
-                lastName="Unknown"
+                firstName=body['firstName'],
+                middleName=body.get('middleName', ''),
+                lastName=body['lastName']
             )
     except Exception as error:
         raise AuthError({"message": str(error)}, 400)
@@ -147,21 +147,21 @@ def sign_in(body: dict):
     access_token = response['AuthenticationResult']['AccessToken']
     refresh_token = response['AuthenticationResult']['RefreshToken']
 
-    # retrieve user data
-    user_data = current_app.boto_client.get_user(AccessToken=access_token)
+    user_data = None
+    with DataAccessLayer.session() as db_session:
+        user_repo = UserRepository(db_session)
+        signed_in_user = user_repo.get_user(body['email'])
+        user_data = user_schema.dump(signed_in_user)
     
     # set refresh token cookie
     session['refresh_token'] = refresh_token
-    session['username'] = user_data['Username']
+    session['username'] = body['email']
 
     # return user data json
     return {
         'token': access_token,
-        'user': {
-            'email': body['email']
-        }
+        'user': user_data
     }
-
 
 def resend_confirmation_code():
     '''
@@ -387,10 +387,13 @@ def confirm_forgot_password():
     return response
 
 def user(token_info):
+    user_data = None
+    with DataAccessLayer.session() as db_session:
+        user_repo = UserRepository(db_session)
+        signed_in_user = user_repo.get_user(token_info["Username"])
+        user_data = user_schema.dump(signed_in_user)
     return {
-      "user": {
-          "email": token_info["Username"]
-      }
+      "user": user_data
     }
 
 def private(token_info):

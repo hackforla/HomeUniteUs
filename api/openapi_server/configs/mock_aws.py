@@ -127,7 +127,9 @@ class AWSMockService():
             try:
                 signUpAdmin({
                     "email": email,
-                    "password": user["password"]
+                    "password": user["password"],
+                    "firstName": "testuser_firstname",
+                    "lastName": "testuser_lastname"
                 })
                 self._auto_signup_user(email)
                 self.app.logger.info(f"Created test user: {email}")

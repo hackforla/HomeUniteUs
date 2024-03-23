@@ -50,13 +50,14 @@ def confirm_user(app, email: str) -> None:
     )
     assert confirm_response['ResponseMetadata']['HTTPStatusCode'] == 200, f"User factory failed to confirm user"
 
-def create_user(test_client, email: str, password: str) -> None:
+def create_user(test_client, email: str, password: str, firstName: str = None,
+                middleName: str = None, lastName: str = None) -> None:
     '''
     Signup and confirm a new user. Fail the test if the 
     signup or confirm operation fails.
     '''
     app = test_client.application
-    signup_user(app, email, password)
+    signup_user(app, email, password, firstName, middleName, lastName)
     confirm_user(app, email)
 
 def signin_user(test_client, email: str, password: str) -> str:
