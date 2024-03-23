@@ -58,32 +58,48 @@ def get_token_auth_header():
     # return token
     token = parts[1]
     return token
+def delete_user(email: str):
+    with DataAccessLayer.session() as session:
+        user = session.query(User).filter_by(email=email).first()
+        if user is None:
+            raise AuthError({
+                "message": "User with this email does not exist."
+            }, 404)
+
+        try:
+            session.delete(user)
+            session.commit()
+        except IntegrityError:
+            session.rollback()
+            raise AuthError({
+                "message": "Failed to delete user"
+            }, 500)
 
 def sign_up(body: dict):
     secret_hash = current_app.calc_secret_hash(body['email'])
 
+    with DataAccessLayer.session() as session:
+        user = User(email=body['email'])
+        session.add(user)
+        try:
+            session.commit()
+        except IntegrityError:
+            session.rollback()
+            raise AuthError({
+                "message": "A user with this email already exists."
+            }, 422)
+
     try:
         response = current_app.boto_client.sign_up(
-          ClientId=current_app.config['COGNITO_CLIENT_ID'],
-          SecretHash=secret_hash,
-          Username=body['email'],
-          Password=body['password'],
-          ClientMetadata={
-              'url': current_app.root_url
-          }
+        ClientId=current_app.config['COGNITO_CLIENT_ID'],
+        SecretHash=secret_hash,
+        Username=body['email'],
+        Password=body['password'],
+        ClientMetadata={
+            'url': current_app.root_url
+        }
         )
-        with DataAccessLayer.session() as session:
-            user = User(email=body['email'])
-            print(session.query(user))
-            session.add(user)
-            try:
-                session.commit()
-            except IntegrityError:
-                session.rollback()
-                raise AuthError({
-                    "message": "A user with this email already exists."
-                }, 422)
-        print(response)
+
         return response
 
     except botocore.exceptions.ClientError as error:
@@ -96,15 +112,19 @@ def sign_up(body: dict):
                 raise AuthError({  "message": msg }, 400)
             case 'InvalidPasswordException':
                 msg = "Password did not conform with policy"
+                # remove user
                 raise AuthError({  "message": msg }, 400)
             case 'TooManyRequestsException':
                 msg = "Too many requests made. Please wait before trying again."
+                # remove user
                 raise AuthError({  "message": msg }, 400)
             case _:
                 msg = "An unexpected error occurred."
+                # remove user
                 raise AuthError({  "message": msg }, 400)
     except botocore.excepts.ParameterValidationError as error:
         msg = f"The parameters you provided are incorrect: {error}"
+        # remove user from sql
         raise AuthError({"message": msg}, 500)
     
 def signUpHost(body: dict):
