@@ -32,6 +32,7 @@ import {
   GuestSettings,
   CoordinatorDashboard,
 } from './views';
+
 import {AccountVerification} from './views/AccountVerification';
 import {AppLayout, Header} from './components/common';
 import {ResetPasswordContext} from './components/authentication/ResetPasswordContext';
@@ -40,6 +41,9 @@ import {
   GuestDashboardLayout,
 } from './components/layout';
 import {GuestApplicationContext} from './components/common/GuestApplicationContext';
+import {Welcome} from './views/guestApplicationForm/Welcome';
+import {Expectations} from './views/guestApplicationForm/Expectations';
+import {BasicInfo} from './views/guestApplicationForm/BasicInfo';
 
 function HuuApp() {
   const [session] = useSessionMutation();
@@ -96,10 +100,12 @@ function HuuApp() {
           <Route path="contacts" element={<GuestContacts />} />
           <Route path="tasks" element={<GuestTasks />} />
           <Route path="settings" element={<GuestSettings />} />
-          <Route
-            path="application"
-            element={<GuestApplicationContext />}
-          ></Route>
+
+          <Route path="application" element={<GuestApplicationContext />}>
+            <Route path="welcome" element={<Welcome />} />
+            <Route path="expectations" element={<Expectations />} />
+            <Route path="basic" element={<BasicInfo />} />
+          </Route>
         </Route>
         <Route
           path="/coordinator"

@@ -32,16 +32,16 @@ const tasks: Task[] = [
       {
         id: 1,
         title: 'Application',
-        status: 'complete',
+        status: 'inProgress',
         description:
           'Start your guest application to move on to the next step.',
         buttonText: 'Start Application',
-        url: '/guest-application',
+        url: '/guest/application/welcome',
       },
       {
         id: 2,
         title: 'Coordinator Interview',
-        status: 'inProgress',
+        status: 'locked',
         description: 'Meet with your Coordinator to share more about yourself.',
         buttonText: 'Schedule interview',
         url: '/schedule',

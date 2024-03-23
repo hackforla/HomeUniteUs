@@ -175,18 +175,16 @@ describe('Authentication', () => {
 
     cy.visit('/signin');
     // Expect 400 since we don't have a session cookie
-    cy.wait('@session')
-        .its('response.statusCode')
-        .should('eq', 400);
-    
+    cy.wait('@session').its('response.statusCode').should('eq', 400);
+
     cy.findByRole('textbox', {name: /email/i}).type(this.email);
     cy.get('#password').type(this.password);
-    cy.contains('button', 'Sign in').click()
+    cy.contains('button', 'Sign in').click();
 
-    cy.wait('@signin').then((intercept) => {
-      const body = intercept.response?.body
-      const setCookieHeader = intercept.response?.headers['set-cookie']
-      expect(body).to.have.property('user')
+    cy.wait('@signin').then(intercept => {
+      const body = intercept.response?.body;
+      const setCookieHeader = intercept.response?.headers['set-cookie'];
+      expect(body).to.have.property('user');
       expect(body.user).to.have.property('email', this.email);
       expect(setCookieHeader).to.exist;
       expect(setCookieHeader).to.be.an('array').with.length(1);
@@ -195,7 +193,7 @@ describe('Authentication', () => {
       } else {
         throw new Error('set-cookie header is not set');
       }
-    })
+    });
 
     cy.url().should('match', LOGIN_PAGES_URL_PATTERN);
   });
