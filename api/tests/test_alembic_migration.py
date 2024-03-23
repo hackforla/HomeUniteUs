@@ -3,10 +3,12 @@ from openapi_server.models.user_roles import UserRole
 from openapi_server.repositories.user_repo import UserRepository
 
 # Importing these tests will register them within our test project
+# These tests do an excellent job of detecting errors in the alembic
+# downgrade and upgrade scripts.
 from pytest_alembic.tests import test_single_head_revision
 from pytest_alembic.tests import test_upgrade
 from pytest_alembic.tests import test_model_definitions_match_ddl
-# BROKEN from pytest_alembic.tests import test_up_down_consistency
+from pytest_alembic.tests import test_up_down_consistency
 
 def test_db_session_version(empty_db_session):
     '''

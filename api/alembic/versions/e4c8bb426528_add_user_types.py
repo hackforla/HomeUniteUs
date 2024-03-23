@@ -17,17 +17,15 @@ depends_on = None
 
 def upgrade() -> None:
     '''
-    1. Add Two tables:
+    1. Add one table:
         1. role - Store available application user roles
-        2. user_role - Relationship table that matches users with their role (user.id, role.id)
     2. Prepopulate the role table with four role types: Admin, Host, Guest, Coordinator
-    3. Update the user table to add the first, middle, and last name fields.
+    3. Update the user table to add the first, middle, last name, and role_id columns.
       * All existing users will be given the first, last name "UNKNOWN"
-    4. Assign all existing users to the Guest role.
-    5. Drop the host table. 
+      * Assign all existing users to the Guest role.
+    4. Drop the host table. 
       * There is no way to map host users back to the user table. We would need a user id foreign 
         key, or at least an email address.
-    
     '''
     role_table = op.create_table('role',
         sa.Column('id', sa.Integer(), nullable=False),
@@ -40,33 +38,28 @@ def upgrade() -> None:
                     {'name': 'Guest'},
                     {'name': 'Coordinator'}])
     op.create_index(op.f('ix_role_id'), 'role', ['id'], unique=False)
-    op.create_table('user_roles',
-        sa.Column('user_id', sa.Integer(), nullable=False),
-        sa.Column('role_id', sa.Integer(), nullable=False),
-        sa.ForeignKeyConstraint(['role_id'], ['role.id'], ),
-        sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
-        sa.PrimaryKeyConstraint('user_id', 'role_id')
-    )
-
-    # Each existing user will get the first and last names "Unknown" by default
-    # and they will be assigned to the "Guest" user role.
-    op.add_column('user', sa.Column('first_name', sa.String(length=255), nullable=False, server_default='Unknown'))
-    op.add_column('user', sa.Column('middle_name', sa.String(length=255), nullable=True))
-    op.add_column('user', sa.Column('last_name', sa.String(length=255), nullable=False, server_default='Unknown'))
 
     conn = op.get_bind()
     guest_role_id = conn.execute(text("SELECT id FROM role WHERE name = 'Guest'")).fetchone()[0]
-    existing_user_ids = conn.execute(text("SELECT id from user")).fetchall()
-    for user_id in existing_user_ids:
-        conn.execute(text(f"INSERT INTO user_roles (user_id, role_id) VALUES ({user_id[0]}, {guest_role_id})"))
+
+    with op.batch_alter_table('user', schema=None) as batch_op:
+        # Each existing user will get the first and last names "Unknown" by default
+        # and they will be assigned to the "Guest" user role.
+        batch_op.add_column(sa.Column('first_name', sa.String(length=255), nullable=False, server_default='Unknown'))
+        batch_op.add_column(sa.Column('middle_name', sa.String(length=255), nullable=True))
+        batch_op.add_column(sa.Column('last_name', sa.String(length=255), nullable=False, server_default='Unknown'))
+        batch_op.add_column(sa.Column('role_id', sa.Integer, nullable=False, server_default=str(guest_role_id)))
+        batch_op.create_foreign_key('fk_user_role_id', 'role', ['role_id'], ['id'])
 
     op.drop_table('host')
 
 def downgrade() -> None:
-    op.drop_column('user', 'last_name')
-    op.drop_column('user', 'middle_name')
-    op.drop_column('user', 'first_name')
-    op.drop_table('user_roles')
+    with op.batch_alter_table('user', schema=None) as batch_op:
+        batch_op.drop_constraint('fk_user_role_id', type_='foreignkey')
+        batch_op.drop_column('last_name')
+        batch_op.drop_column('middle_name')
+        batch_op.drop_column('first_name')
+
     op.drop_index(op.f('ix_role_id'), table_name='role')
     op.drop_table('role')
     op.create_table('host',
@@ -74,3 +67,4 @@ def downgrade() -> None:
         sa.Column('name', sa.String(), nullable=False),
         sa.PrimaryKeyConstraint('id')
         )
+    op.create_index(op.f('ix_host_id'), 'host', ['id'], unique=False)
