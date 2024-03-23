@@ -78,10 +78,13 @@ To launch the tests, run `tox`.
 
 `tox` will run the tests for this (`api`) project using `pytest` in an isolated virtual environment that is distinct from the virtual environment that you created following the instructions from [Usage - Development](#usage---development). By default `tox` will invoke `pytest` in `debug` mode, which uses 3rd party API mocking. The test cases can optionally be run without mocking by testing the application in `release` mode, using `tox -e releasetest` or `pytest --mode=release`.
 
-### Alembic migrations
+### Database Management
 
-When changing the database, you can automatically generate an alembic migration. Simply change the model however you want in `database.py`, run `alembic revision --autogenerate -m <name_of_migration>` to generate a new migration, and then run `alembic upgrade head` to upgrade your database to the latest revision.
-In the case of someone else adding a revision to the database, simply pull their changes to your repo and run `alembic upgrade head` to upgrade your local database to the latest revision.
+Running the API requires an up-to-date version of the HomeUniteUs database. You can generate an empty database by running this command from the `api` directory with a virtual environment enabled.
+
+`alembic upgrade head`
+
+The current database version can be viewed using the `alembic current` command, or by inspecting the database `alembic_version` table. See the `model` [readme](./openapi_server/models/) for more information about the database project.
 
 ### Dependency Management
 
