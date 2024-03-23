@@ -142,7 +142,7 @@ def test_env_var_bool_parsing(empty_environment: MonkeyPatch):
     with pytest.raises(ValueError):
         create_dev_app()
 
-def test_database_url_config(empty_environment: MonkeyPatch):
+def test_database_url_config(empty_db_session, empty_environment: MonkeyPatch):
     '''
     Test that setting the DATABASE_URL initializes the database 
     using the specified URL.
@@ -168,7 +168,7 @@ def test_root_url_required(empty_environment: MonkeyPatch):
     with pytest.raises(ValueError, match="ROOT_URL"):
         create_app(DevelopmentHUUConfig())
 
-def test_prod_app_disables_development(fake_prod_env: MonkeyPatch):
+def test_prod_app_disables_development(empty_db_session, fake_prod_env: MonkeyPatch):
     def check_development_disabled(enable_testing: bool, enable_debug: bool):
         fake_prod_env.setenv("FLASK_DEBUG", str(enable_debug))
         fake_prod_env.setenv("TESTING", str(enable_testing))
