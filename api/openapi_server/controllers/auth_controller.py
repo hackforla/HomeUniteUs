@@ -62,17 +62,6 @@ def get_token_auth_header():
 def sign_up(body: dict):
     secret_hash = current_app.calc_secret_hash(body['email'])
 
-    with DataAccessLayer.session() as session:
-        user = User(email=body['email'])
-        session.add(user)
-        try:
-            session.commit()
-        except IntegrityError:
-            session.rollback()
-            raise AuthError({
-                "message": "A user with this email already exists."
-            }, 422)
-
     try:
         response = current_app.boto_client.sign_up(
           ClientId=current_app.config['COGNITO_CLIENT_ID'],
@@ -83,7 +72,18 @@ def sign_up(body: dict):
               'url': current_app.root_url
           }
         )
-
+        with DataAccessLayer.session() as session:
+            user = User(email=body['email'])
+            print(session.query(user))
+            session.add(user)
+            try:
+                session.commit()
+            except IntegrityError:
+                session.rollback()
+                raise AuthError({
+                    "message": "A user with this email already exists."
+                }, 422)
+        print(response)
         return response
 
     except botocore.exceptions.ClientError as error:
