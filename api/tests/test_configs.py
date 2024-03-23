@@ -183,7 +183,7 @@ def test_prod_app_disables_development(empty_db_session, fake_prod_env: MonkeyPa
     check_development_disabled(False, True)
     check_development_disabled(False, False)
 
-def test_prod_secret_key_requirements(fake_prod_env: MonkeyPatch): 
+def test_prod_secret_key_requirements(empty_db_session, fake_prod_env: MonkeyPatch): 
     def check_insecure_secret(secret: str):
         fake_prod_env.setenv("SECRET_KEY", secret)
         with pytest.raises(ValueError):

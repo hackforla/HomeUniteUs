@@ -45,9 +45,9 @@ def upgrade() -> None:
     with op.batch_alter_table('user', schema=None) as batch_op:
         # Each existing user will get the first and last names "Unknown" by default
         # and they will be assigned to the "Guest" user role.
-        batch_op.add_column(sa.Column('first_name', sa.String(length=255), nullable=False, server_default='Unknown'))
-        batch_op.add_column(sa.Column('middle_name', sa.String(length=255), nullable=True))
-        batch_op.add_column(sa.Column('last_name', sa.String(length=255), nullable=False, server_default='Unknown'))
+        batch_op.add_column(sa.Column('firstName', sa.String(length=255), nullable=False, server_default='Unknown'))
+        batch_op.add_column(sa.Column('middleName', sa.String(length=255), nullable=True))
+        batch_op.add_column(sa.Column('lastName', sa.String(length=255), nullable=False, server_default='Unknown'))
         batch_op.add_column(sa.Column('role_id', sa.Integer, nullable=False, server_default=str(guest_role_id)))
         batch_op.create_foreign_key('fk_user_role_id', 'role', ['role_id'], ['id'])
 
@@ -56,9 +56,9 @@ def upgrade() -> None:
 def downgrade() -> None:
     with op.batch_alter_table('user', schema=None) as batch_op:
         batch_op.drop_constraint('fk_user_role_id', type_='foreignkey')
-        batch_op.drop_column('last_name')
-        batch_op.drop_column('middle_name')
-        batch_op.drop_column('first_name')
+        batch_op.drop_column('lastName')
+        batch_op.drop_column('middleName')
+        batch_op.drop_column('firstName')
 
     op.drop_index(op.f('ix_role_id'), table_name='role')
     op.drop_table('role')

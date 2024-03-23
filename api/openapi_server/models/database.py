@@ -10,9 +10,9 @@ class User(Base):
     __tablename__ = "user"
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, nullable=False, unique=True)
-    first_name = Column(String(255), nullable=False)
-    middle_name = Column(String(255), nullable=True)
-    last_name = Column(String(255), nullable=False)
+    firstName = Column(String(255), nullable=False)
+    middleName = Column(String(255), nullable=True)
+    lastName = Column(String(255), nullable=False)
     role_id = Column(Integer, ForeignKey('role.id'), nullable=False)
     role = relationship("Role", back_populates="users")
 

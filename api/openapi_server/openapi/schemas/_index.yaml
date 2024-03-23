@@ -62,15 +62,15 @@ UserSchema:
     email:
       type: string 
       format: email
-    first_name:
+    firstName:
       type: string
-    middle_name:
+    middleName:
       type: string
-    last_name:
+    lastName:
       type: string
     role: 
       $ref: '#/RoleSchema'
   required:
     - email
-    - first_name 
-    - last_name
+    - firstName 
+    - lastName

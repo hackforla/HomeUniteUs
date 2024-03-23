@@ -12,9 +12,9 @@ def test_create_host(client):
     
     NEW_HOST = {
         "email" : "test@email.com",
-        "first_name" : "Josh",
-        "middle_name" : "Ray",
-        "last_name" : "Douglas"
+        "firstName" : "Josh",
+        "middleName" : "Ray",
+        "lastName" : "Douglas"
     }
     response = client.post(
         '/api/host',
@@ -22,16 +22,16 @@ def test_create_host(client):
     
     assert response.status_code == 201, f'Response body is: {response.json}'
     assert 'email' in response.json
-    assert 'first_name' in response.json
-    assert 'middle_name' in response.json
-    assert 'last_name' in response.json
+    assert 'firstName' in response.json
+    assert 'middleName' in response.json
+    assert 'lastName' in response.json
     assert 'role' in response.json
     assert 'name' in response.json['role']
 
     assert response.json['email'] == NEW_HOST['email']
-    assert response.json['first_name'] == NEW_HOST['first_name']
-    assert response.json['middle_name'] == NEW_HOST['middle_name']
-    assert response.json['last_name'] == NEW_HOST['last_name']
+    assert response.json['firstName'] == NEW_HOST['firstName']
+    assert response.json['middleName'] == NEW_HOST['middleName']
+    assert response.json['lastName'] == NEW_HOST['lastName']
     assert response.json['role']['name'] == UserRole.HOST.value
     
     # Make sure the database was updated to persist the values
@@ -40,9 +40,9 @@ def test_create_host(client):
         test_host = user_repo.get_user(NEW_HOST['email'])
         assert test_host is not None
         assert test_host.email == NEW_HOST['email']
-        assert test_host.first_name == NEW_HOST['first_name']
-        assert test_host.middle_name == NEW_HOST['middle_name']
-        assert test_host.last_name == NEW_HOST['last_name']
+        assert test_host.firstName == NEW_HOST['firstName']
+        assert test_host.middleName == NEW_HOST['middleName']
+        assert test_host.lastName == NEW_HOST['lastName']
         assert test_host.role.name == UserRole.HOST.value
 
 def test_create_host_empty_body(client):
@@ -77,12 +77,12 @@ def test_get_hosts(client):
     # Arrange
     with DataAccessLayer.session() as session:
         user_repo = UserRepository(session)
-        user_repo.add_user(email="host0@email.com", role=UserRole.HOST, first_name="host0", middle_name = None, last_name="host_last0")
-        user_repo.add_user(email="host1@email.com", role=UserRole.HOST, first_name="host1", middle_name = None, last_name="host_last1")
-        user_repo.add_user(email="host2@email.com", role=UserRole.HOST, first_name="host2", middle_name = None, last_name="host_last2")
-        user_repo.add_user(email="guest1@email.com", role=UserRole.GUEST, first_name="guest0", middle_name = None, last_name="guest_last0")
-        user_repo.add_user(email="Admin2@email.com", role=UserRole.ADMIN, first_name="Admin0", middle_name = None, last_name="cdmin_last0")
-        user_repo.add_user(email="Coordinator3@email.com", role=UserRole.COORDINATOR, first_name="coodinator0", middle_name = None, last_name="coordinator_last0")
+        user_repo.add_user(email="host0@email.com", role=UserRole.HOST, firstName="host0", middleName = None, lastName="host_last0")
+        user_repo.add_user(email="host1@email.com", role=UserRole.HOST, firstName="host1", middleName = None, lastName="host_last1")
+        user_repo.add_user(email="host2@email.com", role=UserRole.HOST, firstName="host2", middleName = None, lastName="host_last2")
+        user_repo.add_user(email="guest1@email.com", role=UserRole.GUEST, firstName="guest0", middleName = None, lastName="guest_last0")
+        user_repo.add_user(email="Admin2@email.com", role=UserRole.ADMIN, firstName="Admin0", middleName = None, lastName="cdmin_last0")
+        user_repo.add_user(email="Coordinator3@email.com", role=UserRole.COORDINATOR, firstName="coodinator0", middleName = None, lastName="coordinator_last0")
     
     # Act
     response = client.get('/api/host')
@@ -94,10 +94,10 @@ def test_get_hosts(client):
     host_emails_set = set()
     for host in response.json:
         assert 'host' in host["email"]
-        assert 'host' in host["first_name"]
-        assert 'host_last' in host["last_name"]
+        assert 'host' in host["firstName"]
+        assert 'host_last' in host["lastName"]
         assert host["role"]["name"] == UserRole.HOST.value
-        assert host["middle_name"] == None
+        assert host["middleName"] == None
         host_emails_set.add(host["email"])
 
     assert len(host_emails_set) == 3, "Duplicate hosts were returned!"

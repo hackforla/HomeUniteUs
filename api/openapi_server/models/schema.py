@@ -1,5 +1,5 @@
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
-from marshmallow import validates, ValidationError
+from marshmallow import validates, ValidationError, EXCLUDE
 from marshmallow_sqlalchemy.fields import Nested
 from openapi_server.models.database import *
 from openapi_server.models.user_roles import UserRole
@@ -17,6 +17,7 @@ class UserSchema(SQLAlchemyAutoSchema):
         include_relationships = True
         load_instance = True
         exclude = ('id',)
+        unknown = EXCLUDE
 
     @validates('role')
     def validate_role(self, value):
