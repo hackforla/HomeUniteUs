@@ -58,7 +58,7 @@ export const DashboardTask = ({
               {buttonText}
             </Button>
           ) : (
-            <Typography>Upcomining</Typography>
+            <Typography>Upcoming</Typography>
           )}
         </Stack>
       </Stack>
