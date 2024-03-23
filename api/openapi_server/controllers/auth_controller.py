@@ -112,19 +112,19 @@ def sign_up(body: dict):
                 raise AuthError({  "message": msg }, 400)
             case 'InvalidPasswordException':
                 msg = "Password did not conform with policy"
-                # remove user
+                delete_user(body['email'])
                 raise AuthError({  "message": msg }, 400)
             case 'TooManyRequestsException':
                 msg = "Too many requests made. Please wait before trying again."
-                # remove user
+                delete_user(body['email'])
                 raise AuthError({  "message": msg }, 400)
             case _:
                 msg = "An unexpected error occurred."
-                # remove user
+                delete_user(body['email'])
                 raise AuthError({  "message": msg }, 400)
     except botocore.excepts.ParameterValidationError as error:
         msg = f"The parameters you provided are incorrect: {error}"
-        # remove user from sql
+        delete_user(body['email'])
         raise AuthError({"message": msg}, 500)
     
 def signUpHost(body: dict):
