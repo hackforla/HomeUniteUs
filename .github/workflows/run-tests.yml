@@ -4,7 +4,7 @@ on:
     branches: [main]
   # This is also a reusable workflow that can be called from other workflows
   workflow_call:
-  workflow_dispatch:
+  push:
 jobs:
   test-api:
     runs-on: ubuntu-latest
