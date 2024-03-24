@@ -14,6 +14,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy import select
 
 from botocore.exceptions import ClientError
+from unittest.mock import patch
 
 cognito_client_url = 'https://homeuniteus.auth.us-east-1.amazoncognito.com'
 
@@ -74,6 +75,8 @@ def delete_user(email: str):
             raise AuthError({
                 "message": "Failed to delete user"
             }, 500)
+        if user is None:
+            print("user is deleted")
 
 def sign_up(body: dict):
     secret_hash = current_app.calc_secret_hash(body['email'])
@@ -94,15 +97,15 @@ def sign_up(body: dict):
         ClientId=current_app.config['COGNITO_CLIENT_ID'],
         SecretHash=secret_hash,
         Username=body['email'],
-        Password=body['password'],
+        Password='lol',
         ClientMetadata={
             'url': current_app.root_url
         }
         )
-
         return response
 
     except botocore.exceptions.ClientError as error:
+        print(error)
         match error.response['Error']['Code']:
             case 'UsernameExistsException': 
                 msg = "A user with this email already exists."
@@ -113,11 +116,11 @@ def sign_up(body: dict):
             case 'InvalidPasswordException':
                 msg = "Password did not conform with policy"
                 delete_user(body['email'])
-                raise AuthError({  "message": msg }, 400)
+                raise AuthError({  "message": msg }, 408)
             case 'TooManyRequestsException':
                 msg = "Too many requests made. Please wait before trying again."
                 delete_user(body['email'])
-                raise AuthError({  "message": msg }, 400)
+                raise AuthError({  "message": msg }, 408)
             case _:
                 msg = "An unexpected error occurred."
                 delete_user(body['email'])
