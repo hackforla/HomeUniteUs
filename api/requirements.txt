@@ -78,7 +78,7 @@ marshmallow==3.20.1
     # via
     #   homeuniteus-api (pyproject.toml)
     #   marshmallow-sqlalchemy
-marshmallow-sqlalchemy==0.30.0
+marshmallow-sqlalchemy==1.0.0
     # via homeuniteus-api (pyproject.toml)
 openapi-schema-validator==0.6.0
     # via openapi-spec-validator
@@ -88,7 +88,6 @@ packaging==23.1
     # via
     #   connexion
     #   marshmallow
-    #   marshmallow-sqlalchemy
     #   prance
 pathable==0.4.3
     # via jsonschema-spec
