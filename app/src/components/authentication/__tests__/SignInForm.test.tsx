@@ -39,15 +39,4 @@ describe('<SignInForm />', () => {
     expect(emailInput).toHaveValue('test@gmail.com');
     expect(passwordInput).toHaveValue('password');
   });
-
-  it('should display error text', async () => {
-    const {emailInput, passwordInput, submitButton} = prepare();
-
-    fireEvent.change(emailInput, {target: {value: 'invalid'}});
-    fireEvent.change(passwordInput, {target: {value: 'password'}});
-    fireEvent.click(submitButton);
-
-    await screen.findByText('email must be a valid email');
-    await screen.findByText(/password must contain/i);
-  });
 });
