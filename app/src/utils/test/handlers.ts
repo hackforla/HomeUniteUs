@@ -1,11 +1,16 @@
-import {rest} from 'msw';
+import {http, HttpResponse} from 'msw';
+
+const buildUrl = (path: string) => {
+  const baseUrl = `${import.meta.env.VITE_HUU_API_BASE_URL}`;
+  return `${baseUrl}${path}`;
+};
 
 const handlers = [
-  rest.post(/.*\/api\/auth\/forgot_password$/, (req, res, ctx) => {
-    return res(ctx.status(200));
+  http.post(buildUrl('/auth/forgot_password'), () => {
+    return new HttpResponse();
   }),
-  rest.post(/.*\/api\/auth\/invite$/, (req, res, ctx) => {
-    return res(ctx.status(200));
+  http.post(buildUrl('/auth/invite'), () => {
+    return new HttpResponse();
   }),
 ];
 
