@@ -5,15 +5,7 @@ post:
     content:
       application/json:
         schema:
-          type: object
-          properties:
-            email:
-              type: string
-            password:
-              type: string
-          required:
-            - email
-            - password
+          $ref: '../../schemas/_index.yaml#/UserSignupSchema'
   responses:
     "200":
       content:

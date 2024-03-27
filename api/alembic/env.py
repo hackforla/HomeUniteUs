@@ -65,11 +65,16 @@ def run_migrations_online() -> None:
 
     """
     print("ONLINE")
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
-    )
+    # Check for an existing connection before creating a new engine.
+    # pytest-alembic will hook into alembic by creating a connection
+    # with the test engine configuration.
+    connectable = context.config.attributes.get("connection", None)
+    if connectable is None:
+        connectable = engine_from_config(
+            config.get_section(config.config_ini_section, {}),
+            prefix="sqlalchemy.",
+            poolclass=pool.NullPool,
+        )
 
     with connectable.connect() as connection:
         context.configure(

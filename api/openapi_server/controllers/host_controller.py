@@ -1,18 +1,12 @@
 from flask import Response
 
-from openapi_server.models.database import Host, DataAccessLayer
-from openapi_server.models.schema import host_schema, hosts_schema
-from sqlalchemy import select
-
-# create host in database
-def create_host(body: dict) -> Response:
-    with DataAccessLayer.session() as session:
-        new_host = Host(name = body["name"])
-        session.add(new_host)
-        session.commit()
-        return host_schema.dump(new_host), 201
+from openapi_server.models.database import DataAccessLayer
+from openapi_server.models.schema import users_schema
+from openapi_server.models.user_roles import UserRole
+from openapi_server.repositories.user_repo import UserRepository
 
 def get_hosts() -> Response:
     with DataAccessLayer.session() as session:
-        all_hosts = session.scalars(select(Host)).all()
-        return hosts_schema.dump(all_hosts), 200
+        user_repo = UserRepository(session)
+        all_users = user_repo.get_users_with_role(UserRole.HOST)
+        return users_schema.dump(all_users), 200

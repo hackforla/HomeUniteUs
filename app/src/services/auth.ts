@@ -2,6 +2,8 @@ import {api} from './api';
 
 export interface User {
   email: string;
+  firstName: string;
+  lastName: string;
 }
 
 export interface UserResponse {

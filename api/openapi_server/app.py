@@ -142,6 +142,11 @@ def create_app(test_config: HUUConfig = None):
     flask_app = connexion_app.app
     flask_app.config.from_object(config)       
 
-    DataAccessLayer.db_init(flask_app.config["DATABASE_URL"])        
+    DATABASE_VERSION = 'e4c8bb426528'
+    DataAccessLayer.db_init(flask_app.config["DATABASE_URL"])
+    if DataAccessLayer.revision_id() != DATABASE_VERSION:
+        raise Exception(f"Database is out of date. Expected {DATABASE_VERSION} but " 
+                        f"found {DataAccessLayer.revision_id()}. "
+                        "Please run 'alembic upgrade head' to upgrade.")
     
     return connexion_app
