@@ -70,10 +70,14 @@ export const SignUp = () => {
   const handleSignUp = async ({
     email,
     password,
+    firstName,
+    lastName,
   }: SignUpHostRequest | SignUpCoordinatorRequest) => {
     try {
       if (type === 'host') {
         await signUpHost({
+          firstName,
+          lastName,
           email,
           password,
         }).unwrap();
@@ -81,6 +85,8 @@ export const SignUp = () => {
 
       if (type === 'coordinator') {
         await signUpCoordinator({
+          firstName,
+          lastName,
           email,
           password,
         }).unwrap();

@@ -22,6 +22,12 @@ export const validationSchema = object().shape({
     .required({required: 'password is required'}),
 });
 
+export const signUpVaildationSchema = object().shape({
+  firstName: string().required('first name is required'),
+  lastName: string().required('first name is required'),
+  ...validationSchema.fields,
+});
+
 // formik requires errors object with keys from yup
 
 interface ValidationErrors {

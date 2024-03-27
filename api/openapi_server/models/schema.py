@@ -1,12 +1,31 @@
-from marshmallow import Schema, fields
+from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
-class HostSchema(Schema):
-    id = fields.Int(missing=None)
-    name = fields.Str(required=True)
+from openapi_server.models.database import *
 
-class HousingProgramServiceProviderSchema(Schema):
-    id = fields.Int(missing=None)
-    provider_name = fields.Str(required=True)
+class UserSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = User
+        include_relationships = True
+        load_instance = True
+
+class HousingProgramServiceProviderSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = HousingProgramServiceProvider
+        include_relationships = True
+        load_instance = True
+
+
+class HousingProgramSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = HousingProgram
+        include_relationships = True
+        load_instance = True
+
+class HostSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = Host
+        include_relationships = True
+        load_instance = True
 
 host_schema = HostSchema()
 hosts_schema = HostSchema(many=True)

@@ -91,7 +91,7 @@ describe('DashboardTask', () => {
       expect(
         screen.queryByRole('button', {name: props.buttonText}),
       ).not.toBeInTheDocument();
-      expect(screen.getByText('Upcomining')).toBeInTheDocument();
+      expect(screen.getByText('Upcoming')).toBeInTheDocument();
     });
 
     it('should render lock icon', () => {

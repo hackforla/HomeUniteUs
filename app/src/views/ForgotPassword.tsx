@@ -34,13 +34,11 @@ export const ForgotPassword = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const formErrors = await validateForm();
     if (formErrors.email) {
       setFieldTouched('email', true);
       return;
     }
-
     try {
       await forgotPassword({email}).unwrap();
       navigate('code');
