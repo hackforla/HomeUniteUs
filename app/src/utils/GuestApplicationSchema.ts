@@ -5,6 +5,8 @@ export const GuestApplicationSchema = [
   null,
   null,
   //validation is based on step
+  object({}),
+  object({}),
   object({
     fullName: string().required('Name is required'),
     dateOfBirth: date()
