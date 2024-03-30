@@ -95,7 +95,7 @@ def sign_up(body: dict):
         ClientId=current_app.config['COGNITO_CLIENT_ID'],
         SecretHash=secret_hash,
         Username=body['email'],
-        Password='lol',
+        Password=body['password'],
         ClientMetadata={
             'url': current_app.root_url
         }
