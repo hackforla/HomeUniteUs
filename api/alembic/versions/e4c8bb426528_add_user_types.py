@@ -8,6 +8,7 @@ Create Date: 2024-03-10 21:47:13.942845
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy import text
+from openapi_server.models.user_roles import UserRole
 
 # revision identifiers, used by Alembic.
 revision = 'e4c8bb426528'
@@ -30,14 +31,15 @@ def upgrade() -> None:
     role_table = op.create_table('role',
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('name', sa.String(), nullable=False),
-        sa.PrimaryKeyConstraint('id')
+        sa.PrimaryKeyConstraint('id'),
+        sa.UniqueConstraint('name')
     )
     op.bulk_insert(role_table,
-                   [{'name': 'Admin'},
-                    {'name': 'Host'},
-                    {'name': 'Guest'},
-                    {'name': 'Coordinator'}])
-    op.create_index(op.f('ix_role_id'), 'role', ['id'], unique=False)
+                   [{'name': UserRole.ADMIN.value},
+                    {'name': UserRole.HOST.value},
+                    {'name': UserRole.GUEST.value},
+                    {'name': UserRole.COORDINATOR.value}])
+    op.create_index(op.f('ix_role_id'), 'role', ['id'])
 
     conn = op.get_bind()
     guest_role_id = conn.execute(text("SELECT id FROM role WHERE name = 'Guest'")).fetchone()[0]
@@ -47,7 +49,7 @@ def upgrade() -> None:
         # and they will be assigned to the "Guest" user role.
         batch_op.add_column(sa.Column('firstName', sa.String(length=255), nullable=False, server_default='Unknown'))
         batch_op.add_column(sa.Column('middleName', sa.String(length=255), nullable=True))
-        batch_op.add_column(sa.Column('lastName', sa.String(length=255), nullable=False, server_default='Unknown'))
+        batch_op.add_column(sa.Column('lastName', sa.String(length=255), nullable=True))
         batch_op.add_column(sa.Column('role_id', sa.Integer, nullable=False, server_default=str(guest_role_id)))
         batch_op.create_foreign_key('fk_user_role_id', 'role', ['role_id'], ['id'])
 
@@ -67,4 +69,4 @@ def downgrade() -> None:
         sa.Column('name', sa.String(), nullable=False),
         sa.PrimaryKeyConstraint('id')
         )
-    op.create_index(op.f('ix_host_id'), 'host', ['id'], unique=False)
+    op.create_index(op.f('ix_host_id'), 'host', ['id'])

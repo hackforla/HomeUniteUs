@@ -17,7 +17,7 @@ import {styled} from '@mui/system';
 
 function getInitials(user: User): string {
   const fi = user.firstName && user.firstName[0] || '?';
-  const li = user.lastName && user.lastName[0] || '?';
+  const li = user.lastName && user.lastName[0] || '';
   
   return fi + li;
 }
@@ -106,7 +106,7 @@ const AvatarDropdownMenu = () => {
     <Box sx={{flexGrow: 0}}>
       <Tooltip title="Open settings">
         <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-          <Avatar alt={user.firstName + ' ' + user.lastName}>{getInitials(user)}</Avatar>
+          <Avatar alt={user.firstName + user.lastName}>{getInitials(user)}</Avatar>
         </IconButton>
       </Tooltip>
       <Menu

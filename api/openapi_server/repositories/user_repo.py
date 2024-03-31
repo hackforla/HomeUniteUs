@@ -13,10 +13,7 @@ class UserRepository:
             raise ValueError(f"{role.value} is not a valid user role type")
         return db_role
 
-    def add_user(self, email: str, role: UserRole, firstName: str, middleName: str, lastName: str) -> User:
-        if not (email and firstName and lastName and role):
-            raise ValueError("Missing one or more input parameters. All parameters in add_user are required.")
-        
+    def add_user(self, email: str, role: UserRole, firstName: str, middleName: str=None, lastName: str=None) -> User:      
         new_role = self._get_role(role)        
         new_user = User(email=email, firstName=firstName, middleName=middleName, 
                         lastName=lastName, role_id=new_role.id)

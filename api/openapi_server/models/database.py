@@ -1,6 +1,8 @@
-from sqlalchemy import create_engine, Table, text
+from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session, declarative_base, relationship
+# Avoid naming conflict with marshmallow.validates
+from sqlalchemy.orm import validates as validates_sqlachemy
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -12,14 +14,20 @@ class User(Base):
     email = Column(String, nullable=False, unique=True)
     firstName = Column(String(255), nullable=False)
     middleName = Column(String(255), nullable=True)
-    lastName = Column(String(255), nullable=False)
+    lastName = Column(String(255), nullable=True)
     role_id = Column(Integer, ForeignKey('role.id'), nullable=False)
     role = relationship("Role", back_populates="users")
+
+    @validates_sqlachemy('firstName')
+    def validate_first_name(self, key, value):
+        if not value or not value.strip():
+            raise ValueError(f"{key} must contain at least one non-space character")
+        return value.strip()
 
 class Role(Base):
     __tablename__ = "role"
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
+    name = Column(String, nullable=False, unique=True)
     users = relationship("User", back_populates="role")
 
 class HousingProgramServiceProvider(Base):
