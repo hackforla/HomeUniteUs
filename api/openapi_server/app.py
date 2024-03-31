@@ -15,6 +15,7 @@ from connexion.apps.flask_app import (
     IntegerConverter
 )
 
+import openapi_server.models
 from openapi_server.models.database import DataAccessLayer
 from openapi_server.exceptions import AuthError, handle_auth_error
 from openapi_server.configs.registry import HUUConfigRegistry, HUUConfig
@@ -142,10 +143,10 @@ def create_app(test_config: HUUConfig = None):
     flask_app = connexion_app.app
     flask_app.config.from_object(config)       
 
-    DATABASE_VERSION = 'e4c8bb426528'
+    current_db_version = openapi_server.models.version()
     DataAccessLayer.db_init(flask_app.config["DATABASE_URL"])
-    if DataAccessLayer.revision_id() != DATABASE_VERSION:
-        raise Exception(f"Database is out of date. Expected {DATABASE_VERSION} but " 
+    if DataAccessLayer.revision_id() != current_db_version:
+        raise Exception(f"Database is out of date. Expected {current_db_version} but " 
                         f"found {DataAccessLayer.revision_id()}. "
                         "Please run 'alembic upgrade head' to upgrade.")
     
