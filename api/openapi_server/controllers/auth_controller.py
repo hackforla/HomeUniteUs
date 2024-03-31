@@ -14,7 +14,6 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy import select
 
 from botocore.exceptions import ClientError
-from unittest.mock import patch
 
 cognito_client_url = 'https://homeuniteus.auth.us-east-1.amazoncognito.com'
 
