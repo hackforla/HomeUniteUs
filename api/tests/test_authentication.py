@@ -50,11 +50,6 @@ def test_signup_with_missing_fields(client, endpoint):
         {
             'email': 'inbox928@placeholder.org',
             'password': 'Fakepass%^&7!asdf',
-            'firstName': 'Josh'
-        },
-        {
-            'email': 'inbox928@placeholder.org',
-            'password': 'Fakepass%^&7!asdf',
             'lastName': 'Josh'
         },
         {

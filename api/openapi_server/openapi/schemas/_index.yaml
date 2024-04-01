@@ -73,7 +73,6 @@ UserSchema:
   required:
     - email
     - firstName 
-    - lastName
 UserSignupSchema:
   type: object
   allOf:

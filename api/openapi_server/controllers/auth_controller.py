@@ -72,7 +72,7 @@ def sign_up(body: dict, role: UserRole):
                 role=role,
                 firstName=body['firstName'],
                 middleName=body.get('middleName', ''),
-                lastName=body['lastName']
+                lastName=body.get('lastName', '')
             )
     except Exception as error:
         raise AuthError({"message": str(error)}, 400)
