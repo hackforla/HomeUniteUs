@@ -6,11 +6,11 @@ import {object} from 'yup';
 import {useFieldGroups} from './hooks/useFieldGroups';
 import {FieldGroup, Answer, validations} from './constants/intakeProfile';
 
-type Values = {
+export type Values = {
   [key: string]: unknown;
 };
 
-type InitialValues = Record<string, Values>;
+export type InitialValues = Record<string, Values>;
 
 const createInitialValues = (
   fieldGroups: FieldGroup[],
@@ -76,7 +76,7 @@ export const IntakeProfile = () => {
         window.alert(values[groupId]);
       }}
     >
-      {() => (
+      {({errors}) => (
         <Stack
           direction="row"
           sx={{
@@ -113,7 +113,7 @@ export const IntakeProfile = () => {
           </Stack>
           <Stack component="form" sx={{height: '100%', flex: 1}}>
             <Stack sx={{flex: 1, overflowY: 'auto'}}>
-              <Outlet context={{groupId, fieldGroups}} />
+              <Outlet context={{groupId, fieldGroups, errors}} />
             </Stack>
             <Stack sx={{p: 1}}>
               <Button type="submit" variant="contained">
