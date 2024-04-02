@@ -2,6 +2,7 @@ import string
 import re
 import pytest
 from werkzeug.http import parse_cookie
+from openapi_server.models.database import DataAccessLayer 
 
 from tests.setup_utils import create_user, create_and_signin_user
 
@@ -252,3 +253,27 @@ def test_session_endpoint(client):
 
     assert response.status_code == 200, f"session failed: {response.json}"
     assert 'token' in response.json, 'session succeeded but token field missing from response'
+
+def test_user_signup_rollback(app):
+    """ Verify that a failed signup with cognito 
+    reverts the local DB entry of the user's email."""
+    
+
+    rollback_email = 'test_user_signup_rollback@fake.com'
+    signup_response = app.test_client().post(
+        '/api/auth/signup/host',
+        json = {
+            'email': rollback_email,
+            'password': 'weak'
+        }
+    )
+    assert signup_response.status_code == 400
+    with pytest.raises(app.boto_client.exceptions.UserNotFoundException):
+        app.boto_client.admin_delete_user(
+            UserPoolId=app.config['COGNITO_USER_POOL_ID'],
+            Username=rollback_email
+        )
+    with DataAccessLayer.session() as sess:
+        rolledback_user = sess.query(User).filter_by(email=rollback_email).first()\
+        # This assertion will fail on `main` because no rollback is happening
+        assert rolledback_user is None
