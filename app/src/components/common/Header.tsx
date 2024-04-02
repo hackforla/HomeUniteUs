@@ -4,7 +4,18 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import MenuIcon from '@mui/icons-material/Menu';
-import {Drawer, IconButton, Stack, styled} from '@mui/material';
+import Divider from '@mui/material/Divider';
+import {
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Stack,
+  styled,
+  Typography,
+} from '@mui/material';
 import logo from '../../img/favicon.png';
 
 const MOBILE_DRAWER_WIDTH = 209;
@@ -22,6 +33,25 @@ export const Header = () => {
   const handleDrawerToggle = () => {
     setMobileOpen(prevState => !prevState);
   };
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{textAlign: 'center'}}>
+      <Typography variant="h6" sx={{my: 2}}>
+        MUI
+      </Typography>
+      <Divider />
+      <List>
+        {navItems.map(({title, href}) => (
+          <ListItem key={title} disablePadding>
+            <ListItemButton sx={{textAlign: 'center'}} href={href}>
+              <ListItemText primary={title} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
 
   return (
     <Box sx={{display: 'flex'}}>
