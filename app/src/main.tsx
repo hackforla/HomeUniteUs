@@ -43,6 +43,7 @@ import {
   Language,
   About,
   Review,
+  IntakeProfile,
 } from './views';
 
 import {AccountVerification} from './views/AccountVerification';
@@ -146,7 +147,7 @@ function HuuApp() {
           path="/profile/:profileId"
           element={
             <ProtectedRoute>
-              <div>profile</div>
+              <IntakeProfile />
             </ProtectedRoute>
           }
         >
