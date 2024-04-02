@@ -15,6 +15,7 @@ from sqlalchemy import select
 
 from botocore.exceptions import ClientError
 
+
 cognito_client_url = 'https://homeuniteus.auth.us-east-1.amazoncognito.com'
 
 # Get user attributes from Cognito response
@@ -76,6 +77,8 @@ def delete_user(email: str):
             }, 500)
 
 def sign_up(body: dict):
+    from openapi_server.controllers.admin_controller import removeUser
+    # import locally to avoid circular import error 
     secret_hash = current_app.calc_secret_hash(body['email'])
 
     with DataAccessLayer.session() as session:
@@ -111,15 +114,15 @@ def sign_up(body: dict):
                 raise AuthError({  "message": msg }, 400)
             case 'InvalidPasswordException':
                 msg = "Password did not conform with policy"
-                delete_user(body['email'])
+                removeUser(body, True, False)
                 raise AuthError({  "message": msg }, 400)
             case 'TooManyRequestsException':
                 msg = "Too many requests made. Please wait before trying again."
-                delete_user(body['email'])
+                removeUser(body, True, False)
                 raise AuthError({  "message": msg }, 408)
             case _:
                 msg = "An unexpected error occurred."
-                delete_user(body['email'])
+                removeUser(body, True, False)
                 raise AuthError({  "message": msg }, 400)
     except botocore.excepts.ParameterValidationError as error:
         msg = f"The parameters you provided are incorrect: {error}"

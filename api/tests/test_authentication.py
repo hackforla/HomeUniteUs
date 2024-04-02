@@ -268,8 +268,15 @@ def test_user_signup_rollback(app):
         }
     )
     assert signup_response.status_code == 400
-    
+    with pytest.raises(app.boto_client.exceptions.UserNotFoundException):
+        app.boto_client.admin_delete_user(
+            UserPoolId=app.config['COGNITO_USER_POOL_ID'],
+            Username=rollback_email
+        )
     with DataAccessLayer.session() as sess:
         rolledback_user = sess.query(User).filter_by(email=rollback_email).first()\
         # This assertion will fail on `main` because no rollback is happening
         assert rolledback_user is None
+
+    # test making sure the 200 still works fine
+        
