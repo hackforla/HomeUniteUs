@@ -142,6 +142,16 @@ function HuuApp() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/profile/:profileId"
+          element={
+            <ProtectedRoute>
+              <div>profile</div>
+            </ProtectedRoute>
+          }
+        >
+          <Route path="group/:groupId" element={<div></div>} />
+        </Route>
       </Routes>
     </>
   );
