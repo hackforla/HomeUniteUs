@@ -54,6 +54,7 @@ import {
   GuestDashboardLayout,
 } from './components/layout';
 import {GuestApplicationContext} from './components/common/GuestApplicationContext';
+import {FieldGroupList} from './components/IntakeProfile/IntakeProfileGroups';
 
 function HuuApp() {
   const [session] = useSessionMutation();
@@ -151,7 +152,7 @@ function HuuApp() {
             </ProtectedRoute>
           }
         >
-          <Route path="group/:groupId" element={<div></div>} />
+          <Route path="group/:groupId" element={<FieldGroupList />} />
         </Route>
       </Routes>
     </>

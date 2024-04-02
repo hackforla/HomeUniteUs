@@ -1,15 +1,13 @@
 import {Button, Stack} from '@mui/material';
-import {Outlet, useParams} from 'react-router-dom';
+import {Link, Outlet, useParams} from 'react-router-dom';
 import {useFieldGroups} from './hooks/useFieldGroups';
 
 export const IntakeProfile = () => {
-  const {profileId} = useParams();
+  const {profileId, groupId} = useParams();
 
-  const {answers, fieldGroups} = useFieldGroups({profileId: profileId || ''});
+  const {fieldGroups} = useFieldGroups({profileId: profileId || ''});
 
-  if (profileId === undefined) return null;
-
-  console.log({answers, fieldGroups});
+  if (profileId === undefined || groupId === undefined) return null;
 
   return (
     <Stack
@@ -30,10 +28,25 @@ export const IntakeProfile = () => {
           borderColor: 'grey.200',
           backgroundColor: 'background.default',
         }}
-      ></Stack>
+      >
+        {fieldGroups.map(({id, title}) => {
+          const fieldTitle = title || '...';
+          return (
+            <Button
+              key={id}
+              variant="contained"
+              to={`group/${id}`}
+              component={Link}
+              color="inherit"
+            >
+              {fieldTitle}
+            </Button>
+          );
+        })}
+      </Stack>
       <Stack component="form" sx={{height: '100%', flex: 1}}>
         <Stack sx={{flex: 1, overflowY: 'auto'}}>
-          <Outlet />
+          <Outlet context={{groupId, fieldGroups}} />
         </Stack>
         <Stack sx={{p: 1}}>
           <Button type="submit" variant="contained">
