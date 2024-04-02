@@ -1,10 +1,15 @@
 import {Button, Stack} from '@mui/material';
 import {Outlet, useParams} from 'react-router-dom';
+import {useFieldGroups} from './hooks/useFieldGroups';
 
 export const IntakeProfile = () => {
   const {profileId} = useParams();
 
+  const {answers, fieldGroups} = useFieldGroups({profileId: profileId || ''});
+
   if (profileId === undefined) return null;
+
+  console.log({answers, fieldGroups});
 
   return (
     <Stack
