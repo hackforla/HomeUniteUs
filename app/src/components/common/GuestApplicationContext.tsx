@@ -1,11 +1,11 @@
-import {Box, Stack} from '@mui/material';
+import {Box, Stack, useTheme} from '@mui/material';
 import {Formik} from 'formik';
 import {useEffect, useState} from 'react';
 import {Outlet} from 'react-router-dom';
-import ProgressBar from './ProgressBar';
 import {GuestApplicationSchema} from '../../utils/GuestApplicationSchema';
 import {NavButtons} from './GuestApplicationButtons';
 import {useNavigate} from 'react-router-dom';
+import {Sections} from '../../views/guestApplicationForm/Sections';
 
 export interface formInputValues {
   fullName: string;
@@ -32,12 +32,6 @@ export interface formInputValues {
   hostRelationshipGoal: string;
   potentialChallenges: string;
 }
-export const stepToRouteMapping: {[key: number]: string} = {
-  1: 'welcome',
-  2: 'expectations',
-  3: 'basic',
-  4: 'contact',
-};
 export const initialValues = {
   fullName: '',
   dateOfBirth: '',
@@ -63,23 +57,79 @@ export const initialValues = {
   hostRelationshipGoal: '',
   potentialChallenges: '',
 };
+export const contentPerSection: {
+  [key: number]: {complete: boolean; innerText: string; route: string};
+} = {
+  0: {
+    complete: true,
+    innerText: 'Welcome',
+    route: 'welcome',
+  },
+  1: {
+    complete: false,
+    innerText: 'Expectations',
+    route: 'expectations',
+  },
+  2: {
+    complete: false,
+    innerText: 'Basic',
+    route: 'basic',
+  },
+  3: {
+    complete: false,
+    innerText: 'Guest and Pets',
+    route: 'guestAndPets',
+  },
+  4: {
+    complete: false,
+    innerText: 'Employment',
+    route: 'employment',
+  },
+  5: {
+    complete: false,
+    innerText: 'Education',
+    route: 'education',
+  },
+  6: {
+    complete: false,
+    innerText: 'Language',
+    route: 'language',
+  },
+  7: {
+    complete: false,
+    innerText: 'Substance Use',
+    route: 'substanceUse',
+  },
+  8: {
+    complete: false,
+    innerText: 'Mental Health',
+    route: 'mentalHealth',
+  },
+  9: {
+    complete: false,
+    innerText: 'Interests',
+    route: 'interests',
+  },
+  10: {
+    complete: false,
+    innerText: 'About',
+    route: 'about',
+  },
+  11: {
+    complete: false,
+    innerText: 'Review',
+    route: 'review',
+  },
+};
 
 export const GuestApplicationContext = () => {
-  const TOTAL_PAGES = 10; /*Once all forms are made and added to "stepToRouteMapping", make this number change based on "stepToRouteMapping"*/
-  const [step, setStep] = useState<number>(() => {
-    const storedStep = localStorage.getItem('currentStep');
-    const initialStep = storedStep ? parseInt(storedStep, 10) : 1;
-    return initialStep;
-  });
-
-  const progressBarValue = (step / TOTAL_PAGES) * 100;
+  const [step, setStep] = useState<number>(0);
+  const [showSections, setShowSections] = useState<boolean>(false);
   const navigate = useNavigate();
+  const theme = useTheme();
 
   useEffect(() => {
-    navigate(stepToRouteMapping[step]);
-  }, []);
-  useEffect(() => {
-    localStorage.setItem('currentStep', step.toString());
+    navigate(contentPerSection[step].route);
   }, [step]);
   function saveData() {
     //add logic to save current data
@@ -88,53 +138,70 @@ export const GuestApplicationContext = () => {
   function nextStep() {
     saveData();
     const newStep = step + 1;
-    if (stepToRouteMapping[newStep] !== undefined) {
+    if (contentPerSection[newStep] !== undefined) {
       setStep(newStep);
-      navigate(stepToRouteMapping[newStep]);
     } else {
-      alert('Form not complete!');
+      alert('end of form');
     }
   }
   function prevStep() {
     const newStep = step - 1;
-    if (step > 1) {
+    if (step > 0) {
       setStep(newStep);
-      navigate(stepToRouteMapping[newStep]);
     } else {
       navigate('/guest');
     }
   }
-  function saveAndExit() {
-    saveData();
-    navigate('/guest');
+  function openSections() {
+    setShowSections(true);
+    console.log('Open sections');
   }
 
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={() => console.log('Parent wrapper submit')}
-      validationSchema={GuestApplicationSchema[step - 1]}
+      validationSchema={GuestApplicationSchema[step]}
     >
-      <Box padding={2} gap={0} height={'95vh'}>
-        <Stack>
-          <ProgressBar progressBarValue={progressBarValue} />
-        </Stack>
-        <Stack
-          marginTop={2}
-          overflow={'scroll'}
-          minHeight={'72%'}
-          maxHeight={'72%'}
-        >
-          <Outlet />
-        </Stack>
-        <Stack>
-          <NavButtons
-            next={nextStep}
-            prev={prevStep}
-            saveAndExit={saveAndExit}
-          />
-        </Stack>
-      </Box>
+      <Stack>
+        {showSections ? (
+          <Stack
+            sx={{
+              backgroundColor: theme.palette.grey[50],
+              zIndex: 1000,
+            }}
+          >
+            <Sections
+              setStep={setStep}
+              contentPerSection={contentPerSection}
+              setShowSections={setShowSections}
+            />
+          </Stack>
+        ) : (
+          <Box
+            padding={2}
+            gap={0}
+            height={'95vh'}
+            sx={{backgroundColor: theme.palette.grey[50]}}
+          >
+            <Stack
+              marginTop={2}
+              overflow={'scroll'}
+              minHeight={'72%'}
+              maxHeight={'72%'}
+            >
+              <Outlet />
+            </Stack>
+            <Stack>
+              <NavButtons
+                next={nextStep}
+                prev={prevStep}
+                openSections={openSections}
+              />
+            </Stack>
+          </Box>
+        )}
+      </Stack>
     </Formik>
   );
 };
