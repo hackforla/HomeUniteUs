@@ -14,7 +14,8 @@ import {FormikErrors, useFormikContext, FormikHandlers} from 'formik';
 import {useOutletContext} from 'react-router-dom';
 
 import {Values, InitialValues} from 'src/views/IntakeProfile';
-import {FieldGroup, Fields} from 'src/views/constants/intakeProfile';
+import {FieldGroup, Fields, Guest} from 'src/views/constants/intakeProfile';
+import {AdditionalGuestsField} from './AdditionaGuestsField';
 
 interface OutletContext {
   groupId: string;
@@ -170,6 +171,16 @@ export const RenderFields = ({
           id="outlined"
           placeholder="multiple choice field"
           variant="outlined"
+        />
+      );
+    case 'additional_guests':
+      return (
+        <AdditionalGuestsField
+          errors={errors}
+          guests={values[field.id] as Guest[]}
+          fieldId={field.id}
+          groupId={groupId}
+          onChange={handleChange}
         />
       );
     default:
