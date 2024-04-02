@@ -1,4 +1,5 @@
 import {faker} from '@faker-js/faker';
+import {array, object, string} from 'yup';
 
 export const fieldTypes = [
   'short_text',
@@ -77,3 +78,25 @@ export const fieldBuilder = (options: Partial<Fields> = {}): Fields => ({
     ...options.validations,
   },
 });
+
+const phoneRegExp =
+  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+
+export const validations = {
+  short_text: string().required('This field is required'),
+  long_text: string().required('This field is required'),
+  number: string()
+    .matches(phoneRegExp, 'phone number is not valid')
+    .required('This field is required'),
+  email: string().email().required('This field is required'),
+  yes_no: string().required('This field is required'),
+  dropdown: string().required('This field is required'),
+  multiple_choice: string().required('This field is required'),
+  additional_guests: array().of(
+    object().shape({
+      name: string().required('Name is required'),
+      dob: string().required('DOB is required'),
+      relationship: string().required('Relationship is required'),
+    }),
+  ),
+};
