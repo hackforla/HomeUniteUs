@@ -87,7 +87,7 @@ export const RenderFields = ({
         <TextField
           {...props}
           multiline
-          rows={2}
+          rows={1}
           id="outlined"
           variant="outlined"
           placeholder="Type you answer here"
