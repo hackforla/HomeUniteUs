@@ -97,13 +97,15 @@ export const IntakeProfile = () => {
           ([fieldId, value]) => {
             const answer = answers.find(answer => answer.fieldId === fieldId);
             if (answer) {
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
               answer.value = value;
               return answer;
             }
           },
         );
 
-        console.log(updateAnswers);
+        window.alert(JSON.stringify(updateAnswers, null, 2));
       }}
     >
       {({errors, handleSubmit}) => (
