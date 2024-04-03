@@ -8,14 +8,9 @@ import {
 import {setCredentials, tokenReceived} from '../app/authSlice';
 import {RootState} from '../app/store';
 
-const baseUrl =
-  import.meta.env.MODE === 'test'
-    ? `${import.meta.env.VITE_HUU_API_BASE_URL}`
-    : '/api';
-
 // Create base query
 const baseQuery = fetchBaseQuery({
-  baseUrl,
+  baseUrl: new URL('/api', location.origin).href,
   prepareHeaders: (headers, {getState}) => {
     // get token from state
     const token = (getState() as RootState).auth.token;
