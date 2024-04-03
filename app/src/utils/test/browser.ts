@@ -1,7 +1,7 @@
 import {setupWorker} from 'msw/browser';
-import {handlers} from './handlers';
+import {handlers as profileHandlers} from './handlers/profile';
 
-export const worker = setupWorker(...handlers);
+export const worker = setupWorker(...profileHandlers);
 
 export const enableMocking = async () => {
   if (process.env.NODE_ENV !== 'development') {

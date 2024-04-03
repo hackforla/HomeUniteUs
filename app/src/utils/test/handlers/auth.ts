@@ -5,7 +5,7 @@ const buildUrl = (path: string) => {
   return `${baseUrl}${path}`;
 };
 
-const handlers = [
+export const handlers = [
   http.post(buildUrl('/auth/forgot_password'), () => {
     return new HttpResponse();
   }),
@@ -13,5 +13,3 @@ const handlers = [
     return new HttpResponse();
   }),
 ];
-
-export {handlers};
