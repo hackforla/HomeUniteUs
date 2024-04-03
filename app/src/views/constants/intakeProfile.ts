@@ -53,6 +53,7 @@ export interface Guest {
 }
 
 export interface Answer {
+  id: string;
   fieldId: string;
   value: string | Guest[] | undefined;
 }

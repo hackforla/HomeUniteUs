@@ -11,6 +11,10 @@ interface UseFieldGroups {
   profileId: string;
 }
 
+/**
+ * Generates field groups and answers for a given profile id
+ */
+
 export const useFieldGroups = ({profileId}: UseFieldGroups) => {
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [fieldGroups, setFieldGroups] = useState<FieldGroup[]>([]);
@@ -104,6 +108,7 @@ export const useFieldGroups = ({profileId}: UseFieldGroups) => {
           }
 
           return {
+            id: faker.string.uuid(),
             fieldId: field.id,
             value,
           };

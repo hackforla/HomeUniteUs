@@ -12,6 +12,15 @@ export type Values = {
 
 export type InitialValues = Record<string, Values>;
 
+/**
+ * Creates an object used for the initial Formik valiues
+ * It takes the form of:
+ * {
+ *  fieldGroupId: {
+ *     fieldId: answerValue
+ *  }
+ * }
+ */
 const createInitialValues = (
   fieldGroups: FieldGroup[],
   answers: Answer[],
@@ -31,6 +40,16 @@ const createInitialValues = (
     };
   }, {});
 };
+
+/**
+ * Creates a validation schema for Formik based on field type
+ * It takes the form of:
+ * {
+ *  fieldGroupId: {
+ *     fieldId: validationSchema
+ *  }
+ * }
+ */
 
 const buildValidationSchema = (
   fieldGroup: FieldGroup[],
@@ -73,10 +92,21 @@ export const IntakeProfile = () => {
       validationSchema={validationSchema}
       enableReinitialize={true}
       onSubmit={values => {
-        window.alert(values[groupId]);
+        // Update answers objects with new values
+        const updateAnswers = Object.entries(values[groupId]).map(
+          ([fieldId, value]) => {
+            const answer = answers.find(answer => answer.fieldId === fieldId);
+            if (answer) {
+              answer.value = value;
+              return answer;
+            }
+          },
+        );
+
+        console.log(updateAnswers);
       }}
     >
-      {({errors}) => (
+      {({errors, handleSubmit}) => (
         <Stack
           direction="row"
           sx={{
@@ -111,7 +141,11 @@ export const IntakeProfile = () => {
               );
             })}
           </Stack>
-          <Stack component="form" sx={{height: '100%', flex: 1}}>
+          <Stack
+            onSubmit={handleSubmit}
+            component="form"
+            sx={{height: '100%', flex: 1}}
+          >
             <Stack sx={{flex: 1, overflowY: 'auto'}}>
               <Outlet context={{groupId, fieldGroups, errors}} />
             </Stack>
