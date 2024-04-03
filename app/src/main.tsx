@@ -55,6 +55,7 @@ import {
 } from './components/layout';
 import {GuestApplicationContext} from './components/common/GuestApplicationContext';
 import {FieldGroupList} from './components/IntakeProfile/IntakeProfileGroups';
+import {enableMocking} from './utils/test/browser';
 
 function HuuApp() {
   const [session] = useSessionMutation();
@@ -161,17 +162,19 @@ function HuuApp() {
 
 const appRoot = document.getElementById('root') as HTMLElement;
 
-ReactDOM.createRoot(appRoot).render(
-  <React.StrictMode>
-    <Provider store={setupStore()}>
-      <BrowserRouter>
-        <StyledEngineProvider injectFirst>
-          <ThemeProvider theme={HomeUniteUsTheme}>
-            <CssBaseline />
-            <HuuApp />
-          </ThemeProvider>
-        </StyledEngineProvider>
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>,
-);
+enableMocking().then(() => {
+  ReactDOM.createRoot(appRoot).render(
+    <React.StrictMode>
+      <Provider store={setupStore()}>
+        <BrowserRouter>
+          <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={HomeUniteUsTheme}>
+              <CssBaseline />
+              <HuuApp />
+            </ThemeProvider>
+          </StyledEngineProvider>
+        </BrowserRouter>
+      </Provider>
+    </React.StrictMode>,
+  );
+});
