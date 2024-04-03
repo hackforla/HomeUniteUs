@@ -5,6 +5,7 @@ import {object} from 'yup';
 
 import {useFieldGroups} from './hooks/useFieldGroups';
 import {FieldGroup, Answer, validations} from './constants/intakeProfile';
+import {useGetProfileQuery} from '../services/profile';
 
 export type Values = {
   [key: string]: unknown;
@@ -80,6 +81,8 @@ export const IntakeProfile = () => {
   const {profileId, groupId} = useParams();
 
   const {answers, fieldGroups} = useFieldGroups({profileId: profileId || ''});
+  const {data} = useGetProfileQuery({profileId: profileId}, {skip: !profileId});
+  console.log(data);
 
   if (profileId === undefined || groupId === undefined) return null;
 

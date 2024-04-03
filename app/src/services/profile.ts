@@ -20,7 +20,7 @@ export interface GetProfileApiResponse {
 }
 
 export interface GetProfileApiArg {
-  profileId: string;
+  profileId: string | undefined;
 }
 
 export const {useGetProfileQuery} = injectedRtkApi;
