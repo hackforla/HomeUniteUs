@@ -3,15 +3,42 @@ import {Link, Outlet, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
 import {object} from 'yup';
 
-import {useFieldGroups} from './hooks/useFieldGroups';
-import {FieldGroup, Answer, validations} from './constants/intakeProfile';
-import {useGetProfileQuery} from '../services/profile';
+import {
+  FieldGroup,
+  Answer,
+  validations,
+  FieldTypes,
+} from './constants/intakeProfile';
+import {useGetProfileQuery, useGetAnswersQuery} from '../services/profile';
 
 export type Values = {
   [key: string]: unknown;
 };
 
 export type InitialValues = Record<string, Values>;
+
+const fieldDefaultValue = (fieldType: FieldTypes) => {
+  switch (fieldType) {
+    case 'short_text':
+      return '';
+    case 'long_text':
+      return '';
+    case 'dropdown':
+      return '';
+    case 'number':
+      return '';
+    case 'additional_guests':
+      return [];
+    case 'email':
+      return '';
+    case 'multiple_choice':
+      return '';
+    case 'yes_no':
+      return '';
+    default:
+      return '';
+  }
+};
 
 /**
  * Creates an object used for the initial Formik valiues
@@ -31,7 +58,8 @@ const createInitialValues = (
       return {
         ...acc,
         [field.id]:
-          answers.find(answer => answer.fieldId === field.id)?.value || '',
+          answers.find(answer => answer.fieldId === field.id)?.value ||
+          fieldDefaultValue(field.type),
       };
     }, {});
 
@@ -80,11 +108,24 @@ const buildValidationSchema = (
 export const IntakeProfile = () => {
   const {profileId, groupId} = useParams();
 
-  const {answers, fieldGroups} = useFieldGroups({profileId: profileId || ''});
-  const {data} = useGetProfileQuery({profileId: profileId}, {skip: !profileId});
-  console.log(data);
+  // const {answers, fieldGroups} = useFieldGroups({profileId: profileId || ''});
+  const {data: profileData} = useGetProfileQuery(
+    {profileId: profileId},
+    {skip: !profileId},
+  );
+  const {data: answersData} = useGetAnswersQuery({userId: '1'});
 
-  if (profileId === undefined || groupId === undefined) return null;
+  if (
+    profileId === undefined ||
+    groupId === undefined ||
+    profileData === undefined ||
+    answersData === undefined
+  )
+    return null;
+
+  const {fieldGroups} = profileData;
+  const {answers} = answersData;
+  console.log(answers);
 
   const validationSchema = buildValidationSchema(fieldGroups, groupId);
   const initalValues = createInitialValues(fieldGroups, answers);
@@ -104,6 +145,11 @@ export const IntakeProfile = () => {
               // @ts-ignore
               answer.value = value;
               return answer;
+            } else {
+              return {
+                fieldId,
+                value,
+              };
             }
           },
         );
