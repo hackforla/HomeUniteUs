@@ -27,16 +27,17 @@ export const FieldGroupList = () => {
   const {values, handleChange, errors} = useFormikContext<InitialValues>();
 
   if (fieldGroups === undefined || groupId === undefined) return null;
-
-  const fields = fieldGroups.find(group => group.id === groupId)?.fields || [];
+  const fieldGroup = fieldGroups.find(group => group.id === groupId);
+  const fields = fieldGroup?.fields || [];
 
   return (
     <Container maxWidth="sm" sx={{py: 4}}>
       <Stack sx={{gap: 2}}>
+        <Typography variant="h5">{fieldGroup?.title}</Typography>
         {fields.map(field => {
           return (
             <Stack key={field.id} sx={{gap: 1}}>
-              <Typography variant="h5">{field.title}</Typography>
+              <Typography variant="h6">{field.title}</Typography>
               <RenderFields
                 groupId={groupId}
                 field={field}
