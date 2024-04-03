@@ -14,12 +14,12 @@ const injectedRtkApi = api.injectEndpoints({
 
 export {injectedRtkApi as hostAPI};
 
-interface GetProfileApiResponse {
+export interface GetProfileApiResponse {
   id: string;
   fieldGroups: FieldGroup[];
 }
 
-interface GetProfileApiArg {
+export interface GetProfileApiArg {
   profileId: string;
 }
 
