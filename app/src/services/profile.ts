@@ -1,5 +1,67 @@
-import {Answer, FieldGroup} from 'src/views/constants/intakeProfile';
 import {api} from './api';
+
+export const fieldTypes = [
+  'short_text',
+  'long_text',
+  'number',
+  'email',
+  'dropdown',
+  'multiple_choice',
+  'yes_no',
+  'additional_guests',
+] as const;
+
+type FieldTypeTuple = typeof fieldTypes;
+
+export type FieldTypes = FieldTypeTuple[number];
+
+export interface Choice {
+  id: string;
+  label: string;
+}
+
+export interface ReduiredIf {
+  field_id: string;
+  value: string;
+}
+
+export interface Fields {
+  id: string;
+  title: string;
+  type: FieldTypes;
+  properties: {
+    description?: string;
+    randomize?: boolean;
+    alphabetical_order?: boolean;
+    allow_multiple_selection?: boolean;
+    allow_other_choice?: boolean;
+    choices?: Choice[];
+  };
+  validations: {
+    required?: boolean;
+    max_characters?: number;
+    required_if?: ReduiredIf;
+  };
+}
+
+export interface FieldGroup {
+  id: string;
+  title: string;
+  fields: Fields[];
+}
+
+export interface Guest {
+  id: string;
+  name: string;
+  dob: string;
+  relationship: string;
+}
+
+export interface Answer {
+  id: string;
+  fieldId: string;
+  value: string | Guest[] | undefined;
+}
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: build => ({

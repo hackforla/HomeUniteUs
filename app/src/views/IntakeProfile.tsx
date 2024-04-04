@@ -1,13 +1,10 @@
 import {Button, Stack} from '@mui/material';
 import {Link, Outlet, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
-import {object} from 'yup';
 
 import {
-  FieldGroup,
-  Answer,
-  validations,
-  FieldTypes,
+  buildValidationSchema,
+  createInitialValues,
 } from './constants/intakeProfile';
 import {useGetProfileQuery, useGetAnswersQuery} from '../services/profile';
 
@@ -16,94 +13,6 @@ export type Values = {
 };
 
 export type InitialValues = Record<string, Values>;
-
-const fieldDefaultValue = (fieldType: FieldTypes) => {
-  switch (fieldType) {
-    case 'short_text':
-      return '';
-    case 'long_text':
-      return '';
-    case 'dropdown':
-      return '';
-    case 'number':
-      return '';
-    case 'additional_guests':
-      return [];
-    case 'email':
-      return '';
-    case 'multiple_choice':
-      return '';
-    case 'yes_no':
-      return '';
-    default:
-      return '';
-  }
-};
-
-/**
- * Creates an object used for the initial Formik valiues
- * It takes the form of:
- * {
- *  fieldGroupId: {
- *     fieldId: answerValue
- *  }
- * }
- */
-const createInitialValues = (
-  fieldGroups: FieldGroup[],
-  answers: Answer[],
-): InitialValues => {
-  return fieldGroups.reduce((acc: InitialValues, fieldGroup) => {
-    const fields = fieldGroup.fields.reduce((acc, field) => {
-      return {
-        ...acc,
-        [field.id]:
-          answers.find(answer => answer.fieldId === field.id)?.value ||
-          fieldDefaultValue(field.type),
-      };
-    }, {});
-
-    return {
-      ...acc,
-      [fieldGroup.id]: {...fields},
-    };
-  }, {});
-};
-
-/**
- * Creates a validation schema for Formik based on field type
- * It takes the form of:
- * {
- *  fieldGroupId: {
- *     fieldId: validationSchema
- *  }
- * }
- */
-
-const buildValidationSchema = (
-  fieldGroup: FieldGroup[],
-  groupId: string | undefined,
-) => {
-  if (groupId === undefined) {
-    console.error('Invalid groupId');
-    return object().shape({});
-  }
-
-  const fields = fieldGroup.find(group => group.id === groupId)?.fields || [];
-
-  const schema = object().shape(
-    fields.reduce((acc, field) => {
-      return {
-        ...acc,
-        [field.id]: validations[field.type],
-      };
-    }, {}),
-  );
-
-  return object().shape({
-    [groupId]: object().shape({...schema.fields}),
-  });
-};
 
 export const IntakeProfile = () => {
   const {profileId, groupId} = useParams();
@@ -125,7 +34,6 @@ export const IntakeProfile = () => {
 
   const {fieldGroups} = profileData;
   const {answers} = answersData;
-  console.log(answers);
 
   const validationSchema = buildValidationSchema(fieldGroups, groupId);
   const initalValues = createInitialValues(fieldGroups, answers);

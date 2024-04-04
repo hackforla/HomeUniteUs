@@ -15,8 +15,8 @@ import {FormikErrors, useFormikContext, FormikHandlers} from 'formik';
 import {useOutletContext} from 'react-router-dom';
 
 import {Values, InitialValues} from 'src/views/IntakeProfile';
-import {FieldGroup, Fields, Guest} from 'src/views/constants/intakeProfile';
 import {AdditionalGuestsField} from './AdditionaGuestsField';
+import {FieldGroup, Fields, Guest} from 'src/services/profile';
 
 interface OutletContext {
   groupId: string;

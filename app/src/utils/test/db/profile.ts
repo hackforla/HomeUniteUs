@@ -97,7 +97,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
         title: 'Employment Information',
         fields: [
           {
-            id: faker.string.numeric(4),
+            id: '5478',
             title: 'Are you currently employed?',
             type: 'yes_no',
             properties: {},
@@ -111,14 +111,24 @@ export const intakeProfiles: GetProfileApiResponse[] = [
               'If no, are you currently looking for work? If so, what type?',
             type: 'long_text',
             properties: {},
-            validations: {},
+            validations: {
+              required_if: {
+                field_id: '5478',
+                value: 'no',
+              },
+            },
           },
           {
             id: faker.string.numeric(4),
             title: 'If yes, please describe your current employment',
             type: 'long_text',
             properties: {},
-            validations: {},
+            validations: {
+              required_if: {
+                field_id: '5478',
+                value: 'yes',
+              },
+            },
           },
         ],
       },

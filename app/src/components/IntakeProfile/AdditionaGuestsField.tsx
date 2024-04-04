@@ -2,7 +2,7 @@ import {faker} from '@faker-js/faker';
 import {Stack, Typography, Button, TextField} from '@mui/material';
 import {FormikErrors, FormikHandlers, FieldArray} from 'formik';
 import {Values} from 'src/views/IntakeProfile';
-import {Guest} from 'src/views/constants/intakeProfile';
+import {Guest} from '../../services/profile';
 
 interface AdditionalGuestsFieldProps {
   errors: FormikErrors<Values>;

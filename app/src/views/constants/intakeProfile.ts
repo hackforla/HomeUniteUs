@@ -1,62 +1,13 @@
 import {faker} from '@faker-js/faker';
 import {array, object, string} from 'yup';
-
-export const fieldTypes = [
-  'short_text',
-  'long_text',
-  'number',
-  'email',
-  'dropdown',
-  'multiple_choice',
-  'yes_no',
-  'additional_guests',
-] as const;
-
-type FieldTypeTuple = typeof fieldTypes;
-
-export type FieldTypes = FieldTypeTuple[number];
-
-export interface Choice {
-  id: string;
-  label: string;
-}
-
-export interface Fields {
-  id: string;
-  title: string;
-  type: FieldTypes;
-  properties: {
-    description?: string;
-    randomize?: boolean;
-    alphabetical_order?: boolean;
-    allow_multiple_selection?: boolean;
-    allow_other_choice?: boolean;
-    choices?: Choice[];
-  };
-  validations: {
-    required?: boolean;
-    max_characters?: number;
-  };
-}
-
-export interface FieldGroup {
-  id: string;
-  title: string;
-  fields: Fields[];
-}
-
-export interface Guest {
-  id: string;
-  name: string;
-  dob: string;
-  relationship: string;
-}
-
-export interface Answer {
-  id: string;
-  fieldId: string;
-  value: string | Guest[] | undefined;
-}
+import {InitialValues} from '../IntakeProfile';
+import {
+  FieldGroup,
+  Fields,
+  fieldTypes,
+  FieldTypes,
+  Answer,
+} from 'src/services/profile';
 
 export const fieldGroupBuilder = (
   options: Partial<FieldGroup> = {},
@@ -80,19 +31,80 @@ export const fieldBuilder = (options: Partial<Fields> = {}): Fields => ({
   },
 });
 
+/**
+ * Creates an object used for the initial Formik valiues
+ * It takes the form of:
+ * {
+ *  fieldGroupId: {
+ *     fieldId: answerValue
+ *  }
+ * }
+ */
+const fieldDefaultValue = (fieldType: FieldTypes) => {
+  switch (fieldType) {
+    case 'short_text':
+      return '';
+    case 'long_text':
+      return '';
+    case 'dropdown':
+      return '';
+    case 'number':
+      return '';
+    case 'additional_guests':
+      return [];
+    case 'email':
+      return '';
+    case 'multiple_choice':
+      return '';
+    case 'yes_no':
+      return '';
+    default:
+      return '';
+  }
+};
+
+export const createInitialValues = (
+  fieldGroups: FieldGroup[],
+  answers: Answer[],
+): InitialValues => {
+  return fieldGroups.reduce((acc: InitialValues, fieldGroup) => {
+    const fields = fieldGroup.fields.reduce((acc, field) => {
+      return {
+        ...acc,
+        [field.id]:
+          answers.find(answer => answer.fieldId === field.id)?.value ||
+          fieldDefaultValue(field.type),
+      };
+    }, {});
+
+    return {
+      ...acc,
+      [fieldGroup.id]: {...fields},
+    };
+  }, {});
+};
+
+/**
+ * Creates a validation schema for Formik based on field type
+ * It takes the form of:
+ * {
+ *  fieldGroupId: {
+ *     fieldId: validationSchema
+ *  }
+ * }
+ */
+
 const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
-export const validations = {
-  short_text: string().required('This field is required'),
-  long_text: string().required('This field is required'),
-  number: string()
-    .matches(phoneRegExp, 'phone number is not valid')
-    .required('This field is required'),
-  email: string().email().required('This field is required'),
-  yes_no: string().required('This field is required'),
-  dropdown: string().required('This field is required'),
-  multiple_choice: string().required('This field is required'),
+export const typeValidations = {
+  short_text: string(),
+  long_text: string(),
+  number: string().matches(phoneRegExp, 'phone number is not valid'),
+  email: string().email(),
+  yes_no: string(),
+  dropdown: string(),
+  multiple_choice: string(),
   additional_guests: array().of(
     object().shape({
       name: string().required('Name is required'),
@@ -100,4 +112,68 @@ export const validations = {
       relationship: string().required('Relationship is required'),
     }),
   ),
+};
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+const merge = (...schemas) => {
+  const [first, ...rest] = schemas;
+
+  const merged = rest.reduce(
+    (mergedSchemas, schema) => mergedSchemas.concat(schema),
+    first,
+  );
+
+  return merged;
+};
+
+const createFieldValidationSchema = ({type, validations}: Fields) => {
+  if (!typeValidations[type]) {
+    console.error(`Invalid type: ${type}`);
+  }
+
+  let schema = typeValidations[type];
+
+  if (validations.required) {
+    // only works for string types at the moment
+    schema = merge(schema, string().required('This field is required'));
+  }
+
+  if (validations.required_if) {
+    const {field_id, value} = validations.required_if;
+    // only works for string types at the moment
+    const requiedIfSchema = string().when(field_id, {
+      is: value,
+      then: schema => schema.required('This field is required'),
+      otherwise: schema => schema,
+    });
+    schema = merge(schema, requiedIfSchema);
+  }
+
+  return schema;
+};
+
+export const buildValidationSchema = (
+  fieldGroup: FieldGroup[],
+  groupId: string | undefined,
+) => {
+  if (groupId === undefined) {
+    console.error('Invalid groupId');
+    return object().shape({});
+  }
+
+  const fields = fieldGroup.find(group => group.id === groupId)?.fields || [];
+
+  const schema = object().shape(
+    fields.reduce((acc, field) => {
+      return {
+        ...acc,
+        [field.id]: createFieldValidationSchema(field),
+      };
+    }, {}),
+  );
+
+  return object().shape({
+    [groupId]: object().shape({...schema.fields}),
+  });
 };
