@@ -2,6 +2,7 @@ import {
   Container,
   FormControl,
   FormControlLabel,
+  FormHelperText,
   MenuItem,
   Radio,
   RadioGroup,
@@ -134,11 +135,12 @@ export const RenderFields = ({
       );
     case 'yes_no':
       return (
-        <FormControl>
+        <FormControl error={error}>
           <RadioGroup {...props} row aria-labelledby="yes-no-field">
             <FormControlLabel value="yes" control={<Radio />} label="Yes" />
             <FormControlLabel value="no" control={<Radio />} label="No" />
           </RadioGroup>
+          <FormHelperText>{helperText}</FormHelperText>
         </FormControl>
       );
     case 'dropdown':
@@ -146,7 +148,7 @@ export const RenderFields = ({
         throw new Error('Invalid field type');
 
       return (
-        <FormControl fullWidth>
+        <FormControl fullWidth error={error}>
           <Select
             {...props}
             labelId="demo-simple-select-label"
@@ -163,6 +165,7 @@ export const RenderFields = ({
               </MenuItem>
             ))}
           </Select>
+          <FormHelperText>{helperText}</FormHelperText>
         </FormControl>
       );
     case 'multiple_choice':

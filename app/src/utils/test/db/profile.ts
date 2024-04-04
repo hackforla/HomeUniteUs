@@ -109,14 +109,14 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             id: faker.string.numeric(4),
             title:
               'If no, are you currently looking for work? If so, what type?',
-            type: 'short_text',
+            type: 'long_text',
             properties: {},
             validations: {},
           },
           {
             id: faker.string.numeric(4),
             title: 'If yes, please describe your current employment',
-            type: 'short_text',
+            type: 'long_text',
             properties: {},
             validations: {},
           },
