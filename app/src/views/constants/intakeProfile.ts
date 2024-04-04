@@ -7,7 +7,7 @@ import {
   fieldTypes,
   FieldTypes,
   Answer,
-} from 'src/services/profile';
+} from '../../services/profile';
 
 export const fieldGroupBuilder = (
   options: Partial<FieldGroup> = {},
@@ -101,7 +101,7 @@ export const typeValidations = {
   short_text: string(),
   long_text: string(),
   number: string().matches(phoneRegExp, 'phone number is not valid'),
-  email: string().email(),
+  email: string().email('Must be a valid email address'),
   yes_no: string(),
   dropdown: string(),
   multiple_choice: string(),
