@@ -38,7 +38,7 @@ export const FieldGroupList = () => {
         {fields.map(field => {
           return (
             <Stack key={field.id} sx={{gap: 1}}>
-              <Typography variant="h6">{field.title}</Typography>
+              <Typography variant="body1">{field.title}</Typography>
               <RenderFields
                 groupId={groupId}
                 field={field}
