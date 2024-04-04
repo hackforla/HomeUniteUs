@@ -6,10 +6,14 @@ import {
   buildValidationSchema,
   createInitialValues,
 } from './constants/intakeProfile';
-import {useGetProfileQuery, useGetAnswersQuery} from '../services/profile';
+import {
+  useGetProfileQuery,
+  useGetAnswersQuery,
+  Answer,
+} from '../services/profile';
 
 export type Values = {
-  [key: string]: unknown;
+  [key: string]: Answer['value'];
 };
 
 export type InitialValues = Record<string, Values>;
@@ -44,13 +48,10 @@ export const IntakeProfile = () => {
       validationSchema={validationSchema}
       enableReinitialize={true}
       onSubmit={values => {
-        // Update answers objects with new values
         const updateAnswers = Object.entries(values[groupId]).map(
           ([fieldId, value]) => {
             const answer = answers.find(answer => answer.fieldId === fieldId);
             if (answer) {
-              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-              // @ts-ignore
               answer.value = value;
               return answer;
             } else {
