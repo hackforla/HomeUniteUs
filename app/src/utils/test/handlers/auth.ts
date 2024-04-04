@@ -1,10 +1,10 @@
 import {http, HttpResponse} from 'msw';
 
 export const handlers = [
-  http.post('/auth/forgot_password', () => {
+  http.post('/api/auth/forgot_password', () => {
     return new HttpResponse();
   }),
-  http.post('/auth/invite', () => {
+  http.post('/api/auth/invite', () => {
     return new HttpResponse();
   }),
 ];

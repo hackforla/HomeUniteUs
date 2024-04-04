@@ -96,17 +96,14 @@ describe('ForgotPasswordCode page', () => {
     });
     test('display an error message', async () => {
       server.use(
-        http.post(
-          `${import.meta.env.VITE_HUU_API_BASE_URL}/auth/forgot_password`,
-          () => {
-            return HttpResponse.json(
-              {
-                message: 'Invalid email address',
-              },
-              {status: 400},
-            );
-          },
-        ),
+        http.post('/api/auth/forgot_password', () => {
+          return HttpResponse.json(
+            {
+              message: 'Invalid email address',
+            },
+            {status: 400},
+          );
+        }),
       );
 
       setup();

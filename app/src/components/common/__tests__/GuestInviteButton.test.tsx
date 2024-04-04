@@ -113,7 +113,7 @@ describe('<GuestInviteButton />', () => {
     const message = 'There was an error sending the invite.';
 
     server.use(
-      http.post(`${import.meta.env.VITE_HUU_API_BASE_URL}/auth/invite`, () => {
+      http.post('/api/auth/invite', () => {
         return HttpResponse.json(
           {
             message,
