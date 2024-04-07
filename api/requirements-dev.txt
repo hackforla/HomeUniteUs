@@ -47,9 +47,13 @@ colorama==0.4.6
     #   pytest
     #   tox
 connexion==2.14.2
-    # via homeuniteus-api (pyproject.toml)
+    # via
+    #   connexion
+    #   homeuniteus-api (pyproject.toml)
 coverage==7.3.0
-    # via pytest-cov
+    # via
+    #   coverage
+    #   pytest-cov
 cryptography==41.0.7
     # via
     #   moto
@@ -110,10 +114,13 @@ markupsafe==2.1.3
     #   mako
     #   werkzeug
 marshmallow==3.20.1
+    # via
+    #   homeuniteus-api (pyproject.toml)
+    #   marshmallow-sqlalchemy
+marshmallow-sqlalchemy==1.0.0
     # via homeuniteus-api (pyproject.toml)
 moto==4.2.10
     # via homeuniteus-api (pyproject.toml)
-marshmallow_sqlalchemy==0.30.0
 openapi-schema-validator==0.6.0
     # via openapi-spec-validator
 openapi-spec-validator==0.6.0
@@ -169,7 +176,9 @@ python-dateutil==2.8.2
 python-dotenv==0.20.0
     # via homeuniteus-api (pyproject.toml)
 python-jose==3.3.0
-    # via moto
+    # via
+    #   moto
+    #   python-jose
 pyyaml==6.0.1
     # via
     #   clickclick
@@ -211,7 +220,9 @@ six==1.16.0
     #   python-dateutil
     #   rfc3339-validator
 sqlalchemy==2.0.20
-    # via alembic
+    # via
+    #   alembic
+    #   marshmallow-sqlalchemy
 swagger-ui-bundle==0.0.9
     # via connexion
 tomli==2.0.1
