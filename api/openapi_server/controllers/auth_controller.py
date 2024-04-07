@@ -77,7 +77,7 @@ def delete_user(email: str):
             }, 500)
 
 def sign_up(body: dict):
-    from openapi_server.controllers.admin_controller import removeUser
+    from openapi_server.controllers.admin_controller import remove_user
     # import locally to avoid circular import error 
     secret_hash = current_app.calc_secret_hash(body['email'])
 
@@ -114,15 +114,15 @@ def sign_up(body: dict):
                 raise AuthError({  "message": msg }, 400)
             case 'InvalidPasswordException':
                 msg = "Password did not conform with policy"
-                removeUser(body, True, False)
+                remove_user(body, True, False)
                 raise AuthError({  "message": msg }, 400)
             case 'TooManyRequestsException':
                 msg = "Too many requests made. Please wait before trying again."
-                removeUser(body, True, False)
+                remove_user(body, True, False)
                 raise AuthError({  "message": msg }, 408)
             case _:
                 msg = "An unexpected error occurred."
-                removeUser(body, True, False)
+                remove_user(body, True, False)
                 raise AuthError({  "message": msg }, 400)
     except botocore.excepts.ParameterValidationError as error:
         msg = f"The parameters you provided are incorrect: {error}"

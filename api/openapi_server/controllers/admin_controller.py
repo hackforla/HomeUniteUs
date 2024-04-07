@@ -55,7 +55,7 @@ def initial_sign_in_reset_password():
         'user': user
     }
 
-def removeUser(body: dict, removeDB: bool = True, removeCognito: bool = True):
+def remove_user(body: dict, removeDB: bool = True, removeCognito: bool = True):
     '''
     Remove a user from connected database and AWS Cognito user pool.
     This method is only available to admin users.
