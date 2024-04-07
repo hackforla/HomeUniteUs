@@ -59,22 +59,6 @@ def get_token_auth_header():
     # return token
     token = parts[1]
     return token
-def delete_user(email: str):
-    with DataAccessLayer.session() as session:
-        user = session.query(User).filter_by(email=email).first()
-        if user is None:
-            raise AuthError({
-                "message": "User with this email does not exist."
-            }, 404)
-
-        try:
-            session.delete(user)
-            session.commit()
-        except IntegrityError:
-            session.rollback()
-            raise AuthError({
-                "message": "Failed to delete user"
-            }, 500)
 
 def sign_up(body: dict):
     from openapi_server.controllers.admin_controller import remove_user
@@ -126,7 +110,7 @@ def sign_up(body: dict):
                 raise AuthError({  "message": msg }, 400)
     except botocore.excepts.ParameterValidationError as error:
         msg = f"The parameters you provided are incorrect: {error}"
-        delete_user(body['email'])
+        remove_user(body, True, False)
         raise AuthError({"message": msg}, 500)
     
 def signUpHost(body: dict):

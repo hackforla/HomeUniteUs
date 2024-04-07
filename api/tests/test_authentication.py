@@ -277,6 +277,3 @@ def test_user_signup_rollback(app):
         rolledback_user = sess.query(User).filter_by(email=rollback_email).first()\
         # This assertion will fail on `main` because no rollback is happening
         assert rolledback_user is None
-
-    # test making sure the 200 still works fine
-        
