@@ -64,6 +64,8 @@ def remove_user(body: dict, removeDB: bool = True, removeCognito: bool = True):
     {
         "email": "EMAIL_TO_REMOVE"
     }
+    Function takes removeDB and removeCognito params to specificy 
+    where the user is removed from. By default, the user is removed from both.
     '''
     if removeDB:   
         with DataAccessLayer.session() as session:
