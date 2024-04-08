@@ -2,15 +2,12 @@ import {Button, Stack} from '@mui/material';
 import {Link, Outlet, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
 
-import {
-  buildValidationSchema,
-  createInitialValues,
-} from './constants/intakeProfile';
+import {buildValidationSchema, createInitialValues} from './constants';
 import {
   useGetProfileQuery,
   useGetAnswersQuery,
   Answer,
-} from '../services/profile';
+} from '../../services/profile';
 
 export type Values = {
   [key: string]: Answer['value'];

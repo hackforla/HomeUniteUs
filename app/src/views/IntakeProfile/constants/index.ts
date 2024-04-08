@@ -1,13 +1,13 @@
 import {faker} from '@faker-js/faker';
 import {array, object, string} from 'yup';
-import {InitialValues} from '../IntakeProfile';
+import {InitialValues} from '..';
 import {
   FieldGroup,
   Fields,
   fieldTypes,
   FieldTypes,
   Answer,
-} from '../../services/profile';
+} from '../../../services/profile';
 
 export const fieldGroupBuilder = (
   options: Partial<FieldGroup> = {},

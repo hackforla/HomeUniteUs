@@ -1,6 +1,6 @@
 import {faker} from '@faker-js/faker';
 import {useEffect, useState} from 'react';
-import {fieldBuilder, fieldGroupBuilder} from '../constants/intakeProfile';
+import {fieldBuilder, fieldGroupBuilder} from '../constants';
 import {Answer, FieldGroup} from 'src/services/profile';
 
 interface UseFieldGroups {
