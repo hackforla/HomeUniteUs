@@ -68,14 +68,18 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             title: 'Email',
             type: 'email',
             properties: {},
-            validations: {},
+            validations: {
+              required: true,
+            },
           },
           {
             id: faker.string.numeric(4),
             title: 'Phone Number',
             type: 'number',
             properties: {},
-            validations: {},
+            validations: {
+              required: true,
+            },
           },
         ],
       },
@@ -179,14 +183,18 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             title: 'Email',
             type: 'email',
             properties: {},
-            validations: {},
+            validations: {
+              required: true,
+            },
           },
           {
             id: faker.string.numeric(4),
             title: 'Phone Number',
             type: 'number',
             properties: {},
-            validations: {},
+            validations: {
+              required: true,
+            },
           },
         ],
       },
