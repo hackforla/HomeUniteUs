@@ -126,7 +126,11 @@ dev = [
   # pip-tools provides the tools pip-compile and pip-sync to help manage requirements files
   "pip-tools",
 
-  "moto[cognitoidp]",
+  "moto[cognitoidp]==4.2.10",
+
+  # cryptography is a transitive dependency of moto, but we specify a minimum
+  # version since a known security vulnerability is present in < 42.0.4 
+  "cryptography>=42.0.4"
 ]
 
 # This defines the "prod" extra dependency group.

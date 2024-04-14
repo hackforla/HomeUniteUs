@@ -47,16 +47,21 @@ colorama==0.4.6
     #   pytest
     #   tox
 connexion==2.14.2
-    # via homeuniteus-api (pyproject.toml)
+    # via
+    #   connexion
+    #   homeuniteus-api (pyproject.toml)
 coverage==7.3.0
-    # via pytest-cov
+    # via
+    #   coverage
+    #   pytest-cov
 cryptography==42.0.4
     # via
+    #   homeuniteus-api (pyproject.toml)
     #   moto
     #   python-jose
 distlib==0.3.7
     # via virtualenv
-ecdsa==0.18.0
+ecdsa==0.19.0
     # via
     #   moto
     #   python-jose
@@ -112,7 +117,9 @@ markupsafe==2.1.3
 marshmallow==3.20.1
     # via homeuniteus-api (pyproject.toml)
 moto==4.2.10
-    # via homeuniteus-api (pyproject.toml)
+    # via
+    #   homeuniteus-api (pyproject.toml)
+    #   moto
 openapi-schema-validator==0.6.0
     # via openapi-spec-validator
 openapi-spec-validator==0.6.0
@@ -142,7 +149,7 @@ prance==23.6.21.0
     # via homeuniteus-api (pyproject.toml)
 psycopg2-binary==2.9.5
     # via homeuniteus-api (pyproject.toml)
-pyasn1==0.5.1
+pyasn1==0.6.0
     # via
     #   python-jose
     #   rsa
@@ -168,7 +175,9 @@ python-dateutil==2.8.2
 python-dotenv==0.20.0
     # via homeuniteus-api (pyproject.toml)
 python-jose==3.3.0
-    # via moto
+    # via
+    #   moto
+    #   python-jose
 pyyaml==6.0.1
     # via
     #   clickclick
