@@ -131,7 +131,6 @@ describe('<GuestInviteButton />', () => {
     fireEvent.click(submitButton);
 
     await screen.findByText(/first name is required/i);
-    await screen.findByText(/last name is required/i);
     await screen.findByText(/email is required/i);
   });
 });

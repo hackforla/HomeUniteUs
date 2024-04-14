@@ -5,7 +5,9 @@
 #    pip-compile --extra=dev --output-file=requirements-dev.txt --strip-extras pyproject.toml
 #
 alembic==1.10.2
-    # via homeuniteus-api (pyproject.toml)
+    # via
+    #   homeuniteus-api (pyproject.toml)
+    #   pytest-alembic
 attrs==23.1.0
     # via
     #   jsonschema
@@ -163,8 +165,11 @@ pyproject-hooks==1.0.0
 pytest==7.4.2
     # via
     #   homeuniteus-api (pyproject.toml)
+    #   pytest-alembic
     #   pytest-cov
     #   pytest-randomly
+pytest-alembic==0.11.0
+    # via homeuniteus-api (pyproject.toml)
 pytest-cov==4.0.0
     # via homeuniteus-api (pyproject.toml)
 pytest-randomly==3.12.0
@@ -223,6 +228,7 @@ sqlalchemy==2.0.20
     # via
     #   alembic
     #   marshmallow-sqlalchemy
+    #   pytest-alembic
 swagger-ui-bundle==0.0.9
     # via connexion
 tomli==2.0.1
