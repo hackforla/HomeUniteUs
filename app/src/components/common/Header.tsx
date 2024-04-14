@@ -4,9 +4,10 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import MenuIcon from '@mui/icons-material/Menu';
-import {Drawer, IconButton, Stack, styled} from '@mui/material';
+import Divider from '@mui/material/Divider';
+import {Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Stack, styled} from '@mui/material';
 import logo from '../../img/favicon.png';
-
+import Typography from '@mui/material/Typography';
 const MOBILE_DRAWER_WIDTH = 209;
 
 const navItems = [
@@ -42,7 +43,7 @@ export const Header = () => {
   );
 
   const container =
-    window !== undefined ? () => window().document.body : undefined;
+    window !== undefined ? () => window.document.body : undefined;
 
   return (
     <Box sx={{display: 'flex'}}>
