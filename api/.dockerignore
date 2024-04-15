@@ -1,6 +1,7 @@
 .travis.yaml
 .openapi-generator-ignore
 README.md
+tox.ini
 git_push.sh
 setup.py
 
