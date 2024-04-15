@@ -93,3 +93,10 @@ def removeUser(body: dict):
             case _:
                 msg = error.response['Error']['Message']
                 raise AuthError({"message": msg}, 500)
+            
+def health():
+    '''
+    The health check endpoint always returns a successful status code.
+    This is useful for determining whether the API startup was successful.
+    '''
+    return 'API is healthy 😎', 200
