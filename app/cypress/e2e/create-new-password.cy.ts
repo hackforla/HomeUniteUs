@@ -47,9 +47,7 @@ describe('Forgot Password', () => {
     const sessionId = faker.string.uuid();
     const password = 'Test1234!';
 
-    cy.visit(
-      `http://localhost:4040/create-password?userId=${userId}&sessionId=${sessionId}`,
-    );
+    cy.visit(`/create-password?userId=${userId}&sessionId=${sessionId}`);
 
     cy.findByLabelText('Password').type(password);
     cy.findByLabelText('Confirm Password').type(password);
