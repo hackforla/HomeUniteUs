@@ -9,8 +9,7 @@ WORKDIR /app
 # move source files into image
 COPY . ./
 
-# Only install non-development dependencies
-RUN npm install
+RUN npm ci
 
 # generate bundles from source
 RUN npm run build
