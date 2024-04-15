@@ -51,6 +51,7 @@ jobs:
     steps:
       - name: Run Tests With Backend Mocking
         run: pytest
+        working-directory: /api
   test-api-nomock:
     runs-on: ubuntu-latest
     needs: [build-api]     
@@ -64,6 +65,7 @@ jobs:
     steps:
       - name: Run Tests With Backend Mocking
         run: pytest --mode=release
+        working-directory: /api
   test-app-mock:
     runs-on: ubuntu-latest
     needs: [build-app, build-api]
