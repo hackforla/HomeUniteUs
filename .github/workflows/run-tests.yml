@@ -52,7 +52,7 @@ jobs:
       options: --entrypoint /bin/bash --no-healthcheck
     steps:
       - name: Run Tests With Backend Mocking
-        run: tox
+        run: pytest
         working-directory: /opt/HomeUniteUs/api
   test-api-real-aws:
     runs-on: ubuntu-latest
@@ -66,7 +66,7 @@ jobs:
         COGNITO_ACCESS_KEY: ${{ secrets.COGNITO_ACCESS_KEY }}
     steps:
       - name: Run Tests With Backend Mocking
-        run: tox -e releasetest
+        run: pytest --move=release
         working-directory: /opt/HomeUniteUs/api
   test-app-mock-backend:
     runs-on: ubuntu-latest
