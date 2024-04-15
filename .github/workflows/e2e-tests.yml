@@ -58,6 +58,10 @@ jobs:
     container:
       image: ghcr.io/hackforla/homeuniteus/api:latest
       options: --entrypoint /bin/bash --no-healthcheck
+      env:
+        COGNITO_REGION: ${{ secrets.COGNITO_REGION }}
+        COGNITO_ACCESS_ID: ${{ secrets.COGNITO_ACCESS_ID }}
+        COGNITO_ACCESS_KEY: ${{ secrets.COGNITO_ACCESS_KEY }}
     steps:
       - name: Run Tests With Backend Mocking
         run: pytest --mode=release
@@ -85,6 +89,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build-app, build-api]
     services:
+      backend:
+        image: ghcr.io/hackforla/homeuniteus/api:latest
+        env:
+          ENV: development
+          HOST: 0.0.0.0
       frontend:
         image: ghcr.io/hackforla/homeuniteus/app:latest-test
         env:
