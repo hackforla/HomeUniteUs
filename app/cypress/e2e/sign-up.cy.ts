@@ -4,16 +4,18 @@ describe('Sign Up', () => {
   beforeEach(() => {
     if (Cypress.env('USE_MOCK')) {
       // While Mocking always return a successful status code
-      cy.intercept('POST', '/api/auth/signup/coordinator', {statusCode: 200}).as(
-        'signUpCoordinator',
-      );
+      cy.intercept('POST', '/api/auth/signup/coordinator', {
+        statusCode: 200,
+      }).as('signUpCoordinator');
 
       cy.intercept('POST', '/api/auth/signup/host', {statusCode: 200}).as(
         'signUpHost',
       );
     } else {
       // cy.intercept without a request will not stub out the real API call
-      cy.intercept('POST', '/api/auth/signup/coordinator').as('signUpCoordinator');
+      cy.intercept('POST', '/api/auth/signup/coordinator').as(
+        'signUpCoordinator',
+      );
       cy.intercept('POST', '/api/auth/signup/host').as('signUpHost');
     }
   });
