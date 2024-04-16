@@ -5,10 +5,6 @@ on:
   # This is also a reusable workflow that can be called from other workflows
   workflow_call:
   workflow_dispatch:
-env:
-  API_IMAGE_NAME: ghcr.io/hackforla/homeuniteus/api:${{ github.run_id }}
-  APP_TEST_IMAGE_NAME: ghcr.io/hackforla/homeuniteus/app:${{ github.run_id }}-test
-  APP_PROD_IMAGE_NAME: ghcr.io/hackforla/homeuniteus/app:${{ github.run_id }}
 jobs:
   build-api:
     runs-on: ubuntu-latest
@@ -23,8 +19,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and Push API Image
         run: |
-          docker build -t $API_IMAGE_NAME ./api
-          docker push $API_IMAGE_NAME
+          IMAGE_NAME=ghcr.io/hackforla/homeuniteus/api:${GITHUB_RUN_ID}
+          docker build -t $IMAGE_NAME ./api
+          docker push $IMAGE_NAME
   build-app:
     runs-on: ubuntu-latest
     steps:
@@ -38,17 +35,19 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and Push Testing Image
         run: |
-          docker build --build-arg VITE_HUU_API_BASE_URL=http://127.0.0.1:8080/api --target development --tag $APP_TEST_IMAGE_NAME ./app
-          docker push $APP_TEST_IMAGE_NAME
+          IMAGE_NAME=ghcr.io/hackforla/homeuniteus/app:${GITHUB_RUN_ID}-test
+          docker build --build-arg VITE_HUU_API_BASE_URL=http://127.0.0.1:8080/api --target development --tag $IMAGE_NAME ./app
+          docker push $IMAGE_NAME
       - name: Build Production Image
         run: |
-          docker build --build-arg VITE_HUU_API_BASE_URL=http://127.0.0.1:8080/api --target production --tag $APP_PROD_IMAGE_NAME ./app
-          docker push $APP_PROD_IMAGE_NAME
+          IMAGE_NAME=ghcr.io/hackforla/homeuniteus/app:${GITHUB_RUN_ID}
+          docker build --build-arg VITE_HUU_API_BASE_URL=http://127.0.0.1:8080/api --target production --tag $IMAGE_NAME ./app
+          docker push $IMAGE_NAME
   test-api-mock-aws:
     runs-on: ubuntu-latest
     needs: [build-api]
     container:
-      image: ${{ env.API_IMAGE_NAME }}
+      image: ghcr.io/hackforla/homeuniteus/api:${GITHUB_RUN_ID}
       options: --entrypoint /bin/bash --no-healthcheck
     steps:
       - name: Run Tests With Backend Mocking
@@ -58,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build-api]     
     container:
-      image: ${{ env.APP_TEST_IMAGE_NAME }}
+      image: ghcr.io/hackforla/homeuniteus/api:${GITHUB_RUN_ID}
       options: --entrypoint /bin/bash --no-healthcheck
       env:
         COGNITO_REGION: ${{ secrets.COGNITO_REGION }}
@@ -73,11 +72,11 @@ jobs:
     needs: [build-app, build-api]
     services:
       frontend:
-        image: ${{ env.APP_TEST_IMAGE_NAME }}
+        image: ghcr.io/hackforla/homeuniteus/app:${GITHUB_RUN_ID}-test
         env:
           VITE_HUU_API_BASE_URL: http://127.0.0.1:8080/api
     container:
-      image: ${{ env.APP_TEST_IMAGE_NAME }}
+      image: ghcr.io/hackforla/homeuniteus/app:${GITHUB_RUN_ID}-test
       options: --entrypoint /bin/bash --no-healthcheck
       env:
           CYPRESS_BASE_URL: http://frontend:4040
@@ -91,16 +90,16 @@ jobs:
     needs: [build-app, build-api]
     services:
       backend:
-        image: ${{ env.API_IMAGE_NAME }}
+        image: ghcr.io/hackforla/homeuniteus/api:${GITHUB_RUN_ID}
         env:
           ENV: development
           HOST: 0.0.0.0
       frontend:
-        image: ${{ env.APP_TEST_IMAGE_NAME }}
+        image: ghcr.io/hackforla/homeuniteus/app:${GITHUB_RUN_ID}-test
         env:
           VITE_HUU_API_BASE_URL: http://backend:8080/api
     container:
-      image: ${{ env.APP_TEST_IMAGE_NAME }}
+      image: ghcr.io/hackforla/homeuniteus/app:${GITHUB_RUN_ID}-test
       options: --entrypoint /bin/bash --no-healthcheck
       env:
           CYPRESS_BASE_URL: http://frontend:4040
