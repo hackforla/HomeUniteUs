@@ -73,6 +73,11 @@ filelock==3.12.2
     #   tox
     #   virtualenv
 flask==2.2.5
+    # via
+    #   connexion
+    #   flask-testing
+flask-testing==0.8.1
+    # via homeuniteus-api (pyproject.toml)
     # via connexion
 greenlet==2.0.2
     # via sqlalchemy
