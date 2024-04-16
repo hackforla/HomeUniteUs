@@ -16,10 +16,6 @@ RUN alembic upgrade head
 
 EXPOSE 8080
 ENTRYPOINT ["/bin/sh", "-c"]
-# We can decrease the number of health checks when 
-# v25.0 docker engine is release. This engine will
-# provide a --start-interval option that allows a custom
-# startup health check interval
 HEALTHCHECK --interval=5s --timeout=5s --retries=3 \
     CMD curl --fail http://${HOST:-localhost}:${PORT:-8080}/api/health || exit 1
 CMD ["python -m openapi_server"]
