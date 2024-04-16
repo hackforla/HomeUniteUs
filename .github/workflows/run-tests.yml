@@ -16,20 +16,25 @@ jobs:
         with:
           fetch-depth: 500
           fetch-tags: true
+
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
           cache: 'pip'
+
       - name: Upgrade pip
         run: python -m pip install --upgrade pip
+
       - name: Install API dev Dependencies
         run: |
           pip install -r requirements-dev.txt
+
       - name: Run development tests with mocking enabled, using tox
         run: |
           # Use tox because it is configured to test against the same package type being deployed
           tox
+
       - name: Run release tests with mocking disabled, using tox
         env:
           COGNITO_REGION: ${{ secrets.COGNITO_REGION }}
@@ -38,6 +43,7 @@ jobs:
         run: |
           echo "COGNITO_REGION set"
           tox -e releasetest
+
   test-app:
     runs-on: ubuntu-latest
     defaults:
@@ -45,17 +51,22 @@ jobs:
         shell: bash
         working-directory: ./app
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Use Node.js 16.x
         uses: actions/setup-node@v3
         with:
           node-version: '16.x'
           cache: 'npm'
           cache-dependency-path: app/package-lock.json
-      - name: Run npm CI
+
+      - name: Run npm CI - install dependencies
         run: npm ci
+
       - name: Test app
         run: npm run test -- --no-color --run
+
       - name: Run E2E tests
         uses: cypress-io/github-action@v5
         with:
