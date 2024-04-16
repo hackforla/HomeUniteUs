@@ -1,26 +1,19 @@
 # Third Party
 import pytest
-
+from collections.abc import Generator
 # Local
-from openapi_server.models.database import DataAccessLayer
 from openapi_server.repositories.service_provider_repository import HousingProviderRepository
 
 @pytest.fixture
-def empty_housing_repo() -> HousingProviderRepository:
+def empty_housing_repo(empty_db_session) -> Generator[HousingProviderRepository, None, None]:
     '''
     SetUp and TearDown an empty housing repository for 
     testing purposes.
     '''
-    DataAccessLayer._engine = None
-    DataAccessLayer.db_init("sqlite:///:memory:")
-
     yield HousingProviderRepository()
-    
-    test_engine, DataAccessLayer._engine = DataAccessLayer._engine, None 
-    test_engine.dispose()
 
 @pytest.fixture
-def housing_repo_5_entries(empty_housing_repo: HousingProviderRepository) -> HousingProviderRepository:
+def housing_repo_5_entries(empty_housing_repo: HousingProviderRepository) -> Generator[HousingProviderRepository, None, None]:
     '''
     SetUp and TearDown a housing repository with five service providers. 
     The providers will have ids [1-5] and names Provider 1...Provider5

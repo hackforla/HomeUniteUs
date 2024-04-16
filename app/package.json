@@ -9,6 +9,8 @@
     "preview": "vite preview",
     "test": "vitest",
     "coverage": "vitest run --coverage",
+    "cypress:run:mock": "cypress run --env USE_MOCK=true",
+    "cypress:run:nomock": "cypress run --env USE_MOCK=false",
     "cypress:open": "cypress open --env USE_MOCK=true",
     "cypress:open:nomock": "cypress open --env USE_MOCK=false",
     "storybook": "start-storybook -p 6006",

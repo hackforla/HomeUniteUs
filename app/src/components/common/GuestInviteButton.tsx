@@ -20,7 +20,7 @@ import {isFetchBaseQueryError, isErrorWithMessage} from '../../app/helpers';
 
 export const validationSchema = object({
   firstName: string().required('first name is required'),
-  lastName: string().required('last name is required'),
+  lastName: string().optional(),
   email: string().email().required('email is required'),
 });
 

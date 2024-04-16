@@ -17,15 +17,12 @@ import {
   Typography,
 } from '@mui/material';
 import logo from '../../img/favicon.png';
-
 const MOBILE_DRAWER_WIDTH = 209;
 
 const navItems = [
   {title: 'Login', href: '/signin'},
   {title: 'Sign Up', href: '/signup'},
 ];
-
-const container = window !== undefined ? () => window.document.body : undefined;
 
 export const Header = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -52,6 +49,9 @@ export const Header = () => {
       </List>
     </Box>
   );
+
+  const container =
+    window !== undefined ? () => window.document.body : undefined;
 
   return (
     <Box sx={{display: 'flex'}}>
