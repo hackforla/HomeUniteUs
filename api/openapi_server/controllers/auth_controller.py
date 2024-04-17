@@ -227,6 +227,26 @@ def confirm_sign_up():
         return redirect(f"{current_app.root_url}/email-verification-success")
     except Exception as e:
         return redirect(f"{current_app.root_url}/email-verification-error")
+    
+def confirm_sign_up_v2(body: dict):   
+    secret_hash = current_app.calc_secret_hash(body['email'])
+
+    try:
+        response = current_app.boto_client.confirm_sign_up(
+            ClientId=current_app.config['COGNITO_CLIENT_ID'],
+            SecretHash=secret_hash,
+            Username=body['email'],
+            ConfirmationCode=body['code'],
+        )
+    except Exception as e:
+        code = e.response['Error']['Code']
+        message = e.response['Error']['Message']
+        raise AuthError({
+                  "code": code, 
+                  "message": message
+              }, 401)
+
+    return response
 
 def signout():
     access_token = get_token_auth_header()
