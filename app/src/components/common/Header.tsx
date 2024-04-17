@@ -5,7 +5,17 @@ import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import MenuIcon from '@mui/icons-material/Menu';
 import Divider from '@mui/material/Divider';
-import {Drawer, IconButton, List, ListItem, ListItemButton, ListItemText, Stack, styled} from '@mui/material';
+import {
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Stack,
+  styled,
+  Typography,
+} from '@mui/material';
 import logo from '../../img/favicon.png';
 import Typography from '@mui/material/Typography';
 const MOBILE_DRAWER_WIDTH = 209;
@@ -15,8 +25,6 @@ const navItems = [
   {title: 'Sign Up', href: '/signup'},
 ];
 
-const container = window !== undefined ? () => window.document.body : undefined;
-
 export const Header = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -24,6 +32,7 @@ export const Header = () => {
     setMobileOpen(prevState => !prevState);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{textAlign: 'center'}}>
       <Typography variant="h6" sx={{my: 2}}>

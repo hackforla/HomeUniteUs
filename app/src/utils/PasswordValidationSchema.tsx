@@ -24,7 +24,7 @@ export const validationSchema = object().shape({
 
 export const signUpVaildationSchema = object().shape({
   firstName: string().required('first name is required'),
-  lastName: string().required('first name is required'),
+  lastName: string().optional(),
   ...validationSchema.fields,
 });
 
