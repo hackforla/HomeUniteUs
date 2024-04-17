@@ -249,7 +249,6 @@ def token():    # get code from body
     client_id = current_app.config['COGNITO_CLIENT_ID']
     client_secret = current_app.config['COGNITO_CLIENT_SECRET']
     callback_uri = request.args['callback_uri']
-    user_role = callback_uri.split('/')[2].capitalize()
 
     token_url = f"{cognito_client_url}/oauth2/token"
     auth = requests.auth.HTTPBasicAuth(client_id, client_secret)
@@ -267,6 +266,7 @@ def token():    # get code from body
 
     refresh_token = response.json().get('refresh_token')
     access_token = response.json().get('access_token')
+    id_token = response.json().get('id_token')
 
     # retrieve user data
     try:
@@ -281,31 +281,42 @@ def token():    # get code from body
 
     # create user object from user data
     user_attrs = get_user_attr(user_data)
-    role = UserRole.COORDINATOR if user_role == 'Coordinator' else UserRole.HOST
-
-    try:
-        with DataAccessLayer.session() as db_session:
-            user_repo = UserRepository(db_session)
-            user_repo.add_user(
-                email=user_attrs['email'],
-                role=role,
-                firstName=user_attrs['first_name'],
-                middleName=user_attrs.get('middle_name', ''),
-                lastName=user_attrs.get('last_name', '')
-            )
-    except Exception as error:
-        print('Database Error!!!!', error)
-        raise AuthError({"message": str(error)}, 400)
     
+    # check if user exists in database
     user = None
     with DataAccessLayer.session() as db_session:
         user_repo = UserRepository(db_session)
         signed_in_user = user_repo.get_user(user_attrs['email'])
         user = user_schema.dump(signed_in_user)
+
+    # If not, add user to database and get user object
+    if(user is None):
+        user_role = callback_uri.split('/')[2].capitalize()
+        role = UserRole.COORDINATOR if user_role == 'Coordinator' else UserRole.HOST
+
+        try:
+            with DataAccessLayer.session() as db_session:
+                user_repo = UserRepository(db_session)
+                user_repo.add_user(
+                    email=user_attrs['email'],
+                    role=role,
+                    firstName=user_attrs['first_name'],
+                    middleName=user_attrs.get('middle_name', ''),
+                    lastName=user_attrs.get('last_name', '')
+                )
+        except Exception as error:
+            print('Database Error!!!!', error)
+            raise AuthError({"message": str(error)}, 400)
+        
+        with DataAccessLayer.session() as db_session:
+            user_repo = UserRepository(db_session)
+            signed_in_user = user_repo.get_user(user_attrs['email'])
+            user = user_schema.dump(signed_in_user)
     
     # set refresh token cookie
     session['refresh_token'] = refresh_token
     session['username'] = user_attrs['email']
+    session['id_token'] = id_token
 
 
     # return user data json
