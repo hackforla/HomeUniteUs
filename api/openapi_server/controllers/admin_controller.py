@@ -38,7 +38,6 @@ def initial_sign_in_reset_password():
             
         )
     except Exception as e:  
-        print(e)
         raise AuthError({"message": "failed to change password"}, 500) from e
     
     access_token = response['AuthenticationResult']['AccessToken']

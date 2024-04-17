@@ -151,8 +151,6 @@ def sign_in(body: dict):
     refresh_token = response['AuthenticationResult']['RefreshToken']
     id_token = response['AuthenticationResult']['IdToken']
 
-    print(response['AuthenticationResult'])
-
     user_data = None
     with DataAccessLayer.session() as db_session:
         user_repo = UserRepository(db_session)
@@ -284,6 +282,7 @@ def token():    # get code from body
     
     # check if user exists in database
     user = None
+
     with DataAccessLayer.session() as db_session:
         user_repo = UserRepository(db_session)
         signed_in_user = user_repo.get_user(user_attrs['email'])
@@ -305,7 +304,6 @@ def token():    # get code from body
                     lastName=user_attrs.get('last_name', '')
                 )
         except Exception as error:
-            print('Database Error!!!!', error)
             raise AuthError({"message": str(error)}, 400)
         
         with DataAccessLayer.session() as db_session:
@@ -524,7 +522,6 @@ def confirm_invite():
             return redirect(f"{current_app.config['ROOT_URL']}/create-password?error=There was an unexpected error. Please try again.")
 
     except botocore.exceptions.ClientError as error:
-        print(error)
         msg = ''
         match error.response['Error']['Code']:
             case 'NotAuthorizedException':
