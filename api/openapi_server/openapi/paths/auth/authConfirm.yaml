@@ -1,20 +1,6 @@
-post:
+get:
   description: Confirm or deny verification of users email
   operationId: confirm_sign_up
-  requestBody:
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            email:
-              type: string
-              format: email
-            code:
-              type: string
-          required:
-            - email
-            - code
   responses:
     "200":
       content:

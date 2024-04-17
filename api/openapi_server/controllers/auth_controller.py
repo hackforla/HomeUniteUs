@@ -23,13 +23,12 @@ cognito_client_url = 'https://homeuniteus.auth.us-east-1.amazoncognito.com'
 def get_user_attr(user_data):
     user_attr = {}
     for attribute in user_data['UserAttributes']:
-        print(attribute['Name'], attribute['Value'])
         if attribute['Name'] == 'email':
-            user_attr.email = attribute['Value']
+            user_attr["email"] = attribute['Value']
         if attribute['Name'] == 'given_name':
-            user_attr.first_name = attribute['Value']
+            user_attr["first_name"] = attribute['Value']
         if attribute['Name'] == 'family_name':
-            user_attr.last_name = attribute['Value']
+            user_attr["last_name"] = attribute['Value']
 
 
     return user_attr
@@ -207,25 +206,24 @@ def resend_confirmation_code():
         raise AuthError({"message": msg}, 500)
 
 
-def confirm_sign_up(body: dict):   
-    secret_hash = current_app.calc_secret_hash(body['email'])
+def confirm_sign_up():
+    code = request.args['code']
+    email = request.args['email']
+    client_id = request.args['clientId']
+
+    secret_hash = current_app.calc_secret_hash(email)
 
     try:
-        response = current_app.boto_client.confirm_sign_up(
-            ClientId=current_app.config['COGNITO_CLIENT_ID'],
+        current_app.boto_client.confirm_sign_up(
+            ClientId=client_id,
             SecretHash=secret_hash,
-            Username=body['email'],
-            ConfirmationCode=body['code'],
+            Username=email,
+            ConfirmationCode=code
         )
-    except Exception as e:
-        code = e.response['Error']['Code']
-        message = e.response['Error']['Message']
-        raise AuthError({
-                  "code": code, 
-                  "message": message
-              }, 401)
 
-    return response
+        return redirect(f"{current_app.root_url}/email-verification-success")
+    except Exception as e:
+        return redirect(f"{current_app.root_url}/email-verification-error")
 
 def signout():
     access_token = get_token_auth_header()
@@ -246,6 +244,7 @@ def token():    # get code from body
     client_id = current_app.config['COGNITO_CLIENT_ID']
     client_secret = current_app.config['COGNITO_CLIENT_SECRET']
     callback_uri = request.args['callback_uri']
+    user_role = callback_uri.split('/')[2].capitalize()
 
     token_url = f"{cognito_client_url}/oauth2/token"
     auth = requests.auth.HTTPBasicAuth(client_id, client_secret)
@@ -260,7 +259,6 @@ def token():    # get code from body
 
     # get tokens from oauth2/token endpoint
     response = requests.post(token_url, auth=auth, data=params)
-    print('Token request response:', response.json())
 
     refresh_token = response.json().get('refresh_token')
     access_token = response.json().get('access_token')
@@ -268,10 +266,7 @@ def token():    # get code from body
     # retrieve user data
     try:
         user_data = current_app.boto_client.get_user(AccessToken=access_token)
-        print('User data:', user_data)
-    except Exception as e:
-        print('Error!!!!', e)
-        
+    except botocore.exceptions.ClientError as e:        
         code = e.response['Error']['Code']
         message = e.response['Error']['Message']
         raise AuthError({
@@ -281,6 +276,7 @@ def token():    # get code from body
 
     # create user object from user data
     user_attrs = get_user_attr(user_data)
+    role = UserRole.COORDINATOR if user_role == 'Coordinator' else UserRole.HOST
 
     try:
         with DataAccessLayer.session() as db_session:
@@ -289,13 +285,23 @@ def token():    # get code from body
                 email=user_attrs['email'],
                 role=role,
                 firstName=user_attrs['first_name'],
-                lastName=user_attrs['last_name']
+                middleName=user_attrs.get('middle_name', ''),
+                lastName=user_attrs.get('last_name', '')
             )
     except Exception as error:
+        print('Database Error!!!!', error)
         raise AuthError({"message": str(error)}, 400)
-
+    
+    user = None
+    with DataAccessLayer.session() as db_session:
+        user_repo = UserRepository(db_session)
+        signed_in_user = user_repo.get_user(user_attrs['email'])
+        user = user_schema.dump(signed_in_user)
+    
     # set refresh token cookie
     session['refresh_token'] = refresh_token
+    session['username'] = user_attrs['email']
+
 
     # return user data json
     return {
@@ -305,11 +311,17 @@ def token():    # get code from body
 
 
 def current_session():
+    user_data = None
+    with DataAccessLayer.session() as db_session:
+        user_repo = UserRepository(db_session)
+        signed_in_user = user_repo.get_user(session.get('username'))
+        user_data = user_schema.dump(signed_in_user)
+
+    print('Get current session', refresh().get('refresh_token'))
+
     return {
         'token': refresh().get('refresh_token'),
-        'user': {
-            'email': session.get('username')
-        }
+        'user': user_data
     }
 
 def refresh():
@@ -412,7 +424,6 @@ def google():
     client_id = current_app.config['COGNITO_CLIENT_ID']
     root_url = current_app.root_url
     redirect_uri = request.args['redirect_uri']
-    print(f"{cognito_client_url}/oauth2/authorize?client_id={client_id}&response_type=code&scope=email+openid+profile+phone+aws.cognito.signin.user.admin&redirect_uri={root_url}{redirect_uri}&identity_provider=Google")
 
     return redirect(f"{cognito_client_url}/oauth2/authorize?client_id={client_id}&response_type=code&scope=email+openid+profile+phone+aws.cognito.signin.user.admin&redirect_uri={root_url}{redirect_uri}&identity_provider=Google")
 
