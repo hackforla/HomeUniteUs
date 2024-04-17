@@ -311,20 +311,20 @@ def token():    # get code from body
 
 
 def current_session():
+    print('Get current session', session)
     user_data = None
     with DataAccessLayer.session() as db_session:
         user_repo = UserRepository(db_session)
         signed_in_user = user_repo.get_user(session.get('username'))
         user_data = user_schema.dump(signed_in_user)
 
-    print('Get current session', refresh().get('refresh_token'))
-
     return {
-        'token': refresh().get('refresh_token'),
+        'token': refresh().get('token'),
         'user': user_data
     }
 
 def refresh():
+    print('Refresh Session', session)
     refreshToken = session.get('refresh_token')
     username = session.get('username')
     if None in (refreshToken, username):
@@ -408,11 +408,29 @@ def confirm_forgot_password():
     return response
 
 def user(token_info):
+    email = None
+    for attribute in token_info['UserAttributes']:
+        if attribute['Name'] == 'email':
+            email = attribute['Value']
+
+    if(email is None):
+        raise AuthError({
+            'code': 'email_not_found',
+            'message': 'Email not found in user data.'
+        }, 401)
+
     user_data = None
-    with DataAccessLayer.session() as db_session:
-        user_repo = UserRepository(db_session)
-        signed_in_user = user_repo.get_user(token_info["Username"])
-        user_data = user_schema.dump(signed_in_user)
+    try:
+        with DataAccessLayer.session() as db_session:
+            user_repo = UserRepository(db_session)
+            signed_in_user = user_repo.get_user(email)
+            user_data = user_schema.dump(signed_in_user)
+    except Exception as e:
+        raise AuthError({
+            'code': 'database_error',
+            'message': str(e)
+        }, 401)
+    
     return {
       "user": user_data
     }
