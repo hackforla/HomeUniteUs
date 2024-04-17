@@ -10,7 +10,9 @@ from flask import (
 )
 from openapi_server.exceptions import AuthError
 from openapi_server.models.database import DataAccessLayer, User
-from sqlalchemy.exc import IntegrityError
+from openapi_server.repositories.user_repo import UserRepository
+from openapi_server.models.user_roles import UserRole
+from openapi_server.models.schema import user_schema
 from sqlalchemy import select
 
 from botocore.exceptions import ClientError
@@ -59,19 +61,21 @@ def get_token_auth_header():
     token = parts[1]
     return token
 
-def sign_up(body: dict):
+def sign_up(body: dict, role: UserRole):
     secret_hash = current_app.calc_secret_hash(body['email'])
 
-    with DataAccessLayer.session() as session:
-        user = User(email=body['email'])
-        session.add(user)
-        try:
-            session.commit()
-        except IntegrityError:
-            session.rollback()
-            raise AuthError({
-                "message": "A user with this email already exists."
-            }, 422)
+    try:
+        with DataAccessLayer.session() as db_session:
+            user_repo = UserRepository(db_session)
+            user_repo.add_user(
+                email=body['email'],
+                role=role,
+                firstName=body['firstName'],
+                middleName=body.get('middleName', ''),
+                lastName=body.get('lastName', '')
+            )
+    except Exception as error:
+        raise AuthError({"message": str(error)}, 400)
 
     try:
         response = current_app.boto_client.sign_up(
@@ -107,13 +111,16 @@ def sign_up(body: dict):
         msg = f"The parameters you provided are incorrect: {error}"
         raise AuthError({"message": msg}, 500)
     
+def signUpAdmin(body: dict):
+    return sign_up(body, UserRole.ADMIN)
+
 def signUpHost(body: dict):
     """Signup a new Host"""
-    return sign_up(body)
+    return sign_up(body, UserRole.HOST)
 
 def signUpCoordinator(body: dict):  # noqa: E501
     """Signup a new Coordinator"""
-    return sign_up(body)
+    return sign_up(body, UserRole.COORDINATOR)
 
 def sign_in(body: dict):
     secret_hash = current_app.calc_secret_hash(body['email'])
@@ -140,21 +147,21 @@ def sign_in(body: dict):
     access_token = response['AuthenticationResult']['AccessToken']
     refresh_token = response['AuthenticationResult']['RefreshToken']
 
-    # retrieve user data
-    user_data = current_app.boto_client.get_user(AccessToken=access_token)
+    user_data = None
+    with DataAccessLayer.session() as db_session:
+        user_repo = UserRepository(db_session)
+        signed_in_user = user_repo.get_user(body['email'])
+        user_data = user_schema.dump(signed_in_user)
     
     # set refresh token cookie
     session['refresh_token'] = refresh_token
-    session['username'] = user_data['Username']
+    session['username'] = body['email']
 
     # return user data json
     return {
         'token': access_token,
-        'user': {
-            'email': body['email']
-        }
+        'user': user_data
     }
-
 
 def resend_confirmation_code():
     '''
@@ -380,10 +387,13 @@ def confirm_forgot_password():
     return response
 
 def user(token_info):
+    user_data = None
+    with DataAccessLayer.session() as db_session:
+        user_repo = UserRepository(db_session)
+        signed_in_user = user_repo.get_user(token_info["Username"])
+        user_data = user_schema.dump(signed_in_user)
     return {
-      "user": {
-          "email": token_info["Username"]
-      }
+      "user": user_data
     }
 
 def private(token_info):
