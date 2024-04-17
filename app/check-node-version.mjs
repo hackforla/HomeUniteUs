@@ -3,7 +3,6 @@ import semver from 'semver';
 import {createRequire} from 'node:module';
 const require = createRequire(import.meta.url);
 const packageJson = require('./package.json');
-console.log('packageJson', packageJson);
 const engines = packageJson.engines;
 
 const version = engines.node;
