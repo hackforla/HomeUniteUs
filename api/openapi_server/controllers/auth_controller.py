@@ -1,6 +1,7 @@
 import connexion
 import botocore
 import requests
+import jwt
 
 from flask import (
     redirect, 
@@ -148,6 +149,9 @@ def sign_in(body: dict):
 
     access_token = response['AuthenticationResult']['AccessToken']
     refresh_token = response['AuthenticationResult']['RefreshToken']
+    id_token = response['AuthenticationResult']['IdToken']
+
+    print(response['AuthenticationResult'])
 
     user_data = None
     with DataAccessLayer.session() as db_session:
@@ -157,6 +161,7 @@ def sign_in(body: dict):
     
     # set refresh token cookie
     session['refresh_token'] = refresh_token
+    session['id_token'] = id_token
     session['username'] = body['email']
 
     # return user data json
@@ -311,7 +316,6 @@ def token():    # get code from body
 
 
 def current_session():
-    print('Get current session', session)
     user_data = None
     with DataAccessLayer.session() as db_session:
         user_repo = UserRepository(db_session)
@@ -324,14 +328,17 @@ def current_session():
     }
 
 def refresh():
-    print('Refresh Session', session)
     refreshToken = session.get('refresh_token')
     username = session.get('username')
-    if None in (refreshToken, username):
+    id_token = session.get('id_token')
+
+    if None in (refreshToken, username, id_token):
         raise AuthError({
             'code': 'session_expired',
             'message': 'Session not found'
         }, 401)
+
+    decoded = jwt.decode(id_token,algorithms=["RS256"], options={"verify_signature": False})
 
     try:
         response = current_app.boto_client.initiate_auth(
@@ -339,7 +346,7 @@ def refresh():
             AuthFlow='REFRESH_TOKEN',
             AuthParameters={
                 'REFRESH_TOKEN': refreshToken,
-                'SECRET_HASH': current_app.calc_secret_hash(username)
+                'SECRET_HASH': current_app.calc_secret_hash(decoded["cognito:username"])
             }
         )
     except Exception as e:
