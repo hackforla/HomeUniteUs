@@ -152,10 +152,16 @@ def sign_in(body: dict):
     id_token = response['AuthenticationResult']['IdToken']
 
     user_data = None
-    with DataAccessLayer.session() as db_session:
-        user_repo = UserRepository(db_session)
-        signed_in_user = user_repo.get_user(body['email'])
-        user_data = user_schema.dump(signed_in_user)
+    try:
+        with DataAccessLayer.session() as db_session:
+            user_repo = UserRepository(db_session)
+            signed_in_user = user_repo.get_user(body['email'])
+            user_data = user_schema.dump(signed_in_user)
+    except Exception as e:
+        raise AuthError({
+            'code': 'database_error',
+            'message': str(e)
+        }, 401)
     
     # set refresh token cookie
     session['refresh_token'] = refresh_token
@@ -306,7 +312,9 @@ def token():    # get code from body
     with DataAccessLayer.session() as db_session:
         user_repo = UserRepository(db_session)
         signed_in_user = user_repo.get_user(user_attrs['email'])
-        user = user_schema.dump(signed_in_user)
+        if(bool(signed_in_user) == True):
+            user = user_schema.dump(signed_in_user)
+
 
     # If not, add user to database and get user object
     if(user is None):
@@ -329,8 +337,11 @@ def token():    # get code from body
         with DataAccessLayer.session() as db_session:
             user_repo = UserRepository(db_session)
             signed_in_user = user_repo.get_user(user_attrs['email'])
-            user = user_schema.dump(signed_in_user)
-    
+            if(bool(signed_in_user) == True):
+                user = user_schema.dump(signed_in_user)
+            else:
+                raise AuthError({"message": "User not found in database"}, 400)
+            
     # set refresh token cookie
     session['refresh_token'] = refresh_token
     session['username'] = user_attrs['email']
