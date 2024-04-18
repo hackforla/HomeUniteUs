@@ -100,7 +100,8 @@ describe('ForgotPasswordCode page', () => {
       expect(screen.getByTestId(/success/i)).toBeInTheDocument();
       expect(screen.getByRole('alert')).toBeInTheDocument();
     });
-    test.only('display an error message', async () => {
+
+    test('display an error message', async () => {
       server.use(
         http.post(`/api/auth/forgot_password`, () => {
           return HttpResponse.json(
