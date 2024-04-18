@@ -17,13 +17,9 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": [
-      "vitest/globals",
-      "@testing-library/jest-dom",
-      "cypress",
-      "@testing-library/cypress"
-    ]
+    "types": ["vitest/globals", "@testing-library/jest-dom"]
   },
   "include": ["src", "*.ts", "check-node-version.mjs"],
+  "exclude": ["./cypress.config.ts"],
   "references": [{"path": "./tsconfig.node.json"}]
 }
