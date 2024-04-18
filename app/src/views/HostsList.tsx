@@ -45,11 +45,7 @@ export const HostsList = () => {
         </Button>
       </Stack>
       <h2>Hosts</h2>
-      <ul>
-        {data?.map(host => (
-          <li key={host.id}>{host.name}</li>
-        ))}
-      </ul>
+      <ul>{data?.map(host => <li key={host.id}>{host.name}</li>)}</ul>
     </Container>
   );
 };

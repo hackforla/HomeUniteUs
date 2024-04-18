@@ -13,7 +13,7 @@ import {ForgotPasswordCode} from '../ForgotPasswordCode';
 import {BrowserRouter} from 'react-router-dom';
 import {Formik} from 'formik';
 import {server} from '../../utils/test/server';
-import {HttpResponse, http} from 'msw';
+import {HttpResponse, http, delay} from 'msw';
 
 const {navigate} = vi.hoisted(() => {
   return {
@@ -30,6 +30,8 @@ vi.mock('react-router-dom', async () => {
 });
 
 const setup = (values: Partial<ResestPasswordValues> = {}) => {
+  const user = userEvent.setup();
+
   render(
     <BrowserRouter>
       <Formik
@@ -41,6 +43,10 @@ const setup = (values: Partial<ResestPasswordValues> = {}) => {
       </Formik>
     </BrowserRouter>,
   );
+
+  return {
+    user,
+  };
 };
 
 describe('ForgotPasswordCode page', () => {
@@ -94,9 +100,11 @@ describe('ForgotPasswordCode page', () => {
       expect(screen.getByTestId(/success/i)).toBeInTheDocument();
       expect(screen.getByRole('alert')).toBeInTheDocument();
     });
+
     test('display an error message', async () => {
       server.use(
-        http.post(`/api/auth/forgot_password`, () => {
+        http.post(`/api/auth/forgot_password`, async () => {
+          await delay();
           return HttpResponse.json(
             {
               message: 'Invalid email address',
@@ -106,10 +114,10 @@ describe('ForgotPasswordCode page', () => {
         }),
       );
 
-      setup();
+      const {user} = setup();
       const resendButton = screen.getByRole('button', {name: /resend/i});
 
-      await userEvent.click(resendButton);
+      await user.click(resendButton);
       expect(resendButton).toBeDisabled();
 
       await screen.findByRole('alert');
