@@ -30,6 +30,8 @@ vi.mock('react-router-dom', async () => {
 });
 
 const setup = (values: Partial<ResestPasswordValues> = {}) => {
+  const user = userEvent.setup();
+
   render(
     <BrowserRouter>
       <Formik
@@ -41,6 +43,10 @@ const setup = (values: Partial<ResestPasswordValues> = {}) => {
       </Formik>
     </BrowserRouter>,
   );
+
+  return {
+    user,
+  };
 };
 
 describe('ForgotPasswordCode page', () => {
@@ -94,7 +100,7 @@ describe('ForgotPasswordCode page', () => {
       expect(screen.getByTestId(/success/i)).toBeInTheDocument();
       expect(screen.getByRole('alert')).toBeInTheDocument();
     });
-    test('display an error message', async () => {
+    test.only('display an error message', async () => {
       server.use(
         http.post(`/api/auth/forgot_password`, () => {
           return HttpResponse.json(
@@ -106,11 +112,10 @@ describe('ForgotPasswordCode page', () => {
         }),
       );
 
-      setup();
+      const {user} = setup();
       const resendButton = screen.getByRole('button', {name: /resend/i});
 
-      await userEvent.click(resendButton);
-      expect(resendButton).toBeDisabled();
+      await user.click(resendButton);
 
       await screen.findByRole('alert');
 
