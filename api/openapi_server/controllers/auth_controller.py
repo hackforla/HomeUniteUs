@@ -10,7 +10,9 @@ from flask import (
 )
 from openapi_server.exceptions import AuthError
 from openapi_server.models.database import DataAccessLayer, User
-from sqlalchemy.exc import IntegrityError
+from openapi_server.repositories.user_repo import UserRepository
+from openapi_server.models.user_roles import UserRole
+from openapi_server.models.schema import user_schema
 from sqlalchemy import select
 
 from botocore.exceptions import ClientError
@@ -19,15 +21,18 @@ cognito_client_url = 'https://homeuniteus.auth.us-east-1.amazoncognito.com'
 
 # Get user attributes from Cognito response
 def get_user_attr(user_data):
-    email = None
+    user_attr = {}
     for attribute in user_data['UserAttributes']:
+        print(attribute['Name'], attribute['Value'])
         if attribute['Name'] == 'email':
-            email = attribute['Value']
-            break
+            user_attr.email = attribute['Value']
+        if attribute['Name'] == 'given_name':
+            user_attr.first_name = attribute['Value']
+        if attribute['Name'] == 'family_name':
+            user_attr.last_name = attribute['Value']
 
-    return {
-      'email': email
-    }
+
+    return user_attr
 
 # Get auth token from header
 def get_token_auth_header():
@@ -59,19 +64,21 @@ def get_token_auth_header():
     token = parts[1]
     return token
 
-def sign_up(body: dict):
+def sign_up(body: dict, role: UserRole):
     secret_hash = current_app.calc_secret_hash(body['email'])
 
-    with DataAccessLayer.session() as session:
-        user = User(email=body['email'])
-        session.add(user)
-        try:
-            session.commit()
-        except IntegrityError:
-            session.rollback()
-            raise AuthError({
-                "message": "A user with this email already exists."
-            }, 422)
+    try:
+        with DataAccessLayer.session() as db_session:
+            user_repo = UserRepository(db_session)
+            user_repo.add_user(
+                email=body['email'],
+                role=role,
+                firstName=body['firstName'],
+                middleName=body.get('middleName', ''),
+                lastName=body.get('lastName', '')
+            )
+    except Exception as error:
+        raise AuthError({"message": str(error)}, 400)
 
     try:
         response = current_app.boto_client.sign_up(
@@ -107,13 +114,16 @@ def sign_up(body: dict):
         msg = f"The parameters you provided are incorrect: {error}"
         raise AuthError({"message": msg}, 500)
     
+def signUpAdmin(body: dict):
+    return sign_up(body, UserRole.ADMIN)
+
 def signUpHost(body: dict):
     """Signup a new Host"""
-    return sign_up(body)
+    return sign_up(body, UserRole.HOST)
 
 def signUpCoordinator(body: dict):  # noqa: E501
     """Signup a new Coordinator"""
-    return sign_up(body)
+    return sign_up(body, UserRole.COORDINATOR)
 
 def sign_in(body: dict):
     secret_hash = current_app.calc_secret_hash(body['email'])
@@ -140,21 +150,21 @@ def sign_in(body: dict):
     access_token = response['AuthenticationResult']['AccessToken']
     refresh_token = response['AuthenticationResult']['RefreshToken']
 
-    # retrieve user data
-    user_data = current_app.boto_client.get_user(AccessToken=access_token)
+    user_data = None
+    with DataAccessLayer.session() as db_session:
+        user_repo = UserRepository(db_session)
+        signed_in_user = user_repo.get_user(body['email'])
+        user_data = user_schema.dump(signed_in_user)
     
     # set refresh token cookie
     session['refresh_token'] = refresh_token
-    session['username'] = user_data['Username']
+    session['username'] = body['email']
 
     # return user data json
     return {
         'token': access_token,
-        'user': {
-            'email': body['email']
-        }
+        'user': user_data
     }
-
 
 def resend_confirmation_code():
     '''
@@ -231,8 +241,7 @@ def signout():
     # send response
     return response
 
-def token():
-    # get code from body
+def token():    # get code from body
     code = request.get_json()['code']
     client_id = current_app.config['COGNITO_CLIENT_ID']
     client_secret = current_app.config['COGNITO_CLIENT_SECRET']
@@ -251,6 +260,7 @@ def token():
 
     # get tokens from oauth2/token endpoint
     response = requests.post(token_url, auth=auth, data=params)
+    print('Token request response:', response.json())
 
     refresh_token = response.json().get('refresh_token')
     access_token = response.json().get('access_token')
@@ -258,7 +268,10 @@ def token():
     # retrieve user data
     try:
         user_data = current_app.boto_client.get_user(AccessToken=access_token)
+        print('User data:', user_data)
     except Exception as e:
+        print('Error!!!!', e)
+        
         code = e.response['Error']['Code']
         message = e.response['Error']['Message']
         raise AuthError({
@@ -267,16 +280,19 @@ def token():
               }, 401)
 
     # create user object from user data
-    user = get_user_attr(user_data)
+    user_attrs = get_user_attr(user_data)
 
-    with DataAccessLayer.session() as db_session:
-        db_user = User(email=user['email'])
-        user_id = db_session.execute(
-            select(User.id).filter_by(email=user["email"])
-        ).first()
-        if user_id is None:
-            db_session.add(db_user)
-            db_session.commit()
+    try:
+        with DataAccessLayer.session() as db_session:
+            user_repo = UserRepository(db_session)
+            user_repo.add_user(
+                email=user_attrs['email'],
+                role=role,
+                firstName=user_attrs['first_name'],
+                lastName=user_attrs['last_name']
+            )
+    except Exception as error:
+        raise AuthError({"message": str(error)}, 400)
 
     # set refresh token cookie
     session['refresh_token'] = refresh_token
@@ -380,10 +396,13 @@ def confirm_forgot_password():
     return response
 
 def user(token_info):
+    user_data = None
+    with DataAccessLayer.session() as db_session:
+        user_repo = UserRepository(db_session)
+        signed_in_user = user_repo.get_user(token_info["Username"])
+        user_data = user_schema.dump(signed_in_user)
     return {
-      "user": {
-          "email": token_info["Username"]
-      }
+      "user": user_data
     }
 
 def private(token_info):

@@ -13,7 +13,7 @@ export const validationSchema = object().shape({
     .matches(/^(?=.*[A-Z])/, {
       message: {uppercase: 'Must contain at least one uppercase character'},
     })
-    .matches(/\W|_/g, {
+    .matches(/\W|_/, {
       message: {
         // add specificity into message
         special: 'password must contain at least one special character',
@@ -24,7 +24,7 @@ export const validationSchema = object().shape({
 
 export const signUpVaildationSchema = object().shape({
   firstName: string().required('first name is required'),
-  lastName: string().required('first name is required'),
+  lastName: string().optional(),
   ...validationSchema.fields,
 });
 
