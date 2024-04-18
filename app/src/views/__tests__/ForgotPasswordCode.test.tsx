@@ -13,7 +13,7 @@ import {ForgotPasswordCode} from '../ForgotPasswordCode';
 import {BrowserRouter} from 'react-router-dom';
 import {Formik} from 'formik';
 import {server} from '../../utils/test/server';
-import {HttpResponse, http} from 'msw';
+import {HttpResponse, http, delay} from 'msw';
 
 const {navigate} = vi.hoisted(() => {
   return {
@@ -103,7 +103,8 @@ describe('ForgotPasswordCode page', () => {
 
     test('display an error message', async () => {
       server.use(
-        http.post(`/api/auth/forgot_password`, () => {
+        http.post(`/api/auth/forgot_password`, async () => {
+          await delay();
           return HttpResponse.json(
             {
               message: 'Invalid email address',
@@ -117,6 +118,7 @@ describe('ForgotPasswordCode page', () => {
       const resendButton = screen.getByRole('button', {name: /resend/i});
 
       await user.click(resendButton);
+      expect(resendButton).toBeDisabled();
 
       await screen.findByRole('alert');
 
