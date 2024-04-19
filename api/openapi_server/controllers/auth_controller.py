@@ -362,8 +362,10 @@ def current_session():
         signed_in_user = user_repo.get_user(session.get('username'))
         user_data = user_schema.dump(signed_in_user)
 
+    token = refresh().get('token')
+
     return {
-        'token': refresh().get('token'),
+        'token': token,
         'user': user_data
     }
 
@@ -378,7 +380,7 @@ def refresh():
             'message': 'Session not found'
         }, 401)
 
-    decoded = jwt.decode(id_token,algorithms=["RS256"], options={"verify_signature": False})
+    decoded = jwt.decode(id_token, algorithms=["RS256"], options={"verify_signature": False})
 
     try:
         response = current_app.boto_client.initiate_auth(
@@ -389,7 +391,7 @@ def refresh():
                 'SECRET_HASH': current_app.calc_secret_hash(decoded["cognito:username"])
             }
         )
-    except Exception as e:
+    except botocore.exceptions.ClientError as e:
         code = e.response['Error']['Code']
         message = e.response['Error']['Message']
         raise AuthError({
