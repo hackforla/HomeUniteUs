@@ -139,10 +139,15 @@ def sign_in(body: dict):
                 'SECRET_HASH': secret_hash
             }
         )
+
+        current_app.logger.info('%s initiated auth with Cognito successfully', body['email'])
     except ClientError as e:
+        current_app.logger.info('Failed to initiate auth with Cognito for user: %s', body['email'])
         raise AuthError(e.response["Error"], 401)
     
     if(response.get('ChallengeName') and response['ChallengeName'] == 'NEW_PASSWORD_REQUIRED'):
+        current_app.logger.info('User being redirected to create new password page', body['email'])
+
         userId = response['ChallengeParameters']['USER_ID_FOR_SRP']
         sessionId = response['Session']
         return redirect(f"{current_app.root_url}/create-password?userId={userId}&sessionId={sessionId}")              
@@ -158,6 +163,7 @@ def sign_in(body: dict):
             signed_in_user = user_repo.get_user(body['email'])
             user_data = user_schema.dump(signed_in_user)
     except Exception as e:
+        current_app.logger.info('Failed to retrieve user: %s from db', body['email'])
         raise AuthError({
             'code': 'database_error',
             'message': str(e)
