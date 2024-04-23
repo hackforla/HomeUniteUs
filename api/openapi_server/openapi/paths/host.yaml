@@ -9,28 +9,5 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../schemas/_index.yaml#/HostResponse"
-  x-openapi-router-controller: openapi_server.controllers.host_controller
-post:
-  summary: Create a host
-  tags:
-    - host
-  operationId: create_host
-  requestBody:
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            name:
-              type: string
-          required:
-            - name
-  responses:
-    "200":
-      description: Success created host
-      content:
-        application/json:
-          schema:
-            $ref: "../schemas/_index.yaml#/HostResponse"
+            $ref: "../schemas/_index.yaml#/UserSchema"
   x-openapi-router-controller: openapi_server.controllers.host_controller

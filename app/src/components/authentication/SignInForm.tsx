@@ -21,22 +21,7 @@ interface SignInFormProps {
 
 const validationSchema = object({
   email: string().email().required('email is required'),
-  password: string()
-    .required('password is required')
-    .matches(/^(?=.*[0-9])/, 'password must contain at least one number')
-    .min(8, 'password must be at least 8 characters')
-    .matches(
-      /^(?=.*[a-z])/,
-      'password must contain at least one lowercase character',
-    )
-    .matches(
-      /^(?=.*[A-Z])/,
-      'password must contain at least one uppercase character',
-    )
-    .matches(
-      /^(?=.*[!@#%&])/,
-      'password must contain at least one special character',
-    ),
+  password: string().required('password is required'),
 });
 
 export const SignInForm = ({

@@ -3,11 +3,11 @@ import {Button, Stack} from '@mui/material';
 export const NavButtons = ({
   next,
   prev,
-  saveAndExit,
+  openSections,
 }: {
   next: () => void;
   prev: () => void;
-  saveAndExit: () => void;
+  openSections: () => void;
 }) => {
   return (
     <Stack gap={2}>
@@ -26,11 +26,11 @@ export const NavButtons = ({
       <Button
         fullWidth
         size="medium"
-        onClick={saveAndExit}
+        onClick={openSections}
         variant="text"
         sx={{color: 'black'}}
       >
-        Save and Exit
+        Return to Profile Sections
       </Button>
     </Stack>
   );

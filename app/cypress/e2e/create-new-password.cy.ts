@@ -42,7 +42,7 @@ describe('Forgot Password', () => {
     }).as('user');
   });
 
-  it.only('should let the user reset their password', () => {
+  it('should let the user reset their password', () => {
     const userId = faker.string.uuid();
     const sessionId = faker.string.uuid();
     const password = 'Test1234!';
