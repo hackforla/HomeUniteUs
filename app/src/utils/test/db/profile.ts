@@ -7,7 +7,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
     fieldGroups: [
       {
         id: faker.string.numeric(4),
-        title: 'Personal Information',
+        title: 'Basic Information',
         fields: [
           {
             id: faker.string.numeric(4),
@@ -38,7 +38,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
           },
           {
             id: faker.string.numeric(4),
-            title: 'Gender',
+            title: 'Gender Identity',
             type: 'dropdown',
             properties: {
               choices: [
@@ -85,7 +85,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       },
       {
         id: faker.string.numeric(4),
-        title: 'Other Guests and/or Pets',
+        title: 'Other Guests/Pets',
         fields: [
           {
             id: faker.string.numeric(4),
@@ -93,6 +93,15 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             type: 'additional_guests',
             properties: {},
             validations: {},
+          },
+          {
+            id: faker.string.numeric(4),
+            title: 'Pets',
+            type: 'yes_no',
+            properties: {},
+            validations: {
+              required: true,
+            },
           },
         ],
       },
@@ -111,6 +120,18 @@ export const intakeProfiles: GetProfileApiResponse[] = [
           },
           {
             id: faker.string.numeric(4),
+            title: 'If yes, please describe your employment.',
+            type: 'long_text',
+            properties: {},
+            validations: {
+              required_if: {
+                field_id: '5478',
+                value: 'yes',
+              },
+            },
+          },
+          {
+            id: faker.string.numeric(4),
             title:
               'If no, are you currently looking for work? If so, what type?',
             type: 'long_text',
@@ -122,16 +143,171 @@ export const intakeProfiles: GetProfileApiResponse[] = [
               },
             },
           },
+        ],
+      },
+      {
+        id: faker.string.numeric(4),
+        title: 'Education',
+        fields: [
+          {
+            id: '6478',
+            title: 'Are you enrolled in an Educational Program?',
+            type: 'yes_no',
+            properties: {},
+            validations: {
+              required: true,
+            },
+          },
           {
             id: faker.string.numeric(4),
-            title: 'If yes, please describe your current employment',
+            title: 'If yes, please describe the program.',
             type: 'long_text',
             properties: {},
             validations: {
               required_if: {
-                field_id: '5478',
+                field_id: '6478',
                 value: 'yes',
               },
+            },
+          },
+          {
+            id: faker.string.numeric(4),
+            title:
+              'If no, are you hoping to enroll in an Educational Program? If so, what type?',
+            type: 'long_text',
+            properties: {},
+            validations: {
+              required_if: {
+                field_id: '6478',
+                value: 'no',
+              },
+            },
+          },
+        ],
+      },
+      {
+        id: faker.string.numeric(4),
+        title: 'Language Proficiency',
+        fields: [
+          {
+            id: '5479',
+            title: 'Are you bilingual or multilingual?',
+            type: 'yes_no',
+            properties: {},
+            validations: {
+              required: true,
+            },
+          },
+          {
+            id: faker.string.numeric(4),
+            title: 'If yes, what languages do you speak?',
+            type: 'long_text',
+            properties: {},
+            validations: {
+              required_if: {
+                field_id: '5479',
+                value: 'yes',
+              },
+            },
+          },
+        ],
+      },
+      {
+        id: faker.string.numeric(4),
+        title: 'Substance Use',
+        fields: [
+          {
+            id: faker.string.numeric(4),
+            title: 'Do you smoke cigarettes?',
+            type: 'yes_no',
+            properties: {},
+            validations: {
+              required: true,
+            },
+          },
+          {
+            id: faker.string.numeric(4),
+            title: 'Do you drink alcohol?',
+            type: 'yes_no',
+            properties: {},
+            validations: {
+              required: true,
+            },
+          },
+          {
+            id: faker.string.numeric(4),
+            title: 'Do you use any other substances?',
+            type: 'yes_no',
+            properties: {},
+            validations: {
+              required: true,
+            },
+          },
+        ],
+      },
+      {
+        id: faker.string.numeric(4),
+        title: 'Mental Health',
+        fields: [
+          {
+            id: faker.string.numeric(4),
+            title: 'Do you suffer mental illness?',
+            type: 'yes_no',
+            properties: {},
+            validations: {
+              required: true,
+            },
+          },
+        ],
+      },
+      {
+        id: faker.string.numeric(4),
+        title: 'Interest in Being a Guest',
+        fields: [
+          {
+            id: faker.string.numeric(4),
+            title:
+              'Please share how you think participating in the Host Homes Program will help you obtain long-term housing and meet your educational and/or employment goals:',
+            type: 'long_text',
+            properties: {},
+            validations: {
+              required: true,
+            },
+          },
+          {
+            id: faker.string.numeric(4),
+            title:
+              'What kind of relationship do you hope to have with your host home?',
+            type: 'long_text',
+            properties: {},
+            validations: {
+              required: true,
+            },
+          },
+          {
+            id: faker.string.numeric(4),
+            title:
+              'Please describe any challenges you foresee encountering in participating in the Host Homes Program.',
+            type: 'long_text',
+            properties: {},
+            validations: {
+              required: true,
+            },
+          },
+        ],
+      },
+      {
+        id: faker.string.numeric(4),
+        title: 'About You',
+        fields: [
+          {
+            id: faker.string.numeric(4),
+            title:
+              'Please take some time to write an introduction of yourself that you would feel comfortable with the Host Homes Coordinator sharing with a potential host. Feel free to talk about your interests, your story or anything else that you think would be important to share:',
+            type: 'long_text',
+            properties: {},
+            validations: {
+              required: true,
             },
           },
         ],
