@@ -308,7 +308,9 @@ def test_user_signup_rollback(app):
         '/api/auth/signup/host',
         json = {
             'email': rollback_email,
-            'password': 'lol'
+            'password': 'lol',
+            'firstName': 'firstname',
+            'lastName': 'lastname'
         }
     )
     assert signup_response.status_code == 400
@@ -318,6 +320,6 @@ def test_user_signup_rollback(app):
             Username=rollback_email
         )
     with DataAccessLayer.session() as sess:
-        rolledback_user = sess.query(User).filter_by(email=rollback_email).first()\
+        rolledback_user = sess.query(User).filter_by(email=rollback_email).first()
         # This assertion will fail on `main` because no rollback is happening
         assert rolledback_user is None

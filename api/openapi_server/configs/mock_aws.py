@@ -5,13 +5,8 @@ import json
 from flask import request
 
 from openapi_server.exceptions import AuthError
-<<<<<<< HEAD
 from openapi_server.controllers.admin_controller import remove_user
-from openapi_server.controllers.auth_controller import signUpHost
-=======
-from openapi_server.controllers.admin_controller import removeUser
 from openapi_server.controllers.auth_controller import signUpAdmin
->>>>>>> cc4c495664e76a2721d9b4d90771d2e7af23d9af
 
 class AWSTemporaryUserpool():
     '''

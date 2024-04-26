@@ -65,13 +65,9 @@ def get_token_auth_header():
     token = parts[1]
     return token
 
-<<<<<<< HEAD
-def sign_up(body: dict):
+def sign_up(body: dict, role: UserRole):
     from openapi_server.controllers.admin_controller import remove_user
     # import locally to avoid circular import error 
-=======
-def sign_up(body: dict, role: UserRole):
->>>>>>> cc4c495664e76a2721d9b4d90771d2e7af23d9af
     secret_hash = current_app.calc_secret_hash(body['email'])
 
     try:
@@ -109,15 +105,15 @@ def sign_up(body: dict, role: UserRole):
                 raise AuthError({  "message": msg }, 400)
             case 'InvalidPasswordException':
                 msg = "Password did not conform with policy"
-                remove_user(body, True, False)
+                remove_user(body, removeDB=True, removeCognito=False)
                 raise AuthError({  "message": msg }, 400)
             case 'TooManyRequestsException':
                 msg = "Too many requests made. Please wait before trying again."
-                remove_user(body, True, False)
+                remove_user(body, removeDB=True, removeCognito=False)
                 raise AuthError({  "message": msg }, 408)
             case _:
                 msg = "An unexpected error occurred."
-                remove_user(body, True, False)
+                remove_user(body, removeDB=True, removeCognito=False)
                 raise AuthError({  "message": msg }, 400)
     except botocore.excepts.ParameterValidationError as error:
         msg = f"The parameters you provided are incorrect: {error}"
