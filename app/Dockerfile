@@ -1,5 +1,5 @@
 # Named temprorary image to build client bundles
-FROM node:lts-alpine as builder
+FROM node:20-alpine as builder
 
 # do all copies/builds within a subdirectory
 WORKDIR /app

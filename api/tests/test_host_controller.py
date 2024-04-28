@@ -1,75 +1,66 @@
-from openapi_server.models.database import DataAccessLayer, Host
+from openapi_server.models.database import User, DataAccessLayer
+from openapi_server.repositories.user_repo import UserRepository
+from openapi_server.models.user_roles import UserRole
 
-def test_create_host(client):
+def test_signup_host(client):
     """
-    Test creating a new host using a 
-    simulated post request. Verify that the 
-    response is correct, and that the app 
-    database was properly updated.
+    Test creating a new host using a simulated post request. Verify that the 
+    response is correct, and that the app database was properly updated.
     """
     
     NEW_HOST = {
-        "name" : "new_host"
+        "email" : "test@email.com",
+        "password": "Test!@123",
+        "firstName": "Josh",
+        "middleName": "Ray",
+        "lastName": "Douglas"
     }
     response = client.post(
-        '/api/host',
+        '/api/auth/signup/host',
         json=NEW_HOST)
     
-    assert response.status_code == 201, f'Response body is: {response.json}'
-    assert 'name' in response.json
-    assert 'id' in response.json
-    assert response.json['name'] == NEW_HOST['name']
-    
+    assert response.status_code == 200, f'Response body is: {response.json}'
+
+    # Make sure the database was updated to persist the values
     with DataAccessLayer.session() as session:
-        test_host = session.query(Host).filter_by(name=NEW_HOST['name']).first()
-
-    assert test_host is not None
-    assert test_host.name == NEW_HOST['name']
-
-def test_create_host_empty_body(client):
-    """
-    Test creating a new host with an empty JSON body.
-    This should return an error response.
-    """
-
-    response = client.post(
-        '/api/host',
-        json={})
-
-    assert response.status_code == 400 
+        user_repo = UserRepository(session)
+        test_host = user_repo.get_user(NEW_HOST['email'])
+        assert test_host is not None
+        assert test_host.email == NEW_HOST['email']
+        assert test_host.firstName == NEW_HOST['firstName']
+        assert test_host.middleName == NEW_HOST['middleName']
+        assert test_host.lastName == NEW_HOST['lastName']
+        assert test_host.role.name == UserRole.HOST.value
     
-
-def test_create_host_invalid_data(client):
-    """
-    Test creating a new host with invalid data in the request body.
-    This should return an error response (e.g., 400 Bad Request).
-    """
-    invalid_host_data = {"invalid_field": "value"}
-
-    response = client.post('/api/host', json=invalid_host_data)
-    assert response.status_code == 400
-
-
 def test_get_hosts(client): 
     """
-    Test that checks if a list of 5 Hosts are returned from a GET request.
-    The 5 test Hosts are created by this test.  
+    Test that get_hosts returns all hosts available in the database. The endpoint
+    should properly filter out all other user roles.
     """
-
+    # Arrange
     with DataAccessLayer.session() as session:
-        host1 = Host(name="host1")
-        host2 = Host(name="host2")
-        host3 = Host(name="host3")
-        host4 = Host(name="host4")
-        host5 = Host(name="host5")
-        session.add_all([host1, host2, host3, host4, host5])
-        session.commit()
-
-    response = client.get('/api/host')
-    assert response.status_code == 200, f'Response body is: {response.json}'
+        user_repo = UserRepository(session)
+        user_repo.add_user(email="host0@email.com", role=UserRole.HOST, firstName="host0", middleName = None, lastName="host_last0")
+        user_repo.add_user(email="host1@email.com", role=UserRole.HOST, firstName="host1", middleName = None, lastName="host_last1")
+        user_repo.add_user(email="host2@email.com", role=UserRole.HOST, firstName="host2", middleName = None, lastName="host_last2")
+        user_repo.add_user(email="guest1@email.com", role=UserRole.GUEST, firstName="guest0", middleName = None, lastName="guest_last0")
+        user_repo.add_user(email="Admin2@email.com", role=UserRole.ADMIN, firstName="Admin0", middleName = None, lastName="cdmin_last0")
+        user_repo.add_user(email="Coordinator3@email.com", role=UserRole.COORDINATOR, firstName="coodinator0", middleName = None, lastName="coordinator_last0")
     
+    # Act
+    response = client.get('/api/host')
+
+    # Assert
+    assert response.status_code == 200, f'Response body is: {response.json}'
     assert isinstance(response.json, list)
-    assert len(response.json) == 5
-    for i in range(1, len(response.json) + 1):
-        assert response.json[i - 1]['name'] == f"host{i}"
-        assert response.json[i - 1]['id'] == i
+    assert len(response.json) == 3
+    host_emails_set = set()
+    for host in response.json:
+        assert 'host' in host["email"]
+        assert 'host' in host["firstName"]
+        assert 'host_last' in host["lastName"]
+        assert host["role"]["name"] == UserRole.HOST.value
+        assert host["middleName"] == None
+        host_emails_set.add(host["email"])
+
+    assert len(host_emails_set) == 3, "Duplicate hosts were returned!"

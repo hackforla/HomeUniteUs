@@ -1,11 +1,11 @@
-import {rest} from 'msw';
+import {http, HttpResponse} from 'msw';
 
 const handlers = [
-  rest.post(/.*\/api\/auth\/forgot_password$/, (req, res, ctx) => {
-    return res(ctx.status(200));
+  http.post('/api/auth/forgot_password', () => {
+    return new HttpResponse();
   }),
-  rest.post(/.*\/api\/auth\/invite$/, (req, res, ctx) => {
-    return res(ctx.status(200));
+  http.post('/api/auth/invite', () => {
+    return new HttpResponse();
   }),
 ];
 

@@ -4,27 +4,25 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import MenuIcon from '@mui/icons-material/Menu';
-// import Divider from '@mui/material/Divider';
+import Divider from '@mui/material/Divider';
 import {
   Drawer,
   IconButton,
-  // List,
-  // ListItem,
-  // ListItemButton,
-  // ListItemText,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
   Stack,
   styled,
+  Typography,
 } from '@mui/material';
 import logo from '../../img/favicon.png';
-// import Typography from '@mui/material/Typography';
 const MOBILE_DRAWER_WIDTH = 209;
 
 const navItems = [
   {title: 'Login', href: '/signin'},
   {title: 'Sign Up', href: '/signup'},
 ];
-
-const container = window !== undefined ? () => window.document.body : undefined;
 
 export const Header = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -33,26 +31,27 @@ export const Header = () => {
     setMobileOpen(prevState => !prevState);
   };
 
-  // const drawer = (
-  //   <Box onClick={handleDrawerToggle} sx={{textAlign: 'center'}}>
-  //     <Typography variant="h6" sx={{my: 2}}>
-  //       MUI
-  //     </Typography>
-  //     <Divider />
-  //     <List>
-  //       {navItems.map(({title, href}) => (
-  //         <ListItem key={title} disablePadding>
-  //           <ListItemButton sx={{textAlign: 'center'}} href={href}>
-  //             <ListItemText primary={title} />
-  //           </ListItemButton>
-  //         </ListItem>
-  //       ))}
-  //     </List>
-  //   </Box>
-  // );
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{textAlign: 'center'}}>
+      <Typography variant="h6" sx={{my: 2}}>
+        MUI
+      </Typography>
+      <Divider />
+      <List>
+        {navItems.map(({title, href}) => (
+          <ListItem key={title} disablePadding>
+            <ListItemButton sx={{textAlign: 'center'}} href={href}>
+              <ListItemText primary={title} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
 
-  // const container =
-  //   window !== undefined ? () => window.document.body : undefined;
+  const container =
+    window !== undefined ? () => window.document.body : undefined;
 
   return (
     <Box sx={{display: 'flex'}}>
