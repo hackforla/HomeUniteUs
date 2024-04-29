@@ -3,8 +3,11 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.orm import Session, declarative_base, relationship
 # Avoid naming conflict with marshmallow.validates
 from sqlalchemy.orm import validates as validates_sqlachemy
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, ForeignKey, Text, Boolean, DateTime
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.sql import func
+from sqlalchemy.schema import CheckConstraint
+from sqlalchemy.types import JSON
 
 Base = declarative_base()
 
@@ -17,6 +20,7 @@ class User(Base):
     lastName = Column(String(255), nullable=True)
     role_id = Column(Integer, ForeignKey('role.id'), nullable=False)
     role = relationship("Role", back_populates="users")
+    responses = relationship("Response", back_populates="user")
 
     @validates_sqlachemy('firstName')
     def validate_first_name(self, key, value):
@@ -45,6 +49,69 @@ class HousingProgram(Base):
     id = Column(Integer, primary_key=True, index=True)
     program_name = Column(String, nullable=False)
     service_provider = Column(Integer, ForeignKey('housing_program_service_provider.id'), nullable=False)
+
+class Form(Base):
+    __tablename__ = 'forms'
+    form_id = Column(Integer, primary_key=True)
+    title = Column(String(255), nullable=False)
+    description = Column(Text)
+    created_at = Column(DateTime, default=func.current_timestamp())
+
+class FieldProperties(Base):
+    __tablename__ = 'field_properties'
+    properties_id = Column(Integer, primary_key=True)
+    description = Column(Text)
+    field_type = Column(String(50), nullable=False)
+    choices = Column(JSON)  # Using native JSON support
+    field_group = Column(JSON)  # Using native JSON support
+
+    __table_args__ = (
+        CheckConstraint(
+            "field_type IN ('date', 'dropdown', 'multiple_choice', 'email', 'file_upload', 'group', 'long_text', 'number', 'short_text', 'yes_no')",
+            name='chk_field_type'
+        ),
+    )
+
+class FieldValidations(Base):
+    __tablename__ = 'field_validations'
+    validations_id = Column(Integer, primary_key=True)
+    required = Column(Boolean, nullable=False, default=False)
+    max_length = Column(Integer)  # NULL if not applicable
+
+class FieldGroup(Base):
+    __tablename__ = 'field_groups'
+    group_id = Column(Integer, primary_key=True)
+    form_id = Column(Integer, ForeignKey('forms.form_id'), nullable=False)
+    title = Column(String(255), nullable=False)
+    description = Column(Text)
+    form = relationship("Form", back_populates="field_groups")
+
+class Field(Base):
+    __tablename__ = 'fields'
+    field_id = Column(String(255), primary_key=True)
+    form_id = Column(Integer, ForeignKey('forms.form_id'), nullable=False)
+    ref = Column(String(255), nullable=False)
+    properties_id = Column(Integer, ForeignKey('field_properties.properties_id'), nullable=False)
+    validations_id = Column(Integer, ForeignKey('field_validations.validations_id'), nullable=False)
+    group_id = Column(Integer, ForeignKey('field_groups.group_id'))
+    form = relationship("Form", back_populates="fields")
+    properties = relationship("FieldProperties")
+    validations = relationship("FieldValidations")
+    group = relationship("FieldGroup", back_populates="fields")
+    responses = relationship("Response", back_populates="field")
+
+class Response(Base):
+    __tablename__ = 'responses'
+    answer_id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    field_id = Column(String(255), ForeignKey('fields.field_id'), nullable=False)
+    answer_text = Column(Text)
+    user = relationship("User", back_populates="responses")
+    field = relationship("Field", back_populates="responses")
+
+Form.field_groups = relationship("FieldGroup", order_by=FieldGroup.group_id, back_populates="form")
+Form.fields = relationship("Field", order_by=Field.field_id, back_populates="form")
+FieldGroup.fields = relationship("Field", order_by=Field.field_id, back_populates="group")
 
 class DataAccessLayer:
     _engine: Engine = None
