@@ -1,8 +1,8 @@
-"""first_forms_api
+"""initial_form_api
 
-Revision ID: 4f86de253491
+Revision ID: cfc4e41b69d3
 Revises: e4c8bb426528
-Create Date: 2024-04-28 20:29:57.931911
+Create Date: 2024-05-05 17:14:51.771328
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '4f86de253491'
+revision = 'cfc4e41b69d3'
 down_revision = 'e4c8bb426528'
 branch_labels = None
 depends_on = None
@@ -22,7 +22,6 @@ def upgrade() -> None:
     sa.Column('description', sa.Text(), nullable=True),
     sa.Column('field_type', sa.String(length=50), nullable=False),
     sa.Column('choices', sa.JSON(), nullable=True),
-    sa.Column('field_group', sa.JSON(), nullable=True),
     sa.CheckConstraint("field_type IN ('date', 'dropdown', 'multiple_choice', 'email', 'file_upload', 'group', 'long_text', 'number', 'short_text', 'yes_no')", name='chk_field_type'),
     sa.PrimaryKeyConstraint('properties_id')
     )
@@ -48,13 +47,11 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('group_id')
     )
     op.create_table('fields',
-    sa.Column('field_id', sa.String(length=255), nullable=False),
-    sa.Column('form_id', sa.Integer(), nullable=False),
+    sa.Column('field_id', sa.Integer(), nullable=False),
     sa.Column('ref', sa.String(length=255), nullable=False),
     sa.Column('properties_id', sa.Integer(), nullable=False),
     sa.Column('validations_id', sa.Integer(), nullable=False),
     sa.Column('group_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['form_id'], ['forms.form_id'], ),
     sa.ForeignKeyConstraint(['group_id'], ['field_groups.group_id'], ),
     sa.ForeignKeyConstraint(['properties_id'], ['field_properties.properties_id'], ),
     sa.ForeignKeyConstraint(['validations_id'], ['field_validations.validations_id'], ),
@@ -69,8 +66,17 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('answer_id')
     )
-    
+    with op.batch_alter_table('role', schema=None) as batch_op:
+        batch_op.create_unique_constraint('role', ['name'])
+    with op.batch_alter_table('user', schema=None) as batch_op:
+        batch_op.alter_column('lastName',
+                existing_type=sa.VARCHAR(length=255),
+                nullable=True,
+                existing_server_default=sa.text("'Unknown'"))
+
 def downgrade() -> None:
+    with op.batch_alter_table('role', schema=None) as batch_op:
+        batch_op.drop_constraint('role', type_='unique')
     op.drop_table('responses')
     op.drop_table('fields')
     op.drop_table('field_groups')
