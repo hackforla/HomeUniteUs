@@ -9,6 +9,7 @@ export const fieldTypes = [
   'multiple_choice',
   'yes_no',
   'additional_guests',
+  'pets',
 ] as const;
 
 type FieldTypeTuple = typeof fieldTypes;
