@@ -81,7 +81,7 @@ flask-testing==0.8.1
     # via connexion
 greenlet==2.0.2
     # via sqlalchemy
-idna==3.4
+idna==3.7
     # via requests
 inflection==0.5.1
     # via connexion
