@@ -110,3 +110,21 @@ jobs:
       - name: Test using a real backend
         run: npm run cypress:run:nomock
         working-directory: /app
+#       - uses: actions/checkout@v4
+#       - name: Use Node.js 20
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: 20
+#           cache: "npm"
+#           cache-dependency-path: app/package-lock.json
+#       - name: Run npm CI
+#         run: npm ci
+#       - name: Test app
+#         run: npm run test -- --no-color --run
+#       - name: Run E2E tests
+#         uses: cypress-io/github-action@v5
+#         with:
+#           install: false
+#           start: npm run dev
+#           working-directory: ./app
+#           wait-on: "http://[::1]:4040/"

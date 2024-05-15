@@ -21,15 +21,18 @@ cognito_client_url = 'https://homeuniteus.auth.us-east-1.amazoncognito.com'
 
 # Get user attributes from Cognito response
 def get_user_attr(user_data):
-    email = None
+    user_attr = {}
     for attribute in user_data['UserAttributes']:
+        print(attribute['Name'], attribute['Value'])
         if attribute['Name'] == 'email':
-            email = attribute['Value']
-            break
+            user_attr.email = attribute['Value']
+        if attribute['Name'] == 'given_name':
+            user_attr.first_name = attribute['Value']
+        if attribute['Name'] == 'family_name':
+            user_attr.last_name = attribute['Value']
 
-    return {
-      'email': email
-    }
+
+    return user_attr
 
 # Get auth token from header
 def get_token_auth_header():
@@ -238,8 +241,7 @@ def signout():
     # send response
     return response
 
-def token():
-    # get code from body
+def token():    # get code from body
     code = request.get_json()['code']
     client_id = current_app.config['COGNITO_CLIENT_ID']
     client_secret = current_app.config['COGNITO_CLIENT_SECRET']
@@ -258,6 +260,7 @@ def token():
 
     # get tokens from oauth2/token endpoint
     response = requests.post(token_url, auth=auth, data=params)
+    print('Token request response:', response.json())
 
     refresh_token = response.json().get('refresh_token')
     access_token = response.json().get('access_token')
@@ -265,7 +268,10 @@ def token():
     # retrieve user data
     try:
         user_data = current_app.boto_client.get_user(AccessToken=access_token)
+        print('User data:', user_data)
     except Exception as e:
+        print('Error!!!!', e)
+        
         code = e.response['Error']['Code']
         message = e.response['Error']['Message']
         raise AuthError({
@@ -274,16 +280,19 @@ def token():
               }, 401)
 
     # create user object from user data
-    user = get_user_attr(user_data)
+    user_attrs = get_user_attr(user_data)
 
-    with DataAccessLayer.session() as db_session:
-        db_user = User(email=user['email'])
-        user_id = db_session.execute(
-            select(User.id).filter_by(email=user["email"])
-        ).first()
-        if user_id is None:
-            db_session.add(db_user)
-            db_session.commit()
+    try:
+        with DataAccessLayer.session() as db_session:
+            user_repo = UserRepository(db_session)
+            user_repo.add_user(
+                email=user_attrs['email'],
+                role=role,
+                firstName=user_attrs['first_name'],
+                lastName=user_attrs['last_name']
+            )
+    except Exception as error:
+        raise AuthError({"message": str(error)}, 400)
 
     # set refresh token cookie
     session['refresh_token'] = refresh_token
