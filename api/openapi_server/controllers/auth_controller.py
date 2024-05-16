@@ -143,7 +143,9 @@ def sign_in(body: dict):
         current_app.logger.info('%s initiated auth with Cognito successfully', body['email'])
     except ClientError as e:
         current_app.logger.info('Failed to initiate auth with Cognito for user: %s', body['email'])
-        raise AuthError(e.response["Error"], 401)
+        raise AuthError({
+            'code': e.response["Error"]["Code"], 
+            'message': e.response["Error"]["Message"]}, 401)
     
     if(response.get('ChallengeName') and response['ChallengeName'] == 'NEW_PASSWORD_REQUIRED'):
         current_app.logger.info('User being redirected to create new password page', body['email'])
@@ -475,6 +477,7 @@ def user(token_info):
         }, 401)
 
     user_data = None
+
     try:
         with DataAccessLayer.session() as db_session:
             user_repo = UserRepository(db_session)
@@ -504,24 +507,18 @@ def google():
 #Do I have an oauth token
 def invite():
 
-    get_token_auth_header()
-
     if connexion.request.is_json:
         body = connexion.request.get_json()     
         
     try:
-        email = body['email']
-
-        response = current_app.boto_client.admin_create_user(
+        current_app.boto_client.admin_create_user(
             UserPoolId=current_app.config['COGNITO_USER_POOL_ID'],
-            Username=email,
+            Username=body['email'],
             ClientMetadata={
                 'url': current_app.config['ROOT_URL']
             },
             DesiredDeliveryMediums=["EMAIL"]
         )
-
-        return response
 
     except botocore.exceptions.ClientError as error:
         match error.response['Error']['Code']:
@@ -534,6 +531,20 @@ def invite():
     except botocore.exceptions.ParamValidationError as error:
         msg = f"The parameters you provided are incorrect: {error}"
         raise AuthError({"message": msg}, 500)
+    
+    try:
+        with DataAccessLayer.session() as db_session:
+            user_repo = UserRepository(db_session)
+            user_repo.add_user(
+                email=body['email'],
+                role=UserRole.GUEST,
+                firstName=body['firstName'],
+                middleName=body.get('middleName', ''),
+                lastName=body.get('lastName', '')
+            )
+    except Exception as error:
+        raise AuthError({"message": str(error)}, 400)
+
 
 def confirm_invite():
     
