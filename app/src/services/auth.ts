@@ -1,9 +1,13 @@
 import {api} from './api';
 
+export interface UserRole {
+  name: 'Guest' | 'Host' | 'Coordinator' | 'Admin';
+}
 export interface User {
   email: string;
   firstName: string;
   lastName: string;
+  role: UserRole;
 }
 
 export interface UserResponse {
