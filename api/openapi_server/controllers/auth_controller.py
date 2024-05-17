@@ -18,6 +18,7 @@ from sqlalchemy import select
 
 from botocore.exceptions import ClientError
 
+
 cognito_client_url = 'https://homeuniteus.auth.us-east-1.amazoncognito.com'
 
 # Get user attributes from Cognito response
@@ -65,6 +66,8 @@ def get_token_auth_header():
     return token
 
 def sign_up(body: dict, role: UserRole):
+    from openapi_server.controllers.admin_controller import remove_user
+    # import locally to avoid circular import error 
     secret_hash = current_app.calc_secret_hash(body['email'])
 
     try:
@@ -82,15 +85,14 @@ def sign_up(body: dict, role: UserRole):
 
     try:
         response = current_app.boto_client.sign_up(
-          ClientId=current_app.config['COGNITO_CLIENT_ID'],
-          SecretHash=secret_hash,
-          Username=body['email'],
-          Password=body['password'],
-          ClientMetadata={
-              'url': current_app.root_url
-          }
+        ClientId=current_app.config['COGNITO_CLIENT_ID'],
+        SecretHash=secret_hash,
+        Username=body['email'],
+        Password=body['password'],
+        ClientMetadata={
+            'url': current_app.root_url
+        }
         )
-
         return response
 
     except botocore.exceptions.ClientError as error:
@@ -103,15 +105,19 @@ def sign_up(body: dict, role: UserRole):
                 raise AuthError({  "message": msg }, 400)
             case 'InvalidPasswordException':
                 msg = "Password did not conform with policy"
+                remove_user(body, removeDB=True, removeCognito=False)
                 raise AuthError({  "message": msg }, 400)
             case 'TooManyRequestsException':
                 msg = "Too many requests made. Please wait before trying again."
-                raise AuthError({  "message": msg }, 400)
+                remove_user(body, removeDB=True, removeCognito=False)
+                raise AuthError({  "message": msg }, 408)
             case _:
                 msg = "An unexpected error occurred."
+                remove_user(body, removeDB=True, removeCognito=False)
                 raise AuthError({  "message": msg }, 400)
     except botocore.excepts.ParameterValidationError as error:
         msg = f"The parameters you provided are incorrect: {error}"
+        remove_user(body, True, False)
         raise AuthError({"message": msg}, 500)
     
 def signUpAdmin(body: dict):
