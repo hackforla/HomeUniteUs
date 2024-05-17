@@ -38,7 +38,6 @@ def initial_sign_in_reset_password():
             
         )
     except Exception as e:  
-        print(e)
         raise AuthError({"message": "failed to change password"}, 500) from e
     
     access_token = response['AuthenticationResult']['AccessToken']
@@ -55,7 +54,7 @@ def initial_sign_in_reset_password():
         'user': user
     }
 
-def removeUser(body: dict):
+def remove_user(body: dict, removeDB: bool = True, removeCognito: bool = True):
     '''
     Remove a user from connected database and AWS Cognito user pool.
     This method is only available to admin users.
@@ -64,32 +63,37 @@ def removeUser(body: dict):
     {
         "email": "EMAIL_TO_REMOVE"
     }
-    '''   
-    with DataAccessLayer.session() as session:
-        user = session.query(User).filter_by(email=body['email']).first()
-        if user:
-            session.delete(user)
+    Function takes removeDB and removeCognito params to specificy 
+    where the user is removed from. By default, the user is removed from both.
+    '''
+    if not removeDB and not removeCognito:
+        print("User was not deleted in Database nor Cognito")
+    if removeDB:   
+        with DataAccessLayer.session() as session:
+            user = session.query(User).filter_by(email=body['email']).first()
+            if user:
+                session.delete(user)
+            try:
+                session.commit()
+            except IntegrityError:
+                session.rollback()
+                # Since we're deleting, an IntegrityError might indicate a different problem
+                # Adjust the error message accordingly
+                raise AuthError({
+                    "message": "Could not delete the user due to a database integrity constraint."
+                }, 422)
+    if removeCognito:
         try:
-            session.commit()
-        except IntegrityError:
-            session.rollback()
-            # Since we're deleting, an IntegrityError might indicate a different problem
-            # Adjust the error message accordingly
-            raise AuthError({
-                "message": "Could not delete the user due to a database integrity constraint."
-            }, 422)
-        
-    try:
-        response = current_app.boto_client.admin_delete_user(
-            UserPoolId=current_app.config['COGNITO_USER_POOL_ID'],
-            Username=body['email']
-        )
-        return response
-    except botocore.exceptions.ClientError as error:
-        match error.response['Error']['Code']:
-            case 'UserNotFoundException':
-                msg = "User not found. Could not delete user."
-                raise AuthError({"message": msg}, 400)
-            case _:
-                msg = error.response['Error']['Message']
-                raise AuthError({"message": msg}, 500)
+            response = current_app.boto_client.admin_delete_user(
+                UserPoolId=current_app.config['COGNITO_USER_POOL_ID'],
+                Username=body['email']
+            )
+            return response
+        except botocore.exceptions.ClientError as error:
+            match error.response['Error']['Code']:
+                case 'UserNotFoundException':
+                    msg = "User not found. Could not delete user."
+                    raise AuthError({"message": msg}, 400)
+                case _:
+                    msg = error.response['Error']['Message']
+                    raise AuthError({"message": msg}, 500)
