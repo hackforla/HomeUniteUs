@@ -73,10 +73,15 @@ export const SignIn = () => {
       const {user, token} = response;
 
       dispatch(setCredentials({user, token}));
-      // navigate user to the page they tried to access before being redirected to login page
-      // navigate(from, {replace: true});
-      // navigate user to home page
-      navigate('/coordinator');
+
+      const routes = {
+        Guest: '/guest',
+        Host: '/host',
+        Coordinator: '/coordinator',
+        Admin: '/coordinator',
+      };
+
+      navigate(routes[user.role.name]);
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
         // you can access all properties of `FetchBaseQueryError` here
