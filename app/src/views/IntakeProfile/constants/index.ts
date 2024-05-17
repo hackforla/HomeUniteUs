@@ -6,7 +6,7 @@ import {
   Fields,
   fieldTypes,
   FieldTypes,
-  Answer,
+  Response,
 } from '../../../services/profile';
 
 export const fieldGroupBuilder = (
@@ -36,7 +36,7 @@ export const fieldBuilder = (options: Partial<Fields> = {}): Fields => ({
  * It takes the form of:
  * {
  *  fieldGroupId: {
- *     fieldId: answerValue
+ *     fieldId: responseValue
  *  }
  * }
  */
@@ -65,14 +65,14 @@ const fieldDefaultValue = (fieldType: FieldTypes) => {
 
 export const createInitialValues = (
   fieldGroups: FieldGroup[],
-  answers: Answer[],
+  responses: Response[],
 ): InitialValues => {
   return fieldGroups.reduce((acc: InitialValues, fieldGroup) => {
     const fields = fieldGroup.fields.reduce((acc, field) => {
       return {
         ...acc,
         [field.id]:
-          answers.find(answer => answer.fieldId === field.id)?.value ||
+          responses.find(response => response.fieldId === field.id)?.value ||
           fieldDefaultValue(field.type),
       };
     }, {});

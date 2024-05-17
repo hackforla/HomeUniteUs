@@ -57,7 +57,7 @@ export interface Guest {
   relationship: string;
 }
 
-export interface Answer {
+export interface Response {
   id: string;
   fieldId: string;
   value: string | Guest[] | undefined;
@@ -70,12 +70,12 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/profile/${queryArg.profileId}`,
       }),
     }),
-    getAnswers: build.query<
-      GetProfileAnswersApiResponse,
-      GetProfileAnswersApiArg
+    getResponses: build.query<
+      GetProfileResponsesApiResponse,
+      GetProfileResponsesApiArg
     >({
       query: queryArg => ({
-        url: `/profile/answers/${queryArg.userId}`,
+        url: `/profile/responses/${queryArg.userId}`,
       }),
     }),
   }),
@@ -93,12 +93,12 @@ export interface GetProfileApiArg {
   profileId: string | undefined;
 }
 
-export interface GetProfileAnswersApiResponse {
-  answers: Answer[];
+export interface GetProfileResponsesApiResponse {
+  responses: Response[];
 }
 
-export interface GetProfileAnswersApiArg {
+export interface GetProfileResponsesApiArg {
   userId: string | undefined;
 }
 
-export const {useGetProfileQuery, useGetAnswersQuery} = injectedRtkApi;
+export const {useGetProfileQuery, useGetResponsesQuery} = injectedRtkApi;

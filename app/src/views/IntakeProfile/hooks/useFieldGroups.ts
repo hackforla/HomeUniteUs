@@ -1,18 +1,18 @@
 import {faker} from '@faker-js/faker';
 import {useEffect, useState} from 'react';
 import {fieldBuilder, fieldGroupBuilder} from '../constants';
-import {Answer, FieldGroup} from 'src/services/profile';
+import {Response, FieldGroup} from 'src/services/profile';
 
 interface UseFieldGroups {
   profileId: string;
 }
 
 /**
- * Generates field groups and answers for a given profile id
+ * Generates field groups and responses for a given profile id
  */
 
 export const useFieldGroups = ({profileId}: UseFieldGroups) => {
-  const [answers, setAnswers] = useState<Answer[]>([]);
+  const [responses, setResponses] = useState<Response[]>([]);
   const [fieldGroups, setFieldGroups] = useState<FieldGroup[]>([]);
 
   useEffect(() => {
@@ -47,7 +47,7 @@ export const useFieldGroups = ({profileId}: UseFieldGroups) => {
 
       setFieldGroups(fieldGroups);
 
-      const answersArr = fieldGroups
+      const responsesArr = fieldGroups
         .map(fieldGroup => fieldGroup.fields)
         .flat()
         .map(field => {
@@ -109,9 +109,9 @@ export const useFieldGroups = ({profileId}: UseFieldGroups) => {
             value,
           };
         });
-      setAnswers(answersArr);
+      setResponses(responsesArr);
     }
   }, [profileId]);
 
-  return {answers, fieldGroups};
+  return {responses, fieldGroups};
 };
