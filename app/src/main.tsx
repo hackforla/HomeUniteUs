@@ -54,7 +54,7 @@ import {
   GuestDashboardLayout,
 } from './components/layout';
 import {GuestApplicationContext} from './components/common/GuestApplicationContext';
-import {FieldGroupList} from './components/IntakeProfile/IntakeProfileGroups';
+import {FieldGroupList} from './components/intake-profile/IntakeProfileGroups';
 import {enableMocking} from './utils/test/browser';
 
 function HuuApp() {

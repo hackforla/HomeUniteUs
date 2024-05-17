@@ -59,7 +59,7 @@ interface RenderFieldProps {
   field: Fields;
   values: Values;
   handleChange: FormikHandlers['handleChange'];
-  errors: FormikErrors<Values>;
+  errors: FormikErrors<InitialValues>;
 }
 
 export const RenderFields = ({
