@@ -2,6 +2,7 @@ import connexion
 import botocore
 import requests
 import jwt
+import random
 
 from flask import (
     redirect, 
@@ -514,12 +515,16 @@ def google():
 def invite():
 
     if connexion.request.is_json:
-        body = connexion.request.get_json()     
+        body = connexion.request.get_json()    
+
+    unrestricted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.-_~'
+    temporary_password = ''.join(random.choices(unrestricted_chars, k=12))
         
     try:
         current_app.boto_client.admin_create_user(
             UserPoolId=current_app.config['COGNITO_USER_POOL_ID'],
             Username=body['email'],
+            TemporaryPassword=temporary_password,
             ClientMetadata={
                 'url': current_app.config['ROOT_URL']
             },
