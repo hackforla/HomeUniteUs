@@ -1,15 +1,18 @@
 
 import connexion
+import jwt
 from sqlalchemy.exc import IntegrityError
 from flask import session, current_app
 
 from openapi_server.controllers import auth_controller
 from openapi_server.exceptions import AuthError
 from openapi_server.models.database import DataAccessLayer, User
+from openapi_server.repositories.user_repo import UserRepository
+from openapi_server.models.schema import user_schema
 import botocore
 
-def initial_sign_in_reset_password(): 
-    """Sets initial password.
+def new_password(): 
+    """Sets new password.
      
     Removes auto generated password and replaces with 
     user assigned password. Used for account setup.
@@ -42,11 +45,26 @@ def initial_sign_in_reset_password():
     
     access_token = response['AuthenticationResult']['AccessToken']
     refresh_token = response['AuthenticationResult']['RefreshToken']
+    id_token = response['AuthenticationResult']['IdToken']
 
-    user_data = current_app.boto_client.get_user(AccessToken=access_token)
-    user = auth_controller.get_user_attr(user_data)
+    decoded_id_token = jwt.decode(id_token, algorithms=["RS256"], options={"verify_signature": False})
+    print('decoded_id_token:', decoded_id_token)
+
+    try:
+        with DataAccessLayer.session() as db_session:
+            user_repo = UserRepository(db_session)
+            signed_in_user = user_repo.get_user(decoded_id_token['email'])
+            user = user_schema.dump(signed_in_user)
+    except Exception as e:
+        current_app.logger.info('Failed to retrieve user: %s from db', decoded_id_token['email'])
+        raise AuthError({
+            'code': 'database_error',
+            'message': str(e)
+        }, 401)
 
     session['refresh_token'] = refresh_token
+    session['id_token'] = id_token
+    session['username'] = decoded_id_token['email']
 
     # return user data json
     return {
