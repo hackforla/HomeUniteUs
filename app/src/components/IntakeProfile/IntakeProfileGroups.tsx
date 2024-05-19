@@ -13,10 +13,12 @@ import {
 } from '@mui/material';
 import {FormikErrors, useFormikContext, FormikHandlers} from 'formik';
 import {useOutletContext} from 'react-router-dom';
-
 import {Values, InitialValues} from 'src/views/IntakeProfile';
 import {AdditionalGuestsField} from './AdditionaGuestsField';
+// import {FieldGroup, Fields, Guest, Pet} from 'src/services/profile';
 import {FieldGroup, Fields, Guest} from 'src/services/profile';
+
+// import {AdditionalPetsField} from './AdditionalPetsField';
 
 interface OutletContext {
   groupId: string;
@@ -187,6 +189,14 @@ export const RenderFields = ({
           onChange={handleChange}
         />
       );
+    // case 'pets':
+    //   return (
+    //     <AdditionalPetsField
+    //       errors={errors}
+    //       onChange={handleChange}
+    //       pets={values[field.id] as Pet[]
+    //     />
+    //   );
     default:
       throw new Error('Invalid field type');
   }

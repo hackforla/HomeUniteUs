@@ -58,6 +58,10 @@ export interface Guest {
   relationship: string;
 }
 
+export interface Pet {
+  type: string;
+}
+
 export interface Answer {
   id: string;
   fieldId: string;

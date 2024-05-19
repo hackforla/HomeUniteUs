@@ -148,9 +148,10 @@ function HuuApp() {
         <Route
           path="/profile/:profileId"
           element={
-            <ProtectedRoute>
-              <IntakeProfile />
-            </ProtectedRoute>
+            // <ProtectedRoute>
+            //   <IntakeProfile />
+            // </ProtectedRoute>
+            <IntakeProfile />
           }
         >
           <Route path="group/:groupId" element={<FieldGroupList />} />

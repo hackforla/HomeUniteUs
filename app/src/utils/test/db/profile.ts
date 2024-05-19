@@ -103,6 +103,15 @@ export const intakeProfiles: GetProfileApiResponse[] = [
               required: true,
             },
           },
+          {
+            id: faker.string.numeric(4),
+            title: 'Pet Type',
+            type: 'short_text',
+            properties: {},
+            validations: {
+              required: false,
+            },
+          },
         ],
       },
       {
