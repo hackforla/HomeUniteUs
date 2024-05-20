@@ -48,7 +48,6 @@ def new_password():
     id_token = response['AuthenticationResult']['IdToken']
 
     decoded_id_token = jwt.decode(id_token, algorithms=["RS256"], options={"verify_signature": False})
-    print('decoded_id_token:', decoded_id_token)
 
     try:
         with DataAccessLayer.session() as db_session:
