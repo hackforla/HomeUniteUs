@@ -1,4 +1,4 @@
-import React, {ReactElement} from 'react';
+import React, {ReactElement, ReactNode} from 'react';
 import {render, RenderOptions} from '@testing-library/react';
 import {ThemeProvider} from '@mui/material/styles';
 import {Provider} from 'react-redux';
@@ -9,7 +9,7 @@ import {PreloadedState} from '@reduxjs/toolkit';
 import {setupStore, RootState, AppStore} from '../../app/store';
 
 interface ProviderProps {
-  children: ReactElement;
+  children: ReactNode;
 }
 
 interface ExtendedRenderOptions extends Omit<RenderOptions, 'queries'> {

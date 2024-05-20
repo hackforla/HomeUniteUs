@@ -2,7 +2,7 @@ import {Stack, Box, Typography, Button} from '@mui/material';
 import CheckCircleOutlined from '@mui/icons-material/CheckCircleOutlined';
 import LockIcon from '@mui/icons-material/Lock';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import {useNavigate} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 import {SubTask} from '../../views/GuestApplicationTracker';
 
@@ -18,16 +18,11 @@ export const DashboardTask = ({
   buttonText,
   url,
 }: DashboardTaskProps) => {
-  const navigate = useNavigate();
-
+  console.log(url);
   const statusIcons = {
     inProgress: <AccessTimeIcon sx={{color: '#FFC700'}} />,
     complete: <CheckCircleOutlined color="success" />,
     locked: <LockIcon sx={{color: 'rgba(0, 0, 0, 0.38)'}} />,
-  };
-
-  const handleClick = () => {
-    navigate(url);
   };
 
   return (
@@ -53,7 +48,8 @@ export const DashboardTask = ({
               size="medium"
               variant="contained"
               disabled={status === 'complete'}
-              onClick={handleClick}
+              to={url}
+              component={Link}
             >
               {buttonText}
             </Button>

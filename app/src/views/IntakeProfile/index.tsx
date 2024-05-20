@@ -68,8 +68,7 @@ export const IntakeProfile = () => {
         <Stack
           direction="row"
           sx={{
-            height: '100vh',
-            width: '100vw',
+            flex: '1 1 auto',
             backgroundColor: 'grey.50',
           }}
         >
