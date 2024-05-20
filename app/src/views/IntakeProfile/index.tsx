@@ -1,4 +1,4 @@
-import {Button, Stack} from '@mui/material';
+import {Button, Stack, useTheme} from '@mui/material';
 import {Link, Outlet, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
 
@@ -16,6 +16,8 @@ export type Values = {
 export type InitialValues = Record<string, Values>;
 
 export const IntakeProfile = () => {
+  const theme = useTheme();
+  const toolbarHeight = Number(theme.mixins.toolbar.minHeight);
   const {profileId, groupId} = useParams();
 
   const {data: profileData} = useGetProfileQuery(
@@ -68,7 +70,7 @@ export const IntakeProfile = () => {
         <Stack
           direction="row"
           sx={{
-            flex: '1 1 auto',
+            height: `calc(100vh - ${toolbarHeight}px)`,
             backgroundColor: 'grey.50',
           }}
         >
