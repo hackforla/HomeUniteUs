@@ -8,14 +8,14 @@ import {SubTask} from '../../views/GuestApplicationTracker';
 
 export type DashboardTaskProps = Pick<
   SubTask,
-  'title' | 'description' | 'status' | 'buttonText' | 'url'
+  'title' | 'description' | 'status' | 'linkText' | 'url'
 >;
 
 export const DashboardTask = ({
   title,
   description,
   status,
-  buttonText,
+  linkText,
   url,
 }: DashboardTaskProps) => {
   console.log(url);
@@ -51,7 +51,7 @@ export const DashboardTask = ({
               to={url}
               component={Link}
             >
-              {buttonText}
+              {linkText}
             </Button>
           ) : (
             <Typography>Upcoming</Typography>

@@ -19,7 +19,7 @@ export interface SubTask {
   title: string;
   status: TaskStatus;
   description: string;
-  buttonText: string;
+  linkText: string;
   url: string;
 }
 
@@ -35,7 +35,7 @@ const tasks: Task[] = [
         status: 'inProgress',
         description:
           'Start your guest application to move on to the next step.',
-        buttonText: 'Start Application',
+        linkText: 'Start Application',
         url: 'profile/1/group/1',
       },
       {
@@ -43,7 +43,7 @@ const tasks: Task[] = [
         title: 'Coordinator Interview',
         status: 'locked',
         description: 'Meet with your Coordinator to share more about yourself.',
-        buttonText: 'Schedule interview',
+        linkText: 'Schedule interview',
         url: '/schedule',
       },
       {
@@ -52,7 +52,7 @@ const tasks: Task[] = [
         status: 'locked',
         description:
           'Complete a training session to prepare you for the host home experience.',
-        buttonText: 'Schedule training',
+        linkText: 'Schedule training',
         url: '/schedule',
       },
     ],
@@ -67,7 +67,7 @@ const tasks: Task[] = [
         title: 'Match with a Host',
         status: 'locked',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        buttonText: 'Find hosts',
+        linkText: 'Find hosts',
         url: '/match',
       },
       {
@@ -75,7 +75,7 @@ const tasks: Task[] = [
         title: 'Meeting with Host',
         status: 'locked',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        buttonText: 'Schedule meeting',
+        linkText: 'Schedule meeting',
         url: '/schedule',
       },
     ],
@@ -90,7 +90,7 @@ const tasks: Task[] = [
         title: 'Sign Agreement',
         status: 'locked',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-        buttonText: 'Sign agreement',
+        linkText: 'Sign agreement',
         url: '/schedule',
       },
     ],

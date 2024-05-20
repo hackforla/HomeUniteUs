@@ -21,7 +21,7 @@ function setup(props?: Partial<DashboardTaskProps>) {
     title: 'Application',
     status: 'inProgress',
     description: 'Start your guest application to move on to the next step.',
-    buttonText: 'Start Application',
+    linkText: 'Start Application',
     url: '/guest-application',
     ...props,
   };
@@ -52,12 +52,12 @@ describe('DashboardTask', () => {
       const user = userEvent.setup();
 
       const {props} = setup();
-      const button = screen.getByRole('button', {name: props.buttonText});
+      const link = screen.getByRole('link', {name: props.linkText});
 
-      expect(button).toBeInTheDocument();
-      expect(button).not.toBeDisabled();
+      expect(link).toBeInTheDocument();
+      expect(link).not.toBeDisabled();
 
-      await user.click(button);
+      await user.click(link);
       expect(navigate).toHaveBeenCalledWith(props.url);
     });
 
@@ -69,12 +69,12 @@ describe('DashboardTask', () => {
   });
 
   describe('when the task is complete', () => {
-    it('should render a disabled button', () => {
+    it('should render a disabled link', () => {
       const {props} = setup({status: 'complete'});
-      const button = screen.getByRole('button', {name: props.buttonText});
+      const link = screen.getByRole('link', {name: props.linkText});
 
-      expect(button).toBeInTheDocument();
-      expect(button).toBeDisabled();
+      expect(link).toBeInTheDocument();
+      expect(link).toBeDisabled();
     });
 
     it('should render check icon', () => {
@@ -89,7 +89,7 @@ describe('DashboardTask', () => {
       const {props} = setup({status: 'locked'});
 
       expect(
-        screen.queryByRole('button', {name: props.buttonText}),
+        screen.queryByRole('link', {name: props.linkText}),
       ).not.toBeInTheDocument();
       expect(screen.getByText('Upcoming')).toBeInTheDocument();
     });
