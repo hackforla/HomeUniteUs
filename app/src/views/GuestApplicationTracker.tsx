@@ -32,7 +32,7 @@ const tasks: Task[] = [
       {
         id: 1,
         title: 'Application',
-        status: 'inProgress',
+        status: 'complete',
         description:
           'Start your guest application to move on to the next step.',
         linkText: 'Start Application',

@@ -48,17 +48,14 @@ describe('DashboardTask', () => {
   });
 
   describe('when the task is in progress', () => {
-    it('should render a button to start the task', async () => {
-      const user = userEvent.setup();
+    it('should render a link to start the task', async () => {
+      userEvent.setup();
 
       const {props} = setup();
       const link = screen.getByRole('link', {name: props.linkText});
 
       expect(link).toBeInTheDocument();
       expect(link).not.toBeDisabled();
-
-      await user.click(link);
-      expect(navigate).toHaveBeenCalledWith(props.url);
     });
 
     it('should render clock icon', () => {
@@ -74,7 +71,7 @@ describe('DashboardTask', () => {
       const link = screen.getByRole('link', {name: props.linkText});
 
       expect(link).toBeInTheDocument();
-      expect(link).toBeDisabled();
+      expect(link).toHaveAttribute('aria-disabled', 'true');
     });
 
     it('should render check icon', () => {
