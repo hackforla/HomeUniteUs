@@ -517,6 +517,7 @@ def invite():
     if connexion.request.is_json:
         body = connexion.request.get_json()    
 
+    # TODO: Possibly encrypt these passwords?
     unrestricted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.-_~'
     temporary_password = ''.join(random.choices(unrestricted_chars, k=12))
         
