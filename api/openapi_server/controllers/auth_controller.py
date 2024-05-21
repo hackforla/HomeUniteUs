@@ -518,8 +518,11 @@ def invite():
         body = connexion.request.get_json()    
 
     # TODO: Possibly encrypt these passwords?
-    unrestricted_chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ.-_~'
-    temporary_password = ''.join(random.choices(unrestricted_chars, k=12))
+    numbers = '0123456789'
+    lowercase_chars = 'abcdefghijklmnopqrstuvwxyz'
+    uppercase_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    symbols = '.-_~'
+    temporary_password = ''.join(random.choices(numbers, k=3)) + ''.join(random.choices(lowercase_chars, k=3)) + ''.join(random.choices(symbols, k=1)) + ''.join(random.choices(uppercase_chars, k=3))
         
     try:
         current_app.boto_client.admin_create_user(
