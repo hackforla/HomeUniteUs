@@ -135,6 +135,7 @@ def _signup_unconfirmed(signup_endpoint, client, is_mocking):
             'password': password
         }
     )
+
     
     if expect_user_confirmed:
         assert signin_response.status_code == 200, "Mocked users should be able to signin without confirmation."
@@ -142,7 +143,7 @@ def _signup_unconfirmed(signup_endpoint, client, is_mocking):
     else:
         assert signin_response.status_code == 401, (
             "When using the real AWS service signin should fail since user is unconfirmed. ")
-        assert signin_response.json["Code"] == "UserNotConfirmedException"
+        assert signin_response.json["code"] == "UserNotConfirmedException"
 
 def test_signup_unconfirmed_host(client, is_mocking):
     '''
