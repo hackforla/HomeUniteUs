@@ -202,7 +202,7 @@ referencing==0.30.2
     #   jsonschema
     #   jsonschema-spec
     #   jsonschema-specifications
-requests==2.31.0
+requests==2.32.0
     # via
     #   connexion
     #   jsonschema-spec
