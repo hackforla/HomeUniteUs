@@ -6,7 +6,7 @@ describe('Forgot Password', () => {
     oneHourFromNow.setHours(oneHourFromNow.getHours() + 1);
     const cookieExpiration = oneHourFromNow.toUTCString();
 
-    cy.intercept('POST', '/api/auth/initialInvite', {
+    cy.intercept('POST', '/api/auth/new_password', {
       statusCode: 200,
       headers: {
         'Set-Cookie': `session=fake_session_value; expires=${cookieExpiration}; path=/`,

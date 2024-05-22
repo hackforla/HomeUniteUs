@@ -2,6 +2,7 @@ import connexion
 import botocore
 import requests
 import jwt
+import random
 
 from flask import (
     redirect, 
@@ -85,13 +86,13 @@ def sign_up(body: dict, role: UserRole):
 
     try:
         response = current_app.boto_client.sign_up(
-        ClientId=current_app.config['COGNITO_CLIENT_ID'],
-        SecretHash=secret_hash,
-        Username=body['email'],
-        Password=body['password'],
-        ClientMetadata={
-            'url': current_app.root_url
-        }
+            ClientId=current_app.config['COGNITO_CLIENT_ID'],
+            SecretHash=secret_hash,
+            Username=body['email'],
+            Password=body['password'],
+            ClientMetadata={
+                'url': current_app.root_url
+            }
         )
         return response
 
@@ -149,7 +150,9 @@ def sign_in(body: dict):
         current_app.logger.info('%s initiated auth with Cognito successfully', body['email'])
     except ClientError as e:
         current_app.logger.info('Failed to initiate auth with Cognito for user: %s', body['email'])
-        raise AuthError(e.response["Error"], 401)
+        raise AuthError({
+            'code': e.response["Error"]["Code"], 
+            'message': e.response["Error"]["Message"]}, 401)
     
     if(response.get('ChallengeName') and response['ChallengeName'] == 'NEW_PASSWORD_REQUIRED'):
         current_app.logger.info('User being redirected to create new password page', body['email'])
@@ -481,6 +484,7 @@ def user(token_info):
         }, 401)
 
     user_data = None
+
     try:
         with DataAccessLayer.session() as db_session:
             user_repo = UserRepository(db_session)
@@ -510,24 +514,26 @@ def google():
 #Do I have an oauth token
 def invite():
 
-    get_token_auth_header()
-
     if connexion.request.is_json:
-        body = connexion.request.get_json()     
+        body = connexion.request.get_json()    
+
+    # TODO: Possibly encrypt these passwords?
+    numbers = '0123456789'
+    lowercase_chars = 'abcdefghijklmnopqrstuvwxyz'
+    uppercase_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    symbols = '.-_~'
+    temporary_password = ''.join(random.choices(numbers, k=3)) + ''.join(random.choices(lowercase_chars, k=3)) + ''.join(random.choices(symbols, k=1)) + ''.join(random.choices(uppercase_chars, k=3))
         
     try:
-        email = body['email']
-
-        response = current_app.boto_client.admin_create_user(
+        current_app.boto_client.admin_create_user(
             UserPoolId=current_app.config['COGNITO_USER_POOL_ID'],
-            Username=email,
+            Username=body['email'],
+            TemporaryPassword=temporary_password,
             ClientMetadata={
                 'url': current_app.config['ROOT_URL']
             },
             DesiredDeliveryMediums=["EMAIL"]
         )
-
-        return response
 
     except botocore.exceptions.ClientError as error:
         match error.response['Error']['Code']:
@@ -540,6 +546,20 @@ def invite():
     except botocore.exceptions.ParamValidationError as error:
         msg = f"The parameters you provided are incorrect: {error}"
         raise AuthError({"message": msg}, 500)
+    
+    try:
+        with DataAccessLayer.session() as db_session:
+            user_repo = UserRepository(db_session)
+            user_repo.add_user(
+                email=body['email'],
+                role=UserRole.GUEST,
+                firstName=body['firstName'],
+                middleName=body.get('middleName', ''),
+                lastName=body.get('lastName', '')
+            )
+    except Exception as error:
+        raise AuthError({"message": str(error)}, 400)
+
 
 def confirm_invite():
     

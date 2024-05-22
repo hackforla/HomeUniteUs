@@ -95,6 +95,8 @@ prance==23.6.21.0
     # via homeuniteus-api (pyproject.toml)
 psycopg2-binary==2.9.5
     # via homeuniteus-api (pyproject.toml)
+pyjwt==2.8.0
+    # via pyjwt
 python-dateutil==2.8.2
     # via botocore
 python-dotenv==0.20.0
