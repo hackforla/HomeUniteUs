@@ -52,6 +52,11 @@ describe('Authentication', () => {
                 token: 'fake.jwt.token',
                 user: {
                   email: 'test@gmail.com',
+                  firstName: 'Test',
+                  lastName: 'User',
+                  role: {
+                    name: 'Guest',
+                  },
                 },
               }
             : {

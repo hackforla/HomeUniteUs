@@ -7,7 +7,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import {Tooltip, Avatar, Menu, MenuItem, Stack} from '@mui/material';
 import logo from '../../img/favicon.png';
-import {useSignOutMutation} from '../../services/auth';
+import {UserRole, useSignOutMutation} from '../../services/auth';
 import {selectCurrentUser} from '../../../src/app/authSlice';
 import {User} from '../../services/auth';
 
@@ -97,6 +97,7 @@ const AvatarDropdownMenu = () => {
   // If the user ever fails to load, then display
   // ?? as the initials for debugging purposes
   const user = useSelector(selectCurrentUser) || {
+    role: {} as UserRole,
     email: 'unknown',
     firstName: '?',
     lastName: '?',
