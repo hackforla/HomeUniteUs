@@ -18,7 +18,7 @@ import {AdditionalGuestsField} from './AdditionaGuestsField';
 // import {FieldGroup, Fields, Guest, Pet} from 'src/services/profile';
 import {FieldGroup, Fields, Guest} from 'src/services/profile';
 
-// import {AdditionalPetsField} from './AdditionalPetsField';
+import {AdditionalPetsField} from './AdditionalPetsField';
 
 interface OutletContext {
   groupId: string;
@@ -83,7 +83,6 @@ export const RenderFields = ({
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const helperText = errors[groupId]?.[field.id];
-
   switch (field.type) {
     case 'short_text':
       return (
@@ -189,14 +188,16 @@ export const RenderFields = ({
           onChange={handleChange}
         />
       );
-    // case 'pets':
-    //   return (
-    //     <AdditionalPetsField
-    //       errors={errors}
-    //       onChange={handleChange}
-    //       pets={values[field.id] as Pet[]
-    //     />
-    //   );
+    case 'pets':
+      return (
+        <AdditionalPetsField
+          errors={errors}
+          pets={values[field.id]}
+          // pets={[]}
+          fieldId={field.id}
+          onChange={handleChange}
+        />
+      );
     default:
       throw new Error('Invalid field type');
   }

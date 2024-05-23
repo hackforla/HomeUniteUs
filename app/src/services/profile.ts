@@ -65,7 +65,7 @@ export interface Pet {
 export interface Answer {
   id: string;
   fieldId: string;
-  value: string | Guest[] | undefined;
+  value: string | Guest[] | Pet[] | undefined;
 }
 
 const injectedRtkApi = api.injectEndpoints({

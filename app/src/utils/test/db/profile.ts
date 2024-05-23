@@ -104,9 +104,10 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
+            // 'pets' type is causing error
             id: faker.string.numeric(4),
             title: 'Pet Type',
-            type: 'short_text',
+            type: 'pets',
             properties: {},
             validations: {
               required: false,

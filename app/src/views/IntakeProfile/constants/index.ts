@@ -58,6 +58,8 @@ const fieldDefaultValue = (fieldType: FieldTypes) => {
       return '';
     case 'yes_no':
       return '';
+    case 'pets':
+      return [];
     default:
       return '';
   }
@@ -112,6 +114,12 @@ export const typeValidations = {
       relationship: string().required('Relationship is required'),
     }),
   ),
+  // array of strings of the type of pets
+  pets: array().of(
+    object().shape({
+      type: string().required('Type of pet is required'),
+    }),
+  ),
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -129,7 +137,9 @@ const merge = (...schemas) => {
 
 const createFieldValidationSchema = ({type, validations}: Fields) => {
   if (!typeValidations[type]) {
-    console.error(`Invalid type: ${type}`);
+    console.error(
+      `No schema exists in typeValidations hashmap in IntakeProfile/constants/index.ts for type: ${type}`,
+    );
   }
 
   let schema = typeValidations[type];
