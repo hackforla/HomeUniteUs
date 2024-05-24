@@ -1,20 +1,22 @@
-// import {faker} from '@faker-js/faker';
-import {Stack, Button, TextField} from '@mui/material';
-// import {FormikErrors, FormikHandlers, FieldArray} from 'formik';
-import {FieldArray} from 'formik';
-
+import {Stack, Button, TextField, Typography} from '@mui/material';
+import {FormikErrors, FieldArray} from 'formik';
 import {Pet} from '../../services/profile';
 import Autocomplete from '@mui/material/Autocomplete';
 
-// interface Values {
-//   pets: Pet[];
-// }
+interface Values {
+  pets: Pet[];
+}
 
 interface AdditionalPetsFieldProps {
   pets: Pet[];
-  // errors: FormikErrors<Values>;
   fieldId: string;
-  // onChange: FormikHandlers['handleChange'];
+  groupId: string;
+  errors: FormikErrors<Values>;
+  setFieldValue: (
+    field: string,
+    value: string,
+    shouldValidate?: boolean,
+  ) => void;
 }
 
 const top10pets = [
@@ -28,26 +30,59 @@ const top10pets = [
 ];
 
 export const AdditionalPetsField = ({
-  // errors,
+  errors,
   pets,
   fieldId,
-  // onChange,
+  groupId,
+  setFieldValue,
 }: AdditionalPetsFieldProps) => {
   return (
     <Stack gap={2}>
-      <FieldArray name={fieldId}>
-        {({push /*remove*/}) => (
+      <FieldArray name={`${groupId}.${fieldId}`}>
+        {({push, remove}) => (
           <>
             {pets.map((pet, index) => {
               return (
                 <Stack key={`pet-${index}`} sx={{gap: 1}}>
+                  <Stack direction="row" sx={{justifyContent: 'space-between'}}>
+                    <Typography variant="h6">Pet {index + 1}</Typography>
+                    <Button
+                      color="inherit"
+                      onClick={() => remove(index)}
+                      variant="text"
+                    >
+                      X
+                    </Button>
+                  </Stack>
                   <Autocomplete
                     disablePortal
-                    id="combo-box"
+                    id={`combo-box-${index}`}
                     options={top10pets}
-                    sx={{width: 300}}
+                    getOptionLabel={option => option.label}
+                    value={
+                      top10pets.find(option => option.label === pet.type) ||
+                      null
+                    }
+                    sx={{width: '100%'}}
+                    onChange={(event, value) => {
+                      setFieldValue(
+                        `${groupId}.${fieldId}[${index}].type`,
+                        value?.label || '',
+                      );
+                    }}
                     renderInput={params => (
-                      <TextField {...params} label="pet" />
+                      <TextField
+                        {...params}
+                        label="Pet Type"
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        error={Boolean(
+                          errors[groupId]?.[fieldId]?.[index]?.type,
+                        )}
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore
+                        helperText={errors[groupId]?.[fieldId]?.[index]?.type}
+                      />
                     )}
                   />
                 </Stack>
@@ -56,7 +91,6 @@ export const AdditionalPetsField = ({
             <Button
               onClick={() =>
                 push({
-                  // type: faker.string.alpha(),
                   type: '',
                 })
               }

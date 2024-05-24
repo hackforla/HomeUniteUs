@@ -15,8 +15,7 @@ import {FormikErrors, useFormikContext, FormikHandlers} from 'formik';
 import {useOutletContext} from 'react-router-dom';
 import {Values, InitialValues} from 'src/views/IntakeProfile';
 import {AdditionalGuestsField} from './AdditionaGuestsField';
-// import {FieldGroup, Fields, Guest, Pet} from 'src/services/profile';
-import {FieldGroup, Fields, Guest} from 'src/services/profile';
+import {FieldGroup, Fields, Guest, Pet} from 'src/services/profile';
 
 import {AdditionalPetsField} from './AdditionalPetsField';
 
@@ -27,7 +26,8 @@ interface OutletContext {
 
 export const FieldGroupList = () => {
   const {groupId, fieldGroups} = useOutletContext<OutletContext>();
-  const {values, handleChange, errors} = useFormikContext<InitialValues>();
+  const {values, handleChange, errors, setFieldValue} =
+    useFormikContext<InitialValues>();
 
   if (fieldGroups === undefined || groupId === undefined) return null;
   const fieldGroup = fieldGroups.find(group => group.id === groupId);
@@ -46,6 +46,7 @@ export const FieldGroupList = () => {
                 field={field}
                 values={values[groupId]}
                 handleChange={handleChange}
+                setFieldValue={setFieldValue}
                 errors={errors}
               />
             </Stack>
@@ -62,6 +63,11 @@ interface RenderFieldProps {
   values: Values;
   handleChange: FormikHandlers['handleChange'];
   errors: FormikErrors<Values>;
+  setFieldValue: (
+    field: string,
+    value: string,
+    shouldValidate?: boolean,
+  ) => void;
 }
 
 export const RenderFields = ({
@@ -69,6 +75,7 @@ export const RenderFields = ({
   field,
   values,
   handleChange,
+  setFieldValue,
   errors,
 }: RenderFieldProps) => {
   const props = {
@@ -192,10 +199,10 @@ export const RenderFields = ({
       return (
         <AdditionalPetsField
           errors={errors}
-          pets={values[field.id]}
-          // pets={[]}
+          pets={values[field.id] as Pet[]}
           fieldId={field.id}
-          onChange={handleChange}
+          groupId={groupId}
+          setFieldValue={setFieldValue}
         />
       );
     default:
