@@ -1,6 +1,8 @@
 import connexion
 import botocore
 import requests
+import jwt
+import random
 
 from flask import (
     redirect, 
@@ -17,19 +19,19 @@ from sqlalchemy import select
 
 from botocore.exceptions import ClientError
 
+
 cognito_client_url = 'https://homeuniteus.auth.us-east-1.amazoncognito.com'
 
 # Get user attributes from Cognito response
 def get_user_attr(user_data):
     user_attr = {}
     for attribute in user_data['UserAttributes']:
-        print(attribute['Name'], attribute['Value'])
         if attribute['Name'] == 'email':
-            user_attr.email = attribute['Value']
+            user_attr["email"] = attribute['Value']
         if attribute['Name'] == 'given_name':
-            user_attr.first_name = attribute['Value']
+            user_attr["first_name"] = attribute['Value']
         if attribute['Name'] == 'family_name':
-            user_attr.last_name = attribute['Value']
+            user_attr["last_name"] = attribute['Value']
 
 
     return user_attr
@@ -65,6 +67,8 @@ def get_token_auth_header():
     return token
 
 def sign_up(body: dict, role: UserRole):
+    from openapi_server.controllers.admin_controller import remove_user
+    # import locally to avoid circular import error 
     secret_hash = current_app.calc_secret_hash(body['email'])
 
     try:
@@ -82,15 +86,14 @@ def sign_up(body: dict, role: UserRole):
 
     try:
         response = current_app.boto_client.sign_up(
-          ClientId=current_app.config['COGNITO_CLIENT_ID'],
-          SecretHash=secret_hash,
-          Username=body['email'],
-          Password=body['password'],
-          ClientMetadata={
-              'url': current_app.root_url
-          }
+            ClientId=current_app.config['COGNITO_CLIENT_ID'],
+            SecretHash=secret_hash,
+            Username=body['email'],
+            Password=body['password'],
+            ClientMetadata={
+                'url': current_app.root_url
+            }
         )
-
         return response
 
     except botocore.exceptions.ClientError as error:
@@ -103,15 +106,19 @@ def sign_up(body: dict, role: UserRole):
                 raise AuthError({  "message": msg }, 400)
             case 'InvalidPasswordException':
                 msg = "Password did not conform with policy"
+                remove_user(body, removeDB=True, removeCognito=False)
                 raise AuthError({  "message": msg }, 400)
             case 'TooManyRequestsException':
                 msg = "Too many requests made. Please wait before trying again."
-                raise AuthError({  "message": msg }, 400)
+                remove_user(body, removeDB=True, removeCognito=False)
+                raise AuthError({  "message": msg }, 408)
             case _:
                 msg = "An unexpected error occurred."
+                remove_user(body, removeDB=True, removeCognito=False)
                 raise AuthError({  "message": msg }, 400)
     except botocore.excepts.ParameterValidationError as error:
         msg = f"The parameters you provided are incorrect: {error}"
+        remove_user(body, True, False)
         raise AuthError({"message": msg}, 500)
     
 def signUpAdmin(body: dict):
@@ -139,25 +146,41 @@ def sign_in(body: dict):
                 'SECRET_HASH': secret_hash
             }
         )
+
+        current_app.logger.info('%s initiated auth with Cognito successfully', body['email'])
     except ClientError as e:
-        raise AuthError(e.response["Error"], 401)
+        current_app.logger.info('Failed to initiate auth with Cognito for user: %s', body['email'])
+        raise AuthError({
+            'code': e.response["Error"]["Code"], 
+            'message': e.response["Error"]["Message"]}, 401)
     
     if(response.get('ChallengeName') and response['ChallengeName'] == 'NEW_PASSWORD_REQUIRED'):
+        current_app.logger.info('User being redirected to create new password page', body['email'])
+
         userId = response['ChallengeParameters']['USER_ID_FOR_SRP']
         sessionId = response['Session']
         return redirect(f"{current_app.root_url}/create-password?userId={userId}&sessionId={sessionId}")              
 
     access_token = response['AuthenticationResult']['AccessToken']
     refresh_token = response['AuthenticationResult']['RefreshToken']
+    id_token = response['AuthenticationResult']['IdToken']
 
     user_data = None
-    with DataAccessLayer.session() as db_session:
-        user_repo = UserRepository(db_session)
-        signed_in_user = user_repo.get_user(body['email'])
-        user_data = user_schema.dump(signed_in_user)
+    try:
+        with DataAccessLayer.session() as db_session:
+            user_repo = UserRepository(db_session)
+            signed_in_user = user_repo.get_user(body['email'])
+            user_data = user_schema.dump(signed_in_user)
+    except Exception as e:
+        current_app.logger.info('Failed to retrieve user: %s from db', body['email'])
+        raise AuthError({
+            'code': 'database_error',
+            'message': str(e)
+        }, 401)
     
     # set refresh token cookie
     session['refresh_token'] = refresh_token
+    session['id_token'] = id_token
     session['username'] = body['email']
 
     # return user data json
@@ -207,7 +230,26 @@ def resend_confirmation_code():
         raise AuthError({"message": msg}, 500)
 
 
-def confirm_sign_up(body: dict):   
+def confirm_sign_up():
+    code = request.args['code']
+    email = request.args['email']
+    client_id = request.args['clientId']
+
+    secret_hash = current_app.calc_secret_hash(email)
+
+    try:
+        current_app.boto_client.confirm_sign_up(
+            ClientId=client_id,
+            SecretHash=secret_hash,
+            Username=email,
+            ConfirmationCode=code
+        )
+
+        return redirect(f"{current_app.root_url}/email-verification-success")
+    except Exception as e:
+        return redirect(f"{current_app.root_url}/email-verification-error")
+    
+def confirm_sign_up_v2(body: dict):   
     secret_hash = current_app.calc_secret_hash(body['email'])
 
     try:
@@ -260,18 +302,15 @@ def token():    # get code from body
 
     # get tokens from oauth2/token endpoint
     response = requests.post(token_url, auth=auth, data=params)
-    print('Token request response:', response.json())
 
     refresh_token = response.json().get('refresh_token')
     access_token = response.json().get('access_token')
+    id_token = response.json().get('id_token')
 
     # retrieve user data
     try:
         user_data = current_app.boto_client.get_user(AccessToken=access_token)
-        print('User data:', user_data)
-    except Exception as e:
-        print('Error!!!!', e)
-        
+    except botocore.exceptions.ClientError as e:        
         code = e.response['Error']['Code']
         message = e.response['Error']['Message']
         raise AuthError({
@@ -281,21 +320,48 @@ def token():    # get code from body
 
     # create user object from user data
     user_attrs = get_user_attr(user_data)
+    
+    # check if user exists in database
+    user = None
 
-    try:
+    with DataAccessLayer.session() as db_session:
+        user_repo = UserRepository(db_session)
+        signed_in_user = user_repo.get_user(user_attrs['email'])
+        if(bool(signed_in_user) == True):
+            user = user_schema.dump(signed_in_user)
+
+
+    # If not, add user to database and get user object
+    if(user is None):
+        user_role = callback_uri.split('/')[2].capitalize()
+        role = UserRole.COORDINATOR if user_role == 'Coordinator' else UserRole.HOST
+
+        try:
+            with DataAccessLayer.session() as db_session:
+                user_repo = UserRepository(db_session)
+                user_repo.add_user(
+                    email=user_attrs['email'],
+                    role=role,
+                    firstName=user_attrs['first_name'],
+                    middleName=user_attrs.get('middle_name', ''),
+                    lastName=user_attrs.get('last_name', '')
+                )
+        except Exception as error:
+            raise AuthError({"message": str(error)}, 400)
+        
         with DataAccessLayer.session() as db_session:
             user_repo = UserRepository(db_session)
-            user_repo.add_user(
-                email=user_attrs['email'],
-                role=role,
-                firstName=user_attrs['first_name'],
-                lastName=user_attrs['last_name']
-            )
-    except Exception as error:
-        raise AuthError({"message": str(error)}, 400)
-
+            signed_in_user = user_repo.get_user(user_attrs['email'])
+            if(bool(signed_in_user) == True):
+                user = user_schema.dump(signed_in_user)
+            else:
+                raise AuthError({"message": "User not found in database"}, 400)
+            
     # set refresh token cookie
     session['refresh_token'] = refresh_token
+    session['username'] = user_attrs['email']
+    session['id_token'] = id_token
+
 
     # return user data json
     return {
@@ -305,21 +371,31 @@ def token():    # get code from body
 
 
 def current_session():
+    user_data = None
+    with DataAccessLayer.session() as db_session:
+        user_repo = UserRepository(db_session)
+        signed_in_user = user_repo.get_user(session.get('username'))
+        user_data = user_schema.dump(signed_in_user)
+
+    token = refresh().get('token')
+
     return {
-        'token': refresh().get('refresh_token'),
-        'user': {
-            'email': session.get('username')
-        }
+        'token': token,
+        'user': user_data
     }
 
 def refresh():
     refreshToken = session.get('refresh_token')
     username = session.get('username')
-    if None in (refreshToken, username):
+    id_token = session.get('id_token')
+
+    if None in (refreshToken, username, id_token):
         raise AuthError({
             'code': 'session_expired',
             'message': 'Session not found'
         }, 401)
+
+    decoded = jwt.decode(id_token, algorithms=["RS256"], options={"verify_signature": False})
 
     try:
         response = current_app.boto_client.initiate_auth(
@@ -327,10 +403,10 @@ def refresh():
             AuthFlow='REFRESH_TOKEN',
             AuthParameters={
                 'REFRESH_TOKEN': refreshToken,
-                'SECRET_HASH': current_app.calc_secret_hash(username)
+                'SECRET_HASH': current_app.calc_secret_hash(decoded["cognito:username"])
             }
         )
-    except Exception as e:
+    except botocore.exceptions.ClientError as e:
         code = e.response['Error']['Code']
         message = e.response['Error']['Message']
         raise AuthError({
@@ -396,11 +472,30 @@ def confirm_forgot_password():
     return response
 
 def user(token_info):
+    email = None
+    for attribute in token_info['UserAttributes']:
+        if attribute['Name'] == 'email':
+            email = attribute['Value']
+
+    if(email is None):
+        raise AuthError({
+            'code': 'email_not_found',
+            'message': 'Email not found in user data.'
+        }, 401)
+
     user_data = None
-    with DataAccessLayer.session() as db_session:
-        user_repo = UserRepository(db_session)
-        signed_in_user = user_repo.get_user(token_info["Username"])
-        user_data = user_schema.dump(signed_in_user)
+
+    try:
+        with DataAccessLayer.session() as db_session:
+            user_repo = UserRepository(db_session)
+            signed_in_user = user_repo.get_user(email)
+            user_data = user_schema.dump(signed_in_user)
+    except Exception as e:
+        raise AuthError({
+            'code': 'database_error',
+            'message': str(e)
+        }, 401)
+    
     return {
       "user": user_data
     }
@@ -412,7 +507,6 @@ def google():
     client_id = current_app.config['COGNITO_CLIENT_ID']
     root_url = current_app.root_url
     redirect_uri = request.args['redirect_uri']
-    print(f"{cognito_client_url}/oauth2/authorize?client_id={client_id}&response_type=code&scope=email+openid+profile+phone+aws.cognito.signin.user.admin&redirect_uri={root_url}{redirect_uri}&identity_provider=Google")
 
     return redirect(f"{cognito_client_url}/oauth2/authorize?client_id={client_id}&response_type=code&scope=email+openid+profile+phone+aws.cognito.signin.user.admin&redirect_uri={root_url}{redirect_uri}&identity_provider=Google")
 
@@ -420,24 +514,26 @@ def google():
 #Do I have an oauth token
 def invite():
 
-    get_token_auth_header()
-
     if connexion.request.is_json:
-        body = connexion.request.get_json()     
+        body = connexion.request.get_json()    
+
+    # TODO: Possibly encrypt these passwords?
+    numbers = '0123456789'
+    lowercase_chars = 'abcdefghijklmnopqrstuvwxyz'
+    uppercase_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    symbols = '.-_~'
+    temporary_password = ''.join(random.choices(numbers, k=3)) + ''.join(random.choices(lowercase_chars, k=3)) + ''.join(random.choices(symbols, k=1)) + ''.join(random.choices(uppercase_chars, k=3))
         
     try:
-        email = body['email']
-
-        response = current_app.boto_client.admin_create_user(
+        current_app.boto_client.admin_create_user(
             UserPoolId=current_app.config['COGNITO_USER_POOL_ID'],
-            Username=email,
+            Username=body['email'],
+            TemporaryPassword=temporary_password,
             ClientMetadata={
                 'url': current_app.config['ROOT_URL']
             },
             DesiredDeliveryMediums=["EMAIL"]
         )
-
-        return response
 
     except botocore.exceptions.ClientError as error:
         match error.response['Error']['Code']:
@@ -450,6 +546,20 @@ def invite():
     except botocore.exceptions.ParamValidationError as error:
         msg = f"The parameters you provided are incorrect: {error}"
         raise AuthError({"message": msg}, 500)
+    
+    try:
+        with DataAccessLayer.session() as db_session:
+            user_repo = UserRepository(db_session)
+            user_repo.add_user(
+                email=body['email'],
+                role=UserRole.GUEST,
+                firstName=body['firstName'],
+                middleName=body.get('middleName', ''),
+                lastName=body.get('lastName', '')
+            )
+    except Exception as error:
+        raise AuthError({"message": str(error)}, 400)
+
 
 def confirm_invite():
     
@@ -477,7 +587,6 @@ def confirm_invite():
             return redirect(f"{current_app.config['ROOT_URL']}/create-password?error=There was an unexpected error. Please try again.")
 
     except botocore.exceptions.ClientError as error:
-        print(error)
         msg = ''
         match error.response['Error']['Code']:
             case 'NotAuthorizedException':

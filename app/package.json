@@ -18,7 +18,7 @@
     "cypress:open:nomock": "cypress open --env USE_MOCK=false",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
-    "lint": "eslint . --ext ts --ext tsx --max-warnings 0",
+    "lint": "eslint . --ext ts --ext tsx --max-warnings 0 --fix",
     "type-check": "npx tsc --noEmit",
     "prepare": "cd .. && husky install app/.husky",
     "pre-commit": "lint-staged",

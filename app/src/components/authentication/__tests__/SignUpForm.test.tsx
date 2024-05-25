@@ -1,6 +1,11 @@
 import {BrowserRouter} from 'react-router-dom';
 import {describe, vi} from 'vitest';
-import {render, screen, userEvent, fireEvent} from '../../../utils/test/test-utils';
+import {
+  render,
+  screen,
+  userEvent,
+  fireEvent,
+} from '../../../utils/test/test-utils';
 import {SignUpForm, SignUpFormProps} from '../SignUpForm';
 import {faker} from '@faker-js/faker';
 
