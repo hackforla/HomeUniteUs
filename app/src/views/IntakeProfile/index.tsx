@@ -1,4 +1,4 @@
-import {Button, Stack, useTheme} from '@mui/material';
+import {Button, Stack, Typography, useTheme} from '@mui/material';
 import {Link, Outlet, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
 
@@ -79,23 +79,62 @@ export const IntakeProfile = () => {
               gap: 1,
               p: 1,
               height: '100%',
-              width: '256px',
+              width: '412px',
               borderRight: '1px solid',
               borderColor: 'grey.200',
-              backgroundColor: 'background.default',
+              backgroundColor: 'inherit',
+              padding: '12px',
             }}
           >
+            <Stack
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginTop: '35px',
+              }}
+            >
+              <Typography
+                sx={{fontSize: 18, fontWeight: 'medium', marginBottom: 1}}
+              >
+                Profile Sections
+              </Typography>
+              <Typography sx={{fontSize: 14, fontWeight: 'medium'}}>
+                0 of 11
+              </Typography>
+            </Stack>
             {fieldGroups.map(({id, title}) => {
               const fieldTitle = title || '...';
               return (
                 <Button
                   key={id}
-                  variant="contained"
                   to={`group/${id}`}
                   component={Link}
-                  color="inherit"
+                  sx={{
+                    borderRadius: 2,
+                    backgroundColor: '#ffffff',
+                    height: 56,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    paddingInline: 3,
+                  }}
                 >
-                  {fieldTitle}
+                  <Typography
+                    sx={{
+                      fontSize: 16,
+                      fontWeight: 'medium',
+                      color: theme.palette.text.primary,
+                    }}
+                  >
+                    {fieldTitle}
+                  </Typography>
+                  {/*                 {complete ? (
+                  <CheckCircleOutlined color="success" />
+                ) : (
+                  <CircleOutlined color="action" />
+                )} */}
                 </Button>
               );
             })}
