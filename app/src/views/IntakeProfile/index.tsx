@@ -1,4 +1,5 @@
 import {Button, Stack, Typography, useTheme} from '@mui/material';
+import {CheckCircleOutlined} from '@mui/icons-material';
 import {Link, Outlet, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
 
@@ -40,6 +41,20 @@ export const IntakeProfile = () => {
   const validationSchema = buildValidationSchema(fieldGroups, groupId);
   const initalValues = createInitialValues(fieldGroups, responses);
 
+  const statusStyling = {
+    selected: {
+      icon: null,
+      color: theme.palette.primary.contrastText,
+    },
+    complete: {
+      icon: <CheckCircleOutlined color="success" />,
+      color: '#EAF2EA',
+    },
+    incomplete: {
+      icon: null,
+      color: theme.palette.primary.contrastText,
+    },
+  };
   return (
     <Formik
       initialValues={initalValues}
@@ -102,9 +117,10 @@ export const IntakeProfile = () => {
               </Typography>
               <Typography sx={{fontSize: 14, fontWeight: 'medium'}}>
                 0 of 11
+                {/* add logic for keeping trakc of completed */}
               </Typography>
             </Stack>
-            {fieldGroups.map(({id, title}) => {
+            {fieldGroups.map(({id, title, status}) => {
               const fieldTitle = title || '...';
               return (
                 <Button
@@ -113,7 +129,7 @@ export const IntakeProfile = () => {
                   component={Link}
                   sx={{
                     borderRadius: 2,
-                    backgroundColor: '#ffffff',
+                    backgroundColor: statusStyling[status].color,
                     height: 56,
                     display: 'flex',
                     justifyContent: 'space-between',
@@ -130,11 +146,7 @@ export const IntakeProfile = () => {
                   >
                     {fieldTitle}
                   </Typography>
-                  {/*                 {complete ? (
-                  <CheckCircleOutlined color="success" />
-                ) : (
-                  <CircleOutlined color="action" />
-                )} */}
+                  {statusStyling[status].icon}
                 </Button>
               );
             })}
