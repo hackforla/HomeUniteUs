@@ -8,6 +8,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: faker.string.numeric(4),
         title: 'Basic Information',
+        status: 'complete',
         fields: [
           {
             id: faker.string.numeric(4),
@@ -62,6 +63,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: faker.string.numeric(4),
         title: 'Contact Information',
+        status: 'complete',
         fields: [
           {
             id: faker.string.numeric(4),
@@ -86,6 +88,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: faker.string.numeric(4),
         title: 'Other Guests/Pets',
+        status: 'selected',
         fields: [
           {
             id: faker.string.numeric(4),
@@ -108,6 +111,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: faker.string.numeric(4),
         title: 'Employment Information',
+        status: 'incomplete',
         fields: [
           {
             id: '5478',
@@ -148,6 +152,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: faker.string.numeric(4),
         title: 'Education',
+        status: 'incomplete',
         fields: [
           {
             id: '6478',
@@ -188,6 +193,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: faker.string.numeric(4),
         title: 'Language Proficiency',
+        status: 'incomplete',
         fields: [
           {
             id: '5479',
@@ -215,6 +221,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: faker.string.numeric(4),
         title: 'Substance Use',
+        status: 'incomplete',
         fields: [
           {
             id: faker.string.numeric(4),
@@ -248,6 +255,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: faker.string.numeric(4),
         title: 'Mental Health',
+        status: 'incomplete',
         fields: [
           {
             id: faker.string.numeric(4),
@@ -263,6 +271,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: faker.string.numeric(4),
         title: 'Interest in Being a Guest',
+        status: 'incomplete',
         fields: [
           {
             id: faker.string.numeric(4),
@@ -299,6 +308,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: faker.string.numeric(4),
         title: 'About You',
+        status: 'incomplete',
         fields: [
           {
             id: faker.string.numeric(4),
@@ -320,6 +330,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: faker.string.numeric(4),
         title: 'Personal Information',
+        status: 'incomplete',
         fields: [
           {
             id: faker.string.numeric(4),
@@ -353,6 +364,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: faker.string.numeric(4),
         title: 'Contact Information',
+        status: 'incomplete',
         fields: [
           {
             id: faker.string.numeric(4),
@@ -377,6 +389,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: faker.string.numeric(4),
         title: 'Home Information',
+        status: 'incomplete',
         fields: [
           {
             id: faker.string.numeric(4),
@@ -413,6 +426,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: faker.string.numeric(4),
         title: 'Restrictions',
+        status: 'incomplete',
         fields: [
           {
             id: faker.string.numeric(4),
