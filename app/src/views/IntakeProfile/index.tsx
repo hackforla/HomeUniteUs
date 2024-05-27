@@ -1,5 +1,5 @@
 import {Button, Stack, Typography, useTheme} from '@mui/material';
-import {CheckCircleOutlined} from '@mui/icons-material';
+import {CheckCircleOutlined, LockRounded} from '@mui/icons-material';
 import {Link, Outlet, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
 
@@ -45,14 +45,26 @@ export const IntakeProfile = () => {
     selected: {
       icon: null,
       color: theme.palette.primary.contrastText,
+      borderColor: '#DADADA',
+      shadow: '0px 4px 4px rgba(0, 0, 0, .25)',
     },
     complete: {
       icon: <CheckCircleOutlined color="success" />,
       color: '#EAF2EA',
+      borderColor: 'grey.50',
+      shadow: 'grey.50',
     },
     incomplete: {
       icon: null,
       color: theme.palette.primary.contrastText,
+      borderColor: 'grey.50',
+      shadow: 'grey.50',
+    },
+    locked: {
+      icon: <LockRounded fontSize="small" sx={{color: 'rgba(0, 0, 0, .54)'}} />,
+      color: '#E8E8E8',
+      borderColor: 'grey.50',
+      shadow: 'grey.50',
     },
   };
   return (
@@ -135,6 +147,10 @@ export const IntakeProfile = () => {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     paddingInline: 3,
+                    borderColor: statusStyling[status].borderColor,
+                    borderWidth: 2,
+                    borderStyle: 'solid',
+                    boxShadow: statusStyling[status].shadow,
                   }}
                 >
                   <Typography
