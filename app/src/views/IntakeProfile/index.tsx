@@ -1,4 +1,4 @@
-import {Box, Stack, Typography, useTheme} from '@mui/material';
+import {Box, Stack, Typography, useMediaQuery, useTheme} from '@mui/material';
 import {CheckCircleOutlined, LockRounded} from '@mui/icons-material';
 import {FormButton} from '../../components/common/FormButton';
 import {Link, Outlet, useParams} from 'react-router-dom';
@@ -23,6 +23,7 @@ export const IntakeProfile = () => {
   const toolbarHeight = Number(theme.mixins.toolbar.minHeight);
   const {profileId, groupId} = useParams();
   const [completedCount, setCompletedCount] = useState(0);
+  const isMobile = useMediaQuery(theme.breakpoints.up('sm'));
 
   const {data: profileData} = useGetProfileQuery(
     {profileId: profileId},
@@ -188,22 +189,45 @@ export const IntakeProfile = () => {
             <Stack sx={{overflowY: 'auto'}}>
               <Outlet context={{groupId, fieldGroups, errors}} />
             </Stack>
-            <Stack
-              sx={{flexDirection: 'row', marginLeft: 'auto', gap: 1, p: 2}}
-            >
-              <FormButton
-                text="Back"
-                variant="outline"
-                onClick={() => console.log('hello outline')}
-                mobile={false}
-              />
-              <FormButton
-                text="Continue"
-                variant="fill"
-                onClick={() => console.log('hello')}
-                mobile={false}
-              />
-            </Stack>
+            {isMobile ? (
+              <Stack
+                sx={{flexDirection: 'row', marginLeft: 'auto', gap: 1, p: 2}}
+              >
+                <FormButton
+                  text="Back"
+                  variant="outline"
+                  onClick={() => console.log('hello outline')}
+                  mobile={false}
+                />
+                <FormButton
+                  text="Continue"
+                  variant="fill"
+                  onClick={() => console.log('hello fill')}
+                  mobile={false}
+                />
+              </Stack>
+            ) : (
+              <Stack sx={{flexDirection: 'column', gap: 1, p: 2}}>
+                <FormButton
+                  text="Back"
+                  variant="outline"
+                  onClick={() => console.log('hello outline')}
+                  mobile={true}
+                />
+                <FormButton
+                  text="Continue"
+                  variant="fill"
+                  onClick={() => console.log('hello fill')}
+                  mobile={true}
+                />
+                <FormButton
+                  text="Return to Profile Sections"
+                  variant="transparent"
+                  onClick={() => console.log('hello sections')}
+                  mobile={true}
+                />
+              </Stack>
+            )}
           </Stack>
         </Stack>
       )}
