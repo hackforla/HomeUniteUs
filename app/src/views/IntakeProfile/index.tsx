@@ -9,6 +9,7 @@ import {
   useGetResponsesQuery,
   Response,
 } from '../../services/profile';
+import {useEffect, useState} from 'react';
 
 export type Values = {
   [key: string]: Response['value'];
@@ -20,12 +21,23 @@ export const IntakeProfile = () => {
   const theme = useTheme();
   const toolbarHeight = Number(theme.mixins.toolbar.minHeight);
   const {profileId, groupId} = useParams();
+  const [completedCount, setCompletedCount] = useState(0);
 
   const {data: profileData} = useGetProfileQuery(
     {profileId: profileId},
     {skip: !profileId},
   );
   const {data: responsesData} = useGetResponsesQuery({userId: '1'});
+
+  useEffect(() => {
+    if (profileData) {
+      const count = profileData.fieldGroups.filter(
+        group => group.status == 'complete',
+      ).length;
+      setCompletedCount(count);
+      console.log(count);
+    }
+  }, [profileData]);
 
   if (
     profileId === undefined ||
@@ -40,6 +52,7 @@ export const IntakeProfile = () => {
 
   const validationSchema = buildValidationSchema(fieldGroups, groupId);
   const initalValues = createInitialValues(fieldGroups, responses);
+  const totalTask = fieldGroups.length;
 
   const statusStyling = {
     selected: {
@@ -128,7 +141,7 @@ export const IntakeProfile = () => {
                 Profile Sections
               </Typography>
               <Typography sx={{fontSize: 14, fontWeight: 'medium'}}>
-                0 of 11
+                {completedCount} of {totalTask}
                 {/* add logic for keeping trakc of completed */}
               </Typography>
             </Stack>

@@ -111,7 +111,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: faker.string.numeric(4),
         title: 'Employment Information',
-        status: 'incomplete',
+        status: 'complete',
         fields: [
           {
             id: '5478',
