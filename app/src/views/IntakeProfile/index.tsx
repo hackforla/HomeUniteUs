@@ -1,6 +1,6 @@
 import {Box, Stack, Typography, useTheme} from '@mui/material';
 import {CheckCircleOutlined, LockRounded} from '@mui/icons-material';
-import {FormButton} from 'src/components/common/FormButton';
+import {FormButton} from '../../components/common/FormButton';
 import {Link, Outlet, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
 
@@ -36,7 +36,6 @@ export const IntakeProfile = () => {
         group => group.status == 'complete',
       ).length;
       setCompletedCount(count);
-      console.log(count);
     }
   }, [profileData]);
 
@@ -53,7 +52,7 @@ export const IntakeProfile = () => {
 
   const validationSchema = buildValidationSchema(fieldGroups, groupId);
   const initalValues = createInitialValues(fieldGroups, responses);
-  const totalTask = fieldGroups.length;
+  const totalTask = fieldGroups.length - 1;
 
   const statusStyling = {
     selected: {
@@ -143,7 +142,6 @@ export const IntakeProfile = () => {
               </Typography>
               <Typography sx={{fontSize: 14, fontWeight: 'medium'}}>
                 {completedCount} of {totalTask}
-                {/* add logic for keeping trakc of completed */}
               </Typography>
             </Stack>
             {fieldGroups.map(({id, title, status}) => {
@@ -187,11 +185,24 @@ export const IntakeProfile = () => {
             component="form"
             sx={{height: '100%', flex: 1}}
           >
-            <Stack sx={{flex: 1, overflowY: 'auto'}}>
+            <Stack sx={{overflowY: 'auto'}}>
               <Outlet context={{groupId, fieldGroups, errors}} />
             </Stack>
-            <Stack sx={{p: 1}}>
-              <FormButton text="hello" variant="filled" onClick={null} />
+            <Stack
+              sx={{flexDirection: 'row', marginLeft: 'auto', gap: 1, p: 2}}
+            >
+              <FormButton
+                text="Back"
+                variant="outline"
+                onClick={() => console.log('hello outline')}
+                mobile={false}
+              />
+              <FormButton
+                text="Continue"
+                variant="fill"
+                onClick={() => console.log('hello')}
+                mobile={false}
+              />
             </Stack>
           </Stack>
         </Stack>
