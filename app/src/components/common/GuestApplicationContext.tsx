@@ -3,7 +3,7 @@ import {Formik} from 'formik';
 import {useEffect, useState} from 'react';
 import {Outlet} from 'react-router-dom';
 import {GuestApplicationSchema} from '../../utils/GuestApplicationSchema';
-import {NavButtons} from './GuestApplicationButtons';
+/* import {NavButtons} from './formButton'; */
 import {useNavigate} from 'react-router-dom';
 import {Sections} from '../../views/guestApplicationForm/Sections';
 
@@ -131,11 +131,11 @@ export const GuestApplicationContext = () => {
   useEffect(() => {
     navigate(contentPerSection[step].route);
   }, [step]);
-  function saveData() {
+  /*   function saveData() {
     //add logic to save current data
     console.log('data saving features not implemented');
-  }
-  function nextStep() {
+  } */
+  /*   function nextStep() {
     saveData();
     const newStep = step + 1;
     if (contentPerSection[newStep] !== undefined) {
@@ -143,20 +143,20 @@ export const GuestApplicationContext = () => {
     } else {
       alert('end of form');
     }
-  }
-  function prevStep() {
+  } */
+  /*   function prevStep() {
     const newStep = step - 1;
     if (step > 0) {
       setStep(newStep);
     } else {
       navigate('/guest');
     }
-  }
-  function openSections() {
+  } */
+  /*   function openSections() {
     setShowSections(true);
     console.log('Open sections');
   }
-
+ */
   return (
     <Formik
       initialValues={initialValues}
@@ -193,11 +193,11 @@ export const GuestApplicationContext = () => {
               <Outlet />
             </Stack>
             <Stack>
-              <NavButtons
+              {/*               <NavButtons
                 next={nextStep}
                 prev={prevStep}
                 openSections={openSections}
-              />
+              /> */}
             </Stack>
           </Box>
         )}

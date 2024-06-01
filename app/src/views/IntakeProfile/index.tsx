@@ -1,5 +1,6 @@
-import {Button, Stack, Typography, useTheme} from '@mui/material';
+import {Box, Stack, Typography, useTheme} from '@mui/material';
 import {CheckCircleOutlined, LockRounded} from '@mui/icons-material';
+import {FormButton} from 'src/components/common/FormButton';
 import {Link, Outlet, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
 
@@ -148,7 +149,7 @@ export const IntakeProfile = () => {
             {fieldGroups.map(({id, title, status}) => {
               const fieldTitle = title || '...';
               return (
-                <Button
+                <Box
                   key={id}
                   to={`group/${id}`}
                   component={Link}
@@ -164,6 +165,7 @@ export const IntakeProfile = () => {
                     borderWidth: 2,
                     borderStyle: 'solid',
                     boxShadow: statusStyling[status].shadow,
+                    textDecoration: 'none',
                   }}
                 >
                   <Typography
@@ -176,7 +178,7 @@ export const IntakeProfile = () => {
                     {fieldTitle}
                   </Typography>
                   {statusStyling[status].icon}
-                </Button>
+                </Box>
               );
             })}
           </Stack>
@@ -189,9 +191,7 @@ export const IntakeProfile = () => {
               <Outlet context={{groupId, fieldGroups, errors}} />
             </Stack>
             <Stack sx={{p: 1}}>
-              <Button type="submit" variant="contained">
-                Submit
-              </Button>
+              <FormButton text="hello" variant="filled" onClick={null} />
             </Stack>
           </Stack>
         </Stack>
