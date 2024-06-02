@@ -19,7 +19,7 @@ interface AdditionalPetsFieldProps {
   ) => void;
 }
 
-const top10pets = [
+const top_pets = [
   {label: 'Dog'},
   {label: 'Cat'},
   {label: 'Bird'},
@@ -57,11 +57,10 @@ export const AdditionalPetsField = ({
                   <Autocomplete
                     disablePortal
                     id={`combo-box-${index}`}
-                    options={top10pets}
+                    options={top_pets}
                     getOptionLabel={option => option.label}
                     value={
-                      top10pets.find(option => option.label === pet.type) ||
-                      null
+                      top_pets.find(option => option.label === pet.type) || null
                     }
                     sx={{width: '100%'}}
                     onChange={(event, value) => {
