@@ -33,13 +33,8 @@ export const FormButton = ({
             size="medium"
             variant="outlined"
             onClick={onClick}
-            sx={{
-              color: 'primary.main',
-              border: 2,
-              borderColor: 'primary.main',
-              width: mobile ? '100%' : 161,
-              ...customStyles,
-            }}
+            style={{border: '2px solid', width: mobile ? '100%' : 161}} //in styles to prevent bug where button becomes smaller on hover
+            sx={{...customStyles}}
           >
             {text}
           </Button>

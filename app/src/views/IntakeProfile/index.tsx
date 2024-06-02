@@ -21,9 +21,8 @@ export const IntakeProfile = () => {
   const toolbarHeight = Number(theme.mixins.toolbar.minHeight);
   const {profileId, groupId} = useParams();
   const [completedCount, setCompletedCount] = useState(0);
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [showSections, setShowSections] = useState(isMobile);
-  // use ismobile on mobile view of buttons?
 
   const {data: profileData} = useGetProfileQuery(
     {profileId: profileId},
@@ -41,7 +40,6 @@ export const IntakeProfile = () => {
   }, [profileData]);
   function handleClick() {
     setShowSections(!showSections);
-    console.log(showSections);
   }
 
   if (
@@ -175,8 +173,8 @@ export const IntakeProfile = () => {
             </Stack>
             <Stack
               sx={{
-                flexDirection: isMobile ? 'column' : 'row',
-                marginLeft: isMobile ? '0' : 'auto',
+                flexDirection: {xs: 'column', md: 'row'},
+                marginLeft: {xs: '0', md: 'auto'},
                 gap: 1,
                 p: 2,
               }}
@@ -185,20 +183,20 @@ export const IntakeProfile = () => {
                 text="Back"
                 variant="outline"
                 onClick={() => console.log('hello outline')}
-                mobile={isMobile ? true : false}
+                mobile={isMobile}
               />
               <FormButton
                 text="Continue"
                 variant="fill"
                 onClick={() => console.log('hello fill')}
-                mobile={isMobile ? true : false}
+                mobile={isMobile}
               />
               <FormButton
                 text="Return to Profile Sections"
                 variant="transparent"
                 onClick={handleClick}
-                mobile={isMobile ? true : false}
-                customStyles={{display: {sx: 'flex', md: 'none'}}}
+                mobile={isMobile}
+                customStyles={{display: {md: 'none'}}}
               />
             </Stack>
           </Stack>
