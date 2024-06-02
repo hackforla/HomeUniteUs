@@ -23,7 +23,9 @@ export const IntakeProfile = () => {
   const toolbarHeight = Number(theme.mixins.toolbar.minHeight);
   const {profileId, groupId} = useParams();
   const [completedCount, setCompletedCount] = useState(0);
-  const isMobile = useMediaQuery(theme.breakpoints.up('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [showSections, setShowSections] = useState(isMobile);
+  // use ismobile on mobile view of buttons?
 
   const {data: profileData} = useGetProfileQuery(
     {profileId: profileId},
@@ -39,6 +41,10 @@ export const IntakeProfile = () => {
       setCompletedCount(count);
     }
   }, [profileData]);
+  function handleClick() {
+    setShowSections(!showSections);
+    console.log(showSections);
+  }
 
   if (
     profileId === undefined ||
@@ -125,6 +131,7 @@ export const IntakeProfile = () => {
               borderColor: 'grey.200',
               backgroundColor: 'inherit',
               padding: '12px',
+              display: {xs: showSections ? 'flex' : 'none', md: 'flex'},
             }}
           >
             <Stack
@@ -166,6 +173,7 @@ export const IntakeProfile = () => {
                     boxShadow: statusStyling[status].shadow,
                     textDecoration: 'none',
                   }}
+                  onClick={handleClick}
                 >
                   <Typography
                     sx={{
@@ -184,29 +192,16 @@ export const IntakeProfile = () => {
           <Stack
             onSubmit={handleSubmit}
             component="form"
-            sx={{height: '100%', flex: 1}}
+            sx={{
+              height: '100%',
+              flex: 1,
+              display: {xs: showSections ? 'none' : 'flex', md: 'flex'},
+            }}
           >
             <Stack sx={{overflowY: 'auto'}}>
               <Outlet context={{groupId, fieldGroups, errors}} />
             </Stack>
             {isMobile ? (
-              <Stack
-                sx={{flexDirection: 'row', marginLeft: 'auto', gap: 1, p: 2}}
-              >
-                <FormButton
-                  text="Back"
-                  variant="outline"
-                  onClick={() => console.log('hello outline')}
-                  mobile={false}
-                />
-                <FormButton
-                  text="Continue"
-                  variant="fill"
-                  onClick={() => console.log('hello fill')}
-                  mobile={false}
-                />
-              </Stack>
-            ) : (
               <Stack sx={{flexDirection: 'column', gap: 1, p: 2}}>
                 <FormButton
                   text="Back"
@@ -223,8 +218,25 @@ export const IntakeProfile = () => {
                 <FormButton
                   text="Return to Profile Sections"
                   variant="transparent"
-                  onClick={() => console.log('hello sections')}
+                  onClick={handleClick}
                   mobile={true}
+                />
+              </Stack>
+            ) : (
+              <Stack
+                sx={{flexDirection: 'row', marginLeft: 'auto', gap: 1, p: 2}}
+              >
+                <FormButton
+                  text="Back"
+                  variant="outline"
+                  onClick={() => console.log('hello outline')}
+                  mobile={false}
+                />
+                <FormButton
+                  text="Continue"
+                  variant="fill"
+                  onClick={() => console.log('hello fill')}
+                  mobile={false}
                 />
               </Stack>
             )}

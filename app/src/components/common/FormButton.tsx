@@ -25,6 +25,7 @@ export const FormButton = ({text, variant, onClick, mobile}: Props) => {
           <Button
             size="medium"
             variant="outlined"
+            onClick={onClick}
             sx={{
               color: 'primary.main',
               border: 2,
@@ -40,6 +41,7 @@ export const FormButton = ({text, variant, onClick, mobile}: Props) => {
           <Button
             size="medium"
             variant="text"
+            onClick={onClick}
             sx={{
               border: 2,
               width: mobile ? '100%' : 161,
