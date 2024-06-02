@@ -1,9 +1,8 @@
 import {Box, Stack, Typography, useMediaQuery, useTheme} from '@mui/material';
-import {CheckCircleOutlined, LockRounded} from '@mui/icons-material';
 import {FormButton} from '../../components/common/FormButton';
 import {Link, Outlet, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
-
+import useStatusStyling from './constants/statusStyling';
 import {buildValidationSchema, createInitialValues} from './constants';
 import {
   useGetProfileQuery,
@@ -11,8 +10,6 @@ import {
   Response,
 } from '../../services/profile';
 import {useEffect, useState} from 'react';
-import {InProgressIcon} from '../../components/Icons/InProgressIcon';
-
 export type Values = {
   [key: string]: Response['value'];
 };
@@ -62,38 +59,8 @@ export const IntakeProfile = () => {
   const initalValues = createInitialValues(fieldGroups, responses);
   const totalTask = fieldGroups.length - 1;
 
-  const statusStyling = {
-    selected: {
-      icon: null,
-      color: theme.palette.primary.contrastText,
-      borderColor: '#DADADA',
-      shadow: '0px 4px 4px rgba(0, 0, 0, .25)',
-    },
-    complete: {
-      icon: <CheckCircleOutlined color="success" />,
-      color: '#EAF2EA',
-      borderColor: 'grey.50',
-      shadow: 'grey.50',
-    },
-    pending: {
-      icon: null,
-      color: theme.palette.primary.contrastText,
-      borderColor: 'grey.50',
-      shadow: 'grey.50',
-    },
-    locked: {
-      icon: <LockRounded fontSize="small" sx={{color: 'rgba(0, 0, 0, .54)'}} />,
-      color: '#E8E8E8',
-      borderColor: 'grey.50',
-      shadow: 'grey.50',
-    },
-    incomplete: {
-      icon: <InProgressIcon />,
-      color: theme.palette.primary.contrastText,
-      borderColor: 'grey.50',
-      shadow: 'grey.50',
-    },
-  };
+  const statusStyling = useStatusStyling();
+
   return (
     <Formik
       initialValues={initalValues}
