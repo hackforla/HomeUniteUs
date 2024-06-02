@@ -98,9 +98,8 @@ export const IntakeProfile = () => {
           <Stack
             sx={{
               gap: 1,
-              p: 1,
-              height: '100%',
               width: '412px',
+              overflowY: 'auto',
               borderRight: '1px solid',
               borderColor: 'grey.200',
               backgroundColor: 'inherit',
@@ -110,11 +109,10 @@ export const IntakeProfile = () => {
           >
             <Stack
               sx={{
-                display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 alignItems: 'center',
-                marginTop: '35px',
+                margin: '35px 35px 0px 0px',
               }}
             >
               <Typography
@@ -136,7 +134,7 @@ export const IntakeProfile = () => {
                   sx={{
                     borderRadius: 2,
                     backgroundColor: statusStyling[status].color,
-                    height: 56,
+                    minHeight: 56,
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
