@@ -11,6 +11,7 @@ import {
   Response,
 } from '../../services/profile';
 import {useEffect, useState} from 'react';
+import {InProgressIcon} from '../../components/Icons/InProgressIcon';
 
 export type Values = {
   [key: string]: Response['value'];
@@ -74,7 +75,7 @@ export const IntakeProfile = () => {
       borderColor: 'grey.50',
       shadow: 'grey.50',
     },
-    incomplete: {
+    pending: {
       icon: null,
       color: theme.palette.primary.contrastText,
       borderColor: 'grey.50',
@@ -83,6 +84,12 @@ export const IntakeProfile = () => {
     locked: {
       icon: <LockRounded fontSize="small" sx={{color: 'rgba(0, 0, 0, .54)'}} />,
       color: '#E8E8E8',
+      borderColor: 'grey.50',
+      shadow: 'grey.50',
+    },
+    incomplete: {
+      icon: <InProgressIcon />,
+      color: theme.palette.primary.contrastText,
       borderColor: 'grey.50',
       shadow: 'grey.50',
     },
