@@ -173,45 +173,34 @@ export const IntakeProfile = () => {
             <Stack sx={{overflowY: 'auto'}}>
               <Outlet context={{groupId, fieldGroups, errors}} />
             </Stack>
-            {isMobile ? (
-              <Stack sx={{flexDirection: 'column', gap: 1, p: 2}}>
-                <FormButton
-                  text="Back"
-                  variant="outline"
-                  onClick={() => console.log('hello outline')}
-                  mobile={true}
-                />
-                <FormButton
-                  text="Continue"
-                  variant="fill"
-                  onClick={() => console.log('hello fill')}
-                  mobile={true}
-                />
-                <FormButton
-                  text="Return to Profile Sections"
-                  variant="transparent"
-                  onClick={handleClick}
-                  mobile={true}
-                />
-              </Stack>
-            ) : (
-              <Stack
-                sx={{flexDirection: 'row', marginLeft: 'auto', gap: 1, p: 2}}
-              >
-                <FormButton
-                  text="Back"
-                  variant="outline"
-                  onClick={() => console.log('hello outline')}
-                  mobile={false}
-                />
-                <FormButton
-                  text="Continue"
-                  variant="fill"
-                  onClick={() => console.log('hello fill')}
-                  mobile={false}
-                />
-              </Stack>
-            )}
+            <Stack
+              sx={{
+                flexDirection: isMobile ? 'column' : 'row',
+                marginLeft: isMobile ? '0' : 'auto',
+                gap: 1,
+                p: 2,
+              }}
+            >
+              <FormButton
+                text="Back"
+                variant="outline"
+                onClick={() => console.log('hello outline')}
+                mobile={isMobile ? true : false}
+              />
+              <FormButton
+                text="Continue"
+                variant="fill"
+                onClick={() => console.log('hello fill')}
+                mobile={isMobile ? true : false}
+              />
+              <FormButton
+                text="Return to Profile Sections"
+                variant="transparent"
+                onClick={handleClick}
+                mobile={isMobile ? true : false}
+                customStyles={{display: {sx: 'flex', md: 'none'}}}
+              />
+            </Stack>
           </Stack>
         </Stack>
       )}

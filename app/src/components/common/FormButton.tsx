@@ -1,12 +1,19 @@
-import {Button} from '@mui/material';
+import {Button, SxProps} from '@mui/material';
 interface Props {
   text: string;
   variant: 'outline' | 'fill' | 'transparent';
   onClick: () => void;
   mobile: boolean;
+  customStyles?: SxProps;
 }
 
-export const FormButton = ({text, variant, onClick, mobile}: Props) => {
+export const FormButton = ({
+  text,
+  variant,
+  onClick,
+  mobile,
+  customStyles,
+}: Props) => {
   const renderButton = () => {
     switch (variant) {
       case 'fill':
@@ -15,7 +22,7 @@ export const FormButton = ({text, variant, onClick, mobile}: Props) => {
             size="medium"
             variant="contained"
             onClick={onClick}
-            sx={{width: mobile ? '100%' : 183}}
+            sx={{width: mobile ? '100%' : 183, ...customStyles}}
           >
             {text}
           </Button>
@@ -31,6 +38,7 @@ export const FormButton = ({text, variant, onClick, mobile}: Props) => {
               border: 2,
               borderColor: 'primary.main',
               width: mobile ? '100%' : 161,
+              ...customStyles,
             }}
           >
             {text}
@@ -47,6 +55,7 @@ export const FormButton = ({text, variant, onClick, mobile}: Props) => {
               width: mobile ? '100%' : 161,
               color: 'black',
               borderColor: 'transparent',
+              ...customStyles,
             }}
           >
             {text}
@@ -58,7 +67,7 @@ export const FormButton = ({text, variant, onClick, mobile}: Props) => {
             size="medium"
             variant="contained"
             onClick={onClick}
-            sx={{width: mobile ? '100%' : 183}}
+            sx={{width: mobile ? '100%' : 183, ...customStyles}}
           >
             {text}
           </Button>
