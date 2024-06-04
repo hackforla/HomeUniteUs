@@ -1,5 +1,5 @@
 import {faker} from '@faker-js/faker';
-import {array, object, string} from 'yup';
+import {array, object, string, date} from 'yup';
 import {InitialValues} from '..';
 import {
   FieldGroup,
@@ -8,6 +8,7 @@ import {
   FieldTypes,
   Response,
 } from '../../../services/profile';
+import {format} from 'date-fns';
 
 export const fieldGroupBuilder = (
   options: Partial<FieldGroup> = {},
@@ -108,7 +109,15 @@ export const typeValidations = {
   additional_guests: array().of(
     object().shape({
       name: string().required('Name is required'),
-      dob: string().required('DOB is required'),
+      dob: date()
+        .transform(function (value, originalValue) {
+          if (this.isType(value)) {
+            return format(originalValue, 'P');
+          }
+          return originalValue;
+        })
+        .typeError('DOB is required')
+        .required('DOB is required'),
       relationship: string().required('Relationship is required'),
     }),
   ),

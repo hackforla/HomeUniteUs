@@ -1,8 +1,15 @@
 import {faker} from '@faker-js/faker';
 import {Stack, Typography, Button, TextField} from '@mui/material';
-import {FormikErrors, FormikHandlers, FieldArray} from 'formik';
+import {DateField} from '@mui/x-date-pickers/DateField';
+import {
+  FormikErrors,
+  FormikHandlers,
+  FieldArray,
+  useFormikContext,
+} from 'formik';
 import {InitialValues} from 'src/views/IntakeProfile';
 import {Guest} from '../../services/profile';
+import {format, isDate} from 'date-fns';
 
 interface AdditionalGuestsFieldProps {
   errors: FormikErrors<InitialValues>;
@@ -19,14 +26,16 @@ export const AdditionalGuestsField = ({
   groupId,
   onChange,
 }: AdditionalGuestsFieldProps) => {
+  const {setFieldValue} = useFormikContext<InitialValues>();
   return (
     <Stack gap={2}>
       <FieldArray name={`${groupId}.${fieldId}`}>
         {({push, remove}) => (
           <>
             {guests.map((guest, index) => {
+              // console.log('guest', guest);
               return (
-                <Stack key={guest.id} sx={{gap: 1}}>
+                <Stack key={guest.id} sx={{gap: 2}}>
                   <Stack direction="row" sx={{justifyContent: 'space-between'}}>
                     <Typography variant="h6">Guest {index + 1}</Typography>
                     <Button
@@ -48,18 +57,34 @@ export const AdditionalGuestsField = ({
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
                     error={Boolean(errors[groupId]?.[fieldId]?.[index]?.name)}
+                    helperText={errors[groupId]?.[fieldId]?.[index]?.name}
                   />
-                  <TextField
-                    id="outlined"
-                    placeholder="Guest date of birth"
-                    variant="outlined"
+                  <DateField
                     label="Date of birth"
-                    name={`${groupId}.${fieldId}[${index}].dob`}
                     value={guest.dob}
-                    onChange={onChange}
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    error={Boolean(errors[groupId]?.[fieldId]?.[index]?.dob)}
+                    format="P"
+                    onChange={value => {
+                      let date = value;
+                      if (isDate(value) && value !== null) {
+                        date = format(value, 'P');
+                      }
+
+                      setFieldValue(
+                        `${groupId}.${fieldId}[${index}].dob`,
+                        date,
+                        true,
+                      );
+                    }}
+                    slotProps={{
+                      textField: {
+                        error: Boolean(
+                          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                          // @ts-ignore
+                          errors[groupId]?.[fieldId]?.[index]?.dob,
+                        ),
+                        helperText: errors[groupId]?.[fieldId]?.[index]?.dob,
+                      },
+                    }}
                   />
                   <TextField
                     id="outlined"
@@ -74,6 +99,9 @@ export const AdditionalGuestsField = ({
                       // @ts-ignore
                       errors[groupId]?.[fieldId]?.[index]?.relationship,
                     )}
+                    helperText={
+                      errors[groupId]?.[fieldId]?.[index]?.relationship
+                    }
                   />
                 </Stack>
               );
@@ -83,7 +111,7 @@ export const AdditionalGuestsField = ({
                 push({
                   id: faker.string.uuid(),
                   name: '',
-                  dob: '',
+                  dob: null,
                   relationship: '',
                 })
               }
