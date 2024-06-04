@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import {Provider} from 'react-redux';
+import {CssBaseline, StyledEngineProvider, ThemeProvider} from '@mui/material';
+import {LocalizationProvider} from '@mui/x-date-pickers';
+import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 import './index.css';
 
-import {CssBaseline, StyledEngineProvider, ThemeProvider} from '@mui/material';
-import {Provider} from 'react-redux';
 import {setupStore} from './app/store';
 import {ProtectedRoute} from './components/authentication/ProtectedRoute';
 import {useSessionMutation} from './services/auth';
@@ -167,12 +169,14 @@ enableMocking().then(() => {
     <React.StrictMode>
       <Provider store={setupStore()}>
         <BrowserRouter>
-          <StyledEngineProvider injectFirst>
-            <ThemeProvider theme={HomeUniteUsTheme}>
-              <CssBaseline />
-              <HuuApp />
-            </ThemeProvider>
-          </StyledEngineProvider>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <StyledEngineProvider injectFirst>
+              <ThemeProvider theme={HomeUniteUsTheme}>
+                <CssBaseline />
+                <HuuApp />
+              </ThemeProvider>
+            </StyledEngineProvider>
+          </LocalizationProvider>
         </BrowserRouter>
       </Provider>
     </React.StrictMode>,
