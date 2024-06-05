@@ -7,8 +7,12 @@ import {
   Button,
 } from '@mui/material';
 import React from 'react';
+import {Link, useOutletContext} from 'react-router-dom';
+import {OutletContext} from './IntakeProfileGroups';
 
 export const ProfileReivew = () => {
+  const {fieldGroups} = useOutletContext<OutletContext>();
+
   return (
     <Container>
       <Stack gap={3}>
@@ -23,41 +27,51 @@ export const ProfileReivew = () => {
             </Typography>
             <Divider />
           </Stack>
-          <Stack
-            sx={{
-              boxShadow: '0px 4px 4px 3px rgba(183, 183, 183, 0.25)',
-              px: 3,
-              py: 2,
-              borderRadius: 1,
-            }}
-            gap={3}
-          >
-            <Stack
-              sx={{width: '100%'}}
-              direction="row"
-              justifyContent="space-between"
-              alignContent="center"
-            >
-              <Typography variant="h6">Basic Information</Typography>
-              <Button variant="text" color="inherit">
-                Edit
-              </Button>
-            </Stack>
-            <Stack gap={1}>
-              <Box>
-                <Typography sx={{fontSize: '18px'}}>First Name</Typography>
-                <Typography variant="body1" sx={{fontWeight: 'bold'}}>
-                  John
-                </Typography>
-              </Box>
-              <Box>
-                <Typography sx={{fontSize: '18px'}}>Last Name</Typography>
-                <Typography variant="body1" sx={{fontWeight: 'bold'}}>
-                  Doe
-                </Typography>
-              </Box>
-            </Stack>
-          </Stack>
+          {fieldGroups.map(group => {
+            return (
+              <Stack
+                key={group.id}
+                sx={{
+                  boxShadow: '0px 4px 4px 3px rgba(183, 183, 183, 0.25)',
+                  px: 3,
+                  py: 2,
+                  borderRadius: 1,
+                }}
+                gap={3}
+              >
+                <Stack
+                  sx={{width: '100%'}}
+                  direction="row"
+                  justifyContent="space-between"
+                  alignContent="center"
+                >
+                  <Typography variant="h6">{group.title}</Typography>
+                  <Button
+                    variant="text"
+                    to={`/guest/profile/1/group/${group.id}`}
+                    component={Link}
+                    color="inherit"
+                  >
+                    Edit
+                  </Button>
+                </Stack>
+                <Stack gap={1}>
+                  {group.fields.map(field => {
+                    return (
+                      <Box key={field.id}>
+                        <Typography sx={{fontSize: '18px'}}>
+                          {field.title}
+                        </Typography>
+                        <Typography variant="body1" sx={{fontWeight: 'bold'}}>
+                          ---
+                        </Typography>
+                      </Box>
+                    );
+                  })}
+                </Stack>
+              </Stack>
+            );
+          })}
         </Stack>
       </Stack>
     </Container>

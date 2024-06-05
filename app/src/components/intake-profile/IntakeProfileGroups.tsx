@@ -18,7 +18,7 @@ import {Values, InitialValues} from 'src/views/IntakeProfile';
 import {AdditionalGuestsField} from './AdditionaGuestsField';
 import {FieldGroup, Fields, Guest} from 'src/services/profile';
 
-interface OutletContext {
+export interface OutletContext {
   groupId: string;
   fieldGroups: FieldGroup[];
 }
