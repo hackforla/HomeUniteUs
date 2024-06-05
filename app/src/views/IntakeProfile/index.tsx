@@ -2,7 +2,7 @@ import {Box, Stack, Typography, useMediaQuery, useTheme} from '@mui/material';
 import {FormButton} from '../../components/common/FormButton';
 import {Link, Outlet, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
-import useStatusStyling from './constants/statusStyling';
+import useStatusStyling from './hooks/useStatusStyling';
 import {buildValidationSchema, createInitialValues} from './constants';
 import {
   useGetProfileQuery,
