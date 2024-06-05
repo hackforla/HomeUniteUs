@@ -28,7 +28,7 @@ export const IntakeProfile = () => {
 
   if (
     profileId === undefined ||
-    groupId === undefined ||
+    // groupId === undefined ||
     profileData === undefined ||
     responsesData === undefined
   )
@@ -99,6 +99,14 @@ export const IntakeProfile = () => {
                 </Button>
               );
             })}
+            <Button
+              variant="contained"
+              to={`review`}
+              component={Link}
+              color="inherit"
+            >
+              Review
+            </Button>
           </Stack>
           <Stack
             onSubmit={handleSubmit}
