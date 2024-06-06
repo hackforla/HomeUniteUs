@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Stack,
   Box,
@@ -6,12 +7,15 @@ import {
   Divider,
   Button,
 } from '@mui/material';
-import React from 'react';
 import {Link, useOutletContext} from 'react-router-dom';
+import {useFormikContext} from 'formik';
+
 import {OutletContext} from './IntakeProfileGroups';
+import {InitialValues} from 'src/views/IntakeProfile';
 
 export const ProfileReivew = () => {
   const {fieldGroups} = useOutletContext<OutletContext>();
+  const {values} = useFormikContext<InitialValues>();
 
   return (
     <Container>
@@ -63,7 +67,9 @@ export const ProfileReivew = () => {
                           {field.title}
                         </Typography>
                         <Typography variant="body1" sx={{fontWeight: 'bold'}}>
-                          ---
+                          {typeof values[group.id][field.id] === 'string'
+                            ? values[group.id][field.id]
+                            : '--'}
                         </Typography>
                       </Box>
                     );
