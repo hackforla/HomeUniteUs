@@ -1,7 +1,7 @@
 import {Box, Stack, Typography, useTheme} from '@mui/material';
 import {Link} from 'react-router-dom';
 import useStatusStyling from '../../views/IntakeProfile/hooks/useStatusStyling';
-import {useState} from 'react';
+import {Dispatch, SetStateAction} from 'react';
 
 type FieldGroup = {
   id: string;
@@ -10,19 +10,22 @@ type FieldGroup = {
 
 export const ProfileSection = ({
   fieldGroups,
-  handleClick,
+  handleSectionClick,
+  selectedItem,
+  setSelectedItem,
 }: {
   fieldGroups: FieldGroup[];
-  handleClick: () => void;
+  handleSectionClick: () => void;
+  selectedItem: string | null;
+  setSelectedItem: Dispatch<SetStateAction<string | null>>;
 }) => {
   const totalTask = fieldGroups.length - 1;
   const statusStyling = useStatusStyling();
   const theme = useTheme();
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
   const handleItemClick = (id: string) => {
     setSelectedItem(id);
-    handleClick();
+    handleSectionClick();
   };
   return (
     <>

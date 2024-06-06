@@ -1,5 +1,5 @@
 import {Button, Stack, useMediaQuery, useTheme} from '@mui/material';
-import {Outlet, useParams} from 'react-router-dom';
+import {Outlet, useNavigate, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
 import {buildValidationSchema, createInitialValues} from './constants';
 import {
@@ -7,8 +7,8 @@ import {
   useGetResponsesQuery,
   Response,
 } from '../../services/profile';
-import {useState} from 'react';
-import {ProfileSection} from '../../components/intake-profile/Sections';
+import {useEffect, useState} from 'react';
+import {ProfileSection} from '../../components/intake-profile/ProfileSection';
 export type Values = {
   [key: string]: Response['value'];
 };
@@ -17,10 +17,14 @@ export type InitialValues = Record<string, Values>;
 
 export const IntakeProfile = () => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const toolbarHeight = Number(theme.mixins.toolbar.minHeight);
   const {profileId, groupId} = useParams();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [showSections, setShowSections] = useState(isMobile);
+  const [selectedItem, setSelectedItem] = useState<string | null>(
+    groupId || null,
+  );
 
   const {data: profileData} = useGetProfileQuery(
     {profileId: profileId},
@@ -28,9 +32,11 @@ export const IntakeProfile = () => {
   );
   const {data: responsesData} = useGetResponsesQuery({userId: '1'});
 
-  function handleClick() {
-    setShowSections(!showSections);
-  }
+  useEffect(() => {
+    if (groupId) {
+      setSelectedItem(groupId);
+    }
+  }, [groupId]);
 
   if (
     profileId === undefined ||
@@ -45,6 +51,30 @@ export const IntakeProfile = () => {
 
   const validationSchema = buildValidationSchema(fieldGroups, groupId);
   const initalValues = createInitialValues(fieldGroups, responses);
+  const currentIndex = fieldGroups.findIndex(
+    group => group.id === selectedItem,
+  );
+
+  function handleSectionClick() {
+    setShowSections(!showSections);
+  }
+  function handleNext() {
+    if (currentIndex < fieldGroups.length - 1) {
+      const nextGroupId = fieldGroups[currentIndex + 1].id;
+      setSelectedItem(nextGroupId);
+      navigate(`group/${nextGroupId}`);
+      //need to add autosave feature
+    }
+  }
+
+  function handleBack() {
+    if (currentIndex > 0) {
+      const prevGroupId = fieldGroups[currentIndex - 1].id;
+      setSelectedItem(prevGroupId);
+      navigate(`group/${prevGroupId}`);
+      //need to add autosave feature
+    }
+  }
 
   return (
     <Formik
@@ -94,7 +124,9 @@ export const IntakeProfile = () => {
           >
             <ProfileSection
               fieldGroups={fieldGroups}
-              handleClick={handleClick}
+              handleSectionClick={handleSectionClick}
+              selectedItem={selectedItem}
+              setSelectedItem={setSelectedItem}
             />
           </Stack>
           <Stack
@@ -120,16 +152,16 @@ export const IntakeProfile = () => {
               <Button
                 size="medium"
                 variant="outlined"
-                onClick={() => alert('go back to prev item')}
+                onClick={handleBack}
                 style={{border: '2px solid'}} //in styles to prevent bug where button becomes smaller on hover
-                sx={{width: {sm: '100%', md: 183}}}
+                sx={{width: {sm: '100%', md: 161}}}
               >
                 Back
               </Button>
               <Button
                 size="medium"
                 variant="contained"
-                onClick={() => alert('continue to next item')}
+                onClick={handleNext}
                 sx={{width: {sm: '100%', md: 183}}}
               >
                 Continue
@@ -137,7 +169,7 @@ export const IntakeProfile = () => {
               <Button
                 size="medium"
                 variant="text"
-                onClick={handleClick}
+                onClick={handleSectionClick}
                 sx={{
                   border: 2,
                   width: {sm: '100%'},
