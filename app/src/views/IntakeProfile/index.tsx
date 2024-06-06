@@ -83,7 +83,7 @@ export const IntakeProfile = () => {
           <Stack
             sx={{
               gap: 1,
-              width: '412px',
+              width: {xs: '100%', sm: '100%', md: '412px'},
               overflowY: 'auto',
               borderRight: '1px solid',
               borderColor: 'grey.200',
