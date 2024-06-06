@@ -3,12 +3,9 @@ import {Link} from 'react-router-dom';
 import useStatusStyling from '../../views/IntakeProfile/hooks/useStatusStyling';
 import {useState} from 'react';
 
-type Status = 'complete' | 'pending' | 'locked' | 'incomplete';
-
 type FieldGroup = {
   id: string;
   title: string;
-  status: Status;
 };
 
 export const ProfileSection = ({
@@ -44,7 +41,9 @@ export const ProfileSection = ({
           {0 /* needs to be implemented*/} of {totalTask}
         </Typography>
       </Stack>
-      {fieldGroups.map(({id, title, status}) => {
+      {fieldGroups.map(({id, title}) => {
+        const status = 'complete'; //change status here to see different styles
+        // complete | partial | incomplete | locked
         const fieldTitle = title || '...';
         return (
           <Box

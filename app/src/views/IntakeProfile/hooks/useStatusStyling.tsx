@@ -13,7 +13,7 @@ const useStatusStyling = () => {
       borderColor: '#EAF2EA',
       shadow: 'grey.50',
     },
-    pending: {
+    incomplete: {
       icon: null,
       color: theme.palette.primary.contrastText,
       borderColor: 'grey.50',
@@ -25,7 +25,7 @@ const useStatusStyling = () => {
       borderColor: 'grey.50',
       shadow: 'grey.50',
     },
-    incomplete: {
+    partial: {
       icon: <InProgressIcon />,
       color: theme.palette.primary.contrastText,
       borderColor: 'grey.50',

@@ -15,8 +15,6 @@ type FieldTypeTuple = typeof fieldTypes;
 
 export type FieldTypes = FieldTypeTuple[number];
 
-export type TaskStatus = 'complete' | 'incomplete' | 'locked' | 'pending';
-
 export interface Choice {
   id: string;
   label: string;
@@ -50,7 +48,6 @@ export interface FieldGroup {
   id: string;
   title: string;
   fields: Fields[];
-  status: TaskStatus;
 }
 
 export interface Guest {
