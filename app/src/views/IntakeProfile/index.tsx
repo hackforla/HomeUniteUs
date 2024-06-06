@@ -1,5 +1,4 @@
-import {Stack, useMediaQuery, useTheme} from '@mui/material';
-import {FormButton} from '../../components/common/FormButton';
+import {Button, Stack, useMediaQuery, useTheme} from '@mui/material';
 import {Outlet, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
 import {buildValidationSchema, createInitialValues} from './constants';
@@ -118,25 +117,37 @@ export const IntakeProfile = () => {
                 p: 2,
               }}
             >
-              <FormButton
-                text="Back"
-                variant="outline"
-                onClick={() => console.log('hello outline')}
-                mobile={isMobile}
-              />
-              <FormButton
-                text="Continue"
-                variant="fill"
-                onClick={() => console.log('hello fill')}
-                mobile={isMobile}
-              />
-              <FormButton
-                text="Return to Profile Sections"
-                variant="transparent"
+              <Button
+                size="medium"
+                variant="outlined"
+                onClick={() => alert('go back to prev item')}
+                style={{border: '2px solid'}} //in styles to prevent bug where button becomes smaller on hover
+                sx={{width: {sm: '100%', md: 183}}}
+              >
+                Back
+              </Button>
+              <Button
+                size="medium"
+                variant="contained"
+                onClick={() => alert('continue to next item')}
+                sx={{width: {sm: '100%', md: 183}}}
+              >
+                Continue
+              </Button>
+              <Button
+                size="medium"
+                variant="text"
                 onClick={handleClick}
-                mobile={isMobile}
-                customStyles={{display: {md: 'none'}}}
-              />
+                sx={{
+                  border: 2,
+                  width: {sm: '100%'},
+                  display: {md: 'none'},
+                  color: 'black',
+                  borderColor: 'transparent',
+                }}
+              >
+                Return to Profile Sections
+              </Button>
             </Stack>
           </Stack>
         </Stack>
