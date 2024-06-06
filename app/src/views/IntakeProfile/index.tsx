@@ -1,15 +1,15 @@
-import {Box, Stack, Typography, useMediaQuery, useTheme} from '@mui/material';
+import {Stack, useMediaQuery, useTheme} from '@mui/material';
 import {FormButton} from '../../components/common/FormButton';
-import {Link, Outlet, useParams} from 'react-router-dom';
+import {Outlet, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
-import useStatusStyling from './hooks/useStatusStyling';
 import {buildValidationSchema, createInitialValues} from './constants';
 import {
   useGetProfileQuery,
   useGetResponsesQuery,
   Response,
 } from '../../services/profile';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
+import {ProfileSection} from '../../components/intake-profile/Sections';
 export type Values = {
   [key: string]: Response['value'];
 };
@@ -20,7 +20,6 @@ export const IntakeProfile = () => {
   const theme = useTheme();
   const toolbarHeight = Number(theme.mixins.toolbar.minHeight);
   const {profileId, groupId} = useParams();
-  const [completedCount, setCompletedCount] = useState(0);
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [showSections, setShowSections] = useState(isMobile);
 
@@ -30,14 +29,6 @@ export const IntakeProfile = () => {
   );
   const {data: responsesData} = useGetResponsesQuery({userId: '1'});
 
-  useEffect(() => {
-    if (profileData) {
-      const count = profileData.fieldGroups.filter(
-        group => group.status == 'complete',
-      ).length;
-      setCompletedCount(count);
-    }
-  }, [profileData]);
   function handleClick() {
     setShowSections(!showSections);
   }
@@ -55,9 +46,6 @@ export const IntakeProfile = () => {
 
   const validationSchema = buildValidationSchema(fieldGroups, groupId);
   const initalValues = createInitialValues(fieldGroups, responses);
-  const totalTask = fieldGroups.length - 1;
-
-  const statusStyling = useStatusStyling();
 
   return (
     <Formik
@@ -105,59 +93,10 @@ export const IntakeProfile = () => {
               display: {xs: showSections ? 'flex' : 'none', md: 'flex'},
             }}
           >
-            <Stack
-              sx={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                margin: '35px 35px 0px 0px',
-              }}
-            >
-              <Typography
-                sx={{fontSize: 18, fontWeight: 'medium', marginBottom: 1}}
-              >
-                Profile Sections
-              </Typography>
-              <Typography sx={{fontSize: 14, fontWeight: 'medium'}}>
-                {completedCount} of {totalTask}
-              </Typography>
-            </Stack>
-            {fieldGroups.map(({id, title, status}) => {
-              const fieldTitle = title || '...';
-              return (
-                <Box
-                  key={id}
-                  to={`group/${id}`}
-                  component={Link}
-                  sx={{
-                    borderRadius: 2,
-                    backgroundColor: statusStyling[status].color,
-                    minHeight: 56,
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    paddingInline: 3,
-                    borderColor: statusStyling[status].borderColor,
-                    borderWidth: 2,
-                    borderStyle: 'solid',
-                    boxShadow: statusStyling[status].shadow,
-                    textDecoration: 'none',
-                  }}
-                  onClick={handleClick}
-                >
-                  <Typography
-                    sx={{
-                      fontSize: 16,
-                      fontWeight: 'medium',
-                      color: theme.palette.text.primary,
-                    }}
-                  >
-                    {fieldTitle}
-                  </Typography>
-                  {statusStyling[status].icon}
-                </Box>
-              );
-            })}
+            <ProfileSection
+              fieldGroups={fieldGroups}
+              handleClick={handleClick}
+            />
           </Stack>
           <Stack
             onSubmit={handleSubmit}
