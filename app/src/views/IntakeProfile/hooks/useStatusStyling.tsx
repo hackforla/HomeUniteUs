@@ -7,16 +7,10 @@ const useStatusStyling = () => {
   const theme = useTheme();
 
   return {
-    selected: {
-      icon: null,
-      color: theme.palette.primary.contrastText,
-      borderColor: '#DADADA',
-      shadow: '0px 4px 4px rgba(0, 0, 0, .25)',
-    },
     complete: {
       icon: <CheckCircleOutlined color="success" />,
       color: '#EAF2EA',
-      borderColor: 'grey.50',
+      borderColor: '#EAF2EA',
       shadow: 'grey.50',
     },
     pending: {

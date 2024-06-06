@@ -15,12 +15,7 @@ type FieldTypeTuple = typeof fieldTypes;
 
 export type FieldTypes = FieldTypeTuple[number];
 
-export type TaskStatus =
-  | 'selected'
-  | 'complete'
-  | 'incomplete'
-  | 'locked'
-  | 'pending';
+export type TaskStatus = 'complete' | 'incomplete' | 'locked' | 'pending';
 
 export interface Choice {
   id: string;

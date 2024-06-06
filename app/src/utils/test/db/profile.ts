@@ -88,7 +88,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: faker.string.numeric(4),
         title: 'Other Guests/Pets',
-        status: 'selected',
+        status: 'incomplete',
         fields: [
           {
             id: faker.string.numeric(4),
@@ -111,7 +111,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: faker.string.numeric(4),
         title: 'Employment Information',
-        status: 'incomplete',
+        status: 'pending',
         fields: [
           {
             id: '5478',

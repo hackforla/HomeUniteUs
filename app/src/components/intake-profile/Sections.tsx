@@ -1,8 +1,9 @@
 import {Box, Stack, Typography, useTheme} from '@mui/material';
 import {Link} from 'react-router-dom';
 import useStatusStyling from '../../views/IntakeProfile/hooks/useStatusStyling';
+import {useState} from 'react';
 
-type Status = 'selected' | 'complete' | 'pending' | 'locked' | 'incomplete';
+type Status = 'complete' | 'pending' | 'locked' | 'incomplete';
 
 type FieldGroup = {
   id: string;
@@ -20,6 +21,12 @@ export const ProfileSection = ({
   const totalTask = fieldGroups.length - 1;
   const statusStyling = useStatusStyling();
   const theme = useTheme();
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+
+  const handleItemClick = (id: string) => {
+    setSelectedItem(id);
+    handleClick();
+  };
   return (
     <>
       <Stack
@@ -52,13 +59,17 @@ export const ProfileSection = ({
               justifyContent: 'space-between',
               alignItems: 'center',
               paddingInline: 3,
-              borderColor: statusStyling[status].borderColor,
+              borderColor:
+                selectedItem === id
+                  ? '#DADADA'
+                  : statusStyling[status].borderColor,
               borderWidth: 2,
               borderStyle: 'solid',
-              boxShadow: statusStyling[status].shadow,
+              boxShadow:
+                selectedItem === id ? '0px 4px 4px rgba(0, 0, 0, .25)' : 'none',
               textDecoration: 'none',
             }}
-            onClick={handleClick}
+            onClick={() => handleItemClick(id)}
           >
             <Typography
               sx={{
