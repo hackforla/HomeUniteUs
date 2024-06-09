@@ -69,14 +69,14 @@ export const DashboardTaskAccordion = ({
       </StyledAccordionSummary>
       <Divider />
       <AccordionDetails data-testid="tasks" sx={{padding: 0}}>
-        {subTasks.map(({id, title, description, status, buttonText, url}) => {
+        {subTasks.map(({id, title, description, status, linkText, url}) => {
           return (
             <DashboardTask
               key={`subtask-${id}`}
               title={title}
               description={description}
               status={status}
-              buttonText={buttonText}
+              linkText={linkText}
               url={url}
             />
           );

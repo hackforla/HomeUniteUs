@@ -33,3 +33,4 @@ export {Sections} from './guestApplicationForm/Sections';
 export {SubstanceUse} from './guestApplicationForm/SubstanceUse';
 export {Welcome} from './guestApplicationForm/Welcome';
 export {About} from './guestApplicationForm/About';
+export {IntakeProfile} from './IntakeProfile';

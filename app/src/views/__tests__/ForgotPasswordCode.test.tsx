@@ -103,7 +103,7 @@ describe('ForgotPasswordCode page', () => {
 
     test('display an error message', async () => {
       server.use(
-        http.post(`/api/auth/forgot_password`, async () => {
+        http.post('/api/auth/forgot_password', async () => {
           await delay();
           return HttpResponse.json(
             {
