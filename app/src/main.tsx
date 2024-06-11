@@ -58,7 +58,7 @@ import {
 import {GuestApplicationContext} from './components/common/GuestApplicationContext';
 import {FieldGroupList} from './components/intake-profile/IntakeProfileGroups';
 import {enableMocking} from './utils/test/browser';
-import {ProfileReivew} from './components/intake-profile/ProfileReivew';
+import {ProfileReview} from './components/intake-profile/ProfileReview';
 
 function HuuApp() {
   const [session] = useSessionMutation();
@@ -138,7 +138,7 @@ function HuuApp() {
             }
           >
             <Route path="group/:groupId" element={<FieldGroupList />} />
-            <Route path="review" element={<ProfileReivew />} />
+            <Route path="review" element={<ProfileReview />} />
           </Route>
         </Route>
         <Route
