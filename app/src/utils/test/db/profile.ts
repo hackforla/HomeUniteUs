@@ -96,7 +96,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
           },
           {
             id: faker.string.numeric(4),
-            title: 'Do you have any pets?',
+            title: 'Do you have any pets in your care?',
             type: 'yes_no',
             properties: {},
             validations: {
