@@ -43,6 +43,10 @@ paths:
     $ref: "./paths/auth/authPrivate.yaml"
   /auth/google:
     $ref: "./paths/auth/authGoogle.yaml"
+  /auth/google/sign_up:
+    $ref: "./paths/auth/authGoogleSignUp.yaml"
+  /auth/google/sign_in:
+    $ref: "./paths/auth/authGoogleSignIn.yaml"
   /auth/new_password:
     $ref: "./paths/auth/authNewPassword.yaml"
   /auth/invite:
