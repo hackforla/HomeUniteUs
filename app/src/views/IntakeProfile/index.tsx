@@ -28,7 +28,6 @@ export const IntakeProfile = () => {
 
   if (
     profileId === undefined ||
-    // groupId === undefined ||
     profileData === undefined ||
     responsesData === undefined
   )
@@ -37,7 +36,11 @@ export const IntakeProfile = () => {
   const {fieldGroups} = profileData;
   const {responses} = responsesData;
 
-  const validationSchema = buildValidationSchema(fieldGroups, groupId);
+  // create validation schema for current group. Return empty object if groupId is undefined, which means we are on welcome or review page
+  const validationSchema =
+    groupId === undefined ? {} : buildValidationSchema(fieldGroups, groupId);
+
+  // create initial values from responses and fieldGroups
   const initalValues = createInitialValues(fieldGroups, responses);
 
   return (
@@ -46,6 +49,11 @@ export const IntakeProfile = () => {
       validationSchema={validationSchema}
       enableReinitialize={true}
       onSubmit={values => {
+        if (!groupId) {
+          console.error('groupId is not defined in on submit');
+          return;
+        }
+
         const updateResponses = Object.entries(values[groupId]).map(
           ([fieldId, value]) => {
             const response = responses.find(
@@ -108,6 +116,7 @@ export const IntakeProfile = () => {
               Review
             </Button>
           </Stack>
+
           <Stack
             onSubmit={handleSubmit}
             component="form"
