@@ -27,8 +27,6 @@ paths:
     $ref: "./paths/auth/authConfirm.yaml"
   /auth/signout:
     $ref: "./paths/auth/authSignout.yaml"
-  /auth/token:
-    $ref: "./paths/auth/authToken.yaml"
   /auth/session:
     $ref: "./paths/auth/authSession.yaml"
   /auth/refresh:
