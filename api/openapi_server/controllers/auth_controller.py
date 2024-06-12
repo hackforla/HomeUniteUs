@@ -331,15 +331,17 @@ def google_sign_in():
         else:
             #if user does not exist in database, they haven't gone through sign up process, delete user from Cognito and return error
             try:
+                decoded = jwt.decode(id_token, algorithms=["RS256"], options={"verify_signature": False})
+                
                 current_app.logger.info('Deleting user from Cognito')
-                response = current_app.boto_client.admint_delete_user(
+                response = current_app.boto_client.admin_delete_user(
                     UserPoolId=current_app.config['COGNITO_USER_POOL_ID'],
-                    Username=user_attrs['email']
+                    Username=decoded["cognito:username"]
                 )
                 current_app.logger.info('User deleted from Cognito')
                 raise AuthError({
-                    'code': 'invalid_role',
-                    'message': 'Invalid role. no role found provided'
+                    'code': 'No user found',
+                    'message': 'No user found'
                 }, 400)
             except botocore.exceptions.ClientError as e:
                 current_app.logger.error('Failed to delete user from Cognito')
@@ -413,9 +415,11 @@ def google_sign_up():
     if role is None:
         try:
             current_app.logger.info('Deleting user from Cognito')
-            response = current_app.boto_client.admint_delete_user(
+            decoded = jwt.decode(id_token, algorithms=["RS256"], options={"verify_signature": False})
+
+            response = current_app.boto_client.admin_delete_user(
                 UserPoolId=current_app.config['COGNITO_USER_POOL_ID'],
-                Username=user_attrs['email']
+                Username=decoded["cognito:username"]
             )
             current_app.logger.info('User deleted from Cognito')
             raise AuthError({
