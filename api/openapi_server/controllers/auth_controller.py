@@ -284,7 +284,6 @@ def signout():
     return response
 
 def google_sign_in():
-    print('google_sign_in')
     # get code from body
     code = request.get_json()['code']
     client_id = current_app.config['COGNITO_CLIENT_ID']
@@ -323,11 +322,33 @@ def google_sign_in():
     # create user object from user data
     user_attrs = get_user_attr(user_data)
 
+    # check if user exists in database
     with DataAccessLayer.session() as db_session:
         user_repo = UserRepository(db_session)
         signed_in_user = user_repo.get_user(user_attrs['email'])
         if(bool(signed_in_user) == True):
             user = user_schema.dump(signed_in_user)
+        else:
+            #if user does not exist in database, they haven't gone through sign up process, delete user from Cognito and return error
+            try:
+                current_app.logger.info('Deleting user from Cognito')
+                response = current_app.boto_client.admint_delete_user(
+                    UserPoolId=current_app.config['COGNITO_USER_POOL_ID'],
+                    Username=user_attrs['email']
+                )
+                current_app.logger.info('User deleted from Cognito')
+                raise AuthError({
+                    'code': 'invalid_role',
+                    'message': 'Invalid role. no role found provided'
+                }, 400)
+            except botocore.exceptions.ClientError as e:
+                current_app.logger.error('Failed to delete user from Cognito')
+                code = e.response['Error']['Code']
+                message = e.response['Error']['Message']
+                raise AuthError({
+                    'code': code,
+                    'message': message
+                }, 400)
 
     # set refresh token cookie
     session['refresh_token'] = refresh_token
@@ -342,8 +363,6 @@ def google_sign_in():
     }
 
 def google_sign_up():
-    print('google_sign_in')
-
     # get code from body
     code = request.get_json()['code']
     client_id = current_app.config['COGNITO_CLIENT_ID']
@@ -381,9 +400,38 @@ def google_sign_up():
 
     # create user object from user data
     user_attrs = get_user_attr(user_data)
-
     user_role = callback_uri.split('/')[2].capitalize()
-    role = UserRole.COORDINATOR if user_role == 'Coordinator' else UserRole.HOST
+
+    role = None
+    if user_role == 'Coordinator':
+        role = UserRole.COORDINATOR
+    
+    if user_role == 'Host':
+        role = UserRole.HOST
+    
+    # if role is None, delete user from Cognito and return error
+    if role is None:
+        try:
+            current_app.logger.info('Deleting user from Cognito')
+            response = current_app.boto_client.admint_delete_user(
+                UserPoolId=current_app.config['COGNITO_USER_POOL_ID'],
+                Username=user_attrs['email']
+            )
+            current_app.logger.info('User deleted from Cognito')
+            raise AuthError({
+                'code': 'invalid_role',
+                'message': 'Invalid role. no role found provided'
+            }, 400)
+        except botocore.exceptions.ClientError as e:
+            current_app.logger.error('Failed to delete user from Cognito')
+            code = e.response['Error']['Code']
+            message = e.response['Error']['Message']
+            raise AuthError({
+                'code': code,
+                'message': message
+            }, 400)
+
+
 
     try:
         with DataAccessLayer.session() as db_session:
