@@ -13,10 +13,11 @@ import {
 } from '@mui/material';
 import {FormikErrors, useFormikContext, FormikHandlers} from 'formik';
 import {useOutletContext} from 'react-router-dom';
-
 import {Values, InitialValues} from 'src/views/IntakeProfile';
 import {AdditionalGuestsField} from './AdditionaGuestsField';
-import {FieldGroup, Fields, Guest} from 'src/services/profile';
+import {FieldGroup, Fields, Guest, Pet} from 'src/services/profile';
+
+import {AdditionalPetsField} from './AdditionalPetsField';
 
 interface OutletContext {
   groupId: string;
@@ -25,7 +26,8 @@ interface OutletContext {
 
 export const FieldGroupList = () => {
   const {groupId, fieldGroups} = useOutletContext<OutletContext>();
-  const {values, handleChange, errors} = useFormikContext<InitialValues>();
+  const {values, handleChange, errors, setFieldValue} =
+    useFormikContext<InitialValues>();
 
   if (fieldGroups === undefined || groupId === undefined) return null;
   const fieldGroup = fieldGroups.find(group => group.id === groupId);
@@ -44,6 +46,7 @@ export const FieldGroupList = () => {
                 field={field}
                 values={values[groupId]}
                 handleChange={handleChange}
+                setFieldValue={setFieldValue}
                 errors={errors}
               />
             </Stack>
@@ -67,6 +70,7 @@ export const RenderFields = ({
   field,
   values,
   handleChange,
+  setFieldValue,
   errors,
 }: RenderFieldProps) => {
   const props = {
@@ -81,7 +85,6 @@ export const RenderFields = ({
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const helperText = errors[groupId]?.[field.id];
-
   switch (field.type) {
     case 'short_text':
       return (
@@ -185,6 +188,16 @@ export const RenderFields = ({
           fieldId={field.id}
           groupId={groupId}
           onChange={handleChange}
+        />
+      );
+    case 'pets':
+      return (
+        <AdditionalPetsField
+          errors={errors}
+          pets={values[field.id] as Pet[]}
+          fieldId={field.id}
+          groupId={groupId}
+          setFieldValue={setFieldValue}
         />
       );
     default:
