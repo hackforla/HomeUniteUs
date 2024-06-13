@@ -13,7 +13,7 @@ export const handlers = [
     return new HttpResponse(null, {status: 404});
   }),
 
-  http.get('/api/profile/answers/:userId', () => {
-    return HttpResponse.json({answers: []});
+  http.get('/api/profile/responses/:userId', () => {
+    return HttpResponse.json({responses: []});
   }),
 ];

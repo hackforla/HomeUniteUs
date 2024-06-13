@@ -62,12 +62,7 @@ interface RenderFieldProps {
   field: Fields;
   values: Values;
   handleChange: FormikHandlers['handleChange'];
-  errors: FormikErrors<Values>;
-  setFieldValue: (
-    field: string,
-    value: string,
-    shouldValidate?: boolean,
-  ) => void;
+  errors: FormikErrors<InitialValues>;
 }
 
 export const RenderFields = ({

@@ -54,7 +54,7 @@ import {
   GuestDashboardLayout,
 } from './components/layout';
 import {GuestApplicationContext} from './components/common/GuestApplicationContext';
-import {FieldGroupList} from './components/IntakeProfile/IntakeProfileGroups';
+import {FieldGroupList} from './components/intake-profile/IntakeProfileGroups';
 import {enableMocking} from './utils/test/browser';
 
 function HuuApp() {
@@ -126,6 +126,16 @@ function HuuApp() {
             <Route path="about" element={<About />} />
             <Route path="review" element={<Review />} />
           </Route>
+          <Route
+            path="profile/:profileId"
+            element={
+              <ProtectedRoute>
+                <IntakeProfile />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="group/:groupId" element={<FieldGroupList />} />
+          </Route>
         </Route>
         <Route
           path="/coordinator"
@@ -145,16 +155,6 @@ function HuuApp() {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/profile/:profileId"
-          element={
-            <ProtectedRoute>
-              <IntakeProfile />
-            </ProtectedRoute>
-          }
-        >
-          <Route path="group/:groupId" element={<FieldGroupList />} />
-        </Route>
       </Routes>
     </>
   );
