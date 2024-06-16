@@ -164,7 +164,7 @@ class AWSMockService():
         # conditional login within our endpoint. The lambda approach
         # requires more overhead, and conditional logic within the endpoint
         # risks adding a bug to the production code.
-        if ('signup' in request.endpoint.lower()) and 200 <= response.status_code < 300:
+        if request.endpoint and ('signup' in request.endpoint.lower()) and 200 <= response.status_code < 300:
             email = request.json['email']
             if self._auto_signup_user(email):
                 new_response = response.get_json()

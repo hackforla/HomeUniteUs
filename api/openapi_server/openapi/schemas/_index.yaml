@@ -83,3 +83,75 @@ UserSignupSchema:
           type: string
       required:
         - password
+FormResponse:
+  type: object
+  properties:
+    field_id:
+      type: integer
+    answer_text:
+      type: string
+FormResponses:
+  type: array
+  items:
+    $ref: '#/FormResponse'
+FieldValidations:
+  type: object
+  properties:
+    required:
+      type: boolean
+    max_length:
+      type: integer
+      nullable: true
+FieldProperties:
+  type: object
+  properties:
+    description:
+      type: string
+    field_type:
+      type: string
+      enum:
+        - date
+        - dropdown
+        - multiple_choice
+        - email
+        - file_upload
+        - group
+        - long_text
+        - number
+        - short_text
+        - yes_no
+    choices:
+      type: array
+      items:
+        type: string
+Field:
+  type: object
+  properties:
+    ref:
+      type: string
+    properties:
+      $ref: '#/FieldProperties'
+    validations:
+      $ref: '#/FieldValidations'
+FieldGroup:
+  type: object
+  properties:
+    title:
+      type: string
+    description:
+      type: string
+    fields:
+      type: array
+      items:
+        $ref: '#/Field'
+Form:
+  type: object
+  properties:
+    title:
+      type: string
+    description:
+      type: string
+    field_groups:
+      type: array
+      items:
+        $ref: '#/FieldGroup'

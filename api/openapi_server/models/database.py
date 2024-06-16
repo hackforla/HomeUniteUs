@@ -8,6 +8,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.sql import func
 from sqlalchemy.schema import CheckConstraint
 from sqlalchemy.types import JSON
+from typing import List
 
 Base = declarative_base()
 
@@ -55,6 +56,9 @@ class Form(Base):
     title = Column(String(255), nullable=False)
     description = Column(Text)
     created_at = Column(DateTime, default=func.current_timestamp())
+
+    def get_field_ids(self) -> List[int]:
+        return [field.field_id for group in self.field_groups for field in group.fields]
 
 class FieldProperties(Base):
     __tablename__ = 'field_properties'
