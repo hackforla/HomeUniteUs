@@ -2,6 +2,7 @@ import string
 import re
 import pytest
 from werkzeug.http import parse_cookie
+from openapi_server.models.database import DataAccessLayer, User 
 
 from tests.setup_utils import create_user, create_and_signin_user
 
@@ -35,6 +36,41 @@ def test_signin_without_email_format(client):
 
     assert response.status_code == 400
     assert "is not a email" in strip_punctuation(response.json["detail"].lower())
+
+@pytest.mark.parametrize('endpoint', ['/api/auth/signup/host','/api/auth/signup/coordinator'])
+def test_signup_with_missing_fields(client, endpoint):
+    '''
+    Attempts to login without all required fields returns 
+    a bad request error.
+    '''
+    BAD_SIGNUP_REQUESTS = [
+        {
+            'email': 'inbox928@placeholder.org',
+            'password': 'Fakepass%^&7!asdf'
+        },
+        {
+            'email': 'inbox928@placeholder.org',
+            'password': 'Fakepass%^&7!asdf',
+            'lastName': 'Josh'
+        },
+        {
+            'email': 'inbox928@placeholder.org',
+            'firstName': 'Josh',
+            'lastName': 'Douglas'
+        },
+        {
+            'password': 'Fakepass%^&7!asdf',
+            'firstName': 'Josh',
+            'lastName': 'Douglas'
+        }, 
+        {
+        }
+    ]
+
+    for req in BAD_SIGNUP_REQUESTS:
+        response = client.post(endpoint, json = req)
+        assert response.status_code == 400, req
+        assert 'detail' in response.json and 'required property' in response.json['detail'], req
 
 def test_refresh_without_cookie(client):
     '''
@@ -80,7 +116,9 @@ def _signup_unconfirmed(signup_endpoint, client, is_mocking):
         signup_endpoint,
         json = {
             'email': email,
-            'password': password
+            'password': password,
+            "firstName": "valid name",
+            "lastName": "valid name"
         }
     )
 
@@ -97,6 +135,7 @@ def _signup_unconfirmed(signup_endpoint, client, is_mocking):
             'password': password
         }
     )
+
     
     if expect_user_confirmed:
         assert signin_response.status_code == 200, "Mocked users should be able to signin without confirmation."
@@ -104,7 +143,7 @@ def _signup_unconfirmed(signup_endpoint, client, is_mocking):
     else:
         assert signin_response.status_code == 401, (
             "When using the real AWS service signin should fail since user is unconfirmed. ")
-        assert signin_response.json["Code"] == "UserNotConfirmedException"
+        assert signin_response.json["code"] == "UserNotConfirmedException"
 
 def test_signup_unconfirmed_host(client, is_mocking):
     '''
@@ -153,13 +192,17 @@ def test_weak_passwords_rejected(client):
         '/api/auth/signup/host',
         json = {
             'email': email,
-            'password': password
+            'password': password,
+            'firstName': 'unqiue',
+            'lastName': 'name'
         }
     )
 
     assert signup_response.status_code == 400, "The weak password worked for signup!"
     assert "password did not conform with policy" in signup_response.json["message"].lower()
 
+# TODO: This test is currently disabled because the token returned from moto is different from the token returned from the real AWS service.
+@pytest.mark.skip(reason="There is a bug involving the contents of the token being returned from moto being different from the token returned from the real AWS service.")
 def test_basic_auth_flow(client):
     '''
     Create a new user, confirm it, and login using the 
@@ -168,7 +211,9 @@ def test_basic_auth_flow(client):
     '''
     EMAIL = 'inbox928@placeholder.org'
     PASSWORD = 'Fake4!@#$2589FFF'
-    create_user(client, EMAIL, PASSWORD)
+    FIRST_NAME = "PNAU"
+    LAST_NAME = "Hyperbolic"
+    create_user(client, EMAIL, PASSWORD, firstName=FIRST_NAME, lastName=LAST_NAME)
 
     response = client.post(
         '/api/auth/signin',
@@ -177,6 +222,7 @@ def test_basic_auth_flow(client):
             'password': PASSWORD
         }
     )
+
     assert response.status_code == 200, "Signin failed"
     assert 'token' in response.json, 'Signin succeeded but token field missing from response'
     jwt = response.json['token']
@@ -192,6 +238,9 @@ def test_basic_auth_flow(client):
     assert 'user' in response.json
     assert 'email' in response.json['user']
     assert response.json['user']['email'] == EMAIL
+    assert response.json['user']['firstName'] == FIRST_NAME
+    assert response.json['user']['middleName'] == ''
+    assert response.json['user']['lastName'] == LAST_NAME
 
 def test_signin_returns_session_cookie(client):
     '''
@@ -252,3 +301,29 @@ def test_session_endpoint(client):
 
     assert response.status_code == 200, f"session failed: {response.json}"
     assert 'token' in response.json, 'session succeeded but token field missing from response'
+
+def test_user_signup_rollback(app):
+    """ Verify that a failed signup with cognito 
+    reverts the local DB entry of the user's email."""
+
+
+    rollback_email = 'test_user_signup_rollback@fake.com'
+    signup_response = app.test_client().post(
+        '/api/auth/signup/host',
+        json = {
+            'email': rollback_email,
+            'password': 'lol',
+            'firstName': 'firstname',
+            'lastName': 'lastname'
+        }
+    )
+    assert signup_response.status_code == 400
+    with pytest.raises(app.boto_client.exceptions.UserNotFoundException):
+        app.boto_client.admin_delete_user(
+            UserPoolId=app.config['COGNITO_USER_POOL_ID'],
+            Username=rollback_email
+        )
+    with DataAccessLayer.session() as sess:
+        rolledback_user = sess.query(User).filter_by(email=rollback_email).first()
+        # This assertion will fail on `main` because no rollback is happening
+        assert rolledback_user is None

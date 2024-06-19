@@ -2,13 +2,13 @@ get:
   description: Confirms user invite by signing them in using the link sent to their email
   operationId: confirm_invite
   parameters:
-    - name: email
-      in: query
+    - in: query
+      name: password
       schema:
         type: string
       required: true
-    - name: password
-      in: query
+    - in: query
+      name: email
       schema:
         type: string
       required: true

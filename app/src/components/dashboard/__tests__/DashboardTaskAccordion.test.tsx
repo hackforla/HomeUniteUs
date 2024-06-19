@@ -15,7 +15,7 @@ const task: TaskAccordionProps = {
       title: 'Application',
       status: 'complete',
       description: 'Start your guest application to move on to the next step.',
-      buttonText: 'Start Application',
+      linkText: 'Start Application',
       url: '/guest-application',
     },
     {
@@ -23,7 +23,7 @@ const task: TaskAccordionProps = {
       title: 'Coordinator Interview',
       status: 'inProgress',
       description: 'Meet with your Coordinator to share more about yourself.',
-      buttonText: 'Schedule interview',
+      linkText: 'Schedule interview',
       url: '/schedule',
     },
     {
@@ -32,7 +32,7 @@ const task: TaskAccordionProps = {
       status: 'locked',
       description:
         'Complete a training session to prepare you for the host home experience.',
-      buttonText: 'Schedule training',
+      linkText: 'Schedule training',
       url: '/schedule',
     },
   ],

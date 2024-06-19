@@ -43,6 +43,7 @@ import {
   Language,
   About,
   Review,
+  IntakeProfile,
 } from './views';
 
 import {AccountVerification} from './views/AccountVerification';
@@ -53,6 +54,8 @@ import {
   GuestDashboardLayout,
 } from './components/layout';
 import {GuestApplicationContext} from './components/common/GuestApplicationContext';
+import {FieldGroupList} from './components/intake-profile/IntakeProfileGroups';
+import {enableMocking} from './utils/test/browser';
 
 function HuuApp() {
   const [session] = useSessionMutation();
@@ -123,6 +126,16 @@ function HuuApp() {
             <Route path="about" element={<About />} />
             <Route path="review" element={<Review />} />
           </Route>
+          <Route
+            path="profile/:profileId"
+            element={
+              <ProtectedRoute>
+                <IntakeProfile />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="group/:groupId" element={<FieldGroupList />} />
+          </Route>
         </Route>
         <Route
           path="/coordinator"
@@ -149,17 +162,19 @@ function HuuApp() {
 
 const appRoot = document.getElementById('root') as HTMLElement;
 
-ReactDOM.createRoot(appRoot).render(
-  <React.StrictMode>
-    <Provider store={setupStore()}>
-      <BrowserRouter>
-        <StyledEngineProvider injectFirst>
-          <ThemeProvider theme={HomeUniteUsTheme}>
-            <CssBaseline />
-            <HuuApp />
-          </ThemeProvider>
-        </StyledEngineProvider>
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>,
-);
+enableMocking().then(() => {
+  ReactDOM.createRoot(appRoot).render(
+    <React.StrictMode>
+      <Provider store={setupStore()}>
+        <BrowserRouter>
+          <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={HomeUniteUsTheme}>
+              <CssBaseline />
+              <HuuApp />
+            </ThemeProvider>
+          </StyledEngineProvider>
+        </BrowserRouter>
+      </Provider>
+    </React.StrictMode>,
+  );
+});
