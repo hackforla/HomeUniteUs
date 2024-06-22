@@ -45,7 +45,7 @@ export const ProfileSection = ({
         </Typography>
       </Stack>
       {fieldGroups.map(({id, title}) => {
-        const status = 'complete'; //change status here to see different styles
+        const status = 'locked'; //change status here to see different styles
         // complete | partial | incomplete | locked
         const fieldTitle = title || '...';
         return (

@@ -1,6 +1,6 @@
 import {useTheme} from '@mui/material/styles';
 import {InProgressIcon} from '../../../components/Icons/InProgressIcon';
-import {LockedIcon} from '../../../components/Icons/LockedIcon';
+import LockIcon from '@mui/icons-material/Lock';
 import {CheckCircleOutlined} from '@mui/icons-material';
 
 const useStatusStyling = () => {
@@ -20,7 +20,16 @@ const useStatusStyling = () => {
       shadow: 'grey.50',
     },
     locked: {
-      icon: <LockedIcon />,
+      icon: (
+        <LockIcon
+          sx={{
+            backgroundColor: 'rgba(0, 0, 0, 0.38)',
+            borderRadius: '50%',
+            padding: '5px',
+            color: 'rgba(0, 0, 0, 0.54)',
+          }}
+        />
+      ),
       color: '#E8E8E8',
       borderColor: 'grey.50',
       shadow: 'grey.50',
