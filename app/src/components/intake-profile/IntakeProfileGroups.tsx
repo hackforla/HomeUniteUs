@@ -3,6 +3,7 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
+  FormLabel,
   InputLabel,
   MenuItem,
   OutlinedInput,
@@ -114,9 +115,14 @@ export const RenderFields = ({
           rows={4}
           id="outlined"
           placeholder="Type you answer here"
+          label="label needs to be added"
           variant="outlined"
           error={error}
           helperText={helperText}
+          required
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
       );
     case 'number':
@@ -129,6 +135,10 @@ export const RenderFields = ({
           id="outlined"
           placeholder="(909)555-1234"
           variant="outlined"
+          required
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
       );
     case 'email':
@@ -141,11 +151,16 @@ export const RenderFields = ({
           id="outlined"
           placeholder="example@emai.com"
           variant="outlined"
+          required
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
       );
     case 'yes_no':
       return (
-        <FormControl error={error}>
+        <FormControl error={error} required>
+          <FormLabel sx={{color: 'black'}}>Label needed</FormLabel>
           <RadioGroup {...props} row aria-labelledby="yes-no-field">
             <FormControlLabel value="yes" control={<Radio />} label="Yes" />
             <FormControlLabel value="no" control={<Radio />} label="No" />
