@@ -8,16 +8,16 @@ type FieldGroup = {
   title: string;
 };
 
-export const ProfileSection = ({
+export const ProfileSidebar = ({
   fieldGroups,
   handleSectionClick,
-  selectedItem,
   setSelectedItem,
+  groupId,
 }: {
   fieldGroups: FieldGroup[];
   handleSectionClick: () => void;
-  selectedItem: string | null;
   setSelectedItem: Dispatch<SetStateAction<string | null>>;
+  groupId: string;
 }) => {
   const totalTask = fieldGroups.length - 1;
   const statusStyling = useStatusStyling();
@@ -27,6 +27,7 @@ export const ProfileSection = ({
     setSelectedItem(id);
     handleSectionClick();
   };
+
   return (
     <>
       <Stack
@@ -45,7 +46,7 @@ export const ProfileSection = ({
         </Typography>
       </Stack>
       {fieldGroups.map(({id, title}) => {
-        const status = 'locked'; //change status here to see different styles
+        const status = 'complete'; // Change status here to see different styles
         // complete | partial | incomplete | locked
         const fieldTitle = title || '...';
         return (
@@ -62,13 +63,11 @@ export const ProfileSection = ({
               alignItems: 'center',
               paddingInline: 3,
               borderColor:
-                selectedItem === id
-                  ? '#DADADA'
-                  : statusStyling[status].borderColor,
+                groupId === id ? '#DADADA' : statusStyling[status].borderColor,
               borderWidth: 2,
               borderStyle: 'solid',
               boxShadow:
-                selectedItem === id ? '0px 4px 4px rgba(0, 0, 0, .25)' : 'none',
+                groupId === id ? '0px 4px 4px rgba(0, 0, 0, .25)' : 'none',
               textDecoration: 'none',
             }}
             onClick={() => handleItemClick(id)}

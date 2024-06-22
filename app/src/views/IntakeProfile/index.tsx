@@ -7,8 +7,8 @@ import {
   useGetResponsesQuery,
   Response,
 } from '../../services/profile';
-import {useEffect, useState} from 'react';
-import {ProfileSection} from '../../components/intake-profile/ProfileSection';
+import {useState} from 'react';
+import {ProfileSidebar} from '../../components/intake-profile/ProfileSidebar';
 export type Values = {
   [key: string]: Response['value'];
 };
@@ -31,12 +31,6 @@ export const IntakeProfile = () => {
     {skip: !profileId},
   );
   const {data: responsesData} = useGetResponsesQuery({userId: '1'});
-
-  useEffect(() => {
-    if (groupId) {
-      setSelectedItem(groupId);
-    }
-  }, [groupId]);
 
   if (
     profileId === undefined ||
@@ -122,11 +116,11 @@ export const IntakeProfile = () => {
               display: {xs: showSections ? 'flex' : 'none', md: 'flex'},
             }}
           >
-            <ProfileSection
+            <ProfileSidebar
               fieldGroups={fieldGroups}
               handleSectionClick={handleSectionClick}
-              selectedItem={selectedItem}
               setSelectedItem={setSelectedItem}
+              groupId={groupId}
             />
           </Stack>
           <Stack
