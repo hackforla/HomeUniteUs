@@ -3,7 +3,9 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
+  InputLabel,
   MenuItem,
+  OutlinedInput,
   Radio,
   RadioGroup,
   Select,
@@ -90,13 +92,18 @@ export const RenderFields = ({
       return (
         <TextField
           {...props}
+          required
           multiline
           rows={1}
           id="outlined"
           variant="outlined"
           placeholder="Type you answer here"
+          label="label needs to be added"
           error={error}
           helperText={helperText}
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
       );
     case 'long_text':
@@ -151,12 +158,16 @@ export const RenderFields = ({
         throw new Error('Invalid field type');
 
       return (
-        <FormControl fullWidth error={error}>
+        <FormControl fullWidth error={error} variant="outlined">
+          <InputLabel shrink required id="demo-simple-select-label">
+            Select a choice
+          </InputLabel>
           <Select
             {...props}
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             displayEmpty
+            input={<OutlinedInput label="Select a choice" />}
             inputProps={{'aria-label': 'select-choice'}}
           >
             <MenuItem value="" disabled>
