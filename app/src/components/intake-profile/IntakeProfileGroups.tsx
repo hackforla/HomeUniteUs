@@ -38,7 +38,13 @@ export const FieldGroupList = () => {
 
   return (
     <Container maxWidth="sm" sx={{py: 4}}>
-      <Stack sx={{gap: 2}}>
+      <Stack
+        sx={{
+          gap: 2,
+          '.MuiInputLabel-asterisk': {color: 'red'},
+          '.MuiFormLabel-asterisk': {color: 'red'},
+        }}
+      >
         <Typography variant="h5">{fieldGroup?.title}</Typography>
         {fields.map(field => {
           return (
