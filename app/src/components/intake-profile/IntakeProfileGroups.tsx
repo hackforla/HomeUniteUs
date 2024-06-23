@@ -45,11 +45,10 @@ export const FieldGroupList = () => {
           '.MuiFormLabel-asterisk': {color: 'red'},
         }}
       >
-        {<Typography variant="h5">{fieldGroup?.title}</Typography>}
+        <Typography variant="h5">{fieldGroup?.title}</Typography>
         {fields.map(field => {
           return (
             <Stack key={field.id} sx={{gap: 1}}>
-              <Typography variant="body1">{field.title}</Typography>
               <RenderFields
                 groupId={groupId}
                 field={field}
@@ -105,7 +104,7 @@ export const RenderFields = ({
           id="outlined"
           variant="outlined"
           placeholder="Type you answer here"
-          label="label needs to be added"
+          label={field.title}
           error={error}
           helperText={helperText}
           InputLabelProps={{
@@ -121,7 +120,7 @@ export const RenderFields = ({
           rows={4}
           id="outlined"
           placeholder="Type you answer here"
-          label="label needs to be added"
+          label={field.title}
           variant="outlined"
           error={error}
           helperText={helperText}
@@ -134,7 +133,7 @@ export const RenderFields = ({
     case 'number':
       return (
         <TextField
-          label="Phone Number"
+          label={field.title}
           {...props}
           error={error}
           helperText={helperText}
@@ -151,7 +150,7 @@ export const RenderFields = ({
       return (
         <TextField
           {...props}
-          label="Email"
+          label={field.title}
           error={error}
           helperText={helperText}
           id="outlined"
@@ -166,7 +165,7 @@ export const RenderFields = ({
     case 'yes_no':
       return (
         <FormControl error={error} required={field.validations.required}>
-          <FormLabel sx={{color: 'black'}}>Label needed</FormLabel>
+          <FormLabel sx={{color: 'black'}}>{field.title}</FormLabel>
           <RadioGroup {...props} row aria-labelledby="yes-no-field">
             <FormControlLabel value="yes" control={<Radio />} label="Yes" />
             <FormControlLabel value="no" control={<Radio />} label="No" />
