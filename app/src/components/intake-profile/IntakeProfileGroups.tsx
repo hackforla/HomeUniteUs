@@ -45,7 +45,7 @@ export const FieldGroupList = () => {
           '.MuiFormLabel-asterisk': {color: 'red'},
         }}
       >
-        <Typography variant="h5">{fieldGroup?.title}</Typography>
+        {<Typography variant="h5">{fieldGroup?.title}</Typography>}
         {fields.map(field => {
           return (
             <Stack key={field.id} sx={{gap: 1}}>
@@ -99,7 +99,7 @@ export const RenderFields = ({
       return (
         <TextField
           {...props}
-          required
+          required={field.validations.required}
           multiline
           rows={1}
           id="outlined"
@@ -125,7 +125,7 @@ export const RenderFields = ({
           variant="outlined"
           error={error}
           helperText={helperText}
-          required
+          required={field.validations.required}
           InputLabelProps={{
             shrink: true,
           }}
@@ -141,7 +141,7 @@ export const RenderFields = ({
           id="outlined"
           placeholder="(909)555-1234"
           variant="outlined"
-          required
+          required={field.validations.required}
           InputLabelProps={{
             shrink: true,
           }}
@@ -157,7 +157,7 @@ export const RenderFields = ({
           id="outlined"
           placeholder="example@emai.com"
           variant="outlined"
-          required
+          required={field.validations.required}
           InputLabelProps={{
             shrink: true,
           }}
@@ -165,7 +165,7 @@ export const RenderFields = ({
       );
     case 'yes_no':
       return (
-        <FormControl error={error} required>
+        <FormControl error={error} required={field.validations.required}>
           <FormLabel sx={{color: 'black'}}>Label needed</FormLabel>
           <RadioGroup {...props} row aria-labelledby="yes-no-field">
             <FormControlLabel value="yes" control={<Radio />} label="Yes" />
@@ -180,7 +180,11 @@ export const RenderFields = ({
 
       return (
         <FormControl fullWidth error={error} variant="outlined">
-          <InputLabel shrink required id="demo-simple-select-label">
+          <InputLabel
+            shrink
+            required={field.validations.required}
+            id="demo-simple-select-label"
+          >
             Select a choice
           </InputLabel>
           <Select
