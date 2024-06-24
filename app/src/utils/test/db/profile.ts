@@ -321,6 +321,21 @@ export const intakeProfiles: GetProfileApiResponse[] = [
           },
         ],
       },
+      {
+        id: faker.string.numeric(4),
+        title: 'Review',
+        fields: [
+          {
+            id: faker.string.numeric(4),
+            title: 'review',
+            type: 'long_text',
+            properties: {},
+            validations: {
+              required: true,
+            },
+          },
+        ],
+      },
     ],
   },
   {
