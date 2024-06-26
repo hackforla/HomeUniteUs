@@ -67,6 +67,12 @@ const getResponseValue = (field: Fields) => {
           dob: faker.date.past(),
           relationship: 'spouse',
         },
+        {
+          id: faker.string.uuid(),
+          name: faker.person.fullName(),
+          dob: faker.date.past(),
+          relationship: 'spouse',
+        },
       ];
     case 'email':
       return faker.internet.email();

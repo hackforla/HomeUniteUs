@@ -61,18 +61,72 @@ export const ProfileReview = () => {
                 </Stack>
                 <Stack gap={1}>
                   {group.fields.map(field => {
-                    return (
-                      <Box key={field.id}>
-                        <Typography sx={{fontSize: '18px'}}>
-                          {field.title}
-                        </Typography>
-                        <Typography variant="body1" sx={{fontWeight: 'bold'}}>
-                          {typeof values[group.id][field.id] === 'string'
-                            ? values[group.id][field.id]
-                            : 'N/A'}
-                        </Typography>
-                      </Box>
-                    );
+                    if (field.type === 'additional_guests') {
+                      return (
+                        <Stack key={field.id}>
+                          <Typography sx={{fontSize: '18px'}}>
+                            {field.title}
+                          </Typography>
+                          {values[group.id][field.id].map((guest, index) => {
+                            return (
+                              <Box key={guest.id}>
+                                <Typography variant="h6">
+                                  Guest {index + 1}
+                                </Typography>
+                                <Stack gap={1}>
+                                  <Box>
+                                    <Typography sx={{fontSize: '18px'}}>
+                                      Name
+                                    </Typography>
+                                    <Typography
+                                      variant="body1"
+                                      sx={{fontWeight: 'bold'}}
+                                    >
+                                      {guest.name}
+                                    </Typography>
+                                  </Box>
+                                  <Box>
+                                    <Typography sx={{fontSize: '18px'}}>
+                                      Date of Birth
+                                    </Typography>
+                                    <Typography
+                                      variant="body1"
+                                      sx={{fontWeight: 'bold'}}
+                                    >
+                                      {guest.dob}
+                                    </Typography>
+                                  </Box>
+                                  <Box>
+                                    <Typography sx={{fontSize: '18px'}}>
+                                      Relationship
+                                    </Typography>
+                                    <Typography
+                                      variant="body1"
+                                      sx={{fontWeight: 'bold'}}
+                                    >
+                                      {guest.relationship}
+                                    </Typography>
+                                  </Box>
+                                </Stack>
+                              </Box>
+                            );
+                          })}
+                        </Stack>
+                      );
+                    } else {
+                      return (
+                        <Box key={field.id}>
+                          <Typography sx={{fontSize: '18px'}}>
+                            {field.title}
+                          </Typography>
+                          <Typography variant="body1" sx={{fontWeight: 'bold'}}>
+                            {values[group.id][field.id]
+                              ? values[group.id][field.id]
+                              : 'N/A'}
+                          </Typography>
+                        </Box>
+                      );
+                    }
                   })}
                 </Stack>
               </Stack>
