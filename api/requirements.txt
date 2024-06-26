@@ -38,7 +38,7 @@ flask==2.2.5
     # via connexion
 greenlet==2.0.2
     # via sqlalchemy
-idna==3.4
+idna==3.7
     # via requests
 inflection==0.5.1
     # via connexion
@@ -46,7 +46,7 @@ itsdangerous==2.1.2
     # via
     #   connexion
     #   flask
-jinja2==3.1.2
+jinja2==3.1.4
     # via
     #   flask
     #   swagger-ui-bundle
@@ -95,6 +95,8 @@ prance==23.6.21.0
     # via homeuniteus-api (pyproject.toml)
 psycopg2-binary==2.9.5
     # via homeuniteus-api (pyproject.toml)
+pyjwt==2.8.0
+    # via pyjwt
 python-dateutil==2.8.2
     # via botocore
 python-dotenv==0.20.0
@@ -109,7 +111,7 @@ referencing==0.30.2
     #   jsonschema
     #   jsonschema-spec
     #   jsonschema-specifications
-requests==2.31.0
+requests==2.32.2
     # via
     #   connexion
     #   jsonschema-spec
@@ -145,7 +147,7 @@ urllib3==1.26.18
     # via
     #   botocore
     #   requests
-werkzeug==2.2.3
+werkzeug==3.0.3
     # via
     #   connexion
     #   flask

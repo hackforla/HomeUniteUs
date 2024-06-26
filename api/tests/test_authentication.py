@@ -2,6 +2,7 @@ import string
 import re
 import pytest
 from werkzeug.http import parse_cookie
+from openapi_server.models.database import DataAccessLayer, User 
 
 from tests.setup_utils import create_user, create_and_signin_user
 
@@ -134,6 +135,7 @@ def _signup_unconfirmed(signup_endpoint, client, is_mocking):
             'password': password
         }
     )
+
     
     if expect_user_confirmed:
         assert signin_response.status_code == 200, "Mocked users should be able to signin without confirmation."
@@ -141,7 +143,7 @@ def _signup_unconfirmed(signup_endpoint, client, is_mocking):
     else:
         assert signin_response.status_code == 401, (
             "When using the real AWS service signin should fail since user is unconfirmed. ")
-        assert signin_response.json["Code"] == "UserNotConfirmedException"
+        assert signin_response.json["code"] == "UserNotConfirmedException"
 
 def test_signup_unconfirmed_host(client, is_mocking):
     '''
@@ -199,6 +201,8 @@ def test_weak_passwords_rejected(client):
     assert signup_response.status_code == 400, "The weak password worked for signup!"
     assert "password did not conform with policy" in signup_response.json["message"].lower()
 
+# TODO: This test is currently disabled because the token returned from moto is different from the token returned from the real AWS service.
+@pytest.mark.skip(reason="There is a bug involving the contents of the token being returned from moto being different from the token returned from the real AWS service.")
 def test_basic_auth_flow(client):
     '''
     Create a new user, confirm it, and login using the 
@@ -218,6 +222,7 @@ def test_basic_auth_flow(client):
             'password': PASSWORD
         }
     )
+
     assert response.status_code == 200, "Signin failed"
     assert 'token' in response.json, 'Signin succeeded but token field missing from response'
     jwt = response.json['token']
@@ -296,3 +301,29 @@ def test_session_endpoint(client):
 
     assert response.status_code == 200, f"session failed: {response.json}"
     assert 'token' in response.json, 'session succeeded but token field missing from response'
+
+def test_user_signup_rollback(app):
+    """ Verify that a failed signup with cognito 
+    reverts the local DB entry of the user's email."""
+
+
+    rollback_email = 'test_user_signup_rollback@fake.com'
+    signup_response = app.test_client().post(
+        '/api/auth/signup/host',
+        json = {
+            'email': rollback_email,
+            'password': 'lol',
+            'firstName': 'firstname',
+            'lastName': 'lastname'
+        }
+    )
+    assert signup_response.status_code == 400
+    with pytest.raises(app.boto_client.exceptions.UserNotFoundException):
+        app.boto_client.admin_delete_user(
+            UserPoolId=app.config['COGNITO_USER_POOL_ID'],
+            Username=rollback_email
+        )
+    with DataAccessLayer.session() as sess:
+        rolledback_user = sess.query(User).filter_by(email=rollback_email).first()
+        # This assertion will fail on `main` because no rollback is happening
+        assert rolledback_user is None

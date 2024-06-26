@@ -5,7 +5,7 @@ import json
 from flask import request
 
 from openapi_server.exceptions import AuthError
-from openapi_server.controllers.admin_controller import removeUser
+from openapi_server.controllers.admin_controller import remove_user
 from openapi_server.controllers.auth_controller import signUpAdmin
 
 class AWSTemporaryUserpool():
@@ -120,7 +120,7 @@ class AWSMockService():
             email = user["email"]
 
             try:
-                removeUser({"email": email})
+                remove_user({"email": email})
             except AuthError:
                 # This error is expected if the local database
                 # Does not have the test user yet. We can ignore it.

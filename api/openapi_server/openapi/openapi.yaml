@@ -43,8 +43,8 @@ paths:
     $ref: "./paths/auth/authPrivate.yaml"
   /auth/google:
     $ref: "./paths/auth/authGoogle.yaml"
-  /auth/initialInvite:
-    $ref: "./paths/auth/authInitialInvite.yaml"
+  /auth/new_password:
+    $ref: "./paths/auth/authNewPassword.yaml"
   /auth/invite:
     $ref: "./paths/auth/authInvite.yaml"
   /auth/confirmInvite:
@@ -55,6 +55,14 @@ paths:
     $ref: "./paths/forms.yaml"
   /responses/{form_id}:
     $ref: "./paths/responses.yaml"
+  /health:
+      get:
+        operationId: openapi_server.controllers.admin_controller.health
+        summary: Health Check
+        description: Returns the health status of the API.
+        responses:
+          '200':
+            description: API is healthy.
 components:
   securitySchemes:
     jwt:
