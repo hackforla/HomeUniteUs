@@ -127,8 +127,13 @@ dev = [
   # pip-tools provides the tools pip-compile and pip-sync to help manage requirements files
   "pip-tools",
 
+
+  # cryptography is a transitive dependency of moto, but we specify a minimum
+  # version since a known security vulnerability is present in < 42.0.4 
+  "cryptography>=42.0.4"
   "moto[cognitoidp]",
-]
+
+  "pytest-alembic==0.11.0",
 
 # This defines the "prod" extra dependency group.
 # It installs dependencies necessary for running this API in production.

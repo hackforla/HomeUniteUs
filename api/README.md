@@ -2,7 +2,7 @@
 
 ## Overview
 
-This is the *Home Unite Us* web API server.
+This is the _Home Unite Us_ web API server.
 
 This server uses the [Connexion](https://github.com/zalando/connexion) framework on top of Flask.
 
@@ -24,12 +24,12 @@ Run `python -V` to check the Python version.
 
 The API application configuration must be specified before running the application. Configuration variables can be specified either as environment variables, or as entries within a `.env` file located within the `api` directory. To get started, copy the values from one of these configurations into a `.env` file:
 
-* `.env.dev.example`
-  * [Recommended] This is the easiest configuration to use. It enables debugging, and mocks third party API calls so no secrets are needed to run the API.
-* `.env.staging.example`
-  * This configuration strips all mocking from the application, but allows debugging and other testing related features.
-* `.env.prod.example`
-  * This configuration strips all mocking and strictly validates the configuration to ensure that debugging is disabled and that the deployment is production-ready.
+- `.env.dev.example`
+  - [Recommended] This is the easiest configuration to use. It enables debugging, and mocks third party API calls so no secrets are needed to run the API.
+- `.env.staging.example`
+  - This configuration strips all mocking from the application, but allows debugging and other testing related features.
+- `.env.prod.example`
+  - This configuration strips all mocking and strictly validates the configuration to ensure that debugging is disabled and that the deployment is production-ready.
 
 Using the `staging` or `production` configurations will require access to deployment secrets. If access to these secrets are needed to test a feature locally then you can request the secrets in the HUU slack channel.
 
@@ -78,10 +78,13 @@ To launch the tests, run `tox`.
 
 `tox` will run the tests for this (`api`) project using `pytest` in an isolated virtual environment that is distinct from the virtual environment that you created following the instructions from [Usage - Development](#usage---development). By default `tox` will invoke `pytest` in `debug` mode, which uses 3rd party API mocking. The test cases can optionally be run without mocking by testing the application in `release` mode, using `tox -e releasetest` or `pytest --mode=release`.
 
-### Alembic migrations
+### Database Management
 
-When changing the database, you can automatically generate an alembic migration. Simply change the model however you want in `database.py`, run `alembic revision --autogenerate -m <name_of_migration>` to generate a new migration, and then run `alembic upgrade head` to upgrade your database to the latest revision.
-In the case of someone else adding a revision to the database, simply pull their changes to your repo and run `alembic upgrade head` to upgrade your local database to the latest revision.
+Running the API requires an up-to-date version of the HomeUniteUs database. You can generate an empty database by running this command from the `api` directory with a virtual environment enabled.
+
+`alembic upgrade head`
+
+The current database version can be viewed using the `alembic current` command, or by inspecting the database `alembic_version` table. See the `model` [readme](./openapi_server/models/) for more information about the database project.
 
 ### Dependency Management
 
@@ -89,8 +92,8 @@ Core dependencies of this project are listed in `pyproject.toml` under the `[pro
 
 To aid in testing and building a reproducible, predictable, and deterministic API, this project also includes auto-generated requirements files that contains a list of all core and transitive dependencies with pinned versions. These files are:
 
-* `requirements.txt` for a base set dependencies
-* `requirements-dev.txt` that also includes developer dependencies
+- `requirements.txt` for a base set dependencies
+- `requirements-dev.txt` that also includes developer dependencies
 
 Developers will use `pip install -r requirements-dev.txt` in their own Python virtual environment when working on this API.
 
@@ -193,26 +196,8 @@ docker exec `docker ps -qf "ancestor=homeuniteus-api"` pytest
 
 Debugging is enabled when using the `development` configuration. It can also be enabled on the `staging` configuration by setting the `FLASK_DEBUG` environment variable to `True`, or adding a `FLASK_DEBUG=True` to your local `.env` file. When debugging is enabled, the API server will automatically reload each time you save a change to the source code.
 
-For Visual Studio Code users:
-
-* Set breakpoint(s).
-* Add the following config below to your `/.vscode/launch.json` configuration.
-
-```json
-{
-    "name": "Openapi_server module",
-    "type": "python",
-    "request": "launch",
-    "module": "openapi_server",
-    "justMyCode": false,
-    "cwd": "${workspaceFolder}/api"
-}
-```
-
-With this configuration selecting "Run" -> "Start with Debugging" will start the API with the debugger enabled.
-
 ## Usage - Production
-
+ 
 A WSGI server is needed to run our application. A WSGI (Web Server Gateway Interface) server is a bridge between a web server and web applications. The server handles requests, invokes the web application, translates responses back to HTTP, and also manages concurrency to ensure the server can handle multiple requests simultaneously.
 
 While Flask does provide a built-in development server, it is not intended for production use. Therefore, we utilize a third-party, production-grade WSGI server to manage our application. Various options exist, but we've chosen `gunicorn`. `gunicorn` does not support Windows, but you can use another WSGI server like `waitress` if Windows support is needed.

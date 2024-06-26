@@ -31,18 +31,7 @@ import {
   GuestTasks,
   GuestSettings,
   CoordinatorDashboard,
-  Welcome,
-  Expectations,
-  BasicInfo,
-  GuestAndPets,
-  Employment,
-  Education,
-  SubstanceUse,
-  MentalHealth,
-  Interests,
-  Language,
-  About,
-  Review,
+  IntakeProfile,
 } from './views';
 
 import {AccountVerification} from './views/AccountVerification';
@@ -52,7 +41,8 @@ import {
   CoordinatorDashboardLayout,
   GuestDashboardLayout,
 } from './components/layout';
-import {GuestApplicationContext} from './components/common/GuestApplicationContext';
+import {FieldGroupList} from './components/intake-profile/IntakeProfileGroups';
+import {enableMocking} from './utils/test/browser';
 
 function HuuApp() {
   const [session] = useSessionMutation();
@@ -109,19 +99,15 @@ function HuuApp() {
           <Route path="contacts" element={<GuestContacts />} />
           <Route path="tasks" element={<GuestTasks />} />
           <Route path="settings" element={<GuestSettings />} />
-          <Route path="application" element={<GuestApplicationContext />}>
-            <Route path="welcome" element={<Welcome />} />
-            <Route path="expectations" element={<Expectations />} />
-            <Route path="basic" element={<BasicInfo />} />
-            <Route path="guestAndPets" element={<GuestAndPets />} />
-            <Route path="employment" element={<Employment />} />
-            <Route path="education" element={<Education />} />
-            <Route path="language" element={<Language />} />
-            <Route path="substanceUse" element={<SubstanceUse />} />
-            <Route path="mentalHealth" element={<MentalHealth />} />
-            <Route path="interests" element={<Interests />} />
-            <Route path="about" element={<About />} />
-            <Route path="review" element={<Review />} />
+          <Route
+            path="profile/:profileId"
+            element={
+              <ProtectedRoute>
+                <IntakeProfile />
+              </ProtectedRoute>
+            }
+          >
+            <Route path="group/:groupId" element={<FieldGroupList />} />
           </Route>
         </Route>
         <Route
@@ -149,17 +135,19 @@ function HuuApp() {
 
 const appRoot = document.getElementById('root') as HTMLElement;
 
-ReactDOM.createRoot(appRoot).render(
-  <React.StrictMode>
-    <Provider store={setupStore()}>
-      <BrowserRouter>
-        <StyledEngineProvider injectFirst>
-          <ThemeProvider theme={HomeUniteUsTheme}>
-            <CssBaseline />
-            <HuuApp />
-          </ThemeProvider>
-        </StyledEngineProvider>
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>,
-);
+enableMocking().then(() => {
+  ReactDOM.createRoot(appRoot).render(
+    <React.StrictMode>
+      <Provider store={setupStore()}>
+        <BrowserRouter>
+          <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={HomeUniteUsTheme}>
+              <CssBaseline />
+              <HuuApp />
+            </ThemeProvider>
+          </StyledEngineProvider>
+        </BrowserRouter>
+      </Provider>
+    </React.StrictMode>,
+  );
+});

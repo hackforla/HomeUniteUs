@@ -1,7 +1,13 @@
 import {api} from './api';
 
+export interface UserRole {
+  name: 'Guest' | 'Host' | 'Coordinator' | 'Admin';
+}
 export interface User {
   email: string;
+  firstName: string;
+  lastName: string;
+  role: UserRole;
 }
 
 export interface UserResponse {
@@ -150,7 +156,7 @@ const authApi = api.injectEndpoints({
     }),
     newPassword: build.mutation<void, NewPasswordRequest>({
       query: credentials => ({
-        url: 'auth/initialInvite',
+        url: 'auth/new_password',
         method: 'POST',
         withCredentials: true,
         body: credentials,
