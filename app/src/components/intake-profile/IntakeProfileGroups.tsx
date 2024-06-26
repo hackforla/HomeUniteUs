@@ -3,7 +3,10 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
+  FormLabel,
+  InputLabel,
   MenuItem,
+  OutlinedInput,
   Radio,
   RadioGroup,
   Select,
@@ -13,10 +16,11 @@ import {
 } from '@mui/material';
 import {FormikErrors, useFormikContext, FormikHandlers} from 'formik';
 import {useOutletContext} from 'react-router-dom';
-
 import {Values, InitialValues} from 'src/views/IntakeProfile';
 import {AdditionalGuestsField} from './AdditionaGuestsField';
-import {FieldGroup, Fields, Guest} from 'src/services/profile';
+import {FieldGroup, Fields, Guest, Pet} from 'src/services/profile';
+
+import {AdditionalPetsField} from './AdditionalPetsField';
 
 export interface OutletContext {
   groupId: string;
@@ -25,7 +29,8 @@ export interface OutletContext {
 
 export const FieldGroupList = () => {
   const {groupId, fieldGroups} = useOutletContext<OutletContext>();
-  const {values, handleChange, errors} = useFormikContext<InitialValues>();
+  const {values, handleChange, errors, setFieldValue} =
+    useFormikContext<InitialValues>();
 
   if (fieldGroups === undefined || groupId === undefined) return null;
   const fieldGroup = fieldGroups.find(group => group.id === groupId);
@@ -33,17 +38,23 @@ export const FieldGroupList = () => {
 
   return (
     <Container maxWidth="sm" sx={{py: 4}}>
-      <Stack sx={{gap: 2}}>
+      <Stack
+        sx={{
+          gap: 2,
+          '.MuiInputLabel-asterisk': {color: 'red'},
+          '.MuiFormLabel-asterisk': {color: 'red'},
+        }}
+      >
         <Typography variant="h5">{fieldGroup?.title}</Typography>
         {fields.map(field => {
           return (
             <Stack key={field.id} sx={{gap: 1}}>
-              <Typography variant="body1">{field.title}</Typography>
               <RenderFields
                 groupId={groupId}
                 field={field}
                 values={values[groupId]}
                 handleChange={handleChange}
+                setFieldValue={setFieldValue}
                 errors={errors}
               />
             </Stack>
@@ -67,6 +78,7 @@ export const RenderFields = ({
   field,
   values,
   handleChange,
+  setFieldValue,
   errors,
 }: RenderFieldProps) => {
   const props = {
@@ -81,19 +93,23 @@ export const RenderFields = ({
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const helperText = errors[groupId]?.[field.id];
-
   switch (field.type) {
     case 'short_text':
       return (
         <TextField
           {...props}
+          required={field.validations.required}
           multiline
           rows={1}
           id="outlined"
           variant="outlined"
           placeholder="Type you answer here"
+          label={field.title}
           error={error}
           helperText={helperText}
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
       );
     case 'long_text':
@@ -104,38 +120,52 @@ export const RenderFields = ({
           rows={4}
           id="outlined"
           placeholder="Type you answer here"
+          label={field.title}
           variant="outlined"
           error={error}
           helperText={helperText}
+          required={field.validations.required}
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
       );
     case 'number':
       return (
         <TextField
-          label="Phone Number"
+          label={field.title}
           {...props}
           error={error}
           helperText={helperText}
           id="outlined"
           placeholder="(909)555-1234"
           variant="outlined"
+          required={field.validations.required}
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
       );
     case 'email':
       return (
         <TextField
           {...props}
-          label="Email"
+          label={field.title}
           error={error}
           helperText={helperText}
           id="outlined"
           placeholder="example@emai.com"
           variant="outlined"
+          required={field.validations.required}
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
       );
     case 'yes_no':
       return (
-        <FormControl error={error}>
+        <FormControl error={error} required={field.validations.required}>
+          <FormLabel sx={{color: 'black'}}>{field.title}</FormLabel>
           <RadioGroup {...props} row aria-labelledby="yes-no-field">
             <FormControlLabel value="yes" control={<Radio />} label="Yes" />
             <FormControlLabel value="no" control={<Radio />} label="No" />
@@ -148,12 +178,20 @@ export const RenderFields = ({
         throw new Error('Invalid field type');
 
       return (
-        <FormControl fullWidth error={error}>
+        <FormControl fullWidth error={error} variant="outlined">
+          <InputLabel
+            shrink
+            required={field.validations.required}
+            id="demo-simple-select-label"
+          >
+            Select a choice
+          </InputLabel>
           <Select
             {...props}
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             displayEmpty
+            input={<OutlinedInput label="Select a choice" />}
             inputProps={{'aria-label': 'select-choice'}}
           >
             <MenuItem value="" disabled>
@@ -185,6 +223,16 @@ export const RenderFields = ({
           fieldId={field.id}
           groupId={groupId}
           onChange={handleChange}
+        />
+      );
+    case 'pets':
+      return (
+        <AdditionalPetsField
+          errors={errors}
+          pets={values[field.id] as Pet[]}
+          fieldId={field.id}
+          groupId={groupId}
+          setFieldValue={setFieldValue}
         />
       );
     default:

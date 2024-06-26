@@ -9,6 +9,7 @@ export const fieldTypes = [
   'multiple_choice',
   'yes_no',
   'additional_guests',
+  'pets',
 ] as const;
 
 type FieldTypeTuple = typeof fieldTypes;
@@ -60,7 +61,7 @@ export interface Guest {
 export interface Response {
   id: string;
   fieldId: string;
-  value: string | Guest[] | undefined;
+  value: string | Guest[] | Pet[] | undefined;
 }
 
 const injectedRtkApi = api.injectEndpoints({

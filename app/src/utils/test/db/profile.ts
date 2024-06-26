@@ -96,11 +96,20 @@ export const intakeProfiles: GetProfileApiResponse[] = [
           },
           {
             id: faker.string.numeric(4),
-            title: 'Pets',
+            title: 'Do you have any pets in your care?',
             type: 'yes_no',
             properties: {},
             validations: {
               required: true,
+            },
+          },
+          {
+            id: faker.string.numeric(4),
+            title: 'Pet Type',
+            type: 'pets',
+            properties: {},
+            validations: {
+              required: false,
             },
           },
         ],
@@ -304,6 +313,21 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             id: faker.string.numeric(4),
             title:
               'Please take some time to write an introduction of yourself that you would feel comfortable with the Host Homes Coordinator sharing with a potential host. Feel free to talk about your interests, your story or anything else that you think would be important to share:',
+            type: 'long_text',
+            properties: {},
+            validations: {
+              required: true,
+            },
+          },
+        ],
+      },
+      {
+        id: faker.string.numeric(4),
+        title: 'Review',
+        fields: [
+          {
+            id: faker.string.numeric(4),
+            title: 'review',
             type: 'long_text',
             properties: {},
             validations: {
