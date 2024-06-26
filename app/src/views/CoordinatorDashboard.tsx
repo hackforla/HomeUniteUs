@@ -13,6 +13,7 @@ import {faker} from '@faker-js/faker';
 import {styled} from '@mui/material/styles';
 
 import {GuestInviteButton} from '../components/common';
+import {LoadingComponent} from './LoadingComponent';
 
 const buildRow = () => {
   return {
@@ -146,7 +147,7 @@ export const CoordinatorDashboard = () => {
         <StyledDataGrid
           checkboxSelection
           disableRowSelectionOnClick
-          rows={data}
+          rows={data ? data : []}
           columns={columns}
           initialState={{
             pagination: {
@@ -157,6 +158,10 @@ export const CoordinatorDashboard = () => {
           }}
           slots={{
             pagination: CustomPagination,
+            noRowsOverlay: LoadingComponent,
+          }}
+          sx={{
+            height: '538.75px',
           }}
         />
       </Box>
