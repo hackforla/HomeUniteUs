@@ -101,16 +101,33 @@ def remove_user(body: dict, removeDB: bool = True, removeCognito: bool = True):
                 }, 422)
     if removeCognito:
         try:
-            response = current_app.boto_client.admin_delete_user(
-                UserPoolId=current_app.config['COGNITO_USER_POOL_ID'],
-                Username=body['email']
-            )
-            return response
-        except botocore.exceptions.ClientError as error:
-            match error.response['Error']['Code']:
-                case 'UserNotFoundException':
-                    msg = "User not found. Could not delete user."
-                    raise AuthError({"message": msg}, 400)
-                case _:
-                    msg = error.response['Error']['Message']
-                    raise AuthError({"message": msg}, 500)
+            session.commit()
+        except IntegrityError:
+            session.rollback()
+            # Since we're deleting, an IntegrityError might indicate a different problem
+            # Adjust the error message accordingly
+            raise AuthError({
+                "message": "Could not delete the user due to a database integrity constraint."
+            }, 422)
+        
+    try:
+        response = current_app.boto_client.admin_delete_user(
+            UserPoolId=current_app.config['COGNITO_USER_POOL_ID'],
+            Username=body['email']
+        )
+        return response
+    except botocore.exceptions.ClientError as error:
+        match error.response['Error']['Code']:
+            case 'UserNotFoundException':
+                msg = "User not found. Could not delete user."
+                raise AuthError({"message": msg}, 400)
+            case _:
+                msg = error.response['Error']['Message']
+                raise AuthError({"message": msg}, 500)
+            
+def health():
+    '''
+    The health check endpoint always returns a successful status code.
+    This is useful for determining whether the API startup was successful.
+    '''
+    return 'API is healthy 😎', 200
