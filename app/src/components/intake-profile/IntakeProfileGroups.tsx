@@ -3,7 +3,10 @@ import {
   FormControl,
   FormControlLabel,
   FormHelperText,
+  FormLabel,
+  InputLabel,
   MenuItem,
+  OutlinedInput,
   Radio,
   RadioGroup,
   Select,
@@ -35,12 +38,17 @@ export const FieldGroupList = () => {
 
   return (
     <Container maxWidth="sm" sx={{py: 4}}>
-      <Stack sx={{gap: 2}}>
+      <Stack
+        sx={{
+          gap: 2,
+          '.MuiInputLabel-asterisk': {color: 'red'},
+          '.MuiFormLabel-asterisk': {color: 'red'},
+        }}
+      >
         <Typography variant="h5">{fieldGroup?.title}</Typography>
         {fields.map(field => {
           return (
             <Stack key={field.id} sx={{gap: 1}}>
-              <Typography variant="body1">{field.title}</Typography>
               <RenderFields
                 groupId={groupId}
                 field={field}
@@ -90,13 +98,18 @@ export const RenderFields = ({
       return (
         <TextField
           {...props}
+          required={field.validations.required}
           multiline
           rows={1}
           id="outlined"
           variant="outlined"
           placeholder="Type you answer here"
+          label={field.title}
           error={error}
           helperText={helperText}
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
       );
     case 'long_text':
@@ -107,38 +120,52 @@ export const RenderFields = ({
           rows={4}
           id="outlined"
           placeholder="Type you answer here"
+          label={field.title}
           variant="outlined"
           error={error}
           helperText={helperText}
+          required={field.validations.required}
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
       );
     case 'number':
       return (
         <TextField
-          label="Phone Number"
+          label={field.title}
           {...props}
           error={error}
           helperText={helperText}
           id="outlined"
           placeholder="(909)555-1234"
           variant="outlined"
+          required={field.validations.required}
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
       );
     case 'email':
       return (
         <TextField
           {...props}
-          label="Email"
+          label={field.title}
           error={error}
           helperText={helperText}
           id="outlined"
           placeholder="example@emai.com"
           variant="outlined"
+          required={field.validations.required}
+          InputLabelProps={{
+            shrink: true,
+          }}
         />
       );
     case 'yes_no':
       return (
-        <FormControl error={error}>
+        <FormControl error={error} required={field.validations.required}>
+          <FormLabel sx={{color: 'black'}}>{field.title}</FormLabel>
           <RadioGroup {...props} row aria-labelledby="yes-no-field">
             <FormControlLabel value="yes" control={<Radio />} label="Yes" />
             <FormControlLabel value="no" control={<Radio />} label="No" />
@@ -151,12 +178,20 @@ export const RenderFields = ({
         throw new Error('Invalid field type');
 
       return (
-        <FormControl fullWidth error={error}>
+        <FormControl fullWidth error={error} variant="outlined">
+          <InputLabel
+            shrink
+            required={field.validations.required}
+            id="demo-simple-select-label"
+          >
+            Select a choice
+          </InputLabel>
           <Select
             {...props}
             labelId="demo-simple-select-label"
             id="demo-simple-select"
             displayEmpty
+            input={<OutlinedInput label="Select a choice" />}
             inputProps={{'aria-label': 'select-choice'}}
           >
             <MenuItem value="" disabled>
