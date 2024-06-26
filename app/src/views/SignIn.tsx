@@ -1,5 +1,5 @@
 import React from 'react';
-import {useNavigate, useLocation, Location} from 'react-router-dom';
+import {useNavigate, Location} from 'react-router-dom';
 import {
   Typography,
   Stack,
@@ -13,13 +13,13 @@ import CloseIcon from '@mui/icons-material/Close';
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
 import {SignInForm} from '../components/authentication/SignInForm';
-import {
-  SignInRequest,
-  useSignInMutation,
-  useGetTokenMutation,
-} from '../services/auth';
+import {SignInRequest, useSignInMutation} from '../services/auth';
 import {isFetchBaseQueryError, isErrorWithMessage} from '../app/helpers';
 import {FormContainer} from '../components/authentication';
+import {
+  useAuthenticateWithOAuth,
+  redirectsByRole,
+} from '../components/authentication/hooks/useAuthenticateWithOAuth';
 export interface LocationState {
   from: Location;
 }
@@ -27,41 +27,17 @@ export interface LocationState {
 export const SignIn = () => {
   const [errorMessage, setErrorMessage] = React.useState('');
 
-  const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [signIn, {isLoading: signInIsLoading}] = useSignInMutation();
-  const [getToken, {isLoading: getTokenIsLoading}] = useGetTokenMutation();
   // const locationState = location.state as LocationState;
 
   // Save location from which user was redirected to login page
   // const from = locationState?.from?.pathname || '/';
-
-  React.useEffect(() => {
-    if (location.search.includes('code')) {
-      const code = location.search.split('?code=')[1];
-      getToken({
-        code,
-        callbackUri: '/signin',
-      })
-        .unwrap()
-        .then(response => {
-          const {token, user} = response;
-          dispatch(setCredentials({user, token}));
-          navigate('/coordinator');
-        })
-        .catch(err => {
-          if (isFetchBaseQueryError(err)) {
-            // you can access all properties of `FetchBaseQueryError` here
-            const errMsg = err.data.message;
-            setErrorMessage(errMsg);
-          } else if (isErrorWithMessage(err)) {
-            // you can access a string 'message' property here
-            setErrorMessage(err.message);
-          }
-        });
-    }
-  }, [location]);
+  const {getTokenIsLoading} = useAuthenticateWithOAuth({
+    setErrorMessage,
+    callbackUri: '/signin',
+  });
 
   const handleSignIn = async ({email, password}: SignInRequest) => {
     try {
@@ -73,10 +49,8 @@ export const SignIn = () => {
       const {user, token} = response;
 
       dispatch(setCredentials({user, token}));
-      // navigate user to the page they tried to access before being redirected to login page
-      // navigate(from, {replace: true});
-      // navigate user to home page
-      navigate('/coordinator');
+
+      navigate(redirectsByRole[user.role.name]);
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
         // you can access all properties of `FetchBaseQueryError` here

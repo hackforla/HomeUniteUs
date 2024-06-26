@@ -1,6 +1,6 @@
 import {http, HttpResponse} from 'msw';
 
-const handlers = [
+export const handlers = [
   http.post('/api/auth/forgot_password', () => {
     return new HttpResponse();
   }),
@@ -8,5 +8,3 @@ const handlers = [
     return new HttpResponse();
   }),
 ];
-
-export {handlers};
