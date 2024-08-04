@@ -2,7 +2,7 @@
 name: Blank Issue
 about: Consistent formatting make Issues concise and easy to navigate
 title: ''
-labels: 'feature: missing, milestone: missing, points: missing, Role: missing'
+labels: 'milestone: missing, points: missing, Role: missing, Complexity: Missing, Feature: Missing'
 assignees: ''
 
 ---
