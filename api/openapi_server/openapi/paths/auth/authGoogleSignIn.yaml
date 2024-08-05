@@ -1,6 +1,21 @@
 post:
   description: Sign in user from OAuth Provider
-  operationId: token
+  operationId: google_sign_in
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            code:
+              type: string
+  parameters:
+    - in: query
+      name: callback_uri
+      schema:
+        type: string
+      required: true
   responses:
     "200":
       content:

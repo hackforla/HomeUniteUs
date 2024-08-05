@@ -1,0 +1,28 @@
+post:
+  description: Sign in user from OAuth Provider
+  operationId: google_sign_up
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            code:
+              type: string
+  parameters:
+    - in: query
+      name: callback_uri
+      schema:
+        type: string
+      required: true
+  responses:
+    "200":
+      content:
+        application/json:
+          schema:
+            $ref: "../../openapi.yaml#/components/schemas/ApiResponse"
+      description: successful operation
+  tags:
+    - auth
+  x-openapi-router-controller: openapi_server.controllers.auth_controller

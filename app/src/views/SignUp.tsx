@@ -16,6 +16,7 @@ import {
   SignUpCoordinatorRequest,
   useSignUpHostMutation,
   useSignUpCoordinatorMutation,
+  useGoogleSignUpMutation,
 } from '../services/auth';
 import {isErrorWithMessage, isFetchBaseQueryError} from '../app/helpers';
 import {FormContainer} from '../components/authentication';
@@ -30,6 +31,8 @@ export const SignUp = () => {
     useSignUpHostMutation();
   const [signUpCoordinator, {isLoading: signUpCoordinatorIsLoading}] =
     useSignUpCoordinatorMutation();
+  const [googleSignUp, {isLoading: getTokenIsLoading}] =
+    useGoogleSignUpMutation();
   // get type from params
   // const locationState = location.state as LocationState;
 
@@ -37,7 +40,8 @@ export const SignUp = () => {
   // const from = locationState?.from?.pathname || '/';
 
   const callbackUri = `/signup/${type}`;
-  const {getTokenIsLoading} = useAuthenticateWithOAuth({
+  useAuthenticateWithOAuth({
+    query: googleSignUp,
     setErrorMessage,
     callbackUri,
   });

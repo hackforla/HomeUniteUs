@@ -283,7 +283,8 @@ def signout():
     # send response
     return response
 
-def token():    # get code from body
+def google_sign_in():
+    # get code from body
     code = request.get_json()['code']
     client_id = current_app.config['COGNITO_CLIENT_ID']
     client_secret = current_app.config['COGNITO_CLIENT_SECRET']
@@ -320,43 +321,37 @@ def token():    # get code from body
 
     # create user object from user data
     user_attrs = get_user_attr(user_data)
-    
-    # check if user exists in database
-    user = None
 
+    # check if user exists in database
     with DataAccessLayer.session() as db_session:
         user_repo = UserRepository(db_session)
         signed_in_user = user_repo.get_user(user_attrs['email'])
         if(bool(signed_in_user) == True):
             user = user_schema.dump(signed_in_user)
-
-
-    # If not, add user to database and get user object
-    if(user is None):
-        user_role = callback_uri.split('/')[2].capitalize()
-        role = UserRole.COORDINATOR if user_role == 'Coordinator' else UserRole.HOST
-
-        try:
-            with DataAccessLayer.session() as db_session:
-                user_repo = UserRepository(db_session)
-                user_repo.add_user(
-                    email=user_attrs['email'],
-                    role=role,
-                    firstName=user_attrs['first_name'],
-                    middleName=user_attrs.get('middle_name', ''),
-                    lastName=user_attrs.get('last_name', '')
+        else:
+            #if user does not exist in database, they haven't gone through sign up process, delete user from Cognito and return error
+            try:
+                decoded = jwt.decode(id_token, algorithms=["RS256"], options={"verify_signature": False})
+                
+                current_app.logger.info('Deleting user from Cognito')
+                response = current_app.boto_client.admin_delete_user(
+                    UserPoolId=current_app.config['COGNITO_USER_POOL_ID'],
+                    Username=decoded["cognito:username"]
                 )
-        except Exception as error:
-            raise AuthError({"message": str(error)}, 400)
-        
-        with DataAccessLayer.session() as db_session:
-            user_repo = UserRepository(db_session)
-            signed_in_user = user_repo.get_user(user_attrs['email'])
-            if(bool(signed_in_user) == True):
-                user = user_schema.dump(signed_in_user)
-            else:
-                raise AuthError({"message": "User not found in database"}, 400)
-            
+                current_app.logger.info('User deleted from Cognito')
+                raise AuthError({
+                    'code': 'No user found',
+                    'message': 'No user found'
+                }, 400)
+            except botocore.exceptions.ClientError as e:
+                current_app.logger.error('Failed to delete user from Cognito')
+                code = e.response['Error']['Code']
+                message = e.response['Error']['Message']
+                raise AuthError({
+                    'code': code,
+                    'message': message
+                }, 400)
+
     # set refresh token cookie
     session['refresh_token'] = refresh_token
     session['username'] = user_attrs['email']
@@ -369,6 +364,111 @@ def token():    # get code from body
         'user': user
     }
 
+def google_sign_up():
+    # get code from body
+    code = request.get_json()['code']
+    client_id = current_app.config['COGNITO_CLIENT_ID']
+    client_secret = current_app.config['COGNITO_CLIENT_SECRET']
+    callback_uri = request.args['callback_uri']
+
+    token_url = f"{cognito_client_url}/oauth2/token"
+    auth = requests.auth.HTTPBasicAuth(client_id, client_secret)
+    redirect_uri = f"{current_app.root_url}{callback_uri}"
+
+    params = {
+      'grant_type': 'authorization_code',
+      'client_id': client_id,
+      'code': code,
+      'redirect_uri': redirect_uri
+    }
+
+    # get tokens from oauth2/token endpoint
+    response = requests.post(token_url, auth=auth, data=params)
+
+    refresh_token = response.json().get('refresh_token')
+    access_token = response.json().get('access_token')
+    id_token = response.json().get('id_token')
+
+    # retrieve user data
+    try:
+        user_data = current_app.boto_client.get_user(AccessToken=access_token)
+    except botocore.exceptions.ClientError as e:        
+        code = e.response['Error']['Code']
+        message = e.response['Error']['Message']
+        raise AuthError({
+                  "code": code, 
+                  "message": message
+              }, 401)
+
+    # create user object from user data
+    user_attrs = get_user_attr(user_data)
+    user_role = callback_uri.split('/')[2].capitalize()
+
+    role = None
+    if user_role == 'Coordinator':
+        role = UserRole.COORDINATOR
+    
+    if user_role == 'Host':
+        role = UserRole.HOST
+    
+    # if role is None, delete user from Cognito and return error
+    if role is None:
+        try:
+            current_app.logger.info('Deleting user from Cognito')
+            decoded = jwt.decode(id_token, algorithms=["RS256"], options={"verify_signature": False})
+
+            response = current_app.boto_client.admin_delete_user(
+                UserPoolId=current_app.config['COGNITO_USER_POOL_ID'],
+                Username=decoded["cognito:username"]
+            )
+            current_app.logger.info('User deleted from Cognito')
+            raise AuthError({
+                'code': 'invalid_role',
+                'message': 'Invalid role. no role found provided'
+            }, 400)
+        except botocore.exceptions.ClientError as e:
+            current_app.logger.error('Failed to delete user from Cognito')
+            code = e.response['Error']['Code']
+            message = e.response['Error']['Message']
+            raise AuthError({
+                'code': code,
+                'message': message
+            }, 400)
+
+
+
+    try:
+        with DataAccessLayer.session() as db_session:
+            user_repo = UserRepository(db_session)
+            user_repo.add_user(
+                email=user_attrs['email'],
+                role=role,
+                firstName=user_attrs['first_name'],
+                middleName=user_attrs.get('middle_name', ''),
+                lastName=user_attrs.get('last_name', '')
+            )
+    except Exception as error:
+        raise AuthError({"message": str(error)}, 400)
+    
+    with DataAccessLayer.session() as db_session:
+        user_repo = UserRepository(db_session)
+        signed_in_user = user_repo.get_user(user_attrs['email'])
+        if(bool(signed_in_user) == True):
+            user = user_schema.dump(signed_in_user)
+        else:
+            raise AuthError({"message": "User not found in database"}, 400)
+        
+    # set refresh token cookie
+    session['refresh_token'] = refresh_token
+    session['username'] = user_attrs['email']
+    session['id_token'] = id_token
+
+
+    # return user data json
+    return {
+        'token': access_token,
+        'user': user
+    }
 
 def current_session():
     user_data = None
