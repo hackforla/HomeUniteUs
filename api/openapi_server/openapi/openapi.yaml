@@ -49,6 +49,12 @@ paths:
     $ref: "./paths/auth/authInvite.yaml"
   /auth/confirmInvite:
     $ref: "./paths/auth/authConfirmInvite.yaml"
+  /forms: 
+    $ref: "./paths/post-form.yaml"
+  /forms/{form_id}:
+    $ref: "./paths/forms.yaml"
+  /responses/{form_id}:
+    $ref: "./paths/responses.yaml"
   /health:
       get:
         operationId: openapi_server.controllers.admin_controller.health

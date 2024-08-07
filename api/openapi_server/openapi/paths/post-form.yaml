@@ -1,0 +1,23 @@
+post:
+  summary: Create a new form
+  operationId: create_form
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/_index.yaml#/Form'
+  responses:
+    '200':
+      description: Successfully created a form
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/_index.yaml#/Form'
+    '401':
+      description: Authentication error
+    '404':
+      description: Not found
+  x-openapi-router-controller: openapi_server.controllers.forms_controller
+  security:
+    - jwt: ["secret"]

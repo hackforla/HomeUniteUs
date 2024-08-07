@@ -5,6 +5,36 @@ classDiagram
 class alembic_version{
    *VARCHAR<32> version_num NOT NULL
 }
+class field_groups{
+   *INTEGER group_id NOT NULL
+   TEXT description
+   INTEGER form_id NOT NULL
+   VARCHAR<255> title NOT NULL
+}
+class forms{
+   *INTEGER form_id NOT NULL
+   DATETIME created_at
+   TEXT description
+   VARCHAR<255> title NOT NULL
+}
+class field_properties{
+   *INTEGER properties_id NOT NULL
+   JSON choices
+   TEXT description
+   VARCHAR<50> field_type NOT NULL
+}
+class field_validations{
+   *INTEGER validations_id NOT NULL
+   INTEGER max_length
+   BOOLEAN required NOT NULL
+}
+class fields{
+   *INTEGER field_id NOT NULL
+   INTEGER group_id
+   INTEGER properties_id NOT NULL
+   VARCHAR<255> ref NOT NULL
+   INTEGER validations_id NOT NULL
+}
 class housing_program{
    *INTEGER id NOT NULL
    VARCHAR program_name NOT NULL
@@ -14,19 +44,31 @@ class housing_program_service_provider{
    *INTEGER id NOT NULL
    VARCHAR provider_name NOT NULL
 }
-class role{
-   *INTEGER id NOT NULL
-   VARCHAR name NOT NULL
+class responses{
+   *INTEGER answer_id NOT NULL
+   TEXT answer_text
+   VARCHAR<255> field_id NOT NULL
+   INTEGER user_id NOT NULL
 }
 class user{
    *INTEGER id NOT NULL
    VARCHAR email NOT NULL
    VARCHAR<255> firstName NOT NULL
-   VARCHAR<255> lastName NOT NULL
+   VARCHAR<255> lastName
    VARCHAR<255> middleName
    INTEGER role_id NOT NULL
 }
+class role{
+   *INTEGER id NOT NULL
+   VARCHAR name NOT NULL
+}
+forms "1" -- "0..n" field_groups
+field_groups "0..1" -- "0..n" fields
+field_validations "1" -- "0..n" fields
+field_properties "1" -- "0..n" fields
 housing_program_service_provider "1" -- "0..n" housing_program
+fields "1" -- "0..n" responses
+user "1" -- "0..n" responses
 role "1" -- "0..n" user
 ```
 

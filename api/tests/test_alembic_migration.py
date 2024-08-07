@@ -21,7 +21,7 @@ def test_db_session_version(empty_db_session):
 
     # Before updating to the new revision please add additional 
     # test cases below that check the integrity of your new migration
-    assert DataAccessLayer.revision_id() == 'e4c8bb426528'
+    assert DataAccessLayer.revision_id() == 'cfc4e41b69d3'
 
 def test_user_roles_available(empty_db_session):
     '''

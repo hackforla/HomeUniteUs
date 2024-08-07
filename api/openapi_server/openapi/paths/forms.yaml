@@ -1,0 +1,23 @@
+get:
+  summary: Get a form by ID
+  operationId: get_form
+  parameters:
+    - name: form_id
+      in: path
+      required: true
+      schema:
+        type: integer
+  responses:
+    '200':
+      description: Form data retrieved successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/_index.yaml#/Form'
+    '404':
+      description: Form not found
+    '401':
+      description: Authentication error
+  x-openapi-router-controller: openapi_server.controllers.forms_controller
+  security:
+    - jwt: ["secret"]

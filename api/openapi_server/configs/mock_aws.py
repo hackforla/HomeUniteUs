@@ -70,10 +70,12 @@ class AWSTemporaryUserpool():
         self.app.logger.info("Destroyed fake temporary userpool")
 
     def __enter__(self):
-        self.create() 
+        self.create()
+        return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.destroy()
+        return self
 
 class AWSMockService():
     '''
@@ -138,6 +140,29 @@ class AWSMockService():
 
         self.test_users_created = True
 
+    def add_aws_userpool_user(self, email, password, attributes=None):
+        """
+        Adds a new user to the temporary user pool with the given username, password, and attributes.
+        Attributes should be a list of dictionaries, each containing a 'Name' and 'Value' key.
+        """
+        if attributes is None:
+            attributes = []
+
+        try:
+            response = self.app.boto_client.admin_create_user(
+                UserPoolId=self.app.config["COGNITO_USER_POOL_ID"],
+                Username=email,
+                TemporaryPassword=password,
+                UserAttributes=attributes,
+                MessageAction='SUPPRESS'
+            )
+            self._auto_signup_user(email)
+            self.app.logger.info(f"Added user {email} to the temporary user pool")
+            return response
+        except Exception as e:
+            self.app.logger.error(f"Failed to add user {email}: {str(e)}")
+            raise
+
     def _auto_signup_user(self, email) -> bool:
         '''
         Auto-confirm a new user. Return True if successful and
@@ -164,7 +189,7 @@ class AWSMockService():
         # conditional login within our endpoint. The lambda approach
         # requires more overhead, and conditional logic within the endpoint
         # risks adding a bug to the production code.
-        if ('signup' in request.endpoint.lower()) and 200 <= response.status_code < 300:
+        if request.endpoint and ('signup' in request.endpoint.lower()) and 200 <= response.status_code < 300:
             email = request.json['email']
             if self._auto_signup_user(email):
                 new_response = response.get_json()
@@ -193,7 +218,9 @@ class AWSMockService():
         self.app.logger.info("Stopped mock AWS Cognito service")
 
     def __enter__(self):
-        self.start() 
+        self.start()
+        return self
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.stop()
+        return self
