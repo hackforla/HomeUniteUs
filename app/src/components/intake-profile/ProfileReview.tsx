@@ -67,6 +67,8 @@ export const ProfileReview = () => {
                           <Typography sx={{fontSize: '18px'}}>
                             {field.title}
                           </Typography>
+                          {/* // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore */}
                           {values[group.id][field.id].map((guest, index) => {
                             return (
                               <Box key={guest.id}>
@@ -114,6 +116,8 @@ export const ProfileReview = () => {
                         </Stack>
                       );
                     } else if (field.type === 'pets') {
+                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                      // @ts-ignore
                       return values[group.id][field.id].map(pet => {
                         return (
                           <Box key={field.id}>
@@ -136,6 +140,8 @@ export const ProfileReview = () => {
                             {field.title}
                           </Typography>
                           <Typography variant="body1" sx={{fontWeight: 'bold'}}>
+                            {/* // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore */}
                             {values[group.id][field.id] ?? 'N/A'}
                           </Typography>
                         </Box>

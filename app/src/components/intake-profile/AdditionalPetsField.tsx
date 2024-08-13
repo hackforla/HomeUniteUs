@@ -70,9 +70,9 @@ export const AdditionalPetsField = ({
                       <TextField
                         {...params}
                         label="Pet Type"
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore
                         error={Boolean(
+                          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                          // @ts-ignore
                           errors[groupId]?.[fieldId]?.[index]?.type,
                         )}
                         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
