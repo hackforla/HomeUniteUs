@@ -1,7 +1,8 @@
 import {Stack, Button, TextField, Typography} from '@mui/material';
-import {FormikErrors, FieldArray} from 'formik';
+import {FormikErrors, FieldArray, useFormikContext} from 'formik';
 import {Pet} from '../../services/profile';
 import Autocomplete from '@mui/material/Autocomplete';
+import {InitialValues} from 'src/views/IntakeProfile';
 
 interface Values {
   pets: Pet[];
@@ -12,11 +13,6 @@ interface AdditionalPetsFieldProps {
   fieldId: string;
   groupId: string;
   errors: FormikErrors<Values>;
-  setFieldValue: (
-    field: string,
-    value: string,
-    shouldValidate?: boolean,
-  ) => void;
 }
 
 const top_pets = [
@@ -34,8 +30,9 @@ export const AdditionalPetsField = ({
   pets,
   fieldId,
   groupId,
-  setFieldValue,
 }: AdditionalPetsFieldProps) => {
+  const {setFieldValue} = useFormikContext<InitialValues>();
+
   return (
     <Stack gap={2}>
       <FieldArray name={`${groupId}.${fieldId}`}>

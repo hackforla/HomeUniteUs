@@ -82,13 +82,6 @@ const getResponseValue = (field: Fields) => {
       ];
     case 'email':
       return faker.internet.email();
-    case 'multiple_choice':
-      if (!field.properties.choices) {
-        throw new Error(
-          'No choices object found on multiple choice field while generating response value',
-        );
-      }
-      return field.properties.choices[1].label;
     case 'yes_no':
       return 'no';
     default:

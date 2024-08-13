@@ -6,7 +6,6 @@ export const fieldTypes = [
   'number',
   'email',
   'dropdown',
-  'multiple_choice',
   'yes_no',
   'additional_guests',
   'pets',

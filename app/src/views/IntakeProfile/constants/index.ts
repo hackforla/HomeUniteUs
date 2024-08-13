@@ -55,8 +55,6 @@ const fieldDefaultValue = (fieldType: FieldTypes) => {
       return [];
     case 'email':
       return '';
-    case 'multiple_choice':
-      return '';
     case 'yes_no':
       return '';
     case 'pets':
@@ -107,7 +105,6 @@ export const typeValidations = {
   email: string().email('Must be a valid email address'),
   yes_no: string(),
   dropdown: string(),
-  multiple_choice: string(),
   additional_guests: array().of(
     object().shape({
       name: string().required('Name is required'),

@@ -29,8 +29,7 @@ export interface OutletContext {
 
 export const FieldGroupList = () => {
   const {groupId, fieldGroups} = useOutletContext<OutletContext>();
-  const {values, handleChange, errors, setFieldValue} =
-    useFormikContext<InitialValues>();
+  const {values, handleChange, errors} = useFormikContext<InitialValues>();
 
   if (fieldGroups === undefined || groupId === undefined) return null;
   const fieldGroup = fieldGroups.find(group => group.id === groupId);
@@ -54,7 +53,6 @@ export const FieldGroupList = () => {
                 field={field}
                 values={values[groupId]}
                 handleChange={handleChange}
-                setFieldValue={setFieldValue}
                 errors={errors}
               />
             </Stack>
@@ -78,7 +76,6 @@ export const RenderFields = ({
   field,
   values,
   handleChange,
-  setFieldValue,
   errors,
 }: RenderFieldProps) => {
   const props = {
@@ -206,15 +203,6 @@ export const RenderFields = ({
           <FormHelperText>{helperText}</FormHelperText>
         </FormControl>
       );
-    case 'multiple_choice':
-      return (
-        <TextField
-          {...props}
-          id="outlined"
-          placeholder="multiple choice field"
-          variant="outlined"
-        />
-      );
     case 'additional_guests':
       return (
         <AdditionalGuestsField
@@ -232,7 +220,6 @@ export const RenderFields = ({
           pets={values[field.id] as Pet[]}
           fieldId={field.id}
           groupId={groupId}
-          setFieldValue={setFieldValue}
         />
       );
     default:
