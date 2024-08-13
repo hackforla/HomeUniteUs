@@ -8,17 +8,19 @@ type FieldGroup = {
   title: string;
 };
 
+interface ProfileSidebarProps {
+  fieldGroups: FieldGroup[];
+  handleSectionClick: () => void;
+  setSelectedItem: Dispatch<SetStateAction<string | null>>;
+  groupId: string | undefined;
+}
+
 export const ProfileSidebar = ({
   fieldGroups,
   handleSectionClick,
   setSelectedItem,
   groupId,
-}: {
-  fieldGroups: FieldGroup[];
-  handleSectionClick: () => void;
-  setSelectedItem: Dispatch<SetStateAction<string | null>>;
-  groupId: string;
-}) => {
+}: ProfileSidebarProps) => {
   const totalTask = fieldGroups.length - 1;
   const statusStyling = useStatusStyling();
   const theme = useTheme();
