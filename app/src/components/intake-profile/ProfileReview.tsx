@@ -59,7 +59,7 @@ export const ProfileReview = () => {
                     Edit
                   </Button>
                 </Stack>
-                <Stack gap={1}>
+                <Stack gap={2}>
                   {group.fields.map(field => {
                     if (field.type === 'additional_guests') {
                       return (
@@ -113,6 +113,22 @@ export const ProfileReview = () => {
                           })}
                         </Stack>
                       );
+                    } else if (field.type === 'pets') {
+                      return values[group.id][field.id].map(pet => {
+                        return (
+                          <Box key={field.id}>
+                            <Typography sx={{fontSize: '18px'}}>
+                              Type of Pet
+                            </Typography>
+                            <Typography
+                              variant="body1"
+                              sx={{fontWeight: 'bold'}}
+                            >
+                              {pet.type ?? 'N/A'}
+                            </Typography>
+                          </Box>
+                        );
+                      });
                     } else {
                       return (
                         <Box key={field.id}>
@@ -120,9 +136,7 @@ export const ProfileReview = () => {
                             {field.title}
                           </Typography>
                           <Typography variant="body1" sx={{fontWeight: 'bold'}}>
-                            {values[group.id][field.id]
-                              ? values[group.id][field.id]
-                              : 'N/A'}
+                            {values[group.id][field.id] ?? 'N/A'}
                           </Typography>
                         </Box>
                       );
