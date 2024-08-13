@@ -64,6 +64,10 @@ export interface Response {
   value: string | Guest[] | Pet[] | undefined;
 }
 
+export interface Pet {
+  type: string;
+}
+
 const injectedRtkApi = api.injectEndpoints({
   endpoints: build => ({
     getProfile: build.query<GetProfileApiResponse, GetProfileApiArg>({
