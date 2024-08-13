@@ -1,5 +1,5 @@
 import {Button, Stack, useMediaQuery, useTheme} from '@mui/material';
-import {Outlet, useNavigate, useParams} from 'react-router-dom';
+import {Outlet, useNavigate, useParams, Link} from 'react-router-dom';
 import {Formik} from 'formik';
 import {buildValidationSchema, createInitialValues} from './constants';
 import {
@@ -55,6 +55,7 @@ export const IntakeProfile = () => {
   function handleSectionClick() {
     setShowSections(!showSections);
   }
+
   function handleNext() {
     if (currentIndex < fieldGroups.length - 1) {
       const nextGroupId = fieldGroups[currentIndex + 1].id;
@@ -130,6 +131,14 @@ export const IntakeProfile = () => {
               setSelectedItem={setSelectedItem}
               groupId={groupId}
             />
+            <Button
+              variant="contained"
+              to={`review`}
+              component={Link}
+              color="inherit"
+            >
+              Review
+            </Button>
           </Stack>
 
           <Stack
