@@ -1,20 +1,18 @@
 import {Stack, Typography} from '@mui/material';
 import {Dispatch, SetStateAction} from 'react';
 import {SidebarButton} from './SidebarButton';
-
-type FieldGroup = {
-  id: string;
-  title: string;
-};
+import {FieldGroup} from 'src/services/profile';
 
 interface ProfileSidebarProps {
   fieldGroups: FieldGroup[];
+  groupId: string | undefined;
   handleSectionClick: () => void;
   setSelectedItem: Dispatch<SetStateAction<string | null>>;
-  groupId: string | undefined;
+  showSections: boolean;
 }
 
 export const ProfileSidebar = ({
+  showSections,
   fieldGroups,
   handleSectionClick,
   setSelectedItem,
@@ -28,7 +26,18 @@ export const ProfileSidebar = ({
   };
 
   return (
-    <>
+    <Stack
+      sx={{
+        gap: 1,
+        width: {xs: '100%', sm: '100%', md: '412px'},
+        overflowY: 'auto',
+        borderRight: '1px solid',
+        borderColor: 'grey.200',
+        backgroundColor: 'inherit',
+        padding: '12px',
+        display: {xs: showSections ? 'flex' : 'none', md: 'flex'},
+      }}
+    >
       <Stack
         sx={{
           flexDirection: 'row',
@@ -45,20 +54,28 @@ export const ProfileSidebar = ({
         </Typography>
       </Stack>
       {fieldGroups.map(({id, title}) => {
-        const status = 'incomplete'; // Change status here to see different styles
+        // Change status here to see different styles
         // complete | partial | incomplete | locked
+        const status = 'incomplete';
         const fieldTitle = title || '...';
+
         return (
           <SidebarButton
             key={id}
             fieldTitle={fieldTitle}
-            groupId={groupId}
-            handleClick={handleItemClick}
-            id={id}
+            handleClick={() => handleItemClick(id)}
+            isActive={groupId === id}
             status={status}
+            to={`group/${id}`}
           />
         );
       })}
-    </>
+      <SidebarButton
+        fieldTitle="Review"
+        to={'review'}
+        status={'locked'}
+        isActive={false}
+      />
+    </Stack>
   );
 };

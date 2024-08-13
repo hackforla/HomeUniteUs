@@ -1,5 +1,5 @@
 import {Button, Stack, useMediaQuery, useTheme} from '@mui/material';
-import {Outlet, useNavigate, useParams, Link} from 'react-router-dom';
+import {Outlet, useNavigate, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
 import {buildValidationSchema, createInitialValues} from './constants';
 import {
@@ -113,34 +113,13 @@ export const IntakeProfile = () => {
             backgroundColor: 'grey.50',
           }}
         >
-          <Stack
-            sx={{
-              gap: 1,
-              width: {xs: '100%', sm: '100%', md: '412px'},
-              overflowY: 'auto',
-              borderRight: '1px solid',
-              borderColor: 'grey.200',
-              backgroundColor: 'inherit',
-              padding: '12px',
-              display: {xs: showSections ? 'flex' : 'none', md: 'flex'},
-            }}
-          >
-            <ProfileSidebar
-              fieldGroups={fieldGroups}
-              handleSectionClick={handleSectionClick}
-              setSelectedItem={setSelectedItem}
-              groupId={groupId}
-            />
-            <Button
-              variant="contained"
-              to={`review`}
-              component={Link}
-              color="inherit"
-            >
-              Review
-            </Button>
-          </Stack>
-
+          <ProfileSidebar
+            showSections={showSections}
+            fieldGroups={fieldGroups}
+            handleSectionClick={handleSectionClick}
+            setSelectedItem={setSelectedItem}
+            groupId={groupId}
+          />
           <Stack
             onSubmit={handleSubmit}
             component="form"

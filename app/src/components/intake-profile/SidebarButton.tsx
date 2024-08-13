@@ -6,26 +6,25 @@ import {FieldGroup} from 'src/services/profile';
 
 interface SidebarButtonProps {
   fieldTitle: FieldGroup['title'];
-  groupId: string | undefined;
-  handleClick: (id: string) => void;
-  id: FieldGroup['id'];
+  isActive: boolean;
+  handleClick?: () => void;
   status: 'complete' | 'partial' | 'incomplete' | 'locked';
+  to: string;
 }
 
 export const SidebarButton = ({
   fieldTitle,
-  groupId,
   handleClick,
-  id,
+  isActive,
   status,
+  to,
 }: SidebarButtonProps) => {
   const statusStyling = useStatusStyling();
   const theme = useTheme();
 
   return (
     <Box
-      key={id}
-      to={`group/${id}`}
+      to={to}
       component={Link}
       sx={{
         borderRadius: 2,
@@ -35,14 +34,13 @@ export const SidebarButton = ({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingInline: 3,
-        borderColor:
-          groupId === id ? '#DADADA' : statusStyling[status].borderColor,
+        borderColor: isActive ? '#DADADA' : statusStyling[status].borderColor,
         borderWidth: 2,
         borderStyle: 'solid',
-        boxShadow: groupId === id ? '0px 4px 4px rgba(0, 0, 0, .25)' : 'none',
+        boxShadow: isActive ? '0px 4px 4px rgba(0, 0, 0, .25)' : 'none',
         textDecoration: 'none',
       }}
-      onClick={() => handleClick(id)}
+      onClick={handleClick && handleClick}
     >
       <Typography
         sx={{
