@@ -33,7 +33,6 @@ export const AdditionalGuestsField = ({
         {({push, remove}) => (
           <>
             {guests.map((guest, index) => {
-              // console.log('guest', guest);
               return (
                 <Stack key={guest.id} sx={{gap: 2}}>
                   <Stack direction="row" sx={{justifyContent: 'space-between'}}>
