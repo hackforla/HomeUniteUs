@@ -59,6 +59,12 @@ const getResponseValue = (field: Fields) => {
       return field.properties.choices[1].label;
     case 'number':
       return faker.phone.number();
+    case 'pets':
+      return [
+        {
+          type: 'Dog',
+        },
+      ];
     case 'additional_guests':
       return [
         {
