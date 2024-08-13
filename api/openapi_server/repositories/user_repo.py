@@ -33,5 +33,11 @@ class UserRepository:
     def get_user(self, email: str) -> User:
         return self.session.query(User).filter_by(email=email).first()
     
+    def get_all_users(self) -> List[User]:
+        return self.session.query(User).all()
+    
+    def get_user_id(self, email: str) -> int:
+        return self.session.query(User).filter_by(email=email).first().id
+    
     def get_users_with_role(self, role: UserRole) -> List[User]:
         return self.session.query(User).filter_by(role=self._get_role(role))
