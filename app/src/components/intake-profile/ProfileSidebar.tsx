@@ -6,7 +6,7 @@ import {FieldGroup} from 'src/services/profile';
 interface ProfileSidebarProps {
   fieldGroups: FieldGroup[];
   groupId: string | undefined;
-  handleSectionClick: () => void;
+  toggleShowSections: () => void;
   setSelectedItem: Dispatch<SetStateAction<string | null>>;
   showSections: boolean;
 }
@@ -14,7 +14,7 @@ interface ProfileSidebarProps {
 export const ProfileSidebar = ({
   showSections,
   fieldGroups,
-  handleSectionClick,
+  toggleShowSections,
   setSelectedItem,
   groupId,
 }: ProfileSidebarProps) => {
@@ -22,7 +22,7 @@ export const ProfileSidebar = ({
 
   const handleItemClick = (id: string) => {
     setSelectedItem(id);
-    handleSectionClick();
+    toggleShowSections();
   };
 
   return (

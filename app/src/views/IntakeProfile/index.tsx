@@ -1,5 +1,5 @@
 import {Button, Stack, useMediaQuery, useTheme} from '@mui/material';
-import {Outlet, useNavigate, useParams} from 'react-router-dom';
+import {Outlet, useLocation, useNavigate, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
 import {buildValidationSchema, createInitialValues} from './constants';
 import {
@@ -20,6 +20,7 @@ export const IntakeProfile = () => {
   const navigate = useNavigate();
   const toolbarHeight = Number(theme.mixins.toolbar.minHeight);
   const {profileId, groupId} = useParams();
+  const location = useLocation();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [showSections, setShowSections] = useState(isMobile);
   const [selectedItem, setSelectedItem] = useState<string | null>(
@@ -52,7 +53,7 @@ export const IntakeProfile = () => {
     group => group.id === selectedItem,
   );
 
-  function handleSectionClick() {
+  function toggleShowSections() {
     setShowSections(!showSections);
   }
 
@@ -73,6 +74,10 @@ export const IntakeProfile = () => {
       //need to add autosave feature
     }
   }
+
+  const handleSubmitApplication = () => {
+    // submit the application after review
+  };
 
   return (
     <Formik
@@ -116,7 +121,7 @@ export const IntakeProfile = () => {
           <ProfileSidebar
             showSections={showSections}
             fieldGroups={fieldGroups}
-            handleSectionClick={handleSectionClick}
+            toggleShowSections={toggleShowSections}
             setSelectedItem={setSelectedItem}
             groupId={groupId}
           />
@@ -149,18 +154,30 @@ export const IntakeProfile = () => {
               >
                 Back
               </Button>
-              <Button
-                size="medium"
-                variant="contained"
-                onClick={handleNext}
-                sx={{width: {sm: '100%', md: 183}}}
-              >
-                Continue
-              </Button>
+              {location.pathname.includes('review') ? (
+                <Button
+                  size="medium"
+                  variant="contained"
+                  onClick={handleSubmitApplication}
+                  sx={{width: {sm: '100%', md: 183}}}
+                >
+                  Submit Application
+                </Button>
+              ) : (
+                <Button
+                  size="medium"
+                  variant="contained"
+                  onClick={handleNext}
+                  sx={{width: {sm: '100%', md: 183}}}
+                >
+                  Continue
+                </Button>
+              )}
+
               <Button
                 size="medium"
                 variant="text"
-                onClick={handleSectionClick}
+                onClick={toggleShowSections}
                 sx={{
                   border: 2,
                   width: {sm: '100%'},
