@@ -43,11 +43,7 @@ click==8.1.7
 clickclick==20.10.2
     # via connexion
 colorama==0.4.6
-    # via
-    #   build
-    #   click
-    #   pytest
-    #   tox
+    # via tox
 connexion==2.14.2
     # via
     #   connexion
@@ -74,11 +70,6 @@ filelock==3.12.2
     #   tox
     #   virtualenv
 flask==2.2.5
-    # via
-    #   connexion
-    #   flask-testing
-flask-testing==0.8.1
-    # via homeuniteus-api (pyproject.toml)
     # via connexion
 greenlet==2.0.2
     # via sqlalchemy
@@ -166,8 +157,6 @@ pyasn1==0.6.0
     #   rsa
 pycparser==2.21
     # via cffi
-pyjwt==2.8.0
-    # via pyjwt
 pyproject-api==1.5.4
     # via tox
 pyproject-hooks==1.0.0
@@ -263,7 +252,7 @@ urllib3==1.26.19
     #   responses
 virtualenv==20.24.3
     # via tox
-werkzeug==3.0.3
+werkzeug==2.2.3
     # via
     #   connexion
     #   flask
