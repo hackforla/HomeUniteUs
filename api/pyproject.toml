@@ -99,6 +99,9 @@ dependencies = [
     "marshmallow==3.20.1",
     "marshmallow_sqlalchemy==1.0.0",
     "openapi-spec-validator==0.6.0",
+
+    # pyjwt is used to decode information contained in a JWT
+    "pyjwt==2.8.0",
 ]
 
 # This project defines dependencies for different "variants" of this project.
