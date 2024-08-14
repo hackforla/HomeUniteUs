@@ -1,7 +1,8 @@
 name: Run API and App Tests
 on:
-  pull_request:
-    branches: [main]
+  # This workflow is not ready to be used. Still needs further testing.
+  # pull_request:
+  #   branches: [main]
   # This is also a reusable workflow that can be called from other workflows
   workflow_call:
   workflow_dispatch:
@@ -55,7 +56,7 @@ jobs:
         working-directory: /opt/HomeUniteUs/api
   test-api-real-aws:
     runs-on: ubuntu-latest
-    needs: [build-api]     
+    needs: [build-api]
     container:
       image: ghcr.io/hackforla/homeuniteus/api:latest
       options: --entrypoint /bin/bash --no-healthcheck
@@ -79,8 +80,8 @@ jobs:
       image: ghcr.io/hackforla/homeuniteus/app:latest-test
       options: --entrypoint /bin/bash --no-healthcheck
       env:
-          CYPRESS_BASE_URL: http://frontend:4040
-          CYPRESS_USE_MOCK: true
+        CYPRESS_BASE_URL: http://frontend:4040
+        CYPRESS_USE_MOCK: true
     steps:
       - name: Run Tests With Backend Mocking
         run: npm run cypress:run:mock
@@ -102,10 +103,10 @@ jobs:
       image: ghcr.io/hackforla/homeuniteus/app:latest-test
       options: --entrypoint /bin/bash --no-healthcheck
       env:
-          CYPRESS_BASE_URL: http://frontend:4040
-          CYPRESS_USE_MOCK: false
-          CYPRESS_REAL_EMAIL: testhost@test.com
-          CYPRESS_REAL_PASSWORD: Test!123
+        CYPRESS_BASE_URL: http://frontend:4040
+        CYPRESS_USE_MOCK: false
+        CYPRESS_REAL_EMAIL: testhost@test.com
+        CYPRESS_REAL_PASSWORD: Test!123
     steps:
       - name: Test using a real backend
         run: npm run cypress:run:nomock
