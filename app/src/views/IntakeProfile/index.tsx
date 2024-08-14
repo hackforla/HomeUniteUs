@@ -119,11 +119,12 @@ export const IntakeProfile = () => {
           }}
         >
           <ProfileSidebar
-            showSections={showSections}
             fieldGroups={fieldGroups}
+            groupId={groupId}
+            isReviewPage={location.pathname.includes('review')}
             toggleShowSections={toggleShowSections}
             setSelectedItem={setSelectedItem}
-            groupId={groupId}
+            showSections={showSections}
           />
           <Stack
             onSubmit={handleSubmit}

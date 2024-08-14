@@ -6,17 +6,19 @@ import {FieldGroup} from 'src/services/profile';
 interface ProfileSidebarProps {
   fieldGroups: FieldGroup[];
   groupId: string | undefined;
+  isReviewPage: boolean;
   toggleShowSections: () => void;
   setSelectedItem: Dispatch<SetStateAction<string | null>>;
   showSections: boolean;
 }
 
 export const ProfileSidebar = ({
-  showSections,
   fieldGroups,
-  toggleShowSections,
-  setSelectedItem,
   groupId,
+  isReviewPage,
+  setSelectedItem,
+  showSections,
+  toggleShowSections,
 }: ProfileSidebarProps) => {
   const totalTask = fieldGroups.length - 1;
 
@@ -73,8 +75,8 @@ export const ProfileSidebar = ({
       <SidebarButton
         fieldTitle="Review"
         to={'review'}
-        status={'locked'}
-        isActive={false}
+        status={'incomplete'}
+        isActive={isReviewPage}
       />
     </Stack>
   );
