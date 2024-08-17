@@ -154,13 +154,24 @@ export const RenderFields = ({
           error={error}
           helperText={helperText}
           id="outlined"
-          placeholder="example@emai.com"
+          placeholder="example@email.com"
           variant="outlined"
           required={field.validations.required}
           InputLabelProps={{
             shrink: true,
           }}
         />
+      );
+    case 'contact_method':
+      return (
+        <FormControl error={error} required={field.validations.required}>
+          <FormLabel sx={{color: 'black'}}>{field.title}</FormLabel>
+          <RadioGroup {...props} row aria-labelledby="yes-no-field">
+            <FormControlLabel value="email" control={<Radio />} label="email" />
+            <FormControlLabel value="phone" control={<Radio />} label="phone" />
+          </RadioGroup>
+          <FormHelperText>{helperText}</FormHelperText>
+        </FormControl>
       );
     case 'yes_no':
       return (

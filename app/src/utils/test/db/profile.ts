@@ -81,6 +81,15 @@ export const intakeProfiles: GetProfileApiResponse[] = [
               required: true,
             },
           },
+          {
+            id: faker.string.numeric(4),
+            title: 'What is the best way to contact you?',
+            type: 'contact_method',
+            properties: {},
+            validations: {
+              required: true,
+            },
+          },
         ],
       },
       {
