@@ -120,6 +120,7 @@ export const typeValidations = {
       type: string().required('Type of pet is required'),
     }),
   ),
+  contact_method: string(),
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
