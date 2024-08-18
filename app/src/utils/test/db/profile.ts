@@ -1,6 +1,9 @@
 import {faker} from '@faker-js/faker';
 import {GetProfileApiResponse} from 'src/services/profile';
 
+const emailFieldId = faker.string.numeric(4);
+const phoneFieldId = faker.string.numeric(4);
+
 export const intakeProfiles: GetProfileApiResponse[] = [
   {
     id: '1',
@@ -64,7 +67,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
         title: 'Contact Information',
         fields: [
           {
-            id: faker.string.numeric(4),
+            id: emailFieldId,
             title: 'Email',
             type: 'email',
             properties: {},
@@ -73,7 +76,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: phoneFieldId,
             title: 'Phone Number',
             type: 'number',
             properties: {},
@@ -88,6 +91,10 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             properties: {},
             validations: {
               required: true,
+            },
+            linkedFields: {
+              emailFieldId: emailFieldId,
+              phoneFieldId: phoneFieldId,
             },
           },
         ],

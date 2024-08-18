@@ -19,7 +19,6 @@ import {useOutletContext} from 'react-router-dom';
 import {Values, InitialValues} from 'src/views/IntakeProfile';
 import {AdditionalGuestsField} from './AdditionaGuestsField';
 import {FieldGroup, Fields, Guest, Pet} from 'src/services/profile';
-
 import {AdditionalPetsField} from './AdditionalPetsField';
 
 interface OutletContext {
@@ -93,6 +92,8 @@ export const RenderFields = ({
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const helperText = errors[groupId]?.[field.id];
+  console.log(groupId, field);
+
   switch (field.type) {
     case 'short_text':
       return (
@@ -137,6 +138,7 @@ export const RenderFields = ({
           {...props}
           error={error}
           helperText={helperText}
+          type="tel"
           id="outlined"
           placeholder="(909)555-1234"
           variant="outlined"
@@ -151,6 +153,7 @@ export const RenderFields = ({
         <TextField
           {...props}
           label={field.title}
+          type="email"
           error={error}
           helperText={helperText}
           id="outlined"
@@ -163,16 +166,36 @@ export const RenderFields = ({
         />
       );
     case 'contact_method':
+      // eslint-disable-next-line no-case-declarations
+      const {emailFieldId, phoneFieldId} = field.linkedFields || {};
+      // console.log(emailFieldId, phoneFieldId, values);
+      // eslint-disable-next-line no-case-declarations
+      const isEmailFilled = Boolean(
+        values[emailFieldId] && /\S+@\S+\.\S+/.test(values[emailFieldId]),
+      );
+      // eslint-disable-next-line no-case-declarations
+      const isPhoneFilled = Boolean(
+        values[phoneFieldId] &&
+          /^\(\d{3}\)\d{3}-\d{4}$/.test(values[phoneFieldId]),
+      );
+
+      console.log(
+        values[emailFieldId],
+        isEmailFilled,
+        values[phoneFieldId],
+        isPhoneFilled,
+      );
       return (
         <FormControl error={error} required={field.validations.required}>
           <FormLabel sx={{color: 'black'}}>{field.title}</FormLabel>
-          <RadioGroup {...props} row aria-labelledby="yes-no-field">
-            <FormControlLabel value="email" control={<Radio />} label="email" />
-            <FormControlLabel value="phone" control={<Radio />} label="phone" />
+          <RadioGroup {...props} aria-labelledby="contact-method-field">
+            <FormControlLabel value="phone" control={<Radio />} label="Phone" />
+            <FormControlLabel value="email" control={<Radio />} label="Email" />
           </RadioGroup>
           <FormHelperText>{helperText}</FormHelperText>
         </FormControl>
       );
+
     case 'yes_no':
       return (
         <FormControl error={error} required={field.validations.required}>
