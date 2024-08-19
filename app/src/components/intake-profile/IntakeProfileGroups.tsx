@@ -92,7 +92,6 @@ export const RenderFields = ({
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const helperText = errors[groupId]?.[field.id];
-  console.log(groupId, field);
 
   switch (field.type) {
     case 'short_text':
