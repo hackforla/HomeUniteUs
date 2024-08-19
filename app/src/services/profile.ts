@@ -44,7 +44,7 @@ export interface Fields {
     max_characters?: number;
     required_if?: ReduiredIf;
   };
-  linkedFields: {
+  linkedFields?: {
     emailFieldId?: string;
     phoneFieldId?: string;
   };

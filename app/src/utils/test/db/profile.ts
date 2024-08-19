@@ -392,30 +392,6 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       },
       {
         id: faker.string.numeric(4),
-        title: 'Contact Information',
-        fields: [
-          {
-            id: faker.string.numeric(4),
-            title: 'Email',
-            type: 'email',
-            properties: {},
-            validations: {
-              required: true,
-            },
-          },
-          {
-            id: faker.string.numeric(4),
-            title: 'Phone Number',
-            type: 'number',
-            properties: {},
-            validations: {
-              required: true,
-            },
-          },
-        ],
-      },
-      {
-        id: faker.string.numeric(4),
         title: 'Home Information',
         fields: [
           {
