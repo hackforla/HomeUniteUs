@@ -44,9 +44,9 @@ export interface Fields {
     max_characters?: number;
     required_if?: ReduiredIf;
   };
-  linkedFields?: {
-    emailFieldId: string;
-    phoneFieldId: string;
+  linkedFields: {
+    emailFieldId?: string;
+    phoneFieldId?: string;
   };
 }
 
@@ -67,6 +67,10 @@ export interface Response {
   id: string;
   fieldId: string;
   value: string | Guest[] | Pet[] | undefined;
+}
+
+export interface Pet {
+  id: string;
 }
 
 const injectedRtkApi = api.injectEndpoints({

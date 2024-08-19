@@ -166,30 +166,43 @@ export const RenderFields = ({
       );
     case 'contact_method':
       // eslint-disable-next-line no-case-declarations
-      const {emailFieldId, phoneFieldId} = field.linkedFields || {};
-      // console.log(emailFieldId, phoneFieldId, values);
+      const {emailFieldId, phoneFieldId} = field.linkedFields;
       // eslint-disable-next-line no-case-declarations
-      const isEmailFilled = Boolean(
-        values[emailFieldId] && /\S+@\S+\.\S+/.test(values[emailFieldId]),
-      );
+      let isEmailFilled = false;
       // eslint-disable-next-line no-case-declarations
-      const isPhoneFilled = Boolean(
-        values[phoneFieldId] &&
-          /^\(\d{3}\)\d{3}-\d{4}$/.test(values[phoneFieldId]),
-      );
+      let isPhoneFilled = false;
+      if (emailFieldId) {
+        // This isn't best practice and can be replaced with validator library to verify email
+        isEmailFilled = Boolean(
+          values[emailFieldId] && /\S+@\S+\.\S+/.test(values[emailFieldId]),
+        );
+      }
 
-      console.log(
-        values[emailFieldId],
-        isEmailFilled,
-        values[phoneFieldId],
-        isPhoneFilled,
-      );
+      // eslint-disable-next-line no-case-declarations
+      if (phoneFieldId) {
+        // This does not validate international numbers and can be replaced with libphonenumber-js library
+        // or field can be replaced to include area code and separate validation based on country
+        const phoneRegex =
+          /^(\+1|1)?[-.\s]?\(?[2-9]\d{2}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/;
+        isPhoneFilled = phoneRegex.test(values[phoneFieldId]);
+      }
+
       return (
         <FormControl error={error} required={field.validations.required}>
           <FormLabel sx={{color: 'black'}}>{field.title}</FormLabel>
           <RadioGroup {...props} aria-labelledby="contact-method-field">
-            <FormControlLabel value="phone" control={<Radio />} label="Phone" />
-            <FormControlLabel value="email" control={<Radio />} label="Email" />
+            <FormControlLabel
+              value="phone"
+              control={<Radio />}
+              label="Phone"
+              disabled={!isPhoneFilled}
+            />
+            <FormControlLabel
+              value="email"
+              control={<Radio />}
+              label="Email"
+              disabled={!isEmailFilled}
+            />
           </RadioGroup>
           <FormHelperText>{helperText}</FormHelperText>
         </FormControl>
