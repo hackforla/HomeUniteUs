@@ -119,6 +119,13 @@ def empty_db_session(alembic_runner, alembic_engine) -> Generator[Session, None,
     test_engine.dispose()
 
 @pytest.fixture()
+def empty_db_session_provider(empty_db_session):
+    class _provider:
+        def session(): return empty_db_session
+
+    return _provider
+
+@pytest.fixture()
 def client(app):
     return app.test_client()
 

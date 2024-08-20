@@ -1,0 +1,46 @@
+put:
+  summary: Update user responses for a specific form
+  operationId: update_responses
+  parameters:
+    - name: form_id
+      in: path
+      required: true
+      schema:
+        type: integer
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../schemas/_index.yaml#/FormResponses'
+  responses:
+    '401':
+      description: Authentication error
+    '204':
+      description: Responses updated successfully
+  x-openapi-router-controller: openapi_server.controllers.responses_controller
+  security:
+  - jwt: ["secret"]
+get:
+  summary: Get responses for a specific form and user
+  operationId: get_responses
+  parameters:
+    - name: form_id
+      in: path
+      required: true
+      schema:
+        type: integer
+  responses:
+    '200':
+      description: Successfully retrieved responses
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/_index.yaml#/FormResponses'
+    '401':
+      description: Authentication error
+    '404':
+      description: Responses not found
+  x-openapi-router-controller: openapi_server.controllers.responses_controller
+  security:
+    - jwt: ["secret"]
