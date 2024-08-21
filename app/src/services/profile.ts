@@ -53,7 +53,7 @@ export interface FieldGroup {
 export interface Guest {
   id: string;
   name: string;
-  dob: Date;
+  dob: string | null;
   relationship: string;
 }
 

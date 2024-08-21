@@ -8,7 +8,6 @@ import {
   FieldTypes,
   Response,
 } from '../../../services/profile';
-import {format} from 'date-fns';
 
 export const fieldGroupBuilder = (
   options: Partial<FieldGroup> = {},
@@ -109,13 +108,7 @@ export const typeValidations = {
     object().shape({
       name: string().required('Name is required'),
       dob: date()
-        .transform(function (value, originalValue) {
-          if (this.isType(value)) {
-            return format(originalValue, 'P');
-          }
-          return originalValue;
-        })
-        .typeError('DOB is required')
+        .typeError('DOB is not a valid date')
         .required('DOB is required'),
       relationship: string().required('Relationship is required'),
     }),

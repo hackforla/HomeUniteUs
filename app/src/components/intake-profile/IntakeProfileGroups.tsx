@@ -17,10 +17,10 @@ import {
 import {FormikErrors, useFormikContext, FormikHandlers} from 'formik';
 import {useOutletContext} from 'react-router-dom';
 import {Values, InitialValues} from 'src/views/IntakeProfile';
-import {AdditionalGuestsField} from './AdditionaGuestsField';
+import {AdditionalGuestsField} from './fields/AdditionaGuestsField';
 import {FieldGroup, Fields, Guest, Pet} from 'src/services/profile';
 
-import {AdditionalPetsField} from './AdditionalPetsField';
+import {AdditionalPetsField} from './fields/AdditionalPetsField';
 
 export interface OutletContext {
   groupId: string;

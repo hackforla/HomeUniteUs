@@ -70,13 +70,13 @@ const getResponseValue = (field: Fields) => {
         {
           id: faker.string.uuid(),
           name: faker.person.fullName(),
-          dob: faker.date.past(),
+          dob: null,
           relationship: 'spouse',
         },
         {
           id: faker.string.uuid(),
           name: faker.person.fullName(),
-          dob: faker.date.past(),
+          dob: null,
           relationship: 'spouse',
         },
       ];

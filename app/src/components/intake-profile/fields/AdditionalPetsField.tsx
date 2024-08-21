@@ -1,6 +1,6 @@
 import {Stack, Button, TextField, Typography} from '@mui/material';
 import {FormikErrors, FieldArray, useFormikContext} from 'formik';
-import {Pet} from '../../services/profile';
+import {Pet} from '../../../services/profile';
 import Autocomplete from '@mui/material/Autocomplete';
 import {InitialValues} from 'src/views/IntakeProfile';
 
