@@ -4,6 +4,7 @@ export const fieldTypes = [
   'short_text',
   'long_text',
   'number',
+  'date',
   'email',
   'dropdown',
   'yes_no',

@@ -52,6 +52,8 @@ const fieldDefaultValue = (fieldType: FieldTypes) => {
       return '';
     case 'additional_guests':
       return [];
+    case 'date':
+      return null;
     case 'email':
       return '';
     case 'yes_no':
@@ -104,6 +106,7 @@ export const typeValidations = {
   email: string().email('Must be a valid email address'),
   yes_no: string(),
   dropdown: string(),
+  date: date().typeError('DOB is not a valid date'),
   additional_guests: array().of(
     object().shape({
       name: string().required('Name is required'),
@@ -144,8 +147,12 @@ const createFieldValidationSchema = ({type, validations}: Fields) => {
   let schema = typeValidations[type];
 
   if (validations.required) {
-    // only works for string types at the moment
-    schema = merge(schema, string().required('This field is required'));
+    if (schema.type === 'date') {
+      schema = merge(schema, date().required('This field is required'));
+    } else {
+      // only works for string types at the moment
+      schema = merge(schema, string().required('This field is required'));
+    }
   }
 
   if (validations.required_if) {

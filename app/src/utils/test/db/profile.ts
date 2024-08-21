@@ -30,7 +30,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
           {
             id: faker.string.numeric(4),
             title: 'Date of Birth',
-            type: 'short_text',
+            type: 'date',
             properties: {},
             validations: {
               required: true,
