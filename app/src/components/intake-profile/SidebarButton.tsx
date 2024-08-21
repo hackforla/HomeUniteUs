@@ -1,5 +1,5 @@
 import React from 'react';
-import useStatusStyling from '../../views/IntakeProfile/hooks/useStatusStyling';
+import useStatusStyling from './hooks/useStatusStyling';
 import {Box, Typography, useTheme} from '@mui/material';
 import {Link} from 'react-router-dom';
 import {FieldGroup} from 'src/services/profile';
