@@ -49,6 +49,8 @@ const getResponseValue = (field: Fields) => {
       return faker.lorem.words(4);
     case 'long_text':
       return faker.lorem.paragraph();
+    case 'date':
+      return faker.date.past().toISOString();
     case 'dropdown':
       if (!field.properties.choices) {
         throw new Error(
@@ -70,13 +72,13 @@ const getResponseValue = (field: Fields) => {
         {
           id: faker.string.uuid(),
           name: faker.person.fullName(),
-          dob: null,
+          dob: faker.date.past().toISOString(),
           relationship: 'spouse',
         },
         {
           id: faker.string.uuid(),
           name: faker.person.fullName(),
-          dob: null,
+          dob: faker.date.past().toISOString(),
           relationship: 'spouse',
         },
       ];
