@@ -1,9 +1,16 @@
 import React from 'react';
 import {setCredentials} from '../../../app/authSlice';
 import {isFetchBaseQueryError, isErrorWithMessage} from '../../../app/helpers';
-import {useGetTokenMutation} from '../../../services/auth';
+import {TokenRequest, TokenResponse} from '../../../services/auth';
 import {useNavigate} from 'react-router-dom';
 import {useAppDispatch} from '../../../app/hooks/store';
+import {
+  MutationActionCreatorResult,
+  MutationDefinition,
+  BaseQueryFn,
+  FetchArgs,
+  FetchBaseQueryError,
+} from '@reduxjs/toolkit/query';
 
 // TODO: Maybe store this in a more global location? with routes?
 export const redirectsByRole = {
@@ -14,23 +21,33 @@ export const redirectsByRole = {
 };
 
 interface UseAuthenticateWithOAuth {
+  query: (
+    arg: TokenRequest,
+  ) => MutationActionCreatorResult<
+    MutationDefinition<
+      TokenRequest,
+      BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError>,
+      'Hosts',
+      TokenResponse,
+      'api'
+    >
+  >;
   setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
   callbackUri: string;
 }
 
 export const useAuthenticateWithOAuth = ({
+  query,
   setErrorMessage,
   callbackUri,
 }: UseAuthenticateWithOAuth) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const [getToken, {isLoading: getTokenIsLoading}] = useGetTokenMutation();
-
   React.useEffect(() => {
     if (location.search.includes('code')) {
       const code = location.search.split('?code=')[1];
-      getToken({
+      query({
         code,
         callbackUri,
       })
@@ -51,7 +68,5 @@ export const useAuthenticateWithOAuth = ({
           }
         });
     }
-  }, [location, setErrorMessage, getToken, dispatch, navigate, callbackUri]);
-
-  return {getTokenIsLoading};
+  }, [location, setErrorMessage, dispatch, navigate, callbackUri, query]);
 };
