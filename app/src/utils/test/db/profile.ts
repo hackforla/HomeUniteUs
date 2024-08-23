@@ -30,7 +30,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
           {
             id: faker.string.numeric(4),
             title: 'Date of Birth',
-            type: 'short_text',
+            type: 'date',
             properties: {},
             validations: {
               required: true,
@@ -313,21 +313,6 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             id: faker.string.numeric(4),
             title:
               'Please take some time to write an introduction of yourself that you would feel comfortable with the Host Homes Coordinator sharing with a potential host. Feel free to talk about your interests, your story or anything else that you think would be important to share:',
-            type: 'long_text',
-            properties: {},
-            validations: {
-              required: true,
-            },
-          },
-        ],
-      },
-      {
-        id: faker.string.numeric(4),
-        title: 'Review',
-        fields: [
-          {
-            id: faker.string.numeric(4),
-            title: 'review',
             type: 'long_text',
             properties: {},
             validations: {

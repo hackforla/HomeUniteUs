@@ -1,35 +1,45 @@
-import {Box, Stack, Typography, useTheme} from '@mui/material';
-import {Link} from 'react-router-dom';
-import useStatusStyling from '../../views/IntakeProfile/hooks/useStatusStyling';
+import {Stack, Typography} from '@mui/material';
 import {Dispatch, SetStateAction} from 'react';
+import {SidebarButton} from './SidebarButton';
+import {FieldGroup} from 'src/services/profile';
 
-type FieldGroup = {
-  id: string;
-  title: string;
-};
+interface ProfileSidebarProps {
+  fieldGroups: FieldGroup[];
+  groupId: string | undefined;
+  isReviewPage: boolean;
+  toggleShowSections: () => void;
+  setSelectedItem: Dispatch<SetStateAction<string | null>>;
+  showSections: boolean;
+}
 
 export const ProfileSidebar = ({
   fieldGroups,
-  handleSectionClick,
-  setSelectedItem,
   groupId,
-}: {
-  fieldGroups: FieldGroup[];
-  handleSectionClick: () => void;
-  setSelectedItem: Dispatch<SetStateAction<string | null>>;
-  groupId: string;
-}) => {
+  isReviewPage,
+  setSelectedItem,
+  showSections,
+  toggleShowSections,
+}: ProfileSidebarProps) => {
   const totalTask = fieldGroups.length - 1;
-  const statusStyling = useStatusStyling();
-  const theme = useTheme();
 
   const handleItemClick = (id: string) => {
     setSelectedItem(id);
-    handleSectionClick();
+    toggleShowSections();
   };
 
   return (
-    <>
+    <Stack
+      sx={{
+        gap: 1,
+        width: {xs: '100%', sm: '100%', md: '412px'},
+        overflowY: 'auto',
+        borderRight: '1px solid',
+        borderColor: 'grey.200',
+        backgroundColor: 'inherit',
+        padding: '12px',
+        display: {xs: showSections ? 'flex' : 'none', md: 'flex'},
+      }}
+    >
       <Stack
         sx={{
           flexDirection: 'row',
@@ -46,45 +56,28 @@ export const ProfileSidebar = ({
         </Typography>
       </Stack>
       {fieldGroups.map(({id, title}) => {
-        const status = 'complete'; // Change status here to see different styles
+        // Change status here to see different styles
         // complete | partial | incomplete | locked
+        const status = 'incomplete';
         const fieldTitle = title || '...';
+
         return (
-          <Box
+          <SidebarButton
             key={id}
+            fieldTitle={fieldTitle}
+            handleClick={() => handleItemClick(id)}
+            isActive={groupId === id}
+            status={status}
             to={`group/${id}`}
-            component={Link}
-            sx={{
-              borderRadius: 2,
-              backgroundColor: statusStyling[status].color,
-              minHeight: 56,
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              paddingInline: 3,
-              borderColor:
-                groupId === id ? '#DADADA' : statusStyling[status].borderColor,
-              borderWidth: 2,
-              borderStyle: 'solid',
-              boxShadow:
-                groupId === id ? '0px 4px 4px rgba(0, 0, 0, .25)' : 'none',
-              textDecoration: 'none',
-            }}
-            onClick={() => handleItemClick(id)}
-          >
-            <Typography
-              sx={{
-                fontSize: 16,
-                fontWeight: 'medium',
-                color: theme.palette.text.primary,
-              }}
-            >
-              {fieldTitle}
-            </Typography>
-            {statusStyling[status].icon}
-          </Box>
+          />
         );
       })}
-    </>
+      <SidebarButton
+        fieldTitle="Review"
+        to={'review'}
+        status={'incomplete'}
+        isActive={isReviewPage}
+      />
+    </Stack>
   );
 };
