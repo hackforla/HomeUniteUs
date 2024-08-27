@@ -9,7 +9,8 @@ delete:
       required: true
       description: The id of the user to delete
       schema:
-        type: string
+        format: int64
+        type: integer
   responses:
     "200":
       description: Null response

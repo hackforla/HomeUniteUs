@@ -1,7 +1,31 @@
 from typing import List
 
-from openapi_server.models.database import User, Role
-from openapi_server.models.user_roles import UserRole
+from openapi_server.models.database import UnmatchedGuestCase, UnmatchedGuestCaseStatus, User, Role
+from openapi_server.models.user_roles import UmatchedCaseStatus, UserRole
+
+class UnmatchedCaseRepository:
+    def __init__(self, session):
+        self.session = session
+        
+    def add_case(self, guest_id: int, coordinator_id: int) -> UnmatchedGuestCase:
+        status_id = self.session.query(UnmatchedGuestCaseStatus).filter_by(status_text=UmatchedCaseStatus.IN_PROGRESS).first().id
+        new_guest_case = UnmatchedGuestCase(guest_id=guest_id,coordinator_id=coordinator_id,status_id=status_id)
+        self.session.add(new_guest_case)
+        self.session.commit()
+
+        return new_guest_case
+        
+        
+    def delete_case_for_guest(self, guest_id: int) -> bool:
+        guest_case = self.session.query(UnmatchedGuestCaseStatus).filter_by(guest_id=guest_id).first()
+        if guest_case:
+            self.session.delete(guest_case)
+            self.session.commit()
+            return True
+        return False
+        
+    def get_case_for_guest(self, guest_id: int) -> UnmatchedGuestCase:
+        return self.session.query(UnmatchedGuestCase).filter_by(guest_id=guest_id).first()
 
 class UserRepository:
     def __init__(self, session):
@@ -29,6 +53,9 @@ class UserRepository:
             self.session.commit()
             return True
         return False
+    
+    def get_user_by_id(self, id: int) -> User:
+        return self.session.query(User).filter_by(id=id).first()    
     
     def get_user(self, email: str) -> User:
         return self.session.query(User).filter_by(email=email).first()

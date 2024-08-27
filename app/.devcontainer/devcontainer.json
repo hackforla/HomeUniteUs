@@ -1,0 +1,26 @@
+{
+    "name": "Node",
+    "build": {
+      "dockerfile": "./Dockerfile",
+      "context": ".."
+    },
+    // install the decalred pip and npm packages
+    "postCreateCommand": "npm install",
+    "runArgs": ["--platform=linux/amd64"],
+    "forwardPorts": [
+      38428
+    ],
+    "customizations": {
+      "vscode": {
+        "settings": {
+          "terminal.integrated.defaultProfile.linux": "bash",
+          "extensions.verifySignature": false
+        },
+        "extensions": [
+          "ms-python.vscode-pylance",
+          "ms-vscode.vscode-typescript-next"
+        ]
+      }
+    }
+  }
+  

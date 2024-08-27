@@ -5,3 +5,9 @@ class UserRole(Enum):
     GUEST = "Guest"
     HOST = "Host"
     COORDINATOR = "Coordinator"
+
+    
+
+class UmatchedCaseStatus(Enum):
+    IN_PROGRESS = "In Progress"
+    COMPLETE = "Complete"

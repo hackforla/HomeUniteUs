@@ -3,6 +3,7 @@ import botocore
 import requests
 import jwt
 import random
+import json
 
 from flask import (
     redirect, 
@@ -12,7 +13,7 @@ from flask import (
 )
 from openapi_server.exceptions import AuthError
 from openapi_server.models.database import DataAccessLayer, User
-from openapi_server.repositories.user_repo import UserRepository
+from openapi_server.repositories.user_repo import UnmatchedCaseRepository, UserRepository
 from openapi_server.models.user_roles import UserRole
 from openapi_server.models.schema import user_schema
 from sqlalchemy import select
@@ -515,7 +516,7 @@ def google():
 def invite():
 
     if connexion.request.is_json:
-        body = connexion.request.get_json()    
+        body = connexion.request.get_json()
 
     # TODO: Possibly encrypt these passwords?
     numbers = '0123456789'
@@ -548,6 +549,7 @@ def invite():
         raise AuthError({"message": msg}, 500)
     
     try:
+        coordinator_email = session['username']
         with DataAccessLayer.session() as db_session:
             user_repo = UserRepository(db_session)
             user_repo.add_user(
@@ -557,8 +559,19 @@ def invite():
                 middleName=body.get('middleName', ''),
                 lastName=body.get('lastName', '')
             )
+            guest_id = user_repo.get_user_id(body['email'])
+            coordinator_id = user_repo.get_user_id(coordinator_email)
+            unmatched_case_repo = UnmatchedCaseRepository(db_session)
+            unmatched_case_repo.add_case(
+                guest_id=guest_id,
+                coordinator_id=coordinator_id
+            )
     except Exception as error:
         raise AuthError({"message": str(error)}, 400)
+    
+    
+
+    
 
 
 def confirm_invite():

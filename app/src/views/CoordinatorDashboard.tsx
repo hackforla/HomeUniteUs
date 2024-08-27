@@ -1,46 +1,35 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Box, Tabs, Tab, Typography, Pagination, Stack} from '@mui/material';
 import {
   DataGrid,
-  GridRowsProp,
   GridColDef,
   gridPageCountSelector,
   gridPageSelector,
   useGridApiContext,
   useGridSelector,
 } from '@mui/x-data-grid';
-import {faker} from '@faker-js/faker';
+// import {faker} from '@faker-js/faker';
 import {styled} from '@mui/material/styles';
 
+import {
+  AdminApiError,
+  DashboardDataItem,
+  DashboardDataResponse,
+  useGetAllDashboardDataMutation,
+} from '../services/coordinator';
 import {GuestInviteButton} from '../components/common';
 import {LoadingComponent} from './LoadingComponent';
 
-const buildRow = () => {
-  return {
-    id: faker.string.uuid(),
-    applicant: faker.person.fullName(),
-    type: faker.helpers.arrayElement(['Guest', 'Host']),
-    status: faker.helpers.arrayElement(['In Progress', 'Complete']),
-    coordinator: faker.helpers.arrayElement([
-      faker.person.fullName(),
-      'Unassigned',
-    ]),
-    updated: faker.date.past().toLocaleDateString(),
-    notes: faker.lorem.words({min: 0, max: 15}),
-  };
-};
-const rows: GridRowsProp = Array.from(Array(30), () => buildRow());
-
 const columns: GridColDef[] = [
   {
-    field: 'applicant',
+    field: 'userName',
     headerName: 'Applicant',
     flex: 1,
   },
-  {field: 'type', headerName: 'Type'},
-  {field: 'status', headerName: 'Status'},
-  {field: 'coordinator', headerName: 'Coordinator', flex: 1},
-  {field: 'updated', headerName: 'Updated', flex: 1},
+  {field: 'userType', headerName: 'Type'},
+  {field: 'caseStatus', headerName: 'Status'},
+  {field: 'coordinatorName', headerName: 'Coordinator', flex: 1},
+  {field: 'lastUpdated', headerName: 'Updated', flex: 1},
   {
     field: 'notes',
     headerName: 'Notes',
@@ -58,23 +47,46 @@ function a11yProps(index: number) {
 
 export const CoordinatorDashboard = () => {
   const [value, setValue] = useState(0);
+  const [dashboardDataItems, setDashboardDataItems] = useState(
+    [] as DashboardDataItem[],
+  );
+  // const [getAllDashboardData, {isLoading, isSuccess, reset}] = useGetAllDashboardDataMutation();
+  const [getAllDashboardData] = useGetAllDashboardDataMutation();
 
-  const data = rows.filter(row => {
+  const dashboardData = dashboardDataItems.filter(row => {
     if (value === 0) {
       return row;
     } else if (value === 1) {
-      return row.type === 'Guest';
+      return row.userType === 'GUEST';
     } else if (value === 2) {
-      return row.type === 'Host';
+      return row.userType === 'HOST';
     }
   });
 
-  const totalGuests = rows.filter(row => row.type === 'Guest').length;
-  const totalHosts = rows.filter(row => row.type === 'Host').length;
+  const totalAppUsers = dashboardDataItems.filter(
+    row => ['GUEST', 'HOST'].indexOf(row.userType) >= 0,
+  ).length;
+  const totalGuests = dashboardDataItems.filter(
+    row => row.userType === 'GUEST',
+  ).length;
+  const totalHosts = dashboardDataItems.filter(
+    row => row.userType === 'HOST',
+  ).length;
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+
+  useEffect(() => {
+    getAllDashboardData()
+      .unwrap()
+      .then((dashboardDataResponse: DashboardDataResponse) => {
+        setDashboardDataItems(dashboardDataResponse.dashboardItems);
+      })
+      .catch((reason: {data: AdminApiError}) => {
+        console.log(`getAllDashboardData failed: ${JSON.stringify(reason)}`);
+      });
+  }, [value]);
 
   return (
     <StyledPageContainer>
@@ -110,7 +122,7 @@ export const CoordinatorDashboard = () => {
               icon={
                 <StyledUserCount>
                   <Typography fontSize="14px" fontWeight="bold">
-                    {rows.length}
+                    {totalAppUsers}
                   </Typography>
                 </StyledUserCount>
               }
@@ -147,7 +159,7 @@ export const CoordinatorDashboard = () => {
         <StyledDataGrid
           checkboxSelection
           disableRowSelectionOnClick
-          rows={data ? data : []}
+          rows={dashboardData ? dashboardData : []}
           columns={columns}
           initialState={{
             pagination: {
