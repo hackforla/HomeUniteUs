@@ -119,11 +119,22 @@ const authApi = api.injectEndpoints({
         body: credentials,
       }),
     }),
-    getToken: build.mutation<TokenResponse, TokenRequest>({
+    googleSignUp: build.mutation<TokenResponse, TokenRequest>({
       query: data => {
         const {code, callbackUri} = data;
         return {
-          url: `auth/token?callback_uri=${callbackUri}`,
+          url: `auth/google/sign_up?callback_uri=${callbackUri}`,
+          method: 'POST',
+          withCredentials: true,
+          body: {code},
+        };
+      },
+    }),
+    googleSignIn: build.mutation<TokenResponse, TokenRequest>({
+      query: data => {
+        const {code, callbackUri} = data;
+        return {
+          url: `auth/google/sign_in?callback_uri=${callbackUri}`,
           method: 'POST',
           withCredentials: true,
           body: {code},
@@ -212,7 +223,8 @@ export const {
   useSignOutMutation,
   useVerificationMutation,
   useNewPasswordMutation,
-  useGetTokenMutation,
+  useGoogleSignUpMutation,
+  useGoogleSignInMutation,
   useForgotPasswordMutation,
   useConfirmForgotPasswordMutation,
   useSessionMutation,

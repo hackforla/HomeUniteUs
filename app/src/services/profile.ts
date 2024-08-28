@@ -4,9 +4,9 @@ export const fieldTypes = [
   'short_text',
   'long_text',
   'number',
+  'date',
   'email',
   'dropdown',
-  'multiple_choice',
   'yes_no',
   'additional_guests',
   'pets',
@@ -54,7 +54,7 @@ export interface FieldGroup {
 export interface Guest {
   id: string;
   name: string;
-  dob: string;
+  dob: string | null;
   relationship: string;
 }
 
@@ -62,6 +62,10 @@ export interface Response {
   id: string;
   fieldId: string;
   value: string | Guest[] | Pet[] | undefined;
+}
+
+export interface Pet {
+  type: string;
 }
 
 const injectedRtkApi = api.injectEndpoints({
