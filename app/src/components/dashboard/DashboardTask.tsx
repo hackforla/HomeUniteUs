@@ -18,7 +18,6 @@ export const DashboardTask = ({
   linkText,
   url,
 }: DashboardTaskProps) => {
-  console.log(url);
   const statusIcons = {
     inProgress: <AccessTimeIcon sx={{color: '#FFC700'}} />,
     complete: <CheckCircleOutlined color="success" />,

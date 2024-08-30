@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import {Provider} from 'react-redux';
+import {CssBaseline, StyledEngineProvider, ThemeProvider} from '@mui/material';
+import {LocalizationProvider} from '@mui/x-date-pickers';
+import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 import './index.css';
 
-import {CssBaseline, StyledEngineProvider, ThemeProvider} from '@mui/material';
-import {Provider} from 'react-redux';
 import {setupStore} from './app/store';
 import {ProtectedRoute} from './components/authentication/ProtectedRoute';
 import {useSessionMutation} from './services/auth';
@@ -43,6 +45,7 @@ import {
 } from './components/layout';
 import {FieldGroupList} from './components/intake-profile/IntakeProfileGroups';
 import {enableMocking} from './utils/test/browser';
+import {ProfileReview} from './components/intake-profile/ProfileReview';
 
 function HuuApp() {
   const [session] = useSessionMutation();
@@ -108,6 +111,7 @@ function HuuApp() {
             }
           >
             <Route path="group/:groupId" element={<FieldGroupList />} />
+            <Route path="review" element={<ProfileReview />} />
           </Route>
         </Route>
         <Route
@@ -140,12 +144,14 @@ enableMocking().then(() => {
     <React.StrictMode>
       <Provider store={setupStore()}>
         <BrowserRouter>
-          <StyledEngineProvider injectFirst>
-            <ThemeProvider theme={HomeUniteUsTheme}>
-              <CssBaseline />
-              <HuuApp />
-            </ThemeProvider>
-          </StyledEngineProvider>
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <StyledEngineProvider injectFirst>
+              <ThemeProvider theme={HomeUniteUsTheme}>
+                <CssBaseline />
+                <HuuApp />
+              </ThemeProvider>
+            </StyledEngineProvider>
+          </LocalizationProvider>
         </BrowserRouter>
       </Provider>
     </React.StrictMode>,

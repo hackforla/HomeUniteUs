@@ -13,7 +13,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import {setCredentials} from '../app/authSlice';
 import {useAppDispatch} from '../app/hooks/store';
 import {SignInForm} from '../components/authentication/SignInForm';
-import {SignInRequest, useSignInMutation} from '../services/auth';
+import {
+  SignInRequest,
+  useGoogleSignInMutation,
+  useSignInMutation,
+} from '../services/auth';
 import {isFetchBaseQueryError, isErrorWithMessage} from '../app/helpers';
 import {FormContainer} from '../components/authentication';
 import {
@@ -30,11 +34,14 @@ export const SignIn = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [signIn, {isLoading: signInIsLoading}] = useSignInMutation();
+  const [googleSignIn, {isLoading: getTokenIsLoading}] =
+    useGoogleSignInMutation();
   // const locationState = location.state as LocationState;
 
   // Save location from which user was redirected to login page
   // const from = locationState?.from?.pathname || '/';
-  const {getTokenIsLoading} = useAuthenticateWithOAuth({
+  useAuthenticateWithOAuth({
+    query: googleSignIn,
     setErrorMessage,
     callbackUri: '/signin',
   });
