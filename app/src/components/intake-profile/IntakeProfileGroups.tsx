@@ -20,6 +20,7 @@ import {Values, InitialValues} from 'src/views/IntakeProfile';
 import {AdditionalGuestsField} from './AdditionaGuestsField';
 import {FieldGroup, Fields, Guest, Pet} from 'src/services/profile';
 import {AdditionalPetsField} from './AdditionalPetsField';
+import {phoneRegExp} from '../../views/IntakeProfile/constants/index';
 
 interface OutletContext {
   groupId: string;
@@ -177,14 +178,9 @@ export const RenderFields = ({
           values[emailFieldId] && /\S+@\S+\.\S+/.test(values[emailFieldId]),
         );
       }
-
       // eslint-disable-next-line no-case-declarations
       if (phoneFieldId) {
-        // This does not validate international numbers and can be replaced with libphonenumber-js library
-        // or field can be replaced to include area code and separate validation based on country
-        const phoneRegex =
-          /^(\+1|1)?[-.\s]?\(?[2-9]\d{2}\)?[-.\s]?\d{3}[-.\s]?\d{4}$/;
-        isPhoneFilled = phoneRegex.test(values[phoneFieldId]);
+        isPhoneFilled = phoneRegExp.test(values[phoneFieldId]);
       }
 
       return (

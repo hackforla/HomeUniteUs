@@ -96,13 +96,13 @@ export const createInitialValues = (
  * }
  */
 
-const phoneRegExp =
+export const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 export const typeValidations = {
   short_text: string(),
   long_text: string(),
-  number: string().matches(phoneRegExp, 'phone number is not valid'),
+  number: string().matches(phoneRegExp, 'Phone number is not valid'),
   email: string().email('Must be a valid email address'),
   yes_no: string(),
   dropdown: string(),

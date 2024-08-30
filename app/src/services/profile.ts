@@ -70,6 +70,7 @@ export interface Response {
 }
 
 export interface Pet {
+  type: string;
   id: string;
 }
 
