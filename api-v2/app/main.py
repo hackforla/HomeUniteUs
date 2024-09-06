@@ -2,19 +2,18 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
 
-# from api.main import api_router
+from api.main import api_router
 from core.config import settings
-# from seed import init_db
+from seed import init_db
 
 
-# @asynccontextmanager
-# async def lifespan(app: FastAPI):
-#     init_db()
-#     yield
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    init_db()
+    yield
 
 
-# app = FastAPI(lifespan=lifespan)
-app = FastAPI()
+app = FastAPI(lifespan=lifespan)
 
 
-# app.include_router(api_router, prefix="/api")
+app.include_router(api_router, prefix="/api")
