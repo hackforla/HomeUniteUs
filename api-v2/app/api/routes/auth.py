@@ -5,7 +5,6 @@ from fastapi import Depends, APIRouter, HTTPException, Response, Security, Reque
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from botocore.exceptions import ClientError
-from typing import Annotated
 
 
 from schemas import UserCreate, UserSignInRequest, UserSignInResponse, RefreshTokenResponse
