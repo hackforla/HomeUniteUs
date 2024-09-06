@@ -1,0 +1,27 @@
+{
+    "name": "FullStack",
+    "build": {
+      "dockerfile": "./Dockerfile",
+      "context": ".."
+    },
+    // install the decalred pip and npm packages
+    "postCreateCommand": "bash ./scripts/install-deps-debian.bash",
+    "runArgs": ["--platform=linux/amd64"],
+    "forwardPorts": [
+      38429,
+      38428
+    ],
+    "customizations": {
+      "vscode": {
+        "settings": {
+          "terminal.integrated.defaultProfile.linux": "bash",
+          "extensions.verifySignature": false
+        },
+        "extensions": [
+          "ms-python.vscode-pylance",
+          "ms-vscode.vscode-typescript-next"
+        ]
+      }
+    }
+  }
+  

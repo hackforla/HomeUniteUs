@@ -31,6 +31,18 @@ class RoleSchema(SQLAlchemyAutoSchema):
         include_relationships = True
         load_instance = True
 
+class UnmatchedCaseSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = UnmatchedGuestCase
+        include_relationships = True
+        load_instance = True
+
+class UnmatchedCaseStatusSchema(SQLAlchemyAutoSchema):
+    class Meta:
+        model = UnmatchedGuestCaseStatus
+        include_relationships = True
+        load_instance = True
+
 class UserSchema(SQLAlchemyAutoSchema):
     role = Nested(RoleSchema, only=['name'], required=True)
     class Meta:
@@ -147,3 +159,5 @@ service_provider_schema = HousingProgramServiceProviderSchema()
 service_provider_list_schema = HousingProgramServiceProviderSchema(many=True)
 form_schema = FormSchema()
 response_schema = ResponseSchema(many=True)
+unmatched_cs_schema = UnmatchedCaseStatusSchema()
+unmatched_c_schema = UnmatchedCaseSchema()

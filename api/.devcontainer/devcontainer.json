@@ -1,0 +1,25 @@
+{
+    "name": "Python",
+    "build": {
+      "dockerfile": "./Dockerfile",
+      "context": ".."
+    },
+    "postCreateCommand": "python3 -m pip install .",
+    //// TODO: if we can use the latest Python offered in devcontainers, this may
+    ////   provide a better dev UX
+    // "image": "mcr.microsoft.com/vscode/devcontainers/python:3.9-bullseye",
+    "runArgs": ["--platform=linux/amd64"],
+    "forwardPorts": [
+      38429
+    ],
+    "customizations": {
+      "vscode": {
+        "settings": {
+          "terminal.integrated.defaultProfile.linux": "bash",
+          "extensions.verifySignature": false
+        },
+        "extensions": ["ms-python.vscode-pylance"]
+      }
+    }
+  }
+  

@@ -57,6 +57,24 @@ paths:
     $ref: "./paths/forms.yaml"
   /responses/{form_id}:
     $ref: "./paths/responses.yaml"
+  /coordinator/dashboard/all:
+      get:
+        summary: Get dashboard data
+        operationId: get_dashboard_data
+        responses:
+          '200':
+            description: Successfully retrieved responses
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/DashboardData'
+          '401':
+            description: Authentication error
+          '404':
+            description: Responses not found
+        x-openapi-router-controller: openapi_server.controllers.coordinator_controller
+        security:
+          - jwt: ["secret"]
   /health:
       get:
         operationId: openapi_server.controllers.admin_controller.health
@@ -78,6 +96,33 @@ components:
     $ref: "./parameters/_index.yaml"
   schemas:
     $ref: "./schemas/_index.yaml"
+    DashboardDataItem:
+      properties:
+        id:
+          format: int64
+          type: integer
+        userName:
+          type: string
+        caseStatus:
+          type: string
+        coordinatorName:
+          type: string
+        userType:
+          type: string
+        lastUpdated:
+          type: string
+        notes:
+          type: string
+      title: DashboardDataItem
+      type: object
+    DashboardData:
+      properties:
+        dashboardItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/DashboardDataItem'
+      title: DashboardData
+      type: object
     ApiResponse:
       example:
         code: 0

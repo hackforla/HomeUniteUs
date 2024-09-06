@@ -45,6 +45,7 @@ import {
 } from './components/layout';
 import {FieldGroupList} from './components/intake-profile/IntakeProfileGroups';
 import {enableMocking} from './utils/test/browser';
+import {SystemAdminDashboard} from './views/SystemAdminDashboard';
 import {ProfileReview} from './components/intake-profile/ProfileReview';
 
 function HuuApp() {
@@ -129,6 +130,14 @@ function HuuApp() {
           element={
             <ProtectedRoute>
               <HostApplicationTracker />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <SystemAdminDashboard />
             </ProtectedRoute>
           }
         />

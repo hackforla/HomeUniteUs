@@ -49,6 +49,13 @@ ServiceProviders:
   type: array
   items:
     $ref: '#/ServiceProviderWithId'
+DashboardDataSchema:
+  type: object
+  properties:
+    name:
+      type: string
+  required:
+    - name
 RoleSchema:
   type: object
   properties:

@@ -8,6 +8,7 @@
   },
   "scripts": {
     "dev": "vite",
+    "dbg": "vite --debug",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest",
