@@ -19,9 +19,10 @@ import {useOutletContext} from 'react-router-dom';
 import {InitialValues} from 'src/views/IntakeProfile';
 import {AdditionalGuestsField} from './fields/AdditionaGuestsField';
 import {FieldGroup, Fields, Guest, Pet} from 'src/services/profile';
-
-import {AdditionalPetsField} from './fields/AdditionalPetsField';
+import {AdditionalPetsField} from './AdditionalPetsField';
+import {phoneRegExp} from '../../views/IntakeProfile/constants/index';
 import {DatePickerField} from './fields/DatePickerField';
+
 
 export interface OutletContext {
   groupId: string;
@@ -79,6 +80,7 @@ export const RenderFields = ({groupId, field}: RenderFieldProps) => {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const helperText = errors[groupId]?.[field.id];
+
   switch (field.type) {
     case 'additional_guests':
       return (
@@ -175,6 +177,7 @@ export const RenderFields = ({groupId, field}: RenderFieldProps) => {
           {...props}
           error={error}
           helperText={helperText}
+          type="tel"
           id="outlined"
           placeholder="(909)555-1234"
           variant="outlined"
@@ -204,6 +207,7 @@ export const RenderFields = ({groupId, field}: RenderFieldProps) => {
           variant="outlined"
           placeholder="Type you answer here"
           label={field.title}
+          type="email"
           error={error}
           helperText={helperText}
           InputLabelProps={{
@@ -211,6 +215,45 @@ export const RenderFields = ({groupId, field}: RenderFieldProps) => {
           }}
         />
       );
+    case 'contact_method':
+      // eslint-disable-next-line no-case-declarations
+      const {emailFieldId, phoneFieldId} = field.linkedFields;
+      // eslint-disable-next-line no-case-declarations
+      let isEmailFilled = false;
+      // eslint-disable-next-line no-case-declarations
+      let isPhoneFilled = false;
+      if (emailFieldId) {
+        // This isn't best practice and can be replaced with validator library to verify email
+        isEmailFilled = Boolean(
+          values[emailFieldId] && /\S+@\S+\.\S+/.test(values[emailFieldId]),
+        );
+      }
+      // eslint-disable-next-line no-case-declarations
+      if (phoneFieldId) {
+        isPhoneFilled = phoneRegExp.test(values[phoneFieldId]);
+      }
+
+      return (
+        <FormControl error={error} required={field.validations.required}>
+          <FormLabel sx={{color: 'black'}}>{field.title}</FormLabel>
+          <RadioGroup {...props} aria-labelledby="contact-method-field">
+            <FormControlLabel
+              value="phone"
+              control={<Radio />}
+              label="Phone"
+              disabled={!isPhoneFilled}
+            />
+            <FormControlLabel
+              value="email"
+              control={<Radio />}
+              label="Email"
+              disabled={!isEmailFilled}
+            />
+          </RadioGroup>
+          <FormHelperText>{helperText}</FormHelperText>
+        </FormControl>
+      );
+
     case 'yes_no':
       return (
         <FormControl error={error} required={field.validations.required}>

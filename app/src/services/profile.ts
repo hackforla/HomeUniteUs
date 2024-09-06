@@ -10,6 +10,7 @@ export const fieldTypes = [
   'yes_no',
   'additional_guests',
   'pets',
+  'contact_method',
 ] as const;
 
 type FieldTypeTuple = typeof fieldTypes;
@@ -43,6 +44,10 @@ export interface Fields {
     max_characters?: number;
     required_if?: ReduiredIf;
   };
+  linkedFields?: {
+    emailFieldId?: string;
+    phoneFieldId?: string;
+  };
 }
 
 export interface FieldGroup {
@@ -66,6 +71,7 @@ export interface Response {
 
 export interface Pet {
   type: string;
+  id: string;
 }
 
 const injectedRtkApi = api.injectEndpoints({

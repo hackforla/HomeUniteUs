@@ -1,6 +1,9 @@
 import {faker} from '@faker-js/faker';
 import {GetProfileApiResponse} from 'src/services/profile';
 
+const emailFieldId = faker.string.numeric(4);
+const phoneFieldId = faker.string.numeric(4);
+
 export const intakeProfiles: GetProfileApiResponse[] = [
   {
     id: '1',
@@ -64,7 +67,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
         title: 'Contact Information',
         fields: [
           {
-            id: faker.string.numeric(4),
+            id: emailFieldId,
             title: 'Email',
             type: 'email',
             properties: {},
@@ -73,12 +76,25 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: phoneFieldId,
             title: 'Phone Number',
             type: 'number',
             properties: {},
             validations: {
               required: true,
+            },
+          },
+          {
+            id: faker.string.numeric(4),
+            title: 'What is the best way to contact you?',
+            type: 'contact_method',
+            properties: {},
+            validations: {
+              required: true,
+            },
+            linkedFields: {
+              emailFieldId: emailFieldId,
+              phoneFieldId: phoneFieldId,
             },
           },
         ],
@@ -352,30 +368,6 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             id: faker.string.numeric(4),
             title: 'Date of Birth',
             type: 'short_text',
-            properties: {},
-            validations: {
-              required: true,
-            },
-          },
-        ],
-      },
-      {
-        id: faker.string.numeric(4),
-        title: 'Contact Information',
-        fields: [
-          {
-            id: faker.string.numeric(4),
-            title: 'Email',
-            type: 'email',
-            properties: {},
-            validations: {
-              required: true,
-            },
-          },
-          {
-            id: faker.string.numeric(4),
-            title: 'Phone Number',
-            type: 'number',
             properties: {},
             validations: {
               required: true,
