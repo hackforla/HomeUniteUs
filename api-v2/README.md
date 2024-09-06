@@ -51,7 +51,7 @@ And your API docs at:
 http://127.0.0.1:8000/docs
 ```
 
-To exit the virtual environment, run from the shell:
+To exit the virtual environment, within the shell run:
 ```shell
 exit
 ```
