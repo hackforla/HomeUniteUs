@@ -39,11 +39,15 @@ class User(UserBase):
         from_attributes = True
 
 
-class UserSignIn(BaseModel):
+class UserSignInRequest(BaseModel):
     email: str
     password: str
 
 
 class UserSignInResponse(BaseModel):
     user: User
+    token: str
+
+
+class RefreshTokenResponse(BaseModel):
     token: str

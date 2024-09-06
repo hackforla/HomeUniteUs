@@ -1,12 +1,14 @@
 import logging
+import jwt
 
-from fastapi import Depends, APIRouter, HTTPException, Response, Security
+from fastapi import Depends, APIRouter, HTTPException, Response, Security, Request
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from botocore.exceptions import ClientError
+from typing import Annotated
 
 
-from schemas import UserCreate, UserSignIn, UserSignInResponse
+from schemas import UserCreate, UserSignInRequest, UserSignInResponse, RefreshTokenResponse
 from crud import create_user, delete_user, get_user
 from api.deps import (
     get_db,
@@ -92,7 +94,7 @@ This route is used to sign in a user and start a new session
     response_model=UserSignInResponse,
 )
 def signin(
-    body: UserSignIn,
+    body: UserSignInRequest,
     response: Response,
     db: Session = Depends(get_db),
     cognito_client=Depends(get_cognito_client),
@@ -154,3 +156,79 @@ This route is a secret route that requires authentication and the guest role
 )
 def secret():
     return {"message": "Welcome to the secret route"}
+
+
+'''
+# Current session route
+
+This route is used to get the current session and user info upon page refresh
+
+'''
+@router.get("/session", response_model=UserSignInResponse)
+def current_session(request: Request, cognito_client=Depends(get_cognito_client), db: Session = Depends(get_db)):
+    id_token = request.cookies.get('id_token')
+    refresh_token = request.cookies.get('refresh_token')
+    if None in (id_token, refresh_token):
+        raise HTTPException(status_code=401, detail="Missing session cookies")
+    
+    decoded_id_token = jwt.decode(
+        id_token, algorithms=["RS256"], options={"verify_signature": False}
+    )
+
+    user = get_user(db, decoded_id_token['email'])
+
+    try:
+        auth_response = cognito_client.initiate_auth(
+            ClientId=cognito_client_id,
+            AuthFlow='REFRESH_TOKEN',
+            AuthParameters={
+                'REFRESH_TOKEN': refresh_token,
+                'SECRET_HASH': calc_secret_hash(decoded_id_token["cognito:username"])
+            }
+        )
+    except ClientError as e:
+        code = e.response['Error']['Code']
+        message = e.response['Error']['Message']
+        raise HTTPException(status_code=400, detail={"code": code, "message": message})
+
+    return {
+        "user": user,
+        "token": auth_response['AuthenticationResult']['AccessToken'],
+    }
+
+
+'''
+# Refresh route
+
+This route is used to refresh the current access token during session
+'''
+@router.get("/refresh", response_model=RefreshTokenResponse)
+def refresh(request: Request, cognito_client=Depends(get_cognito_client)):
+    refresh_token = request.cookies.get('refresh_token')
+    id_token = request.cookies.get('id_token')
+
+    if None in (refresh_token, id_token):
+        raise HTTPException(status_code=401, detail="Missing refresh token or id token")
+
+    decoded = jwt.decode(id_token, algorithms=["RS256"], options={"verify_signature": False})
+
+    try:
+        response = cognito_client.initiate_auth(
+            ClientId=cognito_client_id,
+            AuthFlow='REFRESH_TOKEN',
+            AuthParameters={
+                'REFRESH_TOKEN': refresh_token,
+                'SECRET_HASH': calc_secret_hash(decoded["cognito:username"])
+            }
+        )
+    except ClientError as e:
+        code = e.response['Error']['Code']
+        message = e.response['Error']['Message']
+        raise HTTPException(status_code=400, detail={"code": code, "message": message})
+
+    access_token = response['AuthenticationResult']['AccessToken']
+
+    # Return access token
+    return {
+      "token": access_token
+    }
