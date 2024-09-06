@@ -27,7 +27,7 @@ Run `python -V` to check the Python version.
 
 #### Configuration
 
-The API application configuration must be specified before running the application. Configuration variables can be specified either as environment variables, or as entries within a `.env` file located within the `api-v2` directory. To get started, copy the values from one of `.env.example` into a `.env` file:
+The API application configuration must be specified before running the application. Configuration variables are specified as entries within a `.env` file located within the `api-v2` directory. To get started, create a '.env` file withing `/api-v2` and copy the values from `.env.example` into the new `.env` file. You may have to contact someone from the development team to get the necessary values.
 
 #### Setup and Run
 
