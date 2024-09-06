@@ -161,8 +161,9 @@ def secret():
 # Current session route
 
 This route is used to get the current session and user info upon page refresh
-
 '''
+
+
 @router.get("/session", response_model=UserSignInResponse)
 def current_session(request: Request, cognito_client=Depends(get_cognito_client), db: Session = Depends(get_db)):
     id_token = request.cookies.get('id_token')
@@ -201,6 +202,8 @@ def current_session(request: Request, cognito_client=Depends(get_cognito_client)
 
 This route is used to refresh the current access token during session
 '''
+
+
 @router.get("/refresh", response_model=RefreshTokenResponse)
 def refresh(request: Request, cognito_client=Depends(get_cognito_client)):
     refresh_token = request.cookies.get('refresh_token')
