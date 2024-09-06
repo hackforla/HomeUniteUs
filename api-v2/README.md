@@ -1,4 +1,4 @@
-# Home Unite Us OpenAPI Server
+# Home Unite Us FastAPI Server
 
 ## Overview
 
