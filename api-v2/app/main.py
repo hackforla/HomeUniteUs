@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 
 
 # from api.main import api_router
-# from core.config import settings
+from core.config import settings
 # from seed import init_db
 
 
