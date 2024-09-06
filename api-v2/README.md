@@ -31,7 +31,7 @@ The API application configuration must be specified before running the applicati
 
 #### Setup and Run
 
-Once the `.env` file has been configured using the instructions outlined above and Poetry is installed, run the following commands in the `api-v2` directory to install the required development dependencies and run the application.
+Once the `.env` file has been configured and Poetry is installed, run the following commands in the `api-v2` directory to install the required development dependencies and run the application.
 
 ```shell
 poetry install                      # Installs all dependencies
