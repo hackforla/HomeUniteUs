@@ -13,7 +13,7 @@ This server uses:
 
 ## Requirements
 
-You will need Python >= 3.8+ to install Poetry.
+You will need Python 3.8+ to install Poetry.
 
 Run `python -V` to check the Python version.
 
