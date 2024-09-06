@@ -235,23 +235,3 @@ def refresh(request: Request, cognito_client=Depends(get_cognito_client)):
       "token": access_token
     }
 
-'''
-# Get user route
-
-This route is used to get the current user info
-'''
-
-@router.get("/user", response_model=User)
-def get_user_info(request: Request, db: Session = Depends(get_db)):
-    id_token = request.cookies.get('id_token')
-    if(id_token is None):
-        raise HTTPException(status_code=401, detail="Missing id token")
-    
-    decoded = jwt.decode(id_token, algorithms=["RS256"], options={"verify_signature": False})
-    email = decoded['email']
-    if(email is None):
-        raise HTTPException(status_code=401, detail="Email not found in token")
-
-    user = get_user(db, email)
-        
-    return user
