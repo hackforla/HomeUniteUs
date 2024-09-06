@@ -38,7 +38,13 @@ poetry install                      # Installs all dependencies
 
 poetry shell                        # Activates the virtual environment
 
-poetry run fastapi dev app/main.py      # Runs this server in developer mode
+poetry run fastapi dev app/main.py  # Runs this server in developer mode
+```
+
+To exit the virtual environment, run from the shell:
+
+```shell
+exit
 ```
 
 Your server is now running at:
