@@ -6,10 +6,10 @@ This is the _Home Unite Us_ web API server.
 
 This server uses:
 
-- [FastAPI](https://fastapi.tiangolo.com/) as the web framework for API development.
-- [SQLAlchemy](https://www.sqlalchemy.org/) as the ORM for database operations.
-- [Pydantic](https://docs.pydantic.dev/latest/) for data validation and serialization.
-- [Poetry](https://python-poetry.org/docs/) for dependency management.
+- [FastAPI](https://fastapi.tiangolo.com/) - Web framework for API development
+- [SQLAlchemy](https://www.sqlalchemy.org/) - ORM for database operations
+- [Pydantic](https://docs.pydantic.dev/latest/) - Data validation and serialization
+- [Poetry](https://python-poetry.org/docs/) - Dependency management
 
 ## Requirements
 
