@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "home unite us"
+name = "homeuniteus-api"
 version = "0.1.0"
 description = "Web API for Home Unite Us"
 authors = [
