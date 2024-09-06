@@ -1,10 +1,11 @@
-from pydantic_settings import BaseSettings
-from dotenv import load_dotenv
-
-load_dotenv()
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_file=".env"
+    )
+
     COGNITO_CLIENT_ID: str
     COGNITO_CLIENT_SECRET: str
     COGNITO_REGION: str
@@ -17,9 +18,6 @@ class Settings(BaseSettings):
     ROOT_URL: str
     ENV: str
     DATABASE_URL: str
-
-    class Config:
-        env_file = ".env"
 
 
 settings = Settings()
