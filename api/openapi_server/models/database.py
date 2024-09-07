@@ -28,6 +28,12 @@ class User(Base):
             raise ValueError(f"{key} must contain at least one non-space character")
         return value.strip()
 
+class Role(Base):
+    __tablename__ = "role"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False, unique=True)
+    users = relationship("User", back_populates="role")
+
 class UnmatchedGuestCase(Base):
     __tablename__ = "unmatched_guest_case"
     id = Column(Integer, primary_key=True, index=True)
@@ -41,12 +47,6 @@ class UnmatchedGuestCaseStatus(Base):
     id = Column(Integer, primary_key=True, index=True)
     status_text = Column(String(255), nullable=False, unique=True)
     cases = relationship("UnmatchedGuestCase", back_populates="status")
-
-class Role(Base):
-    __tablename__ = "role"
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False, unique=True)
-    users = relationship("User", back_populates="role")
 
 class HousingProgramServiceProvider(Base):
     __tablename__ = "housing_program_service_provider"  
