@@ -49,7 +49,7 @@ class UserSignInResponse(BaseModel):
     token: str
 
 
-class SmartNested(Nested):
+class SmartNested(Nested): 
     '''
     Schema attribute used to serialize nested attributes to 
     primary keys, unless they are already loaded. This
@@ -196,7 +196,15 @@ class ResponseSchema(BaseModel):
 
         return data
 
+class ForgotPasswordRequest(BaseModel):
+    email: str
 
+
+class ForgotPasswordResponse(BaseModel):
+    code: int
+    type: str
+    message: str
+    
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)
 service_provider_schema = HousingProgramServiceProviderSchema()

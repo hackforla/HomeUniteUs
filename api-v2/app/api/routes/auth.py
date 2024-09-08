@@ -6,7 +6,8 @@ from sqlalchemy.orm import Session
 from botocore.exceptions import ClientError
 
 
-from schemas import UserCreate, UserSignIn, UserSignInResponse
+from schemas import UserCreate, UserSignIn, UserSignInResponse, ForgotPasswordRequest, ForgotPasswordResponse
+
 from crud import create_user, delete_user, get_user
 from api.deps import (
     get_db,
@@ -14,6 +15,7 @@ from api.deps import (
     requires_auth,
     allow_roles,
     role_to_cognito_group_map,
+    calc_secret_hash
 )
 
 from utils import calc_secret_hash
@@ -154,3 +156,32 @@ This route is a secret route that requires authentication and the guest role
 )
 def secret():
     return {"message": "Welcome to the secret route"}
+
+
+""" 
+# Forgot Password Route
+
+This route handles forgot password requests by hashing credentials and sending to AWS Cognito.
+
+"""
+
+
+@router.post("/forgot_password", response_model=ForgotPasswordResponse)
+def forgot_password(
+    body: ForgotPasswordRequest,
+    cognito_client=Depends(get_cognito_client)
+):
+    secret_hash = calc_secret_hash(body.email)
+    
+    try:
+        response = cognito_client.forgot_password(
+            ClientId=cognito_client_id ,
+            SecretHash=secret_hash,
+            Username=body.email
+        )
+    except boto3.exceptions.Boto3Error as e:
+        code = e.response['Error']['Code']
+        message = e.response['Error']['Message']
+        raise HTTPException(status_code=401, detail={"code": code, "message": message})
+    
+    return {"message": "Password reset instructions sent"}
