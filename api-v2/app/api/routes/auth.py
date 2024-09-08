@@ -1,9 +1,11 @@
 import logging
+import boto3
 
 from fastapi import Depends, APIRouter, HTTPException, Response, Security
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from botocore.exceptions import ClientError
+
 
 
 from schemas import UserCreate, UserSignIn, UserSignInResponse, ForgotPasswordRequest, ForgotPasswordResponse
