@@ -204,6 +204,14 @@ class ForgotPasswordResponse(BaseModel):
     code: int
     type: str
     message: str
+
+class ConfirmForgotPasswordRequest(BaseModel):
+    email: str
+    code: str
+    password: str
+
+class ConfirmForgotPasswordResponse(BaseModel):
+    message: str
     
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)

@@ -8,7 +8,7 @@ from botocore.exceptions import ClientError
 
 
 
-from schemas import UserCreate, UserSignIn, UserSignInResponse, ForgotPasswordRequest, ForgotPasswordResponse
+from schemas import UserCreate, UserSignIn, UserSignInResponse, ForgotPasswordRequest, ForgotPasswordResponse, ConfirmForgotPasswordResponse, ConfirmForgotPasswordRequest
 
 from crud import create_user, delete_user, get_user
 from api.deps import (
@@ -187,3 +187,33 @@ def forgot_password(
         raise HTTPException(status_code=401, detail={"code": code, "message": message})
     
     return {"message": "Password reset instructions sent"}
+
+
+""" 
+# Confirm forgot password route
+
+This route handles forgot password confirmation code requests by receiving the confirmation code and sending to AWS Cognito to verify.
+
+"""
+
+@router.post("/confirm_forgot_password", response_model=ConfirmForgotPasswordResponse)
+def confirm_forgot_password(
+    body: ConfirmForgotPasswordRequest,
+    cognito_client=Depends(get_cognito_client)
+):
+    secret_hash = calc_secret_hash(body.email)
+    
+    try:
+        response = cognito_client.confirm_forgot_password(
+            ClientId=settings.COGNITO_CLIENT_ID,
+            SecretHash=secret_hash,
+            Username=body.email,
+            ConfirmationCode=body.code,
+            Password=body.password
+        )
+    except boto3.exceptions.Boto3Error as e:
+        code = e.response['Error']['Code']
+        message = e.response['Error']['Message']
+        raise HTTPException(status_code=401, detail={"code": code, "message": message})
+    
+    return {"message": "Password has been reset successfully"}
