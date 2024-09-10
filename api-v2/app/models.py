@@ -55,33 +55,3 @@ class UnmatchedGuestCaseStatus(Base):
     cases = relationship("UnmatchedGuestCase", back_populates="status")
 
 
-class DataAccessLayer:
-    _engine: Engine = None
-
-    @classmethod
-    def db_init(cls, conn_string):
-        # Check that a database engine is not already set. The test project will
-        # hook into the DataAccessLayer to create a test project database engine.
-        if cls._engine: return
-
-        cls._engine = create_engine(conn_string, echo=True, future=True)
-        Base.metadata.create_all(bind=cls._engine)
-
-    @classmethod
-    def session(cls) -> Session:
-        return Session(cls._engine)
-
-    @classmethod
-    def revision_id(cls) -> str:
-        "Return the database alembic migration revision number."
-        if not cls._engine: return ""
-        try:
-            with cls._engine.connect() as conn:
-                # Using text() to ensure the query is treated as a literal SQL statement
-                result = conn.execute(
-                    text("SELECT version_num FROM alembic_version"))
-                revision_id = result.scalar()
-                return revision_id
-        except SQLAlchemyError:
-            # This catches errors such as missing alembic_version table
-            return ""

@@ -5,8 +5,8 @@ import time
 from fastapi import Request, HTTPException
 from fastapi.security import SecurityScopes
 
-from core.db import SessionLocal
-from core.config import settings
+from app.core.db import SessionLocal
+from app.core.config import settings
 
 cognito_region = settings.COGNITO_REGION
 cognito_access_id = settings.COGNITO_ACCESS_ID

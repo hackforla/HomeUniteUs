@@ -1,4 +1,3 @@
-from app.models import DataAccessLayer
 from app.user_roles import UserRole
 from app.repositories.user_repo import UserRepository
 

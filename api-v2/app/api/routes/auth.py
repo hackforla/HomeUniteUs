@@ -6,9 +6,9 @@ from sqlalchemy.orm import Session
 from botocore.exceptions import ClientError
 
 
-from schemas import UserCreate, UserSignIn, UserSignInResponse
-from crud import create_user, delete_user, get_user
-from api.deps import (
+from app.schemas import UserCreate, UserSignIn, UserSignInResponse
+from app.crud import create_user, delete_user, get_user
+from app.api.deps import (
     get_db,
     get_cognito_client,
     requires_auth,
@@ -16,8 +16,8 @@ from api.deps import (
     role_to_cognito_group_map,
 )
 
-from utils import calc_secret_hash
-from core.config import settings
+from app.utils import calc_secret_hash
+from app.core.config import settings
 
 router = APIRouter()
 

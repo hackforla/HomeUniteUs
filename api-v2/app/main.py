@@ -2,9 +2,9 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
 
-from api.main import api_router
-from core.config import settings
-from seed import init_db
+from app.api.main import api_router
+# from core.config import settings
+from app.seed import init_db
 
 
 @asynccontextmanager
