@@ -51,7 +51,6 @@ class UserSignInResponse(BaseModel):
 #     Schema attribute used to serialize nested attributes to
 #     primary keys, unless they are already loaded. This
 #     enables serialization of complex nested relationships.
-
 #     Modified from
 #     https://marshmallow-sqlalchemy.readthedocs.io/en/latest/recipes.html#smart-nested-field
 #     '''

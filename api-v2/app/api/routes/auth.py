@@ -1,4 +1,5 @@
 import logging
+import boto3
 
 from fastapi import Depends, APIRouter, HTTPException, Response, Security
 from fastapi.responses import RedirectResponse
@@ -6,7 +7,8 @@ from sqlalchemy.orm import Session
 from botocore.exceptions import ClientError
 
 
-from app.schemas import UserCreate, UserSignIn, UserSignInResponse
+from app.schemas import UserCreate, UserSignIn, UserSignInResponse, ForgotPasswordRequest, ForgotPasswordResponse, ConfirmForgotPasswordResponse, ConfirmForgotPasswordRequest
+
 from app.crud import create_user, delete_user, get_user
 from app.api.deps import (
     get_db,
@@ -14,6 +16,7 @@ from app.api.deps import (
     requires_auth,
     allow_roles,
     role_to_cognito_group_map,
+    calc_secret_hash
 )
 
 from app.utils import calc_secret_hash
@@ -154,3 +157,62 @@ This route is a secret route that requires authentication and the guest role
 )
 def secret():
     return {"message": "Welcome to the secret route"}
+
+
+""" 
+# Forgot Password Route
+
+This route handles forgot password requests by hashing credentials and sending to AWS Cognito.
+
+"""
+
+
+@router.post("/forgot_password", response_model=ForgotPasswordResponse)
+def forgot_password(
+    body: ForgotPasswordRequest,
+    cognito_client=Depends(get_cognito_client)
+):
+    secret_hash = calc_secret_hash(body.email)
+    
+    try:
+        response = cognito_client.forgot_password(
+            ClientId=cognito_client_id ,
+            SecretHash=secret_hash,
+            Username=body.email
+        )
+    except boto3.exceptions.Boto3Error as e:
+        code = e.response['Error']['Code']
+        message = e.response['Error']['Message']
+        raise HTTPException(status_code=401, detail={"code": code, "message": message})
+    
+    return {"message": "Password reset instructions sent"}
+
+
+""" 
+# Confirm forgot password route
+
+This route handles forgot password confirmation code requests by receiving the confirmation code and sending to AWS Cognito to verify.
+
+"""
+
+@router.post("/confirm_forgot_password", response_model=ConfirmForgotPasswordResponse)
+def confirm_forgot_password(
+    body: ConfirmForgotPasswordRequest,
+    cognito_client=Depends(get_cognito_client)
+):
+    secret_hash = calc_secret_hash(body.email)
+    
+    try:
+        response = cognito_client.confirm_forgot_password(
+            ClientId=settings.COGNITO_CLIENT_ID,
+            SecretHash=secret_hash,
+            Username=body.email,
+            ConfirmationCode=body.code,
+            Password=body.password
+        )
+    except boto3.exceptions.Boto3Error as e:
+        code = e.response['Error']['Code']
+        message = e.response['Error']['Message']
+        raise HTTPException(status_code=401, detail={"code": code, "message": message})
+    
+    return {"message": "Password has been reset successfully"}
