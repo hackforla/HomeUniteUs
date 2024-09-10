@@ -1,4 +1,6 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings
+
 
 
 class Settings(BaseSettings):
@@ -18,6 +20,5 @@ class Settings(BaseSettings):
     ROOT_URL: str
     ENV: str
     DATABASE_URL: str
-
 
 settings = Settings()

@@ -1,5 +1,4 @@
-from pydantic import BaseModel
-from typing import Optional
+from pydantic import BaseModel, ConfigDict
 
 from enum import Enum
 
@@ -15,15 +14,14 @@ class RoleBase(BaseModel):
     id: int
     type: UserRoleEnum
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserBase(BaseModel):
     email: str
     firstName: str
-    middleName: Optional[str] = None
-    lastName: Optional[str] = None
+    middleName: str | None = None
+    lastName: str | None = None
 
 
 class UserCreate(UserBase):
@@ -35,8 +33,7 @@ class User(UserBase):
     id: int
     role: RoleBase
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserSignInRequest(BaseModel):
@@ -51,3 +48,64 @@ class UserSignInResponse(BaseModel):
 
 class RefreshTokenResponse(BaseModel):
     token: str
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+
+class ForgotPasswordResponse(BaseModel):
+    code: int
+    type: str
+    message: str
+
+
+class ConfirmForgotPasswordRequest(BaseModel):
+    email: str
+    code: str
+    password: str
+
+
+class ConfirmForgotPasswordResponse(BaseModel):
+    message: str
+
+
+# class SmartNested(Nested):
+#     '''
+#     Schema attribute used to serialize nested attributes to
+#     primary keys, unless they are already loaded. This
+#     enables serialization of complex nested relationships.
+#     Modified from
+#     https://marshmallow-sqlalchemy.readthedocs.io/en/latest/recipes.html#smart-nested-field
+#     '''
+
+#     def serialize(self, attr, obj, accessor=None):
+#         if hasattr(obj, attr):
+#             value = getattr(obj, attr, None)
+#             if value is None:
+#                 return None
+#             elif hasattr(value, 'id'):
+#                 return {"id": value.id}
+#             else:
+#                 return super(SmartNested, self).serialize(attr, obj, accessor)
+#         else:
+#             raise AttributeError(
+#                 f"{obj.__class__.__name__} object has no attribute '{attr}'")
+
+# class RoleSchema(BaseModel):
+
+#     model_config = ConfigDict(from_attributes=True)
+
+# class UnmatchedCaseSchema(BaseModel):
+
+#     model_config = ConfigDict(from_attributes=True)
+
+# class UnmatchedCaseStatusSchema(BaseModel):
+
+#     model_config = ConfigDict(from_attributes=True)
+
+# class UserSchema(BaseModel):
+#     model_config = ConfigDict(from_attributes=True)
+
+# user_schema = UserSchema()
+# users_schema = UserSchema(many=True)
+# unmatched_cs_schema = UnmatchedCaseStatusSchema()
+# unmatched_c_schema = UnmatchedCaseSchema()

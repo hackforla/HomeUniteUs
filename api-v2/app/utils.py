@@ -1,7 +1,7 @@
 import hmac
 import base64
 
-from core.config import settings
+from app.core.config import settings
 
 
 # Helper function to calculate secret hash

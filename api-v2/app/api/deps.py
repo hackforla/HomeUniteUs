@@ -1,12 +1,14 @@
 import boto3
 import jwt
 import time
+import hmac
+import base64
 
 from fastapi import Request, HTTPException
 from fastapi.security import SecurityScopes
 
-from core.db import SessionLocal
-from core.config import settings
+from app.core.db import SessionLocal
+from app.core.config import settings
 
 cognito_region = settings.COGNITO_REGION
 cognito_access_id = settings.COGNITO_ACCESS_ID
@@ -87,3 +89,13 @@ def allow_roles(request: Request, security_scopes: SecurityScopes):
     if not contains_group:
         raise HTTPException(status_code=403, detail="Unauthorized")
     return True
+
+
+
+def calc_secret_hash(username: str) -> str:
+    message = username + settings.COGNITO_CLIENT_ID
+    secret = bytearray(settings.COGNITO_CLIENT_SECRET, "utf-8")
+    dig = hmac.new(
+        secret, msg=message.encode("utf-8"), digestmod="sha256"
+    ).digest()
+    return base64.b64encode(dig).decode()
