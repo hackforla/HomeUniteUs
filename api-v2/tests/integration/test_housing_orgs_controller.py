@@ -34,14 +34,14 @@ def test_create_housing_org(client):
     response = client.post(PATH, json=requested_org)
     response_obj = response.json()
 
-    assert response.status_code == 201, response
+    assert response.status_code == 201
     assert response_obj["org_name"] == requested_org["org_name"]
 
-    print(response_obj['id'])
     response = client.get(f"{PATH}/{response_obj['id']}")
-    assert response.status_code == 200, response
+    assert response.status_code == 200
     response_obj = response.json()
-    assert response_obj["org_name"] == requested_org["org_name"], response
+    assert response_obj["id"] == 1
+    assert response_obj["org_name"] == requested_org["org_name"]
 
 
 def test_create_with_extra_data(client):
@@ -60,7 +60,7 @@ def test_create_with_extra_data(client):
     response = client.post(PATH, json=create_request)
     response_body = response.json()
 
-    assert response.status_code == 201, response
+    assert response.status_code == 201
     assert 'org_name' in response_body
     assert 'id' in response_body
     assert response_body['org_name'] == create_request['org_name']
@@ -77,14 +77,14 @@ def test_create_bad_json_invalid_type(client):
     bad_create_request = {"org_name": 1}
     response = client.post(PATH, json=bad_create_request)
 
-    assert response.status_code == 422, response
+    assert response.status_code == 422
 
 
 def test_create_bad_json_missing_name(client):
     bad_create_request = {"org_namez": 1}
     response = client.post(PATH, json=bad_create_request)
 
-    assert response.status_code == 422, response
+    assert response.status_code == 422
 
 
 def test_delete_housing_org(client: TestClient):
@@ -95,7 +95,7 @@ def test_delete_housing_org(client: TestClient):
     ids = populate_test_database(client=client, num_entries=1)
     path = f'{PATH}/{ids[0]}'
     response = client.delete(path)
-    assert response.status_code == 204, response
+    assert response.status_code == 204
 
     response = client.get(path)
     assert response.status_code == 404, "Housing org was not deleted."
@@ -115,7 +115,7 @@ def test_delete_nonexistant_org(client: TestClient):
     assert len(response_body) == NUM_ROWS
 
     response = client.delete(f"{PATH}/{999}")
-    assert response.status_code == 404, response
+    assert response.status_code == 404
 
     response = client.get(PATH)
     response_body = response.json()
@@ -128,7 +128,7 @@ def test_get_nonexistent_org(client: TestClient):
     response = client.get(f"{PATH}/{999}")
     response_body = response.json()
 
-    assert response.status_code == 404, response
+    assert response.status_code == 404
     assert 'org_name' not in response_body
 
 
@@ -143,7 +143,7 @@ def test_get_housing_orgs(client: TestClient):
     response = client.get(PATH)
     response_body = response.json()
 
-    assert response.status_code == 200, response
+    assert response.status_code == 200
     assert len(response_body) == expected_org_count
 
 
@@ -151,7 +151,7 @@ def test_get_housing_org_empty_db(client):
     response = client.get(PATH)
     response_body = response.json()
 
-    assert response.status_code == 200, response
+    assert response.status_code == 200
     assert len(response_body) == 0
 
 
@@ -165,7 +165,7 @@ def test_put_update_housing_org(client: TestClient):
 
     response = client.put(f"{PATH}/{ids[0]}", json=updated_org)
 
-    assert response.status_code == 200, response
+    assert response.status_code == 200
 
     response_obj = response.json()
     assert response_obj["org_name"] == updated_org["org_name"]
@@ -175,13 +175,13 @@ def test_put_update_housing_org(client: TestClient):
 def test_put_create_housing_org_no_id(client: TestClient):
     put_body = {"org_name": "New Housing Org Name"}
     response = client.put(f"{PATH}/{999}", json=put_body)
-    assert response.status_code == 201, response
+    assert response.status_code == 201
 
 
 def test_put_create_housing_org_mismatch_id(client: TestClient):
     failed_put_body = {"id": 1, "org_name": "New Housing Org Name"}
     response = client.put(f"{PATH}/{999}", json=failed_put_body)
-    assert response.status_code == 409, response
+    assert response.status_code == 409
 
 
 def test_put_with_extra_data(client: TestClient):
@@ -201,7 +201,7 @@ def test_put_with_extra_data(client: TestClient):
     response = client.put(f"{PATH}/{ids[0]}", json=update_request)
     response_body = response.json()
 
-    assert response.status_code == 200, response
+    assert response.status_code == 200
 
     assert 'org_name' in response_body
     assert 'id' in response_body

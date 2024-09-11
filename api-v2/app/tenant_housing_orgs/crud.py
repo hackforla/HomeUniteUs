@@ -3,16 +3,12 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 
-from . import models, schemas
+from . import models
 
 
-def create_housing_org(session: Session, housing_org: schemas.HousingOrg):
+def create_housing_org(session: Session, new_housing_org: models.HousingOrg):
     """Create a Housing Org."""
-    new_org = models.HousingOrg(org_name=housing_org.org_name)
-    session.add(new_org)
-    session.commit()
-    session.refresh(new_org)
-    return new_org
+    session.add(new_housing_org)
 
 
 def read_housing_org_by_id(session: Session,
@@ -46,15 +42,13 @@ def upsert_housing_org(session: Session,
     """
     was_created = False
 
-    with session.begin():
-        db_housing_org = session.query(
-            models.HousingOrg).filter_by(id=housing_org.id).first()
-        if db_housing_org:
-            db_housing_org.org_name = housing_org.org_name
-        else:
-            session.add(housing_org)
-            was_created = True
-        session.commit()
+    db_housing_org = session.query(
+        models.HousingOrg).filter_by(id=housing_org.id).first()
+    if db_housing_org:
+        db_housing_org.org_name = housing_org.org_name
+    else:
+        session.add(housing_org)
+        was_created = True
 
     return was_created
 
@@ -63,4 +57,3 @@ def delete_housing_org(session: Session, housing_org: models.HousingOrg):
     """Delete a HousingOrg."""
     housing_org = session.get(models.HousingOrg, housing_org.id)
     session.delete(housing_org)
-    session.commit()
