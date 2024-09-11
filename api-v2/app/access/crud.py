@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
-import app.models as models
-import app.schemas as schemas
+import app.access.models as models
+import app.access.schemas as schemas
 
 
 def get_role(db: Session, role: int):

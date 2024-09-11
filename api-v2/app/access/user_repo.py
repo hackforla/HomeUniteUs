@@ -1,7 +1,7 @@
 from typing import List
 
-from ..models import UnmatchedGuestCase, UnmatchedGuestCaseStatus, User, Role
-from ..user_roles import UmatchedCaseStatus, UserRole
+from .models import UnmatchedGuestCase, UnmatchedGuestCaseStatus, User, Role
+from .user_roles import UmatchedCaseStatus, UserRole
 
 
 class UnmatchedCaseRepository:

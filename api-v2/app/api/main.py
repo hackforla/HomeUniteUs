@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from app.api.routes import auth, user
+from app.access import auth, user
 from app.intake_profile import controller as intake_profile
 from app.tenant_housing_orgs import controller as housing_org
 
