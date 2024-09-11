@@ -1,3 +1,7 @@
+"""Controller (or "Resource") that represents a Housing Org(anization).
+
+This module implements the HTTP interface that represents a Housing Org.
+"""
 from . import crud, models, schemas
 
 from fastapi import APIRouter, Depends, Request, Response, HTTPException, status
@@ -14,8 +18,7 @@ router = APIRouter()
 def create_housing_org(
     housing_org: schemas.HousingOrg,
     request: Request,
-    session: Session = Depends(get_db)
-) -> schemas.HousingOrg:
+    session: Session = Depends(get_db)) -> schemas.HousingOrg:
     """Create a housing org.
 
     A housing org is created if it is not already in

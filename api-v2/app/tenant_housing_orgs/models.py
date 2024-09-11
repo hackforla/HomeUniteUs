@@ -1,3 +1,5 @@
+"""SQLAlchemy models for the Housing Org."""
+
 from typing import Annotated
 from typing import List
 from sqlalchemy import ForeignKey, String

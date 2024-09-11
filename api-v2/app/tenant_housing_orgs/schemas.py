@@ -1,3 +1,4 @@
+"""Pydantic schemas for the Housing Org."""
 from pydantic import BaseModel, ConfigDict
 
 
