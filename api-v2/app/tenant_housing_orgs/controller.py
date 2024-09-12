@@ -34,7 +34,7 @@ def create_housing_org(
         db_org = crud.read_housing_org_by_name(session, housing_org.org_name)
         if db_org:
             redirect_url = request.url_for('get_housing_org',
-                                           **{'housing_org_id': db_org.id})
+                                           **{'housing_org_id': db_org.housing_org_id})
             return RedirectResponse(url=redirect_url,
                                     status_code=status.HTTP_303_SEE_OTHER)
 
@@ -49,11 +49,7 @@ def create_housing_org(
 def get_housing_org(
     housing_org_id: int, session: Session = Depends(get_db)
 ) -> schemas.HousingOrg | None:
-    """Get details about a housing org from an ID.
-
-    :param org_id: The ID of the housing org to read, update or delete
-    :type org_id: int
-    """
+    """Get details about a housing org from an ID."""
     housing_org = crud.read_housing_org_by_id(session, housing_org_id)
     if not housing_org:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -79,14 +75,14 @@ def put_housing_org(
     If the representation contains a Housing Org ID that does match the ID given
     in the path, then a HTTP 409 Conflict will be returned.
     """
-    if body.id is not None and body.id != housing_org_id:
+    if body.housing_org_id is not None and body.housing_org_id != housing_org_id:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail=
             "The Housing Org ID in the path mismatches the ID in the request body."
         )
 
-    housing_org = models.HousingOrg(id=housing_org_id, org_name=body.org_name)
+    housing_org = models.HousingOrg(housing_org_id=housing_org_id, org_name=body.org_name)
 
     with session.begin():
         was_created = crud.upsert_housing_org(session, housing_org)

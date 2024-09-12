@@ -43,7 +43,7 @@ def upsert_housing_org(session: Session,
     was_created = False
 
     db_housing_org = session.query(
-        models.HousingOrg).filter_by(id=housing_org.id).first()
+        models.HousingOrg).filter_by(housing_org_id=housing_org.housing_org_id).first()
     if db_housing_org:
         db_housing_org.org_name = housing_org.org_name
     else:
@@ -55,5 +55,5 @@ def upsert_housing_org(session: Session,
 
 def delete_housing_org(session: Session, housing_org: models.HousingOrg):
     """Delete a HousingOrg."""
-    housing_org = session.get(models.HousingOrg, housing_org.id)
+    housing_org = session.get(models.HousingOrg, housing_org.housing_org_id)
     session.delete(housing_org)
