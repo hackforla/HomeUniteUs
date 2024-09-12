@@ -1,18 +1,5 @@
 import {api} from './api';
-
-export interface UserRole {
-  name: 'Guest' | 'Host' | 'Coordinator' | 'Admin';
-}
-export interface User {
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: UserRole;
-}
-
-export interface UserResponse {
-  user: User;
-}
+import {User} from './user';
 
 export interface SignUpHostResponse {
   user: User;
@@ -193,13 +180,6 @@ const authApi = api.injectEndpoints({
         withCredentials: true,
       }),
     }),
-    user: build.query<UserResponse, void>({
-      query: () => ({
-        url: 'auth/user',
-        method: 'GET',
-        withCredentials: true,
-      }),
-    }),
     resendConfirmationCode: build.mutation<
       ResendConfirmationCodeResponse,
       ResendConfirmationCodeRequest
@@ -228,7 +208,6 @@ export const {
   useForgotPasswordMutation,
   useConfirmForgotPasswordMutation,
   useSessionMutation,
-  useUserQuery,
   usePrivateQuery,
   useResendConfirmationCodeMutation,
 } = authApi;

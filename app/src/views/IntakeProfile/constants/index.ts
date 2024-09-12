@@ -1,4 +1,3 @@
-
 import {faker} from '@faker-js/faker';
 import {array, object, string} from 'yup';
 import {InitialValues} from '..';
@@ -189,4 +188,3 @@ export const buildValidationSchema = (
     [groupId]: object().shape({...schema.fields}),
   });
 };
-
