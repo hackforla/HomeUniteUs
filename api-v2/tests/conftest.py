@@ -9,7 +9,7 @@ from fastapi.testclient import TestClient
 
 from app.main import app as main_app
 from app.core.db import Base
-from app.api.deps import get_db
+from app.modules.deps import get_db
 
 
 @pytest.fixture

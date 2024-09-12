@@ -1,7 +1,7 @@
 from sqlalchemy import event
 
 from app.core.db import Base, engine
-from app.access.models import Role
+from app.modules.access.models import Role
 
 INITIAL_ROLES = [
     {"type": "admin"},

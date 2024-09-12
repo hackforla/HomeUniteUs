@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, Request, Response, HTTPException, status
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 
-from app.api.deps import (
+from app.modules.deps import (
     get_db, )
 
 router = APIRouter()

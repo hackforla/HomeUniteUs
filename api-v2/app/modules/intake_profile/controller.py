@@ -3,7 +3,7 @@ import logging
 from fastapi import Depends, APIRouter, HTTPException, Response, Security
 from fastapi.responses import RedirectResponse
 
-from app.api.deps import (
+from app.modules.deps import (
     get_db,
     get_cognito_client,
     requires_auth,

@@ -8,10 +8,10 @@ from sqlalchemy.orm import Session
 from botocore.exceptions import ClientError
 
 
-from app.access.schemas import UserCreate, UserSignInRequest, UserSignInResponse, ForgotPasswordRequest, ForgotPasswordResponse, ConfirmForgotPasswordResponse, ConfirmForgotPasswordRequest, RefreshTokenResponse
+from app.modules.access.schemas import UserCreate, UserSignInRequest, UserSignInResponse, ForgotPasswordRequest, ForgotPasswordResponse, ConfirmForgotPasswordResponse, ConfirmForgotPasswordRequest, RefreshTokenResponse
 
-from app.access.crud import create_user, delete_user, get_user
-from app.api.deps import (
+from app.modules.access.crud import create_user, delete_user, get_user
+from app.modules.deps import (
     get_db,
     get_cognito_client,
     requires_auth,
