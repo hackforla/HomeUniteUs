@@ -19,10 +19,9 @@ import {useOutletContext} from 'react-router-dom';
 import {InitialValues} from 'src/views/IntakeProfile';
 import {AdditionalGuestsField} from './fields/AdditionaGuestsField';
 import {FieldGroup, Fields, Guest, Pet} from 'src/services/profile';
-import {AdditionalPetsField} from './AdditionalPetsField';
+import {AdditionalPetsField} from './fields/AdditionalPetsField';
 import {phoneRegExp} from '../../views/IntakeProfile/constants/index';
 import {DatePickerField} from './fields/DatePickerField';
-
 
 export interface OutletContext {
   groupId: string;
