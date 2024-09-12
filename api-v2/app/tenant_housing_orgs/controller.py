@@ -4,6 +4,7 @@ This module implements the HTTP interface that represents a Housing Org.
 """
 from . import crud, models, schemas
 
+from typing import Any
 from fastapi import APIRouter, Depends, Request, Response, HTTPException, status
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
@@ -14,24 +15,28 @@ from app.api.deps import (
 router = APIRouter()
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/",
+             status_code=status.HTTP_201_CREATED,
+             response_model=schemas.HousingOrg)
 def create_housing_org(
         housing_org: schemas.HousingOrg,
         request: Request,
-        session: Session = Depends(get_db)) -> schemas.HousingOrg:
+        session: Session = Depends(get_db)) -> Any:
     """Create a housing org.
 
     A housing org is created if it is not already in
     the database.
 
-    Return the newly created housing org. Return None
-    if the housing org already exists.
+    Return the newly created housing org.
+    If the Housing Org with the given name exists, a redirect response is given.
     """
     with session.begin():
         db_org = crud.read_housing_org_by_name(session, housing_org.org_name)
         if db_org:
-            return RedirectResponse(status_code=status.HTTP_303_SEE_OTHER,
-                                    url=f"{request.url}/{db_org.id}")
+            redirect_url = request.url_for('get_housing_org',
+                                           **{'housing_org_id': db_org.id})
+            return RedirectResponse(url=redirect_url,
+                                    status_code=status.HTTP_303_SEE_OTHER)
 
         new_housing_org = models.HousingOrg(org_name=housing_org.org_name)
         crud.create_housing_org(session, new_housing_org)
@@ -77,13 +82,14 @@ def put_housing_org(
     if body.id is not None and body.id != housing_org_id:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="The Housing Org ID in the path mismatches the ID in the request body.")
+            detail=
+            "The Housing Org ID in the path mismatches the ID in the request body."
+        )
 
     housing_org = models.HousingOrg(id=housing_org_id, org_name=body.org_name)
 
     with session.begin():
         was_created = crud.upsert_housing_org(session, housing_org)
-        session.commit()
 
     if was_created:
         response.status_code = status.HTTP_201_CREATED
@@ -103,4 +109,3 @@ def delete_housing_org(housing_org_id: int,
         if not housing_org:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
         crud.delete_housing_org(session, housing_org)
-        session.commit()

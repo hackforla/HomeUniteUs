@@ -31,16 +31,43 @@ def test_create_housing_org(client):
     """Test create a new housing org."""
     requested_org = {"org_name": "-123ASCII&"}
 
+    # POST
     response = client.post(PATH, json=requested_org)
-    response_obj = response.json()
-
     assert response.status_code == 201
+    response_obj = response.json()
     assert response_obj["org_name"] == requested_org["org_name"]
 
+    # GET
     response = client.get(f"{PATH}/{response_obj['id']}")
     assert response.status_code == 200
     response_obj = response.json()
     assert response_obj["id"] == 1
+    assert response_obj["org_name"] == requested_org["org_name"]
+
+
+def test_create_duplicate_housing_org_redirects(client):
+    """Test create a duplicate housing org redirects."""
+    requested_org = {"org_name": "-123ASCII&"}
+
+    # POST 1 of 2
+    response = client.post(PATH, json=requested_org)
+    assert response.status_code == 201
+    response_obj = response.json()
+    assert response_obj["id"] is not None
+    assert response_obj["org_name"] == requested_org["org_name"]
+
+    org_id = response_obj["id"]
+
+    # POST 2 of 2 should redirect instead of creating a new one
+    # Explicitly turn on following redirects to get a HTTP 200.
+    # The wrong status code (307) was being returned when setting
+    # follow_redirect to False. At the time of this writting, it
+    # seems that something changed the controller's RedirectResponse
+    # status code.
+    response = client.post(PATH, follow_redirects=True, json=requested_org)
+    assert response.status_code == 200, "Should have redirected to existing resource."
+    response_obj = response.json()
+    assert response_obj["id"] is not None
     assert response_obj["org_name"] == requested_org["org_name"]
 
 
