@@ -55,3 +55,9 @@ To exit the virtual environment, within the shell run:
 ```shell
 exit
 ```
+
+## Conventions
+
+### API Endpoints
+
+A path segment with spaces must be replace the spaces with a hyphen `-`. For example, `https://dev.homeunite.us/api/housing-orgs`.

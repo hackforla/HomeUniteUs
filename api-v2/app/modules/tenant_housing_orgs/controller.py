@@ -1,5 +1,10 @@
+"""Controller (or "Resource") that represents a Housing Org(anization).
+
+This module implements the HTTP interface that represents a Housing Org.
+"""
 from . import crud, models, schemas
 
+from typing import Any
 from fastapi import APIRouter, Depends, Request, Response, HTTPException, status
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
@@ -10,37 +15,41 @@ from app.modules.deps import (
 router = APIRouter()
 
 
-@router.post("/", status_code=status.HTTP_201_CREATED)
+@router.post("/",
+             status_code=status.HTTP_201_CREATED,
+             response_model=schemas.HousingOrg)
 def create_housing_org(
-    housing_org: schemas.HousingOrg,
-    request: Request,
-    session: Session = Depends(get_db)
-) -> schemas.HousingOrg:
+        housing_org: schemas.HousingOrg,
+        request: Request,
+        session: Session = Depends(get_db)) -> Any:
     """Create a housing org.
 
     A housing org is created if it is not already in
     the database.
 
-    Return the newly created housing org. Return None
-    if the housing org already exists.
+    Return the newly created housing org.
+    If the Housing Org with the given name exists, a redirect response is given.
     """
-    db_org = crud.read_housing_org_by_name(session, housing_org.org_name)
-    if db_org:
-        return RedirectResponse(status_code=status.HTTP_303_SEE_OTHER,
-                                url=f"{request.url}/{db_org.id}")
+    with session.begin():
+        db_org = crud.read_housing_org_by_name(session, housing_org.org_name)
+        if db_org:
+            redirect_url = request.url_for('get_housing_org',
+                                           **{'housing_org_id': db_org.housing_org_id})
+            return RedirectResponse(url=redirect_url,
+                                    status_code=status.HTTP_303_SEE_OTHER)
 
-    return crud.create_housing_org(session, housing_org)
+        new_housing_org = models.HousingOrg(org_name=housing_org.org_name)
+        crud.create_housing_org(session, new_housing_org)
+
+    session.refresh(new_housing_org)
+    return new_housing_org
 
 
 @router.get("/{housing_org_id}")
 def get_housing_org(
     housing_org_id: int, session: Session = Depends(get_db)
 ) -> schemas.HousingOrg | None:
-    """Get details about a housing org from an ID.
-
-    :param org_id: The ID of the housing org to read, update or delete
-    :type org_id: int
-    """
+    """Get details about a housing org from an ID."""
     housing_org = crud.read_housing_org_by_id(session, housing_org_id)
     if not housing_org:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
@@ -57,25 +66,27 @@ def get_housing_orgs(session: Session = Depends(get_db)) -> list[
 
 @router.put("/{housing_org_id}", status_code=status.HTTP_200_OK)
 def put_housing_org(
-    housing_org_id: int,
-    body: schemas.HousingOrg,
-    response: Response,
-    session: Session = Depends(get_db)) -> schemas.HousingOrg:
+        housing_org_id: int,
+        body: schemas.HousingOrg,
+        response: Response,
+        session: Session = Depends(get_db)) -> schemas.HousingOrg:
     """Create or Update a Housing Org with the given ID.
-
-    Return the updated housing org if update is successful, otherwise return None.
 
     If the representation contains a Housing Org ID that does match the ID given
     in the path, then a HTTP 409 Conflict will be returned.
     """
-    if body.id is not None and body.id != housing_org_id:
+    if body.housing_org_id is not None and body.housing_org_id != housing_org_id:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail=f"Failed to find org with id {housing_org_id}")
+            detail=
+            "The Housing Org ID in the path mismatches the ID in the request body."
+        )
 
-    housing_org = models.HousingOrg(id=housing_org_id, org_name=body.org_name)
+    housing_org = models.HousingOrg(housing_org_id=housing_org_id, org_name=body.org_name)
 
-    was_created = crud.upsert_housing_org(session, housing_org)
+    with session.begin():
+        was_created = crud.upsert_housing_org(session, housing_org)
+
     if was_created:
         response.status_code = status.HTTP_201_CREATED
 
@@ -89,7 +100,8 @@ def delete_housing_org(housing_org_id: int,
 
     :param housing_org_id: The ID of the housing org to delete.
     """
-    housing_org = crud.read_housing_org_by_id(session, housing_org_id)
-    if not housing_org:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-    crud.delete_housing_org(session, housing_org)
+    with session.begin():
+        housing_org = crud.read_housing_org_by_id(session, housing_org_id)
+        if not housing_org:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+        crud.delete_housing_org(session, housing_org)
