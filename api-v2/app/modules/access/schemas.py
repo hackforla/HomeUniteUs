@@ -36,7 +36,7 @@ class User(UserBase):
     model_config = ConfigDict(from_attributes=True)
 
 
-class UserSignIn(BaseModel):
+class UserSignInRequest(BaseModel):
     email: str
     password: str
 
@@ -46,6 +46,8 @@ class UserSignInResponse(BaseModel):
     token: str
 
 
+class RefreshTokenResponse(BaseModel):
+    token: str
 class ForgotPasswordRequest(BaseModel):
     email: str
 

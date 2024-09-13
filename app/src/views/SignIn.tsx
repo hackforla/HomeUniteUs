@@ -57,7 +57,7 @@ export const SignIn = () => {
 
       dispatch(setCredentials({user, token}));
 
-      navigate(redirectsByRole[user.role.name]);
+      navigate(redirectsByRole[user.role.type]);
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
         // you can access all properties of `FetchBaseQueryError` here

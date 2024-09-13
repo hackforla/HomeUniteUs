@@ -14,7 +14,7 @@ export const enableMocking = async () => {
     onUnhandledRequest(req, print) {
       // Ignore any requests from these URLs.
       const excludedRoutes = [
-        '/api/auth/user',
+        '/api/user',
         '/api/auth/session',
         '/api/auth/refresh',
       ];

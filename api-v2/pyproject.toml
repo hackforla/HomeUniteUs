@@ -31,9 +31,6 @@ psycopg2-binary = "^2.9"
 # boto3 is used for connecting to AWS resources
 boto3 = "^1.35.13"
 
-# python-dotenv allows the API to pull in external configuration from a .env file
-python-dotenv = "^1.0.1"
-
 # pydantic-settings is a Pydantic feature that is used to load settings/configurations
 # from environment variables or secret files.
 pydantic-settings = "^2.4.0"

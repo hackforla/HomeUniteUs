@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import {User} from '../services/auth';
+import {User, userAPI} from '../services/user';
 import {RootState} from './store';
 import {authApi} from '../services/auth';
 
@@ -34,8 +34,8 @@ export const authSlice = createSlice({
   extraReducers: builder => {
     builder
       // Add a matcher to update auth state with user returned from the user query
-      .addMatcher(authApi.endpoints.user.matchFulfilled, (state, {payload}) => {
-        state.user = payload.user;
+      .addMatcher(userAPI.endpoints.user.matchFulfilled, (state, {payload}) => {
+        state.user = payload;
       })
       .addMatcher(
         authApi.endpoints.session.matchFulfilled,

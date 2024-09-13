@@ -14,10 +14,10 @@ import {
 
 // TODO: Maybe store this in a more global location? with routes?
 export const redirectsByRole = {
-  Guest: '/guest',
-  Host: '/host',
-  Coordinator: '/coordinator',
-  Admin: '/coordinator',
+  guest: '/guest',
+  host: '/host',
+  coordinator: '/coordinator',
+  admin: '/coordinator',
 };
 
 interface UseAuthenticateWithOAuth {
@@ -55,7 +55,7 @@ export const useAuthenticateWithOAuth = ({
         .then(response => {
           const {token, user} = response;
           dispatch(setCredentials({user, token}));
-          navigate(redirectsByRole[user.role.name]);
+          navigate(redirectsByRole[user.role.type]);
         })
         .catch(err => {
           if (isFetchBaseQueryError(err)) {
