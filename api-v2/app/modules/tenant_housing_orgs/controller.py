@@ -5,12 +5,10 @@ This module implements the HTTP interface that represents a Housing Org.
 from . import crud, models, schemas
 
 from typing import Any
-from fastapi import APIRouter, Depends, Request, Response, HTTPException, status
+from fastapi import APIRouter, Request, Response, HTTPException, status
 from fastapi.responses import RedirectResponse
-from sqlalchemy.orm import Session
 
-from app.modules.deps import (
-    get_db, )
+from app.modules.deps import DbSessionDep
 
 router = APIRouter()
 
@@ -21,7 +19,7 @@ router = APIRouter()
 def create_housing_org(
         housing_org: schemas.HousingOrg,
         request: Request,
-        session: Session = Depends(get_db)) -> Any:
+        session: DbSessionDep) -> Any:
     """Create a housing org.
 
     A housing org is created if it is not already in
@@ -46,9 +44,7 @@ def create_housing_org(
 
 
 @router.get("/{housing_org_id}")
-def get_housing_org(
-    housing_org_id: int, session: Session = Depends(get_db)
-) -> schemas.HousingOrg | None:
+def get_housing_org(housing_org_id: int, session: DbSessionDep) -> schemas.HousingOrg | None:
     """Get details about a housing org from an ID."""
     housing_org = crud.read_housing_org_by_id(session, housing_org_id)
     if not housing_org:
@@ -58,7 +54,7 @@ def get_housing_org(
 
 
 @router.get("/")
-def get_housing_orgs(session: Session = Depends(get_db)) -> list[
+def get_housing_orgs(session: DbSessionDep) -> list[
         schemas.HousingOrg]:
     """Get a list of all housing orgs."""
     return crud.read_housing_orgs(session)
@@ -69,7 +65,7 @@ def put_housing_org(
         housing_org_id: int,
         body: schemas.HousingOrg,
         response: Response,
-        session: Session = Depends(get_db)) -> schemas.HousingOrg:
+        session: DbSessionDep) -> schemas.HousingOrg:
     """Create or Update a Housing Org with the given ID.
 
     If the representation contains a Housing Org ID that does match the ID given
@@ -95,7 +91,7 @@ def put_housing_org(
 
 @router.delete("/{housing_org_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_housing_org(housing_org_id: int,
-                       session: Session = Depends(get_db)):
+                       session: DbSessionDep):
     """Delete a housing org.
 
     :param housing_org_id: The ID of the housing org to delete.

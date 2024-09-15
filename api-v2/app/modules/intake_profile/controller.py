@@ -1,15 +1,11 @@
-import logging
 
 from fastapi import Depends, APIRouter, HTTPException, Response, Security
-from fastapi.responses import RedirectResponse
+# from fastapi.responses import RedirectResponse
 
-from app.modules.deps import (
-    get_db,
-    get_cognito_client,
-    requires_auth,
-    allow_roles,
-    role_to_cognito_group_map,
-)
+# from app.modules.deps import (
+#     DbSessionDep,
+#     CognitoIdpDep,
+# )
 
 router = APIRouter()
 

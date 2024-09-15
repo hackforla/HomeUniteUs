@@ -35,6 +35,10 @@ boto3 = "^1.35.13"
 # from environment variables or secret files.
 pydantic-settings = "^2.4.0"
 
+# email-validator validates e-mail addresses. It is used with Pydantic to validates
+# an e-mail address in Pydantic schemas.
+email-validator = "^2.2.0"
+
 # pyjwt is used to decode information contained in a JSON Web Token
 pyjwt = {extras = ["crypto"], version = "^2.9.0"}
 

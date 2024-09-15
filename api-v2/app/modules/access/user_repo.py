@@ -1,7 +1,5 @@
-from typing import List
-
-from .models import UnmatchedGuestCase, UnmatchedGuestCaseStatus, User, Role
-from .user_roles import UmatchedCaseStatus, UserRole
+from app.modules.access.models import UnmatchedGuestCase, UnmatchedGuestCaseStatus, User, Role
+from app.modules.access.user_roles import UmatchedCaseStatus, UserRole
 
 
 class UnmatchedCaseRepository:
@@ -41,7 +39,7 @@ class UserRepository:
         self.session = session
 
     def _get_role(self, role: UserRole) -> Role:
-        db_role = self.session.query(Role).filter_by(name=role.value).first()
+        db_role = self.session.query(Role).filter_by(type=role.value).first()
         if not db_role:
             raise ValueError(f"{role.value} is not a valid user role type")
         return db_role
@@ -57,7 +55,7 @@ class UserRepository:
                         firstName=firstName,
                         middleName=middleName,
                         lastName=lastName,
-                        role_id=new_role.id)
+                        roleId=new_role.id)
         self.session.add(new_user)
         self.session.commit()
 
@@ -77,11 +75,11 @@ class UserRepository:
     def get_user(self, email: str) -> User:
         return self.session.query(User).filter_by(email=email).first()
 
-    def get_all_users(self) -> List[User]:
+    def get_all_users(self) -> list[User]:
         return self.session.query(User).all()
 
     def get_user_id(self, email: str) -> int:
         return self.session.query(User).filter_by(email=email).first().id
 
-    def get_users_with_role(self, role: UserRole) -> List[User]:
+    def get_users_with_role(self, role: UserRole) -> list[User]:
         return self.session.query(User).filter_by(role=self._get_role(role))

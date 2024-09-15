@@ -1,12 +1,9 @@
+from functools import lru_cache
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic_settings import BaseSettings
-
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(
-        env_file=".env"
-    )
+    model_config = SettingsConfigDict(env_file=".env")
 
     COGNITO_CLIENT_ID: str
     COGNITO_CLIENT_SECRET: str
@@ -15,10 +12,10 @@ class Settings(BaseSettings):
     COGNITO_USER_POOL_ID: str
     COGNITO_ACCESS_ID: str
     COGNITO_ACCESS_KEY: str
-    SECRET_KEY: str
-    CONFIG_PROFILE: str
     ROOT_URL: str
-    ENV: str
     DATABASE_URL: str
 
-settings = Settings()
+
+@lru_cache
+def get_settings():
+    return Settings()

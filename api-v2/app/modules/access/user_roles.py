@@ -2,10 +2,10 @@ from enum import Enum
 
 
 class UserRole(Enum):
-    ADMIN = "Admin"
-    GUEST = "Guest"
-    HOST = "Host"
-    COORDINATOR = "Coordinator"
+    ADMIN = "admin"
+    GUEST = "guest"
+    HOST = "host"
+    COORDINATOR = "coordinator"
 
 
 class UmatchedCaseStatus(Enum):

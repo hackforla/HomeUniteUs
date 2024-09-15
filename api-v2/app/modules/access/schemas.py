@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, EmailStr
 
 from enum import Enum
 
@@ -18,7 +18,7 @@ class RoleBase(BaseModel):
 
 
 class UserBase(BaseModel):
-    email: str
+    email: EmailStr
     firstName: str
     middleName: str | None = None
     lastName: str | None = None
@@ -37,7 +37,7 @@ class User(UserBase):
 
 
 class UserSignInRequest(BaseModel):
-    email: str
+    email: EmailStr
     password: str
 
 
@@ -49,7 +49,7 @@ class UserSignInResponse(BaseModel):
 class RefreshTokenResponse(BaseModel):
     token: str
 class ForgotPasswordRequest(BaseModel):
-    email: str
+    email: EmailStr
 
 
 class ForgotPasswordResponse(BaseModel):
@@ -59,7 +59,7 @@ class ForgotPasswordResponse(BaseModel):
 
 
 class ConfirmForgotPasswordRequest(BaseModel):
-    email: str
+    email: EmailStr
     code: str
     password: str
 
