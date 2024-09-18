@@ -6,7 +6,7 @@ import {
   TextField,
   CircularProgress,
 } from '@mui/material';
-import GoogleIcon from '@mui/icons-material/Google';
+// import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
 import {SignUpRequest} from '../../services/auth';
 import {PasswordValidation} from '../common/PasswordValidation';
@@ -14,18 +14,16 @@ import {signUpVaildationSchema} from '../../utils/PasswordValidationSchema';
 import {PasswordField} from './PasswordField';
 
 export interface SignUpFormProps {
-  // sign up according to host/coordinator
+  isLoading: boolean;
   onSubmit: ({
     email,
     password,
     firstName,
     lastName,
   }: Omit<SignUpRequest, 'role'>) => Promise<void>;
-  type: string;
-  isLoading: boolean;
 }
 
-export const SignUpForm = ({onSubmit, type, isLoading}: SignUpFormProps) => {
+export const SignUpForm = ({onSubmit, isLoading}: SignUpFormProps) => {
   const {
     handleSubmit,
     handleChange,
@@ -120,7 +118,7 @@ export const SignUpForm = ({onSubmit, type, isLoading}: SignUpFormProps) => {
         ) : null}
       </Button>
       <Divider>or</Divider>
-      <Button
+      {/* <Button
         disabled={isLoading}
         variant="outlined"
         size="large"
@@ -134,7 +132,7 @@ export const SignUpForm = ({onSubmit, type, isLoading}: SignUpFormProps) => {
         {isLoading ? (
           <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
         ) : null}
-      </Button>
+      </Button> */}
     </Stack>
   );
 };
