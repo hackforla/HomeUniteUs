@@ -10,7 +10,7 @@ import app.core.config as config
 async def lifespan(app: FastAPI):
     settings = config.get_settings()
     engine = db.db_engine(settings)
-    import seed
+    import app.seed
     db.init_db(engine)
     yield
 
