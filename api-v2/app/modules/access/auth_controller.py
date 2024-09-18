@@ -3,7 +3,7 @@ import jwt
 import boto3
 
 from fastapi import Depends, APIRouter, HTTPException, Response, Security, Request
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, JSONResponse
 from botocore.exceptions import ClientError
 
 from app.modules.access.schemas import (
@@ -24,8 +24,8 @@ def set_session_cookie(response: Response, auth_response: dict):
     refresh_token = auth_response["AuthenticationResult"]["RefreshToken"]
     id_token = auth_response["AuthenticationResult"]["IdToken"]
 
-    response.set_cookie("refresh_token", refresh_token)
-    response.set_cookie("id_token", id_token)
+    response.set_cookie("refresh_token", refresh_token, httponly=True)
+    response.set_cookie("id_token", id_token, httponly=True)
 
 @router.get('/signup/confirm')   
 def confirm_sign_up(code: str, username: str, client_id: str, email: str, settings: SettingsDep, cognito_client: CognitoIdpDep, calc_secret_hash: SecretHashFuncDep):
@@ -140,25 +140,27 @@ def signin(body: UserSignInRequest,
         "token": auth_response["AuthenticationResult"]["AccessToken"],
     }
 
-# @router.get(
-#         "/signout", dependencies=[
-#         Depends(requires_auth)
-#     ])
-# def signout(response: Response, cognito_client: CognitoIdpDep):
+@router.post(
+        "/signout", dependencies=[
+        Depends(requires_auth)
+    ])
+def signout(request: Request, cognito_client: CognitoIdpDep):
+    access_token = request.headers.get("Authorization").split(" ")[1]
     
-    
 
-#     # Signout user
-#     response = cognito_client.global_sign_out(
-#         AccessToken=access_token
-#     )
+    # Signout user
+    response = cognito_client.global_sign_out(
+        AccessToken=access_token
+    )
 
-#     # Remove refresh token cookie
-#     session.pop('refresh_token', None)
+    response = JSONResponse(content={"message": "User signed out successfully"})
 
-#     # send response
-#     return response
+    # Remove refresh token cookie
+    response.delete_cookie("refresh_token")
+    response.delete_cookie("id_token")
 
+    # send response
+    return response
 
 @router.get(
     "/secret",
