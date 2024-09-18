@@ -6,21 +6,12 @@ import app.modules.access.adapters.aim_exceptions as aim_exceptions
 import app.modules.access.adapters.cognito_groups as cognito_groups
 import app.modules.access.schemas as schemas
 
-PRIVATE_KEY = """-----BEGIN RSA PRIVATE KEY-----
-MIICWwIBAAKBgQCdjgEs5YgC9pkY3MarawFK9KIc3stNwgX8SmlZ9tyrFrqiebnG
-wW5ys+lexfGiG0R7YrLCYPf3Bsv/BawVI+PxJFDcAb8lhp+n7jG1F0YvRAUjMaxY
-HaC+hrMntxhDVx5T7uSYSwMJGeKJdh3RNg3UpIw3HfBAYf0qnG/bgSsxcwIDAQAB
-AoGAa61/lCWS3SOX4mwQw1qwWX/zw3No0s3FtXVNpxSWH7+68gvrMbFFQNNArWrv
-B3FHTmRX84y+K2/Tv4kq4I/U2gIV5W2N+liT2Lno4iM7J2q5/TRn1rJxppesP8kV
-6aXCSjvMCwcA57iAPvgEEsj2VKNROmkGkRe4PNEfwbqXU9ECQQD7aEfQ+mK3aR+Y
-I/gEOqSgcWrUz+Sc1esh2uHzPOXTBSO5BXnXEin4QutCnHZ75I6k5d5HAdOTxlUX
-gEAY+qo1AkEAoG7RPF/ksCdPbvPwMZfU/8W+P1zlezBllDjVlXWuZ44j4x69aHnS
-4W0v1/hnrDhmKvaMoe5bEv/EbAY2g4+iBwJAV1JKF3jQTtoxghuEKpvf0GZ0b8Rh
-qGPYzqKC9oRBY0EWvk37mssRTsyXgERuFuw062t3//vPbDVoGsiN+t8dvQJAZpl4
-RlwtLFp3ekWW/qBTH5+eo3cNa1LwI3KVZRf1iVRlrwIhr4b5TiE9z6iU5JbM//zc
-w1Jj/CqFu2/dvRVGUQJAVhi8TYdfbiooObs0J+HAQ8uyV5h27Ep6f1OgYM2qy41O
-kYGzhbqepuUGFOGBvH/PJF6IQ5gvUSiSqBupvArFxQ==
------END RSA PRIVATE KEY-----"""
+from cryptography.hazmat.primitives.asymmetric import rsa
+
+PRIVATE_KEY = rsa.generate_private_key(
+    public_exponent=65537,
+    key_size=2048,
+)
 
 
 class AIMInMemory:

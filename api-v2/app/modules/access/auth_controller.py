@@ -17,7 +17,6 @@ from app.modules.deps import (
     AimDep,
     requires_auth,
     allow_roles,
-    OAuthTokenDep,
 )
 
 from fastapi.security import HTTPBearer
