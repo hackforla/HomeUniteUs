@@ -27,6 +27,21 @@ def set_session_cookie(response: Response, auth_response: dict):
     response.set_cookie("refresh_token", refresh_token)
     response.set_cookie("id_token", id_token)
 
+@router.get('/signup/confirm')   
+def confirm_sign_up(code: str, username: str, client_id: str, email: str, settings: SettingsDep, cognito_client: CognitoIdpDep, calc_secret_hash: SecretHashFuncDep):
+    secret_hash = calc_secret_hash(email)
+
+    try:
+        cognito_client.confirm_sign_up(
+            ClientId=client_id,
+            SecretHash=secret_hash,
+            Username=email,
+            ConfirmationCode=code
+        )
+
+        return RedirectResponse(f"{settings.ROOT_URL}/email-verification-success")
+    except Exception as e:
+        return RedirectResponse(f"{settings.ROOT_URL}/email-verification-error")
 
 @router.post("/signup")
 def signup(body: UserCreate,
@@ -34,12 +49,17 @@ def signup(body: UserCreate,
            db: DbSessionDep,
            cognito_client: CognitoIdpDep,
            calc_secret_hash: SecretHashFuncDep):
+    
     """Sign up route.
 
     This route is used to Sign up a new user.
     """
     # Create user in database
-    user = create_user(db, body)
+    try:
+        user = create_user(db, body)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail="Failed to create user")
+ 
     if user is None:
         raise HTTPException(status_code=400, detail="User already exists")
 
@@ -65,7 +85,6 @@ def signup(body: UserCreate,
             GroupName=role_to_cognito_group_map[body.role],
         )
     except Exception as e:
-        print(e)
         raise HTTPException(status_code=400, detail="Failed to confirm user")
 
     return response
@@ -120,6 +139,25 @@ def signin(body: UserSignInRequest,
         "user": user,
         "token": auth_response["AuthenticationResult"]["AccessToken"],
     }
+
+# @router.get(
+#         "/signout", dependencies=[
+#         Depends(requires_auth)
+#     ])
+# def signout(response: Response, cognito_client: CognitoIdpDep):
+    
+    
+
+#     # Signout user
+#     response = cognito_client.global_sign_out(
+#         AccessToken=access_token
+#     )
+
+#     # Remove refresh token cookie
+#     session.pop('refresh_token', None)
+
+#     # send response
+#     return response
 
 
 @router.get(
