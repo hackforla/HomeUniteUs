@@ -49,7 +49,7 @@ export const SignUp = () => {
     lastName,
   }: Omit<SignUpRequest, 'role'>) => {
     if (!type) {
-      return;
+      throw new Error('User type is required');
     }
 
     try {
@@ -107,8 +107,6 @@ export const SignUp = () => {
         <SignUpForm
           onSubmit={handleSignUp}
           isLoading={signUpIsLoading || getTokenIsLoading}
-          // set as type or empty string
-          type={type ? type : ''}
         />
         <Divider sx={{width: '100%'}} />
         <Stack direction="row" justifyContent="flex-end" gap={0.5}>
