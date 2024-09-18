@@ -4,9 +4,9 @@ import pytest
 
 from fastapi.testclient import TestClient
 
-from app.modules.deps import get_aim, get_cognito_client
+from app.modules.deps import get_idp, get_cognito_client
 
-import app.modules.access.adapters.aim_cognito as aim_cognito
+import app.modules.access.adapters.idp_cognito as idp_cognito
 
 PATH = "/api/auth"
 secretsGenerator = secrets.SystemRandom()
@@ -16,7 +16,7 @@ secretsGenerator = secrets.SystemRandom()
 def client(client, api_settings, cognito_client) -> TestClient:
     client.app.dependency_overrides[
         get_cognito_client] = lambda: cognito_client
-    client.app.dependency_overrides[get_aim] = lambda: aim_cognito.AIMCognito(
+    client.app.dependency_overrides[get_idp] = lambda: idp_cognito.IDPCognito(
         api_settings, cognito_client)
 
     return client
@@ -350,4 +350,3 @@ def test_session_endpoint(client, api_settings, cognito_client):
 
     assert response.status_code == 200, response.text
     assert 'token' in response.json(), response.text
-

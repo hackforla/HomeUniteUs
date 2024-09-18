@@ -5,7 +5,7 @@ import time
 
 from botocore.exceptions import ClientError
 
-import app.modules.access.adapters.aim_exceptions as aim_exceptions
+import app.modules.access.adapters.idp_exceptions as idp_exceptions
 from app.modules.access.adapters.cognito_groups import role_to_cognito_group_map
 import app.modules.access.schemas as schemas
 from app.core.config import Settings
@@ -13,14 +13,14 @@ from app.core.config import Settings
 logging = logging.Logger(__name__)
 
 
-class AIMCognito:
+class IDPCognito:
 
     def __init__(self, settings: Settings, cognito_client):
         if cognito_client is None:
             raise Exception(
-                "AIMCognito is not valid without a client for Cognito")
+                "IDPCognito is not valid without a client for Cognito")
         if settings is None:
-            raise Exception("AIMCognito is not valid without a ")
+            raise Exception("IDPCognito is not valid without settings")
 
         self.cognito_client = cognito_client
         self.settings = settings
@@ -46,7 +46,7 @@ class AIMCognito:
             )
         except Exception as e:
             logging.error(f"Failed to create user: {e}")
-            raise aim_exceptions.SignUpUserError(e)
+            raise idp_exceptions.SignUpUserError(e)
 
         # Add user to group
         try:
@@ -58,7 +58,7 @@ class AIMCognito:
             )
         except Exception as e:
             logging.error(f"Failed to add user to group {group}: {e}")
-            raise aim_exceptions.SignUpUserError(e)
+            raise idp_exceptions.SignUpUserError(e)
 
         return response
 
@@ -77,7 +77,7 @@ class AIMCognito:
         except ClientError as e:
             code = e.response['Error']['Code']
             message = e.response['Error']['Message']
-            raise aim_exceptions.SignInError(code=code, message=message)
+            raise idp_exceptions.SignInError(code=code, message=message)
 
         if (auth_response.get("ChallengeName")
                 and auth_response["ChallengeName"] == "NEW_PASSWORD_REQUIRED"):
@@ -111,7 +111,7 @@ class AIMCognito:
         except ClientError as e:
             code = e.response['Error']['Code']
             message = e.response['Error']['Message']
-            raise aim_exceptions.SessionError(code=code, message=message)
+            raise idp_exceptions.SessionError(code=code, message=message)
 
         return auth_response['AuthenticationResult']['AccessToken']
 
@@ -127,7 +127,7 @@ class AIMCognito:
         except ClientError as e:
             code = e.response['Error']['Code']
             message = e.response['Error']['Message']
-            raise aim_exceptions.RefreshError(code=code, message=message)
+            raise idp_exceptions.RefreshError(code=code, message=message)
 
         return auth_response['AuthenticationResult']['AccessToken']
 
@@ -140,7 +140,7 @@ class AIMCognito:
         except ClientError as e:
             code = e.response['Error']['Code']
             message = e.response['Error']['Message']
-            raise aim_exceptions.ForgotPasswordError(code=code,
+            raise idp_exceptions.ForgotPasswordError(code=code,
                                                      message=message)
 
     def confirm_forgot_password(self, email, confirmation_code, password):
@@ -154,7 +154,7 @@ class AIMCognito:
         except ClientError as e:
             code = e.response['Error']['Code']
             message = e.response['Error']['Message']
-            raise aim_exceptions.ConfirmForgotPasswordError(code=code,
+            raise idp_exceptions.ConfirmForgotPasswordError(code=code,
                                                             message=message)
 
     def verify_claims(self, access_token, id_token):

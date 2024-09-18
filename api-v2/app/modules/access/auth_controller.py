@@ -4,7 +4,7 @@ import jwt
 from fastapi import Depends, APIRouter, HTTPException, Response, Security, Request
 from fastapi.responses import RedirectResponse
 
-import app.modules.access.adapters.aim_exceptions as aim_exceptions
+import app.modules.access.adapters.idp_exceptions as idp_exceptions
 from app.modules.access.schemas import (
     UserCreate, UserSignInRequest, UserSignInResponse, ForgotPasswordRequest,
     ForgotPasswordResponse, ConfirmForgotPasswordResponse,
@@ -12,9 +12,8 @@ from app.modules.access.schemas import (
 
 from app.modules.access.crud import create_user, get_user
 from app.modules.deps import (
-    SettingsDep,
     DbSessionDep,
-    AimDep,
+    IdpDep,
     requires_auth,
     allow_roles,
 )
@@ -34,15 +33,16 @@ def set_session_cookie(response: Response, refresh_token, id_token):
 
 
 @router.post("/signup")
-def sign_up(user_to_sign_up: UserCreate, settings: SettingsDep,
-            db: DbSessionDep, aim: AimDep):
+def sign_up(user_to_sign_up: UserCreate,
+            db: DbSessionDep,
+            idp: IdpDep):
     """Sign-up route.
 
     This route is used to sign-up a new user.
     """
     try:
-        response = aim.sign_up(user_to_sign_up)
-    except aim_exceptions.SignUpUserError:
+        response = idp.sign_up(user_to_sign_up)
+    except idp_exceptions.SignUpUserError:
         raise HTTPException(status_code=400, detail="Failed to create user")
 
     # Create user in database
@@ -55,15 +55,17 @@ def sign_up(user_to_sign_up: UserCreate, settings: SettingsDep,
 
 
 @router.post("/signin", response_model=UserSignInResponse)
-def sign_in(user_sign_in: UserSignInRequest, response: Response,
-            settings: SettingsDep, db: DbSessionDep, aim: AimDep):
+def sign_in(user_sign_in: UserSignInRequest,
+            response: Response,
+            db: DbSessionDep,
+            idp: IdpDep):
     """Sign-in route.
 
     This route is used to sign-in a user and start a new session.
     """
     try:
-        result = aim.sign_in(user_sign_in)
-    except aim_exceptions.SignInError as e:
+        result = idp.sign_in(user_sign_in)
+    except idp_exceptions.SignInError as e:
         raise HTTPException(status_code=400,
                             detail={
                                 "code": e.code,
@@ -112,8 +114,9 @@ def secret():
 
 
 @router.get("/session", response_model=UserSignInResponse)
-def current_session(request: Request, settings: SettingsDep, db: DbSessionDep,
-                    aim: AimDep):
+def current_session(request: Request,
+                    db: DbSessionDep,
+                    idp: IdpDep):
     """Current session route.
 
     This route is used to get the current session and user info upon page refresh.
@@ -131,8 +134,8 @@ def current_session(request: Request, settings: SettingsDep, db: DbSessionDep,
     user = get_user(db, email)
 
     try:
-        access_token = aim.session(email=email, refresh_token=refresh_token)
-    except aim_exceptions.SessionError as e:
+        access_token = idp.session(email=email, refresh_token=refresh_token)
+    except idp_exceptions.SessionError as e:
         raise HTTPException(status_code=400,
                             detail={
                                 "code": e.code,
@@ -143,7 +146,7 @@ def current_session(request: Request, settings: SettingsDep, db: DbSessionDep,
 
 
 @router.get("/refresh", response_model=RefreshTokenResponse)
-def refresh(request: Request, settings: SettingsDep, aim: AimDep):
+def refresh(request: Request, idp: IdpDep):
     """Refresh route.
 
     This route is used to refresh the current access token during session.
@@ -162,8 +165,8 @@ def refresh(request: Request, settings: SettingsDep, aim: AimDep):
     email = decoded_id_token['email']
 
     try:
-        access_token = aim.refresh(email, refresh_token)
-    except aim_exceptions.RefreshError as e:
+        access_token = idp.refresh(email, refresh_token)
+    except idp_exceptions.RefreshError as e:
         raise HTTPException(status_code=400,
                             detail={
                                 "code": e.code,
@@ -175,8 +178,8 @@ def refresh(request: Request, settings: SettingsDep, aim: AimDep):
 
 
 @router.post("/forgot_password", response_model=ForgotPasswordResponse)
-def forgot_password(body: ForgotPasswordRequest, settings: SettingsDep,
-                    aim: AimDep):
+def forgot_password(body: ForgotPasswordRequest,
+                    idp: IdpDep):
     """Forgot Password Route.
 
     This route handles forgot password requests by hashing credentials
@@ -184,8 +187,8 @@ def forgot_password(body: ForgotPasswordRequest, settings: SettingsDep,
     """
 
     try:
-        aim.forgot_password(body.email)
-    except aim_exceptions.ForgotPasswordError as e:
+        idp.forgot_password(body.email)
+    except idp_exceptions.ForgotPasswordError as e:
         raise HTTPException(status_code=401,
                             detail={
                                 "code": e.code,
@@ -200,17 +203,17 @@ def forgot_password(body: ForgotPasswordRequest, settings: SettingsDep,
 @router.post("/confirm_forgot_password",
              response_model=ConfirmForgotPasswordResponse)
 def confirm_forgot_password(body: ConfirmForgotPasswordRequest,
-                            settings: SettingsDep, aim: AimDep):
+                            idp: IdpDep):
     """Confirm forgot password route.
 
     This route handles forgot password confirmation code requests by receiving
     the confirmation code and sending to AWS Cognito to verify.
     """
     try:
-        aim.confirm_forgot_password(email=body.email,
+        idp.confirm_forgot_password(email=body.email,
                                     confirmation_code=body.code,
                                     password=body.password)
-    except aim_exceptions.ConfirmForgotPasswordError as e:
+    except idp_exceptions.ConfirmForgotPasswordError as e:
         raise HTTPException(status_code=401,
                             detail={
                                 "code": e.code,

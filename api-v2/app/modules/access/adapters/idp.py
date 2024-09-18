@@ -2,7 +2,7 @@ from typing import Protocol
 
 import app.modules.access.schemas as schemas
 
-class AIM(Protocol):
+class IDP(Protocol):
     def sign_up(self, user_to_sign_up: schemas.UserCreate):
         pass
 
