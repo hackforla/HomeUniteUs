@@ -10,7 +10,7 @@ import os
 print(os.getcwd())
 sys.path.append(os.getcwd())
 
-from app import models as db
+from app.core import db
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

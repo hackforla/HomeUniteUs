@@ -57,14 +57,14 @@ def api_settings():
 def cognito_client(api_settings):
     """Return a mocked Cognito IDP client."""
     with mock_aws():
-        client = boto3.client("cognito-idp",
-                              region_name=api_settings.COGNITO_REGION)
-        with cognito_setup.AWSTemporaryUserpool(client) as temp_pool:
+        boto = boto3.client("cognito-idp",
+                            region_name=api_settings.COGNITO_REGION)
+        with cognito_setup.AWSTemporaryUserpool(boto) as temp_pool:
             api_settings.COGNITO_USER_POOL_ID = temp_pool.tmp_userpool_id
             api_settings.COGNITO_CLIENT_ID = temp_pool.tmp_client_id
             api_settings.COGNITO_CLIENT_SECRET = temp_pool.tmp_client_secret
 
-            yield client
+            yield boto
 
 
 @pytest.fixture

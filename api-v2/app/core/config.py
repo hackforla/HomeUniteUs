@@ -1,5 +1,12 @@
+from enum import Enum
 from functools import lru_cache
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+class Environments(Enum):
+    PRODUCTION: str = "production"
+    DEV: str = "dev"
 
 
 class Settings(BaseSettings):
@@ -14,6 +21,7 @@ class Settings(BaseSettings):
     COGNITO_ACCESS_KEY: str
     ROOT_URL: str
     DATABASE_URL: str
+    ENV: Environments = Environments.DEV
 
 
 @lru_cache

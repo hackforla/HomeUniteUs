@@ -4,17 +4,20 @@ import pytest
 
 from fastapi.testclient import TestClient
 
-from app.modules.deps import get_cognito_client
-from app.modules.access.models import User
+from app.modules.deps import get_aim, get_cognito_client
+
+import app.modules.access.adapters.aim_cognito as aim_cognito
 
 PATH = "/api/auth"
 secretsGenerator = secrets.SystemRandom()
 
 
 @pytest.fixture
-def client(client, cognito_client) -> TestClient:
+def client(client, api_settings, cognito_client) -> TestClient:
     client.app.dependency_overrides[
         get_cognito_client] = lambda: cognito_client
+    client.app.dependency_overrides[get_aim] = lambda: aim_cognito.AIMCognito(
+        api_settings, cognito_client)
 
     return client
 
@@ -283,7 +286,8 @@ def test_basic_auth_flow(client, api_settings, cognito_client):
                            })
 
     assert response.status_code == 200, "Signin failed"
-    assert 'token' in response.json(), 'Signin succeeded but token field missing from response'
+    assert 'token' in response.json(
+    ), 'Signin succeeded but token field missing from response'
     jwt = response.json()['token']
     assert jwt is not None, 'Signin succeeded but returned empty jwt'
     assert len(jwt) > 0
@@ -347,30 +351,3 @@ def test_session_endpoint(client, api_settings, cognito_client):
     assert response.status_code == 200, response.text
     assert 'token' in response.json(), response.text
 
-
-def test_user_signup_rollback(client, api_settings, cognito_client, session_factory):
-    """Test that a failed sign-up with Cognito.
-
-    Ensure the local DB entry of the user's email is deleted."""
-
-    rollback_email = 'test_user_signup_rollback@fake.com'
-    signup_response = client.post(PATH + '/signup',
-                                  json={
-                                      'email': rollback_email,
-                                      'password': 'lol',
-                                      'firstName': 'firstname',
-                                      'lastName': 'lastname',
-                                      'role': 'host',
-                                  })
-
-    assert signup_response.status_code == 400
-
-    with pytest.raises(cognito_client.exceptions.UserNotFoundException):
-        cognito_client.admin_delete_user(
-            UserPoolId=api_settings.COGNITO_USER_POOL_ID,
-            Username=rollback_email)
-
-    with session_factory() as sess:
-        rolledback_user = sess.query(User).filter_by(
-            email=rollback_email).first()
-        assert rolledback_user is None

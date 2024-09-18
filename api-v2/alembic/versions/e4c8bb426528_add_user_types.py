@@ -8,7 +8,7 @@ Create Date: 2024-03-10 21:47:13.942845
 from alembic import op
 import sqlalchemy as sa
 from sqlalchemy import text
-from app.user_roles import UserRole
+from app.modules.access.user_roles import UserRole
 
 # revision identifiers, used by Alembic.
 revision = 'e4c8bb426528'
