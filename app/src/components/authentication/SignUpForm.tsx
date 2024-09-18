@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
-import {SignUpHostRequest, SignUpCoordinatorRequest} from '../../services/auth';
+import {SignUpRequest} from '../../services/auth';
 import {PasswordValidation} from '../common/PasswordValidation';
 import {signUpVaildationSchema} from '../../utils/PasswordValidationSchema';
 import {PasswordField} from './PasswordField';
@@ -20,20 +20,12 @@ export interface SignUpFormProps {
     password,
     firstName,
     lastName,
-  }: SignUpHostRequest | SignUpCoordinatorRequest) => Promise<void>;
+  }: Omit<SignUpRequest, 'role'>) => Promise<void>;
   type: string;
-  getTokenIsLoading: boolean;
-  signUpHostIsLoading: boolean;
-  signUpCoordinatorIsLoading: boolean;
+  isLoading: boolean;
 }
 
-export const SignUpForm = ({
-  onSubmit,
-  type,
-  getTokenIsLoading,
-  signUpHostIsLoading,
-  signUpCoordinatorIsLoading,
-}: SignUpFormProps) => {
+export const SignUpForm = ({onSubmit, type, isLoading}: SignUpFormProps) => {
   const {
     handleSubmit,
     handleChange,
@@ -119,22 +111,17 @@ export const SignUpForm = ({
         variant="contained"
         size="large"
         type="submit"
-        disabled={
-          !isValid ||
-          !dirty ||
-          signUpHostIsLoading ||
-          signUpCoordinatorIsLoading
-        }
+        disabled={!isValid || !dirty || isLoading}
         fullWidth
       >
         Sign up
-        {signUpHostIsLoading || signUpCoordinatorIsLoading ? (
+        {isLoading ? (
           <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
         ) : null}
       </Button>
       <Divider>or</Divider>
       <Button
-        disabled={getTokenIsLoading}
+        disabled={isLoading}
         variant="outlined"
         size="large"
         fullWidth
@@ -144,7 +131,7 @@ export const SignUpForm = ({
         href={`/api/auth/google?redirect_uri=/signup/${type}`}
       >
         <GoogleIcon sx={{fontSize: 16, marginRight: 1}} /> Continue with Google
-        {getTokenIsLoading ? (
+        {isLoading ? (
           <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
         ) : null}
       </Button>

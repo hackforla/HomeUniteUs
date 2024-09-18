@@ -1,27 +1,17 @@
 import {api} from './api';
 import {User} from './user';
 
-export interface SignUpHostResponse {
+export interface SignUpResponse {
   user: User;
   token: string;
 }
 
-export interface SignUpHostRequest {
+export interface SignUpRequest {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
-}
-export interface SignUpCoordinatorResponse {
-  user: User;
-  token: string;
-}
-
-export interface SignUpCoordinatorRequest {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
+  role: string;
 }
 
 export interface SignInResponse {
@@ -81,18 +71,9 @@ export interface ResendConfirmationCodeResponse {
 
 const authApi = api.injectEndpoints({
   endpoints: build => ({
-    signUpHost: build.mutation<SignUpHostResponse, SignUpHostRequest>({
+    signUp: build.mutation<SignUpResponse, SignUpRequest>({
       query: credentials => ({
-        url: '/auth/signup/host',
-        method: 'POST',
-        withCredentials: true,
-        body: credentials,
-      }),
-    }),
-    // prettier-ignore
-    signUpCoordinator: build.mutation<SignUpCoordinatorResponse, SignUpCoordinatorRequest>({
-      query: credentials => ({
-        url: '/auth/signup/coordinator',
+        url: '/auth/signup',
         method: 'POST',
         withCredentials: true,
         body: credentials,
@@ -197,8 +178,7 @@ const authApi = api.injectEndpoints({
 
 export {authApi};
 export const {
-  useSignUpHostMutation,
-  useSignUpCoordinatorMutation,
+  useSignUpMutation,
   useSignInMutation,
   useSignOutMutation,
   useVerificationMutation,
