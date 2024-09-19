@@ -249,7 +249,7 @@ def refresh(request: Request,
 
 
 @router.post(
-        "/forgot_password", 
+        "/forgot-password", 
         description="Handles forgot password requests by hashing credentialsand sending to AWS Cognito", 
         response_model=ForgotPasswordResponse)
 def forgot_password(body: ForgotPasswordRequest,
@@ -274,7 +274,7 @@ def forgot_password(body: ForgotPasswordRequest,
     return {"message": "Password reset instructions sent"}
 
 
-@router.post("/confirm_forgot_password",
+@router.post("/forgot-password/confirm",
              description="Handles forgot password confirmation code requests by receiving the confirmation code and sending to AWS Cognito to verify",
              response_model=ConfirmForgotPasswordResponse)
 def confirm_forgot_password(body: ConfirmForgotPasswordRequest,
