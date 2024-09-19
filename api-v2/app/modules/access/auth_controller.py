@@ -220,7 +220,7 @@ def refresh(request: Request,
         raise HTTPException(status_code=401,
                             detail="Missing refresh token or id token")
 
-    decoded = jwt.decode(id_token,
+    decoded_id_token = jwt.decode(id_token,
                          algorithms=["RS256"],
                          options={"verify_signature": False})
 
@@ -230,7 +230,8 @@ def refresh(request: Request,
             AuthFlow='REFRESH_TOKEN',
             AuthParameters={
                 'REFRESH_TOKEN': refresh_token,
-                'SECRET_HASH': calc_secret_hash(decoded["email"])
+                # DO NOT CHANGE TO EMAIL. THE REFRESH TOKEN AUTH FLOW REQUIRES the use of the 'cognito:username' instead of email
+                'SECRET_HASH': calc_secret_hash(decoded_id_token["cognito:username"])
             })
     except ClientError as e:
         code = e.response['Error']['Code']
