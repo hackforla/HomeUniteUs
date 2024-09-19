@@ -119,7 +119,7 @@ const authApi = api.injectEndpoints({
     }),
     forgotPassword: build.mutation<void, ForgotPasswordRequest>({
       query: credentials => ({
-        url: 'auth/forgot_password',
+        url: 'auth/forgot-password',
         method: 'POST',
         withCredentials: true,
         body: credentials,
@@ -127,7 +127,7 @@ const authApi = api.injectEndpoints({
     }),
     confirmForgotPassword: build.mutation<void, ConfirmForgotPasswordRequest>({
       query: credentials => ({
-        url: 'auth/forgot_password/confirm',
+        url: 'auth/forgot-password/confirm',
         method: 'POST',
         withCredentials: true,
         body: credentials,
