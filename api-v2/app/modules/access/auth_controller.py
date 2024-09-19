@@ -2,7 +2,9 @@ import logging
 import jwt
 import boto3
 
-from fastapi import Depends, APIRouter, HTTPException, Response, Security, Request
+
+from fastapi import Depends, APIRouter, HTTPException, Response, Request
+from fastapi.security import HTTPBearer
 from fastapi.responses import RedirectResponse, JSONResponse
 from botocore.exceptions import ClientError
 
@@ -43,17 +45,13 @@ def confirm_sign_up(code: str, client_id: str, email: str, settings: SettingsDep
     except Exception as e:
         return RedirectResponse(f"{settings.ROOT_URL}/email-verification-error")
 
-@router.post("/signup")
+@router.post("/signup", description="Sign up a new user")
 def signup(body: UserCreate,
            settings: SettingsDep,
            db: DbSessionDep,
            cognito_client: CognitoIdpDep,
-           calc_secret_hash: SecretHashFuncDep):
-    
-    """Sign up route.
+           calc_secret_hash: SecretHashFuncDep) -> JSONResponse:
 
-    This route is used to Sign up a new user.
-    """
     # Create user in database
     try:
         user = create_user(db, body)
@@ -65,7 +63,7 @@ def signup(body: UserCreate,
 
     # Add user to cognito
     try:
-        response = cognito_client.sign_up(
+        cognito_client.sign_up(
             ClientId=settings.COGNITO_CLIENT_ID,
             SecretHash=calc_secret_hash(body.email),
             Username=user.email,
@@ -85,22 +83,24 @@ def signup(body: UserCreate,
             GroupName=role_to_cognito_group_map[body.role],
         )
     except Exception as e:
+        cognito_client.admin_delete_user(
+            UserPoolId=settings.COGNITO_USER_POOL_ID,
+            Username=user.email
+        )
+        delete_user(db, user.id)
         raise HTTPException(status_code=400, detail="Failed to confirm user")
 
-    return response
+    return JSONResponse(content={"message": "User sign up successful"})
 
 
-@router.post("/signin", response_model=UserSignInResponse)
+@router.post("/signin", description="Sign in a user and start a new session", response_model=UserSignInResponse)
 def signin(body: UserSignInRequest,
            response: Response,
            settings: SettingsDep,
            db: DbSessionDep,
            cognito_client: CognitoIdpDep,
            calc_secret_hash: SecretHashFuncDep):
-    """Sign in route.
-
-    This route is used to sign in a user and start a new session.
-    """
+    
     try:
         auth_response = cognito_client.initiate_auth(
             ClientId=settings.COGNITO_CLIENT_ID,
@@ -142,9 +142,10 @@ def signin(body: UserSignInRequest,
 
 @router.post(
         "/signout", dependencies=[
+        Depends(HTTPBearer()),
         Depends(requires_auth)
     ])
-def signout(request: Request, cognito_client: CognitoIdpDep):
+def signout(request: Request, cognito_client: CognitoIdpDep) -> JSONResponse:
     access_token = request.headers.get("Authorization").split(" ")[1]
     
 
@@ -162,35 +163,21 @@ def signout(request: Request, cognito_client: CognitoIdpDep):
     # send response
     return response
 
-@router.get(
-    "/secret",
-    dependencies=[
-        Depends(requires_auth),
-        Security(allow_roles, scopes=["guest"]),
-    ],
-)
-def secret():
-    """Secret route.
 
-    This route is a secret route that requires authentication and the guest role.
-    """
-    return {"message": "Welcome to the secret route"}
-
-
-@router.get("/session", response_model=UserSignInResponse)
-def current_session(request: Request,
+@router.get("/session", description="Get the current session and user info upon page refresh", response_model=UserSignInResponse)
+def current_session(
+                    request: Request,
                     settings: SettingsDep,
                     db: DbSessionDep,
                     cognito_client: CognitoIdpDep,
                     calc_secret_hash: SecretHashFuncDep):
-    """Current session route.
 
-    This route is used to get the current session and user info upon page refresh.
-    """
     id_token = request.cookies.get('id_token')
     refresh_token = request.cookies.get('refresh_token')
-    if None in (id_token, refresh_token):
-        raise HTTPException(status_code=401, detail="Missing session cookies")
+
+    if None in (refresh_token, id_token):
+        raise HTTPException(status_code=401,
+                            detail="Missing refresh token or id token")
 
     decoded_id_token = jwt.decode(id_token,
                                   algorithms=["RS256"],
@@ -222,15 +209,11 @@ def current_session(request: Request,
     }
 
 
-@router.get("/refresh", response_model=RefreshTokenResponse)
+@router.get("/refresh", description="Refresh the current access token during session", response_model=RefreshTokenResponse)
 def refresh(request: Request,
             settings: SettingsDep,
             cognito_client: CognitoIdpDep,
             calc_secret_hash: SecretHashFuncDep):
-    """Refresh route.
-
-    This route is used to refresh the current access token during session.
-    """
     refresh_token = request.cookies.get('refresh_token')
     id_token = request.cookies.get('id_token')
 
@@ -265,16 +248,14 @@ def refresh(request: Request,
     return {"token": access_token}
 
 
-@router.post("/forgot_password", response_model=ForgotPasswordResponse)
+@router.post(
+        "/forgot_password", 
+        description="Handles forgot password requests by hashing credentialsand sending to AWS Cognito", 
+        response_model=ForgotPasswordResponse)
 def forgot_password(body: ForgotPasswordRequest,
                     settings: SettingsDep,
                     cognito_client: CognitoIdpDep,
                     calc_secret_hash: SecretHashFuncDep):
-    """Forgot Password Route.
-
-    This route handles forgot password requests by hashing credentials
-    and sending to AWS Cognito.
-    """
     secret_hash = calc_secret_hash(body.email)
 
     try:
@@ -294,16 +275,13 @@ def forgot_password(body: ForgotPasswordRequest,
 
 
 @router.post("/confirm_forgot_password",
+             description="Handles forgot password confirmation code requests by receiving the confirmation code and sending to AWS Cognito to verify",
              response_model=ConfirmForgotPasswordResponse)
 def confirm_forgot_password(body: ConfirmForgotPasswordRequest,
                             settings: SettingsDep,
                             cognito_client: CognitoIdpDep,
                             calc_secret_hash: SecretHashFuncDep):
-    """Confirm forgot password route.
-
-    This route handles forgot password confirmation code requests by receiving
-    the confirmation code and sending to AWS Cognito to verify.
-    """
+ 
     secret_hash = calc_secret_hash(body.email)
 
     try:
