@@ -9,8 +9,7 @@ from fastapi.responses import RedirectResponse, JSONResponse
 from botocore.exceptions import ClientError
 
 from app.modules.access.schemas import (
-    UserCreate, UserSignInRequest, UserSignInResponse, ForgotPasswordRequest,
-    ForgotPasswordResponse, ConfirmForgotPasswordResponse,
+    UserCreate, UserSignInRequest, UserSignInResponse, ForgotPasswordRequest, ConfirmForgotPasswordResponse,
     ConfirmForgotPasswordRequest, RefreshTokenResponse)
 
 from app.modules.access.crud import create_user, delete_user, get_user
@@ -251,11 +250,11 @@ def refresh(request: Request,
 @router.post(
         "/forgot-password", 
         description="Handles forgot password requests by hashing credentialsand sending to AWS Cognito", 
-        response_model=ForgotPasswordResponse)
+        )
 def forgot_password(body: ForgotPasswordRequest,
                     settings: SettingsDep,
                     cognito_client: CognitoIdpDep,
-                    calc_secret_hash: SecretHashFuncDep):
+                    calc_secret_hash: SecretHashFuncDep) -> JSONResponse:
     secret_hash = calc_secret_hash(body.email)
 
     try:
@@ -271,7 +270,7 @@ def forgot_password(body: ForgotPasswordRequest,
                                 "message": message
                             })
 
-    return {"message": "Password reset instructions sent"}
+    return JSONResponse(content={"message": "Password reset instructions sent"})
 
 
 @router.post("/forgot-password/confirm",
@@ -280,7 +279,7 @@ def forgot_password(body: ForgotPasswordRequest,
 def confirm_forgot_password(body: ConfirmForgotPasswordRequest,
                             settings: SettingsDep,
                             cognito_client: CognitoIdpDep,
-                            calc_secret_hash: SecretHashFuncDep):
+                            calc_secret_hash: SecretHashFuncDep) -> JSONResponse:
  
     secret_hash = calc_secret_hash(body.email)
 
@@ -300,4 +299,4 @@ def confirm_forgot_password(body: ConfirmForgotPasswordRequest,
                                 "message": message
                             })
 
-    return {"message": "Password has been reset successfully"}
+    return {"message": "Password reset successful"}

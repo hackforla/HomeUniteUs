@@ -48,22 +48,15 @@ class UserSignInResponse(BaseModel):
 
 class RefreshTokenResponse(BaseModel):
     token: str
+
 class ForgotPasswordRequest(BaseModel):
     email: EmailStr
-
-
-class ForgotPasswordResponse(BaseModel):
-    code: int
-    type: str
-    message: str
-
 
 class ConfirmForgotPasswordRequest(BaseModel):
     email: EmailStr
     code: str
     password: str
-
-
+    
 class ConfirmForgotPasswordResponse(BaseModel):
     message: str
 
