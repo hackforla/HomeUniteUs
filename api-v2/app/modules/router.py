@@ -12,7 +12,7 @@ api_router.include_router(
     auth_controller.router, prefix="/auth", tags=["auth"]
 )
 api_router.include_router(
-    users_controller.router, prefix="/users", tags=["user"]
+    users_controller.router, prefix="/users", tags=["users"]
 )
 api_router.include_router(
     intake_profile.router, prefix="/intake-profile", tags=["intake_profile"]

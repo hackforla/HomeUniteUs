@@ -10,9 +10,8 @@ from app.modules.deps import DbSessionDep, CognitoIdpDep, SettingsDep
 
 router = APIRouter()
 
-
 @router.get("/current", dependencies=[Depends(HTTPBearer())], response_model=User)
-def get_user_info(request: Request, db: DbSessionDep):
+def get_current_user(request: Request, db: DbSessionDep):
     """Get user route.
 
     This route is used to get the current user info.
@@ -33,10 +32,10 @@ def get_user_info(request: Request, db: DbSessionDep):
     return user
 
 @router.delete("/{user_id}", dependencies=[Depends(HTTPBearer())])
-def delete_user(id: int, db: DbSessionDep, cognito_client: CognitoIdpDep, settings: SettingsDep):
+def delete_user_by_id(user_id: str, db: DbSessionDep, cognito_client: CognitoIdpDep, settings: SettingsDep):
 
     try:
-        user = get_user_by_id(db, id)
+        user = get_user_by_id(db, user_id)
 
     #TODO: Add back once unmatched cases are implemented
     #     role = db_session.query(Role).filter_by(id=user.role_id).first()
@@ -80,12 +79,11 @@ def delete_user(id: int, db: DbSessionDep, cognito_client: CognitoIdpDep, settin
             Username=user.email
         )
     except Exception as e:
-        message = e.response['Error']['Message']
-        raise HTTPException(status_code=401, detail=message)
+        raise HTTPException(status_code=401, detail="An error occured while removing user from cognito.")
 
     # delete user from database
     try:
-        delete_user(db, id)
+        delete_user(db, user_id)
     except IntegrityError:
         db.rollback()
         raise HTTPException(status_code=422, detail="An error occured while removing user to database.")
