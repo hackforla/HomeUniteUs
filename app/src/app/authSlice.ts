@@ -34,9 +34,12 @@ export const authSlice = createSlice({
   extraReducers: builder => {
     builder
       // Add a matcher to update auth state with user returned from the user query
-      .addMatcher(userAPI.endpoints.user.matchFulfilled, (state, {payload}) => {
-        state.user = payload;
-      })
+      .addMatcher(
+        userAPI.endpoints.currentUser.matchFulfilled,
+        (state, {payload}) => {
+          state.user = payload;
+        },
+      )
       .addMatcher(
         authApi.endpoints.session.matchFulfilled,
         (state, {payload}) => {

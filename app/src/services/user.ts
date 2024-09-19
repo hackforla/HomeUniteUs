@@ -12,9 +12,9 @@ export interface User {
 
 const userAPI = api.injectEndpoints({
   endpoints: build => ({
-    user: build.query<User, void>({
+    currentUser: build.query<User, void>({
       query: () => ({
-        url: 'user/',
+        url: 'users/current',
         method: 'GET',
         withCredentials: true,
       }),
@@ -24,4 +24,4 @@ const userAPI = api.injectEndpoints({
 
 export {userAPI};
 
-export const {useUserQuery} = userAPI;
+export const {useCurrentUserQuery} = userAPI;
