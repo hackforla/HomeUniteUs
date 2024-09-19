@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Divider,
+  // Divider,
   Stack,
   Button,
   TextField,
@@ -117,7 +117,8 @@ export const SignUpForm = ({onSubmit, isLoading}: SignUpFormProps) => {
           <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
         ) : null}
       </Button>
-      <Divider>or</Divider>
+      {/* TODO: ADD THIS BACK ONCE GOOGLE AUTH IS SETUP */}
+      {/* <Divider>or</Divider> */}
       {/* <Button
         disabled={isLoading}
         variant="outlined"

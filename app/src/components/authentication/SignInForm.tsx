@@ -1,7 +1,7 @@
 import {
   Button,
   Stack,
-  Divider,
+  // Divider,
   Link,
   TextField,
   CircularProgress,
@@ -95,7 +95,8 @@ export const SignInForm = ({onSubmit, isLoading}: SignInFormProps) => {
           <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
         ) : null}
       </Button>
-      <Divider>or</Divider>
+      {/* TODO: ADD THIS BACK ONCE GOOGLE AUTH IS SETUP */}
+      {/* <Divider>or</Divider> */}
       {/* <Button
         disabled={getTokenIsLoading}
         variant="outlined"
