@@ -28,7 +28,7 @@ def set_session_cookie(response: Response, auth_response: dict):
     response.set_cookie("id_token", id_token, httponly=True)
 
 @router.get('/signup/confirm')   
-def confirm_sign_up(code: str, username: str, client_id: str, email: str, settings: SettingsDep, cognito_client: CognitoIdpDep, calc_secret_hash: SecretHashFuncDep):
+def confirm_sign_up(code: str, client_id: str, email: str, settings: SettingsDep, cognito_client: CognitoIdpDep, calc_secret_hash: SecretHashFuncDep):
     secret_hash = calc_secret_hash(email)
 
     try:
@@ -203,10 +203,9 @@ def current_session(request: Request,
             ClientId=settings.COGNITO_CLIENT_ID,
             AuthFlow='REFRESH_TOKEN',
             AuthParameters={
-                'REFRESH_TOKEN':
-                refresh_token,
-                'SECRET_HASH':
-                calc_secret_hash(decoded_id_token["email"])
+                'REFRESH_TOKEN': refresh_token,
+                # DO NOT CHANGE TO EMAIL. THE REFRESH TOKEN AUTH FLOW REQUIRES the use of the 'cognito:username' instead of email
+                'SECRET_HASH': calc_secret_hash(decoded_id_token["cognito:username"])
             })
     except ClientError as e:
         code = e.response['Error']['Code']
