@@ -29,12 +29,12 @@ def set_session_cookie(response: Response, auth_response: dict):
     response.set_cookie("id_token", id_token, httponly=True)
 
 @router.get('/signup/confirm')   
-def confirm_sign_up(code: str, client_id: str, email: str, settings: SettingsDep, cognito_client: CognitoIdpDep, calc_secret_hash: SecretHashFuncDep):
+def confirm_sign_up(code: str, email: str, settings: SettingsDep, cognito_client: CognitoIdpDep, calc_secret_hash: SecretHashFuncDep):
     secret_hash = calc_secret_hash(email)
 
     try:
         cognito_client.confirm_sign_up(
-            ClientId=client_id,
+            ClientId=settings.COGNITO_CLIENT_ID,
             SecretHash=secret_hash,
             Username=email,
             ConfirmationCode=code
