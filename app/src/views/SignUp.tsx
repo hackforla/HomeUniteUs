@@ -12,11 +12,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import {useNavigate, useParams} from 'react-router-dom';
 import {SignUpForm} from '../components/authentication/SignUpForm';
 import {
-  SignUpHostRequest,
-  SignUpCoordinatorRequest,
-  useSignUpHostMutation,
-  useSignUpCoordinatorMutation,
   useGoogleSignUpMutation,
+  useSignUpMutation,
+  SignUpRequest,
 } from '../services/auth';
 import {isErrorWithMessage, isFetchBaseQueryError} from '../app/helpers';
 import {FormContainer} from '../components/authentication';
@@ -27,10 +25,8 @@ export const SignUp = () => {
   const {type} = useParams();
   const navigate = useNavigate();
 
-  const [signUpHost, {isLoading: signUpHostIsLoading}] =
-    useSignUpHostMutation();
-  const [signUpCoordinator, {isLoading: signUpCoordinatorIsLoading}] =
-    useSignUpCoordinatorMutation();
+  const [signUp, {isLoading: signUpIsLoading}] = useSignUpMutation();
+
   const [googleSignUp, {isLoading: getTokenIsLoading}] =
     useGoogleSignUpMutation();
   // get type from params
@@ -51,25 +47,19 @@ export const SignUp = () => {
     password,
     firstName,
     lastName,
-  }: SignUpHostRequest | SignUpCoordinatorRequest) => {
-    try {
-      if (type === 'host') {
-        await signUpHost({
-          firstName,
-          lastName,
-          email,
-          password,
-        }).unwrap();
-      }
+  }: Omit<SignUpRequest, 'role'>) => {
+    if (!type) {
+      throw new Error('User type is required');
+    }
 
-      if (type === 'coordinator') {
-        await signUpCoordinator({
-          firstName,
-          lastName,
-          email,
-          password,
-        }).unwrap();
-      }
+    try {
+      await signUp({
+        email,
+        password,
+        firstName,
+        lastName,
+        role: type,
+      });
 
       navigate(`/signup/success?email=${email}`);
     } catch (err) {
@@ -116,11 +106,7 @@ export const SignUp = () => {
         </Typography>
         <SignUpForm
           onSubmit={handleSignUp}
-          signUpHostIsLoading={signUpHostIsLoading}
-          signUpCoordinatorIsLoading={signUpCoordinatorIsLoading}
-          getTokenIsLoading={getTokenIsLoading}
-          // set as type or empty string
-          type={type ? type : ''}
+          isLoading={signUpIsLoading || getTokenIsLoading}
         />
         <Divider sx={{width: '100%'}} />
         <Stack direction="row" justifyContent="flex-end" gap={0.5}>

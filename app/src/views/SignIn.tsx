@@ -102,8 +102,7 @@ export const SignIn = () => {
         </Typography>
         <SignInForm
           onSubmit={handleSignIn}
-          signInIsLoading={signInIsLoading}
-          getTokenIsLoading={getTokenIsLoading}
+          isLoading={signInIsLoading || getTokenIsLoading}
         />
         <Divider sx={{width: '100%'}} />
         <Stack direction="row" alignItems="center" gap={0.5}>

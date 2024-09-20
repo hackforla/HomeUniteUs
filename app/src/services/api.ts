@@ -31,7 +31,8 @@ const baseQueryWithReAuth: BaseQueryFn<
 > = async (args, api, extraOptions) => {
   let result = await baseQuery(args, api, extraOptions);
   // if token is expired, try to refresh it
-  if (result.error && result.error.status === 401) {
+  // TODO: Possibly refactor to only try again when error is of a certaion type/status
+  if (result.error) {
     // make request to retrieve new tokens
     const refreshResult = await baseQuery('auth/refresh', api, extraOptions);
 
@@ -42,7 +43,6 @@ const baseQueryWithReAuth: BaseQueryFn<
       //        to give us a flexible but strongly-typed interface to rely on
       const {data} = refreshResult as {data: {token: string}};
       // store new token
-      // api.dispatch(tokenReceived(refreshResult.data.token));
       api.dispatch(tokenReceived(data.token));
       // retry the intiail query
       result = await baseQuery(args, api, extraOptions);

@@ -2,11 +2,11 @@ import React from 'react';
 import {Navigate, useLocation} from 'react-router-dom';
 import {useAuth} from '../../app/hooks/useAuth';
 import {Loading} from '../common';
-import {useUserQuery} from '../../services/user';
+import {useCurrentUserQuery} from '../../services/user';
 
 export const ProtectedRoute = ({children}: {children: JSX.Element}) => {
   const {user} = useAuth();
-  const {isLoading} = useUserQuery();
+  const {isLoading} = useCurrentUserQuery();
   const location = useLocation();
 
   // show loader while fetching data unless user already exists and is logged in

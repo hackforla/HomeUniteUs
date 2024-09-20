@@ -7,9 +7,9 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import {Tooltip, Avatar, Menu, MenuItem, Stack} from '@mui/material';
 import logo from '../../img/favicon.png';
-import {UserRole, useSignOutMutation} from '../../services/auth';
-import {selectCurrentUser} from '../../../src/app/authSlice';
-import {User} from '../../services/auth';
+import {useSignOutMutation} from '../../services/auth';
+import {selectCurrentUser} from '../../app/authSlice';
+import {User, UserRole} from '../../services/user';
 
 import {useSelector} from 'react-redux';
 import {Link, useNavigate} from 'react-router-dom';

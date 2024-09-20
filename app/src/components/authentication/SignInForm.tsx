@@ -1,12 +1,12 @@
 import {
   Button,
   Stack,
-  Divider,
+  // Divider,
   Link,
   TextField,
   CircularProgress,
 } from '@mui/material';
-import GoogleIcon from '@mui/icons-material/Google';
+// import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
 import {object, string} from 'yup';
 
@@ -14,8 +14,7 @@ import {SignInRequest} from '../../services/auth';
 import {PasswordField} from './PasswordField';
 
 interface SignInFormProps {
-  signInIsLoading: boolean;
-  getTokenIsLoading: boolean;
+  isLoading: boolean;
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
 }
 
@@ -24,11 +23,7 @@ const validationSchema = object({
   password: string().required('password is required'),
 });
 
-export const SignInForm = ({
-  onSubmit,
-  signInIsLoading,
-  getTokenIsLoading,
-}: SignInFormProps) => {
+export const SignInForm = ({onSubmit, isLoading}: SignInFormProps) => {
   const {
     handleSubmit,
     handleChange,
@@ -89,19 +84,20 @@ export const SignInForm = ({
         </Link>
       </Stack>
       <Button
-        disabled={!isValid || !dirty || signInIsLoading}
+        disabled={!isValid || !dirty || isLoading}
         variant="contained"
         size="large"
         type="submit"
         fullWidth
       >
         Sign in
-        {signInIsLoading ? (
+        {isLoading ? (
           <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
         ) : null}
       </Button>
-      <Divider>or</Divider>
-      <Button
+      {/* TODO: ADD THIS BACK ONCE GOOGLE AUTH IS SETUP */}
+      {/* <Divider>or</Divider> */}
+      {/* <Button
         disabled={getTokenIsLoading}
         variant="outlined"
         size="large"
@@ -115,7 +111,7 @@ export const SignInForm = ({
         {getTokenIsLoading ? (
           <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
         ) : null}
-      </Button>
+      </Button> */}
     </Stack>
   );
 };
