@@ -301,3 +301,28 @@ def confirm_forgot_password(body: ConfirmForgotPasswordRequest,
                             })
 
     return {"message": "Password reset successful"}
+
+
+@router.post("/confirmInvite",
+             description="",
+             response_model=None)
+
+def confirm_invite():
+    pass
+
+
+@router.post("/invite",
+             description="",
+             response_model=None)
+def invite():
+    pass
+
+
+@router.post("/new_password",
+             description="",
+             response_model=None)
+def new_password():
+    pass
+
+
+
