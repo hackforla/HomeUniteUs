@@ -6,7 +6,7 @@ import {
   FieldArray,
   useFormikContext,
 } from 'formik';
-import {InitialValues} from 'src/views/IntakeProfile';
+import {InitialValues} from 'src/pages/IntakeProfile';
 import {Guest} from '../../../services/profile';
 import {DatePickerField} from './DatePickerField';
 

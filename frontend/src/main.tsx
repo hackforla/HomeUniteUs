@@ -34,9 +34,9 @@ import {
   GuestSettings,
   CoordinatorDashboard,
   IntakeProfile,
-} from './views';
+} from './pages';
 
-import {AccountVerification} from './views/AccountVerification';
+import {AccountVerification} from './pages/AccountVerification';
 import {AppLayout, Header} from './components/common';
 import {ResetPasswordContext} from './components/authentication/ResetPasswordContext';
 import {
@@ -45,7 +45,7 @@ import {
 } from './components/layout';
 import {FieldGroupList} from './components/intake-profile/IntakeProfileGroups';
 import {enableMocking} from './utils/test/browser';
-import {SystemAdminDashboard} from './views/SystemAdminDashboard';
+import {SystemAdminDashboard} from './pages/SystemAdminDashboard';
 import {ProfileReview} from './components/intake-profile/ProfileReview';
 
 function HuuApp() {
