@@ -11,7 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import {useFormikContext} from 'formik';
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
-import {isErrorWithMessage, isFetchBaseQueryError} from '../app/helpers';
+import {isErrorWithMessage, isFetchBaseQueryError} from '../redux/helpers';
 import {ResestPasswordValues} from '../components/authentication/ResetPasswordContext';
 import {useForgotPasswordMutation} from '../services/auth';
 import {FormContainer} from '../components/authentication';

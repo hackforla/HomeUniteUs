@@ -1,9 +1,12 @@
 import React from 'react';
-import {setCredentials} from '../../../app/authSlice';
-import {isFetchBaseQueryError, isErrorWithMessage} from '../../../app/helpers';
+import {setCredentials} from '../../../redux/authSlice';
+import {
+  isFetchBaseQueryError,
+  isErrorWithMessage,
+} from '../../../redux/helpers';
 import {TokenRequest, TokenResponse} from '../../../services/auth';
 import {useNavigate} from 'react-router-dom';
-import {useAppDispatch} from '../../../app/hooks/store';
+import {useAppDispatch} from '../../../redux/hooks/store';
 import {
   MutationActionCreatorResult,
   MutationDefinition,

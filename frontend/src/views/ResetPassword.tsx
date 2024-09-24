@@ -9,7 +9,7 @@ import React from 'react';
 import {useFormikContext} from 'formik';
 import {ResestPasswordValues} from '../components/authentication/ResetPasswordContext';
 import {useConfirmForgotPasswordMutation} from '../services/auth';
-import {getErrorMessage} from '../app/helpers';
+import {getErrorMessage} from '../redux/helpers';
 import {FormContainer, PasswordField} from '../components/authentication';
 import {PasswordValidation} from '../components/common/PasswordValidation';
 

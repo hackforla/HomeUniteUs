@@ -5,7 +5,7 @@ import {Typography, Stack, Alert, IconButton} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import {NewPasswordRequest, useNewPasswordMutation} from '../services/auth';
 import {useNavigate} from 'react-router-dom';
-import {isFetchBaseQueryError, isErrorWithMessage} from '../app/helpers';
+import {isFetchBaseQueryError, isErrorWithMessage} from '../redux/helpers';
 import {FormContainer} from '../components/authentication';
 
 export const NewPassword = () => {

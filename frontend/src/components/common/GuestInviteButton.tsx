@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import {useInviteGuestMutation} from '../../services/coordinator';
 import {CheckOutlined, EmailOutlined} from '@mui/icons-material';
-import {isFetchBaseQueryError, isErrorWithMessage} from '../../app/helpers';
+import {isFetchBaseQueryError, isErrorWithMessage} from '../../redux/helpers';
 
 export const validationSchema = object({
   firstName: string().required('first name is required'),

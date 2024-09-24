@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event';
 
 import {HomeUniteUsTheme} from '../../theme';
 import {PreloadedState} from '@reduxjs/toolkit';
-import {setupStore, RootState, AppStore} from '../../app/store';
+import {setupStore, RootState, AppStore} from '../../redux/store';
 
 interface ProviderProps {
   children: ReactNode;

@@ -7,7 +7,7 @@ import {LocalizationProvider} from '@mui/x-date-pickers';
 import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 import './index.css';
 
-import {setupStore} from './app/store';
+import {setupStore} from './redux/store';
 import {ProtectedRoute} from './components/authentication/ProtectedRoute';
 import {useSessionMutation} from './services/auth';
 import {HomeUniteUsTheme} from './theme';

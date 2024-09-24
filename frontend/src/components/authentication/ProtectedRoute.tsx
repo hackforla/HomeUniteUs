@@ -1,6 +1,6 @@
 import React from 'react';
 import {Navigate, useLocation} from 'react-router-dom';
-import {useAuth} from '../../app/hooks/useAuth';
+import {useAuth} from '../../redux/hooks/useAuth';
 import {Loading} from '../common';
 import {useCurrentUserQuery} from '../../services/user';
 

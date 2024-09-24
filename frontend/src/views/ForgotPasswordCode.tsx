@@ -16,7 +16,7 @@ import {useNavigate} from 'react-router-dom';
 import {ResestPasswordValues} from '../components/authentication/ResetPasswordContext';
 import {CodeField, FormContainer} from '../components/authentication';
 import {useForgotPasswordMutation} from '../services/auth';
-import {getErrorMessage} from '../app/helpers';
+import {getErrorMessage} from '../redux/helpers';
 
 interface Alert {
   severity: AlertColor;

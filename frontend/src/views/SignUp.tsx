@@ -16,7 +16,7 @@ import {
   useSignUpMutation,
   SignUpRequest,
 } from '../services/auth';
-import {isErrorWithMessage, isFetchBaseQueryError} from '../app/helpers';
+import {isErrorWithMessage, isFetchBaseQueryError} from '../redux/helpers';
 import {FormContainer} from '../components/authentication';
 import {useAuthenticateWithOAuth} from '../components/authentication/hooks/useAuthenticateWithOAuth';
 
