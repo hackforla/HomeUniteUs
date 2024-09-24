@@ -12,18 +12,18 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import {setCredentials} from '../redux/authSlice';
 import {useAppDispatch} from '../redux/hooks/store';
-import {SignInForm} from '../components/authentication/SignInForm';
+import {SignInForm} from '../features/authentication/SignInForm';
 import {
   SignInRequest,
   useGoogleSignInMutation,
   useSignInMutation,
 } from '../services/auth';
 import {isFetchBaseQueryError, isErrorWithMessage} from '../redux/helpers';
-import {FormContainer} from '../components/authentication';
+import {FormContainer} from '../features/authentication';
 import {
   useAuthenticateWithOAuth,
   redirectsByRole,
-} from '../components/authentication/hooks/useAuthenticateWithOAuth';
+} from '../features/authentication/hooks/useAuthenticateWithOAuth';
 export interface LocationState {
   from: Location;
 }

@@ -2,7 +2,7 @@ import {List, ListItem, ListSubheader} from '@mui/material';
 import RemoveRoundedIcon from '@mui/icons-material/RemoveRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import {useEffect, useState} from 'react';
-import pwValidate from '../../utils/PasswordValidationSchema';
+import pwValidate from '../../utils/validation-schemas';
 
 interface PasswordProps {
   password: string;

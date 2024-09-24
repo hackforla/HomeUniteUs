@@ -7,11 +7,11 @@ import {
 } from '@mui/material';
 import React from 'react';
 import {useFormikContext} from 'formik';
-import {ResestPasswordValues} from '../components/authentication/ResetPasswordContext';
+import {ResestPasswordValues} from '../features/authentication/ResetPasswordContext';
 import {useConfirmForgotPasswordMutation} from '../services/auth';
 import {getErrorMessage} from '../redux/helpers';
-import {FormContainer, PasswordField} from '../components/authentication';
-import {PasswordValidation} from '../components/common/PasswordValidation';
+import {FormContainer, PasswordField} from '../features/authentication';
+import {PasswordValidation} from '../features/common/PasswordValidation';
 
 export const ResetPassword = () => {
   const {

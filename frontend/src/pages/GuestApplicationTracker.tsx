@@ -3,7 +3,7 @@ import {styled} from '@mui/system';
 import {
   DashboardTaskAccordion,
   CoordinatorContact,
-} from '../components/dashboard';
+} from '../features/dashboard';
 
 export type TaskStatus = 'inProgress' | 'complete' | 'locked';
 

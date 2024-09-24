@@ -10,15 +10,15 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 
 import {useNavigate, useParams} from 'react-router-dom';
-import {SignUpForm} from '../components/authentication/SignUpForm';
+import {SignUpForm} from '../features/authentication/SignUpForm';
 import {
   useGoogleSignUpMutation,
   useSignUpMutation,
   SignUpRequest,
 } from '../services/auth';
 import {isErrorWithMessage, isFetchBaseQueryError} from '../redux/helpers';
-import {FormContainer} from '../components/authentication';
-import {useAuthenticateWithOAuth} from '../components/authentication/hooks/useAuthenticateWithOAuth';
+import {FormContainer} from '../features/authentication';
+import {useAuthenticateWithOAuth} from '../features/authentication/hooks/useAuthenticateWithOAuth';
 
 export const SignUp = () => {
   const [errorMessage, setErrorMessage] = React.useState('');

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {Box, Typography} from '@mui/material';
 import * as React from 'react';
-import {AuthenticatedHeader} from '../components/common';
+import {AuthenticatedHeader} from '../features/common';
 
 interface HostApplicationTrackerProps {}
 

@@ -3,7 +3,7 @@ import {styled} from '@mui/system';
 import {Stack, Typography} from '@mui/material';
 
 import {VerificationRequest, useVerificationMutation} from '../services/auth';
-import {AccountVerificationForm} from '../components/authentication/AccountVerificationForm';
+import {AccountVerificationForm} from '../features/authentication/AccountVerificationForm';
 
 export const AccountVerification = () => {
   const [verify] = useVerificationMutation();

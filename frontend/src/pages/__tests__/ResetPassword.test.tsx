@@ -4,7 +4,7 @@ import {
   ResestPasswordValues,
   initialValues,
   validationSchema,
-} from '../../components/authentication/ResetPasswordContext';
+} from '../../features/authentication/ResetPasswordContext';
 import {render, screen, waitFor, fireEvent} from '../../utils/test/test-utils';
 import {ResetPassword} from '../ResetPassword';
 

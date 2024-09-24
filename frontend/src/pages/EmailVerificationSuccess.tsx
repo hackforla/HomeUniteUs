@@ -1,7 +1,7 @@
 import {Button, Stack, Typography} from '@mui/material';
 import React from 'react';
 import CheckCircleOutline from '@mui/icons-material/CheckCircleOutline';
-import {FormContainer} from '../components/authentication';
+import {FormContainer} from '../features/authentication';
 
 export const EmailVerificationSuccess = () => {
   return (

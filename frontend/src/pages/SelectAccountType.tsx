@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Typography, Button, Stack, Link, Divider} from '@mui/material';
 import {styled} from '@mui/system';
-import {HostIcon, CoordinatorIcon} from '../components/Icons';
+import {HostIcon, CoordinatorIcon} from '../features/Icons';
 
 export const SelectAccountType = () => {
   const [type, setType] = useState('');

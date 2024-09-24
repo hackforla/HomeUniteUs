@@ -10,7 +10,7 @@ import {
 import {useFormik} from 'formik';
 import {SignUpRequest} from '../../services/auth';
 import {PasswordValidation} from '../common/PasswordValidation';
-import {signUpVaildationSchema} from '../../utils/PasswordValidationSchema';
+import {signUpVaildationSchema} from '../../utils/validation-schemas';
 import {PasswordField} from './PasswordField';
 
 export interface SignUpFormProps {

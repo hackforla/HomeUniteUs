@@ -12,9 +12,9 @@ import {useFormikContext} from 'formik';
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import {isErrorWithMessage, isFetchBaseQueryError} from '../redux/helpers';
-import {ResestPasswordValues} from '../components/authentication/ResetPasswordContext';
+import {ResestPasswordValues} from '../features/authentication/ResetPasswordContext';
 import {useForgotPasswordMutation} from '../services/auth';
-import {FormContainer} from '../components/authentication';
+import {FormContainer} from '../features/authentication';
 
 export const ForgotPassword = () => {
   const [errorMessage, setErrorMessage] = React.useState('');

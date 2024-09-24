@@ -8,7 +8,7 @@ import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 import './index.css';
 
 import {setupStore} from './redux/store';
-import {ProtectedRoute} from './components/authentication/ProtectedRoute';
+import {ProtectedRoute} from './features/authentication/ProtectedRoute';
 import {useSessionMutation} from './services/auth';
 import {HomeUniteUsTheme} from './theme';
 import {
@@ -37,16 +37,16 @@ import {
 } from './pages';
 
 import {AccountVerification} from './pages/AccountVerification';
-import {AppLayout, Header} from './components/common';
-import {ResetPasswordContext} from './components/authentication/ResetPasswordContext';
+import {AppLayout, Header} from './features/common';
+import {ResetPasswordContext} from './features/authentication/ResetPasswordContext';
 import {
   CoordinatorDashboardLayout,
   GuestDashboardLayout,
-} from './components/layout';
-import {FieldGroupList} from './components/intake-profile/IntakeProfileGroups';
+} from './features/layout';
+import {FieldGroupList} from './features/intake-profile/IntakeProfileGroups';
 import {enableMocking} from './utils/test/browser';
 import {SystemAdminDashboard} from './pages/SystemAdminDashboard';
-import {ProfileReview} from './components/intake-profile/ProfileReview';
+import {ProfileReview} from './features/intake-profile/ProfileReview';
 
 function HuuApp() {
   const [session] = useSessionMutation();

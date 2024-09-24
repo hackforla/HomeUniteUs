@@ -1,7 +1,7 @@
 import {Button, Stack, Typography} from '@mui/material';
 import React from 'react';
 import CancelOutlined from '@mui/icons-material/CancelOutlined';
-import {FormContainer} from '../components/authentication';
+import {FormContainer} from '../features/authentication';
 
 export const EmailVerificationError = () => {
   return (

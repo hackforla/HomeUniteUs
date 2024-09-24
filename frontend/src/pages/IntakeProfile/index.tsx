@@ -8,7 +8,7 @@ import {
   Response,
 } from '../../services/profile';
 import {useState} from 'react';
-import {ProfileSidebar} from '../../components/intake-profile/ProfileSidebar';
+import {ProfileSidebar} from '../../features/intake-profile/ProfileSidebar';
 export type Values = {
   [key: string]: Response['value'];
 };

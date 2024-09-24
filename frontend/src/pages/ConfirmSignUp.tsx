@@ -10,7 +10,7 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import {useSearchParams} from 'react-router-dom';
 import {useResendConfirmationCodeMutation} from '../services/auth';
-import {FormContainer} from '../components/authentication';
+import {FormContainer} from '../features/authentication';
 import {isFetchBaseQueryError, isErrorWithMessage} from '../redux/helpers';
 
 interface Alert {

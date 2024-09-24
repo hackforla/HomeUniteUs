@@ -13,8 +13,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import {useFormikContext} from 'formik';
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
-import {ResestPasswordValues} from '../components/authentication/ResetPasswordContext';
-import {CodeField, FormContainer} from '../components/authentication';
+import {ResestPasswordValues} from '../features/authentication/ResetPasswordContext';
+import {CodeField, FormContainer} from '../features/authentication';
 import {useForgotPasswordMutation} from '../services/auth';
 import {getErrorMessage} from '../redux/helpers';
 
