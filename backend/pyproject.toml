@@ -1,0 +1,67 @@
+[tool.poetry]
+name = "homeuniteus-api"
+version = "0.1.0"
+description = "Web API for Home Unite Us"
+authors = [
+    "Home Unite Us <homeuniteus@hackforla.org>",
+]
+license = "MIT"
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = {extras = ["standard"], version = "^0.113.0"}
+
+# SQLAlchemy is a Python SQL toolkit and Object Relational Mapper that is
+# mainly used for its object relational mapper and database transactional
+# features.
+sqlalchemy = "^2.0.34"
+
+# alembic is a database migration tool provided by the SQLAlchemy project.
+# alembic does not use SemVer. Changes in the middle number represents a
+# "Significant Minor Release" that might be non-backward compatible.
+# https://alembic.sqlalchemy.org/en/latest/front.html#versioning-scheme
+alembic = "^1.13"
+
+# psycopg2 allows SQLAlchemy to communicate with PostgreSQL.
+# PostgreSQL is this project's target production database.
+psycopg2-binary = "^2.9"
+
+# boto3 is used for connecting to AWS resources
+boto3 = "^1.35.13"
+
+# pydantic-settings is a Pydantic feature that is used to load settings/configurations
+# from environment variables or secret files.
+pydantic-settings = "^2.4.0"
+
+# email-validator validates e-mail addresses. It is used with Pydantic to validates
+# an e-mail address in Pydantic schemas.
+email-validator = "^2.2.0"
+
+# pyjwt is used to decode information contained in a JSON Web Token
+pyjwt = {extras = ["crypto"], version = "^2.9.0"}
+
+[tool.poetry.group.test.dependencies]
+# tox builds and runs tests in an isolated environment.
+# It has its own configuration file named `tox.ini`.
+tox = "^4.18"
+
+# pytest runs the tests implemented in this project.
+pytest = "^8.3"
+
+# pytest-cov will report the amount of test coverage implemented.
+pytest-cov = "^5.0"
+
+# pytest-randomly will cause tests to be run in random order.
+pytest-randomly = "^3.15"
+
+# moto mocks out AWS Services
+moto = {extras = ["cognitoidp"], version = "^5.0"}
+
+# pytest-alembic is a pytest plugin that verifies alembic migrations
+pytest-alembic = "^0.11.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
