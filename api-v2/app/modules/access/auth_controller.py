@@ -1,4 +1,5 @@
 import logging
+import random
 import jwt
 import boto3
 
@@ -10,7 +11,7 @@ from botocore.exceptions import ClientError
 
 from app.modules.access.schemas import (
     UserCreate, UserSignInRequest, UserSignInResponse, ForgotPasswordRequest, ConfirmForgotPasswordResponse,
-    ConfirmForgotPasswordRequest, RefreshTokenResponse)
+    ConfirmForgotPasswordRequest, RefreshTokenResponse, InviteRequest, InviteResponse)
 
 from app.modules.access.crud import create_user, delete_user, get_user
 from app.modules.deps import (SettingsDep, DbSessionDep, CognitoIdpDep,
@@ -250,7 +251,7 @@ def refresh(request: Request,
 
 @router.post(
         "/forgot-password", 
-        description="Handles forgot password requests by hashing credentialsand sending to AWS Cognito", 
+        description="Handles forgot password requests by hashing credentials and sending to AWS Cognito", 
         )
 def forgot_password(body: ForgotPasswordRequest,
                     settings: SettingsDep,
@@ -303,6 +304,68 @@ def confirm_forgot_password(body: ConfirmForgotPasswordRequest,
     return {"message": "Password reset successful"}
 
 
+
+
+@router.post("/invite",
+             description="Invites a new user to application after creating account with email and temporary password in AWS Cognito",
+             response_model=InviteResponse)
+def invite(request: InviteRequest, 
+           settings: SettingsDep,
+           db: DbSessionDep,
+           cognito_client: CognitoIdpDep):
+    # create temporary password for user 
+    numbers = '0123456789'
+    lowercase_chars = 'abcdefghijklmnopqrstuvwxyz'
+    uppercase_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    symbols = '.-_~'
+    temporary_password = ''.join(random.choices(numbers, k=3)) + ''.join(random.choices(lowercase_chars, k=3)) + ''.join(random.choices(symbols, k=1)) + ''.join(random.choices(uppercase_chars, k=3))
+    # create the new user in cognito
+    try:
+        cognito_client.admin_create_user(
+            UserPoolId=settings.COGNITO_USER_POOL_ID,
+            Username=request.email,
+            TemporaryPassword=temporary_password,
+            ClientMetadata={
+                'url': settings.ROOT_URL
+            },
+            DesiredDeliveryMediums=["EMAIL"]
+        )
+    # handle errors
+    except ClientError as error:
+        if error.response['Error']['Code'] == 'UserNotFoundException':
+            raise HTTPException(status_code=400, detail="User not found. Confirmation not sent.")
+        else:
+            raise HTTPException(status_code=500, detail=error.response['Error']['Message'])
+    # if there are no errors create the user in the database
+    try:
+        # get the cooridinator email from somewhere
+        coordinator_email = request.id_token
+          
+        # create the user in the database
+        user = create_user(db, UserCreate(
+            email=request.email,
+            role=UserRole.GUEST,
+            firstName=request.firstName,
+            middleName=request.middleName,
+            lastName=request.lastName
+        ))
+        # get the guest id, cooridinator id from database
+        guest_id = user.id
+        coordinator = get_user(db, coordinator_email)
+        if not coordinator:
+            raise HTTPException(status_code=400, detail="Coordinator not found")
+        coordinator_id = coordinator.id
+        # Assuming you have a create_unmatched_case function in your crud module
+        create_unmatched_case(db, guest_id=guest_id, coordinator_id=coordinator_id)
+    except Exception as error:
+        raise HTTPException(status_code=400, detail=str(error))
+
+    return {"message": "Invitation sent successfully"}
+
+
+
+
+
 @router.post("/confirmInvite",
              description="",
              response_model=None)
@@ -311,11 +374,6 @@ def confirm_invite():
     pass
 
 
-@router.post("/invite",
-             description="",
-             response_model=None)
-def invite():
-    pass
 
 
 @router.post("/new_password",

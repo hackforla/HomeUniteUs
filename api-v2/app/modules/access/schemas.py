@@ -60,6 +60,14 @@ class ConfirmForgotPasswordRequest(BaseModel):
 class ConfirmForgotPasswordResponse(BaseModel):
     message: str
 
+class InviteResponse(BaseModel):
+    code: int
+    type: str
+    message: str
+
+class InviteRequest(BaseModel):
+    email: EmailStr
+
 
 # class SmartNested(Nested):
 #     '''
