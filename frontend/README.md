@@ -75,15 +75,16 @@ This application is statically compiled using `npm run build`. The files created
 
 The `frontend/` directory is organized as follows:
 
-- `src/` - Tthe source code for the frontend application
+- `src/` - The source code for the frontend application
   - `features/` - Contains the components for the application organized by feature as well as a `/ui` for shared components
     - `feature/` - Inside the features folder are folders containing components for a specific feature along with any other required files.
       - `hooks/` - Hooks related to the feature
       - `helpers/` - Helper functions related to the feature
       - `__tests__` - Tests for components in the feature
+      - `index.ts` - A file that exports any components that need to be accessed outside of the feature folder
   - `pages/` - Contains all pages that are rendered by the application. These can be organized by features and contain `hooks/`, `helpers/`, and `__tests__` subfolders as well.
   - `hooks/` - Hooks that are shared across the application
-  - `redux/` - Cotains the redux store, state slices, and helpers for the application
+  - `redux/` - Contains the redux store, state slices, and helpers for the application
   - `services/` - Code related to interfacing with any external APIs
   - `theme/` - Any files related to MUI theming and overrides
   - `utils/` - All utility functions used throughout the application
