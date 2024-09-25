@@ -20,4 +20,4 @@ export {ForgotPasswordCode} from './authentication/ForgotPasswordCode';
 export {ForgotPasswordSuccess} from './authentication/ForgotPasswordSuccess';
 export {Settings} from './Settings';
 export {ConfirmSignUp} from './authentication/ConfirmSignUp';
-export {IntakeProfile} from './IntakeProfile';
+export {IntakeProfile} from './intake-profile/IntakeProfile';

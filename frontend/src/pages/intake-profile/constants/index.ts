@@ -1,6 +1,6 @@
 import {faker} from '@faker-js/faker';
 import {array, object, string} from 'yup';
-import {InitialValues} from '..';
+import {InitialValues} from '../IntakeProfile';
 import {
   FieldGroup,
   Fields,

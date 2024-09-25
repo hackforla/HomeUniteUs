@@ -12,7 +12,7 @@ import {useFormikContext} from 'formik';
 import {format, parseISO} from 'date-fns';
 
 import {OutletContext} from './IntakeProfileGroups';
-import {InitialValues} from 'src/pages/IntakeProfile';
+import {InitialValues} from 'src/pages/intake-profile';
 import {Response} from 'src/services/profile';
 
 export const ProfileReview = () => {

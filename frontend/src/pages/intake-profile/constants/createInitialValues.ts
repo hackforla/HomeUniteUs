@@ -1,5 +1,5 @@
 import {FieldGroup, FieldTypes, Response} from '../../../services/profile';
-import {InitialValues} from '..';
+import {InitialValues} from '../IntakeProfile';
 
 /**
  * Creates an object used for the initial Formik valiues
