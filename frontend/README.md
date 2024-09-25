@@ -14,11 +14,11 @@ The minimum node version enforced is currently 20+, which is the current LTS ver
 
 1. Clone the repository to a directory on your computer
 2. Inside a terminal change directories to the root `HomeUniteUs/` directory
-3. Navigate to the the `app/` directory `cd app/`
+3. Navigate to the the `frontend/` directory: `cd frontend/`
 4. Run the command `npm install` to download all dependencies from the local package.json
 5. Create a local `.env` file and copy the contents from `.env.example`
 6. Message a team member to obtain values for the .env file
-7. From the `app/` directory run `npm run dev` to start a development server at `http://127.0.0.1:4040/`
+7. From the `frontend/` directory run `npm run dev` to start a development server at `http://127.0.0.1:4040/`
 
 The setup for the front end application is now complete and you should see the website running in your browser at the listed port.
 
@@ -62,11 +62,29 @@ For production builds, vite preforms a string replacement on the `import.meta.en
 
 The table below describes the environment variables that are used by this app:
 
-| Variable | Required? | Example | Description |
-|----------|-----------|---------|-------------|
-| `VITE_HUU_API_BASE_URL` | YES | http://localhost:8080/api/ | The HUU API's base URL. In a development environment (mode is 'development' or 'test'): if this variable is not defined, then `http://localhost:4040/api/` will be used by default. In non-development environment: if this variable is not defined, then the build will throw an error. |
-|          |           |         |             |
+| Variable                | Required? | Example                    | Description                                                                                                                                                                                                                                                                              |
+| ----------------------- | --------- | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `VITE_HUU_API_BASE_URL` | YES       | http://localhost:8080/api/ | The HUU API's base URL. In a development environment (mode is 'development' or 'test'): if this variable is not defined, then `http://localhost:4040/api/` will be used by default. In non-development environment: if this variable is not defined, then the build will throw an error. |
+|                         |           |                            |                                                                                                                                                                                                                                                                                          |
 
 ## Production
 
 This application is statically compiled using `npm run build`. The files created by the build command are placed in a `dist` directory. Those files are then placed into a directory served by `Nginx`. The configuration environment variables are expected to exist prior to building this application.
+
+## Folder Structure
+
+The `frontend/` directory is organized as follows:
+
+- `src/` - The source code for the frontend application
+  - `features/` - Contains the components for the application organized by feature as well as a `/ui` for shared components
+    - `feature/` - Inside the features folder are folders containing components for a specific feature along with any other required files.
+      - `hooks/` - Hooks related to the feature
+      - `helpers/` - Helper functions related to the feature
+      - `__tests__` - Tests for components in the feature
+      - `index.ts` - A file that exports any components that need to be accessed outside of the feature folder
+  - `pages/` - Contains all pages that are rendered by the application. These can be organized by features and contain `hooks/`, `helpers/`, and `__tests__` subfolders as well.
+  - `hooks/` - Hooks that are shared across the application
+  - `redux/` - Contains the redux store, state slices, and helpers for the application
+  - `services/` - Code related to interfacing with any external APIs
+  - `theme/` - Any files related to MUI theming and overrides
+  - `utils/` - All utility functions used throughout the application

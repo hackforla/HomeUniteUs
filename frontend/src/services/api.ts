@@ -5,8 +5,8 @@ import {
   FetchBaseQueryError,
   FetchArgs,
 } from '@reduxjs/toolkit/query/react';
-import {setCredentials, tokenReceived} from '../app/authSlice';
-import {RootState} from '../app/store';
+import {setCredentials, tokenReceived} from '../redux/authSlice';
+import {RootState} from '../redux/store';
 
 // Create base query
 const baseQuery = fetchBaseQuery({

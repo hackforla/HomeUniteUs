@@ -7,15 +7,22 @@ import {LocalizationProvider} from '@mui/x-date-pickers';
 import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 import './index.css';
 
-import {setupStore} from './app/store';
-import {ProtectedRoute} from './components/authentication/ProtectedRoute';
+import {setupStore} from './redux/store';
 import {useSessionMutation} from './services/auth';
 import {HomeUniteUsTheme} from './theme';
+import {ProtectedRoute, ResetPasswordContext} from './features/authentication';
+import {Header} from './features/ui';
+import {ProfileReview} from './features/intake-profile/ProfileReview';
+import {FieldGroupList} from './features/intake-profile/IntakeProfileGroups';
+import {
+  AppLayout,
+  CoordinatorDashboardLayout,
+  GuestDashboardLayout,
+} from './features/layouts';
 import {
   GuestApplicationTracker,
   Home,
-  HostApplicationTracker,
-  HostsList,
+  HostDashboard,
   SignIn,
   SignUp,
   ForgotPassword,
@@ -34,19 +41,9 @@ import {
   GuestSettings,
   CoordinatorDashboard,
   IntakeProfile,
-} from './views';
-
-import {AccountVerification} from './views/AccountVerification';
-import {AppLayout, Header} from './components/common';
-import {ResetPasswordContext} from './components/authentication/ResetPasswordContext';
-import {
-  CoordinatorDashboardLayout,
-  GuestDashboardLayout,
-} from './components/layout';
-import {FieldGroupList} from './components/intake-profile/IntakeProfileGroups';
-import {enableMocking} from './utils/test/browser';
-import {SystemAdminDashboard} from './views/SystemAdminDashboard';
-import {ProfileReview} from './components/intake-profile/ProfileReview';
+} from './pages';
+import {SystemAdminDashboard} from './pages/SystemAdminDashboard';
+import {enableMocking} from './utils/testing/browser';
 
 function HuuApp() {
   const [session] = useSessionMutation();
@@ -61,7 +58,6 @@ function HuuApp() {
       <Routes>
         <Route path="/" element={<AppLayout />}>
           <Route index element={<Home />} />
-          <Route path="/hosts" element={<HostsList />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SelectAccountType />} />
@@ -76,7 +72,6 @@ function HuuApp() {
             path="/forgot-password/success"
             element={<ForgotPasswordSuccess />}
           />
-          <Route path="/verification" element={<AccountVerification />} />
           <Route path="/header" element={<Header />} />
           <Route
             path="/email-verification-success"
@@ -88,8 +83,6 @@ function HuuApp() {
           />
           <Route path="/create-password" element={<NewPassword />} />
         </Route>
-
-        {/* guest routes */}
         <Route
           path="/guest"
           element={
@@ -129,7 +122,7 @@ function HuuApp() {
           path="/host"
           element={
             <ProtectedRoute>
-              <HostApplicationTracker />
+              <HostDashboard />
             </ProtectedRoute>
           }
         />
