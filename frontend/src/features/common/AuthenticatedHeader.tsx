@@ -1,19 +1,24 @@
 import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import {Tooltip, Avatar, Menu, MenuItem, Stack} from '@mui/material';
-import logo from '../../img/favicon.png';
+import {styled} from '@mui/system';
+import {
+  Tooltip,
+  Avatar,
+  Menu,
+  MenuItem,
+  Stack,
+  IconButton,
+  Toolbar,
+  Typography,
+  Box,
+  AppBar,
+} from '@mui/material';
+import {useSelector} from 'react-redux';
+import {Link, useNavigate} from 'react-router-dom';
+
 import {useSignOutMutation} from '../../services/auth';
 import {selectCurrentUser} from '../../redux/authSlice';
 import {User, UserRole} from '../../services/user';
-
-import {useSelector} from 'react-redux';
-import {Link, useNavigate} from 'react-router-dom';
-import {styled} from '@mui/system';
 
 function getInitials(user: User): string {
   const fi = (user.firstName && user.firstName[0]) || '?';
@@ -51,7 +56,7 @@ export const AuthenticatedHeader = ({onClick}: OwnProps) => {
           ) : (
             <div style={{width: '40px'}}></div>
           )}
-          <StyledLogo src={logo} alt="Home Unite Us logo" />
+          <StyledLogo src="/images/favicon.png" alt="Home Unite Us logo" />
           <Stack direction="row" gap={1} sx={{alignItems: 'center'}}>
             <AvatarDropdownMenu />
           </Stack>
