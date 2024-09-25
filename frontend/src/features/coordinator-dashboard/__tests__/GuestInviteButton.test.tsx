@@ -7,7 +7,7 @@ import {
   screen,
   userEvent,
 } from '../../../utils/test/test-utils';
-import {GuestInviteButton} from '../GuestInviteButton';
+import {GuestInviteButton} from '../../coordinator-dashboard/GuestInviteButton';
 import {server} from '../../../utils/test/server';
 import {HttpResponse, http} from 'msw';
 
