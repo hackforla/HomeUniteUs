@@ -1,7 +1,7 @@
 import React from 'react';
 import {Navigate, useLocation} from 'react-router-dom';
 import {useAuth} from '../../redux/hooks/useAuth';
-import {Loading} from '../common';
+import {Loading} from '../ui';
 import {useCurrentUserQuery} from '../../services/user';
 
 export const ProtectedRoute = ({children}: {children: JSX.Element}) => {

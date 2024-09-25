@@ -12,7 +12,7 @@ import {Link} from '@mui/material';
 import {styled} from '@mui/system';
 import {Outlet, useLocation} from 'react-router-dom';
 
-import {AuthenticatedHeader} from '../common';
+import {AuthenticatedHeader} from '../ui';
 
 const DRAWER_WIDTH = 209;
 const MOBILE_DRAWER_WIDTH = 296;

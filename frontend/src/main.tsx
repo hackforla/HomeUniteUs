@@ -11,7 +11,7 @@ import {setupStore} from './redux/store';
 import {useSessionMutation} from './services/auth';
 import {HomeUniteUsTheme} from './theme';
 import {ProtectedRoute, ResetPasswordContext} from './features/authentication';
-import {Header} from './features/common';
+import {Header} from './features/ui';
 import {ProfileReview} from './features/intake-profile/ProfileReview';
 import {FieldGroupList} from './features/intake-profile/IntakeProfileGroups';
 import {

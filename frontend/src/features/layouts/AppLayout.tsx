@@ -1,7 +1,7 @@
 import React from 'react';
 import {Stack, Toolbar, Box} from '@mui/material';
 import {Outlet} from 'react-router-dom';
-import {Header} from '../common/Header';
+import {Header} from '../ui/Header';
 
 export const AppLayout = () => {
   return (

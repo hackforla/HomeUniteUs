@@ -28,7 +28,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import PersonIcon from '@mui/icons-material/Person';
 import {red} from '@mui/material/colors';
 import * as React from 'react';
-import {AuthenticatedHeader} from '../features/common';
+import {AuthenticatedHeader} from '../features/ui';
 import {
   DashboardDataItem,
   DashboardDataResponse,
