@@ -13,7 +13,7 @@ import CheckCircleOutlined from '@mui/icons-material/CheckCircleOutlined';
 import LockIcon from '@mui/icons-material/Lock';
 import {styled} from '@mui/material/styles';
 
-import {Task} from '../../pages/GuestApplicationTracker';
+import {Task} from '../../pages/GuestDashboard';
 import {DashboardTask} from './DashboardTask';
 
 export interface TaskAccordionProps

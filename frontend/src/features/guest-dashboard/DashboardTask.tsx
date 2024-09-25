@@ -4,7 +4,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import {Link} from 'react-router-dom';
 
-import {SubTask} from '../../pages/GuestApplicationTracker';
+import {SubTask} from '../../pages/GuestDashboard';
 
 export type DashboardTaskProps = Pick<
   SubTask,
