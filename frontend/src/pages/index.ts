@@ -1,4 +1,3 @@
-export {AccountVerification} from './AccountVerification';
 export {CoordinatorDashboard} from './CoordinatorDashboard';
 export {GuestApplicationTracker} from './guest-dashboard/GuestDashboard';
 export {GuestSettings} from './guest-dashboard/GuestSettings';

@@ -35,11 +35,6 @@ export interface SignOutResponse {
   message: string;
 }
 
-export interface VerificationRequest {
-  email: string;
-  code: string;
-}
-
 export interface ForgotPasswordRequest {
   email: string;
 }
@@ -109,14 +104,6 @@ const authApi = api.injectEndpoints({
         };
       },
     }),
-    verification: build.mutation<void, VerificationRequest>({
-      query: credentials => ({
-        url: 'auth/verify',
-        method: 'POST',
-        withCredentials: true,
-        body: credentials,
-      }),
-    }),
     forgotPassword: build.mutation<void, ForgotPasswordRequest>({
       query: credentials => ({
         url: 'auth/forgot-password',
@@ -181,7 +168,6 @@ export const {
   useSignUpMutation,
   useSignInMutation,
   useSignOutMutation,
-  useVerificationMutation,
   useNewPasswordMutation,
   useGoogleSignUpMutation,
   useGoogleSignInMutation,

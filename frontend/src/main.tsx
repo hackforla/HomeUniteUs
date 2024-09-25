@@ -35,10 +35,10 @@ import {
   IntakeProfile,
 } from './pages';
 
-import {AccountVerification} from './pages/AccountVerification';
-import {AppLayout, Header} from './features/common';
+import {Header} from './features/common';
 import {ResetPasswordContext} from './features/authentication/ResetPasswordContext';
 import {
+  AppLayout,
   CoordinatorDashboardLayout,
   GuestDashboardLayout,
 } from './features/layouts';
@@ -74,7 +74,6 @@ function HuuApp() {
             path="/forgot-password/success"
             element={<ForgotPasswordSuccess />}
           />
-          <Route path="/verification" element={<AccountVerification />} />
           <Route path="/header" element={<Header />} />
           <Route
             path="/email-verification-success"
@@ -86,8 +85,6 @@ function HuuApp() {
           />
           <Route path="/create-password" element={<NewPassword />} />
         </Route>
-
-        {/* guest routes */}
         <Route
           path="/guest"
           element={
