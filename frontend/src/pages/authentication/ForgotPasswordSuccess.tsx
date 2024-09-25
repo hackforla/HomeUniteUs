@@ -1,6 +1,6 @@
 import React from 'react';
 import {Typography, Button, Stack} from '@mui/material';
-import {FormContainer} from '../features/authentication';
+import {FormContainer} from '../../features/authentication';
 
 export const ForgotPasswordSuccess = () => {
   return (

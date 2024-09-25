@@ -11,7 +11,7 @@ import {
   waitFor,
   fireEvent,
 } from '../../utils/testing/test-utils';
-import {ResetPassword} from '../ResetPassword';
+import {ResetPassword} from '../authentication/ResetPassword';
 
 interface Mocks {
   isError: boolean;
