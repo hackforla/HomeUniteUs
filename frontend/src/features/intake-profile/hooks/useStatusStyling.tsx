@@ -1,5 +1,5 @@
 import {useTheme} from '@mui/material/styles';
-import {InProgressIcon} from '../../icons/InProgressIcon';
+import {InProgressIcon} from '../../common/icons/InProgressIcon';
 import LockIcon from '@mui/icons-material/Lock';
 import {CheckCircleOutlined} from '@mui/icons-material';
 
