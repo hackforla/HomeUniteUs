@@ -9,7 +9,7 @@ import {
 // import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
 import {SignUpRequest} from '../../services/auth';
-import {PasswordValidation} from '../common/PasswordValidation';
+import {PasswordValidation} from './PasswordValidation';
 import {signUpVaildationSchema} from '../../utils/validation-schemas';
 import {PasswordField} from './PasswordField';
 

@@ -4,7 +4,7 @@ import {object, string, ref} from 'yup';
 
 import {NewPasswordRequest} from '../../services/auth';
 import {PasswordField} from './PasswordField';
-import {PasswordValidation} from '../common/PasswordValidation';
+import {PasswordValidation} from './PasswordValidation';
 
 interface NewPasswordFormProps {
   onSubmit: ({password, confirmPassword}: NewPasswordRequest) => Promise<void>;

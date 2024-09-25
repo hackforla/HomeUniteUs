@@ -11,7 +11,7 @@ import {ResestPasswordValues} from '../features/authentication/ResetPasswordCont
 import {useConfirmForgotPasswordMutation} from '../services/auth';
 import {getErrorMessage} from '../redux/helpers';
 import {FormContainer, PasswordField} from '../features/authentication';
-import {PasswordValidation} from '../features/common/PasswordValidation';
+import {PasswordValidation} from '../features/authentication/PasswordValidation';
 
 export const ResetPassword = () => {
   const {
