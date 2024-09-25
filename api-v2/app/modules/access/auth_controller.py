@@ -11,7 +11,8 @@ from botocore.exceptions import ClientError
 
 from app.modules.access.schemas import (
     UserCreate, UserSignInRequest, UserSignInResponse, ForgotPasswordRequest, ConfirmForgotPasswordResponse,
-    ConfirmForgotPasswordRequest, RefreshTokenResponse, InviteRequest, InviteResponse)
+    ConfirmForgotPasswordRequest, RefreshTokenResponse, InviteRequest, InviteResponse, UserRoleEnum)
+from app.modules.access.models import ( UnmatchedGuestCase )
 
 from app.modules.access.crud import create_user, delete_user, get_user
 from app.modules.deps import (SettingsDep, DbSessionDep, CognitoIdpDep,
@@ -313,13 +314,26 @@ def invite(request: InviteRequest,
            settings: SettingsDep,
            db: DbSessionDep,
            cognito_client: CognitoIdpDep):
-    # create temporary password for user 
+    
+    id_token = request.cookies.get('id_token')
+    refresh_token = request.cookies.get('refresh_token')
+
+    if None in (refresh_token, id_token):
+        raise HTTPException(status_code=401,
+                            detail="Missing refresh token or id token")
+
+    decoded_id_token = jwt.decode(id_token,
+                                  algorithms=["RS256"],
+                                  options={"verify_signature": False})
+
+    coordinator_email = decoded_id_token['email']
+
     numbers = '0123456789'
     lowercase_chars = 'abcdefghijklmnopqrstuvwxyz'
     uppercase_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     symbols = '.-_~'
     temporary_password = ''.join(random.choices(numbers, k=3)) + ''.join(random.choices(lowercase_chars, k=3)) + ''.join(random.choices(symbols, k=1)) + ''.join(random.choices(uppercase_chars, k=3))
-    # create the new user in cognito
+
     try:
         cognito_client.admin_create_user(
             UserPoolId=settings.COGNITO_USER_POOL_ID,
@@ -330,33 +344,29 @@ def invite(request: InviteRequest,
             },
             DesiredDeliveryMediums=["EMAIL"]
         )
-    # handle errors
+
     except ClientError as error:
         if error.response['Error']['Code'] == 'UserNotFoundException':
             raise HTTPException(status_code=400, detail="User not found. Confirmation not sent.")
         else:
             raise HTTPException(status_code=500, detail=error.response['Error']['Message'])
-    # if there are no errors create the user in the database
+   
     try:
-        # get the cooridinator email from somewhere
-        coordinator_email = request.id_token
-          
-        # create the user in the database
+      
         user = create_user(db, UserCreate(
             email=request.email,
-            role=UserRole.GUEST,
+            role=UserRoleEnum.GUEST,
             firstName=request.firstName,
             middleName=request.middleName,
             lastName=request.lastName
         ))
-        # get the guest id, cooridinator id from database
         guest_id = user.id
         coordinator = get_user(db, coordinator_email)
         if not coordinator:
             raise HTTPException(status_code=400, detail="Coordinator not found")
         coordinator_id = coordinator.id
-        # Assuming you have a create_unmatched_case function in your crud module
-        create_unmatched_case(db, guest_id=guest_id, coordinator_id=coordinator_id)
+        
+        UnmatchedGuestCase(db, guest_id=guest_id, coordinator_id=coordinator_id)
     except Exception as error:
         raise HTTPException(status_code=400, detail=str(error))
 

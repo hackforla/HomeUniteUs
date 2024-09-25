@@ -12,7 +12,10 @@ class Settings(BaseSettings):
     COGNITO_USER_POOL_ID: str
     COGNITO_ACCESS_ID: str
     COGNITO_ACCESS_KEY: str
+    SECRET_KEY: str  
+    CONFIG_PROFILE: str 
     ROOT_URL: str
+    ENV: str  
     DATABASE_URL: str
 
 
