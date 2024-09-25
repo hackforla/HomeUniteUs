@@ -15,7 +15,6 @@ import {
   GuestApplicationTracker,
   Home,
   HostApplicationTracker,
-  HostsList,
   SignIn,
   SignUp,
   ForgotPassword,
@@ -61,7 +60,6 @@ function HuuApp() {
       <Routes>
         <Route path="/" element={<AppLayout />}>
           <Route index element={<Home />} />
-          <Route path="/hosts" element={<HostsList />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SelectAccountType />} />

@@ -7,7 +7,6 @@ export {GuestTasks} from './guest-dashboard/GuestTasks';
 export {GuestDocuments} from './guest-dashboard/GuestDocuments';
 export {Home} from './Home';
 export {HostApplicationTracker} from './HostApplicationTracker';
-export {HostsList} from './HostsList';
 export {ForgotPassword} from './authentication/ForgotPassword';
 export {ResetPassword} from './authentication/ResetPassword';
 export {SelectAccountType} from './authentication/SelectAccountType';
