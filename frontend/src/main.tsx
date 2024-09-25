@@ -42,7 +42,7 @@ import {ResetPasswordContext} from './features/authentication/ResetPasswordConte
 import {
   CoordinatorDashboardLayout,
   GuestDashboardLayout,
-} from './features/layout';
+} from './features/layouts';
 import {FieldGroupList} from './features/intake-profile/IntakeProfileGroups';
 import {enableMocking} from './utils/testing/browser';
 import {SystemAdminDashboard} from './pages/SystemAdminDashboard';
