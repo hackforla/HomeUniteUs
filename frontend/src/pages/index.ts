@@ -15,7 +15,7 @@ export {SignIn} from './authentication/SignIn';
 export {SignUp} from './authentication/SignUp';
 export {EmailVerificationSuccess} from './authentication/EmailVerificationSuccess';
 export {EmailVerificationError} from './authentication/EmailVerificationError';
-export {NewPassword} from './NewPassword';
+export {NewPassword} from './authentication/NewPassword';
 export {ForgotPasswordCode} from './authentication/ForgotPasswordCode';
 export {ForgotPasswordSuccess} from './authentication/ForgotPasswordSuccess';
 export {Settings} from './Settings';

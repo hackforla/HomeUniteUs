@@ -1,12 +1,12 @@
 import React from 'react';
-import {NewPasswordForm} from '../features/authentication/NewPasswordForm';
+import {NewPasswordForm} from '../../features/authentication/NewPasswordForm';
 import {useSearchParams} from 'react-router-dom';
 import {Typography, Stack, Alert, IconButton} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import {NewPasswordRequest, useNewPasswordMutation} from '../services/auth';
+import {NewPasswordRequest, useNewPasswordMutation} from '../../services/auth';
 import {useNavigate} from 'react-router-dom';
-import {isFetchBaseQueryError, isErrorWithMessage} from '../redux/helpers';
-import {FormContainer} from '../features/authentication';
+import {isFetchBaseQueryError, isErrorWithMessage} from '../../redux/helpers';
+import {FormContainer} from '../../features/authentication';
 
 export const NewPassword = () => {
   const [errorMessage, setErrorMessage] = React.useState('');
