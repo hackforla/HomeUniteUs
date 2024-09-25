@@ -14,7 +14,7 @@ import {HomeUniteUsTheme} from './theme';
 import {
   GuestApplicationTracker,
   Home,
-  HostApplicationTracker,
+  HostDashboard,
   SignIn,
   SignUp,
   ForgotPassword,
@@ -124,7 +124,7 @@ function HuuApp() {
           path="/host"
           element={
             <ProtectedRoute>
-              <HostApplicationTracker />
+              <HostDashboard />
             </ProtectedRoute>
           }
         />

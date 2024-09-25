@@ -16,11 +16,11 @@ import {
   DashboardDataItem,
   DashboardDataResponse,
   useGetAllDashboardDataMutation,
-} from '../services/coordinator';
+} from '../../services/coordinator';
 import {
   GuestInviteButton,
   LoadingComponent,
-} from '../features/coordinator-dashboard';
+} from '../../features/coordinator-dashboard';
 
 const columns: GridColDef[] = [
   {

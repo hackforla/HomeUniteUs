@@ -1,32 +1,32 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {Box, Typography} from '@mui/material';
 import * as React from 'react';
-import {AuthenticatedHeader} from '../features/common';
+import {AuthenticatedHeader} from '../../features/common';
 
-interface HostApplicationTrackerProps {}
+interface HostDashboardProps {}
 
-interface HostApplicationTrackerState {}
+interface HostDashboardState {}
 
-enum HostApplicationTrackerActionType {}
+enum HostDashboardActionType {}
 
-interface HostApplicationTrackerAction {
-  type: HostApplicationTrackerActionType;
+interface HostDashboardAction {
+  type: HostDashboardActionType;
   payload?: string;
 }
 
-const initialState: HostApplicationTrackerState = {};
+const initialState: HostDashboardState = {};
 
 function reducer(
-  state: HostApplicationTrackerState,
-  action: HostApplicationTrackerAction,
-): HostApplicationTrackerState {
+  state: HostDashboardState,
+  action: HostDashboardAction,
+): HostDashboardState {
   switch (action.type) {
     default:
       throw new Error(`Unsupported action: ${JSON.stringify(action)}`);
   }
 }
 
-export function HostApplicationTracker(props: HostApplicationTrackerProps) {
+export function HostDashboard(props: HostDashboardProps) {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   return (
     <Box>
