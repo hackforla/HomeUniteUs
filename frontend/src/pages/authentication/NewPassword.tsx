@@ -1,5 +1,5 @@
 import React from 'react';
-import {NewPasswordForm} from '../../features/authentication/NewPasswordForm';
+import {NewPasswordForm} from '../../features/authentication';
 import {useSearchParams} from 'react-router-dom';
 import {Typography, Stack, Alert, IconButton} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';

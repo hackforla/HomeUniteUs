@@ -8,9 +8,17 @@ import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 import './index.css';
 
 import {setupStore} from './redux/store';
-import {ProtectedRoute} from './features/authentication/ProtectedRoute';
 import {useSessionMutation} from './services/auth';
 import {HomeUniteUsTheme} from './theme';
+import {ProtectedRoute, ResetPasswordContext} from './features/authentication';
+import {Header} from './features/common';
+import {ProfileReview} from './features/intake-profile/ProfileReview';
+import {FieldGroupList} from './features/intake-profile/IntakeProfileGroups';
+import {
+  AppLayout,
+  CoordinatorDashboardLayout,
+  GuestDashboardLayout,
+} from './features/layouts';
 import {
   GuestApplicationTracker,
   Home,
@@ -34,18 +42,8 @@ import {
   CoordinatorDashboard,
   IntakeProfile,
 } from './pages';
-
-import {Header} from './features/common';
-import {ResetPasswordContext} from './features/authentication/ResetPasswordContext';
-import {
-  AppLayout,
-  CoordinatorDashboardLayout,
-  GuestDashboardLayout,
-} from './features/layouts';
-import {FieldGroupList} from './features/intake-profile/IntakeProfileGroups';
-import {enableMocking} from './utils/testing/browser';
 import {SystemAdminDashboard} from './pages/SystemAdminDashboard';
-import {ProfileReview} from './features/intake-profile/ProfileReview';
+import {enableMocking} from './utils/testing/browser';
 
 function HuuApp() {
   const [session] = useSessionMutation();

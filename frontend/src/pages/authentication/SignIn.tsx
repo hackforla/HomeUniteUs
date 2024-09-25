@@ -12,14 +12,13 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import {setCredentials} from '../../redux/authSlice';
 import {useAppDispatch} from '../../redux/hooks/store';
-import {SignInForm} from '../../features/authentication/SignInForm';
+import {isFetchBaseQueryError, isErrorWithMessage} from '../../redux/helpers';
 import {
   SignInRequest,
   useGoogleSignInMutation,
   useSignInMutation,
 } from '../../services/auth';
-import {isFetchBaseQueryError, isErrorWithMessage} from '../../redux/helpers';
-import {FormContainer} from '../../features/authentication';
+import {SignInForm, FormContainer} from '../../features/authentication';
 import {
   useAuthenticateWithOAuth,
   redirectsByRole,

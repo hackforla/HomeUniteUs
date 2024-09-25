@@ -20,7 +20,7 @@ import {InitialValues} from 'src/pages/intake-profile';
 import {AdditionalGuestsField} from './fields/AdditionaGuestsField';
 import {FieldGroup, Fields, Guest, Pet} from 'src/services/profile';
 import {AdditionalPetsField} from './fields/AdditionalPetsField';
-import {phoneRegExp} from '../../pages/intake-profile/constants/index';
+import {phoneRegExp} from '../../pages/intake-profile/helpers/index';
 import {DatePickerField} from './fields/DatePickerField';
 
 export interface OutletContext {

@@ -1,14 +1,14 @@
 import {Button, Stack, useMediaQuery, useTheme} from '@mui/material';
 import {Outlet, useLocation, useNavigate, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
-import {buildValidationSchema, createInitialValues} from './constants';
+import {buildValidationSchema, createInitialValues} from './helpers';
 import {
   useGetProfileQuery,
   useGetResponsesQuery,
   Response,
 } from '../../services/profile';
 import {useState} from 'react';
-import {ProfileSidebar} from '../../features/intake-profile/ProfileSidebar';
+import {ProfileSidebar} from '../../features/intake-profile';
 export type Values = {
   [key: string]: Response['value'];
 };
