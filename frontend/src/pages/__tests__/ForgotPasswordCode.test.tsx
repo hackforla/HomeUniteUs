@@ -8,11 +8,11 @@ import {
   screen,
   fireEvent,
   userEvent,
-} from '../../utils/test/test-utils';
+} from '../../utils/testing/test-utils';
 import {ForgotPasswordCode} from '../ForgotPasswordCode';
 import {BrowserRouter} from 'react-router-dom';
 import {Formik} from 'formik';
-import {server} from '../../utils/test/server';
+import {server} from '../../utils/testing/server';
 import {HttpResponse, http, delay} from 'msw';
 
 const {navigate} = vi.hoisted(() => {

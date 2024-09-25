@@ -3,7 +3,7 @@ import {
   screen,
   userEvent,
   fireEvent,
-} from '../../../utils/test/test-utils';
+} from '../../../utils/testing/test-utils';
 import {CodeField} from '..';
 
 describe('CodeField', () => {

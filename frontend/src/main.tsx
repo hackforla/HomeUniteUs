@@ -44,7 +44,7 @@ import {
   GuestDashboardLayout,
 } from './features/layout';
 import {FieldGroupList} from './features/intake-profile/IntakeProfileGroups';
-import {enableMocking} from './utils/test/browser';
+import {enableMocking} from './utils/testing/browser';
 import {SystemAdminDashboard} from './pages/SystemAdminDashboard';
 import {ProfileReview} from './features/intake-profile/ProfileReview';
 

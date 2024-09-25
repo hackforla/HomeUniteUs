@@ -1,5 +1,5 @@
 import {BrowserRouter} from 'react-router-dom';
-import {render, screen, userEvent} from '../../../utils/test/test-utils';
+import {render, screen, userEvent} from '../../../utils/testing/test-utils';
 import {DashboardTask, DashboardTaskProps} from '../DashboardTask';
 
 const {navigate} = vi.hoisted(() => {

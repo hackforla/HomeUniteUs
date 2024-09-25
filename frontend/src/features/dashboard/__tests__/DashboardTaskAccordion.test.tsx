@@ -1,5 +1,5 @@
 import {BrowserRouter} from 'react-router-dom';
-import {render, screen, within} from '../../../utils/test/test-utils';
+import {render, screen, within} from '../../../utils/testing/test-utils';
 import {
   DashboardTaskAccordion,
   TaskAccordionProps,

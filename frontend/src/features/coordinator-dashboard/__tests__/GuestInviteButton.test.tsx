@@ -6,9 +6,9 @@ import {
   render,
   screen,
   userEvent,
-} from '../../../utils/test/test-utils';
+} from '../../../utils/testing/test-utils';
 import {GuestInviteButton} from '../../coordinator-dashboard/GuestInviteButton';
-import {server} from '../../../utils/test/server';
+import {server} from '../../../utils/testing/server';
 import {HttpResponse, http} from 'msw';
 
 function createGuest() {

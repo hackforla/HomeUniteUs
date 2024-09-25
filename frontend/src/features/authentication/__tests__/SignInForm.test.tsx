@@ -1,6 +1,6 @@
 import {BrowserRouter} from 'react-router-dom';
 import {describe, vi} from 'vitest';
-import {fireEvent, render, screen} from '../../../utils/test/test-utils';
+import {fireEvent, render, screen} from '../../../utils/testing/test-utils';
 import {SignInForm} from '../SignInForm';
 
 const prepare = () => {

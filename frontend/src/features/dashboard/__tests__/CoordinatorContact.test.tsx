@@ -1,4 +1,4 @@
-import {render, screen} from '../../../utils/test/test-utils';
+import {render, screen} from '../../../utils/testing/test-utils';
 import {CoordinatorContact} from '../CoordinatorContact';
 
 const setup = () => {

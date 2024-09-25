@@ -5,7 +5,12 @@ import {
   initialValues,
   validationSchema,
 } from '../../features/authentication/ResetPasswordContext';
-import {render, screen, waitFor, fireEvent} from '../../utils/test/test-utils';
+import {
+  render,
+  screen,
+  waitFor,
+  fireEvent,
+} from '../../utils/testing/test-utils';
 import {ResetPassword} from '../ResetPassword';
 
 interface Mocks {

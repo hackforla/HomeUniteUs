@@ -5,7 +5,7 @@ import {
   screen,
   userEvent,
   fireEvent,
-} from '../../../utils/test/test-utils';
+} from '../../../utils/testing/test-utils';
 import {SignUpForm, SignUpFormProps} from '../SignUpForm';
 import {faker} from '@faker-js/faker';
 
