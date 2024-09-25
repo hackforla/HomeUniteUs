@@ -21,7 +21,7 @@
     "build-storybook": "build-storybook",
     "lint": "eslint . --ext ts --ext tsx --max-warnings 0 --fix",
     "type-check": "npx tsc --noEmit",
-    "prepare": "cd .. && husky install app/.husky",
+    "prepare": "cd .. && husky install frontend/.husky",
     "pre-commit": "lint-staged",
     "generate": "npx @rtk-query/codegen-openapi openapi-config.ts",
     "check-node-version": "node check-node-version.mjs",
