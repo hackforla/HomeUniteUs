@@ -310,7 +310,8 @@ def confirm_forgot_password(body: ConfirmForgotPasswordRequest,
 @router.post("/invite",
              description="Invites a new user to application after creating account with email and temporary password in AWS Cognito",
              response_model=InviteResponse)
-def invite(request: InviteRequest, 
+def invite(body: InviteRequest, 
+           request: Request, 
            settings: SettingsDep,
            db: DbSessionDep,
            cognito_client: CognitoIdpDep):
