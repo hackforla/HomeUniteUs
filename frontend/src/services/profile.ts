@@ -76,6 +76,15 @@ export interface Pet {
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: build => ({
+    saveResponses: build.mutation({
+      query: responses => {
+        return {
+          url: `/profile/responses`,
+          method: 'POST',
+          body: responses,
+        };
+      },
+    }),
     getResponses: build.query<
       GetProfileResponsesApiResponse,
       GetProfileResponsesApiArg
@@ -128,6 +137,7 @@ export interface GetProfileResponsesApiArg {
 }
 
 export const {
+  useSaveResponsesMutation,
   useGetProfileQuery,
   useGetProfileSectionQuery,
   useGetResponsesQuery,

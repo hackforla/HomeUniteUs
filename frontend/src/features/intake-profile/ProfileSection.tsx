@@ -15,6 +15,7 @@ import {
   Response,
   useGetProfileSectionQuery,
   useGetResponsesQuery,
+  useSaveResponsesMutation,
 } from '../../services/profile';
 import {createInitialValuesForSection} from './helpers';
 import {RenderFields} from './RenderFields';
@@ -71,18 +72,50 @@ interface ProfileSectionFieldsProps {
   sectionId: string;
 }
 
+export type Values = {
+  [key: string]: Response['value'];
+};
+
+export type InitialValues = Record<string, Values>;
+
 const ProfileSectionFields = ({
   section,
   responses,
   sectionId,
 }: ProfileSectionFieldsProps) => {
+  const [saveResponses, {isLoading}] = useSaveResponsesMutation();
+
+  const handleOnSubmit = (values: InitialValues) => {
+    if (!sectionId) {
+      console.error('groupId is not defined in on submit');
+      return;
+    }
+    // Update the responses with the new values or create new response objects
+    const updateResponses = Object.entries(values[sectionId]).map(
+      ([fieldId, value]) => {
+        const response = responses.find(
+          response => response.fieldId === fieldId,
+        );
+        if (response) {
+          response.value = value;
+          return response;
+        } else {
+          return {
+            fieldId,
+            value,
+          };
+        }
+      },
+    );
+
+    saveResponses({responses: updateResponses});
+  };
+
   return (
     <Formik
       enableReinitialize={true}
       initialValues={createInitialValuesForSection(section, responses)}
-      onSubmit={values => {
-        console.log(values);
-      }}
+      onSubmit={handleOnSubmit}
     >
       {({errors, handleChange, setFieldValue, values, handleSubmit}) => (
         <Stack sx={{gap: 4, flex: 1, backgroundColor: 'white'}}>
@@ -111,8 +144,15 @@ const ProfileSectionFields = ({
             <Button variant="contained" color="inherit">
               Cancel
             </Button>
-            <Button onClick={() => handleSubmit()} variant="contained">
+            <Button
+              disabled={isLoading}
+              onClick={() => handleSubmit()}
+              variant="contained"
+            >
               Save
+              {isLoading ? (
+                <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
+              ) : null}
             </Button>
           </Stack>
         </Stack>

@@ -8,13 +8,24 @@ interface GetResponsesParams {
 }
 
 export const handlers = [
+  http.post('/api/profile/responses', async ({request}) => {
+    const responses = await request.json();
+
+    // Save the responses to the database
+    console.log('Saving responses:', responses);
+
+    await delay(1200);
+
+    return HttpResponse.json({status: 201});
+  }),
   http.get<GetResponsesParams, GetProfileResponsesApiResponse>(
     '/api/profile/responses/:userId',
-    () => {
+    async () => {
       const fields = intakeProfiles[0].fieldGroups
         .map(fieldGroup => fieldGroup.fields)
         .flat();
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const responses = fields.map(field => {
         const value = getResponseValue(field);
         return {
@@ -23,19 +34,19 @@ export const handlers = [
         };
       });
 
-      delay();
+      await delay(1200);
 
       // return a list of filled in responses
-      return HttpResponse.json({responses});
+      // return HttpResponse.json({responses});
       // return an empty list of responses
-      // return HttpResponse.json({responses: []});
+      return HttpResponse.json({responses: []});
     },
   ),
-  http.get('/api/profile/:profileId', req => {
+  http.get('/api/profile/:profileId', async req => {
     const id = req.params.profileId;
     const profile = intakeProfiles.find(p => p.id === id);
 
-    delay();
+    await delay(1200);
 
     if (profile) {
       return HttpResponse.json(profile);
@@ -43,13 +54,13 @@ export const handlers = [
 
     return new HttpResponse(null, {status: 404});
   }),
-  http.get('/api/profile/:profileId/:sectionId', req => {
+  http.get('/api/profile/:profileId/:sectionId', async req => {
     const id = req.params.profileId;
     const sectionId = req.params.sectionId;
     const profile = intakeProfiles.find(p => p.id === id);
     const section = profile?.fieldGroups.find(s => s.id === sectionId);
 
-    delay();
+    await delay();
 
     if (profile) {
       return HttpResponse.json(section);

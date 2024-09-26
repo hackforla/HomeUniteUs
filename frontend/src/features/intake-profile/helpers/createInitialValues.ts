@@ -57,7 +57,7 @@ export const createInitialValues = (
 export const createInitialValuesForSection = (
   group: FieldGroup,
   responses: Response[],
-) => {
+): InitialValues => {
   return {
     [group.id]: group.fields.reduce((acc, field) => {
       return {
