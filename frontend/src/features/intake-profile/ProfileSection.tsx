@@ -7,7 +7,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import {useFormik} from 'formik';
+import {Formik} from 'formik';
 
 import {
   FieldGroup,
@@ -37,10 +37,7 @@ export const ProfileSection = () => {
     return <CircularProgress />;
 
   return (
-    <Container
-      sx={{display: 'flex', alignItems: 'center', height: '100vh'}}
-      maxWidth="sm"
-    >
+    <Container sx={{display: 'flex', height: '100vh', py: 6}} maxWidth="sm">
       <ProfileSectionFields
         section={section}
         responses={responses.responses}
@@ -61,39 +58,45 @@ const ProfileSectionFields = ({
   responses,
   sectionId,
 }: ProfileSectionFieldsProps) => {
-  const {errors, handleChange, setFieldValue, values} = useFormik({
-    enableReinitialize: true,
-    initialValues: createInitialValuesForSection(section, responses),
-    onSubmit: values => {
-      console.log(values);
-    },
-  });
-
   return (
-    <Stack sx={{gap: 4, flex: 1}}>
-      <Typography variant="h5">{section?.title}</Typography>
-      <Stack sx={{gap: 3}}>
-        {section?.fields.map(field => {
-          return (
-            <Stack key={field.id}>
-              <RenderFields
-                errors={errors}
-                handleChange={handleChange}
-                setFieldValue={setFieldValue}
-                values={values}
-                groupId={sectionId}
-                field={field}
-              />
-            </Stack>
-          );
-        })}
-      </Stack>
-      <Stack sx={{flexDirection: 'row', justifyContent: 'flex-end', gap: 1}}>
-        <Button variant="contained" color="inherit">
-          Cancel
-        </Button>
-        <Button variant="contained">Save</Button>
-      </Stack>
-    </Stack>
+    <Formik
+      enableReinitialize={true}
+      initialValues={createInitialValuesForSection(section, responses)}
+      onSubmit={values => {
+        console.log(values);
+      }}
+    >
+      {({errors, handleChange, setFieldValue, values}) => (
+        <Stack sx={{gap: 4, flex: 1}}>
+          <Typography variant="h5" sx={{color: 'primary.main'}}>
+            {section?.title}
+          </Typography>
+          <Stack sx={{gap: 3}}>
+            {section?.fields.map(field => {
+              return (
+                <Stack key={field.id}>
+                  <RenderFields
+                    errors={errors}
+                    handleChange={handleChange}
+                    setFieldValue={setFieldValue}
+                    values={values}
+                    groupId={sectionId}
+                    field={field}
+                  />
+                </Stack>
+              );
+            })}
+          </Stack>
+          <Stack
+            sx={{flexDirection: 'row', justifyContent: 'flex-end', gap: 1}}
+          >
+            <Button variant="contained" color="inherit">
+              Cancel
+            </Button>
+            <Button variant="contained">Save</Button>
+          </Stack>
+        </Stack>
+      )}
+    </Formik>
   );
 };

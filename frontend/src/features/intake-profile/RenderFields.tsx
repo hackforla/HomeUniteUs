@@ -66,6 +66,7 @@ export const RenderFields = ({
           fieldId={field.id}
           groupId={groupId}
           onChange={handleChange}
+          setFieldValue={setFieldValue}
         />
       );
     case 'date':
@@ -167,9 +168,10 @@ export const RenderFields = ({
       return (
         <AdditionalPetsField
           errors={errors}
-          pets={props.value as Pet[]}
           fieldId={field.id}
           groupId={groupId}
+          pets={props.value as Pet[]}
+          setFieldValue={setFieldValue}
         />
       );
     case 'short_text':
