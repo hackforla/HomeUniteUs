@@ -83,27 +83,21 @@ function HuuApp() {
           />
           <Route path="/create-password" element={<NewPassword />} />
         </Route>
-        <Route
-          path="/guest"
-          element={
-            <ProtectedRoute>
-              <GuestDashboardLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<GuestApplicationTracker />} />
-          <Route path="documents" element={<GuestDocuments />} />
-          <Route path="contacts" element={<GuestContacts />} />
-          <Route path="tasks" element={<GuestTasks />} />
-          <Route path="settings" element={<GuestSettings />} />
+        <Route path="/guest">
           <Route
-            path="profile/:profileId"
             element={
               <ProtectedRoute>
-                <IntakeProfile />
+                <GuestDashboardLayout />
               </ProtectedRoute>
             }
           >
+            <Route index element={<GuestApplicationTracker />} />
+            <Route path="documents" element={<GuestDocuments />} />
+            <Route path="contacts" element={<GuestContacts />} />
+            <Route path="tasks" element={<GuestTasks />} />
+            <Route path="settings" element={<GuestSettings />} />
+          </Route>
+          <Route path="profile/:profileId" element={<IntakeProfile />}>
             <Route path="group/:groupId" element={<FieldGroupList />} />
             <Route path="review" element={<ProfileReview />} />
           </Route>

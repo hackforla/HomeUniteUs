@@ -18,7 +18,6 @@ export type InitialValues = Record<string, Values>;
 export const IntakeProfile = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const toolbarHeight = Number(theme.mixins.toolbar.minHeight);
   const {profileId, groupId} = useParams();
   const location = useLocation();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -114,7 +113,7 @@ export const IntakeProfile = () => {
         <Stack
           direction="row"
           sx={{
-            height: `calc(100vh - ${toolbarHeight}px)`,
+            height: '100vh',
             backgroundColor: 'grey.50',
           }}
         >
