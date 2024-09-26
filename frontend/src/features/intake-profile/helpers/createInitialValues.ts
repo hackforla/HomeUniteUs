@@ -1,4 +1,4 @@
-import {InitialValues} from '../IntakeProfile';
+import {InitialValues} from '../../../pages/intake-profile/IntakeProfile';
 import {FieldGroup, FieldTypes, Response} from '../../../services/profile';
 
 /**
@@ -50,6 +50,20 @@ export const createInitialValues = (
     return {
       ...acc,
       [fieldGroup.id]: {...fields},
+    };
+  }, {});
+};
+
+export const createInitialValuesForSection = (
+  group: FieldGroup,
+  responses: Response[],
+) => {
+  return group.fields.reduce((acc, field) => {
+    return {
+      ...acc,
+      [field.id]:
+        responses.find(response => response.fieldId === field.id)?.value ||
+        fieldDefaultValue(field.type),
     };
   }, {});
 };
