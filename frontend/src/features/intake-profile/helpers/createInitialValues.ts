@@ -58,12 +58,14 @@ export const createInitialValuesForSection = (
   group: FieldGroup,
   responses: Response[],
 ) => {
-  return group.fields.reduce((acc, field) => {
-    return {
-      ...acc,
-      [field.id]:
-        responses.find(response => response.fieldId === field.id)?.value ||
-        fieldDefaultValue(field.type),
-    };
-  }, {});
+  return {
+    [group.id]: group.fields.reduce((acc, field) => {
+      return {
+        ...acc,
+        [field.id]:
+          responses.find(response => response.fieldId === field.id)?.value ||
+          fieldDefaultValue(field.type),
+      };
+    }, {}),
+  };
 };

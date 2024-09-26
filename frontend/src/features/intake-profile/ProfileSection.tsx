@@ -1,13 +1,16 @@
 import React from 'react';
 import {useParams} from 'react-router-dom';
-import {Container} from '@mui/material';
+import {CircularProgress, Container, Stack} from '@mui/material';
 import {useFormik} from 'formik';
 
 import {
+  FieldGroup,
+  Response,
   useGetProfileSectionQuery,
   useGetResponsesQuery,
 } from '../../services/profile';
 import {createInitialValuesForSection} from './helpers';
+import {RenderFields} from './RenderFields';
 
 export const ProfileSection = () => {
   const {profileId, sectionId} = useParams();
@@ -19,23 +22,60 @@ export const ProfileSection = () => {
     userId: '1',
   });
 
-  console.log({section, responses});
+  if (
+    isLoading ||
+    responsesLoading ||
+    section === undefined ||
+    responses === undefined
+  )
+    return <CircularProgress />;
 
-  const formik = useFormik({
-    initialValues:
-      !isLoading && !responsesLoading && section && responses
-        ? createInitialValuesForSection(section, responses.responses)
-        : {},
+  return (
+    <Container maxWidth="sm">
+      <ProfileSectionFields
+        section={section}
+        responses={responses.responses}
+        sectionId={sectionId ?? ''}
+      />
+    </Container>
+  );
+};
+
+interface ProfileSectionFieldsProps {
+  section: FieldGroup;
+  responses: Response[];
+  sectionId: string;
+}
+
+const ProfileSectionFields = ({
+  section,
+  responses,
+  sectionId,
+}: ProfileSectionFieldsProps) => {
+  const {errors, handleChange, setFieldValue, values} = useFormik({
+    enableReinitialize: true,
+    initialValues: createInitialValuesForSection(section, responses),
     onSubmit: values => {
       console.log(values);
     },
   });
 
-  console.log(formik.values);
-
   return (
-    <Container maxWidth="sm">
-      <div>This is a section</div>
-    </Container>
+    <Stack sx={{gap: 3}}>
+      {section?.fields.map(field => {
+        return (
+          <Stack key={field.id} sx={{gap: 4}}>
+            <RenderFields
+              errors={errors}
+              handleChange={handleChange}
+              setFieldValue={setFieldValue}
+              values={values}
+              groupId={sectionId}
+              field={field}
+            />
+          </Stack>
+        );
+      })}
+    </Stack>
   );
 };
