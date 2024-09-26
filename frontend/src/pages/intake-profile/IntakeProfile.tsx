@@ -2,7 +2,7 @@ import {Container, Stack, useMediaQuery, useTheme} from '@mui/material';
 import {Outlet, useLocation, useNavigate, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
 import {useState} from 'react';
-import {createInitialValues} from './helpers';
+import {createInitialValues} from '../../features/intake-profile/helpers';
 import {
   useGetProfileQuery,
   useGetResponsesQuery,
