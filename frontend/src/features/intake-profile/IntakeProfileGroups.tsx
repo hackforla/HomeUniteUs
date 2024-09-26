@@ -13,13 +13,13 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import {useFormikContext} from 'formik';
+import {useFormikContext, FormikHandlers, FormikErrors} from 'formik';
 import {useOutletContext} from 'react-router-dom';
 import {InitialValues} from 'src/pages/intake-profile/IntakeProfile';
 import {AdditionalGuestsField} from './fields/AdditionaGuestsField';
 import {FieldGroup, Fields, Guest, Pet} from 'src/services/profile';
 import {AdditionalPetsField} from './fields/AdditionalPetsField';
-import {phoneRegExp} from '../../pages/intake-profile/helpers';
+import {phoneRegExp} from './helpers';
 import {DatePickerField} from './fields/DatePickerField';
 
 export interface OutletContext {
@@ -29,6 +29,8 @@ export interface OutletContext {
 
 export const FieldGroupList = () => {
   const {groupId, fieldGroups} = useOutletContext<OutletContext>();
+  const {errors, handleChange, setFieldValue, values} =
+    useFormikContext<InitialValues>();
 
   if (fieldGroups === undefined || groupId === undefined) return null;
   const fieldGroup = fieldGroups.find(group => group.id === groupId);
@@ -49,7 +51,14 @@ export const FieldGroupList = () => {
       {fields.map(field => {
         return (
           <Stack key={field.id} sx={{gap: 1}}>
-            <RenderFields groupId={groupId} field={field} />
+            <RenderFields
+              errors={errors}
+              handleChange={handleChange}
+              setFieldValue={setFieldValue}
+              values={values}
+              groupId={groupId}
+              field={field}
+            />
           </Stack>
         );
       })}
@@ -58,13 +67,27 @@ export const FieldGroupList = () => {
 };
 
 interface RenderFieldProps {
-  groupId: string;
+  errors: FormikErrors<InitialValues>;
+  handleChange: FormikHandlers['handleChange'];
   field: Fields;
+  groupId: string;
+  setFieldValue: (
+    field: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    value: any,
+    shouldValidate?: boolean,
+  ) => Promise<void | FormikErrors<InitialValues>>;
+  values: InitialValues;
 }
 
-export const RenderFields = ({groupId, field}: RenderFieldProps) => {
-  const {errors, handleChange, setFieldValue, values} =
-    useFormikContext<InitialValues>();
+export const RenderFields = ({
+  errors,
+  handleChange,
+  setFieldValue,
+  values,
+  groupId,
+  field,
+}: RenderFieldProps) => {
   const groupValues = values[groupId];
 
   const props = {
