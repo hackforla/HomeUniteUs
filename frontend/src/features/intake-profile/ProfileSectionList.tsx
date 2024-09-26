@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   Stack,
   List,
@@ -5,23 +6,53 @@ import {
   ListItemButton,
   Typography,
   Container,
+  Box,
 } from '@mui/material';
+import {InProgressIcon} from '../ui/icons/InProgressIcon';
+import LockIcon from '@mui/icons-material/Lock';
+import {CheckCircleOutlined} from '@mui/icons-material';
 import {useParams} from 'react-router-dom';
 import {Link} from 'react-router-dom';
-import {useStatusStyling} from './hooks/useStatusStyling';
-import React from 'react';
 
 import {useGetProfileQuery} from '../../services/profile';
 
+const icon = {
+  complete: (
+    <CheckCircleOutlined
+      color="success"
+      sx={{backgroundColor: 'white', borderRadius: '50%'}}
+    />
+  ),
+  incomplete: (
+    <Box
+      sx={{
+        width: 24,
+        height: 24,
+        border: `2px solid white`,
+        borderRadius: `100%`,
+      }}
+    />
+  ),
+  locked: (
+    <LockIcon
+      sx={{
+        backgroundColor: 'rgba(0, 0, 0, 0.38)',
+        borderRadius: '50%',
+        padding: '5px',
+        color: 'rgba(0, 0, 0, 0.54)',
+      }}
+    />
+  ),
+  partial: <InProgressIcon />,
+};
+
 export const ProfileSectionList = () => {
-  const statusStyling = useStatusStyling();
   const {profileId} = useParams();
 
   const {data: profileData, isLoading} = useGetProfileQuery(
     {profileId: profileId},
     {skip: !profileId},
   );
-  console.log(profileData);
 
   if (isLoading || profileData === undefined) return null;
 
@@ -33,7 +64,7 @@ export const ProfileSectionList = () => {
         {fieldGroups.map(({id, title}) => {
           // Change status here to see different styles
           // complete | partial | incomplete | locked
-          const status = 'incomplete';
+          const status = 'complete';
           const fieldTitle = title || '...';
 
           return (
@@ -43,18 +74,20 @@ export const ProfileSectionList = () => {
                 component={Link}
                 sx={{
                   borderRadius: 2,
-                  backgroundColor: statusStyling[status].color,
-                  minHeight: 56,
+                  backgroundColor: 'primary.main',
+                  color: 'white',
                   display: 'flex',
                   alignItems: 'center',
+                  py: 2,
                   gap: 2,
                   paddingInline: 3,
-                  borderWidth: 2,
-                  borderStyle: 'solid',
                   textDecoration: 'none',
+                  '&:hover': {
+                    backgroundColor: 'primary.dark',
+                  },
                 }}
               >
-                {statusStyling[status].icon}
+                {icon[status]}
                 <Typography
                   sx={{
                     fontSize: 16,

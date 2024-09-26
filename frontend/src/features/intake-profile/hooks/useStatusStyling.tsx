@@ -20,7 +20,7 @@ export const useStatusStyling = () => {
           sx={{
             width: 24,
             height: 24,
-            border: `2px solid grey`,
+            border: `2px solid white`,
             borderRadius: `100%`,
           }}
         />
