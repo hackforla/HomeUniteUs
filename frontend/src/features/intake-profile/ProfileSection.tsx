@@ -1,5 +1,5 @@
 import React from 'react';
-import {useParams} from 'react-router-dom';
+import {Link, useParams} from 'react-router-dom';
 import {
   Button,
   CircularProgress,
@@ -7,6 +7,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+import {ArrowBack} from '@mui/icons-material';
 import {Formik} from 'formik';
 
 import {
@@ -37,7 +38,24 @@ export const ProfileSection = () => {
     return <CircularProgress />;
 
   return (
-    <Container sx={{display: 'flex', height: '100vh', py: 6}} maxWidth="sm">
+    <Container
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        py: 6,
+        gap: 6,
+      }}
+      maxWidth="sm"
+    >
+      <Button
+        component={Link}
+        to={`/guest/profile-proto/${profileId}`}
+        color="inherit"
+        sx={{alignSelf: 'flex-start'}}
+        startIcon={<ArrowBack />}
+      >
+        Go back
+      </Button>
       <ProfileSectionFields
         section={section}
         responses={responses.responses}
@@ -66,8 +84,8 @@ const ProfileSectionFields = ({
         console.log(values);
       }}
     >
-      {({errors, handleChange, setFieldValue, values}) => (
-        <Stack sx={{gap: 4, flex: 1}}>
+      {({errors, handleChange, setFieldValue, values, handleSubmit}) => (
+        <Stack sx={{gap: 4, flex: 1, backgroundColor: 'white'}}>
           <Typography variant="h5" sx={{color: 'primary.main'}}>
             {section?.title}
           </Typography>
@@ -93,7 +111,9 @@ const ProfileSectionFields = ({
             <Button variant="contained" color="inherit">
               Cancel
             </Button>
-            <Button variant="contained">Save</Button>
+            <Button onClick={() => handleSubmit()} variant="contained">
+              Save
+            </Button>
           </Stack>
         </Stack>
       )}
