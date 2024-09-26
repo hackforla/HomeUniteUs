@@ -76,25 +76,25 @@ export interface Pet {
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: build => ({
-    getProfile: build.query<GetProfileApiResponse, GetProfileApiArg>({
-      query: queryArg => ({
-        url: `/profile/${queryArg.profileId}`,
-      }),
-    }),
-    getProfileSections: build.query<
-      GetProfileApiResponse,
-      GetProfileSectionApiArg
-    >({
-      query: queryArg => ({
-        url: `/profile/${queryArg.profileId}/${queryArg.sectionId}`,
-      }),
-    }),
     getResponses: build.query<
       GetProfileResponsesApiResponse,
       GetProfileResponsesApiArg
     >({
       query: queryArg => ({
         url: `/profile/responses/${queryArg.userId}`,
+      }),
+    }),
+    getProfile: build.query<GetProfileApiResponse, GetProfileApiArg>({
+      query: queryArg => ({
+        url: `/profile/${queryArg.profileId}`,
+      }),
+    }),
+    getProfileSection: build.query<
+      GetProfileSectionApiResponse,
+      GetProfileSectionApiArg
+    >({
+      query: queryArg => ({
+        url: `/profile/${queryArg.profileId}/${queryArg.sectionId}`,
       }),
     }),
   }),
@@ -117,10 +117,7 @@ export interface GetProfileSectionApiArg {
   sectionId: string | undefined;
 }
 
-export interface GetProfileSectionApiResponse {
-  id: string;
-  fieldGroup: FieldGroup;
-}
+export type GetProfileSectionApiResponse = FieldGroup;
 
 export interface GetProfileResponsesApiResponse {
   responses: Response[];
@@ -132,6 +129,6 @@ export interface GetProfileResponsesApiArg {
 
 export const {
   useGetProfileQuery,
-  useGetProfileSectionsQuery,
+  useGetProfileSectionQuery,
   useGetResponsesQuery,
 } = injectedRtkApi;

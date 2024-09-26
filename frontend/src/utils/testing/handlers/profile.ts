@@ -8,6 +8,29 @@ interface GetResponsesParams {
 }
 
 export const handlers = [
+  http.get<GetResponsesParams, GetProfileResponsesApiResponse>(
+    '/api/profile/responses/:userId',
+    () => {
+      const fields = intakeProfiles[0].fieldGroups
+        .map(fieldGroup => fieldGroup.fields)
+        .flat();
+
+      const responses = fields.map(field => {
+        const value = getResponseValue(field);
+        return {
+          fieldId: field.id,
+          value,
+        };
+      });
+
+      delay();
+
+      // return a list of filled in responses
+      return HttpResponse.json({responses});
+      // return an empty list of responses
+      // return HttpResponse.json({responses: []});
+    },
+  ),
   http.get('/api/profile/:profileId', req => {
     const id = req.params.profileId;
     const profile = intakeProfiles.find(p => p.id === id);
@@ -34,27 +57,6 @@ export const handlers = [
 
     return new HttpResponse(null, {status: 404});
   }),
-  http.get<GetResponsesParams, GetProfileResponsesApiResponse>(
-    '/api/profile/responses/:userId',
-    () => {
-      const fields = intakeProfiles[0].fieldGroups
-        .map(fieldGroup => fieldGroup.fields)
-        .flat();
-
-      const responses = fields.map(field => {
-        const value = getResponseValue(field);
-        return {
-          fieldId: field.id,
-          value,
-        };
-      });
-
-      // return a list of filled in responses
-      return HttpResponse.json({responses});
-      // return an empty list of responses
-      // return HttpResponse.json({responses: []});
-    },
-  ),
 ];
 
 // Provide a fake response value based on the field type
