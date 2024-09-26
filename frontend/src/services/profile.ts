@@ -81,6 +81,14 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/profile/${queryArg.profileId}`,
       }),
     }),
+    getProfileSections: build.query<
+      GetProfileApiResponse,
+      GetProfileSectionApiArg
+    >({
+      query: queryArg => ({
+        url: `/profile/${queryArg.profileId}/${queryArg.sectionId}`,
+      }),
+    }),
     getResponses: build.query<
       GetProfileResponsesApiResponse,
       GetProfileResponsesApiArg
@@ -104,6 +112,16 @@ export interface GetProfileApiArg {
   profileId: string | undefined;
 }
 
+export interface GetProfileSectionApiArg {
+  profileId: string | undefined;
+  sectionId: string | undefined;
+}
+
+export interface GetProfileSectionApiResponse {
+  id: string;
+  fieldGroup: FieldGroup;
+}
+
 export interface GetProfileResponsesApiResponse {
   responses: Response[];
 }
@@ -112,4 +130,8 @@ export interface GetProfileResponsesApiArg {
   userId: string | undefined;
 }
 
-export const {useGetProfileQuery, useGetResponsesQuery} = injectedRtkApi;
+export const {
+  useGetProfileQuery,
+  useGetProfileSectionsQuery,
+  useGetResponsesQuery,
+} = injectedRtkApi;
