@@ -1,4 +1,4 @@
-import {Button, Stack, useMediaQuery, useTheme} from '@mui/material';
+import {Container, Stack, useMediaQuery, useTheme} from '@mui/material';
 import {Outlet, useLocation, useNavigate, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
 import {buildValidationSchema, createInitialValues} from './helpers';
@@ -8,7 +8,7 @@ import {
   Response,
 } from '../../services/profile';
 import {useState} from 'react';
-import {ProfileSidebar} from '../../features/intake-profile';
+import {ProfileActions, ProfileSidebar} from '../../features/intake-profile';
 export type Values = {
   [key: string]: Response['value'];
 };
@@ -125,71 +125,28 @@ export const IntakeProfile = () => {
             setSelectedItem={setSelectedItem}
             showSections={showSections}
           />
-          <Stack
-            onSubmit={handleSubmit}
-            component="form"
-            sx={{
-              height: '100%',
-              flex: 1,
-              display: {xs: showSections ? 'none' : 'flex', md: 'flex'},
-            }}
-          >
-            <Stack sx={{overflowY: 'auto'}}>
-              <Outlet context={{groupId, fieldGroups, errors}} />
-            </Stack>
+          <Container>
             <Stack
+              onSubmit={handleSubmit}
+              component="form"
               sx={{
-                flexDirection: {xs: 'column', md: 'row'},
-                marginLeft: {xs: '0', md: 'auto'},
-                gap: 1,
-                p: 2,
+                height: '100%',
+                width: '100%',
+                flex: 1,
+                display: {xs: showSections ? 'none' : 'flex', md: 'flex'},
               }}
             >
-              <Button
-                size="medium"
-                variant="outlined"
-                onClick={handleBack}
-                style={{border: '2px solid'}} //in styles to prevent bug where button becomes smaller on hover
-                sx={{width: {sm: '100%', md: 161}}}
-              >
-                Back
-              </Button>
-              {location.pathname.includes('review') ? (
-                <Button
-                  size="medium"
-                  variant="contained"
-                  onClick={handleSubmitApplication}
-                  sx={{width: {sm: '100%', md: 183}}}
-                >
-                  Submit Application
-                </Button>
-              ) : (
-                <Button
-                  size="medium"
-                  variant="contained"
-                  onClick={handleNext}
-                  sx={{width: {sm: '100%', md: 183}}}
-                >
-                  Continue
-                </Button>
-              )}
-
-              <Button
-                size="medium"
-                variant="text"
-                onClick={toggleShowSections}
-                sx={{
-                  border: 2,
-                  width: {sm: '100%'},
-                  display: {md: 'none'},
-                  color: 'black',
-                  borderColor: 'transparent',
-                }}
-              >
-                Return to Profile Sections
-              </Button>
+              <Stack sx={{overflowY: 'auto'}}>
+                <Outlet context={{groupId, fieldGroups, errors}} />
+              </Stack>
+              <ProfileActions
+                handleBack={handleBack}
+                handleNext={handleNext}
+                handleSubmitApplication={handleSubmitApplication}
+                toggleShowSections={toggleShowSections}
+              />
             </Stack>
-          </Stack>
+          </Container>
         </Stack>
       )}
     </Formik>
