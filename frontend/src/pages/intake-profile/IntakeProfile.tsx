@@ -1,7 +1,7 @@
 import {Container, Stack, useMediaQuery, useTheme} from '@mui/material';
 import {Outlet, useLocation, useNavigate, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
-import {buildValidationSchema, createInitialValues} from './helpers';
+import {createInitialValues} from './helpers';
 import {
   useGetProfileQuery,
   useGetResponsesQuery,
@@ -43,8 +43,9 @@ export const IntakeProfile = () => {
   const {responses} = responsesData;
 
   // create validation schema for current group. Return empty object if groupId is undefined, which means we are on welcome or review page
-  const validationSchema =
-    groupId === undefined ? {} : buildValidationSchema(fieldGroups, groupId);
+  // TODO: Reimplement validation schema generation
+  // const validationSchema =
+  //   groupId === undefined ? {} : buildValidationSchema(fieldGroups, groupId);
 
   // create initial values from responses and fieldGroups
   const initalValues = createInitialValues(fieldGroups, responses);
@@ -81,7 +82,7 @@ export const IntakeProfile = () => {
   return (
     <Formik
       initialValues={initalValues}
-      validationSchema={validationSchema}
+      // validationSchema={validationSchema}
       enableReinitialize={true}
       onSubmit={values => {
         if (!groupId) {
