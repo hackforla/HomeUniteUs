@@ -111,10 +111,11 @@ export const IntakeProfile = () => {
     >
       {({errors, handleSubmit}) => (
         <Stack
-          direction="row"
           sx={{
+            flexDirection: 'row',
             height: '100vh',
             backgroundColor: 'grey.50',
+            overflowY: 'scroll',
           }}
         >
           <ProfileSidebar
@@ -125,14 +126,13 @@ export const IntakeProfile = () => {
             setSelectedItem={setSelectedItem}
             showSections={showSections}
           />
-          <Container>
+          <Container sx={{height: '100%'}} maxWidth="md">
             <Stack
               onSubmit={handleSubmit}
               component="form"
               sx={{
-                height: '100%',
-                width: '100%',
                 flex: 1,
+                my: 4,
                 display: {xs: showSections ? 'none' : 'flex', md: 'flex'},
               }}
             >

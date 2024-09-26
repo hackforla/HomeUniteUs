@@ -12,6 +12,8 @@ interface ProfileSidebarProps {
   showSections: boolean;
 }
 
+const DRAWER_WIDTH = 320;
+
 export const ProfileSidebar = ({
   fieldGroups,
   groupId,
@@ -31,7 +33,17 @@ export const ProfileSidebar = ({
     <Drawer
       variant="permanent"
       open
-      sx={{display: {xs: showSections ? 'flex' : 'none', md: 'flex'}}}
+      sx={{
+        width: DRAWER_WIDTH,
+        height: '100%',
+        '& .MuiDrawer-paper': {
+          width: DRAWER_WIDTH,
+        },
+        display: {
+          xs: showSections ? 'flex' : 'none',
+          md: 'flex',
+        },
+      }}
     >
       <Stack
         sx={{
@@ -49,7 +61,7 @@ export const ProfileSidebar = ({
           {0 /* needs to be implemented*/} of {totalTask}
         </Typography>
       </Stack>
-      <Stack component={List} sx={{px: 2, gap: 2}}>
+      <Stack component={List} sx={{px: 2, gap: 2, width: '100%'}}>
         {fieldGroups.map(({id, title}) => {
           // Change status here to see different styles
           // complete | partial | incomplete | locked

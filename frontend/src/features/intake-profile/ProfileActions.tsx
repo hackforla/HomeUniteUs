@@ -20,7 +20,7 @@ export const ProfileActions = ({
         flexDirection: {xs: 'column', md: 'row'},
         marginLeft: {xs: '0', md: 'auto'},
         gap: 1,
-        p: 2,
+        py: 2,
       }}
     >
       <Button

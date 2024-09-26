@@ -1,5 +1,4 @@
 import {
-  Container,
   FormControl,
   FormControlLabel,
   FormHelperText,
@@ -36,24 +35,25 @@ export const FieldGroupList = () => {
   const fields = fieldGroup?.fields || [];
 
   return (
-    <Container maxWidth="sm" sx={{py: 4}}>
-      <Stack
-        sx={{
-          gap: 2,
-          '.MuiInputLabel-asterisk': {color: 'red'},
-          '.MuiFormLabel-asterisk': {color: 'red'},
-        }}
-      >
-        <Typography variant="h5">{fieldGroup?.title}</Typography>
-        {fields.map(field => {
-          return (
-            <Stack key={field.id} sx={{gap: 1}}>
-              <RenderFields groupId={groupId} field={field} />
-            </Stack>
-          );
-        })}
-      </Stack>
-    </Container>
+    <Stack
+      sx={{
+        gap: 2,
+        bgcolor: 'background.paper',
+        padding: 4,
+        borderRadius: 1,
+        '.MuiInputLabel-asterisk': {color: 'red'},
+        '.MuiFormLabel-asterisk': {color: 'red'},
+      }}
+    >
+      <Typography variant="h5">{fieldGroup?.title}</Typography>
+      {fields.map(field => {
+        return (
+          <Stack key={field.id} sx={{gap: 1}}>
+            <RenderFields groupId={groupId} field={field} />
+          </Stack>
+        );
+      })}
+    </Stack>
   );
 };
 
