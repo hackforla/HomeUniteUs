@@ -1,5 +1,6 @@
 import React from 'react';
+import {ProfileSection} from '../../features/intake-profile';
 
 export const IntakeProfileSection = () => {
-  return <div>This is the intake profile section</div>;
+  return <ProfileSection />;
 };
