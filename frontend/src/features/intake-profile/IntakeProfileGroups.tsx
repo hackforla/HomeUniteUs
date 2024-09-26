@@ -16,11 +16,11 @@ import {
 } from '@mui/material';
 import {useFormikContext} from 'formik';
 import {useOutletContext} from 'react-router-dom';
-import {InitialValues} from 'src/pages/intake-profile';
+import {InitialValues} from 'src/pages/intake-profile/IntakeProfile';
 import {AdditionalGuestsField} from './fields/AdditionaGuestsField';
 import {FieldGroup, Fields, Guest, Pet} from 'src/services/profile';
 import {AdditionalPetsField} from './fields/AdditionalPetsField';
-import {phoneRegExp} from '../../pages/intake-profile/helpers/index';
+import {phoneRegExp} from '../../pages/intake-profile/helpers';
 import {DatePickerField} from './fields/DatePickerField';
 
 export interface OutletContext {

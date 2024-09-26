@@ -1,5 +1,5 @@
-import {FieldGroup, FieldTypes, Response} from '../../../services/profile';
 import {InitialValues} from '../IntakeProfile';
+import {FieldGroup, FieldTypes, Response} from '../../../services/profile';
 
 /**
  * Creates an object used for the initial Formik valiues
@@ -12,24 +12,22 @@ import {InitialValues} from '../IntakeProfile';
  */
 const fieldDefaultValue = (fieldType: FieldTypes) => {
   switch (fieldType) {
-    case 'additional_guests':
-      return [];
-    case 'date':
-      return null;
-    case 'dropdown':
-      return '';
-    case 'email':
+    case 'short_text':
       return '';
     case 'long_text':
       return '';
+    case 'dropdown':
+      return '';
     case 'number':
       return '';
-    case 'pets':
+    case 'additional_guests':
       return [];
-    case 'short_text':
+    case 'email':
       return '';
     case 'yes_no':
       return '';
+    case 'pets':
+      return [];
     default:
       return '';
   }

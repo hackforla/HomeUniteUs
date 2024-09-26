@@ -1,4 +1,4 @@
-import {array, object, string, date} from 'yup';
+import {array, object, string} from 'yup';
 import {FieldGroup, Fields} from '../../../services/profile';
 
 /**
@@ -11,23 +11,20 @@ import {FieldGroup, Fields} from '../../../services/profile';
  * }
  */
 
-const phoneRegExp =
+export const phoneRegExp =
   /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
 export const typeValidations = {
   short_text: string(),
   long_text: string(),
-  number: string().matches(phoneRegExp, 'phone number is not valid'),
+  number: string().matches(phoneRegExp, 'Phone number is not valid'),
   email: string().email('Must be a valid email address'),
   yes_no: string(),
   dropdown: string(),
-  date: date().typeError('DOB is not a valid date'),
   additional_guests: array().of(
     object().shape({
       name: string().required('Name is required'),
-      dob: date()
-        .typeError('DOB is not a valid date')
-        .required('DOB is required'),
+      dob: string().required('DOB is required'),
       relationship: string().required('Relationship is required'),
     }),
   ),
@@ -37,6 +34,7 @@ export const typeValidations = {
       type: string().required('Type of pet is required'),
     }),
   ),
+  contact_method: string(),
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -62,12 +60,8 @@ const createFieldValidationSchema = ({type, validations}: Fields) => {
   let schema = typeValidations[type];
 
   if (validations.required) {
-    if (schema.type === 'date') {
-      schema = merge(schema, date().required('This field is required'));
-    } else {
-      // only works for string types at the moment
-      schema = merge(schema, string().required('This field is required'));
-    }
+    // only works for string types at the moment
+    schema = merge(schema, string().required('This field is required'));
   }
 
   if (validations.required_if) {
