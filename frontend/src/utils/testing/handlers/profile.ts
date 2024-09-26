@@ -1,4 +1,4 @@
-import {http, HttpResponse} from 'msw';
+import {delay, http, HttpResponse} from 'msw';
 import {intakeProfiles} from '../db/profile';
 import {faker} from '@faker-js/faker';
 import {Fields, GetProfileResponsesApiResponse} from 'src/services/profile';
@@ -12,13 +12,28 @@ export const handlers = [
     const id = req.params.profileId;
     const profile = intakeProfiles.find(p => p.id === id);
 
+    delay();
+
     if (profile) {
       return HttpResponse.json(profile);
     }
 
     return new HttpResponse(null, {status: 404});
   }),
+  http.get('/api/profile/:profileId/:sectionId', req => {
+    const id = req.params.profileId;
+    const sectionId = req.params.sectionId;
+    const profile = intakeProfiles.find(p => p.id === id);
+    const section = profile?.fieldGroups.find(s => s.id === sectionId);
 
+    delay();
+
+    if (profile) {
+      return HttpResponse.json(section);
+    }
+
+    return new HttpResponse(null, {status: 404});
+  }),
   http.get<GetResponsesParams, GetProfileResponsesApiResponse>(
     '/api/profile/responses/:userId',
     () => {

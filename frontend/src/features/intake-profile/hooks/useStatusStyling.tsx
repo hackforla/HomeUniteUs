@@ -4,7 +4,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import {CheckCircleOutlined} from '@mui/icons-material';
 import {Box} from '@mui/material';
 
-const useStatusStyling = () => {
+export const useStatusStyling = () => {
   const theme = useTheme();
 
   return {
@@ -52,5 +52,3 @@ const useStatusStyling = () => {
     },
   };
 };
-
-export default useStatusStyling;

@@ -1,5 +1,5 @@
 import React from 'react';
-import useStatusStyling from './hooks/useStatusStyling';
+import {useStatusStyling} from './hooks/useStatusStyling';
 import {ListItem, ListItemButton, Typography, useTheme} from '@mui/material';
 import {Link} from 'react-router-dom';
 import {FieldGroup} from 'src/services/profile';

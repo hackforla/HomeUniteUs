@@ -1,13 +1,13 @@
 import {Container, Stack, useMediaQuery, useTheme} from '@mui/material';
 import {Outlet, useLocation, useNavigate, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
+import {useState} from 'react';
 import {createInitialValues} from './helpers';
 import {
   useGetProfileQuery,
   useGetResponsesQuery,
   Response,
 } from '../../services/profile';
-import {useState} from 'react';
 import {ProfileActions, ProfileSidebar} from '../../features/intake-profile';
 export type Values = {
   [key: string]: Response['value'];
@@ -49,6 +49,7 @@ export const IntakeProfile = () => {
 
   // create initial values from responses and fieldGroups
   const initalValues = createInitialValues(fieldGroups, responses);
+
   const currentIndex = fieldGroups.findIndex(
     group => group.id === selectedItem,
   );

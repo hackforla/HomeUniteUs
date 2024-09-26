@@ -41,6 +41,8 @@ import {
   GuestSettings,
   CoordinatorDashboard,
   IntakeProfile,
+  IntakeProfilePortal,
+  IntakeProfileSection,
 } from './pages';
 import {SystemAdminDashboard} from './pages/SystemAdminDashboard';
 import {enableMocking} from './utils/testing/browser';
@@ -101,6 +103,14 @@ function HuuApp() {
             <Route path="group/:groupId" element={<FieldGroupList />} />
             <Route path="review" element={<ProfileReview />} />
           </Route>
+          <Route
+            path="profile-proto/:profileId"
+            element={<IntakeProfilePortal />}
+          />
+          <Route
+            path="profile-proto/:profileId/:sectionId"
+            element={<IntakeProfileSection />}
+          />
         </Route>
         <Route
           path="/coordinator"
