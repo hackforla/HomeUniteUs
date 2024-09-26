@@ -1,6 +1,12 @@
 import React from 'react';
 import {useParams} from 'react-router-dom';
-import {CircularProgress, Container, Stack} from '@mui/material';
+import {
+  Button,
+  CircularProgress,
+  Container,
+  Stack,
+  Typography,
+} from '@mui/material';
 import {useFormik} from 'formik';
 
 import {
@@ -31,7 +37,10 @@ export const ProfileSection = () => {
     return <CircularProgress />;
 
   return (
-    <Container maxWidth="sm">
+    <Container
+      sx={{display: 'flex', alignItems: 'center', height: '100vh'}}
+      maxWidth="sm"
+    >
       <ProfileSectionFields
         section={section}
         responses={responses.responses}
@@ -61,21 +70,30 @@ const ProfileSectionFields = ({
   });
 
   return (
-    <Stack sx={{gap: 3}}>
-      {section?.fields.map(field => {
-        return (
-          <Stack key={field.id} sx={{gap: 4}}>
-            <RenderFields
-              errors={errors}
-              handleChange={handleChange}
-              setFieldValue={setFieldValue}
-              values={values}
-              groupId={sectionId}
-              field={field}
-            />
-          </Stack>
-        );
-      })}
+    <Stack sx={{gap: 4, flex: 1}}>
+      <Typography variant="h5">{section?.title}</Typography>
+      <Stack sx={{gap: 3}}>
+        {section?.fields.map(field => {
+          return (
+            <Stack key={field.id}>
+              <RenderFields
+                errors={errors}
+                handleChange={handleChange}
+                setFieldValue={setFieldValue}
+                values={values}
+                groupId={sectionId}
+                field={field}
+              />
+            </Stack>
+          );
+        })}
+      </Stack>
+      <Stack sx={{flexDirection: 'row', justifyContent: 'flex-end', gap: 1}}>
+        <Button variant="contained" color="inherit">
+          Cancel
+        </Button>
+        <Button variant="contained">Save</Button>
+      </Stack>
     </Stack>
   );
 };
