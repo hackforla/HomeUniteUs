@@ -193,7 +193,7 @@ const SectionLink = ({
       key={id}
       initial={{
         opacity: 0,
-        scale: 0.8,
+        scale: 0.85,
         filter: 'blur(2px)',
         x,
       }}

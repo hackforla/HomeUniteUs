@@ -45,7 +45,7 @@ export const ProfileSection = () => {
     >
       <Button
         component={Link}
-        to={`/guest/profile-proto/${profileId}`}
+        to={`/guest/profile/${profileId}`}
         color="inherit"
         sx={{alignSelf: 'flex-start'}}
         startIcon={<ArrowBack />}
@@ -92,7 +92,7 @@ const ProfileSectionFields = ({
     saveResponses({responses: updatedResponses})
       .unwrap()
       .then(() => {
-        navigate(`/guest/profile-proto/1`);
+        navigate(`/guest/profile/1`);
       })
       .catch(err => {
         console.log(err);

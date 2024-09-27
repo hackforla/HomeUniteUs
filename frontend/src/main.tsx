@@ -100,17 +100,13 @@ function HuuApp() {
             <Route path="tasks" element={<GuestTasks />} />
             <Route path="settings" element={<GuestSettings />} />
           </Route>
-          <Route path="profile/:profileId" element={<IntakeProfile />}>
-            <Route path="group/:groupId" element={<FieldGroupList />} />
-            <Route path="review" element={<ProfileReview />} />
-          </Route>
           <Route element={<AuthenticatedLayout />}>
             <Route
-              path="profile-proto/:profileId"
+              path="profile/:profileId"
               element={<IntakeProfilePortal />}
             />
             <Route
-              path="profile-proto/:profileId/:sectionId"
+              path="profile/:profileId/:sectionId"
               element={<IntakeProfileSection />}
             />
           </Route>
@@ -132,7 +128,12 @@ function HuuApp() {
               <HostDashboard />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route path="profile/:profileId" element={<IntakeProfile />}>
+            <Route path="group/:groupId" element={<FieldGroupList />} />
+            <Route path="review" element={<ProfileReview />} />
+          </Route>
+        </Route>
         <Route
           path="/admin"
           element={
