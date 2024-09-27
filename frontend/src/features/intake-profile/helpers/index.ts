@@ -3,3 +3,4 @@ export {
   createInitialValuesForSection,
 } from './createInitialValues';
 export {buildValidationSchema, phoneRegExp} from './buildValidationSchema';
+export {updateResponses} from './updateResponses';

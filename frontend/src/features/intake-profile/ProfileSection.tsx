@@ -17,7 +17,7 @@ import {
   useGetResponsesQuery,
   useSaveResponsesMutation,
 } from '../../services/profile';
-import {createInitialValuesForSection} from './helpers';
+import {createInitialValuesForSection, updateResponses} from './helpers';
 import {RenderFields} from './RenderFields';
 import {Loading} from '../ui';
 
@@ -86,24 +86,9 @@ const ProfileSectionFields = ({
       return;
     }
     // Update the responses with the new values or create new response objects
-    const updateResponses = Object.entries(values[sectionId]).map(
-      ([fieldId, value]) => {
-        const response = responses.find(
-          response => response.fieldId === fieldId,
-        );
-        if (response) {
-          response.value = value;
-          return response;
-        } else {
-          return {
-            fieldId,
-            value,
-          };
-        }
-      },
-    );
+    const updatedResponses = updateResponses({responses, values, sectionId});
 
-    saveResponses({responses: updateResponses});
+    saveResponses({responses: updatedResponses});
   };
 
   return (
