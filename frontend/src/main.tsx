@@ -16,6 +16,7 @@ import {ProfileReview} from './features/intake-profile/ProfileReview';
 import {FieldGroupList} from './features/intake-profile/IntakeProfileGroups';
 import {
   AppLayout,
+  AuthenticatedLayout,
   CoordinatorDashboardLayout,
   GuestDashboardLayout,
 } from './features/layouts';
@@ -103,14 +104,16 @@ function HuuApp() {
             <Route path="group/:groupId" element={<FieldGroupList />} />
             <Route path="review" element={<ProfileReview />} />
           </Route>
-          <Route
-            path="profile-proto/:profileId"
-            element={<IntakeProfilePortal />}
-          />
-          <Route
-            path="profile-proto/:profileId/:sectionId"
-            element={<IntakeProfileSection />}
-          />
+          <Route element={<AuthenticatedLayout />}>
+            <Route
+              path="profile-proto/:profileId"
+              element={<IntakeProfilePortal />}
+            />
+            <Route
+              path="profile-proto/:profileId/:sectionId"
+              element={<IntakeProfileSection />}
+            />
+          </Route>
         </Route>
         <Route
           path="/coordinator"
