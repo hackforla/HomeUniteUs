@@ -19,6 +19,7 @@ import {
 } from '../../services/profile';
 import {createInitialValuesForSection} from './helpers';
 import {RenderFields} from './RenderFields';
+import {Loading} from '../ui';
 
 export const ProfileSection = () => {
   const {profileId, sectionId} = useParams();
@@ -30,13 +31,7 @@ export const ProfileSection = () => {
     userId: '1',
   });
 
-  if (
-    isLoading ||
-    responsesLoading ||
-    section === undefined ||
-    responses === undefined
-  )
-    return <CircularProgress />;
+  if (isLoading || responsesLoading) return <Loading />;
 
   return (
     <Container

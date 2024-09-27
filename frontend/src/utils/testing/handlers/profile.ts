@@ -14,7 +14,7 @@ export const handlers = [
     // Save the responses to the database
     console.log('Saving responses:', responses);
 
-    await delay(1200);
+    await delay();
 
     return HttpResponse.json({status: 201});
   }),
@@ -34,7 +34,7 @@ export const handlers = [
         };
       });
 
-      await delay(1200);
+      await delay();
 
       // return a list of filled in responses
       // return HttpResponse.json({responses});
@@ -46,7 +46,7 @@ export const handlers = [
     const id = req.params.profileId;
     const profile = intakeProfiles.find(p => p.id === id);
 
-    await delay(1200);
+    await delay();
 
     if (profile) {
       return HttpResponse.json(profile);

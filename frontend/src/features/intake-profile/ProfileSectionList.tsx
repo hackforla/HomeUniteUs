@@ -10,11 +10,12 @@ import {
 } from '@mui/material';
 import {InProgressIcon} from '../ui/icons/InProgressIcon';
 import LockIcon from '@mui/icons-material/Lock';
-import {CheckCircleOutlined} from '@mui/icons-material';
+import {ArrowForwardIos, CheckCircleOutlined} from '@mui/icons-material';
 import {useParams} from 'react-router-dom';
 import {Link} from 'react-router-dom';
 
 import {useGetProfileQuery} from '../../services/profile';
+import {Loading} from '../ui';
 
 const icon = {
   complete: (
@@ -30,6 +31,7 @@ const icon = {
         height: 24,
         border: `2px solid white`,
         borderRadius: `100%`,
+        opacity: 0.5,
       }}
     />
   ),
@@ -54,7 +56,7 @@ export const ProfileSectionList = () => {
     {skip: !profileId},
   );
 
-  if (isLoading || profileData === undefined) return null;
+  if (isLoading || profileData === undefined) return <Loading />;
 
   const {fieldGroups} = profileData;
 
@@ -78,7 +80,8 @@ export const ProfileSectionList = () => {
                   color: 'white',
                   display: 'flex',
                   alignItems: 'center',
-                  py: 2,
+                  height: '48px',
+                  width: '150px',
                   gap: 2,
                   paddingInline: 3,
                   textDecoration: 'none',
@@ -96,6 +99,7 @@ export const ProfileSectionList = () => {
                 >
                   {fieldTitle}
                 </Typography>
+                <ArrowForwardIos sx={{ml: 'auto'}} />
               </ListItemButton>
             </ListItem>
           );
