@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link, useParams} from 'react-router-dom';
+import {Link, useNavigate, useParams} from 'react-router-dom';
 import {
   Button,
   CircularProgress,
@@ -78,9 +78,10 @@ const ProfileSectionFields = ({
   responses,
   sectionId,
 }: ProfileSectionFieldsProps) => {
+  const navigate = useNavigate();
   const [saveResponses, {isLoading}] = useSaveResponsesMutation();
 
-  const handleOnSubmit = (values: InitialValues) => {
+  const handleOnSubmit = async (values: InitialValues) => {
     if (!sectionId) {
       console.error('groupId is not defined in on submit');
       return;
@@ -88,7 +89,14 @@ const ProfileSectionFields = ({
     // Update the responses with the new values or create new response objects
     const updatedResponses = updateResponses({responses, values, sectionId});
 
-    saveResponses({responses: updatedResponses});
+    saveResponses({responses: updatedResponses})
+      .unwrap()
+      .then(() => {
+        navigate(`/guest/profile-proto/1`);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   };
 
   return (
@@ -121,18 +129,29 @@ const ProfileSectionFields = ({
           <Stack
             sx={{flexDirection: 'row', justifyContent: 'flex-end', gap: 1}}
           >
-            <Button variant="contained" color="inherit">
+            <Button
+              variant="contained"
+              color="inherit"
+              sx={{
+                width: 140,
+              }}
+            >
               Cancel
             </Button>
             <Button
               disabled={isLoading}
               onClick={() => handleSubmit()}
               variant="contained"
+              sx={{
+                width: 140,
+              }}
+              endIcon={
+                isLoading ? (
+                  <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
+                ) : null
+              }
             >
               Save
-              {isLoading ? (
-                <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
-              ) : null}
             </Button>
           </Stack>
         </Stack>

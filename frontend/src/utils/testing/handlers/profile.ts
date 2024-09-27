@@ -16,6 +16,9 @@ export const handlers = [
 
     await delay();
 
+    // throw an error
+    // return new HttpResponse(null, {status: 400});
+
     return HttpResponse.json({status: 201});
   }),
   http.get<GetResponsesParams, GetProfileResponsesApiResponse>(
