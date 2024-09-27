@@ -48,18 +48,18 @@ const statusIcon = {
 };
 
 const placementRight: {[key: number]: number} = {
-  0: 240,
-  1: 80,
+  0: -240,
+  1: -70,
   2: 0,
-  3: 60,
-  4: 180,
+  3: -60,
+  4: -180,
 };
 
 const placementLeft: {[key: number]: number} = {
   0: 130,
   1: 20,
   2: 100,
-  3: 60,
+  3: 80,
   4: 240,
 };
 
@@ -114,36 +114,26 @@ export const ProfileSectionList = () => {
               // complete | partial | incomplete | locked
               const status = 'incomplete';
               return (
-                <motion.div
+                <SectionLink
                   key={id}
-                  initial={{
-                    opacity: 0,
-                    scale: 0.8,
-                    filter: 'blur(2px)',
-                    x: placementLeft[index],
-                  }}
-                  animate={{opacity: 1, scale: 1, filter: 'blur(0px)'}}
-                  transition={{
-                    duration: 0.8,
-                    delay: index * 0.1,
-                    type: 'spring',
-                    bounce: 0,
-                  }}
-                  style={{alignSelf: 'flex-start'}}
+                  id={id}
+                  index={index}
+                  x={placementLeft[index]}
+                  side="left"
                 >
-                  <SectionLink id={id}>
-                    {statusIcon[status]}
-                    <Typography
-                      sx={{
-                        fontSize: 16,
-                        color: `palette.text.primary`,
-                      }}
-                    >
-                      {title}
-                    </Typography>
-                    <ArrowForwardIos sx={{ml: 'auto', fontSize: 'medium'}} />
-                  </SectionLink>
-                </motion.div>
+                  {statusIcon[status]}
+                  <Typography
+                    sx={{
+                      fontSize: 16,
+                      color: `palette.text.primary`,
+                    }}
+                  >
+                    {title}
+                  </Typography>
+                  <ArrowForwardIos
+                    sx={{ml: 'auto', fontSize: 'medium', opacity: 0.5}}
+                  />
+                </SectionLink>
               );
             })}
           </Stack>
@@ -153,36 +143,26 @@ export const ProfileSectionList = () => {
               // complete | partial | incomplete | locked
               const status = 'incomplete';
               return (
-                <motion.div
+                <SectionLink
                   key={id}
-                  initial={{
-                    opacity: 0,
-                    scale: 0.8,
-                    filter: 'blur(4px)',
-                    x: placementRight[index] * -1,
-                  }}
-                  animate={{opacity: 1, scale: 1, filter: 'blur(0px)'}}
-                  transition={{
-                    duration: 0.8,
-                    delay: index * 0.1,
-                    type: 'spring',
-                    bounce: 0,
-                  }}
-                  style={{alignSelf: 'flex-end'}}
+                  id={id}
+                  index={index}
+                  x={placementRight[index]}
+                  side="right"
                 >
-                  <SectionLink key={id} id={id}>
-                    {statusIcon[status]}
-                    <Typography
-                      sx={{
-                        fontSize: 16,
-                        color: `palette.text.primary`,
-                      }}
-                    >
-                      {title}
-                    </Typography>
-                    <ArrowForwardIos sx={{ml: 'auto', fontSize: 'medium'}} />
-                  </SectionLink>
-                </motion.div>
+                  {statusIcon[status]}
+                  <Typography
+                    sx={{
+                      fontSize: 16,
+                      color: `palette.text.primary`,
+                    }}
+                  >
+                    {title}
+                  </Typography>
+                  <ArrowForwardIos
+                    sx={{ml: 'auto', fontSize: 'medium', opacity: 0.5}}
+                  />
+                </SectionLink>
               );
             })}
           </Stack>
@@ -195,28 +175,57 @@ export const ProfileSectionList = () => {
 interface SectionLinkProps extends LinkProps {
   children: React.ReactNode;
   id: string;
+  index: number;
+  x: number;
+  side: 'left' | 'right';
 }
 
-const SectionLink = ({children, id, ...props}: SectionLinkProps) => {
+const SectionLink = ({
+  children,
+  id,
+  index,
+  x,
+  side,
+  ...props
+}: SectionLinkProps) => {
   return (
-    <Link
-      to={`${id}`}
-      component={RouterLink}
-      sx={{
-        ...props.sx,
-        display: 'flex',
-        borderRadius: '99999px',
-        backgroundColor: 'primary.main',
-        color: 'white',
-        alignItems: 'center',
-        padding: 2,
-        gap: 2,
-        '&:hover': {
-          backgroundColor: 'primary.dark',
-        },
+    <motion.div
+      key={id}
+      initial={{
+        opacity: 0,
+        scale: 0.8,
+        filter: 'blur(2px)',
+        x,
       }}
+      animate={{opacity: 1, scale: 1, filter: 'blur(0px)'}}
+      transition={{
+        duration: 0.8,
+        delay: index * 0.1,
+        type: 'spring',
+        bounce: 0,
+      }}
+      style={{alignSelf: side === 'left' ? 'flex-start' : 'flex-end'}}
     >
-      {children}
-    </Link>
+      <Link
+        to={`${id}`}
+        component={RouterLink}
+        sx={{
+          ...props.sx,
+          display: 'flex',
+          borderRadius: '99999px',
+          backgroundColor: 'primary.main',
+          color: 'white',
+          alignItems: 'center',
+          padding: 2,
+          gap: 2,
+          '&:hover': {
+            backgroundColor: 'primary.dark',
+            textDecoration: 'none',
+          },
+        }}
+      >
+        {children}
+      </Link>
+    </motion.div>
   );
 };
