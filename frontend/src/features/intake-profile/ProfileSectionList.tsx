@@ -11,6 +11,7 @@ import {InProgressIcon} from '../ui/icons/InProgressIcon';
 import LockIcon from '@mui/icons-material/Lock';
 import {ArrowForwardIos, CheckCircleOutlined} from '@mui/icons-material';
 import {Link as RouterLink, useParams} from 'react-router-dom';
+import {motion} from 'framer-motion';
 
 import {useGetProfileQuery} from '../../services/profile';
 import {Loading} from '../ui';
@@ -46,7 +47,7 @@ const statusIcon = {
   partial: <InProgressIcon />,
 };
 
-const placementLeft: {[key: number]: number} = {
+const placementRight: {[key: number]: number} = {
   0: 240,
   1: 80,
   2: 0,
@@ -54,7 +55,7 @@ const placementLeft: {[key: number]: number} = {
   4: 180,
 };
 
-const placementRight: {[key: number]: number} = {
+const placementLeft: {[key: number]: number} = {
   0: 130,
   1: 20,
   2: 100,
@@ -108,58 +109,80 @@ export const ProfileSectionList = () => {
           }}
         >
           <Stack sx={{flex: 1, justifyContent: 'space-around'}}>
-            {rightFieldGroups.map(({id, title}, index) => {
-              // Change status here to see different styles
-              // complete | partial | incomplete | locked
-              const status = 'incomplete';
-              return (
-                <SectionLink
-                  key={id}
-                  id={id}
-                  sx={{
-                    alignSelf: 'flex-start',
-                    transform: `translateX(${placementRight[index]}px)`,
-                  }}
-                >
-                  {statusIcon[status]}
-                  <Typography
-                    sx={{
-                      fontSize: 16,
-                      color: `palette.text.primary`,
-                    }}
-                  >
-                    {title}
-                  </Typography>
-                  <ArrowForwardIos sx={{ml: 'auto', fontSize: 'medium'}} />
-                </SectionLink>
-              );
-            })}
-          </Stack>
-          <Stack sx={{flex: 1, justifyContent: 'space-around'}}>
             {leftFieldGroups.map(({id, title}, index) => {
               // Change status here to see different styles
               // complete | partial | incomplete | locked
               const status = 'incomplete';
               return (
-                <SectionLink
+                <motion.div
                   key={id}
-                  id={id}
-                  sx={{
-                    alignSelf: 'flex-end',
-                    transform: `translateX(-${placementLeft[index]}px)`,
+                  initial={{
+                    opacity: 0,
+                    scale: 0.8,
+                    filter: 'blur(2px)',
+                    x: placementLeft[index],
                   }}
+                  animate={{opacity: 1, scale: 1, filter: 'blur(0px)'}}
+                  transition={{
+                    duration: 0.8,
+                    delay: index * 0.1,
+                    type: 'spring',
+                    bounce: 0,
+                  }}
+                  style={{alignSelf: 'flex-start'}}
                 >
-                  {statusIcon[status]}
-                  <Typography
-                    sx={{
-                      fontSize: 16,
-                      color: `palette.text.primary`,
-                    }}
-                  >
-                    {title}
-                  </Typography>
-                  <ArrowForwardIos sx={{ml: 'auto', fontSize: 'medium'}} />
-                </SectionLink>
+                  <SectionLink id={id}>
+                    {statusIcon[status]}
+                    <Typography
+                      sx={{
+                        fontSize: 16,
+                        color: `palette.text.primary`,
+                      }}
+                    >
+                      {title}
+                    </Typography>
+                    <ArrowForwardIos sx={{ml: 'auto', fontSize: 'medium'}} />
+                  </SectionLink>
+                </motion.div>
+              );
+            })}
+          </Stack>
+          <Stack sx={{flex: 1, justifyContent: 'space-around'}}>
+            {rightFieldGroups.map(({id, title}, index) => {
+              // Change status here to see different styles
+              // complete | partial | incomplete | locked
+              const status = 'incomplete';
+              return (
+                <motion.div
+                  key={id}
+                  initial={{
+                    opacity: 0,
+                    scale: 0.8,
+                    filter: 'blur(4px)',
+                    x: placementRight[index] * -1,
+                  }}
+                  animate={{opacity: 1, scale: 1, filter: 'blur(0px)'}}
+                  transition={{
+                    duration: 0.8,
+                    delay: index * 0.1,
+                    type: 'spring',
+                    bounce: 0,
+                  }}
+                  style={{alignSelf: 'flex-end'}}
+                >
+                  <SectionLink key={id} id={id}>
+                    {statusIcon[status]}
+                    <Typography
+                      sx={{
+                        fontSize: 16,
+                        color: `palette.text.primary`,
+                      }}
+                    >
+                      {title}
+                    </Typography>
+                    <ArrowForwardIos sx={{ml: 'auto', fontSize: 'medium'}} />
+                  </SectionLink>
+                </motion.div>
               );
             })}
           </Stack>
