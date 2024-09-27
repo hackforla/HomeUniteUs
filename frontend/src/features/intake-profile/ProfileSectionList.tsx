@@ -46,9 +46,7 @@ const statusIcon = {
   partial: <InProgressIcon />,
 };
 
-const SECTION_GAP = 110;
-
-const placementRight: {[key: number]: number} = {
+const placementLeft: {[key: number]: number} = {
   0: 240,
   1: 80,
   2: 0,
@@ -56,7 +54,7 @@ const placementRight: {[key: number]: number} = {
   4: 180,
 };
 
-const placementLeft: {[key: number]: number} = {
+const placementRight: {[key: number]: number} = {
   0: 130,
   1: 20,
   2: 100,
@@ -79,8 +77,17 @@ export const ProfileSectionList = () => {
   const leftFieldGroups = fieldGroups.slice(fieldGroups.length / 2);
 
   return (
-    <Container maxWidth="lg">
-      <Typography variant="h4" sx={{textAlign: 'center', mt: 4, mb: 6}}>
+    <Container
+      maxWidth="lg"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100vh',
+        py: 4,
+        gap: 6,
+      }}
+    >
+      <Typography variant="h4" sx={{textAlign: 'center'}}>
         We want to get to know you better
       </Typography>
 
@@ -92,59 +99,71 @@ export const ProfileSectionList = () => {
           alignItems: 'center',
         }}
       >
-        <img src="/images/guest-welcome.svg" />
-        {rightFieldGroups.map(({id, title}, index) => {
-          // Change status here to see different styles
-          // complete | partial | incomplete | locked
-          const status = 'incomplete';
-          return (
-            <SectionLink
-              key={id}
-              id={id}
-              sx={{
-                top: index * SECTION_GAP,
-                right: placementRight[index],
-              }}
-            >
-              {statusIcon[status]}
-              <Typography
-                sx={{
-                  fontSize: 16,
-                  color: `palette.text.primary`,
-                }}
-              >
-                {title}
-              </Typography>
-              <ArrowForwardIos sx={{ml: 'auto', fontSize: 'medium'}} />
-            </SectionLink>
-          );
-        })}
-        {leftFieldGroups.map(({id, title}, index) => {
-          // Change status here to see different styles
-          // complete | partial | incomplete | locked
-          const status = 'incomplete';
-          return (
-            <SectionLink
-              key={id}
-              id={id}
-              sx={{
-                top: index * SECTION_GAP,
-                left: placementLeft[index],
-              }}
-            >
-              {statusIcon[status]}
-              <Typography
-                sx={{
-                  fontSize: 16,
-                  color: `palette.text.primary`,
-                }}
-              >
-                {title}
-              </Typography>
-              <ArrowForwardIos sx={{ml: 'auto', fontSize: 'medium'}} />
-            </SectionLink>
-          );
-        })}
+        <img src="/images/guest-welcome.svg" style={{width: '50%'}} />
+        <Stack
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            flexDirection: 'row',
+          }}
+        >
+          <Stack sx={{flex: 1, justifyContent: 'space-around'}}>
+            {rightFieldGroups.map(({id, title}, index) => {
+              // Change status here to see different styles
+              // complete | partial | incomplete | locked
+              const status = 'incomplete';
+              return (
+                <SectionLink
+                  key={id}
+                  id={id}
+                  sx={{
+                    alignSelf: 'flex-start',
+                    transform: `translateX(${placementRight[index]}px)`,
+                  }}
+                >
+                  {statusIcon[status]}
+                  <Typography
+                    sx={{
+                      fontSize: 16,
+                      color: `palette.text.primary`,
+                    }}
+                  >
+                    {title}
+                  </Typography>
+                  <ArrowForwardIos sx={{ml: 'auto', fontSize: 'medium'}} />
+                </SectionLink>
+              );
+            })}
+          </Stack>
+          <Stack sx={{flex: 1, justifyContent: 'space-around'}}>
+            {leftFieldGroups.map(({id, title}, index) => {
+              // Change status here to see different styles
+              // complete | partial | incomplete | locked
+              const status = 'incomplete';
+              return (
+                <SectionLink
+                  key={id}
+                  id={id}
+                  sx={{
+                    alignSelf: 'flex-end',
+                    transform: `translateX(-${placementLeft[index]}px)`,
+                  }}
+                >
+                  {statusIcon[status]}
+                  <Typography
+                    sx={{
+                      fontSize: 16,
+                      color: `palette.text.primary`,
+                    }}
+                  >
+                    {title}
+                  </Typography>
+                  <ArrowForwardIos sx={{ml: 'auto', fontSize: 'medium'}} />
+                </SectionLink>
+              );
+            })}
+          </Stack>
+        </Stack>
       </Stack>
     </Container>
   );
@@ -163,7 +182,6 @@ const SectionLink = ({children, id, ...props}: SectionLinkProps) => {
       sx={{
         ...props.sx,
         display: 'flex',
-        position: 'absolute',
         borderRadius: '99999px',
         backgroundColor: 'primary.main',
         color: 'white',
