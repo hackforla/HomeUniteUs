@@ -52,6 +52,7 @@ export interface Fields {
 
 export interface FieldGroup {
   id: string;
+  order: number;
   title: string;
   fields: Fields[];
 }

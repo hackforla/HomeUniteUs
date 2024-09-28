@@ -11,6 +11,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: 'basic-information',
         title: 'Basic Information',
+        order: 1,
         fields: [
           {
             id: 'first-name',
@@ -65,6 +66,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: 'contact-information',
         title: 'Contact Information',
+        order: 2,
         fields: [
           {
             id: 'email',
@@ -102,6 +104,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: 'guests-and-pets',
         title: 'Other Guests/Pets',
+        order: 3,
         fields: [
           {
             id: 'additional-guests',
@@ -133,6 +136,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: 'employment-information',
         title: 'Employment Information',
+        order: 4,
         fields: [
           {
             id: 'employment-status',
@@ -173,6 +177,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: 'education',
         title: 'Education',
+        order: 5,
         fields: [
           {
             id: 'enrollment-status',
@@ -213,6 +218,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: 'language-proficiency',
         title: 'Language Proficiency',
+        order: 6,
         fields: [
           {
             id: 'bilingual',
@@ -240,6 +246,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: 'substance-use',
         title: 'Substance Use',
+        order: 7,
         fields: [
           {
             id: 'smoke',
@@ -273,6 +280,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: 'mental-health',
         title: 'Mental Health',
+        order: 8,
         fields: [
           {
             id: 'mental-health-status',
@@ -288,6 +296,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: 'interest',
         title: 'Interest in Being a Guest',
+        order: 9,
         fields: [
           {
             id: 'interest-goals',
@@ -324,6 +333,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: 'about-you',
         title: 'About You',
+        order: 10,
         fields: [
           {
             id: 'about-you-description',
@@ -345,6 +355,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: 'personal-information',
         title: 'Personal Information',
+        order: 1,
         fields: [
           {
             id: 'first-name',
@@ -378,6 +389,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: 'home-information',
         title: 'Home Information',
+        order: 2,
         fields: [
           {
             id: 'extra-bedrooms',
@@ -414,6 +426,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
       {
         id: 'restrictions',
         title: 'Restrictions',
+        order: 3,
         fields: [
           {
             id: 'smoking',
