@@ -1,7 +1,17 @@
 import {delay, http, HttpResponse} from 'msw';
-import {intakeProfiles} from '../db/profile';
 import {faker} from '@faker-js/faker';
+// import {factory, primaryKey} from '@mswjs/data';
+
 import {Fields, GetProfileResponsesApiResponse} from 'src/services/profile';
+import {intakeProfiles} from '../db/profile';
+
+// const db = factory({
+//   responses: {
+//     id: primaryKey(String),
+//     userId: String,
+//     fieldId: faker.string.uuid,
+//   },
+// });
 
 interface GetResponsesParams {
   userId: string;
@@ -40,9 +50,9 @@ export const handlers = [
       await delay();
 
       // return a list of filled in responses
-      // return HttpResponse.json({responses});
+      return HttpResponse.json({responses});
       // return an empty list of responses
-      return HttpResponse.json({responses: []});
+      // return HttpResponse.json({responses: []});
     },
   ),
   http.get('/api/profile/:profileId', async req => {
