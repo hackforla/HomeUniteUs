@@ -33,6 +33,10 @@ export const ProfileSection = () => {
 
   if (isLoading || responsesLoading) return <Loading />;
 
+  if (!section || !responses) {
+    return <Typography>Something went wrong</Typography>;
+  }
+
   return (
     <Container
       sx={{
@@ -105,57 +109,59 @@ const ProfileSectionFields = ({
       initialValues={createInitialValuesForSection(section, responses)}
       onSubmit={handleOnSubmit}
     >
-      {({errors, handleChange, setFieldValue, values, handleSubmit}) => (
-        <Stack sx={{gap: 4, flex: 1, backgroundColor: 'white'}}>
-          <Typography variant="h5" sx={{color: 'primary.main'}}>
-            {section?.title}
-          </Typography>
-          <Stack sx={{gap: 3}}>
-            {section?.fields.map(field => {
-              return (
-                <Stack key={field.id}>
-                  <RenderFields
-                    errors={errors}
-                    handleChange={handleChange}
-                    setFieldValue={setFieldValue}
-                    values={values}
-                    groupId={sectionId}
-                    field={field}
-                  />
-                </Stack>
-              );
-            })}
-          </Stack>
-          <Stack
-            sx={{flexDirection: 'row', justifyContent: 'flex-end', gap: 1}}
-          >
-            <Button
-              variant="contained"
-              color="inherit"
-              sx={{
-                width: 140,
-              }}
+      {({errors, handleChange, setFieldValue, values, handleSubmit}) => {
+        return (
+          <Stack sx={{gap: 4, flex: 1, backgroundColor: 'white'}}>
+            <Typography variant="h5" sx={{color: 'primary.main'}}>
+              {section?.title}
+            </Typography>
+            <Stack sx={{gap: 3}}>
+              {section?.fields.map(field => {
+                return (
+                  <Stack key={field.id}>
+                    <RenderFields
+                      errors={errors}
+                      handleChange={handleChange}
+                      setFieldValue={setFieldValue}
+                      values={values}
+                      groupId={sectionId}
+                      field={field}
+                    />
+                  </Stack>
+                );
+              })}
+            </Stack>
+            <Stack
+              sx={{flexDirection: 'row', justifyContent: 'flex-end', gap: 1}}
             >
-              Cancel
-            </Button>
-            <Button
-              disabled={isLoading}
-              onClick={() => handleSubmit()}
-              variant="contained"
-              sx={{
-                width: 140,
-              }}
-              endIcon={
-                isLoading ? (
-                  <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
-                ) : null
-              }
-            >
-              Save
-            </Button>
+              <Button
+                variant="contained"
+                color="inherit"
+                sx={{
+                  width: 140,
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                disabled={isLoading}
+                onClick={() => handleSubmit()}
+                variant="contained"
+                sx={{
+                  width: 140,
+                }}
+                endIcon={
+                  isLoading ? (
+                    <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
+                  ) : null
+                }
+              >
+                Save
+              </Button>
+            </Stack>
           </Stack>
-        </Stack>
-      )}
+        );
+      }}
     </Formik>
   );
 };

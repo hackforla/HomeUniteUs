@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import {InProgressIcon} from '../ui/icons/InProgressIcon';
 import LockIcon from '@mui/icons-material/Lock';
-import {ArrowForwardIos, CheckCircleOutlined} from '@mui/icons-material';
+import {ArrowForwardIos, CheckRounded} from '@mui/icons-material';
 import {Link as RouterLink, useParams} from 'react-router-dom';
 import {motion} from 'framer-motion';
 
@@ -18,7 +18,7 @@ import {Loading} from '../ui';
 
 const statusIcon = {
   complete: (
-    <CheckCircleOutlined
+    <CheckRounded
       color="success"
       sx={{backgroundColor: 'white', borderRadius: '50%'}}
     />
@@ -112,7 +112,7 @@ export const ProfileSectionList = () => {
             {leftFieldGroups.map(({id, title}, index) => {
               // Change status here to see different styles
               // complete | partial | incomplete | locked
-              const status = 'incomplete';
+              const status = 'complete';
               return (
                 <SectionLink
                   key={id}
@@ -131,7 +131,7 @@ export const ProfileSectionList = () => {
                     {title}
                   </Typography>
                   <ArrowForwardIos
-                    sx={{ml: 'auto', fontSize: 'medium', opacity: 0.5}}
+                    sx={{ml: 'auto', fontSize: 'small', opacity: 0.5}}
                   />
                 </SectionLink>
               );
@@ -160,7 +160,7 @@ export const ProfileSectionList = () => {
                     {title}
                   </Typography>
                   <ArrowForwardIos
-                    sx={{ml: 'auto', fontSize: 'medium', opacity: 0.5}}
+                    sx={{ml: 'auto', fontSize: 'small', opacity: 0.5}}
                   />
                 </SectionLink>
               );

@@ -44,6 +44,7 @@
     "@reduxjs/toolkit": "^1.8.3",
     "date-fns": "^2.30.0",
     "formik": "^2.2.9",
+    "framer-motion": "^11.9.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.2",
@@ -53,6 +54,7 @@
   "devDependencies": {
     "@babel/core": "^7.18.6",
     "@faker-js/faker": "^8.1.0",
+    "@mswjs/data": "^0.16.2",
     "@rtk-query/codegen-openapi": "^1.0.0-alpha.1",
     "@testing-library/cypress": "^10.0.1",
     "@testing-library/jest-dom": "^6.4.2",
