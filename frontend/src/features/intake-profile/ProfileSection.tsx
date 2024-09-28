@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link, useNavigate, useParams} from 'react-router-dom';
+import {Link, Navigate, useParams} from 'react-router-dom';
 import {
   Button,
   CircularProgress,
@@ -16,26 +16,56 @@ import {
   useGetProfileSectionQuery,
   useGetResponsesQuery,
   useSaveResponsesMutation,
+  useGetProfileQuery,
 } from '../../services/profile';
 import {createInitialValuesForSection, updateResponses} from './helpers';
 import {RenderFields} from './RenderFields';
 import {Loading} from '../ui';
 
+const getNextSectionId = (fieldGroups: FieldGroup[], sectionId: string) => {
+  const currentSectionIndex = fieldGroups.findIndex(
+    group => group.id === sectionId,
+  );
+
+  if (currentSectionIndex === -1) {
+    return '';
+  }
+
+  if (currentSectionIndex === fieldGroups.length - 1) {
+    return '';
+  }
+
+  return fieldGroups[currentSectionIndex + 1].id;
+};
+
 export const ProfileSection = () => {
   const {profileId, sectionId} = useParams();
-  const {data: section, isLoading} = useGetProfileSectionQuery(
-    {profileId: profileId, sectionId: sectionId},
-    {skip: !profileId || !sectionId},
-  );
-  const {data: responses, isLoading: responsesLoading} = useGetResponsesQuery({
-    userId: '1',
+  const {data: profile, isFetching: fetchingProfile} = useGetProfileQuery({
+    profileId: profileId,
   });
+  const {data: section, isFetching: fetchingSection} =
+    useGetProfileSectionQuery(
+      {profileId: profileId, sectionId: sectionId},
+      {refetchOnMountOrArgChange: true},
+    );
+  const {data: responses, isFetching: fetchingResponses} = useGetResponsesQuery(
+    {
+      userId: '1',
+    },
+  );
 
-  if (isLoading || responsesLoading) return <Loading />;
+  if (fetchingSection || fetchingProfile || fetchingResponses)
+    return <Loading />;
 
-  if (!section || !responses) {
+  if (!section || !responses || !profile || !sectionId) {
     return <Typography>Something went wrong</Typography>;
   }
+
+  const nextSectionId = getNextSectionId(profile?.fieldGroups, sectionId);
+  const initialValeus = createInitialValuesForSection(
+    section,
+    responses.responses,
+  );
 
   return (
     <Container
@@ -59,15 +89,19 @@ export const ProfileSection = () => {
       <ProfileSectionFields
         section={section}
         responses={responses.responses}
-        sectionId={sectionId ?? ''}
+        sectionId={sectionId}
+        nextSectionId={nextSectionId}
+        initialValues={initialValeus}
       />
     </Container>
   );
 };
 
 interface ProfileSectionFieldsProps {
-  section: FieldGroup;
+  initialValues: InitialValues;
+  nextSectionId: string;
   responses: Response[];
+  section: FieldGroup;
   sectionId: string;
 }
 
@@ -78,12 +112,14 @@ export type Values = {
 export type InitialValues = Record<string, Values>;
 
 const ProfileSectionFields = ({
-  section,
+  initialValues,
+  nextSectionId,
   responses,
+  section,
   sectionId,
 }: ProfileSectionFieldsProps) => {
-  const navigate = useNavigate();
-  const [saveResponses, {isLoading}] = useSaveResponsesMutation();
+  const [saveResponses, {isSuccess, isError, error}] =
+    useSaveResponsesMutation();
 
   const handleOnSubmit = async (values: InitialValues) => {
     if (!sectionId) {
@@ -93,23 +129,31 @@ const ProfileSectionFields = ({
     // Update the responses with the new values or create new response objects
     const updatedResponses = updateResponses({responses, values, sectionId});
 
-    saveResponses({responses: updatedResponses})
-      .unwrap()
-      .then(() => {
-        navigate(`/guest/profile/1`);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    await saveResponses({responses: updatedResponses});
   };
+
+  if (isSuccess) {
+    return <Navigate to={`/guest/profile/1/${nextSectionId}`} replace={true} />;
+  }
+
+  if (isError) {
+    console.log('Error:', error);
+  }
 
   return (
     <Formik
       enableReinitialize={true}
-      initialValues={createInitialValuesForSection(section, responses)}
+      initialValues={initialValues}
       onSubmit={handleOnSubmit}
     >
-      {({errors, handleChange, setFieldValue, values, handleSubmit}) => {
+      {({
+        errors,
+        handleChange,
+        setFieldValue,
+        values,
+        handleSubmit,
+        isSubmitting,
+      }) => {
         return (
           <Stack sx={{gap: 4, flex: 1, backgroundColor: 'white'}}>
             <Typography variant="h5" sx={{color: 'primary.main'}}>
@@ -144,14 +188,14 @@ const ProfileSectionFields = ({
                 Cancel
               </Button>
               <Button
-                disabled={isLoading}
+                disabled={isSubmitting}
                 onClick={() => handleSubmit()}
                 variant="contained"
                 sx={{
                   width: 140,
                 }}
                 endIcon={
-                  isLoading ? (
+                  isSubmitting ? (
                     <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
                   ) : null
                 }
