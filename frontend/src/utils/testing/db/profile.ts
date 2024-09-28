@@ -9,11 +9,11 @@ export const intakeProfiles: GetProfileApiResponse[] = [
     id: '1',
     fieldGroups: [
       {
-        id: faker.string.numeric(4),
+        id: 'basic-information',
         title: 'Basic Information',
         fields: [
           {
-            id: faker.string.numeric(4),
+            id: 'first-name',
             title: 'First Name',
             type: 'short_text',
             properties: {},
@@ -22,7 +22,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: 'last-name',
             title: 'Last Name',
             type: 'short_text',
             properties: {},
@@ -31,7 +31,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: 'date-of-birth',
             title: 'Date of Birth',
             type: 'date',
             properties: {},
@@ -40,7 +40,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: 'gender-identity',
             title: 'Gender Identity',
             type: 'dropdown',
             properties: {
@@ -63,11 +63,11 @@ export const intakeProfiles: GetProfileApiResponse[] = [
         ],
       },
       {
-        id: faker.string.numeric(4),
+        id: 'contact-information',
         title: 'Contact Information',
         fields: [
           {
-            id: emailFieldId,
+            id: 'email',
             title: 'Email',
             type: 'email',
             properties: {},
@@ -76,7 +76,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: phoneFieldId,
+            id: 'phone-number',
             title: 'Phone Number',
             type: 'number',
             properties: {},
@@ -85,7 +85,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: 'contact-method',
             title: 'What is the best way to contact you?',
             type: 'contact_method',
             properties: {},
@@ -100,18 +100,18 @@ export const intakeProfiles: GetProfileApiResponse[] = [
         ],
       },
       {
-        id: faker.string.numeric(4),
+        id: 'guests-and-pets',
         title: 'Other Guests/Pets',
         fields: [
           {
-            id: faker.string.numeric(4),
+            id: 'additional-guests',
             title: 'Additional Guests',
             type: 'additional_guests',
             properties: {},
             validations: {},
           },
           {
-            id: faker.string.numeric(4),
+            id: 'pets',
             title: 'Do you have any pets in your care?',
             type: 'yes_no',
             properties: {},
@@ -120,7 +120,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: 'pet-type',
             title: 'Pet Type',
             type: 'pets',
             properties: {},
@@ -131,11 +131,11 @@ export const intakeProfiles: GetProfileApiResponse[] = [
         ],
       },
       {
-        id: faker.string.numeric(4),
+        id: 'employment-information',
         title: 'Employment Information',
         fields: [
           {
-            id: '5478',
+            id: 'employment-status',
             title: 'Are you currently employed?',
             type: 'yes_no',
             properties: {},
@@ -144,26 +144,26 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: 'employment-description',
             title: 'If yes, please describe your employment.',
             type: 'long_text',
             properties: {},
             validations: {
               required_if: {
-                field_id: '5478',
+                field_id: 'employment-status',
                 value: 'yes',
               },
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: 'employment-search',
             title:
               'If no, are you currently looking for work? If so, what type?',
             type: 'long_text',
             properties: {},
             validations: {
               required_if: {
-                field_id: '5478',
+                field_id: 'employment-status',
                 value: 'no',
               },
             },
@@ -171,11 +171,11 @@ export const intakeProfiles: GetProfileApiResponse[] = [
         ],
       },
       {
-        id: faker.string.numeric(4),
+        id: 'education',
         title: 'Education',
         fields: [
           {
-            id: '6478',
+            id: 'enrollment-status',
             title: 'Are you enrolled in an Educational Program?',
             type: 'yes_no',
             properties: {},
@@ -184,26 +184,26 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: 'education-description',
             title: 'If yes, please describe the program.',
             type: 'long_text',
             properties: {},
             validations: {
               required_if: {
-                field_id: '6478',
+                field_id: 'enrollment-status',
                 value: 'yes',
               },
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: 'education-search',
             title:
               'If no, are you hoping to enroll in an Educational Program? If so, what type?',
             type: 'long_text',
             properties: {},
             validations: {
               required_if: {
-                field_id: '6478',
+                field_id: 'enrollment-status',
                 value: 'no',
               },
             },
@@ -211,11 +211,11 @@ export const intakeProfiles: GetProfileApiResponse[] = [
         ],
       },
       {
-        id: faker.string.numeric(4),
+        id: 'language-proficiency',
         title: 'Language Proficiency',
         fields: [
           {
-            id: '5479',
+            id: 'bilingual',
             title: 'Are you bilingual or multilingual?',
             type: 'yes_no',
             properties: {},
@@ -224,13 +224,13 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: 'languages',
             title: 'If yes, what languages do you speak?',
             type: 'long_text',
             properties: {},
             validations: {
               required_if: {
-                field_id: '5479',
+                field_id: 'bilingual',
                 value: 'yes',
               },
             },
@@ -238,11 +238,11 @@ export const intakeProfiles: GetProfileApiResponse[] = [
         ],
       },
       {
-        id: faker.string.numeric(4),
+        id: 'substance-use',
         title: 'Substance Use',
         fields: [
           {
-            id: faker.string.numeric(4),
+            id: 'smoke',
             title: 'Do you smoke cigarettes?',
             type: 'yes_no',
             properties: {},
@@ -251,7 +251,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: 'drink',
             title: 'Do you drink alcohol?',
             type: 'yes_no',
             properties: {},
@@ -260,7 +260,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: 'other-substances',
             title: 'Do you use any other substances?',
             type: 'yes_no',
             properties: {},
@@ -271,11 +271,11 @@ export const intakeProfiles: GetProfileApiResponse[] = [
         ],
       },
       {
-        id: faker.string.numeric(4),
+        id: 'mental-health',
         title: 'Mental Health',
         fields: [
           {
-            id: faker.string.numeric(4),
+            id: 'mental-health-status',
             title: 'Do you suffer mental illness?',
             type: 'yes_no',
             properties: {},
@@ -286,11 +286,11 @@ export const intakeProfiles: GetProfileApiResponse[] = [
         ],
       },
       {
-        id: faker.string.numeric(4),
+        id: 'interest',
         title: 'Interest in Being a Guest',
         fields: [
           {
-            id: faker.string.numeric(4),
+            id: 'interest-goals',
             title:
               'Please share how you think participating in the Host Homes Program will help you obtain long-term housing and meet your educational and/or employment goals:',
             type: 'long_text',
@@ -300,7 +300,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: 'interest-relationship',
             title:
               'What kind of relationship do you hope to have with your host home?',
             type: 'long_text',
@@ -310,7 +310,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: 'interest-challenges',
             title:
               'Please describe any challenges you foresee encountering in participating in the Host Homes Program.',
             type: 'long_text',
@@ -322,11 +322,11 @@ export const intakeProfiles: GetProfileApiResponse[] = [
         ],
       },
       {
-        id: faker.string.numeric(4),
+        id: 'about-you',
         title: 'About You',
         fields: [
           {
-            id: faker.string.numeric(4),
+            id: 'about-you-description',
             title:
               'Please take some time to write an introduction of yourself that you would feel comfortable with the Host Homes Coordinator sharing with a potential host. Feel free to talk about your interests, your story or anything else that you think would be important to share:',
             type: 'long_text',
@@ -343,11 +343,11 @@ export const intakeProfiles: GetProfileApiResponse[] = [
     id: '2',
     fieldGroups: [
       {
-        id: faker.string.numeric(4),
+        id: 'personal-information',
         title: 'Personal Information',
         fields: [
           {
-            id: faker.string.numeric(4),
+            id: 'first-name',
             title: 'First Name',
             type: 'short_text',
             properties: {},
@@ -356,7 +356,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: 'last-name',
             title: 'Last Name',
             type: 'short_text',
             properties: {},
@@ -365,7 +365,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: 'date-of-birth',
             title: 'Date of Birth',
             type: 'short_text',
             properties: {},
@@ -376,11 +376,11 @@ export const intakeProfiles: GetProfileApiResponse[] = [
         ],
       },
       {
-        id: faker.string.numeric(4),
+        id: 'home-information',
         title: 'Home Information',
         fields: [
           {
-            id: faker.string.numeric(4),
+            id: 'extra-bedrooms',
             title:
               'Do you have an extra bedroom or private space in their home?',
             type: 'yes_no',
@@ -390,7 +390,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: 'kitchen-bathroom-access',
             title:
               'Are you able to provide Guest with access to a kitchen in which to prepare meals, store food and access to shared or private bathroom?',
             type: 'yes_no',
@@ -400,7 +400,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: 'commitment',
             title:
               'Can you commit to hosting youth Guest for at least 3-6 months?',
             type: 'yes_no',
@@ -412,11 +412,11 @@ export const intakeProfiles: GetProfileApiResponse[] = [
         ],
       },
       {
-        id: faker.string.numeric(4),
+        id: 'restrictions',
         title: 'Restrictions',
         fields: [
           {
-            id: faker.string.numeric(4),
+            id: 'smoking',
             title: 'Do you or anyone in your houshold smoke?',
             type: 'yes_no',
             properties: {},
@@ -425,7 +425,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: 'smoking-inside',
             title: 'Is smoking allowed inside your home?',
             type: 'yes_no',
             properties: {},
@@ -434,7 +434,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: 'pets',
             title: 'Do you or anyone in your household drink alcohol?',
             type: 'yes_no',
             properties: {},
@@ -443,7 +443,7 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: '9846',
+            id: 'drinking',
             title: 'Do you have concerns about your drinking?',
             type: 'yes_no',
             properties: {},
@@ -452,13 +452,13 @@ export const intakeProfiles: GetProfileApiResponse[] = [
             },
           },
           {
-            id: faker.string.numeric(4),
+            id: 'drinking-concerns',
             title: 'If yes, please explain why you are concerned',
             type: 'long_text',
             properties: {},
             validations: {
               required_if: {
-                field_id: '9846',
+                field_id: 'drinking',
                 value: 'yes',
               },
             },
