@@ -6,8 +6,8 @@ from app.modules.deps import DbSessionDep, get_form_1, get_form_2
 router = APIRouter()
 
 
-@router.put("/{intake_profile_id}", status_code=status.HTTP_501_NOT_IMPLEMENTED)
-def put_intake_profile(body, db_session: DbSessionDep):
+@router.put("/responses/{user_id}", status_code=status.HTTP_501_NOT_IMPLEMENTED)
+def update_intake_profile_responses(user_id, body, db_session: DbSessionDep):
     pass
     # TODO: Implement update intake profile responses
     # with db_session.begin() as session:
@@ -30,10 +30,10 @@ def put_intake_profile(body, db_session: DbSessionDep):
     #     return {}, 204
 
 
-@router.get("/{intake_profile_id}", status_code=status.HTTP_501_NOT_IMPLEMENTED)
-def get_intake_profile(intake_profile_id, db_session: DbSessionDep):
+@router.get("/responses/{user_id}", status_code=status.HTTP_501_NOT_IMPLEMENTED)
+def get_intake_profile_responses(user_id, db_session: DbSessionDep):
     pass
-    # TODO: Implement get Intake Profile
+    # TODO: Implement get Intake Profile responses
     # with db_session.begin() as session:
     #     user_repo = UserRepository(session)
     #     forms_repo = FormsRepository(session)
@@ -49,15 +49,15 @@ def get_intake_profile(intake_profile_id, db_session: DbSessionDep):
     #     return [], 202
 
 
-@router.get("/form/{form_id}", status_code=status.HTTP_200_OK)
-def get_intake_profile_form(form_id: int,
-                            form_1: Annotated[str, Depends(get_form_1)],
-                            form_2: Annotated[str, Depends(get_form_2)]):
+@router.get("/form/{profile_id}", status_code=status.HTTP_200_OK)
+def get_intake_profile_form(profile_id: int,
+                            profile_form_1: Annotated[str, Depends(get_form_1)],
+                            profile_form_2: Annotated[str, Depends(get_form_2)]):
     """Get the Intake Profile form definition."""
-    if form_id == 1:
-        return form_1
-    if form_id == 2:
-        return form_2
+    if profile_id == 1:
+        return profile_form_1
+    if profile_id == 2:
+        return profile_form_2
 
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                        detail=f"Form with id {form_id} does not exist.")
+                        detail=f"Form with id {profile_id} does not exist.")

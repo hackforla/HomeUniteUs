@@ -8,7 +8,7 @@ interface GetResponsesParams {
 }
 
 export const handlers = [
-  http.get('/api/profile/:profileId', req => {
+  http.get('/api/intake-profile/form/:profileId', req => {
     const id = req.params.profileId;
     const profile = intakeProfiles.find(p => p.id === id);
 
@@ -20,7 +20,7 @@ export const handlers = [
   }),
 
   http.get<GetResponsesParams, GetProfileResponsesApiResponse>(
-    '/api/profile/responses/:userId',
+    '/api/intake-profile/responses/:userId',
     () => {
       const fields = intakeProfiles[0].fieldGroups
         .map(fieldGroup => fieldGroup.fields)
