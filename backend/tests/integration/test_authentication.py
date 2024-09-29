@@ -345,11 +345,6 @@ def test_session_endpoint(client, api_settings, cognito_client):
     jwt = create_and_signin_user(client, api_settings, cognito_client, EMAIL,
                                  PASSWORD)
 
-    import jwt as j
-    print(
-        j.decode(client.cookies["id_token"],
-                 algorithms=["RS256"],
-                 options={"verify_signature": False}))
     response = client.get(PATH + '/session',
                           headers={"Authorization": f"Bearer {jwt}"})
 
