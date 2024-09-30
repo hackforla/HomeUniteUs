@@ -11,7 +11,7 @@ from botocore.exceptions import ClientError, ParamValidationError
 
 from app.modules.access.schemas import (
     UserCreate, UserSignInRequest, UserSignInResponse, ForgotPasswordRequest, ConfirmForgotPasswordResponse,
-    ConfirmForgotPasswordRequest, RefreshTokenResponse, InviteRequest, InviteResponse, UserRoleEnum, ConfirmInviteRequest)
+    ConfirmForgotPasswordRequest, RefreshTokenResponse, InviteRequest, InviteResponse, UserRoleEnum, ConfirmInviteRequest, NewPasswordRequest)
 from app.modules.access.models import ( UnmatchedGuestCase )
 
 from app.modules.access.crud import create_user, delete_user, get_user
@@ -422,10 +422,58 @@ def confirm_invite(
 
 
 @router.post("/new_password",
-             description="",
-             response_model=None)
-def new_password():
-    pass
+             description="Removes auto generated password and replaces with user assigned password. Used for account setup.",
+             response_model=UserSignInResponse)
+def new_password(
+    body: NewPasswordRequest,
+    response: Response,
+    settings: SettingsDep,
+    db: DbSessionDep,
+    cognito_client: CognitoIdpDep,
+    calc_secret_hash: SecretHashFuncDep
+):
+  
+    secret_hash = calc_secret_hash(body.userId)
+
+    try:
+        auth_response = cognito_client.respond_to_auth_challenge(
+            ClientId=settings.COGNITO_CLIENT_ID,
+            ChallengeName='NEW_PASSWORD_REQUIRED',
+            Session=body.sessionId,
+            ChallengeResponses={
+                'NEW_PASSWORD': body.password,
+                'USERNAME': body.userId,
+                'SECRET_HASH': secret_hash
+            },
+        )
+    except ClientError as e:
+        raise HTTPException(status_code=500, detail={
+            "code": e.response['Error']['Code'],
+            "message": e.response['Error']['Message']
+        })
+
+    access_token = auth_response['AuthenticationResult']['AccessToken']
+    refresh_token = auth_response['AuthenticationResult']['RefreshToken']
+    id_token = auth_response['AuthenticationResult']['IdToken']
+
+    decoded_id_token = jwt.decode(id_token,
+                                  algorithms=["RS256"],
+                                  options={"verify_signature": False})
+
+    try:
+        user = get_user(db, decoded_id_token['email'])
+        if user is None:
+            raise HTTPException(status_code=404, detail="User not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+
+    response.set_cookie("refresh_token", refresh_token, httponly=True)
+    response.set_cookie("id_token", id_token, httponly=True)
+
+    return {
+        "user": user,
+        "token": access_token
+    }
 
 
 

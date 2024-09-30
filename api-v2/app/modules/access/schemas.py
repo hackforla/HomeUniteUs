@@ -79,6 +79,11 @@ class ConfirmInviteRequest(BaseModel):
     email: str
     password: str
 
+class NewPasswordRequest(BaseModel):
+    userId: str
+    password: str
+    sessionId: str
+
 
 # class SmartNested(Nested):
 #     '''
