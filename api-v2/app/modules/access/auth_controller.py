@@ -4,14 +4,14 @@ import jwt
 import boto3
 
 
-from fastapi import Depends, APIRouter, HTTPException, Response, Request
+from fastapi import Depends, APIRouter, HTTPException, Response, Request, Cookie
 from fastapi.security import HTTPBearer
 from fastapi.responses import RedirectResponse, JSONResponse
-from botocore.exceptions import ClientError
+from botocore.exceptions import ClientError, ParamValidationError
 
 from app.modules.access.schemas import (
     UserCreate, UserSignInRequest, UserSignInResponse, ForgotPasswordRequest, ConfirmForgotPasswordResponse,
-    ConfirmForgotPasswordRequest, RefreshTokenResponse, InviteRequest, InviteResponse, UserRoleEnum)
+    ConfirmForgotPasswordRequest, RefreshTokenResponse, InviteRequest, InviteResponse, UserRoleEnum, ConfirmInviteRequest)
 from app.modules.access.models import ( UnmatchedGuestCase )
 
 from app.modules.access.crud import create_user, delete_user, get_user
@@ -308,7 +308,7 @@ def confirm_forgot_password(body: ConfirmForgotPasswordRequest,
 
 
 @router.post("/invite",
-             description="Invites a new user to application after creating account with email and temporary password in AWS Cognito",
+             description="Invites a new user to application after creating a new account with user email and a temporary password in AWS Cognito.",
              response_model=InviteResponse)
 def invite(body: InviteRequest, 
            request: Request, 
@@ -327,7 +327,10 @@ def invite(body: InviteRequest,
                                   algorithms=["RS256"],
                                   options={"verify_signature": False})
 
-    coordinator_email = decoded_id_token['email']
+    coordinator_email = decoded_id_token.get('email')
+    if not coordinator_email:
+        raise HTTPException(status_code=401,
+                            detail="Missing 'email' field in the decoded ID token.")
 
     numbers = '0123456789'
     lowercase_chars = 'abcdefghijklmnopqrstuvwxyz'
@@ -355,11 +358,11 @@ def invite(body: InviteRequest,
     try:
       
         user = create_user(db, UserCreate(
-            email=request.email,
             role=UserRoleEnum.GUEST,
-            firstName=request.firstName,
-            middleName=request.middleName,
-            lastName=request.lastName
+            email=body.email,
+            firstName=body.firstName,
+            middleName=body.middleName,
+            lastName=body.lastName
         ))
         guest_id = user.id
         coordinator = get_user(db, coordinator_email)
@@ -376,14 +379,45 @@ def invite(body: InviteRequest,
 
 
 
+@router.post("/confirmInvite", description="Confirms user invite by signing them in using the link sent to their email")
+def confirm_invite(
+    body: ConfirmInviteRequest,
+    settings: SettingsDep,
+    cognito_client: CognitoIdpDep,
+    calc_secret_hash: SecretHashFuncDep
+):
+    secret_hash = calc_secret_hash(body.email)
+    
+    try:
+        auth_response = cognito_client.initiate_auth(
+            ClientId=settings.COGNITO_CLIENT_ID,
+            AuthFlow='USER_PASSWORD_AUTH',
+            AuthParameters={
+                'USERNAME': body.email,
+                'PASSWORD': body.password,
+                'SECRET_HASH': secret_hash
+            }
+        )
+        
+        if auth_response.get('ChallengeName') == 'NEW_PASSWORD_REQUIRED':
+            userId = auth_response['ChallengeParameters']['USER_ID_FOR_SRP']
+            sessionId = auth_response['Session']
+            return RedirectResponse(f"{settings.ROOT_URL}/create-password?userId={userId}&sessionId={sessionId}")
+        else:
+            return RedirectResponse(f"{settings.ROOT_URL}/create-password?error=There was an unexpected error. Please try again.")
 
-@router.post("/confirmInvite",
-             description="",
-             response_model=None)
-
-def confirm_invite():
-    pass
-
+    except ClientError as e:
+        error_code = e.response['Error']['Code']
+        error_messages = {
+            'NotAuthorizedException': "Incorrect username or password. Your invitation link may be invalid.",
+            'UserNotFoundException': "User not found. Confirmation not sent.",
+            'TooManyRequestsException': "Too many attempts to use invite in a short amount of time."
+        }
+        msg = error_messages.get(error_code, e.response['Error']['Message'])
+        raise HTTPException(status_code=400, detail={"code": error_code, "message": msg})
+    except ParamValidationError as e:
+        msg = f"The parameters you provided are incorrect: {e}"
+        raise HTTPException(status_code=400, detail={"code": "ParamValidationError", "message": msg})
 
 
 

@@ -67,6 +67,17 @@ class InviteResponse(BaseModel):
 
 class InviteRequest(BaseModel):
     email: EmailStr
+    firstName: str
+    middleName: str
+    lastName: str
+
+class Cookies(BaseModel):
+    refresh_token: str 
+    id_token: str 
+
+class ConfirmInviteRequest(BaseModel):
+    email: str
+    password: str
 
 
 # class SmartNested(Nested):
