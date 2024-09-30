@@ -15,6 +15,7 @@ import {motion} from 'framer-motion';
 
 import {useGetProfileQuery} from '../../services/profile';
 import {Loading} from '../ui';
+import {useAppSelector} from '../../redux/hooks/store';
 
 const statusIcon = {
   complete: (
@@ -56,15 +57,16 @@ const placementRight: {[key: number]: number} = {
 };
 
 const placementLeft: {[key: number]: number} = {
-  0: 130,
+  0: 220,
   1: 20,
   2: 100,
-  3: 80,
-  4: 240,
+  3: 120,
+  4: 230,
 };
 
 export const ProfileSectionList = () => {
   const {profileId} = useParams();
+  const {completedSections} = useAppSelector(state => state.guestProfile);
 
   const {data: profileData, isLoading} = useGetProfileQuery(
     {profileId: profileId},
@@ -109,60 +111,34 @@ export const ProfileSectionList = () => {
           }}
         >
           <Stack sx={{flex: 1, justifyContent: 'space-around'}}>
-            {leftFieldGroups.map(({id, title}, index) => {
-              // Change status here to see different styles
-              // complete | partial | incomplete | locked
-              const status = 'complete';
+            {leftFieldGroups.reverse().map(({id, title}, index) => {
               return (
                 <SectionLink
                   key={id}
                   id={id}
-                  index={index}
-                  x={placementLeft[index]}
                   side="left"
-                >
-                  {statusIcon[status]}
-                  <Typography
-                    sx={{
-                      fontSize: 16,
-                      color: `palette.text.primary`,
-                    }}
-                  >
-                    {title}
-                  </Typography>
-                  <ArrowForwardIos
-                    sx={{ml: 'auto', fontSize: 'small', opacity: 0.5}}
-                  />
-                </SectionLink>
+                  status={
+                    completedSections.includes(id) ? 'complete' : 'incomplete'
+                  }
+                  title={title}
+                  x={placementLeft[index]}
+                />
               );
             })}
           </Stack>
           <Stack sx={{flex: 1, justifyContent: 'space-around'}}>
             {rightFieldGroups.map(({id, title}, index) => {
-              // Change status here to see different styles
-              // complete | partial | incomplete | locked
-              const status = 'incomplete';
               return (
                 <SectionLink
                   key={id}
                   id={id}
-                  index={index}
-                  x={placementRight[index]}
                   side="right"
-                >
-                  {statusIcon[status]}
-                  <Typography
-                    sx={{
-                      fontSize: 16,
-                      color: `palette.text.primary`,
-                    }}
-                  >
-                    {title}
-                  </Typography>
-                  <ArrowForwardIos
-                    sx={{ml: 'auto', fontSize: 'small', opacity: 0.5}}
-                  />
-                </SectionLink>
+                  status={
+                    completedSections.includes(id) ? 'complete' : 'incomplete'
+                  }
+                  title={title}
+                  x={placementRight[index]}
+                />
               );
             })}
           </Stack>
@@ -173,19 +149,24 @@ export const ProfileSectionList = () => {
 };
 
 interface SectionLinkProps extends LinkProps {
-  children: React.ReactNode;
   id: string;
-  index: number;
   x: number;
   side: 'left' | 'right';
+  status: 'complete' | 'partial' | 'incomplete' | 'locked';
+  title: string;
+}
+
+function randomIntFromInterval(min: number, max: number) {
+  // min and max included
+  return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 const SectionLink = ({
-  children,
   id,
-  index,
   x,
   side,
+  status,
+  title,
   ...props
 }: SectionLinkProps) => {
   return (
@@ -199,8 +180,8 @@ const SectionLink = ({
       }}
       animate={{opacity: 1, scale: 1, filter: 'blur(0px)'}}
       transition={{
-        duration: 0.8,
-        delay: index * 0.1,
+        duration: 1,
+        delay: randomIntFromInterval(1, 3) / 10,
         type: 'spring',
         bounce: 0,
       }}
@@ -224,7 +205,16 @@ const SectionLink = ({
           },
         }}
       >
-        {children}
+        {statusIcon[status]}
+        <Typography
+          sx={{
+            fontSize: 16,
+            color: `palette.text.primary`,
+          }}
+        >
+          {title}
+        </Typography>
+        <ArrowForwardIos sx={{ml: 'auto', fontSize: 'small', opacity: 0.5}} />
       </Link>
     </motion.div>
   );

@@ -21,6 +21,8 @@ import {
 import {createInitialValuesForSection, updateResponses} from './helpers';
 import {RenderFields} from './RenderFields';
 import {Loading} from '../ui';
+import {useAppDispatch} from '../../redux/hooks/store';
+import {addCompletedSection} from './guetsProfileSlice';
 
 const getNextSectionId = (fieldGroups: FieldGroup[], sectionId: string) => {
   const currentSectionIndex = fieldGroups.findIndex(
@@ -35,7 +37,7 @@ const getNextSectionId = (fieldGroups: FieldGroup[], sectionId: string) => {
     return '';
   }
 
-  return fieldGroups[currentSectionIndex + 1].id;
+  return `/${fieldGroups[currentSectionIndex + 1].id}`;
 };
 
 export const ProfileSection = () => {
@@ -58,7 +60,12 @@ export const ProfileSection = () => {
     return <Loading />;
 
   if (!section || !responses || !profile || !sectionId) {
-    return <Typography>Something went wrong</Typography>;
+    return (
+      <div>
+        Something went wrong. We were not able to retrieve what you were looking
+        for.
+      </div>
+    );
   }
 
   const nextSectionId = getNextSectionId(profile?.fieldGroups, sectionId);
@@ -69,29 +76,30 @@ export const ProfileSection = () => {
 
   return (
     <Container
+      maxWidth="sm"
       sx={{
         display: 'flex',
         flexDirection: 'column',
         py: 6,
         gap: 6,
       }}
-      maxWidth="sm"
     >
       <Button
-        component={Link}
-        to={`/guest/profile/${profileId}`}
         color="inherit"
-        sx={{alignSelf: 'flex-start'}}
+        component={Link}
+        // variant="outlined"
         startIcon={<ArrowBack />}
+        sx={{alignSelf: 'flex-start'}}
+        to={`/guest/profile/${profileId}`}
       >
         Go back
       </Button>
       <ProfileSectionFields
-        section={section}
-        responses={responses.responses}
-        sectionId={sectionId}
-        nextSectionId={nextSectionId}
         initialValues={initialValeus}
+        nextSectionId={nextSectionId}
+        responses={responses.responses}
+        section={section}
+        sectionId={sectionId}
       />
     </Container>
   );
@@ -118,6 +126,8 @@ const ProfileSectionFields = ({
   section,
   sectionId,
 }: ProfileSectionFieldsProps) => {
+  const dispatch = useAppDispatch();
+
   const [saveResponses, {isSuccess, isError, error}] =
     useSaveResponsesMutation();
 
@@ -129,11 +139,18 @@ const ProfileSectionFields = ({
     // Update the responses with the new values or create new response objects
     const updatedResponses = updateResponses({responses, values, sectionId});
 
-    await saveResponses({responses: updatedResponses});
+    await saveResponses({responses: updatedResponses})
+      .then(() => {
+        dispatch(addCompletedSection(sectionId));
+      })
+      .catch(() => {
+        console.error('Error saving responses');
+      });
   };
 
   if (isSuccess) {
-    return <Navigate to={`/guest/profile/1/${nextSectionId}`} replace={true} />;
+    return <Navigate to={`/guest/profile/1${nextSectionId}`} replace={true} />;
+    // return <Navigate to={`/guest/profile/1`} replace={true} />;
   }
 
   if (isError) {
@@ -149,10 +166,10 @@ const ProfileSectionFields = ({
       {({
         errors,
         handleChange,
-        setFieldValue,
-        values,
         handleSubmit,
         isSubmitting,
+        setFieldValue,
+        values,
       }) => {
         return (
           <Stack sx={{gap: 4, flex: 1, backgroundColor: 'white'}}>
@@ -165,11 +182,11 @@ const ProfileSectionFields = ({
                   <Stack key={field.id}>
                     <RenderFields
                       errors={errors}
+                      field={field}
+                      groupId={sectionId}
                       handleChange={handleChange}
                       setFieldValue={setFieldValue}
                       values={values}
-                      groupId={sectionId}
-                      field={field}
                     />
                   </Stack>
                 );
@@ -189,16 +206,16 @@ const ProfileSectionFields = ({
               </Button>
               <Button
                 disabled={isSubmitting}
-                onClick={() => handleSubmit()}
-                variant="contained"
-                sx={{
-                  width: 140,
-                }}
                 endIcon={
                   isSubmitting ? (
                     <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
                   ) : null
                 }
+                onClick={() => handleSubmit()}
+                sx={{
+                  width: 140,
+                }}
+                variant="contained"
               >
                 Save
               </Button>
