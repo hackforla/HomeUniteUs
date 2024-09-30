@@ -78,7 +78,7 @@ const injectedRtkApi = api.injectEndpoints({
   endpoints: build => ({
     getProfile: build.query<GetProfileApiResponse, GetProfileApiArg>({
       query: queryArg => ({
-        url: `/profile/${queryArg.profileId}`,
+        url: `/intake-profile/form/${queryArg.profileId}`,
       }),
     }),
     getResponses: build.query<
@@ -86,7 +86,7 @@ const injectedRtkApi = api.injectEndpoints({
       GetProfileResponsesApiArg
     >({
       query: queryArg => ({
-        url: `/profile/responses/${queryArg.userId}`,
+        url: `/intake-profile/responses/${queryArg.userId}`,
       }),
     }),
   }),

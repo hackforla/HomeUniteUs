@@ -69,9 +69,9 @@ def create_user(client: TestClient,
 
 
 def signin_user(client: TestClient, email: str, password: str) -> str:
-    """
-    Signin a user and return the JWT. Fail the test if the 
-    signin operation fails.
+    """Sign-in a user and return the access token.
+
+    Fail the test if the sign-in operation fails.
     """
     response = client.post(PATH + '/signin',
                            json={
@@ -163,13 +163,14 @@ def test_session_without_cookie(client):
         PATH + '/session',
         headers={"Authorization": "Bearer fake_jwt_token_here"})
     assert response.status_code == 401
-    assert "Missing session cookies" in response.json()['detail']
+    assert "Missing refresh token or id token" in response.json()['detail']
 
 
 def test_incorrect_JWT_fail_auth(client):
     """Test attempts to use an incorrect JWT with the user endpoint."""
     response = client.get(
-        '/api/user', headers={"Authorization": "Bearer fake_jwt_token_here"})
+        '/api/users/current',
+        headers={"Authorization": "Bearer fake_jwt_token_here"})
     assert response.status_code == 401
     assert "Missing id token" in response.json()['detail']
 
@@ -187,7 +188,7 @@ def _signup_unconfirmed(signup_endpoint, role, client, expect_user_confirmed):
 
     assert signup_response.status_code == 200, signup_response.text
     assert signup_response.json(
-    )["UserConfirmed"] == expect_user_confirmed, signup_response.text
+    )["message"] == "User sign up successful", signup_response.text
 
     signin_response = client.post(PATH + '/signin',
                                   json={
@@ -283,12 +284,13 @@ def test_basic_auth_flow(client, api_settings, cognito_client):
                            })
 
     assert response.status_code == 200, "Signin failed"
-    assert 'token' in response.json(), 'Signin succeeded but token field missing from response'
+    assert 'token' in response.json(
+    ), 'Signin succeeded but token field missing from response'
     jwt = response.json()['token']
     assert jwt is not None, 'Signin succeeded but returned empty jwt'
     assert len(jwt) > 0
 
-    response = client.get('/api/user',
+    response = client.get('/api/users/current',
                           headers={"Authorization": f"Bearer {jwt}"})
 
     assert response.status_code == 200, '/user authentication failed'
@@ -316,22 +318,26 @@ def test_signin_returns_refresh_token(client, api_settings, cognito_client):
     all_cookies = response.cookies
     assert all_cookies.get("refresh_token"), "Session cookie is empty"
 
-
+@pytest.mark.skip(reason="""moto is not behaving as expected.
+It is calculating the secret hash using email while AWS Cognito wants it to be calculated using username.
+This causes moto to give false negatives when requesting a refresh token.""")
 def test_refresh_endpoint(client, api_settings, cognito_client):
     """Test refreshing a JWT using the /refresh endpoint."""
     EMAIL = f'{secretsGenerator.randint(1_000, 2_000)}@email.com'
     PASSWORD = 'Fake4!@#$2589FFF'
-    create_and_signin_user(client, api_settings, cognito_client, EMAIL,
-                           PASSWORD)
+    jwt = create_and_signin_user(client, api_settings, cognito_client, EMAIL,
+                                 PASSWORD)
 
-    # The test_client automatically attaches the session cookie to the request
-    # The session cookie stores the refresh token.
-    response = client.get(PATH + '/refresh', )
+    response = client.get(PATH + '/refresh',
+                          headers={"Authorization": f"Bearer {jwt}"})
 
     assert response.status_code == 200, response.text
     assert 'token' in response.json(), response.text
 
 
+@pytest.mark.skip(reason="""moto is not behaving as expected.
+It is calculating the secret hash using email while AWS Cognito wants it to be calculated using username.
+This causes moto to give false negatives when requesting a refresh token.""")
 def test_session_endpoint(client, api_settings, cognito_client):
     """Test refreshing a JWT using the /session endpoint."""
     EMAIL = f'{secretsGenerator.randint(1_000, 2_000)}@email.com'
@@ -339,8 +345,6 @@ def test_session_endpoint(client, api_settings, cognito_client):
     jwt = create_and_signin_user(client, api_settings, cognito_client, EMAIL,
                                  PASSWORD)
 
-    # The test_client automatically attaches the session cookie to the request
-    # The session cookie stores the refresh token.
     response = client.get(PATH + '/session',
                           headers={"Authorization": f"Bearer {jwt}"})
 
@@ -348,7 +352,8 @@ def test_session_endpoint(client, api_settings, cognito_client):
     assert 'token' in response.json(), response.text
 
 
-def test_user_signup_rollback(client, api_settings, cognito_client, session_factory):
+def test_user_signup_rollback(client, api_settings, cognito_client,
+                              session_factory):
     """Test that a failed sign-up with Cognito.
 
     Ensure the local DB entry of the user's email is deleted."""
