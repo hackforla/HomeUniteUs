@@ -12,7 +12,7 @@ from botocore.exceptions import ClientError, ParamValidationError
 from app.modules.access.schemas import (
     UserCreate, UserSignInRequest, UserSignInResponse, ForgotPasswordRequest, ConfirmForgotPasswordResponse,
     ConfirmForgotPasswordRequest, RefreshTokenResponse, InviteRequest, InviteResponse, UserRoleEnum, ConfirmInviteRequest, NewPasswordRequest)
-from app.modules.access.models import ( UnmatchedGuestCase )
+from app.modules.workflow.models import ( UnmatchedGuestCase )
 
 from app.modules.access.crud import create_user, delete_user, get_user
 from app.modules.deps import (SettingsDep, DbSessionDep, CognitoIdpDep,
