@@ -11,7 +11,7 @@ from botocore.exceptions import ClientError, ParamValidationError
 
 from app.modules.access.schemas import (
     UserCreate, UserSignInRequest, UserSignInResponse, ForgotPasswordRequest, ConfirmForgotPasswordResponse,
-    ConfirmForgotPasswordRequest, RefreshTokenResponse, InviteRequest, InviteResponse, UserRoleEnum, ConfirmInviteRequest, NewPasswordRequest)
+    ConfirmForgotPasswordRequest, RefreshTokenResponse, InviteRequest, UserRoleEnum, ConfirmInviteRequest, NewPasswordRequest)
 from app.modules.workflow.models import ( UnmatchedGuestCase )
 
 from app.modules.access.crud import create_user, delete_user, get_user
@@ -309,7 +309,7 @@ def confirm_forgot_password(body: ConfirmForgotPasswordRequest,
 
 @router.post("/invite",
              description="Invites a new user to application after creating a new account with user email and a temporary password in AWS Cognito.",
-             response_model=InviteResponse)
+             )
 def invite(body: InviteRequest, 
            request: Request, 
            settings: SettingsDep,
@@ -341,7 +341,7 @@ def invite(body: InviteRequest,
     try:
         cognito_client.admin_create_user(
             UserPoolId=settings.COGNITO_USER_POOL_ID,
-            Username=request.email,
+            Username=body.email,
             TemporaryPassword=temporary_password,
             ClientMetadata={
                 'url': settings.ROOT_URL
@@ -370,16 +370,19 @@ def invite(body: InviteRequest,
             raise HTTPException(status_code=400, detail="Coordinator not found")
         coordinator_id = coordinator.id
         
-        UnmatchedGuestCase(db, guest_id=guest_id, coordinator_id=coordinator_id)
+        unmatched_case_repo = UnmatchedGuestCase(db)
+        unmatched_case_repo.add_case(
+                guest_id=guest_id,
+                coordinator_id=coordinator_id
+            )
     except Exception as error:
         raise HTTPException(status_code=400, detail=str(error))
 
-    return {"message": "Invitation sent successfully"}
 
 
 
 
-@router.post("/confirmInvite", description="Confirms user invite by signing them in using the link sent to their email")
+@router.post("/confirm-invite", description="Confirms user invite by signing them in using the link sent to their email")
 def confirm_invite(
     body: ConfirmInviteRequest,
     settings: SettingsDep,
@@ -421,7 +424,7 @@ def confirm_invite(
 
 
 
-@router.post("/new_password",
+@router.post("/new-password",
              description="Removes auto generated password and replaces with user assigned password. Used for account setup.",
              response_model=UserSignInResponse)
 def new_password(
