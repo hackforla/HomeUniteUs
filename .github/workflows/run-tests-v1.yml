@@ -11,7 +11,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./api
+        working-directory: ./flask-api
     steps:
       - uses: actions/checkout@main
         with:
@@ -44,7 +44,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./app
+        working-directory: ./frontend
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js 20
@@ -62,5 +62,5 @@ jobs:
         with:
           install: false
           start: npm run dev
-          working-directory: ./app
+          working-directory: ./frontend
           wait-on: "http://[::1]:4040/"
