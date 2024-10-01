@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     COGNITO_USER_POOL_ID: str
     COGNITO_ACCESS_ID: str
     COGNITO_ACCESS_KEY: str
+    COGNITO_ENDPOINT_URL: str | None
     ROOT_URL: str
     DATABASE_URL: str
 
