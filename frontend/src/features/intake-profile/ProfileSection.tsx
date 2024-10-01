@@ -1,9 +1,14 @@
-import React from 'react';
-import {Link, Navigate, useParams} from 'react-router-dom';
+import {useState} from 'react';
+import {Navigate, useNavigate, useParams} from 'react-router-dom';
 import {
   Button,
   CircularProgress,
   Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   Stack,
   Typography,
 } from '@mui/material';
@@ -84,16 +89,6 @@ export const ProfileSection = () => {
         gap: 6,
       }}
     >
-      <Button
-        color="inherit"
-        component={Link}
-        // variant="outlined"
-        startIcon={<ArrowBack />}
-        sx={{alignSelf: 'flex-start'}}
-        to={`/guest/profile/${profileId}`}
-      >
-        Go back
-      </Button>
       <ProfileSectionFields
         initialValues={initialValeus}
         nextSectionId={nextSectionId}
@@ -126,6 +121,8 @@ const ProfileSectionFields = ({
   section,
   sectionId,
 }: ProfileSectionFieldsProps) => {
+  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const [saveResponses, {isSuccess, isError, error}] =
@@ -146,6 +143,18 @@ const ProfileSectionFields = ({
       .catch(() => {
         console.error('Error saving responses');
       });
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleNavigate = () => {
+    navigate(`/guest/profile/1`);
   };
 
   if (isSuccess) {
@@ -170,57 +179,101 @@ const ProfileSectionFields = ({
         isSubmitting,
         setFieldValue,
         values,
+        dirty,
       }) => {
         return (
-          <Stack sx={{gap: 4, flex: 1, backgroundColor: 'white'}}>
-            <Typography variant="h5" sx={{color: 'primary.main'}}>
-              {section?.title}
-            </Typography>
-            <Stack sx={{gap: 3}}>
-              {section?.fields.map(field => {
-                return (
-                  <Stack key={field.id}>
-                    <RenderFields
-                      errors={errors}
-                      field={field}
-                      groupId={sectionId}
-                      handleChange={handleChange}
-                      setFieldValue={setFieldValue}
-                      values={values}
-                    />
-                  </Stack>
-                );
-              })}
-            </Stack>
-            <Stack
-              sx={{flexDirection: 'row', justifyContent: 'flex-end', gap: 1}}
-            >
-              <Button
-                variant="contained"
-                color="inherit"
-                sx={{
-                  width: 140,
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                disabled={isSubmitting}
-                endIcon={
-                  isSubmitting ? (
-                    <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
-                  ) : null
+          <>
+            <Button
+              color="inherit"
+              // variant="outlined"
+              startIcon={<ArrowBack />}
+              sx={{alignSelf: 'flex-start'}}
+              onClick={() => {
+                if (dirty) {
+                  handleOpen();
+                  return;
                 }
-                onClick={() => handleSubmit()}
-                sx={{
-                  width: 140,
-                }}
-                variant="contained"
+
+                handleNavigate();
+              }}
+            >
+              Go back
+            </Button>
+            <Dialog
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">Unsaved changes</DialogTitle>
+              <DialogContent>
+                <DialogContentText id="alert-dialog-description">
+                  You have unsaved changes, leave anyway?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose} color="inherit">
+                  Cancel
+                </Button>
+                <Button onClick={handleNavigate} variant="contained" autoFocus>
+                  Okay
+                </Button>
+              </DialogActions>
+            </Dialog>
+            <Stack sx={{gap: 4, flex: 1, backgroundColor: 'white'}}>
+              <Typography variant="h5" sx={{color: 'primary.main'}}>
+                {section?.title}
+              </Typography>
+              <Stack sx={{gap: 3}}>
+                {section?.fields.map(field => {
+                  return (
+                    <Stack key={field.id}>
+                      <RenderFields
+                        errors={errors}
+                        field={field}
+                        groupId={sectionId}
+                        handleChange={handleChange}
+                        setFieldValue={setFieldValue}
+                        values={values}
+                      />
+                    </Stack>
+                  );
+                })}
+              </Stack>
+              <Stack
+                sx={{flexDirection: 'row', justifyContent: 'flex-end', gap: 1}}
               >
-                Save
-              </Button>
+                <Button
+                  variant="contained"
+                  color="inherit"
+                  sx={{
+                    width: 140,
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  disabled={isSubmitting}
+                  endIcon={
+                    isSubmitting ? (
+                      <CircularProgress
+                        sx={{mx: 1}}
+                        size={20}
+                        color="inherit"
+                      />
+                    ) : null
+                  }
+                  onClick={() => handleSubmit()}
+                  sx={{
+                    width: 140,
+                  }}
+                  variant="contained"
+                >
+                  Save
+                </Button>
+              </Stack>
             </Stack>
-          </Stack>
+          </>
         );
       }}
     </Formik>

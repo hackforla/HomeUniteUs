@@ -77,7 +77,7 @@ export const ProfileSectionList = () => {
 
   const {fieldGroups} = profileData;
   const rightFieldGroups = fieldGroups.slice(0, fieldGroups.length / 2);
-  const leftFieldGroups = fieldGroups.slice(fieldGroups.length / 2);
+  const leftFieldGroups = fieldGroups.slice(fieldGroups.length / 2).reverse();
 
   return (
     <Container
@@ -111,7 +111,7 @@ export const ProfileSectionList = () => {
           }}
         >
           <Stack sx={{flex: 1, justifyContent: 'space-around'}}>
-            {leftFieldGroups.reverse().map(({id, title}, index) => {
+            {leftFieldGroups.map(({id, title}, index) => {
               return (
                 <SectionLink
                   key={id}
