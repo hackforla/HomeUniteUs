@@ -21,6 +21,10 @@ export interface SignUpFormProps {
     firstName,
     lastName,
   }: Omit<SignUpRequest, 'role'>) => Promise<void>;
+  getTokenIsLoading?: boolean;
+  signUpHostIsLoading?: boolean;
+  signUpCoordinatorIsLoading?: boolean;
+  type?: string;
 }
 
 export const SignUpForm = ({onSubmit, isLoading}: SignUpFormProps) => {

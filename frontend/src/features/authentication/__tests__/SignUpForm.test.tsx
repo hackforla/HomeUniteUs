@@ -17,7 +17,7 @@ const prepare = (initialProps: Partial<SignUpFormProps> = {}) => {
     type: 'coordinator',
     getTokenIsLoading: false,
     signUpCoordinatorIsLoading: false,
-    signUpHostIsLoading: false,
+    isLoading: false,
     ...initialProps,
   };
 
@@ -104,7 +104,7 @@ describe('<SignUpForm />', () => {
   });
 
   it('displays loading spinner when signing up as host', () => {
-    const {submitButton} = prepare({signUpHostIsLoading: true});
+    const {submitButton} = prepare({isLoading: true});
 
     expect(submitButton).toBeDisabled();
     expect(screen.getByRole('progressbar')).toBeInTheDocument();

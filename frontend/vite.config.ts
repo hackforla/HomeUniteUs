@@ -53,7 +53,7 @@ export default defineConfig(({mode}) => {
     test: {
       globals: true,
       environment: 'jsdom',
-      setupFiles: './src/utils/test/setupTests.ts',
+      setupFiles: './src/utils/testing/setupTests.ts',
     },
   };
 });

@@ -21,6 +21,7 @@ export const typeValidations = {
   email: string().email('Must be a valid email address'),
   yes_no: string(),
   dropdown: string(),
+  // date: date().required('Date is required').typeError('Invalid date'),
   date: date().typeError('DOB is not a valid date'),
   additional_guests: array().of(
     object().shape({
@@ -37,6 +38,8 @@ export const typeValidations = {
       type: string().required('Type of pet is required'),
     }),
   ),
+  contact_method: string(),
+  multiple_choice: array().of(string().required('Choice is required')),
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -53,7 +56,7 @@ const merge = (...schemas) => {
 };
 
 const createFieldValidationSchema = ({type, validations}: Fields) => {
-  if (!typeValidations[type]) {
+  if (!(type in typeValidations)) {
     console.error(
       `No schema exists in typeValidations hashmap in IntakeProfile/constants/index.ts for type: ${type}`,
     );
