@@ -52,16 +52,19 @@ export const SignUp = () => {
     }
 
     try {
-      await signUp({
+      const response = await signUp({
         email,
         password,
         firstName,
         lastName,
         role: type,
-      });
+      }).unwrap();
 
-      navigate(`/signup/success?email=${email}`);
+      if (!response.error) {
+        navigate(`/signup/success?email=${email}`);
+      }
     } catch (err) {
+      console.log({err});
       if (isFetchBaseQueryError(err)) {
         // you can access all properties of `FetchBaseQueryError` here
         const errMsg = err.data.message;
