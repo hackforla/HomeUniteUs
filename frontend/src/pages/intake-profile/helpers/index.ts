@@ -160,8 +160,6 @@ const createFieldValidationSchema = ({type, validations}: Fields) => {
   }
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  someProblematicCode();
-
   let schema = typeValidations[type];
 
   if (validations.required) {
