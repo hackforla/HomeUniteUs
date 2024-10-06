@@ -1,16 +1,18 @@
 import logging
+import random
 import jwt
 import boto3
 
 
-from fastapi import Depends, APIRouter, HTTPException, Response, Request
+from fastapi import Depends, APIRouter, HTTPException, Response, Request, Cookie
 from fastapi.security import HTTPBearer
 from fastapi.responses import RedirectResponse, JSONResponse
-from botocore.exceptions import ClientError
+from botocore.exceptions import ClientError, ParamValidationError
 
 from app.modules.access.schemas import (
     UserCreate, UserSignInRequest, UserSignInResponse, ForgotPasswordRequest, ConfirmForgotPasswordResponse,
-    ConfirmForgotPasswordRequest, RefreshTokenResponse)
+    ConfirmForgotPasswordRequest, RefreshTokenResponse, InviteRequest, UserRoleEnum, ConfirmInviteRequest, NewPasswordRequest)
+from app.modules.workflow.models import ( UnmatchedGuestCase )
 
 from app.modules.access.crud import create_user, delete_user, get_user
 from app.modules.deps import (SettingsDep, DbSessionDep, CognitoIdpDep,
@@ -250,7 +252,7 @@ def refresh(request: Request,
 
 @router.post(
         "/forgot-password", 
-        description="Handles forgot password requests by hashing credentialsand sending to AWS Cognito", 
+        description="Handles forgot password requests by hashing credentials and sending to AWS Cognito", 
         )
 def forgot_password(body: ForgotPasswordRequest,
                     settings: SettingsDep,
@@ -301,3 +303,180 @@ def confirm_forgot_password(body: ConfirmForgotPasswordRequest,
                             })
 
     return {"message": "Password reset successful"}
+
+
+
+
+@router.post("/invite",
+             description="Invites a new user to application after creating a new account with user email and a temporary password in AWS Cognito.",
+             )
+def invite(body: InviteRequest, 
+           request: Request, 
+           settings: SettingsDep,
+           db: DbSessionDep,
+           cognito_client: CognitoIdpDep):
+    
+    id_token = request.cookies.get('id_token')
+    refresh_token = request.cookies.get('refresh_token')
+
+    if None in (refresh_token, id_token):
+        raise HTTPException(status_code=401,
+                            detail="Missing refresh token or id token")
+
+    decoded_id_token = jwt.decode(id_token,
+                                  algorithms=["RS256"],
+                                  options={"verify_signature": False})
+
+    coordinator_email = decoded_id_token.get('email')
+    if not coordinator_email:
+        raise HTTPException(status_code=401,
+                            detail="Missing 'email' field in the decoded ID token.")
+
+    numbers = '0123456789'
+    lowercase_chars = 'abcdefghijklmnopqrstuvwxyz'
+    uppercase_chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    symbols = '.-_~'
+    temporary_password = ''.join(random.choices(numbers, k=3)) + ''.join(random.choices(lowercase_chars, k=3)) + ''.join(random.choices(symbols, k=1)) + ''.join(random.choices(uppercase_chars, k=3))
+
+    try:
+        cognito_client.admin_create_user(
+            UserPoolId=settings.COGNITO_USER_POOL_ID,
+            Username=body.email,
+            TemporaryPassword=temporary_password,
+            ClientMetadata={
+                'url': settings.ROOT_URL
+            },
+            DesiredDeliveryMediums=["EMAIL"]
+        )
+
+    except ClientError as error:
+        if error.response['Error']['Code'] == 'UserNotFoundException':
+            raise HTTPException(status_code=400, detail="User not found. Confirmation not sent.")
+        else:
+            raise HTTPException(status_code=500, detail=error.response['Error']['Message'])
+   
+    try:
+      
+        user = create_user(db, UserCreate(
+            role=UserRoleEnum.GUEST,
+            email=body.email,
+            firstName=body.firstName,
+            middleName=body.middleName,
+            lastName=body.lastName
+        ))
+        guest_id = user.id
+        coordinator = get_user(db, coordinator_email)
+        if not coordinator:
+            raise HTTPException(status_code=400, detail="Coordinator not found")
+        coordinator_id = coordinator.id
+        
+        unmatched_case_repo = UnmatchedGuestCase(db)
+        unmatched_case_repo.add_case(
+                guest_id=guest_id,
+                coordinator_id=coordinator_id
+            )
+    except Exception as error:
+        raise HTTPException(status_code=400, detail=str(error))
+
+
+
+
+
+@router.post("/confirm-invite", description="Confirms user invite by signing them in using the link sent to their email")
+def confirm_invite(
+    body: ConfirmInviteRequest,
+    settings: SettingsDep,
+    cognito_client: CognitoIdpDep,
+    calc_secret_hash: SecretHashFuncDep
+):
+    secret_hash = calc_secret_hash(body.email)
+    
+    try:
+        auth_response = cognito_client.initiate_auth(
+            ClientId=settings.COGNITO_CLIENT_ID,
+            AuthFlow='USER_PASSWORD_AUTH',
+            AuthParameters={
+                'USERNAME': body.email,
+                'PASSWORD': body.password,
+                'SECRET_HASH': secret_hash
+            }
+        )
+        
+        if auth_response.get('ChallengeName') == 'NEW_PASSWORD_REQUIRED':
+            userId = auth_response['ChallengeParameters']['USER_ID_FOR_SRP']
+            sessionId = auth_response['Session']
+            return RedirectResponse(f"{settings.ROOT_URL}/create-password?userId={userId}&sessionId={sessionId}")
+        else:
+            return RedirectResponse(f"{settings.ROOT_URL}/create-password?error=There was an unexpected error. Please try again.")
+
+    except ClientError as e:
+        error_code = e.response['Error']['Code']
+        error_messages = {
+            'NotAuthorizedException': "Incorrect username or password. Your invitation link may be invalid.",
+            'UserNotFoundException': "User not found. Confirmation not sent.",
+            'TooManyRequestsException': "Too many attempts to use invite in a short amount of time."
+        }
+        msg = error_messages.get(error_code, e.response['Error']['Message'])
+        raise HTTPException(status_code=400, detail={"code": error_code, "message": msg})
+    except ParamValidationError as e:
+        msg = f"The parameters you provided are incorrect: {e}"
+        raise HTTPException(status_code=400, detail={"code": "ParamValidationError", "message": msg})
+
+
+
+@router.post("/new-password",
+             description="Removes auto generated password and replaces with user assigned password. Used for account setup.",
+             response_model=UserSignInResponse)
+def new_password(
+    body: NewPasswordRequest,
+    response: Response,
+    settings: SettingsDep,
+    db: DbSessionDep,
+    cognito_client: CognitoIdpDep,
+    calc_secret_hash: SecretHashFuncDep
+):
+  
+    secret_hash = calc_secret_hash(body.userId)
+
+    try:
+        auth_response = cognito_client.respond_to_auth_challenge(
+            ClientId=settings.COGNITO_CLIENT_ID,
+            ChallengeName='NEW_PASSWORD_REQUIRED',
+            Session=body.sessionId,
+            ChallengeResponses={
+                'NEW_PASSWORD': body.password,
+                'USERNAME': body.userId,
+                'SECRET_HASH': secret_hash
+            },
+        )
+    except ClientError as e:
+        raise HTTPException(status_code=500, detail={
+            "code": e.response['Error']['Code'],
+            "message": e.response['Error']['Message']
+        })
+
+    access_token = auth_response['AuthenticationResult']['AccessToken']
+    refresh_token = auth_response['AuthenticationResult']['RefreshToken']
+    id_token = auth_response['AuthenticationResult']['IdToken']
+
+    decoded_id_token = jwt.decode(id_token,
+                                  algorithms=["RS256"],
+                                  options={"verify_signature": False})
+
+    try:
+        user = get_user(db, decoded_id_token['email'])
+        if user is None:
+            raise HTTPException(status_code=404, detail="User not found")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
+
+    response.set_cookie("refresh_token", refresh_token, httponly=True)
+    response.set_cookie("id_token", id_token, httponly=True)
+
+    return {
+        "user": user,
+        "token": access_token
+    }
+
+
+
