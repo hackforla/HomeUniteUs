@@ -58,13 +58,11 @@ services:
     depends_on:
       - db
       - motoserver
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #   ports:
-  #     - "4040:80"
-  #   depends_on:
-  #     - backend
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "4040:80"
 volumes:
   db-data: {}
   pgadmin-data: {}
