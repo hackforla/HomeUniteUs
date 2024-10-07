@@ -1,6 +1,7 @@
 import os
 import boto3
 import psycopg2
+from urllib.parse import urlparse
 
 
 def create_user(cognito_client, user_pool_id, email, group):
@@ -58,11 +59,12 @@ if __name__ == '__main__':
             print(email + '/Test123! created.')
 
     sql = 'INSERT INTO public.user (email, "firstName", "lastName", "roleId") VALUES (%s, %s, %s, %s) ON CONFLICT(email) DO NOTHING'
-    with psycopg2.connect(dbname='huu',
-                          user="postgres",
-                          password="postgres",
-                          host="127.0.0.1",
-                          port="5432") as db_conn:
+    url = urlparse(os.environ['DATABASE_URL'])
+    with psycopg2.connect(database=url.path[1:],
+                          user=url.username,
+                          password=url.password,
+                          host=url.hostname,
+                          port=url.port) as db_conn:
         with db_conn.cursor() as cur:
             cur.executemany(sql, rows)
             db_conn.commit()
