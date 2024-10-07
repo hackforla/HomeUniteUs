@@ -13,7 +13,7 @@ This server uses:
 
 ## Requirements
 
-You will need Python 3.8+ to install Poetry.
+You will need Python 3.12+ to install Poetry.
 
 Run `python -V` to check the Python version.
 
@@ -27,9 +27,9 @@ Run `python -V` to check the Python version.
 
 #### Configuration
 
-The API configuration must be specified before running the application. Configuration variables are specified as entries within a `.env` file located within the `backend` directory. To get started, create a `.env` file within `/backend` and copy the values from `.env.example` into the new `.env` file. You may have to contact someone from the development team to get the necessary values.
+The API configuration must be specified before running the application. Configuration variables are specified as entries within a `.env` file located within the `backend` directory. To get started, create a `.env` file within `/backend` and copy the values from `.env.example` into the new `.env` file.
 
-#### Setup and Run
+#### Setup and Run - non-Docker version
 
 Once the `.env` file has been configured and Poetry is installed, run the following commands in the `backend` directory to install the required development dependencies and run the application.
 
