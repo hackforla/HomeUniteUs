@@ -39,12 +39,12 @@ jobs:
         run: |
           echo "COGNITO_REGION set"
           tox -e releasetest
-  test-app:
+  test-frontend:
     runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
-        working-directory: ./app
+        working-directory: ./frontend
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js 20
@@ -52,15 +52,15 @@ jobs:
         with:
           node-version: 20
           cache: "npm"
-          cache-dependency-path: app/package-lock.json
+          cache-dependency-path: frontend/package-lock.json
       - name: Run npm CI
         run: npm ci
-      - name: Test app
+      - name: Test frontend
         run: npm run test -- --no-color --run
       - name: Run E2E tests
         uses: cypress-io/github-action@v5
         with:
           install: false
           start: npm run dev
-          working-directory: ./app
+          working-directory: ./frontend
           wait-on: "http://[::1]:4040/"
