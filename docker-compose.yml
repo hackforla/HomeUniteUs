@@ -56,7 +56,7 @@ services:
     links:
       - db
     depends_on:
-      - db
+      - pgadmin
       - motoserver
   frontend:
     build:
