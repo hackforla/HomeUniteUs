@@ -53,6 +53,18 @@ Building with Docker is the simplest option, and debugging applications within t
 2. Verify there are no build errors. If there are build errors, reach out to the development team.
 3. Open `http://localhost:34828` in any browser to use Home Unite Us.
 
+
+#### Test Users
+
+For local development, test users already exist when started using Docker.
+
+The password for all test users is `Test123!`.
+
+- 1 Admin: admin@email.com
+- 26 Guests: guest[a-z]@email.com (e.g. `guesta@email.com`, `guestb@email.com`, ... `guestz@email.com`)
+- 26 Coordinators: coordinator[a-z]@email.com (e.g. `coordinatora@email.com`, `coordinatorb@email.com`, ... `coordinatorz@email.com`)
+- 26 Hosts: host[a-z]@email.com (e.g. `hosta@email.com`, `hostb@email.com`, ... `hostz@email.com`)
+
 ## Testing Instructions
 
 Testing instructions for each application are in the [backend](./backend/README.md) and [frontend](./frontend/README.md) README files.
