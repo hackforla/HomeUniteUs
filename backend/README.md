@@ -59,22 +59,22 @@ startup_scripts/entrypoint.ps1           # Creates test users and runs the API i
 
 Your server is now running at:
 ```
-http://127.0.0.1:8000
+http://localhost:8000
 ```
 
 And your API docs at:
 ```
-http://127.0.0.1:8000/docs
+http://localhost:8000/docs
 ```
 
 pgAdmin4 is available at:
 ```
-http://127.0.0.1:5050/
+http://localhost:5050/browser
 ```
 
 Moto server dashboard is available at:
 ```
-http://127.0.0.1:5000/moto-api
+http://localhost:5000/moto-api
 ```
 
 To exit the virtual environment, within the shell run:
