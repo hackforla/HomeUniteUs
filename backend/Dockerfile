@@ -17,8 +17,6 @@ RUN pip install "poetry==${POETRY_VERSION}"
 WORKDIR /app
 
 # --- Reproduce the environment ---
-# You can comment the following two lines if you prefer to manually install
-#   the dependencies from inside the container.
 COPY pyproject.toml .
 
 # Install the dependencies and clear the cache afterwards.
@@ -34,8 +32,16 @@ ENV PATH="/app/.venv/bin:$PATH"
 
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
-WORKDIR /code
+COPY ./alembic /code/alembic
+COPY ./alembic.ini /code/alembic.ini
 COPY ./app /code/app
 COPY ./form_data /code/form_data
+COPY ./startup_scripts/entrypoint.sh /code/startup_scripts/entrypoint.sh
+COPY ./startup_scripts/setup_moto_server.py /code/startup_scripts/setup_moto_server.py
+COPY ./startup_scripts/create_groups_users.py /code/startup_scripts/create_groups_users.py
 
-CMD ["fastapi", "run", "app/main.py", "--port", "80"]
+RUN chmod +x /code/startup_scripts/entrypoint.sh
+
+WORKDIR /code
+ENTRYPOINT ["/code/startup_scripts/entrypoint.sh", "prod"]
+EXPOSE 8000
