@@ -27,7 +27,19 @@ export interface SignUpFormProps {
   type?: string;
 }
 
-export const SignUpForm = ({onSubmit, isLoading}: SignUpFormProps) => {
+export const SignUpForm = ({
+  onSubmit,
+  isLoading,
+  getTokenIsLoading = false,
+  signUpHostIsLoading = false,
+  signUpCoordinatorIsLoading = false,
+}: SignUpFormProps) => {
+  const isAnyLoading =
+    isLoading ||
+    getTokenIsLoading ||
+    signUpHostIsLoading ||
+    signUpCoordinatorIsLoading;
+
   const {
     handleSubmit,
     handleChange,
@@ -113,12 +125,17 @@ export const SignUpForm = ({onSubmit, isLoading}: SignUpFormProps) => {
         variant="contained"
         size="large"
         type="submit"
-        disabled={!isValid || !dirty || isLoading}
+        disabled={!isValid || !dirty || isAnyLoading}
         fullWidth
       >
         Sign up
-        {isLoading ? (
-          <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
+        {isAnyLoading ? (
+          <CircularProgress
+            sx={{mx: 1}}
+            size={20}
+            color="inherit"
+            role="progressbar"
+          />
         ) : null}
       </Button>
       {/* TODO: ADD THIS BACK ONCE GOOGLE AUTH IS SETUP */}
