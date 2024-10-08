@@ -1,13 +1,10 @@
-# expose parameters for custom configuration of build SDK/runtime versions
-#    and build process configurations
-ARG NODE_VERSION=22.9.0
-ARG POETRY_VERSION=1.8
+ARG NODE_VERSION=20.18.0-bookworm
 ARG HUU_BASE_VERSION=1.0
 ARG HUU_ECR_REPOSITORY=035866691871.dkr.ecr.us-west-2.amazonaws.com/homeuniteus
-ARG HUU_TARGET_ENV=qa
 
 # use the official Node image for building the UI bundle
 FROM node:${NODE_VERSION} as client-builder
+
 
 # navigate to dir where client app source and build will live
 WORKDIR /app
@@ -25,6 +22,11 @@ RUN npm install && npm run build
 #      dockerfile here and install directly
 FROM ${HUU_ECR_REPOSITORY}:base-${HUU_BASE_VERSION}
 
+# expose parameters for custom configuration of build SDK/runtime versions
+#    and build process configurations
+ARG POETRY_VERSION=1.8
+ARG HUU_TARGET_ENV=qa
+
 # navigate to dir where API sources and scripts will live
 WORKDIR /opt/huu
 
@@ -41,7 +43,7 @@ ENV PYTHONUNBUFFERED=1
 ENV POETRY_CACHE_DIR=/opt/.cache
 
 # install poetry for Python package management
-RUN pip install "poetry==${POETRY_VERSION}"
+RUN python3 -m pip install "poetry==${POETRY_VERSION}"
 
 # Install the dependencies and clear the cache afterwards.
 #   This may save some MBs.

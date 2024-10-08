@@ -1,7 +1,8 @@
 ARG NGINX_VERSION=1.27.2
-ARG PYTHON_VERSION=3.12.5
 
 FROM nginx:${NGINX_VERSION}
+
+ARG PYTHON_VERSION=3.12.5
 
 # use latest available system package listings and installations
 RUN apt-get update -y && apt-get upgrade -y
