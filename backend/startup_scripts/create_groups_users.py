@@ -5,20 +5,30 @@ from urllib.parse import urlparse
 
 
 def create_user(cognito_client, user_pool_id, email, group):
-    """Create users in moto server cognitoidp."""
-    cognito_client.admin_create_user(UserPoolId=user_pool_id,
-                                     Username=email,
-                                     TemporaryPassword="Test123!",
-                                     MessageAction='SUPPRESS')
+    """Create users in moto server cognitoidp preventing duplicates."""
+    try:
+        cognito_client.admin_get_user(UserPoolId=user_pool_id, Username=email)
+    except Exception:
+        # The exception means the user doesn't exist so it can now be created.
+        cognito_client.admin_create_user(UserPoolId=user_pool_id,
+                                         Username=email,
+                                         TemporaryPassword="Test123!",
+                                         MessageAction='SUPPRESS')
 
-    cognito_client.admin_confirm_sign_up(UserPoolId=user_pool_id,
-                                         Username=email)
+        cognito_client.admin_confirm_sign_up(UserPoolId=user_pool_id,
+                                             Username=email)
 
-    cognito_client.admin_add_user_to_group(
-        UserPoolId=user_pool_id,
-        Username=email,
-        GroupName=group,
-    )
+        cognito_client.admin_add_user_to_group(
+            UserPoolId=user_pool_id,
+            Username=email,
+            GroupName=group,
+        )
+
+
+def create_group(groups, group, user_pool_id):
+    """Create a group in moto server preventing duplicates."""
+    if not any(g['GroupName'] == group for g in groups['Groups']):
+        cognito_client.create_group(GroupName=group, UserPoolId=user_pool_id)
 
 
 if __name__ == '__main__':
@@ -31,11 +41,15 @@ if __name__ == '__main__':
 
     user_pool_id = os.environ['COGNITO_USER_POOL_ID']
 
-    cognito_client.create_group(GroupName='Admins', UserPoolId=user_pool_id)
-    cognito_client.create_group(GroupName='Hosts', UserPoolId=user_pool_id)
-    cognito_client.create_group(GroupName='Guests', UserPoolId=user_pool_id)
-    cognito_client.create_group(GroupName='Coordinators',
-                                UserPoolId=user_pool_id)
+    # Get existing groups to prevent duplicates
+    groups = cognito_client.list_groups(
+        UserPoolId=user_pool_id,
+        Limit=10,
+    )
+    create_group(groups, 'Admins', user_pool_id)
+    create_group(groups, 'Hosts', user_pool_id)
+    create_group(groups, 'Guests', user_pool_id)
+    create_group(groups, 'Coordinators', user_pool_id)
 
     rows = []
     create_user(cognito_client, user_pool_id, 'admin@email.com', 'Admins')

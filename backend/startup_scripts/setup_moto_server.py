@@ -5,14 +5,7 @@ import boto3
 
 
 class AWSTemporaryUserPool():
-    """Provide a temporary user pool for development and testing purposes.
-
-    The provided userpool is empty. If mocking is enabled then changes to
-    the userpool will be destroyed when the application exists. If mocking
-    is not disabled then destroy() must be called to remove the temporary
-    user data from AWS Cognito. It is recommended to use the context manager
-    to avoid accidentally persisting development data on AWS.
-    """
+    """Provide a temporary user pool for development and testing purposes."""
 
     def __init__(self, cognito_client):
         self.cognito_client = cognito_client
@@ -40,22 +33,6 @@ class AWSTemporaryUserPool():
         self.tmp_client_secret = client_response['UserPoolClient'][
             'ClientSecret']
 
-    def destroy(self):
-        self.cognito_client.delete_user_pool_client(
-            UserPoolId=self.tmp_userpool_id, ClientId=self.tmp_client_id)
-        self.cognito_client.delete_user_pool(UserPoolId=self.tmp_userpool_id)
-        self.tmp_userpool_id = None
-        self.tmp_client_id = None
-        self.tmp_client_secret = None
-
-    def __enter__(self):
-        self.create()
-        return self
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        self.destroy()
-        return self
-
 
 if __name__ == '__main__':
 
@@ -66,10 +43,29 @@ if __name__ == '__main__':
         aws_secret_access_key="testing",
         endpoint_url=os.environ['COGNITO_ENDPOINT_URL'])
 
-    temp_pool = AWSTemporaryUserPool(cognito_client)
-    temp_pool.create()
+    # Only create a user pool and test data if one does not already exist
+    pools = cognito_client.list_user_pools(MaxResults=5)
+    if len(pools['UserPools']) > 0:
+        # It is assumed that if the user pool exists then it has test data for use already.
+        USER_POOL_ID = pools['UserPools'][0]['Id']
+
+        clients = cognito_client.list_user_pool_clients(
+            UserPoolId=USER_POOL_ID, MaxResults=5)
+
+        CLIENT_ID = clients['UserPoolClients'][0]['ClientId']
+
+        user_pool_client = cognito_client.describe_user_pool_client(
+            UserPoolId=USER_POOL_ID, ClientId=CLIENT_ID)
+        CLIENT_SECRET = user_pool_client['UserPoolClient']['ClientSecret']
+    else:
+        temp_pool = AWSTemporaryUserPool(cognito_client)
+        temp_pool.create()
+
+        USER_POOL_ID = temp_pool.tmp_userpool_id
+        CLIENT_ID = temp_pool.tmp_client_id
+        CLIENT_SECRET = temp_pool.tmp_client_secret
 
     # Output user pool information that the API can use to connect to moto server
-    print("export COGNITO_USER_POOL_ID=" + temp_pool.tmp_userpool_id)
-    print("export COGNITO_CLIENT_ID=" + temp_pool.tmp_client_id)
-    print("export COGNITO_CLIENT_SECRET=" + temp_pool.tmp_client_secret)
+    print("export COGNITO_USER_POOL_ID=" + USER_POOL_ID)
+    print("export COGNITO_CLIENT_ID=" + CLIENT_ID)
+    print("export COGNITO_CLIENT_SECRET=" + CLIENT_SECRET)
