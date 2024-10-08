@@ -64,6 +64,26 @@ class ConfirmForgotPasswordResponse(BaseModel):
     message: str
 
 
+class InviteRequest(BaseModel):
+    email: EmailStr
+    firstName: str
+    middleName: str
+    lastName: str
+
+class Cookies(BaseModel):
+    refresh_token: str 
+    id_token: str 
+
+class ConfirmInviteRequest(BaseModel):
+    email: str
+    password: str
+
+class NewPasswordRequest(BaseModel):
+    userId: str
+    password: str
+    sessionId: str
+
+
 # class SmartNested(Nested):
 #     '''
 #     Schema attribute used to serialize nested attributes to
