@@ -39,7 +39,7 @@ jobs:
         run: |
           echo "COGNITO_REGION set"
           tox -e releasetest
-  test-app:
+  test-frontend:
     runs-on: ubuntu-latest
     defaults:
       run:
