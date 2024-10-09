@@ -28,17 +28,17 @@ if (Test-Path .env -and (Get-Item .env).IsReadOnly -eq $false) {
 # Alembic migration
 alembic upgrade head
 
-# Setup moto server and export Cognito environment variables
-python startup_scripts/setup_moto_server.py > envfile
-Import-EnvFile "envfile"
-Remove-Item -Force envfile
-
-# Create test users in moto server and postgres
-python startup_scripts/create_groups_users.py
-
 # Check if the script was called with 'prod' as an argument
 if ($args[0] -eq "prod") {
     fastapi run app/main.py --port 8000
 } else {
+    # Setup moto server and export Cognito environment variables
+    python startup_scripts/setup_moto_server.py > envfile
+    Import-EnvFile "envfile"
+    Remove-Item -Force envfile
+
+    # Create test users in moto server and postgres
+    python startup_scripts/create_groups_users.py
+
     fastapi dev
 }

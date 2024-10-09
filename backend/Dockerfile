@@ -43,5 +43,6 @@ COPY ./startup_scripts/create_groups_users.py /code/startup_scripts/create_group
 RUN chmod +x /code/startup_scripts/entrypoint.sh
 
 WORKDIR /code
-ENTRYPOINT ["/code/startup_scripts/entrypoint.sh", "prod"]
+ENTRYPOINT ["/code/startup_scripts/entrypoint.sh"]
+CMD []
 EXPOSE 8000
