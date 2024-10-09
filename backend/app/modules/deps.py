@@ -65,6 +65,7 @@ def get_cognito_client(settings: SettingsDep):
         region_name=settings.COGNITO_REGION,
         aws_access_key_id=settings.COGNITO_ACCESS_ID,
         aws_secret_access_key=settings.COGNITO_ACCESS_KEY,
+        endpoint_url=settings.COGNITO_ENDPOINT_URL
     )
 
 

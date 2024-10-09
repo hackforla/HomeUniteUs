@@ -1,16 +1,16 @@
+from app.core import db
+
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+from sqlalchemy import create_engine
 
 from alembic import context
 
 import sys
 import os
+
 print(os.getcwd())
 sys.path.append(os.getcwd())
-
-from app import models as db
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -32,6 +32,7 @@ target_metadata = db.Base.metadata
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
 
+database_url = os.environ['DATABASE_URL']
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
@@ -45,9 +46,8 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
     context.configure(
-        url=url,
+        url=database_url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
@@ -70,16 +70,11 @@ def run_migrations_online() -> None:
     # with the test engine configuration.
     connectable = context.config.attributes.get("connection", None)
     if connectable is None:
-        connectable = engine_from_config(
-            config.get_section(config.config_ini_section, {}),
-            prefix="sqlalchemy.",
-            poolclass=pool.NullPool,
-        )
+        connectable = create_engine(database_url)
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection,
+                          target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()
