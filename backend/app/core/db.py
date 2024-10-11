@@ -1,13 +1,16 @@
 """Shared database components."""
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
+from sqlalchemy.types import JSON
+
+from typing import Any
 
 _db_engine = None
 _DbSessionFactory = None
 
 
 class Base(DeclarativeBase):
-    pass
+    type_annotation_map = {dict[str, Any]: JSON}
 
 
 def init_db(engine):

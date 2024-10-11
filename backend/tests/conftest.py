@@ -20,7 +20,7 @@ import tests.cognito_setup as cognito_setup
 
 
 @pytest.fixture
-def session_factory() -> Session:
+def db_engine():
     SQLALCHEMY_DATABASE_URL = "sqlite+pysqlite:///:memory:"
 
     engine = sa.create_engine(
@@ -28,12 +28,18 @@ def session_factory() -> Session:
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
     )
+
+    return engine
+
+
+@pytest.fixture
+def session_factory(db_engine) -> Session:
     TestingSessionLocal = sessionmaker(autocommit=False,
                                        autoflush=False,
-                                       bind=engine)
+                                       bind=db_engine)
 
     import app.seed
-    Base.metadata.create_all(bind=engine)
+    Base.metadata.create_all(bind=db_engine)
 
     return TestingSessionLocal
 
