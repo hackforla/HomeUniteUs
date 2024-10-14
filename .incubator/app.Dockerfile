@@ -1,9 +1,9 @@
 ARG NODE_VERSION=20.18.0-bookworm
-ARG HUU_BASE_VERSION=1.0
+ARG HUU_BASE_VERSION=1.1
 ARG HUU_ECR_REPOSITORY=035866691871.dkr.ecr.us-west-2.amazonaws.com/homeuniteus
 
 # use the official Node image for building the UI bundle
-FROM node:${NODE_VERSION} as client-builder
+FROM node:${NODE_VERSION} AS client-builder
 
 
 # navigate to dir where client app source and build will live
@@ -11,6 +11,8 @@ WORKDIR /app
 
 # copy the UI source code and configurations into our working dir
 COPY ./frontend ./
+
+ENV VITE_HUU_API_BASE_URL=https://qa.homeunite.us/api
 
 # install the NPM packages and generate the UI build
 RUN npm install && npm run build
@@ -42,12 +44,15 @@ ENV PYTHONUNBUFFERED=1
 # Tell Poetry where to place its cache and virtual environment
 ENV POETRY_CACHE_DIR=/opt/.cache
 
-# install poetry for Python package management
-RUN python3 -m pip install "poetry==${POETRY_VERSION}"
+# create a virtual env for the poetry workspace
+RUN python3 -m venv venv
+
+# install poetry using the virtual env's version of `pip`
+RUN ./venv/bin/pip install "poetry==${POETRY_VERSION}"
 
 # Install the dependencies and clear the cache afterwards.
 #   This may save some MBs.
-RUN poetry install --no-root && rm -rf $POETRY_CACHE_DIR
+RUN ./venv/bin/poetry install --no-root && rm -rf $POETRY_CACHE_DIR
 
 # pull our UI build (generated in previous stage) into the conventional
 #   location for its nginx `server` block
@@ -60,14 +65,19 @@ COPY --from=client-builder /app/dist /var/www/${HUU_TARGET_ENV}.homeunite.us/htm
 #   which should be symlinked to: `/etc/nginx/sites-enabled/`
 COPY ./.incubator/default.conf /etc/nginx/conf.d/default.conf
 
+# replace the template values for the environment - this corresponds
+#   to the subdomain of *.homeunite.us where this image will be deployed
 RUN sed -i "s/<HUU_ENVIRONMENT>/${HUU_TARGET_ENV}/g" /etc/nginx/conf.d/default.conf
 
-# add our entrypoint script, which will start the API's `gunicorn` process
-#   and fork it into the background, then run the default entrypoint for nginx
-COPY ./.incubator/docker-entrypoint.sh /opt/huu/entrypoint.sh
+# add our entrypoint script, which will start the API process and fork 
+#   it into the background, then run the default entrypoint for nginx
+COPY ./.incubator/huu-entrypoint.sh ./
 
 # set the `x` flag to allow execution by the dockerd process
 RUN chmod +x /opt/huu/entrypoint.sh
 
 # create the target directory for the nginx access and error logs
 RUN mkdir -p /var/log/${HUU_TARGET_ENV}.homeunite.us/
+
+# launch the application from our custom entrypoint script
+ENTRYPOINT [ "/opt/huu/huu-entrypoint.sh" ]

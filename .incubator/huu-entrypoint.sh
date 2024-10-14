@@ -1,7 +1,7 @@
 #!/bin/bash
 
 pushd /opt/huu
-gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app &
+    ./venv/bin/poetry run fastapi run app/main.py --port 8000 &
 popd
 
 /docker-entrypoint.sh nginx -g 'daemon off;'
