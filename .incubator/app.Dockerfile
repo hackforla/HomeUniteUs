@@ -74,7 +74,7 @@ RUN sed -i "s/<HUU_ENVIRONMENT>/${HUU_TARGET_ENV}/g" /etc/nginx/conf.d/default.c
 COPY ./.incubator/huu-entrypoint.sh ./
 
 # set the `x` flag to allow execution by the dockerd process
-RUN chmod +x /opt/huu/entrypoint.sh
+RUN chmod +x /opt/huu/huu-entrypoint.sh
 
 # create the target directory for the nginx access and error logs
 RUN mkdir -p /var/log/${HUU_TARGET_ENV}.homeunite.us/
