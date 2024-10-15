@@ -102,7 +102,7 @@ describe('ForgotPasswordCode page', () => {
 
     test('display an error message', async () => {
       server.use(
-        http.post('/api/auth/forgot_password', async () => {
+        http.post('/api/auth/forgot-password', async () => {
           await delay(100);
 
           return HttpResponse.json(
@@ -119,7 +119,7 @@ describe('ForgotPasswordCode page', () => {
 
       await user.click(resendButton);
 
-      // expect(resendButton).toBeDisabled();
+      expect(resendButton).toBeDisabled();
 
       await screen.findByRole('alert');
 
