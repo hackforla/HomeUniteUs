@@ -79,7 +79,7 @@ export const ForgotPasswordCode = () => {
         {alert?.message ? (
           <Alert
             sx={{width: '100%'}}
-            data-testid={alert.severity === 'success' ? 'success' : 'error'}
+            data-testid={`alert-${alert.severity}`}
             severity={alert.severity}
             action={
               <IconButton

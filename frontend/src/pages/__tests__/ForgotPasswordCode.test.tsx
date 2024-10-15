@@ -12,8 +12,8 @@ import {
 import {ForgotPasswordCode} from '../authentication/ForgotPasswordCode';
 import {BrowserRouter} from 'react-router-dom';
 import {Formik} from 'formik';
-// import {server} from '../../utils/testing/server';
-// import {HttpResponse, http, delay} from 'msw';
+import {server} from '../../utils/testing/server';
+import {HttpResponse, http, delay} from 'msw';
 
 const {navigate} = vi.hoisted(() => {
   return {
@@ -100,30 +100,31 @@ describe('ForgotPasswordCode page', () => {
       expect(screen.getByRole('alert')).toBeInTheDocument();
     });
 
-    // test('display an error message', async () => {
-    //   server.use(
-    //     http.post('/api/auth/forgot_password', async () => {
-    //       await delay(100);
-    //       return HttpResponse.json(
-    //         {
-    //           message: 'Invalid email address',
-    //         },
-    //         {status: 400},
-    //       );
-    //     }),
-    //   );
+    test('display an error message', async () => {
+      server.use(
+        http.post('/api/auth/forgot_password', async () => {
+          await delay(100);
 
-    //   const {user} = setup();
-    //   const resendButton = screen.getByRole('button', {name: /resend/i});
+          return HttpResponse.json(
+            {
+              message: 'Invalid email address',
+            },
+            {status: 400},
+          );
+        }),
+      );
 
-    //   await user.click(resendButton);
+      const {user} = setup();
+      const resendButton = screen.getByRole('button', {name: /resend/i});
 
-    //   expect(resendButton).toBeDisabled();
+      await user.click(resendButton);
 
-    //   await screen.findByRole('alert');
+      // expect(resendButton).toBeDisabled();
 
-    //   expect(screen.getByTestId(/error/i)).toBeInTheDocument();
-    //   expect(screen.getByRole('alert')).toBeInTheDocument();
-    // });
+      await screen.findByRole('alert');
+
+      expect(screen.getByTestId('alert-error')).toBeInTheDocument();
+      expect(screen.getByRole('alert')).toBeInTheDocument();
+    });
   });
 });
