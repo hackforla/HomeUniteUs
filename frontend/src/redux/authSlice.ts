@@ -1,6 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 // import {User, userAPI} from '../services/user';
+import {User} from '../services/user';
 import {RootState} from './store';
 // import {authApi} from '../services/auth';
 
