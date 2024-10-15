@@ -11,7 +11,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: ./api
+        working-directory: ./flask-api
     steps:
       - uses: actions/checkout@main
         with:

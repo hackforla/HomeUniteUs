@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   db:
     image: postgres
@@ -11,27 +9,75 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_PORT=5432
-    expose:
-      - 5432
-  api:
-    build:
-      context: ./api
-    volumes:
-      - ./api:/usr/src/app
     ports:
-      - "8080:8080"
+      - "5432:5432"
+  pgadmin:
+    image: dpage/pgadmin4
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
     environment:
-      - DATABASE_URL=postgresql://postgres:postgres@db:5432/huu
+      - PGADMIN_DEFAULT_EMAIL=pgadmin@email.com
+      - PGADMIN_DEFAULT_PASSWORD=pgadmin
+      - PGADMIN_CONFIG_SERVER_MODE=False
+      - PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False
+    entrypoint: /bin/sh -c "chmod 600 /pgpass; /entrypoint.sh;"
+    user: root
+    configs:
+      - source: servers.json
+        target: /pgadmin4/servers.json
+      - source: pgpass
+        target: /pgpass
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+  motoserver:
+    image: motoserver/moto:latest
+    ports:
+      - "5000:5000"
+    environment:
+      - MOTO_PORT=5000
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - COGNITO_CLIENT_ID=testing
+      - COGNITO_CLIENT_SECRET=testing
+      - COGNITO_REGION=us-east-1
+      - COGNITO_REDIRECT_URI=http://localhost:4040/signin
+      - COGNITO_USER_POOL_ID=testing
+      - COGNITO_ACCESS_ID=testing
+      - COGNITO_ACCESS_KEY=testing
+      - COGNITO_ENDPOINT_URL=http://motoserver:5000
+      - ROOT_URL=http://localhost:4040
+      - DATABASE_URL=postgresql+psycopg2://postgres:postgres@db:5432/huu
     links:
       - db
     depends_on:
-      - db
-  app:
+      - pgadmin
+      - motoserver
+  frontend:
     build:
-      context: ./app
+      context: ./frontend
     ports:
       - "4040:80"
-    depends_on:
-      - api
 volumes:
   db-data: {}
+  pgadmin-data: {}
+configs:
+  pgpass:
+    content: db:5432:*:postgres:postgres
+  servers.json:
+    content: |
+      {"Servers": {"1": {
+        "Group": "Servers",
+        "Name": "Home Unite Us",
+        "Host": "db",
+        "Port": 5432,
+        "MaintenanceDB": "postgres",
+        "Username": "postgres",
+        "PassFile": "/pgpass",
+        "SSLMode": "prefer"
+      }}}
