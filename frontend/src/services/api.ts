@@ -15,7 +15,6 @@ const baseQuery = fetchBaseQuery({
   prepareHeaders: (headers, {getState}) => {
     // get token from state
     const token = (getState() as RootState).auth.token;
-    console.log('token', token);
     // apply authorization token to headers of all requests if token is available
     if (token) {
       headers.set('authorization', `Bearer ${token}`);

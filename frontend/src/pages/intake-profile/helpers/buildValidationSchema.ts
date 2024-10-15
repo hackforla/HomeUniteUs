@@ -21,7 +21,6 @@ export const typeValidations = {
   email: string().email('Must be a valid email address'),
   yes_no: string(),
   dropdown: string(),
-  // date: date().required('Date is required').typeError('Invalid date'),
   date: date().typeError('DOB is not a valid date'),
   additional_guests: array().of(
     object().shape({
@@ -32,7 +31,6 @@ export const typeValidations = {
       relationship: string().required('Relationship is required'),
     }),
   ),
-  // array of strings of the type of pets
   pets: array().of(
     object().shape({
       type: string().required('Type of pet is required'),
