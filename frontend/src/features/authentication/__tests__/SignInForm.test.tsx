@@ -10,7 +10,7 @@ const prepare = () => {
     <BrowserRouter>
       <SignInForm
         onSubmit={onSubmit}
-        signInIsLoading={false}
+        isLoading={false}
         getTokenIsLoading={false}
       />
     </BrowserRouter>,

@@ -1,5 +1,6 @@
 import {faker} from '@faker-js/faker';
 import {array, object, string} from 'yup';
+
 import {InitialValues} from '../IntakeProfile';
 import {
   FieldGroup,
@@ -114,7 +115,6 @@ export const typeValidations = {
       relationship: string().required('Relationship is required'),
     }),
   ),
-  // array of strings of the type of pets
   pets: array().of(
     object().shape({
       type: string().required('Type of pet is required'),
@@ -122,27 +122,32 @@ export const typeValidations = {
   ),
   contact_method: string(),
 };
-
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const merge = (...schemas) => {
-  const [first, ...rest] = schemas;
+  const validSchemas = schemas.filter(schema => schema !== undefined);
 
-  const merged = rest.reduce(
-    (mergedSchemas, schema) => mergedSchemas.concat(schema),
-    first,
-  );
+  if (validSchemas.length === 0) {
+    return [];
+  }
+
+  const [first, ...rest] = validSchemas;
+
+  const merged = rest.reduce((mergedSchemas, schema) => {
+    return mergedSchemas.concat(schema);
+  }, first);
 
   return merged;
 };
 
 const createFieldValidationSchema = ({type, validations}: Fields) => {
-  if (!typeValidations[type]) {
+  if (!(type in typeValidations)) {
     console.error(
       `No schema exists in typeValidations hashmap in IntakeProfile/constants/index.ts for type: ${type}`,
     );
   }
-
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   let schema = typeValidations[type];
 
   if (validations.required) {

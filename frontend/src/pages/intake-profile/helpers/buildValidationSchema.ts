@@ -31,12 +31,13 @@ export const typeValidations = {
       relationship: string().required('Relationship is required'),
     }),
   ),
-  // array of strings of the type of pets
   pets: array().of(
     object().shape({
       type: string().required('Type of pet is required'),
     }),
   ),
+  contact_method: string(),
+  multiple_choice: array().of(string().required('Choice is required')),
 };
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -53,7 +54,7 @@ const merge = (...schemas) => {
 };
 
 const createFieldValidationSchema = ({type, validations}: Fields) => {
-  if (!typeValidations[type]) {
+  if (!(type in typeValidations)) {
     console.error(
       `No schema exists in typeValidations hashmap in IntakeProfile/constants/index.ts for type: ${type}`,
     );
