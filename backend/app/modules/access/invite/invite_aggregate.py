@@ -9,7 +9,7 @@ from .contracts import (
 )
 
 from collections.abc import Callable
-from datetime import datetime, timezone
+from datetime import datetime
 
 
 class InviteState:
@@ -46,6 +46,7 @@ class InviteState:
         """Update state of an Invite."""
         self.accepted = True
 
+
 class Invite:
     """Allows invites to be sent and managed by existing users."""
 
@@ -58,12 +59,14 @@ class Invite:
         self._state.mutate(domain_event)
         self._changes.append(domain_event)
 
+    @property
     def changes(self):
         """See a view into the events that cause state changes."""
         return self._changes
 
     def send_invite(self, full_name: str, email: str, invitee_role: str,
-                    sent_by: str, token_gen: Callable[[str], str]):
+                    sent_by: str, sent_at: datetime, token_gen: Callable[[str],
+                                                                         str]):
         """Send an invite to the given recipient."""
         if self._state.invited:
             raise InviteAlreadySentException(email)
@@ -72,7 +75,7 @@ class Invite:
                                   email=email,
                                   invitee_role=invitee_role,
                                   sent_by=sent_by,
-                                  sent_at=datetime.now(timezone.utc),
+                                  sent_at=sent_at,
                                   token=token_gen(email))
         self._apply(e)
 

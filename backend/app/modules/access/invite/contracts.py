@@ -1,5 +1,5 @@
 """The identities, classes, value objects that make up the Invite contracts."""
-from app.core.interfaces import Identity, DomainEvent
+from app.core.interfaces import Identity, DomainCommand, DomainEvent
 
 from dataclasses import dataclass
 from datetime import datetime
@@ -15,6 +15,16 @@ class InviteId(Identity):
     def __str__(self):
         """Represent Invite ID as a string."""
         return f"invite-{self.id}"
+
+
+class SendInviteCommand(DomainCommand):
+    """Command with data needed to send an Invite."""
+
+    full_name: str
+    email: str
+    invitee_role: str
+    sent_by: str
+    sent_at: datetime
 
 
 @dataclass
