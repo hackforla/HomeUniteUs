@@ -25,6 +25,7 @@ describe('Sign Up', () => {
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
       email: faker.internet.email(),
+      role: 'host',
       password: 'Test123!',
     };
 
