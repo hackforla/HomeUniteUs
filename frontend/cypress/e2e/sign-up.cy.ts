@@ -30,7 +30,7 @@ describe('Sign Up', () => {
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
       email: faker.internet.email(),
-      role: 'host',
+      role: 'coordinator',
       password: 'Test123!',
     };
 
@@ -44,7 +44,7 @@ describe('Sign Up', () => {
       .should('be.enabled')
       .click();
 
-    cy.url().should('include', '/signup/coordinator');
+    cy.url().should('include', '/signup');
 
     cy.findByRole('button', {name: /sign up/i}).should('be.disabled');
 
@@ -56,9 +56,7 @@ describe('Sign Up', () => {
       .should('be.enabled')
       .click();
 
-    cy.wait('@signUpCoordinator')
-      .its('request.body')
-      .should('deep.equal', user);
+    cy.wait('@signUp').its('request.body').should('deep.equal', user);
 
     cy.url().should('include', `signup/success?email=${user.email}`);
   });
