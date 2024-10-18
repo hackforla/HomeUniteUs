@@ -41,7 +41,8 @@ if __name__ == '__main__':
         region_name="us-east-1",
         aws_access_key_id="testing",
         aws_secret_access_key="testing",
-        endpoint_url=os.environ['COGNITO_ENDPOINT_URL'])
+        # endpoint_url=os.environ['COGNITO_ENDPOINT_URL']
+        )
 
     # Only create a user pool and test data if one does not already exist
     pools = cognito_client.list_user_pools(MaxResults=5)
