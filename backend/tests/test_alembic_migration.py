@@ -1,4 +1,5 @@
 from app.user_roles import UserRole
+
 from app.repositories.user_repo import UserRepository
 
 # Importing these tests will register them within our test project

@@ -6,6 +6,7 @@ import {useCurrentUserQuery} from '../../services/user';
 
 export const ProtectedRoute = ({children}: {children: JSX.Element}) => {
   const {user} = useAuth();
+
   const {isLoading} = useCurrentUserQuery();
   const location = useLocation();
 

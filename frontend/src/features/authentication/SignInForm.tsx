@@ -16,6 +16,9 @@ import {PasswordField} from './PasswordField';
 interface SignInFormProps {
   isLoading: boolean;
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
+  // signInIsLoading: boolean;
+  getTokenIsLoading?: boolean;
+  type?: 'coordinator' | 'guest' | 'host';
 }
 
 const validationSchema = object({

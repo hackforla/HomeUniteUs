@@ -44,13 +44,20 @@ import {
 } from './pages';
 import {SystemAdminDashboard} from './pages/SystemAdminDashboard';
 import {enableMocking} from './utils/testing/browser';
+import {useAppDispatch} from './redux/hooks/store';
+import {setCredentials} from './redux/authSlice';
 
 function HuuApp() {
   const [session] = useSessionMutation();
-
+  const dispatch = useAppDispatch();
   // signin to current session if it exists, otherwise fail silently
   React.useEffect(() => {
-    session();
+    session()
+      .unwrap()
+      .then(res => {
+        const {token, user} = res;
+        dispatch(setCredentials({user, token}));
+      });
   }, []);
 
   return (
