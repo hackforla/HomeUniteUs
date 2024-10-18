@@ -52,9 +52,9 @@ if __name__ == '__main__':
     create_group(groups, 'Coordinators', user_pool_id)
 
     rows = []
-    create_user(cognito_client, user_pool_id, 'admin@email.com', 'Admins')
-    print('admin@email.com/Test123! created.')
-    rows.append(('admin@email.com', 'admin', 'admin', 1))
+    create_user(cognito_client, user_pool_id, 'admin@example.com', 'Admins')
+    print('admin@example.com/Test123! created.')
+    rows.append(('admin@example.com', 'admin', 'admin', 1))
 
     for role, role_id, group in [
         ('guest', 2, 'Guests'),
@@ -62,7 +62,7 @@ if __name__ == '__main__':
         ('host', 4, 'Hosts'),
     ]:
         for x in 'abcdefghijklmnopqrstuvwxyz':
-            email = role + x + '@email.com'
+            email = role + x + '@example.com'
             rows.append((
                 email,
                 role,
