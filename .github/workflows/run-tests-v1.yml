@@ -63,4 +63,4 @@ jobs:
           install: false
           start: npm run dev
           working-directory: ./frontend
-          wait-on: "http://[::1]:34828/"
+          wait-on: "http://localhost:4040/"
