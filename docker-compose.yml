@@ -16,7 +16,7 @@ services:
     volumes:
       - pgadmin-data:/var/lib/pgadmin
     environment:
-      - PGADMIN_DEFAULT_EMAIL=pgadmin@email.com
+      - PGADMIN_DEFAULT_EMAIL=pgadmin4@pgadmin.org
       - PGADMIN_DEFAULT_PASSWORD=pgadmin
       - PGADMIN_CONFIG_SERVER_MODE=False
       - PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False
