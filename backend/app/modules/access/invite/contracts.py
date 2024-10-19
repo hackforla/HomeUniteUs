@@ -1,5 +1,6 @@
 """The identities, classes, value objects that make up the Invite contracts."""
 from app.core.interfaces import Identity, DomainCommand, DomainEvent
+from ..schemas import UserRoleEnum
 
 from dataclasses import dataclass
 from datetime import datetime
@@ -22,8 +23,9 @@ class SendInviteCommand(DomainCommand):
 
     full_name: str
     email: str
-    invitee_role: str
-    sent_by: str
+    invitee_role: UserRoleEnum
+    inviter_id: UserId
+    inviter_role: UserRoleEnum
     sent_at: datetime
 
 
@@ -33,10 +35,10 @@ class InviteSentDomainEvent(DomainEvent):
 
     full_name: str
     email: str
-    invitee_role: str
-    sent_by: str
+    invitee_role: UserRoleEnum
+    inviter_id: UserId
+    inviter_role: UserRoleEnum
     sent_at: datetime
-    token: str
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]):
@@ -45,9 +47,9 @@ class InviteSentDomainEvent(DomainEvent):
         return cls(full_name=data['full_name'],
                    email=data['email'],
                    invitee_role=data['invitee_role'],
-                   sent_by=data['sent_by'],
-                   sent_at=sent_at,
-                   token=data['token'])
+                   inviter_id=data['inviter_id'],
+                   inviter_role=data['inviter_role']
+                   sent_at=sent_at)
 
 
 @dataclass
@@ -55,12 +57,12 @@ class InviteAcceptedDomainEvent(DomainEvent):
     """An Invite was accepted domain event."""
 
     email: str
-    token: str
+    accepted_at: datetime
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]):
         """Deserialize from dict to the correct event class."""
-        return cls(email=data['email'], token=data['token'])
+        return cls(email=data['email'], accepted_at=data['accepted_at'])
 
 
 class InviteAlreadySentException(Exception):

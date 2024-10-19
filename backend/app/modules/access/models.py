@@ -1,5 +1,7 @@
 """Model."""
 
+from email_validator import validate_email, EmailNotValidError
+
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from sqlalchemy.orm import validates as validates_sqlachemy
@@ -8,6 +10,7 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.core.db import Base
+from app.core.interfaces import ValueObject
 
 
 class User(Base):
@@ -35,3 +38,19 @@ class Role(Base):
     type = Column(String, nullable=False, unique=True)
 
     users = relationship("User", back_populates="role")
+
+class Email(ValueObject):
+    """Represent a valid email address."""
+
+    def __init__(self, email: str):
+        try:
+            emailinfo = validate_email(email, check_deliverability=False)
+
+            self.email = emailinfo.normalized
+
+        except EmailNotValidError as e:
+            raise e
+
+    @property
+    def email(self):
+        return self.email

@@ -1,5 +1,6 @@
 """The Invite aggregate handles invites into the system."""
 from app.core.interfaces import DomainEvent
+from ..schemas import UserRoleEnum
 from .contracts import (
     InviteId,
     InviteSentDomainEvent,
@@ -15,14 +16,14 @@ from datetime import datetime
 class InviteState:
     """Holds the state of the Invite aggregate."""
 
-    id: InviteId
+    email: InviteId = None
     full_name: str = None
-    email: str = None
-    invitee_role: str = None
-    sent_by: str = None
+    invitee_role: UserRoleEnum = None
+    inviter_id: UserId = None
+    inviter_role: UserRoleEnum = None
     sent_at: datetime = None
-    invited: bool = False
-    accepted: bool = False
+    expire_at: datetime = None
+    accepted_at: datetime = None
 
     def __init__(self, domain_events: list[DomainEvent]):
         """Initialize state from given events."""
@@ -44,7 +45,7 @@ class InviteState:
 
     def when_InviteAcceptedDomainEvent(self, event: InviteAcceptedDomainEvent):
         """Update state of an Invite."""
-        self.accepted = True
+        self.accepted_at = event.accepted_at
 
 
 class Invite:

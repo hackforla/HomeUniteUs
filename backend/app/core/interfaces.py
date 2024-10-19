@@ -26,6 +26,14 @@ class Identity:
     id: Any
 
 
+class ValueObject:
+    """Represents a Value Object.
+
+    A Value Object has significance to the domain and should be a valid
+    representation of the type of thing it represents. It is also immutable.
+    """
+
+
 class DomainCommand:
     """Representation for an intention to change state of the system.
 
