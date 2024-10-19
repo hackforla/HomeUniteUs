@@ -1,4 +1,4 @@
-name: Run API and App Tests
+name: Run API and Frontend Tests
 on:
   pull_request:
     branches: [main]
@@ -28,7 +28,7 @@ jobs:
         run: poetry install --with test
       - name: Run tests
         run: poetry run pytest
-  test-app:
+  test-frontend:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -52,4 +52,4 @@ jobs:
           install: false
           start: npm run dev
           working-directory: ./frontend
-          wait-on: "http://[::1]:4040/"
+          wait-on: "http://localhost:4040/"

@@ -18,6 +18,7 @@ const prepare = (initialProps: Partial<SignUpFormProps> = {}) => {
     getTokenIsLoading: false,
     signUpCoordinatorIsLoading: false,
     signUpHostIsLoading: false,
+    isLoading: false,
     ...initialProps,
   };
 
