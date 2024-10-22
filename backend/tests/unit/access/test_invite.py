@@ -1,15 +1,18 @@
+from datetime import datetime, timedelta, timezone
+
+import pytest
+
 from app.modules.access.invite.contracts import (
     InviteId,
+    SendInviteRequestedDomainEvent,
     InviteSentDomainEvent,
     InviteAcceptedDomainEvent,
     InviteAlreadySentException,
-    UninvitedException,
+    NotInvitedException,
 )
 from app.modules.access.invite.invite_aggregate import Invite
+from app.modules.access.schemas import UserRoleEnum
 
-from datetime import datetime, timezone
-
-import pytest
 
 def then(given, when, expected_events):
 
@@ -17,7 +20,7 @@ def then(given, when, expected_events):
     when(invite)
 
     assert expected_events == invite.changes
-    assert invite._state.invited
+    assert invite._state.pending_send_invite or invite._state.invited
 
 
 def thenException(given, when, expected_exception_class):
@@ -33,10 +36,12 @@ def test_send_invite():
     fixed_datetime = datetime(2020, 6, 15, 12, 0, 0, tzinfo=timezone.utc)
     full_name = 'test name'
     email = 'test@email.com'
-    invitee_role = 'Coordinator'
-    sent_by = 'coordinators'
+    invitee_role = UserRoleEnum.GUEST
+    inviter_id = 'coordinator-id'
+    inviter_role = UserRoleEnum.COORDINATOR
     sent_at = fixed_datetime
 
+    expire_policy = lambda sent_at: sent_at + timedelta(days=7)
     token_gen = lambda email: 'token-' + email
 
     # Given
@@ -46,50 +51,91 @@ def test_send_invite():
     when = lambda invite: invite.send_invite(full_name=full_name,
                                              email=email,
                                              invitee_role=invitee_role,
-                                             sent_by=sent_by,
+                                             inviter_id=inviter_id,
+                                             inviter_role=inviter_role,
                                              sent_at=sent_at,
-                                             token_gen=token_gen)
+                                             expire_policy=expire_policy)
 
     # Then
     expected_events = [
-        InviteSentDomainEvent(full_name=full_name,
-                              email=email,
-                              invitee_role=invitee_role,
-                              sent_by=sent_by,
-                              sent_at=sent_at,
-                              token=token_gen(email))
+        SendInviteRequestedDomainEvent(full_name=full_name,
+                                       email=email,
+                                       invitee_role=invitee_role,
+                                       inviter_id=inviter_id,
+                                       inviter_role=inviter_role,
+                                       sent_at=sent_at,
+                                       expire_at=expire_policy(sent_at))
     ]
     then(given, when, expected_events)
 
 
-def test_send_duplicate_invite():
+def test_send_duplicate_pending_invite():
 
     # Setup
-    full_name = 'test name'
+    fixed_datetime = datetime(2020, 6, 15, 12, 0, 0, tzinfo=timezone.utc)
     email = 'test@email.com'
-    invitee_role = 'Coordinator'
-    sent_by = 'coordinators'
+    full_name = 'test name'
+    invitee_role = UserRoleEnum.COORDINATOR
+    inviter_id = 'coordinator-id'
+    inviter_role = UserRoleEnum.COORDINATOR
+    sent_at = fixed_datetime
+    expire_at = fixed_datetime + timedelta(days=7)
 
-    token_gen = lambda email: email
+    expire_policy = lambda sent_at: expire_at
 
     # Given
     given = [
-        InviteSentDomainEvent(full_name=full_name,
-                              email=email,
-                              invitee_role=invitee_role,
-                              sent_by=sent_by,
-                              sent_at=datetime.now(timezone.utc),
-                              token=token_gen(email))
+        SendInviteRequestedDomainEvent(full_name=full_name,
+                                       email=email,
+                                       invitee_role=invitee_role,
+                                       inviter_id=inviter_id,
+                                       inviter_role=inviter_role,
+                                       sent_at=sent_at,
+                                       expire_at=expire_at)
     ]
 
     # When
     when = lambda invite: invite.send_invite(full_name=full_name,
                                              email=email,
                                              invitee_role=invitee_role,
-                                             sent_by=sent_by,
-                                             sent_at=datetime.now(tz=timezone.
-                                                                  utc),
-                                             token_gen=token_gen)
+                                             inviter_id=inviter_id,
+                                             inviter_role=inviter_role,
+                                             sent_at=sent_at,
+                                             expire_policy=expire_policy)
+
+    # Then
+    thenException(given, when, InviteAlreadySentException)
+
+
+def test_send_duplicate_sent_invite():
+
+    # Setup
+    fixed_datetime = datetime(2020, 6, 15, 12, 0, 0, tzinfo=timezone.utc)
+    email = 'test@email.com'
+    full_name = 'test name'
+    invitee_role = UserRoleEnum.COORDINATOR
+    inviter_id = 'coordinator-id'
+    inviter_role = UserRoleEnum.COORDINATOR
+    sent_at = fixed_datetime
+    expire_at = fixed_datetime + timedelta(days=7)
+
+    expire_policy = lambda sent_at: expire_at
+
+    # Given
+    given = [
+        InviteSentDomainEvent(email=email,
+                              full_name=full_name,
+                              expire_at=expire_at)
+    ]
+
+    # When
+    when = lambda invite: invite.send_invite(full_name=full_name,
+                                             email=email,
+                                             invitee_role=invitee_role,
+                                             inviter_id=inviter_id,
+                                             inviter_role=inviter_role,
+                                             sent_at=sent_at,
+                                             expire_policy=expire_policy)
 
     # Then
     thenException(given, when, InviteAlreadySentException)
@@ -98,30 +144,25 @@ def test_send_duplicate_invite():
 def test_invite_accepted():
 
     # Setup
-    full_name = 'test name'
     email = 'test@email.com'
-    invitee_role = 'Coordinator'
-    sent_by = 'coordinators'
-
-    token_gen = lambda email: email
+    full_name = 'test name'
+    expire_at = datetime.now(timezone.utc) + timedelta(days=7)
+    accepted_at = datetime.now(timezone.utc)
 
     # Given
     given = [
-        InviteSentDomainEvent(full_name=full_name,
-                              email=email,
-                              invitee_role=invitee_role,
-                              sent_by=sent_by,
-                              sent_at=datetime.now(tz=timezone.utc),
-                              token=token_gen(email))
+        InviteSentDomainEvent(email=email,
+                              full_name=full_name,
+                              expire_at=expire_at)
     ]
 
     # When
     when = lambda invite: invite.accept_invite(email=email,
-                                               token=token_gen(email))
+                                               accepted_at=accepted_at)
 
     # Then
     expected_events = [
-        InviteAcceptedDomainEvent(email=email, token=token_gen(email))
+        InviteAcceptedDomainEvent(email=email, accepted_at=accepted_at)
     ]
     then(given, when, expected_events)
 
@@ -129,19 +170,15 @@ def test_invite_accepted():
 def test_uninvited_invite_accepted():
 
     # Setup
-    full_name = 'test name'
     email = 'test@email.com'
-    invitee_role = 'Coordinator'
-    sent_by = 'coordinators'
-
-    token_gen = lambda email: email
+    accepted_at = datetime.now(timezone.utc)
 
     # Given
     given = []
 
     # When
     when = lambda invite: invite.accept_invite(email=email,
-                                               token=token_gen(email))
+                                               accepted_at=datetime)
 
     # Then
-    thenException(given, when, UninvitedException)
+    thenException(given, when, NotInvitedException)

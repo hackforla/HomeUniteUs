@@ -3,10 +3,11 @@ from app.core.interfaces import DomainEvent
 from ..schemas import UserRoleEnum
 from .contracts import (
     InviteId,
+    SendInviteRequestedDomainEvent,
     InviteSentDomainEvent,
     InviteAcceptedDomainEvent,
     InviteAlreadySentException,
-    UninvitedException,
+    NotInvitedException,
 )
 
 from collections.abc import Callable
@@ -19,11 +20,13 @@ class InviteState:
     email: InviteId = None
     full_name: str = None
     invitee_role: UserRoleEnum = None
-    inviter_id: UserId = None
+    inviter_id: str = None
     inviter_role: UserRoleEnum = None
     sent_at: datetime = None
     expire_at: datetime = None
     accepted_at: datetime = None
+    pending_send_invite: bool = False
+    invited: bool = False
 
     def __init__(self, domain_events: list[DomainEvent]):
         """Initialize state from given events."""
@@ -34,13 +37,20 @@ class InviteState:
         """Update the state based on the domain event."""
         getattr(self, 'when_' + domain_event.__class__.__name__)(domain_event)
 
+    def when_SendInviteRequestedDomainEvent(
+            self, event: SendInviteRequestedDomainEvent):
+        """Update the state of an Invite."""
+        self.email = event.email
+        self.full_name = event.full_name
+        self.invitee_role = event.invitee_role
+        self.inviter_id = event.inviter_id
+        self.inviter_role = event.inviter_role
+        self.sent_at = event.sent_at
+
+        self.pending_send_invite = True
+
     def when_InviteSentDomainEvent(self, event: InviteSentDomainEvent):
         """Update the state of an Invite."""
-        self.full_name = event.full_name
-        self.email = event.email
-        self.invitee_role = event.invitee_role
-        self.sent_by = event.sent_by
-        self.sent_at = event.sent_at
         self.invited = True
 
     def when_InviteAcceptedDomainEvent(self, event: InviteAcceptedDomainEvent):
@@ -65,26 +75,35 @@ class Invite:
         """See a view into the events that cause state changes."""
         return self._changes
 
-    def send_invite(self, full_name: str, email: str, invitee_role: str,
-                    sent_by: str, sent_at: datetime, token_gen: Callable[[str],
-                                                                         str]):
+    def send_invite(self, full_name: str, email: str,
+                    invitee_role: UserRoleEnum, inviter_id: str,
+                    inviter_role: UserRoleEnum, sent_at: datetime,
+                    expire_policy: Callable[[datetime], datetime]):
         """Send an invite to the given recipient."""
-        if self._state.invited:
+        if self._state.pending_send_invite or self._state.invited:
             raise InviteAlreadySentException(email)
 
-        e = InviteSentDomainEvent(full_name=full_name,
-                                  email=email,
-                                  invitee_role=invitee_role,
-                                  sent_by=sent_by,
-                                  sent_at=sent_at,
-                                  token=token_gen(email))
+        e = SendInviteRequestedDomainEvent(email=email,
+                                           full_name=full_name,
+                                           invitee_role=invitee_role,
+                                           inviter_id=inviter_id,
+                                           inviter_role=inviter_role,
+                                           sent_at=sent_at,
+                                           expire_at=expire_policy(sent_at))
         self._apply(e)
 
-    def accept_invite(self, email: str, token: str):
+    def process_sent_invite(self, email: str):
+        """Process a sent invite."""
+        e = InviteSentDomainEvent(email, self._state.full_name,
+                                  self._state.expire_at)
+
+        self._apply(e)
+
+    def accept_invite(self, email: str, accepted_at: datetime):
         """Accept an invite."""
         if not self._state.invited:
-            raise UninvitedException(f"{email} was not invited.")
+            raise NotInvitedException(f"{email} was not invited.")
 
-        e = InviteAcceptedDomainEvent(email=email, token=token)
+        e = InviteAcceptedDomainEvent(email=email, accepted_at=accepted_at)
 
         self._apply(e)
