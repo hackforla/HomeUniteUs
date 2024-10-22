@@ -88,10 +88,10 @@ The `startup_scripts/entrypoint.sh` (or `startup_scripts/entrypoint.ps1` if usin
 
 The password for all test users is `Test123!`.
 
-- 1 Admin: admin@email.com
-- 26 Guests: guest[a-z]@email.com (e.g. `guesta@email.com`, `guestb@email.com`, ... `guestz@email.com`)
-- 26 Coordinators: coordinator[a-z]@email.com (e.g. `coordinatora@email.com`, `coordinatorb@email.com`, ... `coordinatorz@email.com`)
-- 26 Hosts: host[a-z]@email.com (e.g. `hosta@email.com`, `hostb@email.com`, ... `hostz@email.com`)
+- 1 Admin: admin@example.com
+- 26 Guests: guest[a-z]@example.com (e.g. `guesta@example.com`, `guestb@example.com`, ... `guestz@example.com`)
+- 26 Coordinators: coordinator[a-z]@example.com (e.g. `coordinatora@example.com`, `coordinatorb@example.com`, ... `coordinatorz@example.com`)
+- 26 Hosts: host[a-z]@example.com (e.g. `hosta@example.com`, `hostb@example.com`, ... `hostz@example.com`)
 
 ## Conventions
 
