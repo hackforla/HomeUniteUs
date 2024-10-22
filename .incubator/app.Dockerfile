@@ -52,7 +52,8 @@ RUN ./venv/bin/pip install "poetry==${POETRY_VERSION}"
 
 # Install the dependencies and clear the cache afterwards.
 #   This may save some MBs.
-RUN ./venv/bin/poetry install --no-root && rm -rf $POETRY_CACHE_DIR
+# RUN ./venv/bin/poetry install --no-root && rm -rf $POETRY_CACHE_DIR
+RUN ./venv/bin/poetry install
 
 # pull our UI build (generated in previous stage) into the conventional
 #   location for its nginx `server` block
