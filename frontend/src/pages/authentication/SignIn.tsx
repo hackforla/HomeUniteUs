@@ -60,7 +60,8 @@ export const SignIn = () => {
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
         // you can access all properties of `FetchBaseQueryError` here
-        const errMsg = err.data.message;
+        const errMsg =
+          err.data?.message || 'An unexpected error occured in Sign In';
         setErrorMessage(errMsg);
       } else if (isErrorWithMessage(err)) {
         // you can access a string 'message' property here

@@ -14,28 +14,28 @@ This project is part of a larger initiative at Hack for LA around creating a sha
 
 ## Technology Overview
 
-The HomeUniteUs project is structured as a multi-[docker](https://docs.docker.com/) container application (for local development and testing), with secret-protected access to networked resources. The project contains three containers, whose activities are coordinated using the `docker compose` configuration outlined in `docker-compose.yml`. The three containers are:
+The HomeUniteUs project is structured as a multi-[docker](https://docs.docker.com/) container application, with secret-protected access to networked resources. The project contains five containers, whose activities are coordinated using the `docker compose` configuration outlined in `docker-compose.yml`. The five containers are:
 
-1. `app`: A frontend [React](https://reactjs.org/docs/getting-started.html) app developed using [TypeScript](https://www.typescriptlang.org/).
-   * We use [Redux](https://redux.js.org/) to manage client state, with the [Redux Toolkit](https://redux-toolkit.js.org/) to simplify development.
-   * We use the [Material UI](https://material-ui.com/) component library, for access to high quality UI components designed with accessibility in mind.
-   * We use the [Vite](https://vitejs.dev/) build tool, for fast dev builds and optimized production builds.
-2. `api`: A backend python [connexion](https://connexion.readthedocs.io/en/latest/) REST API, hosted on [AWS](https://docs.aws.amazon.com/).
-   * We use `connexion` to simplify our API specification and validation. `connexion` uses the [OpenAPI](https://www.openapis.org/) [specification](https://spec.openapis.org/oas/v3.0.1.html) to map API URLs to specific python functions. It will handle routing, validation, security, and parameter passing when an API request is made. `connexion` also generates documentation for our API, and provides a useful user interface (at `{URL}/api/ui`) that can be used to easily interact with the API for development purposes. We use the variant of `connexion` that runs on top of [Flask](https://flask.palletsprojects.com/en/1.1.x/).
-   * We use the [SQLAlchemy](https://www.sqlalchemy.org/) SQL toolkit and [Object-Relational Mapper (ORM)](https://en.wikipedia.org/wiki/Object%E2%80%93relational_mapping). This serves as a developer-friendly layer between the python app and the database.
-   * We use [gunicorn](https://gunicorn.org/) as our WSGI server. A WSGI server acts as a communication intermediary between an HTTP proxy and the Hone Unite Us API, handling client requests and passing them to the application, then returning the application's responses to the client.
-   * We use [nginx](https://nginx.org/en/docs/) as our HTTP server. This “reverse proxy” sits in front of the WSGI server, and handles a number of complex web server tasks. It is capable of load balancing across the WSGI server works, managing TLS connections, serving static files, and more.
+1. `frontend`: A frontend [React](https://reactjs.org/docs/getting-started.html) app developed using [TypeScript](https://www.typescriptlang.org/).
+   * It uses [Redux](https://redux.js.org/) to manage client state, with the [Redux Toolkit](https://redux-toolkit.js.org/) to simplify development.
+   * It uses the [Material UI](https://material-ui.com/) component library, for access to high quality UI components designed with accessibility in mind.
+   * It uses the [Vite](https://vitejs.dev/) build tool, for fast dev builds and optimized production builds.
+2. `backend`: A backend python API, hosted on [AWS](https://docs.aws.amazon.com/).
+   * It uses `FastAPI` as its web framework.
+   * It uses the [SQLAlchemy](https://www.sqlalchemy.org/) SQL toolkit and [Object-Relational Mapper (ORM)](https://en.wikipedia.org/wiki/Object%E2%80%93relational_mapping). This serves as a developer-friendly layer between the Python app and the database.
 3. `db`: A [PostgreSQL](https://www.postgresql.org/) database container.
    * The database is stored as a docker volume, `db-data`.
    * If the volume is not found during spin-up, then an empty database volume will be created.
-
-In the production environment, each of these services along with `nginx` are deployed onto an EC2 instance and managed as `systemd` service units instead of with Docker.
+4. `motoserver`: A development tool. It runs  [`moto`](http://docs.getmoto.org/en/latest/docs/server_mode.html) in Server Mode.
+   * It allows developers to mock AWS so that AWS secrets are not needed for local development. This tool is used because HUU uses AWS Cognito as its identity and access provider. However, most local development will not need to make actual calls to AWS Cognito for HUU feature development. Using this tool will allow developers to login to HUU on their development machine.
+   * It has a dashboard located at http://127.0.0.1:5000/moto-api/
+5. `pgadmin`: An optional development tool. It is a container running [pgAdmin4](https://www.pgadmin.org/). pgAdmin4 is database administration and development platform for PostgreSQL.
+    * This tool will allow can be used to run queries against the PostgreSQL server running in the `db` container.
+    * It is accessed by going to http://127.0.0.1:5050
 
 ## Build Instructions
 
-Before you can build the project, you will require a `.env` file containing access keys to the application third party services. Please message a team member on the [#home-unite-us slack channel](https://hackforla.slack.com/archives/CRWUG7X0C) once you've completed onboarding. See the [api](./api/README.md) and [app](./app/README.md) READMEs for more information about the required and optional environment variables.
-
-Since this project is dockerized, you can choose to either build the backend and frontend apps as docker containers or directly onto your local machine. This guide will focus on docker builds, but full local build and deployment instructions can be found in the [api](./api/README.md) and [app](./app/README.md) READMEs.
+Since this project is Dockerized, you can choose to either build the backend and frontend apps as Docker containers or directly onto your local machine. This guide will focus on Docker builds, but full local build and deployment instructions can be found in the [api](./backend/README.md) and [app](./frontend/README.md) READMEs.
 
 Also note that the code in this repo *should* build without issue on Linux, Windows, and MacOS. We do, however, utilize some Linux-only tools during deployment and primarily target the Linux platform.
 
@@ -45,16 +45,28 @@ Building with Docker is the simplest option, and debugging applications within t
 
 #### Requirements
 
-* A copy of the `.env` file described above
-* An up-to-date installation of [docker](https://docs.docker.com/get-docker/)
+* An up-to-date installation of [Docker](https://docs.docker.com/get-docker/)
 
 #### Instructions
 
-1. Place a copy of the `.env` file in the `app` directory
-2. Place a copy of the `.env` file in the `api` directory
-3. Build all three containers by running the `docker compose up` shell command from the root directory:
-4. Verify there are no build errors, and open `localhost:4040` in any browser, to see the application
+1. Build and run all containers by running the `docker compose up -d --build` shell command from the root directory:
+2. Verify there are no build errors. If there are build errors, reach out to the development team.
+3. Open `http://localhost:4040` in any browser to use Home Unite Us.
+
+* `pgAdmin4` is available at http://localhost:5050/browser/ to query the database.
+* `moto` server is available at http://localhost:5000/moto-api/ to view mocked AWS data.
+
+#### Test Users
+
+For local development, test users already exist when started using Docker.
+
+The password for all test users is `Test123!`.
+
+- 1 Admin: admin@email.com
+- 26 Guests: guest[a-z]@email.com (e.g. `guesta@email.com`, `guestb@email.com`, ... `guestz@email.com`)
+- 26 Coordinators: coordinator[a-z]@email.com (e.g. `coordinatora@email.com`, `coordinatorb@email.com`, ... `coordinatorz@email.com`)
+- 26 Hosts: host[a-z]@email.com (e.g. `hosta@email.com`, `hostb@email.com`, ... `hostz@email.com`)
 
 ## Testing Instructions
 
-Testing instructions for each application are in the [api](./api/README.md) and [app](./app/README.md) README files.
+Testing instructions for each application are in the [backend](./backend/README.md) and [frontend](./frontend/README.md) README files.

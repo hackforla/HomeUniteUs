@@ -122,20 +122,8 @@ export const typeValidations = {
   ),
   contact_method: string(),
 };
-
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-// const merge = (...schemas) => {
-//   const [first, ...rest] = schemas;
-
-//   const merged = rest.reduce(
-//     (mergedSchemas, schema) => mergedSchemas.concat(schema),
-//     first,
-//   );
-
-//   return merged;
-// };
-
 const merge = (...schemas) => {
   const validSchemas = schemas.filter(schema => schema !== undefined);
 

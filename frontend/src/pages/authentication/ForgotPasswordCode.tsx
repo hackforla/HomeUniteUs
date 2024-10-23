@@ -79,6 +79,7 @@ export const ForgotPasswordCode = () => {
         {alert?.message ? (
           <Alert
             sx={{width: '100%'}}
+            data-testid={`alert-${alert.severity}`}
             severity={alert.severity}
             action={
               <IconButton
@@ -110,6 +111,7 @@ export const ForgotPasswordCode = () => {
           spacing={4}
           sx={{alignItems: 'center'}}
           onSubmit={handleSubmit}
+          data-testid="/success/i"
         >
           <Stack spacing={1} sx={{width: '100%'}}>
             <CodeField
@@ -133,7 +135,7 @@ export const ForgotPasswordCode = () => {
             ) : null}
           </Button>
           <Button
-            disabled={code.length < 6}
+            disabled={code.length < 6 || Boolean(errors.code)}
             fullWidth
             variant="contained"
             size="large"

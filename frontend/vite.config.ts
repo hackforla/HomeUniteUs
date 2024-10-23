@@ -43,7 +43,7 @@ export default defineConfig(({mode}) => {
     },
     plugins: [react()],
     server: {
-      port: 34828,
+      port: 4040,
       proxy: {
         '/api': {
           target: apiBaseUrl.origin,
