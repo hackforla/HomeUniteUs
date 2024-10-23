@@ -1,8 +1,8 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import {User, userAPI} from '../services/user';
+import {User} from '../services/user';
 import {RootState} from './store';
-import {authApi} from '../services/auth';
+// import {authApi} from '../services/auth';
 
 interface AuthState {
   user: User | null;
@@ -31,23 +31,23 @@ export const authSlice = createSlice({
       state.token = token;
     },
   },
-  extraReducers: builder => {
-    builder
-      // Add a matcher to update auth state with user returned from the user query
-      .addMatcher(
-        userAPI.endpoints.currentUser.matchFulfilled,
-        (state, {payload}) => {
-          state.user = payload;
-        },
-      )
-      .addMatcher(
-        authApi.endpoints.session.matchFulfilled,
-        (state, {payload}) => {
-          state.user = payload.user;
-          state.token = payload.token;
-        },
-      );
-  },
+  // extraReducers: builder => {
+  //   builder
+  //     // Add a matcher to update auth state with user returned from the user query
+  //     .addMatcher(
+  //       userAPI.endpoints.currentUser.matchFulfilled,
+  //       (state, {payload}) => {
+  //         state.user = payload;
+  //       },
+  //     )
+  //     .addMatcher(
+  //       authApi.endpoints.session.matchFulfilled,
+  //       (state, {payload}) => {
+  //         state.user = payload.user;
+  //         state.token = payload.token;
+  //       },
+  //     );
+  // },
 });
 
 export default authSlice.reducer;
