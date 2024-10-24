@@ -46,21 +46,32 @@ import {SystemAdminDashboard} from './pages/SystemAdminDashboard';
 import {enableMocking} from './utils/testing/browser';
 import {useAppDispatch} from './redux/hooks/store';
 import {setCredentials} from './redux/authSlice';
+import NotFound from './pages/NotFound';
 
 function HuuApp() {
   const [session] = useSessionMutation({
     fixedCacheKey: 'session-post',
   });
   const dispatch = useAppDispatch();
-  // signin to current session if it exists, otherwise fail silently
+
   React.useEffect(() => {
-    session()
-      .unwrap()
-      .then(res => {
-        const {token, user} = res;
-        dispatch(setCredentials({user, token}));
-      });
-  }, []);
+    const fetchSession = async () => {
+      try {
+        const res = await session().unwrap();
+        const {token, user} = res || {};
+
+        if (token && user) {
+          dispatch(setCredentials({user, token}));
+        } else {
+          console.warn('Token or user missing in session response');
+        }
+      } catch (error) {
+        console.error('Failed to fetch session:', error);
+      }
+    };
+
+    fetchSession();
+  }, [dispatch]);
 
   return (
     <>
@@ -143,6 +154,7 @@ function HuuApp() {
             </ProtectedRoute>
           }
         />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );
