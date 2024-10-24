@@ -43,8 +43,9 @@ jobs:
       # Modified test step to include PYTHONPATH
       - name: Run tests
         run: |
-          export PYTHONPATH=$PYTHONPATH:$(pwd)
+          export PYTHONPATH=$PYTHONPATH:$(pwd) 
           poetry run pytest -v --capture=no
+
   test-frontend:
     runs-on: ubuntu-latest
     defaults:
