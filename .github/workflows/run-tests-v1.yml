@@ -12,6 +12,8 @@ jobs:
       run:
         shell: bash
         working-directory: ./backend
+    env:
+      PYTHONPATH: ./  
     steps:
       - uses: actions/checkout@main
         with:
