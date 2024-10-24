@@ -48,7 +48,9 @@ import {useAppDispatch} from './redux/hooks/store';
 import {setCredentials} from './redux/authSlice';
 
 function HuuApp() {
-  const [session] = useSessionMutation();
+  const [session] = useSessionMutation({
+    fixedCacheKey: 'session-post',
+  });
   const dispatch = useAppDispatch();
   // signin to current session if it exists, otherwise fail silently
   React.useEffect(() => {
