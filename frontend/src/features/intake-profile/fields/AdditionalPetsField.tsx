@@ -2,8 +2,7 @@ import {Stack, Button, TextField, Typography} from '@mui/material';
 import {FormikErrors, FieldArray, useFormikContext} from 'formik';
 import {Pet} from '../../../services/profile';
 import Autocomplete from '@mui/material/Autocomplete';
-import {InitialValues} from 'src/pages/intake-profile';
-
+import {InitialValues} from 'src/pages/intake-profile/IntakeProfile';
 interface Values {
   pets: Pet[];
 }

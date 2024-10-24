@@ -50,6 +50,8 @@ poetry install                           # Installs all dependencies
 
 poetry shell                             # Activates the virtual environment
 
+fastapi run                              # Run the Fast API server
+
 # If using a shell use this:
 startup_scripts/entrypoint.sh            # Creates test users and runs the API in developer mode
 
