@@ -50,15 +50,6 @@ import {setCredentials} from './redux/authSlice';
 function HuuApp() {
   const [session] = useSessionMutation();
   const dispatch = useAppDispatch();
-  // signin to current session if it exists, otherwise fail silently
-  // React.useEffect(() => {
-  //   session()
-  //     .unwrap()
-  //     .then(res => {
-  //       const {token, user} = res;
-  //       dispatch(setCredentials({user, token}));
-  //     });
-  // }, []);
 
   React.useEffect(() => {
     const fetchSession = async () => {
@@ -66,7 +57,6 @@ function HuuApp() {
         const res = await session().unwrap();
         const {token, user} = res || {};
 
-        // Check if token exists before dispatching
         if (token && user) {
           dispatch(setCredentials({user, token}));
         } else {
