@@ -46,6 +46,7 @@ import {SystemAdminDashboard} from './pages/SystemAdminDashboard';
 import {enableMocking} from './utils/testing/browser';
 import {useAppDispatch} from './redux/hooks/store';
 import {setCredentials} from './redux/authSlice';
+import NotFound from './pages/NotFound';
 
 function HuuApp() {
   const [session] = useSessionMutation();
@@ -151,6 +152,7 @@ function HuuApp() {
             </ProtectedRoute>
           }
         />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );
