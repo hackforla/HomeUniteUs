@@ -26,8 +26,23 @@ jobs:
           cache: "poetry"
       - name: Install API Dependencies
         run: poetry install --with test
+      # New debugging step added here
+      - name: Debug environment
+        run: |
+          echo "Current directory: $(pwd)"
+          echo "Directory contents:"
+          ls -la
+          echo "Python path:"
+          poetry run python -c "import sys; print('\n'.join(sys.path))"
+          echo "Poetry environment info:"
+          poetry env info
+      # - name: Run tests
+      #run: poetry run pytest
+      # Modified test step to include PYTHONPATH
       - name: Run tests
-        run: poetry run pytest
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)
+          poetry run pytest -v --capture=no
   test-frontend:
     runs-on: ubuntu-latest
     defaults:
