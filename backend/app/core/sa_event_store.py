@@ -46,7 +46,8 @@ class SqlAlchemyEventStore:
     def __init__(self, session: Session):
         """Instantiate the Event Store using a SQLAlchemy session."""
         if session is None:
-            raise ValueError("A Session is required to construct this Event Store.")
+            raise ValueError(
+                "A Session is required to construct this Event Store.")
 
         self.session = session
 
@@ -54,14 +55,15 @@ class SqlAlchemyEventStore:
         """Fetch the event stream for the given stream."""
         stream = DomainEventStream(version=0, events=[])
 
-        stream_entries = self.session.execute(
-            select(EventStreamEntry.stream_version,
-                   EventStreamEntry.event_data)).all()
+        statement = select(EventStreamEntry.stream_version,
+                           EventStreamEntry.event_data).filter_by(
+                               stream_id=stream_id).order_by(
+                                   EventStreamEntry.stream_version)
+        stream_entries = self.session.execute(statement).all()
 
         for stream_version, event_data in stream_entries:
             stream.version = stream_version
-            stream.events.append(
-                self._deserialize_event(event_data))
+            stream.events.append(self._deserialize_event(event_data))
 
         return stream
 

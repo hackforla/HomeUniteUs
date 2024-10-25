@@ -48,29 +48,56 @@ def test_in_memory_event_store():
 
 def test_sqlalchemy_event_store(session_factory):
     events = [Event1("x"), Event2(1)]
-    stream_id = "test-stream"
+    stream_id_1 = "test-stream-1"
+    stream_id_2 = "test-stream-2"
 
     with session_factory() as session:
         event_store = SqlAlchemyEventStore(session)
-
-        event_stream = event_store.fetch(stream_id)
+        event_stream = event_store.fetch(stream_id_1)
         assert len(event_stream.events) == 0
         assert event_stream.version == 0
 
     with session_factory() as session:
         event_store = SqlAlchemyEventStore(session)
+        event_stream = event_store.fetch(stream_id_2)
+        assert len(event_stream.events) == 0
+        assert event_stream.version == 0
 
-        event_store.append(stream_id, events, event_stream.version)
-        event_stream = event_store.fetch(stream_id)
+    with session_factory() as session:
+        event_store = SqlAlchemyEventStore(session)
+        event_store.append(stream_id_1, events, event_stream.version)
+
+    with session_factory() as session:
+        event_store = SqlAlchemyEventStore(session)
+        event_store.append(stream_id_2, events[::-1], event_stream.version)
+
+    with session_factory() as session:
+        event_store = SqlAlchemyEventStore(session)
+        event_stream = event_store.fetch(stream_id_1)
         assert len(event_stream.events) == 2
         assert event_stream.version == 2
         assert event_stream.events == events
 
     with session_factory() as session:
         event_store = SqlAlchemyEventStore(session)
+        event_store.append(stream_id_1, events, event_stream.version)
 
-        event_store.append(stream_id, events, event_stream.version)
-        event_stream = event_store.fetch(stream_id)
+    with session_factory() as session:
+        event_store = SqlAlchemyEventStore(session)
+        event_stream = event_store.fetch(stream_id_1)
         assert len(event_stream.events) == 4
         assert event_stream.version == 4
         assert event_stream.events == events + events
+
+    with session_factory() as session:
+        event_store = SqlAlchemyEventStore(session)
+        event_stream = event_store.fetch(stream_id_2)
+        assert len(event_stream.events) == 2
+        assert event_stream.version == 2
+        assert event_stream.events == events[::-1]
+
+    with session_factory() as session:
+        event_store = SqlAlchemyEventStore(session)
+        event_stream = event_store.fetch('Non-existing ID')
+        assert len(event_stream.events) == 0
+        assert event_stream.version == 0
