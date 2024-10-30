@@ -208,8 +208,8 @@ describe('Authentication', () => {
   it('should have access to user data after signin', function () {
     cy.visit('/signin');
     loginUsingUI(this.password, this.email);
-    cy.wait('@signin').its('response.statusCode').should('be.within', 200, 299);
-    cy.wait('@user').then(intercept => {
+
+    cy.wait('@signin').then(intercept => {
       expect(intercept.response?.statusCode).eq(200);
       const body = intercept.response?.body;
       expect(body).to.have.property('user');
