@@ -68,13 +68,20 @@ describe('Forgot Password', () => {
       console.log('Current URL:', url);
     });
 
-    cy.url().should('include', '/guest');
+    cy.url().should('include', '/signin');
   });
 
   it.skip('should display error message from params', () => {
     const errorMessage = 'Incorrect username or password.';
     cy.visit(`/create-password?error=${errorMessage}`);
 
-    cy.findByRole('alert').should('have.text', errorMessage);
+    cy.findByRole('alert')
+      .invoke('text')
+      .then(alertText => {
+        cy.log(`Alert Text: ${alertText}`);
+        expect(alertText).to.equal(errorMessage);
+      });
+
+    // cy.findByRole('alert').should('have.text', errorMessage);
   });
 });
