@@ -71,7 +71,7 @@ describe('Forgot Password', () => {
     cy.url().should('include', '/signin');
   });
 
-  it.skip('should display error message from params', () => {
+  it('should display error message from params', () => {
     const errorMessage = 'Incorrect username or password.';
     cy.visit(`/create-password?error=${errorMessage}`);
 
