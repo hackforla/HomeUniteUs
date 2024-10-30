@@ -52,3 +52,5 @@ describe('Forgot Password', () => {
     cy.url().should('include', '/signin');
   });
 });
+
+// path
