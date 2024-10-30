@@ -63,6 +63,11 @@ describe('Forgot Password', () => {
       });
     });
 
+    cy.url().then(url => {
+      cy.log('Current URL:', url);
+      console.log('Current URL:', url);
+    });
+
     cy.url().should('include', '/guest');
   });
 
