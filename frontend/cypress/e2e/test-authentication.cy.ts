@@ -54,8 +54,10 @@ describe('Authentication', () => {
                   email: 'test@gmail.com',
                   firstName: 'Test',
                   lastName: 'User',
+                  id: 2,
                   role: {
-                    name: 'Guest',
+                    id: 2,
+                    type: 'guest',
                   },
                 },
               }
@@ -82,7 +84,7 @@ describe('Authentication', () => {
           statusCode: getIsSignedIn() ? 200 : 401,
         });
       }).as('refresh');
-      cy.intercept('GET', '/api/auth/user', {
+      cy.intercept('GET', '/api/users/current', {
         statusCode: 200,
         body: {
           token: 'fake.jwt.token',
@@ -96,7 +98,7 @@ describe('Authentication', () => {
       cy.intercept('POST', '/api/auth/signout').as('signout');
       cy.intercept('GET', '/api/auth/session').as('session');
       cy.intercept('GET', '/api/auth/refresh').as('refresh');
-      cy.intercept('GET', '/api/auth/user').as('user');
+      cy.intercept('GET', '/api/users/current').as('user');
     }
   });
 
@@ -206,8 +208,8 @@ describe('Authentication', () => {
   it('should have access to user data after signin', function () {
     cy.visit('/signin');
     loginUsingUI(this.password, this.email);
-    cy.wait('@signin').its('response.statusCode').should('be.within', 200, 299);
-    cy.wait('@user').then(intercept => {
+
+    cy.wait('@signin').then(intercept => {
       expect(intercept.response?.statusCode).eq(200);
       const body = intercept.response?.body;
       expect(body).to.have.property('user');
