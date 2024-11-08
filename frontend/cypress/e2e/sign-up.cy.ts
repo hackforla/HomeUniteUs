@@ -4,20 +4,25 @@ describe('Sign Up', () => {
   beforeEach(() => {
     if (Cypress.env('USE_MOCK')) {
       // While Mocking always return a successful status code
-      cy.intercept('POST', '/api/auth/signup/coordinator', {
+      cy.intercept('POST', '/api/auth/signup', {
         statusCode: 200,
-      }).as('signUpCoordinator');
-
-      cy.intercept('POST', '/api/auth/signup/host', {statusCode: 200}).as(
-        'signUpHost',
-      );
+      }).as('signUp');
     } else {
       // cy.intercept without a request will not stub out the real API call
-      cy.intercept('POST', '/api/auth/signup/coordinator').as(
-        'signUpCoordinator',
-      );
-      cy.intercept('POST', '/api/auth/signup/host').as('signUpHost');
+      cy.intercept('POST', '/api/auth/signup').as('signUp');
     }
+
+    cy.intercept('GET', '/api/auth/session', req => {
+      req.reply({
+        statusCode: 401,
+      });
+    }).as('session');
+
+    cy.intercept('GET', '/api/auth/refresh', req => {
+      req.reply({
+        statusCode: 401,
+      });
+    }).as('refresh');
   });
 
   it('user can sign up as a coordinator', () => {
@@ -25,6 +30,7 @@ describe('Sign Up', () => {
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
       email: faker.internet.email(),
+      role: 'coordinator',
       password: 'Test123!',
     };
 
@@ -38,7 +44,7 @@ describe('Sign Up', () => {
       .should('be.enabled')
       .click();
 
-    cy.url().should('include', '/signup/coordinator');
+    cy.url().should('include', '/signup');
 
     cy.findByRole('button', {name: /sign up/i}).should('be.disabled');
 
@@ -50,9 +56,7 @@ describe('Sign Up', () => {
       .should('be.enabled')
       .click();
 
-    cy.wait('@signUpCoordinator')
-      .its('request.body')
-      .should('deep.equal', user);
+    cy.wait('@signUp').its('request.body').should('deep.equal', user);
 
     cy.url().should('include', `signup/success?email=${user.email}`);
   });
@@ -62,6 +66,7 @@ describe('Sign Up', () => {
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
       email: faker.internet.email(),
+      role: 'host',
       password: 'Test123!',
     };
 
@@ -75,7 +80,7 @@ describe('Sign Up', () => {
       .should('be.enabled')
       .click();
 
-    cy.url().should('include', '/signup/host');
+    cy.url().should('include', '/signup');
 
     cy.findByRole('button', {name: /sign up/i}).should('be.disabled');
 
@@ -87,7 +92,7 @@ describe('Sign Up', () => {
       .should('be.enabled')
       .click();
 
-    cy.wait('@signUpHost').its('request.body').should('deep.equal', user);
+    cy.wait('@signUp').its('request.body').should('deep.equal', user);
 
     cy.url().should('include', `signup/success?email=${user.email}`);
   });

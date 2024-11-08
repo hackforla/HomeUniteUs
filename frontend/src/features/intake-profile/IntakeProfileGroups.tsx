@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import {useFormikContext} from 'formik';
 import {useOutletContext} from 'react-router-dom';
-import {InitialValues} from 'src/pages/intake-profile';
+import {InitialValues} from 'src/pages/intake-profile/IntakeProfile';
 import {AdditionalGuestsField} from './fields/AdditionaGuestsField';
 import {FieldGroup, Fields, Guest, Pet} from 'src/services/profile';
 import {AdditionalPetsField} from './fields/AdditionalPetsField';
@@ -216,20 +216,21 @@ export const RenderFields = ({groupId, field}: RenderFieldProps) => {
       );
     case 'contact_method':
       // eslint-disable-next-line no-case-declarations
-      const {emailFieldId, phoneFieldId} = field.linkedFields;
+      const {emailFieldId, phoneFieldId} = field.linkedFields || {};
       // eslint-disable-next-line no-case-declarations
       let isEmailFilled = false;
       // eslint-disable-next-line no-case-declarations
       let isPhoneFilled = false;
       if (emailFieldId) {
-        // This isn't best practice and can be replaced with validator library to verify email
-        isEmailFilled = Boolean(
-          values[emailFieldId] && /\S+@\S+\.\S+/.test(values[emailFieldId]),
-        );
+        const emailValue = values[emailFieldId];
+        isEmailFilled =
+          typeof emailValue === 'string' && /\S+@\S+\.\S+/.test(emailValue);
       }
       // eslint-disable-next-line no-case-declarations
       if (phoneFieldId) {
-        isPhoneFilled = phoneRegExp.test(values[phoneFieldId]);
+        const phoneValue = values[phoneFieldId];
+        isPhoneFilled =
+          typeof phoneValue === 'string' && phoneRegExp.test(phoneValue);
       }
 
       return (

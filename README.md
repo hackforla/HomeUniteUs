@@ -51,7 +51,7 @@ Building with Docker is the simplest option, and debugging applications within t
 
 1. Build and run all containers by running the `docker compose up -d --build` shell command from the root directory:
 2. Verify there are no build errors. If there are build errors, reach out to the development team.
-3. Open `http://localhost:34828` in any browser to use Home Unite Us.
+3. Open `http://localhost:4040` in any browser to use Home Unite Us.
 
 * `pgAdmin4` is available at http://localhost:5050/browser/ to query the database.
 * `moto` server is available at http://localhost:5000/moto-api/ to view mocked AWS data.

@@ -11,10 +11,10 @@ import {RootState} from '../redux/store';
 // Create base query
 const baseQuery = fetchBaseQuery({
   baseUrl: new URL('/api', location.origin).href,
+
   prepareHeaders: (headers, {getState}) => {
     // get token from state
     const token = (getState() as RootState).auth.token;
-
     // apply authorization token to headers of all requests if token is available
     if (token) {
       headers.set('authorization', `Bearer ${token}`);
