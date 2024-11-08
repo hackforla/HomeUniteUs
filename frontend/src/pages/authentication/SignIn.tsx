@@ -52,11 +52,11 @@ export const SignIn = () => {
         password,
       }).unwrap();
 
-      const {user, token} = response;
+      const {user, access_token: token} = response;
 
       dispatch(setCredentials({user, token}));
 
-      navigate(redirectsByRole[user.role.type]);
+      navigate(redirectsByRole[user.role]);
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
         // you can access all properties of `FetchBaseQueryError` here

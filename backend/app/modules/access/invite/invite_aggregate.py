@@ -68,6 +68,10 @@ class InviteState:
 
         self.invited = True
 
+    def when_UserCreatedDomainEvent(self, event: UserCreatedDomainEvent):
+        """Update the state of an Invite."""
+        pass
+
     def when_InviteAcceptedDomainEvent(self, event: InviteAcceptedDomainEvent):
         """Update state of an Invite."""
         self.accepted_at = event.accepted_at

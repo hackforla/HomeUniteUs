@@ -18,9 +18,8 @@ from app.modules.access.schemas import (
 
 from app.modules.access.crud import create_user, delete_user, get_user
 from app.modules.deps import (SettingsDep, DbSessionDep, CognitoIdpDep,
-                              SecretHashFuncDep, CoordinatorDep,
-                              requires_auth, allow_roles,
-                              role_to_cognito_group_map)
+                              SecretHashFuncDep, CoordinatorDep, requires_auth,
+                              allow_roles, role_to_cognito_group_map)
 
 from app.modules.access.models import EmailAddress
 from app.modules.access.invite.contracts import SendInviteCommand, InviteAlreadySentException, NotInvitedException
@@ -188,7 +187,7 @@ def current_session(request: Request, settings: SettingsDep, db: DbSessionDep,
                                   algorithms=["RS256"],
                                   options={"verify_signature": False})
 
-    user = get_user(db, decoded_id_token['email'])
+    user = get_user(db, EmailAddress(decoded_id_token['email']))
 
     try:
         auth_response = cognito_client.initiate_auth(
@@ -322,7 +321,8 @@ def confirm_forgot_password(
     status_code=202,
     description="Invites a new user to join HUU.",
 )
-def invite(invite_request: InviteRequest, coordinator: CoordinatorDep) -> InviteResponse:
+def invite(invite_request: InviteRequest,
+           coordinator: CoordinatorDep) -> InviteResponse:
     """Invite a new user to join HUU."""
     inviter = coordinator
 
@@ -438,7 +438,7 @@ def new_password(body: NewPasswordRequest, response: Response,
                                   options={"verify_signature": False})
 
     try:
-        user = get_user(db, decoded_id_token['email'])
+        user = get_user(db, EmailAddress(decoded_id_token['email']))
         if user is None:
             raise HTTPException(status_code=404, detail="User not found")
     except Exception as e:

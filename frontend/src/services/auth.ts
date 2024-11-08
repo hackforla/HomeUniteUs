@@ -16,7 +16,8 @@ export interface SignUpRequest {
 
 export interface SignInResponse {
   user: User;
-  token: string;
+  access_token: string;
+  token_type: string;
 }
 
 export interface SignInRequest {
@@ -64,6 +65,12 @@ export interface ResendConfirmationCodeResponse {
 }
 // /auth/resend_confirmation_code
 
+const encodeFormData = data => {
+  return Object.keys(data)
+    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+    .join('&');
+};
+
 const authApi = api.injectEndpoints({
   endpoints: build => ({
     signUp: build.mutation<SignUpResponse, SignUpRequest>({
@@ -75,12 +82,18 @@ const authApi = api.injectEndpoints({
       }),
     }),
     signIn: build.mutation<SignInResponse, SignInRequest>({
-      query: credentials => ({
-        url: 'auth/signin',
-        method: 'POST',
-        withCredentials: true,
-        body: credentials,
-      }),
+      query: credentials => {
+        const {email: username, password} = credentials;
+        return {
+          url: 'auth/signin',
+          method: 'POST',
+          withCredentials: true,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: encodeFormData({username, password, grant_type: 'password'}),
+        };
+      },
     }),
     googleSignUp: build.mutation<TokenResponse, TokenRequest>({
       query: data => {

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
 from .models import UserId, UserRoleEnum
@@ -6,8 +8,8 @@ from .models import UserId, UserRoleEnum
 class UserBase(BaseModel):
     email: EmailStr
     first_name: str
-    middle_name: str | None = None
-    last_name: str | None = None
+    middle_name: Optional[str] = None
+    last_name: str
 
 
 class UserCreate(UserBase):
@@ -55,7 +57,7 @@ class ConfirmForgotPasswordResponse(BaseModel):
 class InviteRequest(BaseModel):
     email: EmailStr
     firstName: str
-    middleName: str
+    middleName: Optional[str] = None
     lastName: str
     role: UserRoleEnum = UserRoleEnum.GUEST
 

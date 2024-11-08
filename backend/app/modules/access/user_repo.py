@@ -1,4 +1,10 @@
-from app.modules.access.models import UserId, User, Role, UserRoleEnum
+import logging
+
+from app.core.interfaces import DomainEvent
+from app.modules.access.models import EmailAddress, UserId, User, UserRoleEnum
+from app.modules.access.invite.contracts import UserCreatedDomainEvent
+
+log = logging.Logger(__name__)
 
 
 class UserRepository:
@@ -6,17 +12,34 @@ class UserRepository:
     def __init__(self, session_factory):
         self.session_factory = session_factory
 
+    def mutate(self, domain_event: DomainEvent):
+        """Update the projection based on the domain event."""
+        method = getattr(self, 'when_' + domain_event.__class__.__name__)
+        if method:
+            method(domain_event)
+        else:
+            log.warn(
+                f"when_{domain_event.__class__.__name__} not implemented.")
+
+    def when_UserCreatedDomainEvent(self, e: UserCreatedDomainEvent):
+        """Update users."""
+        if not self.get_user_by_id(e.user_id):
+            self.add_user(e.user_id, e.email, e.role, e.first_name,
+                          e.middle_name, e.last_name)
+
     def add_user(self,
-                 email: str,
+                 user_id: UserId,
+                 email: EmailAddress,
                  role: UserRoleEnum,
-                 firstName: str,
-                 middleName: str = None,
-                 lastName: str = None) -> User:
-        new_user = User(email=email,
-                        firstName=firstName,
-                        middleName=middleName,
-                        lastName=lastName,
-                        role=role.value)
+                 first_name: str,
+                 middle_name: str = None,
+                 last_name: str = None) -> User:
+        new_user = User(user_id=user_id,
+                        email=email,
+                        first_name=first_name,
+                        middle_name=middle_name,
+                        last_name=last_name,
+                        role=role)
         with self.session_factory.begin() as session:
             session.add(new_user)
 

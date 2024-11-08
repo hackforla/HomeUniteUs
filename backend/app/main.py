@@ -15,6 +15,7 @@ from app.modules.access.user_repo import UserRepository
 from app.modules.access.invite.contracts import (
     SendInviteCommand, ProcessSentInviteCommand, FailedSentInviteCommand,
     SendInviteRequestedDomainEvent, InviteSentDomainEvent,
+    UserCreatedDomainEvent,
     InviteAcceptedDomainEvent, InviteSentFailedDomainEvent)
 from app.modules.access.invite.application_service import InviteService
 from app.modules.access.invite.processor import CognitoInviteUserProcessor
@@ -54,6 +55,7 @@ message_bus.EVENT_HANDLERS = {
         CognitoInviteUserProcessor(cognito_client, settings),
     ],
     InviteSentDomainEvent: [dashboard_users_projection],
+    UserCreatedDomainEvent: [user_repo],
     InviteAcceptedDomainEvent: [],
     InviteSentFailedDomainEvent: [dashboard_users_projection],
 }
