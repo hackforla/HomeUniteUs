@@ -19,19 +19,23 @@ import {
 } from '../../services/coordinator';
 import {
   GuestInviteButton,
-  LoadingComponent,
+  //  LoadingComponent,
 } from '../../features/coordinator-dashboard';
 
 const columns: GridColDef[] = [
   {
-    field: 'userName',
+    field: 'name',
     headerName: 'Applicant',
     flex: 1,
   },
-  {field: 'userType', headerName: 'Type'},
-  {field: 'caseStatus', headerName: 'Status'},
-  {field: 'coordinatorName', headerName: 'Coordinator', flex: 1},
-  {field: 'lastUpdated', headerName: 'Updated', flex: 1},
+  {
+    field: 'role',
+    headerName: 'Type',
+    renderCell: params => params.value.toUpperCase(),
+  },
+  {field: 'status', headerName: 'Status', flex: 1},
+  {field: 'coordinator_name', headerName: 'Coordinator', flex: 1},
+  {field: 'updated', headerName: 'Updated', flex: 1},
   {
     field: 'notes',
     headerName: 'Notes',
@@ -59,20 +63,20 @@ export const CoordinatorDashboard = () => {
     if (value === 0) {
       return row;
     } else if (value === 1) {
-      return row.userType === 'GUEST';
+      return row.role === 'guest';
     } else if (value === 2) {
-      return row.userType === 'HOST';
+      return row.role === 'host';
     }
   });
 
   const totalAppUsers = dashboardDataItems.filter(
-    row => ['GUEST', 'HOST'].indexOf(row.userType) >= 0,
+    row => ['guest', 'host'].indexOf(row.role) >= 0,
   ).length;
   const totalGuests = dashboardDataItems.filter(
-    row => row.userType === 'GUEST',
+    row => row.role === 'guest',
   ).length;
   const totalHosts = dashboardDataItems.filter(
-    row => row.userType === 'HOST',
+    row => row.role === 'host',
   ).length;
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -163,6 +167,7 @@ export const CoordinatorDashboard = () => {
           disableRowSelectionOnClick
           rows={dashboardData ? dashboardData : []}
           columns={columns}
+          getRowId={row => row.user_id != -1 || row.email}
           initialState={{
             pagination: {
               paginationModel: {
@@ -172,7 +177,6 @@ export const CoordinatorDashboard = () => {
           }}
           slots={{
             pagination: CustomPagination,
-            noRowsOverlay: LoadingComponent,
           }}
           sx={{
             height: '538.75px',

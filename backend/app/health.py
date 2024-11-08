@@ -1,4 +1,4 @@
-from backend.app.modules.deps import SettingsDep
+from app.modules.deps import SettingsDep
 from fastapi import APIRouter, status, HTTPException
 from fastapi.responses import JSONResponse
 

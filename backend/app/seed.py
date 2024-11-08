@@ -3,10 +3,10 @@ from sqlalchemy import event
 from app.modules.access.models import Role
 
 INITIAL_ROLES = [
-    {"type": "admin"},
-    {"type": "guest"},
-    {"type": "host"},
-    {"type": "coordinator"},
+    {"role": "admin"},
+    {"role": "guest"},
+    {"role": "host"},
+    {"role": "coordinator"},
 ]
 
 

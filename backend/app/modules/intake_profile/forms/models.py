@@ -7,7 +7,9 @@ from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
 from sqlalchemy.schema import CheckConstraint
 from sqlalchemy.sql import func
+
 from app.core.db import Base
+from app.modules.access.models import UserId
 
 intpk = Annotated[int, mapped_column(primary_key=True)]
 
@@ -73,7 +75,7 @@ class Field(Base):
 class Response(Base):
     __tablename__ = 'responses'
     answer_id: Mapped[intpk]
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'), nullable=False)
+    user_id: Mapped[UserId] = mapped_column(ForeignKey('users.user_id'), nullable=False)
     field_id: Mapped[int] = mapped_column(ForeignKey('fields.field_id'),
                                           nullable=False)
     answer_text: Mapped[str]

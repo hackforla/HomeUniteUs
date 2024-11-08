@@ -7,13 +7,22 @@ from urllib.parse import urlparse
 def create_user(cognito_client, user_pool_id, email, group):
     """Create users in moto server cognitoidp preventing duplicates."""
     try:
-        cognito_client.admin_get_user(UserPoolId=user_pool_id, Username=email)
+        response = cognito_client.admin_get_user(UserPoolId=user_pool_id, Username=email)
+        sub = [s['Value'] for s in response['UserAttributes'] if s['Name'] == 'sub']
+        if len(sub) == 0:
+            raise Exception('No sub found.')
+        return sub[0]
     except Exception:
         # The exception means the user doesn't exist so it can now be created.
-        cognito_client.admin_create_user(UserPoolId=user_pool_id,
-                                         Username=email,
-                                         TemporaryPassword="Test123!",
-                                         MessageAction='SUPPRESS')
+        response = cognito_client.admin_create_user(
+            UserPoolId=user_pool_id,
+            Username=email,
+            TemporaryPassword="Test123!",
+            MessageAction='SUPPRESS')
+
+        sub = [s['Value'] for s in response['User']['Attributes'] if s['Name'] == 'sub']
+        if len(sub) == 0:
+            raise Exception('No sub found.')
 
         cognito_client.admin_confirm_sign_up(UserPoolId=user_pool_id,
                                              Username=email)
@@ -23,6 +32,8 @@ def create_user(cognito_client, user_pool_id, email, group):
             Username=email,
             GroupName=group,
         )
+
+        return sub[0]
 
 
 def create_group(groups, group, user_pool_id):
@@ -52,27 +63,29 @@ if __name__ == '__main__':
     create_group(groups, 'Coordinators', user_pool_id)
 
     rows = []
-    create_user(cognito_client, user_pool_id, 'admin@example.com', 'Admins')
-    print('admin@example.com/Test123! created.')
-    rows.append(('admin@example.com', 'admin', 'admin', 1))
+    user_id = create_user(cognito_client, user_pool_id, 'admin@example.com', 'Admins')
+    print(f'{user_id}/admin@example.com/Test123! created.')
+    rows.append(
+        (user_id, 'admin@example.com', 'admin', 'admin', 'admin'))
 
-    for role, role_id, group in [
-        ('guest', 2, 'Guests'),
-        ('coordinator', 3, 'Coordinators'),
-        ('host', 4, 'Hosts'),
+    for role, group in [
+        ('guest', 'Guests'),
+        ('coordinator', 'Coordinators'),
+        ('host', 'Hosts'),
     ]:
         for x in 'abcdefghijklmnopqrstuvwxyz':
             email = role + x + '@example.com'
+            user_id = create_user(cognito_client, user_pool_id, email, group)
             rows.append((
+                user_id,
                 email,
                 role,
                 x,
-                role_id,
+                role,
             ))
-            create_user(cognito_client, user_pool_id, email, group)
-            print(email + '/Test123! created.')
+            print(f'{user_id}/{email}/Test123! created.')
 
-    sql = 'INSERT INTO public.user (email, "firstName", "lastName", "roleId") VALUES (%s, %s, %s, %s) ON CONFLICT(email) DO NOTHING'
+    sql = 'INSERT INTO public.users (user_id, email, first_name, last_name, role) VALUES (%s, %s, %s, %s, %s) ON CONFLICT(email) DO UPDATE SET user_id = EXCLUDED.user_id'
     url = urlparse(os.environ['DATABASE_URL'])
     with psycopg2.connect(database=url.path[1:],
                           user=url.username,

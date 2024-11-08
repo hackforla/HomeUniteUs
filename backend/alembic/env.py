@@ -8,7 +8,9 @@ import app.modules.onboarding.models
 import app.modules.matching.models
 import app.modules.relationship_management.models
 import app.modules.tenant_housing_orgs.models
-import app.modules.workflow.models
+# import app.modules.workflow.models
+import app.projections.dashboard_users_view
+import app.core.sa_event_store
 
 from logging.config import fileConfig
 

@@ -8,11 +8,11 @@ def get_role(db: Session, role: int):
     return db.query(models.Role).filter(models.Role.type == role.value).first()
 
 
-def get_user(db: Session, email: str):
+def get_user(db: Session, email: models.EmailAddress):
     return db.query(models.User).filter(models.User.email == email).first()
 
-def get_user_by_id(db: Session, user_id: int):
-    return db.query(models.User).filter(models.User.id == user_id).first()
+def get_user_by_id(db: Session, user_id: models.UserId):
+    return db.query(models.User).filter(models.User.user_id == user_id).first()
 
 def create_user(db: Session, user: schemas.UserCreate):
     role = get_role(db, user.role)
