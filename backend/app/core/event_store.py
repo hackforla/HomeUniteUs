@@ -7,27 +7,28 @@ from typing import Any, Protocol
 
 from .interfaces import Identity, DomainEvent
 
+
 class AppendOnlyStoreConcurrencyException(Exception):
     pass
-
-
-class EventStore(Protocol):
-    """Abstraction for something that stores domain events."""
-
-    @abstractmethod
-    def fetch(self, stream_id: Identity) -> list[DomainEvent]:
-        raise NotImplementedError
-
-    @abstractmethod
-    def append(self, stream_id: Identity, new_events: list[DomainEvent],
-               expected_version: int):
-        raise NotImplementedError
 
 
 @dataclass
 class DomainEventStream:
     version: int
     events: list[DomainEvent]
+
+
+class EventStore(Protocol):
+    """Abstraction for something that stores domain events."""
+
+    @abstractmethod
+    def fetch(self, stream_id: Identity) -> DomainEventStream:
+        raise NotImplementedError
+
+    @abstractmethod
+    def append(self, stream_id: Identity, new_events: list[DomainEvent],
+               expected_version: int):
+        raise NotImplementedError
 
 
 class InMemoryEventStore:

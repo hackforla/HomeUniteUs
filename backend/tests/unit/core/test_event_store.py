@@ -1,5 +1,7 @@
 from dataclasses import dataclass
-from typing import Any
+from datetime import datetime
+from decimal import Decimal
+import uuid
 
 from app.core.event_store import DomainEvent, InMemoryEventStore
 from app.core.sa_event_store import SqlAlchemyEventStore
@@ -8,23 +10,30 @@ from app.core.sa_event_store import SqlAlchemyEventStore
 @dataclass(frozen=True)
 class Event1(DomainEvent):
     test: str
-
-    @classmethod
-    def from_dict(cls, data: dict[str, Any]):
-        return cls(test=data['test'])
+    date: datetime
+    id: uuid.UUID
+    values: set
+    amount: Decimal
+    complex_num: complex
+    data: bytes
 
 
 @dataclass(frozen=True)
 class Event2(DomainEvent):
     test: int
 
-    @classmethod
-    def from_dict(cls, data: dict[str, Any]):
-        return cls(test=int(data['test']))
-
 
 def test_in_memory_event_store():
-    events = [Event1("x"), Event2(1)]
+    events = [
+        Event1(test="x",
+               date=datetime.now(),
+               id=uuid.uuid4(),
+               values=set([1, 2, 3]),
+               amount=Decimal("2.34"),
+               complex_num=complex("1+2j"),
+               data="test".encode("utf8")),
+        Event2(test=1)
+    ]
     stream_id = "test-stream"
 
     event_store = InMemoryEventStore()
@@ -47,7 +56,16 @@ def test_in_memory_event_store():
 
 
 def test_sqlalchemy_event_store(session_factory):
-    events = [Event1("x"), Event2(1)]
+    events = [
+        Event1(test="x",
+               date=datetime.now(),
+               id=uuid.uuid4(),
+               values=set([1, 2, 3]),
+               amount=Decimal("2.34"),
+               complex_num=complex("1+2j"),
+               data="test".encode("utf8")),
+        Event2(test=1)
+    ]
     stream_id_1 = "test-stream-1"
     stream_id_2 = "test-stream-2"
 

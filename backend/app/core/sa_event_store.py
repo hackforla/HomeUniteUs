@@ -1,6 +1,7 @@
 """This module implements a SQLAlchemy-backed Event Store."""
 from datetime import datetime, timezone
 import importlib
+import json
 import uuid
 
 from sqlalchemy import String, Integer, DateTime, JSON, func, select
@@ -9,8 +10,9 @@ from sqlalchemy.orm import Session, mapped_column, Mapped
 
 from app.core.db import Base
 from app.core.interfaces import Identity
-from .event_store import (AppendOnlyStoreConcurrencyException, DomainEvent,
-                          DomainEventStream)
+from app.core.event_store import (AppendOnlyStoreConcurrencyException,
+                                  DomainEvent, DomainEventStream)
+import app.core.message_bus as message_bus
 
 
 class EventStreamEntry(Base):
@@ -43,13 +45,13 @@ class EventStreamEntry(Base):
 class SqlAlchemyEventStore:
     """Implementation of an Event Store backed by SQLAlchemy."""
 
-    def __init__(self, session: Session):
-        """Instantiate the Event Store using a SQLAlchemy session."""
-        if session is None:
+    def __init__(self, session_factory: Session):
+        """Instantiate the Event Store using a SQLAlchemy Session factory."""
+        if session_factory is None:
             raise ValueError(
-                "A Session is required to construct this Event Store.")
+                "A Session factory is required to construct this Event Store.")
 
-        self.session = session
+        self.session_factory = session_factory
 
     def fetch(self, stream_id: Identity) -> DomainEventStream:
         """Fetch the event stream for the given stream."""
@@ -57,9 +59,10 @@ class SqlAlchemyEventStore:
 
         statement = select(EventStreamEntry.stream_version,
                            EventStreamEntry.event_data).filter_by(
-                               stream_id=stream_id).order_by(
+                               stream_id=str(stream_id)).order_by(
                                    EventStreamEntry.stream_version)
-        stream_entries = self.session.execute(statement).all()
+        with self.session_factory() as session:
+            stream_entries = session.execute(statement).all()
 
         for stream_version, event_data in stream_entries:
             stream.version = stream_version
@@ -76,36 +79,39 @@ class SqlAlchemyEventStore:
         the given stream. This means that another process has already
         updated the stream's events.
         """
-        statement = select(func.max(
-            EventStreamEntry.stream_version)).filter_by(
-                stream_id=str(stream_id))
-        version = self.session.scalars(statement).one_or_none()
+        with self.session_factory() as session:
+            statement = select(func.max(
+                EventStreamEntry.stream_version)).filter_by(
+                    stream_id=str(stream_id))
+            version = session.scalars(statement).one_or_none()
 
-        if version is None:
-            version = 0
-        if version != expected_version:
-            raise AppendOnlyStoreConcurrencyException(
-                f"version={version}, expected={expected_version}, stream_id={stream_id}"
-            )
+            if version is None:
+                version = 0
+            if version != expected_version:
+                raise AppendOnlyStoreConcurrencyException(
+                    f"version={version}, expected={expected_version}, stream_id={stream_id}"
+                )
 
-        stream_entries = [
-            EventStreamEntry(
-                stream_id=str(stream_id),
-                stream_version=version + inc,
-                event_data=e.to_dict(),
-                meta_data={},
-                stored_at=datetime.now(tz=timezone.utc),
-            ) for inc, e in enumerate(new_events, start=1)
-        ]
+            stream_entries = [
+                EventStreamEntry(
+                    stream_id=str(stream_id),
+                    stream_version=version + inc,
+                    event_data=e.to_dict(),
+                    meta_data={},
+                    stored_at=datetime.now(tz=timezone.utc),
+                ) for inc, e in enumerate(new_events, start=1)
+            ]
 
-        self.session.add_all(stream_entries)
-        try:
-            self.session.commit()
-        except IntegrityError:
-            self.session.rollback()
-            raise ValueError(
-                "Failed to append events due to database integrity error (likely a version conflict)."
-            )
+            session.add_all(stream_entries)
+            try:
+                session.commit()
+                for e in new_events:
+                    message_bus.handle(e)
+            except IntegrityError:
+                session.rollback()
+                raise AppendOnlyStoreConcurrencyException(
+                    "Failed to append events due to database integrity error (likely a version conflict)."
+                )
 
     def _deserialize_event(self, event_data):
         """Convert a dictionary back to the correct event class."""

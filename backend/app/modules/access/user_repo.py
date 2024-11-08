@@ -1,54 +1,51 @@
-from app.modules.access.models import User, Role
-from app.modules.access.user_roles import UserRole
+from app.modules.access.models import UserId, User, Role, UserRoleEnum
 
 
 class UserRepository:
 
-    def __init__(self, session):
-        self.session = session
-
-    def _get_role(self, role: UserRole) -> Role:
-        db_role = self.session.query(Role).filter_by(type=role.value).first()
-        if not db_role:
-            raise ValueError(f"{role.value} is not a valid user role type")
-        return db_role
+    def __init__(self, session_factory):
+        self.session_factory = session_factory
 
     def add_user(self,
                  email: str,
-                 role: UserRole,
+                 role: UserRoleEnum,
                  firstName: str,
                  middleName: str = None,
                  lastName: str = None) -> User:
-        new_role = self._get_role(role)
         new_user = User(email=email,
                         firstName=firstName,
                         middleName=middleName,
                         lastName=lastName,
-                        roleId=new_role.id)
-        self.session.add(new_user)
-        self.session.commit()
+                        role=role.value)
+        with self.session_factory.begin() as session:
+            session.add(new_user)
 
         return new_user
 
-    def delete_user(self, user_id: int) -> bool:
-        user = self.session.query(User).filter_by(id=user_id).first()
-        if user:
-            self.session.delete(user)
-            self.session.commit()
-            return True
-        return False
+    def delete_user(self, user_id: UserId) -> bool:
+        with self.session_factory.begin() as session:
+            user = session.query(User).filter_by(user_id=user_id).first()
+            if user:
+                session.delete(user)
+                return True
+            return False
 
-    def get_user_by_id(self, id: int) -> User:
-        return self.session.query(User).filter_by(id=id).first()
+    def get_user_by_id(self, id: UserId) -> User:
+        with self.session_factory() as session:
+            return session.query(User).filter_by(user_id=id).first()
 
     def get_user(self, email: str) -> User:
-        return self.session.query(User).filter_by(email=email).first()
+        with self.session_factory() as session:
+            return session.query(User).filter_by(email=email).first()
 
     def get_all_users(self) -> list[User]:
-        return self.session.query(User).all()
+        with self.session_factory() as session:
+            return session.query(User).all()
 
-    def get_user_id(self, email: str) -> int:
-        return self.session.query(User).filter_by(email=email).first().id
+    def get_user_id(self, email: str) -> UserId:
+        with self.session_factory() as session:
+            return session.query(User).filter_by(email=email).first().user_id
 
-    def get_users_with_role(self, role: UserRole) -> list[User]:
-        return self.session.query(User).filter_by(role=self._get_role(role))
+    def get_users_with_role(self, role: UserRoleEnum) -> list[User]:
+        with self.session_factory() as session:
+            return session.query(User).filter_by(role=role.value)

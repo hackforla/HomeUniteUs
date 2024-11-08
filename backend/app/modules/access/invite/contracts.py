@@ -1,80 +1,126 @@
 """The identities, classes, value objects that make up the Invite contracts."""
 from app.core.interfaces import Identity, DomainCommand, DomainEvent
+from ..models import EmailAddress, UserId
 from ..schemas import UserRoleEnum
 
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any
 
 
 @dataclass(frozen=True)
 class InviteId(Identity):
     """The identity of an Invite."""
 
-    id: str
+    id: EmailAddress
 
     def __str__(self):
         """Represent Invite ID as a string."""
         return f"invite-{self.id}"
 
 
+###############################################################################
+# Domain Commands
+###############################################################################
+
+
+@dataclass
 class SendInviteCommand(DomainCommand):
     """Command with data needed to send an Invite."""
 
-    full_name: str
-    email: str
+    first_name: str
+    middle_name: str | None
+    last_name: str
+    email: EmailAddress
     invitee_role: UserRoleEnum
-    inviter_id: str
+    inviter_id: Identity
     inviter_role: UserRoleEnum
+    requested_at: datetime
+
+
+@dataclass
+class ProcessSentInviteCommand(DomainCommand):
+    """Command to process a sent invite."""
+
+    user_id: UserId
+    email: EmailAddress
     sent_at: datetime
+
+
+@dataclass
+class FailedSentInviteCommand(DomainCommand):
+    """Command to indicate failed to send an invite."""
+
+    email: EmailAddress
+    reason: str
+
+
+###############################################################################
+# Domain Events
+###############################################################################
 
 
 @dataclass
 class SendInviteRequestedDomainEvent(DomainEvent):
     """An Invite domain event."""
 
-    email: str
-    full_name: str
+    email: EmailAddress
+    first_name: str
+    middle_name: str | None
+    last_name: str
     invitee_role: UserRoleEnum
     inviter_id: str
+    inviter_first_name: str
+    inviter_middle_name: str | None
+    inviter_last_name: str
     inviter_role: UserRoleEnum
-    sent_at: datetime
+    requested_at: datetime
     expire_at: datetime
-
-    @classmethod
-    def from_dict(cls, data: dict[str, Any]):
-        """Deserialize from dict to the correct event class."""
-        sent_at = datetime.fromisoformat(data['sent_at'])
-        expire_at = datetime.fromisoformat(data['expire_at'])
-        return cls(full_name=data['full_name'],
-                   email=data['email'],
-                   invitee_role=data['invitee_role'],
-                   inviter_id=data['inviter_id'],
-                   inviter_role=data['inviter_role'],
-                   sent_at=sent_at,
-                   expire_at=expire_at)
 
 
 @dataclass
 class InviteSentDomainEvent(DomainEvent):
     """An Invite domain event."""
 
-    email: str
-    full_name: str
-    expire_at: datetime
+    user_id: UserId
+    email: EmailAddress
+    first_name: str
+    middle_name: str | None
+    last_name: str
+    role: UserRoleEnum
+    inviter_id: UserId
+    sent_at: datetime
+
+
+@dataclass
+class UserCreatedDomainEvent(DomainEvent):
+    """An Invite domain event."""
+
+    user_id: UserId
+    email: EmailAddress
+    first_name: str
+    middle_name: str | None
+    last_name: str
+    role: UserRoleEnum
 
 
 @dataclass
 class InviteAcceptedDomainEvent(DomainEvent):
     """An Invite was accepted domain event."""
 
-    email: str
+    email: EmailAddress
     accepted_at: datetime
 
-    @classmethod
-    def from_dict(cls, data: dict[str, Any]):
-        """Deserialize from dict to the correct event class."""
-        return cls(email=data['email'], accepted_at=data['accepted_at'])
+
+@dataclass
+class InviteSentFailedDomainEvent(DomainEvent):
+    """An Invite failed to send."""
+
+    email: EmailAddress
+
+
+###############################################################################
+# Exceptions
+###############################################################################
 
 
 class InviteAlreadySentException(Exception):

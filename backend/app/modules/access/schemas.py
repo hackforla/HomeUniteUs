@@ -1,27 +1,13 @@
-from pydantic import BaseModel, ConfigDict, EmailStr
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
-from enum import Enum
-
-
-class UserRoleEnum(str, Enum):
-    ADMIN = "admin"
-    GUEST = "guest"
-    HOST = "host"
-    COORDINATOR = "coordinator"
-
-
-class RoleBase(BaseModel):
-    id: int
-    type: UserRoleEnum
-
-    model_config = ConfigDict(from_attributes=True)
+from .models import UserId, UserRoleEnum
 
 
 class UserBase(BaseModel):
     email: EmailStr
-    firstName: str
-    middleName: str | None = None
-    lastName: str | None = None
+    first_name: str
+    middle_name: str | None = None
+    last_name: str | None = None
 
 
 class UserCreate(UserBase):
@@ -30,8 +16,8 @@ class UserCreate(UserBase):
 
 
 class User(UserBase):
-    id: int
-    role: RoleBase
+    id: str = Field(alias="user_id")
+    role: UserRoleEnum
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -43,7 +29,9 @@ class UserSignInRequest(BaseModel):
 
 class UserSignInResponse(BaseModel):
     user: User
-    token: str
+    access_token: str
+    id_token: str
+    token_type: str
 
 
 class RefreshTokenResponse(BaseModel):
@@ -69,49 +57,25 @@ class InviteRequest(BaseModel):
     firstName: str
     middleName: str
     lastName: str
+    role: UserRoleEnum = UserRoleEnum.GUEST
+
+
+class InviteResponse(BaseModel):
+    message: str
+    status: str
+
 
 class Cookies(BaseModel):
-    refresh_token: str 
-    id_token: str 
+    refresh_token: str
+    id_token: str
+
 
 class ConfirmInviteRequest(BaseModel):
     email: str
     password: str
 
+
 class NewPasswordRequest(BaseModel):
     userId: str
     password: str
     sessionId: str
-
-
-# class SmartNested(Nested):
-#     '''
-#     Schema attribute used to serialize nested attributes to
-#     primary keys, unless they are already loaded. This
-#     enables serialization of complex nested relationships.
-#     Modified from
-#     https://marshmallow-sqlalchemy.readthedocs.io/en/latest/recipes.html#smart-nested-field
-#     '''
-
-#     def serialize(self, attr, obj, accessor=None):
-#         if hasattr(obj, attr):
-#             value = getattr(obj, attr, None)
-#             if value is None:
-#                 return None
-#             elif hasattr(value, 'id'):
-#                 return {"id": value.id}
-#             else:
-#                 return super(SmartNested, self).serialize(attr, obj, accessor)
-#         else:
-#             raise AttributeError(
-#                 f"{obj.__class__.__name__} object has no attribute '{attr}'")
-
-# class RoleSchema(BaseModel):
-
-#     model_config = ConfigDict(from_attributes=True)
-
-# class UserSchema(BaseModel):
-#     model_config = ConfigDict(from_attributes=True)
-
-# user_schema = UserSchema()
-# users_schema = UserSchema(many=True)

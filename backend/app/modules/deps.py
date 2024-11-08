@@ -1,17 +1,27 @@
 import boto3
+from dataclasses import dataclass, field
+from datetime import timedelta
 import jwt
+from jwt.exceptions import InvalidTokenError
 import time
 import hmac
 import base64
-
 from typing import Annotated, Any, Callable
 
-from fastapi import Depends, Request, HTTPException
-from fastapi.security import SecurityScopes
+from fastapi import Depends, Request, HTTPException, Security, status
+from fastapi.security import (
+    OAuth2PasswordBearer,
+    SecurityScopes,
+)
 from sqlalchemy.orm import Session
 
 import app.core.db as db
 import app.core.config as config
+from app.core.event_store import EventStore
+import app.core.sa_event_store as sa_event_store
+from app.modules.access.crud import get_user_by_id
+from app.modules.access.models import UserId, User, UserRoleEnum
+from app.modules.access.invite.application_service import InviteService
 
 ################################################################################
 # Loading forms JSON description from disk
@@ -35,6 +45,8 @@ def get_form_2():
         with open("form_data/form2.json", "r") as f:
             FORM_2 = json.load(f)
     return FORM_2
+
+
 ################################################################################
 
 SettingsDep = Annotated[config.Settings, Depends(config.get_settings)]
@@ -59,14 +71,19 @@ def db_session(engine: DbEngineDep):
 DbSessionDep = Annotated[Session, Depends(db_session)]
 
 
+def event_store(db_session: DbSessionDep):
+    return sa_event_store.SqlAlchemyEventStore(db_session)
+
+
+EventStoreDep = Annotated[EventStore, Depends(event_store)]
+
+
 def get_cognito_client(settings: SettingsDep):
-    return boto3.client(
-        "cognito-idp",
-        region_name=settings.COGNITO_REGION,
-        aws_access_key_id=settings.COGNITO_ACCESS_ID,
-        aws_secret_access_key=settings.COGNITO_ACCESS_KEY,
-        endpoint_url=settings.COGNITO_ENDPOINT_URL
-    )
+    return boto3.client("cognito-idp",
+                        region_name=settings.COGNITO_REGION,
+                        aws_access_key_id=settings.COGNITO_ACCESS_ID,
+                        aws_secret_access_key=settings.COGNITO_ACCESS_KEY,
+                        endpoint_url=settings.COGNITO_ENDPOINT_URL)
 
 
 CognitoIdpDep = Annotated[Any, Depends(get_cognito_client)]
@@ -140,3 +157,106 @@ def secret_hash_func(settings: SettingsDep):
 
 
 SecretHashFuncDep = Annotated[Callable, Depends(secret_hash_func)]
+
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl="api/auth/signin",
+    scopes={
+        "me": "Read information about the current user.",
+    },
+)
+
+
+@dataclass
+class TokenData:
+    user_id: UserId | None = None
+    scopes: list[str] = field(default_factory=list)
+
+
+def get_current_user(security_scopes: SecurityScopes,
+                     token: Annotated[str, Depends(oauth2_scheme)],
+                     db_session: DbSessionDep):
+    if security_scopes.scopes:
+        authenticate_value = f'Bearer scope="{security_scopes.scope_str}"'
+    else:
+        authenticate_value = "Bearer"
+
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": authenticate_value},
+    )
+
+    try:
+        payload = jwt.decode(token,
+                             algorithms=["RS256"],
+                             options={"verify_signature": False})
+    except InvalidTokenError:
+        raise credentials_exception
+
+    sub: str = payload.get("sub")
+    if sub is None:
+        raise credentials_exception
+
+    token_scopes = payload.get("scopes", [])
+    token_data = TokenData(scopes=token_scopes, user_id=UserId(sub))
+
+    user = get_user_by_id(db_session, token_data.user_id)
+    if user is None:
+        raise credentials_exception
+
+    for scope in security_scopes.scopes:
+        if scope not in token_data.scopes:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Not enough permissions",
+                headers={"WWW-Authenticate": authenticate_value},
+            )
+    return user
+
+
+def get_current_active_user(
+        current_user: Annotated[User,
+                                Security(get_current_user, scopes=[])]):
+    if current_user.disabled:
+        raise HTTPException(status_code=400, detail="Inactive user")
+    return current_user
+
+
+def get_current_active_coordinator(
+        current_user: Annotated[User, Depends(get_current_active_user)]):
+    if UserRoleEnum(current_user.role) is not UserRoleEnum.COORDINATOR:
+        raise HTTPException(status_code=400, detail="Not a coordinator")
+    return current_user
+
+
+CoordinatorDep = Annotated[User, Depends(get_current_active_coordinator)]
+
+
+def get_current_active_guest(
+        current_user: Annotated[User, Depends(get_current_active_user)]):
+    if UserRoleEnum(current_user.role) is not UserRoleEnum.GUEST:
+        raise HTTPException(status_code=400, detail="Not a guest")
+    return current_user
+
+
+GuestDep = Annotated[User, Depends(get_current_active_guest)]
+
+
+def get_current_active_host(
+        current_user: Annotated[User, Depends(get_current_active_user)]):
+    if UserRoleEnum(current_user.role) is not UserRoleEnum.HOST:
+        raise HTTPException(status_code=400, detail="Not a host")
+    return current_user
+
+
+HostDep = Annotated[User, Depends(get_current_active_host)]
+
+
+def get_current_active_admin(
+        current_user: Annotated[User, Depends(get_current_active_user)]):
+    if UserRoleEnum(current_user.role) is not UserRoleEnum.ADMIN:
+        raise HTTPException(status_code=400, detail="Not a admin")
+    return current_user
+
+
+AdminDep = Annotated[User, Depends(get_current_active_admin)]
