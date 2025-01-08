@@ -60,6 +60,7 @@ export const SignIn = () => {
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
         // you can access all properties of `FetchBaseQueryError` here
+        console.log('signin.tsx', err);
         const errMsg =
           err.data?.message || 'An unexpected error occured in Sign In';
         setErrorMessage(errMsg);

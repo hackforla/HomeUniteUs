@@ -29,6 +29,7 @@ export function isErrorWithMessage(error: unknown): error is {message: string} {
 export function getErrorMessage(err: unknown): string {
   if (isFetchBaseQueryError(err)) {
     // you can access all properties of `FetchBaseQueryError` here
+    console.log('helpers.ts', err);
     const errMsg = err.data?.message || 'An unexpected error occurred.';
     return errMsg;
   }

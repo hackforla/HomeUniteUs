@@ -172,10 +172,10 @@ def current_session(
                     db: DbSessionDep,
                     cognito_client: CognitoIdpDep,
                     calc_secret_hash: SecretHashFuncDep):
-
+    
     id_token = request.cookies.get('id_token')
     refresh_token = request.cookies.get('refresh_token')
-
+    print('session endpoint', request)
     if None in (refresh_token, id_token):
         raise HTTPException(status_code=401,
                             detail="Missing refresh token or id token")
@@ -217,7 +217,8 @@ def refresh(request: Request,
             calc_secret_hash: SecretHashFuncDep):
     refresh_token = request.cookies.get('refresh_token')
     id_token = request.cookies.get('id_token')
-
+    print('REFRESH ENDPOINT', request)
+    print('REFRESH TOKEN',refresh_token, 'ID TOKEN', id_token)
     if None in (refresh_token, id_token):
         raise HTTPException(status_code=401,
                             detail="Missing refresh token or id token")
@@ -318,7 +319,8 @@ def invite(body: InviteRequest,
     
     id_token = request.cookies.get('id_token')
     refresh_token = request.cookies.get('refresh_token')
-
+    print('invite endpoint', request)
+    print('id', id_token, 'refresh', refresh_token)
     if None in (refresh_token, id_token):
         raise HTTPException(status_code=401,
                             detail="Missing refresh token or id token")
