@@ -36,6 +36,24 @@ interface ErrorDisplayState {
   };
 }
 
+export interface AuthErrorResponse {
+  detail: {
+    code: string;
+    message: string;
+  };
+}
+
+const isAuthError = (error: unknown): error is AuthErrorResponse => {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'detail' in error &&
+    typeof error.detail === 'object' &&
+    error.detail !== null &&
+    'code' in error.detail
+  );
+};
+
 export const SignIn = () => {
   const [oAuthError, setOAuthError] = React.useState('');
   const [errorState, setErrorState] = React.useState<ErrorDisplayState>({
@@ -87,14 +105,14 @@ export const SignIn = () => {
       dispatch(setCredentials({user, token}));
       navigate(redirectsByRole[user.role.type]);
     } catch (err) {
-      if (isFetchBaseQueryError(err)) {
+      if (isFetchBaseQueryError(err) && isAuthError(err.data)) {
         // TODO: remove this information after debugging is complete. error codes should only be on server
         console.error('Sign in error:', {
-          code: err.data?.code,
+          code: err.data.detail.code,
           error: err,
         });
 
-        switch (err.data?.code) {
+        switch (err.data.detail.code) {
           case 'AUTH001':
           case 'AUTH002':
             setErrorState({
