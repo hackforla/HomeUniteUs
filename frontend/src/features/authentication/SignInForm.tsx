@@ -12,13 +12,25 @@ import {object, string} from 'yup';
 
 import {SignInRequest} from '../../services/auth';
 import {PasswordField} from './PasswordField';
+import {useEffect} from 'react';
+
+// interface SignInFormProps {
+//   isLoading: boolean;
+//   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
+//   // signInIsLoading: boolean;
+//   getTokenIsLoading?: boolean;
+//   type?: 'coordinator' | 'guest' | 'host';
+// }
 
 interface SignInFormProps {
   isLoading: boolean;
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
-  // signInIsLoading: boolean;
   getTokenIsLoading?: boolean;
   type?: 'coordinator' | 'guest' | 'host';
+  fieldErrors?: {
+    email?: string;
+    password?: string;
+  };
 }
 
 const validationSchema = object({
@@ -26,7 +38,11 @@ const validationSchema = object({
   password: string().required('password is required'),
 });
 
-export const SignInForm = ({onSubmit, isLoading}: SignInFormProps) => {
+export const SignInForm = ({
+  onSubmit,
+  isLoading,
+  fieldErrors,
+}: SignInFormProps) => {
   const {
     handleSubmit,
     handleChange,
@@ -36,6 +52,7 @@ export const SignInForm = ({onSubmit, isLoading}: SignInFormProps) => {
     errors,
     isValid,
     dirty,
+    setFieldError,
   } = useFormik({
     initialValues: {
       email: '',
@@ -46,6 +63,17 @@ export const SignInForm = ({onSubmit, isLoading}: SignInFormProps) => {
       onSubmit(values);
     },
   });
+
+  useEffect(() => {
+    if (fieldErrors) {
+      if (fieldErrors.email) {
+        setFieldError('email', fieldErrors.email);
+      }
+      if (fieldErrors.password) {
+        setFieldError('password', fieldErrors.password);
+      }
+    }
+  }, [fieldErrors, setFieldError]);
 
   return (
     <Stack
@@ -63,8 +91,11 @@ export const SignInForm = ({onSubmit, isLoading}: SignInFormProps) => {
         value={email}
         onChange={handleChange}
         onBlur={handleBlur}
-        error={touched.email && Boolean(errors.email)}
-        helperText={touched.email && errors.email}
+        error={
+          touched.email &&
+          (Boolean(errors.email) || Boolean(fieldErrors?.email))
+        }
+        helperText={touched.email && (errors.email || fieldErrors?.email)}
       />
       <PasswordField
         fullWidth
@@ -75,8 +106,13 @@ export const SignInForm = ({onSubmit, isLoading}: SignInFormProps) => {
         value={password}
         onChange={handleChange}
         onBlur={handleBlur}
-        error={touched.password && Boolean(errors.password)}
-        helperText={touched.password && errors.password}
+        error={
+          touched.password &&
+          (Boolean(errors.password) || Boolean(fieldErrors?.password))
+        }
+        helperText={
+          touched.password && (errors.password || fieldErrors?.password)
+        }
         inputProps={{
           'aria-label': 'password',
         }}
