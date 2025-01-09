@@ -4,7 +4,7 @@ import jwt
 import boto3
 
 
-from fastapi import Depends, APIRouter, HTTPException, Response, Request, Cookie
+from fastapi import Depends, APIRouter, HTTPException, Response, Request, Cookie, status
 from fastapi.security import HTTPBearer
 from fastapi.responses import RedirectResponse, JSONResponse
 from botocore.exceptions import ClientError, ParamValidationError
@@ -112,34 +112,100 @@ def signin(body: UserSignInRequest,
                 "SECRET_HASH": calc_secret_hash(body.email),
             },
         )
+
+        if "AuthenticationResult" not in auth_response or "AccessToken" not in auth_response["AuthenticationResult"]:
+            logger.error(f"Unexpected auth response structure: {auth_response}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail={
+                    "code": "AUTH007",
+                    "message": "Invalid authentication response"
+                }
+            )
     except ClientError as e:
-        raise HTTPException(
-            status_code=400,
-            detail={
-                "code": e.response["Error"]["Code"],
-                "message": e.response["Error"]["Message"],
-            },
-        )
+        error_code = e.response["Error"]["Code"]
+        error_message = e.response["Error"]["Message"]
+
+        if error_code == "NotAuthorizedException":
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail={
+                    "code": "AUTH001",
+                    "message": "Invalid email or password",
+                }
+            )
+        elif error_code == "UserNotFoundException":
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail={
+                    "code": "AUTH002",
+                    "message": "User not found",
+                }
+            )
+        elif error_code == "UserNotConfirmedException":
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail={
+                    "code": "AUTH003",
+                    "message": "Please verify your email first",
+                }
+            )
+        else:
+            # Log unexpected errors
+            logger.error(f"Unexpected Cognito error: {error_code} - {error_message}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail={
+                    "code": "AUTH999",
+                    "message": "An unexpected authentication error occurred",
+                }
+            )
 
     if (auth_response.get("ChallengeName")
             and auth_response["ChallengeName"] == "NEW_PASSWORD_REQUIRED"):
-        userId = auth_response["ChallengeParameters"]["USER_ID_FOR_SRP"]
-        sessionId = auth_response["Session"]
-        root_url = settings.ROOT_URL
-        return RedirectResponse(
-            f"{root_url}/create-password?userId={userId}&sessionId={sessionId}"
+        try:
+            userId = auth_response["ChallengeParameters"]["USER_ID_FOR_SRP"]
+            sessionId = auth_response["Session"]
+            root_url = settings.ROOT_URL
+            return RedirectResponse(
+                f"{root_url}/create-password?userId={userId}&sessionId={sessionId}"
+            )
+        except KeyError as e:
+            logger.error(f"Missing expected challenge parameter: {str(e)}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail={
+                    "code": "AUTH004",
+                    "message": "Error processing password change request"
+                }
+            ) 
+    try:
+        user = get_user(db, body.email)
+        if user is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail={
+                    "code": "AUTH005",
+                    "message": "User not found in database"
+                }
+            )
+
+        set_session_cookie(response, auth_response)
+
+        return {
+            "user": user,
+            "token": auth_response["AuthenticationResult"]["AccessToken"],
+        }
+    except Exception as e:
+        logger.error(f"Database error during signin: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail={
+                "code": "AUTH006",
+                "message": "Error retrieving user information"
+            }
         )
-
-    user = get_user(db, body.email)
-    if user is None:
-        raise HTTPException(status_code=400, detail="User not found")
-
-    set_session_cookie(response, auth_response)
-
-    return {
-        "user": user,
-        "token": auth_response["AuthenticationResult"]["AccessToken"],
-    }
+   
 
 @router.post(
         "/signout", dependencies=[
