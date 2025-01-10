@@ -5,8 +5,9 @@ import {
   Button,
   TextField,
   CircularProgress,
+  Divider,
 } from '@mui/material';
-// import GoogleIcon from '@mui/icons-material/Google';
+import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
 import {SignUpRequest} from '../../services/auth';
 import {PasswordValidation} from './PasswordValidation';
@@ -23,7 +24,20 @@ export interface SignUpFormProps {
   }: Omit<SignUpRequest, 'role'>) => Promise<void>;
 }
 
-export const SignUpForm = ({onSubmit, isLoading}: SignUpFormProps) => {
+export const SignUpForm = ({
+  onSubmit,
+  isLoading,
+  type,
+  getTokenIsLoading = false,
+  signUpHostIsLoading = false,
+  signUpCoordinatorIsLoading = false,
+}: SignUpFormProps) => {
+  const isAnyLoading =
+    isLoading ||
+    getTokenIsLoading ||
+    signUpHostIsLoading ||
+    signUpCoordinatorIsLoading;
+
   const {
     handleSubmit,
     handleChange,
@@ -118,8 +132,8 @@ export const SignUpForm = ({onSubmit, isLoading}: SignUpFormProps) => {
         ) : null}
       </Button>
       {/* TODO: ADD THIS BACK ONCE GOOGLE AUTH IS SETUP */}
-      {/* <Divider>or</Divider> */}
-      {/* <Button
+      <Divider>or</Divider>
+      <Button
         disabled={isLoading}
         variant="outlined"
         size="large"
@@ -133,7 +147,7 @@ export const SignUpForm = ({onSubmit, isLoading}: SignUpFormProps) => {
         {isLoading ? (
           <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
         ) : null}
-      </Button> */}
+      </Button>
     </Stack>
   );
 };

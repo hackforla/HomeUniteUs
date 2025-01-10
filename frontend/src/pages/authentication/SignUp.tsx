@@ -106,10 +106,11 @@ export const SignUp = () => {
         <SignUpForm
           onSubmit={handleSignUp}
           isLoading={signUpIsLoading || getTokenIsLoading}
+          type={type}
         />
         <Divider sx={{width: '100%'}} />
         <Stack direction="row" justifyContent="flex-end" gap={0.5}>
-          <Typography>Already an account?</Typography>
+          <Typography>Already have an account?</Typography>
           <Link underline="always" href="/signin">
             Sign in
           </Link>

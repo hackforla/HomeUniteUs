@@ -4,6 +4,8 @@
       "dockerfile": "./Dockerfile",
       "context": ".."
     },
+    "remoteUser": "huu-dev",
+    "containerUser": "huu-dev",
     // install the decalred pip and npm packages
     "postCreateCommand": "bash ./scripts/install-deps-debian.bash",
     "runArgs": ["--platform=linux/amd64"],

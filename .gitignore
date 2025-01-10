@@ -3,3 +3,5 @@ data
 **/.db
 .DS_Store
 .vscode
+.localdev
+backend/.huuenv

@@ -42,3 +42,6 @@ RUN curl -LO https://nodejs.org/dist/v20.17.0/node-v20.17.0-linux-x64.tar.xz \
     && cp -r ./lib/* /usr/local/lib/ \
     && cp -r ./share/* /usr/local/share/ \
     && cd ..
+
+USER huu-dev
+
