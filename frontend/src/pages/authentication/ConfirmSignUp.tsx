@@ -36,7 +36,8 @@ export const ConfirmSignUp = () => {
     } catch (err) {
       let errorMessage = '';
       if (isFetchBaseQueryError(err)) {
-        errorMessage = err.data.message;
+        errorMessage =
+          err.data?.message || `An error occurred  in Confirm Sign up`;
       } else if (isErrorWithMessage(err)) {
         errorMessage = err.message;
       }

@@ -43,7 +43,7 @@ export default defineConfig(({mode}) => {
     },
     plugins: [react()],
     server: {
-      port: 34828,
+      port: 4040,
       proxy: {
         '/api': {
           target: apiBaseUrl.origin,
@@ -53,7 +53,7 @@ export default defineConfig(({mode}) => {
     test: {
       globals: true,
       environment: 'jsdom',
-      setupFiles: './src/utils/test/setupTests.ts',
+      setupFiles: './src/utils/testing/setupTests.ts',
     },
   };
 });

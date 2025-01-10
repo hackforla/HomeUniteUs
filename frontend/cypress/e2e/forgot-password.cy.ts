@@ -1,10 +1,10 @@
 describe('Forgot Password', () => {
   beforeEach(() => {
-    cy.intercept('POST', '/api/auth/forgot_password', {statusCode: 200}).as(
+    cy.intercept('POST', '/api/auth/forgot-password', {statusCode: 200}).as(
       'forgotPassword',
     );
 
-    cy.intercept('POST', '/api/auth/forgot_password/confirm', {
+    cy.intercept('POST', '/api/auth/forgot-password/confirm', {
       statusCode: 200,
     }).as('forgotPasswordConfirm');
   });
@@ -52,3 +52,5 @@ describe('Forgot Password', () => {
     cy.url().should('include', '/signin');
   });
 });
+
+// path

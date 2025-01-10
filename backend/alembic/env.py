@@ -1,16 +1,26 @@
+from app.core.db import Base
+from app.core.config import get_settings
+
+import app.modules.access.models
+import app.modules.intake_profile.models
+import app.modules.intake_profile.forms.models
+import app.modules.onboarding.models
+import app.modules.matching.models
+import app.modules.relationship_management.models
+import app.modules.tenant_housing_orgs.models
+import app.modules.workflow.models
+
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
+from sqlalchemy import create_engine
 
 from alembic import context
 
 import sys
 import os
+
 print(os.getcwd())
 sys.path.append(os.getcwd())
-
-from app import models as db
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -23,14 +33,14 @@ if config.config_file_name is not None:
 
 # add your model's MetaData object here
 # for 'autogenerate' support
-# from myapp import mymodel
-# target_metadata = mymodel.Base.metadata
-target_metadata = db.Base.metadata
+target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
+
+database_url = get_settings().DATABASE_URL
 
 
 def run_migrations_offline() -> None:
@@ -45,9 +55,8 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
     context.configure(
-        url=url,
+        url=database_url,
         target_metadata=target_metadata,
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
@@ -70,16 +79,11 @@ def run_migrations_online() -> None:
     # with the test engine configuration.
     connectable = context.config.attributes.get("connection", None)
     if connectable is None:
-        connectable = engine_from_config(
-            config.get_section(config.config_ini_section, {}),
-            prefix="sqlalchemy.",
-            poolclass=pool.NullPool,
-        )
+        connectable = create_engine(database_url)
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection,
+                          target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()

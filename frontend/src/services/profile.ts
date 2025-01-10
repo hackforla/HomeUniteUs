@@ -11,6 +11,7 @@ export const fieldTypes = [
   'additional_guests',
   'pets',
   'contact_method',
+  'multiple_choice',
 ] as const;
 
 type FieldTypeTuple = typeof fieldTypes;
@@ -45,8 +46,8 @@ export interface Fields {
     required_if?: ReduiredIf;
   };
   linkedFields?: {
-    emailFieldId?: string;
-    phoneFieldId?: string;
+    emailFieldId: string;
+    phoneFieldId: string;
   };
 }
 
@@ -91,7 +92,7 @@ const injectedRtkApi = api.injectEndpoints({
       GetProfileResponsesApiArg
     >({
       query: queryArg => ({
-        url: `/profile/responses/${queryArg.userId}`,
+        url: `/intake-profile/responses/${queryArg.userId}`,
       }),
     }),
     getProfile: build.query<GetProfileApiResponse, GetProfileApiArg>({

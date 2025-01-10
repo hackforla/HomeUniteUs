@@ -13,6 +13,30 @@ from sqlalchemy.orm import Session
 import app.core.db as db
 import app.core.config as config
 
+################################################################################
+# Loading forms JSON description from disk
+FORM_1 = None
+FORM_2 = None
+
+
+def get_form_1():
+    global FORM_1
+    if FORM_1 is None:
+        import json
+        with open("form_data/form1.json", "r") as f:
+            FORM_1 = json.load(f)
+    return FORM_1
+
+
+def get_form_2():
+    global FORM_2
+    if FORM_2 is None:
+        import json
+        with open("form_data/form2.json", "r") as f:
+            FORM_2 = json.load(f)
+    return FORM_2
+################################################################################
+
 SettingsDep = Annotated[config.Settings, Depends(config.get_settings)]
 
 
@@ -41,6 +65,7 @@ def get_cognito_client(settings: SettingsDep):
         region_name=settings.COGNITO_REGION,
         aws_access_key_id=settings.COGNITO_ACCESS_ID,
         aws_secret_access_key=settings.COGNITO_ACCESS_KEY,
+        endpoint_url=settings.COGNITO_ENDPOINT_URL
     )
 
 

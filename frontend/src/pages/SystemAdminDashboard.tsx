@@ -34,6 +34,7 @@ import {
   DashboardDataResponse,
   useAdminDeleteUserMutation,
   useGetAllDashboardDataMutation,
+  AdminApiError,
 } from '../services/coordinator';
 import ChangeCircleRoundedIcon from '@mui/icons-material/ChangeCircleRounded';
 

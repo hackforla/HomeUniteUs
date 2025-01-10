@@ -49,16 +49,39 @@ class UserSignInResponse(BaseModel):
 class RefreshTokenResponse(BaseModel):
     token: str
 
+
 class ForgotPasswordRequest(BaseModel):
     email: EmailStr
+
 
 class ConfirmForgotPasswordRequest(BaseModel):
     email: EmailStr
     code: str
     password: str
-    
+
+
 class ConfirmForgotPasswordResponse(BaseModel):
     message: str
+
+
+class InviteRequest(BaseModel):
+    email: EmailStr
+    firstName: str
+    middleName: str
+    lastName: str
+
+class Cookies(BaseModel):
+    refresh_token: str 
+    id_token: str 
+
+class ConfirmInviteRequest(BaseModel):
+    email: str
+    password: str
+
+class NewPasswordRequest(BaseModel):
+    userId: str
+    password: str
+    sessionId: str
 
 
 # class SmartNested(Nested):
@@ -87,18 +110,8 @@ class ConfirmForgotPasswordResponse(BaseModel):
 
 #     model_config = ConfigDict(from_attributes=True)
 
-# class UnmatchedCaseSchema(BaseModel):
-
-#     model_config = ConfigDict(from_attributes=True)
-
-# class UnmatchedCaseStatusSchema(BaseModel):
-
-#     model_config = ConfigDict(from_attributes=True)
-
 # class UserSchema(BaseModel):
 #     model_config = ConfigDict(from_attributes=True)
 
 # user_schema = UserSchema()
 # users_schema = UserSchema(many=True)
-# unmatched_cs_schema = UnmatchedCaseStatusSchema()
-# unmatched_c_schema = UnmatchedCaseSchema()

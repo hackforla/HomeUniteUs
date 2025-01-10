@@ -122,7 +122,7 @@ const authApi = api.injectEndpoints({
     }),
     newPassword: build.mutation<void, NewPasswordRequest>({
       query: credentials => ({
-        url: 'auth/new_password',
+        url: 'auth/new-password',
         method: 'POST',
         withCredentials: true,
         body: credentials,
