@@ -11,7 +11,7 @@ from botocore.exceptions import ClientError, ParamValidationError
 
 from app.modules.access.schemas import (
     UserCreate, UserSignInRequest, UserSignInResponse, ForgotPasswordRequest, ConfirmForgotPasswordResponse,
-    ConfirmForgotPasswordRequest, RefreshTokenResponse, InviteRequest, UserRoleEnum, ConfirmInviteRequest, NewPasswordRequest)
+    ConfirmForgotPasswordRequest, RefreshTokenResponse, InviteRequest, UserRoleEnum, ConfirmInviteRequest, NewPasswordRequest, ResendConfirmationCodeRequest)
 from app.modules.workflow.models import ( UnmatchedGuestCase )
 
 from app.modules.access.crud import create_user, delete_user, get_user
@@ -20,6 +20,7 @@ from app.modules.deps import (SettingsDep, DbSessionDep, CognitoIdpDep,
                               role_to_cognito_group_map)
 
 router = APIRouter()
+logger = logging.getLogger(__name__)
 
 
 # Helper function to set session cookies
@@ -46,33 +47,202 @@ def confirm_sign_up(code: str, email: str, settings: SettingsDep, cognito_client
     except Exception as e:
         return RedirectResponse(f"{settings.ROOT_URL}/email-verification-error")
 
-@router.post("/signup", description="Sign up a new user")
+@router.post("/resend_confirmation_code", description="Resend the signup confirmation code to user's email")
+def resend_confirmation_code(
+   body: ResendConfirmationCodeRequest,
+   settings: SettingsDep,
+   cognito_client: CognitoIdpDep,
+   calc_secret_hash: SecretHashFuncDep
+) -> JSONResponse:
+   logger.info(f"Attempting to resend confirmation code to: {body.email}")
+   
+   try:
+       try:
+           cognito_client.admin_get_user(
+               UserPoolId=settings.COGNITO_USER_POOL_ID,
+               Username=body.email
+           )
+       except ClientError as e:
+           if e.response['Error']['Code'] == 'UserNotFoundException':
+               logger.error(f"User not found in Cognito: {body.email}")
+               raise HTTPException(
+                   status_code=status.HTTP_404_NOT_FOUND,
+                   detail={
+                       "code": "AUTH002",
+                       "message": "User not found"
+                   }
+               )
+           raise e
+       
+       response = cognito_client.resend_confirmation_code(
+           ClientId=settings.COGNITO_CLIENT_ID,
+           SecretHash=calc_secret_hash(body.email),
+           Username=body.email,
+           ClientMetadata={"url": settings.ROOT_URL}
+       )
+       
+       logger.info(f"Confirmation code resent successfully to: {body.email}")
+       return JSONResponse(
+           content={"message": "Confirmation code has been resent to your email"}
+       )
+       
+   except ClientError as e:
+       error_code = e.response['Error']['Code']
+       error_message = e.response['Error']['Message']
+       
+       if error_code == "LimitExceededException":
+           logger.warning(f"Rate limit exceeded for: {body.email}")
+           raise HTTPException(
+               status_code=status.HTTP_400_BAD_REQUEST,
+               detail={
+                   "code": "AUTH008",
+                   "message": "Too many attempts. Please try again later"
+               }
+           )
+       elif error_code == "InvalidParameterException":
+           logger.error(f"Invalid email format: {body.email}")
+           raise HTTPException(
+               status_code=status.HTTP_400_BAD_REQUEST,
+               detail={
+                   "code": "AUTH009", 
+                   "message": "Invalid email format"
+               }
+           )
+       else:
+           logger.error(f"Unexpected Cognito error: {error_code} - {error_message}")
+           raise HTTPException(
+               status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+               detail={
+                   "code": "AUTH999",
+                   "message": "An unexpected error occurred"
+               }
+           )
+
+# @router.post("/signup", description="Sign up a new user")
+# def signup(body: UserCreate,
+#            settings: SettingsDep,
+#            db: DbSessionDep,
+#            cognito_client: CognitoIdpDep,
+#            calc_secret_hash: SecretHashFuncDep) -> JSONResponse:
+    
+#     logger.info(f"Signup attempt for user: {body.email}")
+#     existing_user = get_user(db, body.email)
+#     if existing_user:
+#         logger.info(f"Signup failed - user already exists in database: {body.email}")
+#         raise HTTPException(
+#             status_code=status.HTTP_400_BAD_REQUEST, 
+#             detail={
+#                 "code": "USER_EXISTS",
+#                 "message": "An account with this email already exists"
+#             }
+#         )
+
+#     # Create user in database
+#     try:
+#         user = create_user(db, body)
+#     except Exception as e:
+#         logger.error(f"Database error during user creation: {str(e)}")
+#         raise HTTPException(status_code=400, detail="Failed to create user")
+ 
+#     if user is None:
+#         logger.error(f"User already exists: {body.email}")
+#         raise HTTPException(status_code=400, detail="User already exists")
+    
+
+#     # Add user to cognito
+#     try:
+#         cognito_client.sign_up(
+#             ClientId=settings.COGNITO_CLIENT_ID,
+#             SecretHash=calc_secret_hash(body.email),
+#             Username=user.email,
+#             Password=body.password,
+#             ClientMetadata={"url": settings.ROOT_URL},
+#         )
+#         logger.debug(f"Cognito signup response: {cognito_response}")
+
+#     except ClientError as e:
+#         error_code = e.response.get("Error", {}).get("Code")
+#         error_message = e.response.get("Error", {}).get("Message")
+#         logger.error(f"Cognito error during signup: {error_code} - {error_message}")
+        
+#         delete_user(db, user.id)
+#         raise HTTPException(status_code=400, detail=f"Failed to create user: {error_message}")
+
+#     except Exception as e:
+#         logger.error(f"Unexpected error during signup: {str(e)}")
+#         delete_user(db, user.id)
+#         raise HTTPException(status_code=400, detail="Failed to create user")
+
+#     # Add user to group
+#     try:
+#         cognito_client.admin_add_user_to_group(
+#             UserPoolId=settings.COGNITO_USER_POOL_ID,
+#             Username=user.email,
+#             GroupName=role_to_cognito_group_map[body.role],
+#         )
+#     except Exception as e:
+#         logger.error(f"Failed to add user to group: {str(e)}")
+#         cognito_client.admin_delete_user(
+#             UserPoolId=settings.COGNITO_USER_POOL_ID,
+#             Username=user.email
+#         )
+#         delete_user(db, user.id)
+#         raise HTTPException(status_code=400, detail="Failed to confirm user")
+
+#     logger.info(f"User signup successful: {body.email}")
+#     return JSONResponse(content={"message": "User sign up successful"})
+
+@router.post("/signup")
 def signup(body: UserCreate,
            settings: SettingsDep,
            db: DbSessionDep,
            cognito_client: CognitoIdpDep,
            calc_secret_hash: SecretHashFuncDep) -> JSONResponse:
 
+    logger.info(f"Signup attempt for user: {body.email}")
+
+    # First check if user exists in database
+    existing_user = get_user(db, body.email)
+    if existing_user:
+        logger.info(f"Signup failed - user already exists in database: {body.email}")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={
+                "code": "USER_EXISTS",
+                "message": "An account with this email already exists"
+            }
+        )
+
     # Create user in database
     try:
         user = create_user(db, body)
+        logger.info(f"Database user created: {body.email}")
+
     except Exception as e:
+        logger.error(f"Database error during user creation: {str(e)}")
         raise HTTPException(status_code=400, detail="Failed to create user")
- 
-    if user is None:
-        raise HTTPException(status_code=400, detail="User already exists")
 
     # Add user to cognito
     try:
-        cognito_client.sign_up(
+        signup_response = cognito_client.sign_up(  
             ClientId=settings.COGNITO_CLIENT_ID,
             SecretHash=calc_secret_hash(body.email),
             Username=user.email,
             Password=body.password,
             ClientMetadata={"url": settings.ROOT_URL},
         )
+        logger.debug(f"Cognito signup response: {signup_response}")
+        
+    except ClientError as e:
+        error_code = e.response.get("Error", {}).get("Code")
+        error_message = e.response.get("Error", {}).get("Message")
+        logger.error(f"Cognito error during signup: {error_code} - {error_message}")
+        
+        delete_user(db, user.id)
+        raise HTTPException(status_code=400, detail=f"Failed to create user: {error_message}")
+        
     except Exception as e:
-        logging.error(f"Failed to create user: {e}")
+        logger.error(f"Unexpected error during signup: {str(e)}")
         delete_user(db, user.id)
         raise HTTPException(status_code=400, detail="Failed to create user")
 
@@ -83,7 +253,10 @@ def signup(body: UserCreate,
             Username=user.email,
             GroupName=role_to_cognito_group_map[body.role],
         )
+        logger.info(f"User added to group successfully: {body.email}")
+
     except Exception as e:
+        logger.error(f"Failed to add user to group: {str(e)}")
         cognito_client.admin_delete_user(
             UserPoolId=settings.COGNITO_USER_POOL_ID,
             Username=user.email
@@ -91,8 +264,8 @@ def signup(body: UserCreate,
         delete_user(db, user.id)
         raise HTTPException(status_code=400, detail="Failed to confirm user")
 
+    logger.info(f"User signup successful: {body.email}")
     return JSONResponse(content={"message": "User sign up successful"})
-
 
 @router.post("/signin", description="Sign in a user and start a new session", response_model=UserSignInResponse)
 def signin(body: UserSignInRequest,
@@ -101,7 +274,8 @@ def signin(body: UserSignInRequest,
            db: DbSessionDep,
            cognito_client: CognitoIdpDep,
            calc_secret_hash: SecretHashFuncDep):
-    
+    logger.info(f"Sign in attempt for user: {body.email}")
+
     try:
         auth_response = cognito_client.initiate_auth(
             ClientId=settings.COGNITO_CLIENT_ID,
@@ -126,12 +300,17 @@ def signin(body: UserSignInRequest,
         error_code = e.response["Error"]["Code"]
         error_message = e.response["Error"]["Message"]
 
+        logger.error("Authentication failed", extra={
+            "error_code": error_code,
+            "user_email": body.email
+        })
+
         if error_code == "NotAuthorizedException":
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail={
                     "code": "AUTH001",
-                    "message": "Invalid email or password",
+                    "message": "You may have entered an invalid email or password",
                 }
             )
         elif error_code == "UserNotFoundException":
@@ -151,7 +330,6 @@ def signin(body: UserSignInRequest,
                 }
             )
         else:
-            # Log unexpected errors
             logger.error(f"Unexpected Cognito error: {error_code} - {error_message}")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -182,6 +360,9 @@ def signin(body: UserSignInRequest,
     try:
         user = get_user(db, body.email)
         if user is None:
+            logger.error("User found in Cognito but not in database", extra={
+            "user_email": body.email
+            })
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail={
@@ -197,7 +378,10 @@ def signin(body: UserSignInRequest,
             "token": auth_response["AuthenticationResult"]["AccessToken"],
         }
     except Exception as e:
-        logger.error(f"Database error during signin: {str(e)}")
+        logger.error("Database error during user lookup", extra={
+            "error": str(e),
+            "user_email": body.email
+        })
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail={
@@ -208,27 +392,66 @@ def signin(body: UserSignInRequest,
    
 
 @router.post(
-        "/signout", dependencies=[
+    "/signout", 
+    dependencies=[
         Depends(HTTPBearer()),
         Depends(requires_auth)
-    ])
+    ]
+)
 def signout(request: Request, cognito_client: CognitoIdpDep) -> JSONResponse:
-    access_token = request.headers.get("Authorization").split(" ")[1]
-    
+    try:
+        auth_header = request.headers.get("Authorization")
+        if not auth_header:
+            logger.error("Missing Authorization header during signout")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail={
+                    "code": "AUTH001",
+                    "message": "Missing authorization"
+                }
+            )
 
-    # Signout user
-    response = cognito_client.global_sign_out(
-        AccessToken=access_token
-    )
+        access_token = auth_header.split(" ")[1]
 
-    response = JSONResponse(content={"message": "User signed out successfully"})
+        try:
+            cognito_client.global_sign_out(
+                AccessToken=access_token
+            )
+        except ClientError as e:
+            error_code = e.response["Error"]["Code"]
+            logger.error("Cognito signout failed", extra={
+                "error_code": error_code,
+                "error_message": e.response["Error"]["Message"]
+            })
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail={
+                    "code": error_code,
+                    "message": "Sign out failed"
+                }
+            )
 
-    # Remove refresh token cookie
-    response.delete_cookie("refresh_token")
-    response.delete_cookie("id_token")
+        response = JSONResponse(
+            status_code=status.HTTP_200_OK,
+            content={"message": "User signed out successfully"}
+        )
+        response.delete_cookie("refresh_token")
+        response.delete_cookie("id_token")
 
-    # send response
-    return response
+        logger.info("User signed out successfully")
+        return response
+
+    except Exception as e:
+        if not isinstance(e, HTTPException):
+            logger.error(f"Unexpected error during signout: {str(e)}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail={
+                    "code": "AUTH999",
+                    "message": "An unexpected error occurred during sign out"
+                }
+            )
+        raise e
 
 
 @router.get("/session", description="Get the current session and user info upon page refresh", response_model=UserSignInResponse)
