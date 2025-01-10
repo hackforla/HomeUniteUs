@@ -72,6 +72,7 @@ def signup(body: UserCreate,
             ClientMetadata={"url": settings.ROOT_URL},
         )
     except Exception as e:
+        print(e)
         logging.error(f"Failed to create user: {e}")
         delete_user(db, user.id)
         raise HTTPException(status_code=400, detail="Failed to create user")
