@@ -51,7 +51,7 @@ def confirm_sign_up(
         
     except ClientError as e:
         error_code = e.response['Error']['Code']
-        logger.error("Failed to confirm signup", extra={
+        logger.warning("Failed to confirm signup", extra={
             "error_code": error_code,
             "email": email
         })
@@ -84,7 +84,7 @@ def resend_confirmation_code(
            )
        except ClientError as e:
            if e.response['Error']['Code'] == 'UserNotFoundException':
-               logger.error(f"User not found in Cognito: {body.email}")
+               logger.warning(f"User not found in Cognito: {body.email}")
                raise HTTPException(
                    status_code=status.HTTP_404_NOT_FOUND,
                    detail={
@@ -119,7 +119,7 @@ def resend_confirmation_code(
                }
            )
        elif error_code == "InvalidParameterException":
-           logger.error(f"Invalid email format: {body.email}")
+           logger.warning(f"Invalid email format: {body.email}")
            raise HTTPException(
                status_code=status.HTTP_400_BAD_REQUEST,
                detail={
@@ -137,7 +137,7 @@ def resend_confirmation_code(
                }
            )
 
-
+ 
 @router.post("/signup")
 def signup(body: UserCreate,
            settings: SettingsDep,
@@ -148,7 +148,7 @@ def signup(body: UserCreate,
     # First check if user exists in database
     existing_user = get_user(db, body.email)
     if existing_user:
-        logger.error(f"Signup failed - user already exists in database: {body.email}")
+        logger.info(f"Signup failed - user already exists in database: {body.email}")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail={
@@ -162,7 +162,7 @@ def signup(body: UserCreate,
         user = create_user(db, body)
 
     except Exception as e:
-        logger.error("Failed to create user in database", extra={
+        logger.warning("Failed to create user in database", extra={
             "error": str(e)
         })
         raise HTTPException(status_code=400, detail="Failed to create user")
@@ -351,7 +351,7 @@ def signout(request: Request, cognito_client: CognitoIdpDep) -> JSONResponse:
     try:
         auth_header = request.headers.get("Authorization")
         if not auth_header:
-            logger.error("Missing Authorization header during signout")
+            logger.warning("Missing Authorization header during signout")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail={
@@ -414,7 +414,7 @@ def current_session(
     refresh_token = request.cookies.get('refresh_token')
     
     if None in (refresh_token, id_token):
-        logger.error("Session refresh failed", extra={
+        logger.info("Session refresh failed", extra={
             "reason": "Missing tokens",
             "has_id_token": id_token is not None,
             "has_refresh_token": refresh_token is not None
@@ -466,7 +466,7 @@ def refresh(request: Request,
     id_token = request.cookies.get('id_token')
 
     if None in (refresh_token, id_token):
-        logger.error("Token refresh failed", extra={
+        logger.warning("Token refresh failed", extra={
             "reason": "Missing tokens",
             "has_refresh_token": refresh_token is not None,
             "has_id_token": id_token is not None
@@ -585,7 +585,7 @@ def invite(body: InviteRequest,
     refresh_token = request.cookies.get('refresh_token')
 
     if None in (refresh_token, id_token):
-        logger.error("Invite request failed", extra={
+        logger.warning("Invite request failed", extra={
             "reason": "Missing tokens",
             "has_refresh_token": refresh_token is not None,
             "has_id_token": id_token is not None
@@ -626,7 +626,7 @@ def invite(body: InviteRequest,
         error_code = error.response['Error']['Code']
         error_message = error.response['Error']['Message']
 
-        logger.error("Failed to create user in Cognito", extra={
+        logger.warning("Failed to create user in Cognito", extra={
             "error_code": error_code,
             "error_message": error_message,
             "invited_by": coordinator_email
@@ -697,7 +697,7 @@ def confirm_invite(
 
             return RedirectResponse(f"{settings.ROOT_URL}/create-password?userId={userId}&sessionId={sessionId}")
         else:
-            logger.error("Unexpected error during invite confirmation")
+            logger.warning("Unexpected error during invite confirmation")
             return RedirectResponse(f"{settings.ROOT_URL}/create-password?error=There was an unexpected error. Please try again.")
 
     except ClientError as e:
@@ -709,7 +709,7 @@ def confirm_invite(
         }
         msg = error_messages.get(error_code, e.response['Error']['Message'])
 
-        logger.error("Invite confirmation failed", extra={
+        logger.warning("Invite confirmation failed", extra={
             "error_code": error_code,
             "error_message": msg
         })
