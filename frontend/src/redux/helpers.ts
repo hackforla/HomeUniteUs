@@ -1,10 +1,11 @@
-interface ApiError {
-  data: {
-    message: string;
-    code: string;
-  };
-  status: string;
-}
+// interface ApiError {
+//   data: {
+//     detail: any;
+//     message: string;
+//     code: string;
+//   };
+//   status: string;
+// }
 
 /**
  * Type predicate to narrow an unknown error to `FetchBaseQueryError`

@@ -31,20 +31,55 @@ def set_session_cookie(response: Response, auth_response: dict):
     response.set_cookie("refresh_token", refresh_token, httponly=True)
     response.set_cookie("id_token", id_token, httponly=True)
 
-@router.get('/signup/confirm')   
-def confirm_sign_up(code: str, email: str, settings: SettingsDep, cognito_client: CognitoIdpDep, calc_secret_hash: SecretHashFuncDep):
-    secret_hash = calc_secret_hash(email)
+# @router.get('/signup/confirm')   
+# def confirm_sign_up(code: str, email: str, settings: SettingsDep, cognito_client: CognitoIdpDep, calc_secret_hash: SecretHashFuncDep):
+#     secret_hash = calc_secret_hash(email)
 
+#     try:
+#         cognito_client.confirm_sign_up(
+#             ClientId=settings.COGNITO_CLIENT_ID,
+#             SecretHash=secret_hash,
+#             Username=email,
+#             ConfirmationCode=code
+#         )
+
+#         return RedirectResponse(f"{settings.ROOT_URL}/email-verification-success")
+#     except Exception as e:
+#         return RedirectResponse(f"{settings.ROOT_URL}/email-verification-error")
+
+@router.get('/signup/confirm')   
+def confirm_sign_up(
+    code: str, 
+    email: str, 
+    settings: SettingsDep, 
+    cognito_client: CognitoIdpDep, 
+    calc_secret_hash: SecretHashFuncDep
+):
     try:
         cognito_client.confirm_sign_up(
             ClientId=settings.COGNITO_CLIENT_ID,
-            SecretHash=secret_hash,
+            SecretHash=calc_secret_hash(email),
             Username=email,
             ConfirmationCode=code
         )
-
         return RedirectResponse(f"{settings.ROOT_URL}/email-verification-success")
+        
+    except ClientError as e:
+        error_code = e.response['Error']['Code']
+        logger.error("Failed to confirm signup", extra={
+            "error_code": error_code,
+            "email": email
+        })
+        # Add error code to URL for better error messaging on frontend
+        return RedirectResponse(
+            f"{settings.ROOT_URL}/email-verification-error?code={error_code}"
+        )
+
     except Exception as e:
+        logger.error("Unexpected error in confirm signup", extra={
+            "error": str(e),
+            "email": email
+        })
         return RedirectResponse(f"{settings.ROOT_URL}/email-verification-error")
 
 @router.post("/resend_confirmation_code", description="Resend the signup confirmation code to user's email")
@@ -118,79 +153,6 @@ def resend_confirmation_code(
                }
            )
 
-# @router.post("/signup", description="Sign up a new user")
-# def signup(body: UserCreate,
-#            settings: SettingsDep,
-#            db: DbSessionDep,
-#            cognito_client: CognitoIdpDep,
-#            calc_secret_hash: SecretHashFuncDep) -> JSONResponse:
-    
-#     logger.info(f"Signup attempt for user: {body.email}")
-#     existing_user = get_user(db, body.email)
-#     if existing_user:
-#         logger.info(f"Signup failed - user already exists in database: {body.email}")
-#         raise HTTPException(
-#             status_code=status.HTTP_400_BAD_REQUEST, 
-#             detail={
-#                 "code": "USER_EXISTS",
-#                 "message": "An account with this email already exists"
-#             }
-#         )
-
-#     # Create user in database
-#     try:
-#         user = create_user(db, body)
-#     except Exception as e:
-#         logger.error(f"Database error during user creation: {str(e)}")
-#         raise HTTPException(status_code=400, detail="Failed to create user")
- 
-#     if user is None:
-#         logger.error(f"User already exists: {body.email}")
-#         raise HTTPException(status_code=400, detail="User already exists")
-    
-
-#     # Add user to cognito
-#     try:
-#         cognito_client.sign_up(
-#             ClientId=settings.COGNITO_CLIENT_ID,
-#             SecretHash=calc_secret_hash(body.email),
-#             Username=user.email,
-#             Password=body.password,
-#             ClientMetadata={"url": settings.ROOT_URL},
-#         )
-#         logger.debug(f"Cognito signup response: {cognito_response}")
-
-#     except ClientError as e:
-#         error_code = e.response.get("Error", {}).get("Code")
-#         error_message = e.response.get("Error", {}).get("Message")
-#         logger.error(f"Cognito error during signup: {error_code} - {error_message}")
-        
-#         delete_user(db, user.id)
-#         raise HTTPException(status_code=400, detail=f"Failed to create user: {error_message}")
-
-#     except Exception as e:
-#         logger.error(f"Unexpected error during signup: {str(e)}")
-#         delete_user(db, user.id)
-#         raise HTTPException(status_code=400, detail="Failed to create user")
-
-#     # Add user to group
-#     try:
-#         cognito_client.admin_add_user_to_group(
-#             UserPoolId=settings.COGNITO_USER_POOL_ID,
-#             Username=user.email,
-#             GroupName=role_to_cognito_group_map[body.role],
-#         )
-#     except Exception as e:
-#         logger.error(f"Failed to add user to group: {str(e)}")
-#         cognito_client.admin_delete_user(
-#             UserPoolId=settings.COGNITO_USER_POOL_ID,
-#             Username=user.email
-#         )
-#         delete_user(db, user.id)
-#         raise HTTPException(status_code=400, detail="Failed to confirm user")
-
-#     logger.info(f"User signup successful: {body.email}")
-#     return JSONResponse(content={"message": "User sign up successful"})
 
 @router.post("/signup")
 def signup(body: UserCreate,
@@ -464,7 +426,7 @@ def current_session(
     
     id_token = request.cookies.get('id_token')
     refresh_token = request.cookies.get('refresh_token')
-    print('session endpoint', request)
+    
     if None in (refresh_token, id_token):
         raise HTTPException(status_code=401,
                             detail="Missing refresh token or id token")

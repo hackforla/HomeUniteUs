@@ -23,22 +23,17 @@ import {
   useAuthenticateWithOAuth,
   redirectsByRole,
 } from '../../features/authentication/hooks/useAuthenticateWithOAuth';
+
 export interface LocationState {
   from: Location;
 }
 
 interface ErrorDisplayState {
   message: string;
-  helperText?: string;
-  fieldErrors?: {
-    email?: string;
-    password?: string;
-  };
 }
 
-export interface AuthErrorResponse {
+interface AuthErrorResponse {
   detail: {
-    code: string;
     message: string;
   };
 }
@@ -50,7 +45,7 @@ const isAuthError = (error: unknown): error is AuthErrorResponse => {
     'detail' in error &&
     typeof error.detail === 'object' &&
     error.detail !== null &&
-    'code' in error.detail
+    'message' in error.detail
   );
 };
 
@@ -58,8 +53,6 @@ export const SignIn = () => {
   const [oAuthError, setOAuthError] = React.useState('');
   const [errorState, setErrorState] = React.useState<ErrorDisplayState>({
     message: '',
-    helperText: undefined,
-    fieldErrors: undefined,
   });
 
   const navigate = useNavigate();
@@ -67,10 +60,7 @@ export const SignIn = () => {
   const [signIn, {isLoading: signInIsLoading}] = useSignInMutation();
   const [googleSignIn, {isLoading: getTokenIsLoading}] =
     useGoogleSignInMutation();
-  // const locationState = location.state as LocationState;
 
-  // Save location from which user was redirected to login page
-  // const from = locationState?.from?.pathname || '/';
   useAuthenticateWithOAuth({
     query: googleSignIn,
     setErrorMessage: setOAuthError,
@@ -79,19 +69,12 @@ export const SignIn = () => {
 
   useEffect(() => {
     if (oAuthError) {
-      setErrorState({
-        message: oAuthError,
-        fieldErrors: undefined,
-      });
+      setErrorState({message: oAuthError});
     }
   }, [oAuthError]);
 
   const clearError = () => {
-    setErrorState({
-      message: '',
-      fieldErrors: undefined,
-      helperText: undefined,
-    });
+    setErrorState({message: ''});
   };
 
   const handleSignIn = async ({email, password}: SignInRequest) => {
@@ -106,57 +89,10 @@ export const SignIn = () => {
       navigate(redirectsByRole[user.role.type]);
     } catch (err) {
       if (isFetchBaseQueryError(err) && isAuthError(err.data)) {
-        // TODO: remove this information after debugging is complete. error codes should only be on server
-        console.error('Sign in error:', {
-          code: err.data.detail.code,
-          error: err,
+        setErrorState({
+          message: err.data.detail.message,
         });
-
-        switch (err.data.detail.code) {
-          case 'AUTH001':
-          case 'AUTH002':
-            setErrorState({
-              message: 'Invalid email or password',
-              fieldErrors: {
-                email: 'Please check your credentials',
-                password: 'Please check your credentials',
-              },
-            });
-            break;
-
-          case 'AUTH003':
-            setErrorState({
-              message: 'Please verify your email',
-              fieldErrors: {
-                email: 'Check your inbox for a verification link',
-              },
-            });
-            break;
-
-          case 'AUTH004':
-            setErrorState({
-              message: 'Password reset required',
-              fieldErrors: {
-                password: 'Please reset your password',
-              },
-            });
-            break;
-
-          case 'AUTH005':
-          case 'AUTH006':
-          case 'AUTH007':
-            setErrorState({
-              message: 'Unable to sign in. Please try again later.',
-            });
-            break;
-
-          default:
-            setErrorState({
-              message: 'Unable to sign in. Please try again.',
-            });
-        }
       } else if (isErrorWithMessage(err)) {
-        console.error('Network error:', err);
         setErrorState({
           message: 'Unable to connect. Please check your internet connection.',
         });
@@ -186,14 +122,7 @@ export const SignIn = () => {
               </IconButton>
             }
           >
-            <Stack spacing={1}>
-              <Typography>{errorState.message}</Typography>
-              {errorState.helperText && (
-                <Typography variant="body2" color="text.secondary">
-                  {errorState.helperText}
-                </Typography>
-              )}
-            </Stack>
+            <Typography>{errorState.message}</Typography>
           </Alert>
         )}
         <Typography variant="h4" fontWeight="600">
@@ -202,7 +131,6 @@ export const SignIn = () => {
         <SignInForm
           onSubmit={handleSignIn}
           isLoading={signInIsLoading || getTokenIsLoading}
-          fieldErrors={errorState.fieldErrors}
         />
         <Divider sx={{width: '100%'}} />
         <Stack direction="row" alignItems="center" gap={0.5}>
