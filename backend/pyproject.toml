@@ -41,6 +41,7 @@ email-validator = "^2.2.0"
 
 # pyjwt is used to decode information contained in a JSON Web Token
 pyjwt = {extras = ["crypto"], version = "^2.9.0"}
+python-json-logger = "^3.2.1"
 
 [tool.poetry.group.test.dependencies]
 # tox builds and runs tests in an isolated environment.

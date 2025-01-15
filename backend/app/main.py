@@ -15,7 +15,7 @@ async def lifespan(app: FastAPI):
     setup_logging(settings)
 
     logger = logging.getLogger(__name__)
-    logger.info("Starting application")
+    logger.info("Starting application", extra={"environment": settings.HUU_ENVIRONMENT})
     engine = db.db_engine(settings)
     import app.seed
     db.init_db(engine)
