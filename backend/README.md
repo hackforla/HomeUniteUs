@@ -100,3 +100,16 @@ The password for all test users is `Test123!`.
 ### API Endpoints
 
 A path segment with spaces must be replace the spaces with a hyphen `-`. For example, `https://dev.homeunite.us/api/housing-orgs`.
+
+
+
+## Testing
+
+Ensure you have a virtual environment activated in the backend directory.
+
+To run the backend tests:
+
+ ```shell
+ pytest
+ ```
+
