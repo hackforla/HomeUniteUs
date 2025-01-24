@@ -12,13 +12,15 @@ import {
   Typography,
   Box,
   AppBar,
+  Link,
 } from '@mui/material';
 import {useSelector} from 'react-redux';
-import {Link, useNavigate} from 'react-router-dom';
+import {Link as RouterLink, useNavigate} from 'react-router-dom';
 
 import {useSignOutMutation} from '../../services/auth';
 import {selectCurrentUser} from '../../redux/authSlice';
 import {User, UserRole} from '../../services/user';
+import {useAuth} from '../../redux/hooks/useAuth';
 
 function getInitials(user: User): string {
   const fi = (user.firstName && user.firstName[0]) || '?';
@@ -31,7 +33,17 @@ interface OwnProps {
   onClick?: () => void;
 }
 
+const homeRoute: {[key: string]: string} = {
+  guest: '/guest',
+  host: '/host',
+  coordinator: '/coordinator',
+};
+
 export const AuthenticatedHeader = ({onClick}: OwnProps) => {
+  const {user} = useAuth();
+
+  const home = user !== null ? homeRoute[user.role.type] : '';
+
   return (
     <Box sx={{display: 'flex'}}>
       <AppBar
@@ -53,10 +65,10 @@ export const AuthenticatedHeader = ({onClick}: OwnProps) => {
             >
               <MenuIcon />
             </IconButton>
-          ) : (
-            <div style={{width: '40px'}}></div>
-          )}
-          <StyledLogo src="/images/favicon.png" alt="Home Unite Us logo" />
+          ) : null}
+          <Link to={home} component={RouterLink} sx={{display: 'flex'}}>
+            <StyledLogo src="/images/favicon.png" alt="Home Unite Us logo" />
+          </Link>
           <Stack direction="row" gap={1} sx={{alignItems: 'center'}}>
             <AvatarDropdownMenu />
           </Stack>
@@ -133,7 +145,7 @@ const AvatarDropdownMenu = () => {
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        <MenuItem component={Link} to="/settings">
+        <MenuItem component={RouterLink} to="/settings">
           <Typography textAlign="center">Settings</Typography>
         </MenuItem>
         <MenuItem

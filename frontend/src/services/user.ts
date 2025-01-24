@@ -3,6 +3,7 @@ import {api} from './api';
 export interface UserRole {
   type: 'guest' | 'host' | 'coordinator' | 'admin';
 }
+
 export interface User {
   email: string;
   firstName: string;

@@ -1,4 +1,4 @@
-import {Stack, Typography} from '@mui/material';
+import {Drawer, List, Stack, Typography} from '@mui/material';
 import {Dispatch, SetStateAction} from 'react';
 import {SidebarButton} from './SidebarButton';
 import {FieldGroup} from 'src/services/profile';
@@ -11,6 +11,8 @@ interface ProfileSidebarProps {
   setSelectedItem: Dispatch<SetStateAction<string | null>>;
   showSections: boolean;
 }
+
+const DRAWER_WIDTH = 320;
 
 export const ProfileSidebar = ({
   fieldGroups,
@@ -28,16 +30,19 @@ export const ProfileSidebar = ({
   };
 
   return (
-    <Stack
+    <Drawer
+      variant="permanent"
+      open
       sx={{
-        gap: 1,
-        width: {xs: '100%', sm: '100%', md: '412px'},
-        overflowY: 'auto',
-        borderRight: '1px solid',
-        borderColor: 'grey.200',
-        backgroundColor: 'inherit',
-        padding: '12px',
-        display: {xs: showSections ? 'flex' : 'none', md: 'flex'},
+        width: DRAWER_WIDTH,
+        height: '100%',
+        '& .MuiDrawer-paper': {
+          width: DRAWER_WIDTH,
+        },
+        display: {
+          xs: showSections ? 'flex' : 'none',
+          md: 'flex',
+        },
       }}
     >
       <Stack
@@ -45,7 +50,8 @@ export const ProfileSidebar = ({
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          margin: '35px 35px 0px 0px',
+          mt: 4,
+          px: 2,
         }}
       >
         <Typography sx={{fontSize: 18, fontWeight: 'medium', marginBottom: 1}}>
@@ -55,29 +61,85 @@ export const ProfileSidebar = ({
           {0 /* needs to be implemented*/} of {totalTask}
         </Typography>
       </Stack>
-      {fieldGroups.map(({id, title}) => {
-        // Change status here to see different styles
-        // complete | partial | incomplete | locked
-        const status = 'incomplete';
-        const fieldTitle = title || '...';
+      <Stack component={List} sx={{px: 2, gap: 2, width: '100%'}}>
+        {fieldGroups.map(({id, title}) => {
+          // Change status here to see different styles
+          // complete | partial | incomplete | locked
+          const status = 'incomplete';
+          const fieldTitle = title || '...';
 
-        return (
-          <SidebarButton
-            key={id}
-            fieldTitle={fieldTitle}
-            handleClick={() => handleItemClick(id)}
-            isActive={groupId === id}
-            status={status}
-            to={`group/${id}`}
-          />
-        );
-      })}
-      <SidebarButton
-        fieldTitle="Review"
-        to={'review'}
-        status={'incomplete'}
-        isActive={isReviewPage}
-      />
-    </Stack>
+          return (
+            <SidebarButton
+              key={id}
+              fieldTitle={fieldTitle}
+              handleClick={() => handleItemClick(id)}
+              isActive={groupId === id}
+              status={status}
+              to={`group/${id}`}
+            />
+          );
+        })}
+        <SidebarButton
+          fieldTitle="Review"
+          to={'review'}
+          status={'incomplete'}
+          isActive={isReviewPage}
+        />
+      </Stack>
+    </Drawer>
   );
 };
+
+// return (
+//   <Stack
+//     sx={{
+//       gap: 1,
+//       width: {xs: '100%', sm: '100%', md: '412px'},
+//       overflowY: 'auto',
+//       borderRight: '1px solid',
+//       borderColor: 'grey.200',
+//       backgroundColor: 'inherit',
+//       padding: '12px',
+//       display: {xs: showSections ? 'flex' : 'none', md: 'flex'},
+//     }}
+//   >
+//     <Stack
+//       sx={{
+//         flexDirection: 'row',
+//         justifyContent: 'space-between',
+//         alignItems: 'center',
+//         margin: '35px 35px 0px 0px',
+//       }}
+//     >
+//       <Typography sx={{fontSize: 18, fontWeight: 'medium', marginBottom: 1}}>
+//         Profile Sections
+//       </Typography>
+//       <Typography sx={{fontSize: 14, fontWeight: 'medium'}}>
+//         {0 /* needs to be implemented*/} of {totalTask}
+//       </Typography>
+//     </Stack>
+//     {fieldGroups.map(({id, title}) => {
+//       // Change status here to see different styles
+//       // complete | partial | incomplete | locked
+//       const status = 'incomplete';
+//       const fieldTitle = title || '...';
+
+//       return (
+//         <SidebarButton
+//           key={id}
+//           fieldTitle={fieldTitle}
+//           handleClick={() => handleItemClick(id)}
+//           isActive={groupId === id}
+//           status={status}
+//           to={`group/${id}`}
+//         />
+//       );
+//     })}
+//     <SidebarButton
+//       fieldTitle="Review"
+//       to={'review'}
+//       status={'incomplete'}
+//       isActive={isReviewPage}
+//     />
+//   </Stack>
+// );

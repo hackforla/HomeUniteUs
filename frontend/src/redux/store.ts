@@ -2,10 +2,12 @@ import {configureStore, combineReducers} from '@reduxjs/toolkit';
 import type {PreloadedState} from '@reduxjs/toolkit';
 
 import authReducer from './authSlice';
+import guestProfileReducer from '../features/intake-profile/guetsProfileSlice';
 import {api} from '../services/api';
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  guestProfile: guestProfileReducer,
   [api.reducerPath]: api.reducer,
 });
 
