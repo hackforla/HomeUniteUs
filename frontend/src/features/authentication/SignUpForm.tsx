@@ -5,8 +5,9 @@ import {
   Button,
   TextField,
   CircularProgress,
+  Divider,
 } from '@mui/material';
-// import GoogleIcon from '@mui/icons-material/Google';
+import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
 import {SignUpRequest} from '../../services/auth';
 import {PasswordValidation} from './PasswordValidation';
@@ -30,9 +31,10 @@ export interface SignUpFormProps {
 export const SignUpForm = ({
   onSubmit,
   isLoading,
+  type,
   getTokenIsLoading = false,
   signUpHostIsLoading = false,
-  signUpCoordinatorIsLoading = false,
+  signUpCoordinatorIsLoading = false
 }: SignUpFormProps) => {
   const isAnyLoading =
     isLoading ||
@@ -139,8 +141,8 @@ export const SignUpForm = ({
         ) : null}
       </Button>
       {/* TODO: ADD THIS BACK ONCE GOOGLE AUTH IS SETUP */}
-      {/* <Divider>or</Divider> */}
-      {/* <Button
+      <Divider>or</Divider>
+      <Button
         disabled={isLoading}
         variant="outlined"
         size="large"
@@ -154,7 +156,7 @@ export const SignUpForm = ({
         {isLoading ? (
           <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
         ) : null}
-      </Button> */}
+      </Button>
     </Stack>
   );
 };
