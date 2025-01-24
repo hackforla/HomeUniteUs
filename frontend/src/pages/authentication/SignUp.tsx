@@ -58,17 +58,17 @@ export const SignUp = () => {
         firstName,
         lastName,
         role: type,
-      });
+      }).unwrap();
 
       navigate(`/signup/success?email=${email}`);
     } catch (err) {
       if (isFetchBaseQueryError(err)) {
-        // you can access all properties of `FetchBaseQueryError` here
-        const errMsg = err.data.message;
+        const errMsg = err.data?.detail?.message || 'Failed to sign up';
         setErrorMessage(errMsg);
       } else if (isErrorWithMessage(err)) {
-        // you can access a string 'message' property here
-        setErrorMessage(err.message);
+        setErrorMessage(
+          'Unable to connect. Please check your internet connection.',
+        );
       }
     }
   };

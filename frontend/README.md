@@ -30,7 +30,7 @@ The frontend app leverages two different testing frameworks.
 
 Isolated component-level tests are written using [vitest](https://vitest.dev/guide/why.html), a Vite-native test framework that is optimized for testing the individual units of code in isolation, typically functions and components, rather than the entire application with full user interactions.
 
-Existing tests can be executed by running `npm test` within the (`app`) directory. New tests can be added within files with the `.test.tsx` or `.test.ts` extension. We store our test cases alongside the associated source code files, within `__test__` subdirectories.
+Existing tests can be executed by running `npm test` within the (`frontend`) directory. New tests can be added within files with the `.test.tsx` or `.test.ts` extension. We store our test cases alongside the associated source code files, within `__test__` subdirectories.
 
 ### End-to-end (e2e) testing
 
@@ -39,7 +39,7 @@ Integrated browser based tests are written using [Cypress](https://docs.cypress.
 By default we mock out backend integration by intercepting and simulating responses from the backend, however the mocking can be removed if real user credentials are provided as environment variables.
 
 ```pwsh
-cd app
+cd frontend
 # Launch app before testing
 npm run dev
 # Run tests with mocking. The backend does not need to be running.

@@ -105,8 +105,8 @@ def test_signin_with_fake_credentials(client):
                            })
 
     body = response.json()
-    assert response.status_code == 400, body
-    assert body["detail"]["code"] == "UserNotFoundException", body
+    assert response.status_code == 404, body
+    assert body["detail"]["code"] == "AUTH002", body
 
 
 def test_signin_without_email_format(client):
@@ -202,7 +202,7 @@ def _signup_unconfirmed(signup_endpoint, role, client, expect_user_confirmed):
     else:
         assert signin_response.status_code == 400, signin_response.text
         assert signin_response.json()["detail"][
-            "code"] == "UserNotConfirmedException", signin_response.text
+            "code"] == "AUTH003", signin_response.text
 
 
 def test_signup_unconfirmed_host(client):

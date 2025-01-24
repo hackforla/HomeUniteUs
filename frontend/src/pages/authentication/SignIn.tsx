@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useNavigate, Location} from 'react-router-dom';
 import {
   Typography,
@@ -23,27 +23,59 @@ import {
   useAuthenticateWithOAuth,
   redirectsByRole,
 } from '../../features/authentication/hooks/useAuthenticateWithOAuth';
+
 export interface LocationState {
   from: Location;
 }
 
+interface ErrorDisplayState {
+  message: string;
+}
+
+interface AuthErrorResponse {
+  detail: {
+    message: string;
+  };
+}
+
+const isAuthError = (error: unknown): error is AuthErrorResponse => {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'detail' in error &&
+    typeof error.detail === 'object' &&
+    error.detail !== null &&
+    'message' in error.detail
+  );
+};
+
 export const SignIn = () => {
-  const [errorMessage, setErrorMessage] = React.useState('');
+  const [oAuthError, setOAuthError] = React.useState('');
+  const [errorState, setErrorState] = React.useState<ErrorDisplayState>({
+    message: '',
+  });
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [signIn, {isLoading: signInIsLoading}] = useSignInMutation();
   const [googleSignIn, {isLoading: getTokenIsLoading}] =
     useGoogleSignInMutation();
-  // const locationState = location.state as LocationState;
 
-  // Save location from which user was redirected to login page
-  // const from = locationState?.from?.pathname || '/';
   useAuthenticateWithOAuth({
     query: googleSignIn,
-    setErrorMessage,
+    setErrorMessage: setOAuthError,
     callbackUri: '/signin',
   });
+
+  useEffect(() => {
+    if (oAuthError) {
+      setErrorState({message: oAuthError});
+    }
+  }, [oAuthError]);
+
+  const clearError = () => {
+    setErrorState({message: ''});
+  };
 
   const handleSignIn = async ({email, password}: SignInRequest) => {
     try {
@@ -53,19 +85,17 @@ export const SignIn = () => {
       }).unwrap();
 
       const {user, token} = response;
-
       dispatch(setCredentials({user, token}));
-
       navigate(redirectsByRole[user.role.type]);
     } catch (err) {
-      if (isFetchBaseQueryError(err)) {
-        // you can access all properties of `FetchBaseQueryError` here
-        const errMsg =
-          err.data?.message || 'An unexpected error occured in Sign In';
-        setErrorMessage(errMsg);
+      if (isFetchBaseQueryError(err) && isAuthError(err.data)) {
+        setErrorState({
+          message: err.data.detail.message,
+        });
       } else if (isErrorWithMessage(err)) {
-        // you can access a string 'message' property here
-        setErrorMessage(err.message);
+        setErrorState({
+          message: 'Unable to connect. Please check your internet connection.',
+        });
       }
     }
   };
@@ -77,7 +107,7 @@ export const SignIn = () => {
         spacing={4}
         sx={{justifyContent: 'center', alignItems: 'center', width: '100%'}}
       >
-        {errorMessage ? (
+        {errorState.message && (
           <Alert
             sx={{width: '100%'}}
             severity="error"
@@ -86,17 +116,15 @@ export const SignIn = () => {
                 aria-label="close"
                 color="inherit"
                 size="small"
-                onClick={() => {
-                  setErrorMessage('');
-                }}
+                onClick={clearError}
               >
                 <CloseIcon fontSize="inherit" />
               </IconButton>
             }
           >
-            {errorMessage}
+            <Typography>{errorState.message}</Typography>
           </Alert>
-        ) : null}
+        )}
         <Typography variant="h4" fontWeight="600">
           Sign in
         </Typography>

@@ -11,7 +11,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import {useSearchParams} from 'react-router-dom';
 import {useResendConfirmationCodeMutation} from '../../services/auth';
 import {FormContainer} from '../../features/authentication';
-import {isFetchBaseQueryError, isErrorWithMessage} from '../../redux/helpers';
+import {isFetchBaseQueryError} from '../../redux/helpers';
 
 interface Alert {
   severity: 'success' | 'error';
@@ -34,13 +34,10 @@ export const ConfirmSignUp = () => {
         message: 'A new verification link has been sent to your email.',
       });
     } catch (err) {
-      let errorMessage = '';
-      if (isFetchBaseQueryError(err)) {
-        errorMessage =
-          err.data?.message || `An error occurred  in Confirm Sign up`;
-      } else if (isErrorWithMessage(err)) {
-        errorMessage = err.message;
-      }
+      const errorMessage = isFetchBaseQueryError(err)
+        ? err.data?.detail?.message
+        : 'Unable to send verification email. Please try again.';
+
       setAlert({
         severity: 'error',
         message: errorMessage,

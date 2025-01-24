@@ -50,7 +50,7 @@ poetry install                           # Installs all dependencies
 
 poetry shell                             # Activates the virtual environment
 
-fastapi run                              # Run the Fast API server
+poetry run uvicorn app.main:app --reload # Run the Fast API server
 
 # If using a shell use this:
 startup_scripts/entrypoint.sh            # Creates test users and runs the API in developer mode
@@ -100,3 +100,16 @@ The password for all test users is `Test123!`.
 ### API Endpoints
 
 A path segment with spaces must be replace the spaces with a hyphen `-`. For example, `https://dev.homeunite.us/api/housing-orgs`.
+
+
+
+## Testing
+
+Ensure you have a virtual environment activated in the backend directory.
+
+To run the backend tests:
+
+ ```shell
+ pytest
+ ```
+
