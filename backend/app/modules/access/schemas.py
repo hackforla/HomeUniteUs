@@ -40,6 +40,10 @@ class UserSignInRequest(BaseModel):
     email: EmailStr
     password: str
 
+class AuthCodeSignUpRequest(BaseModel):
+    code: str
+  
+
 
 class UserSignInResponse(BaseModel):
     user: User

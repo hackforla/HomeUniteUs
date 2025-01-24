@@ -12,6 +12,7 @@ WORKDIR /app
 # copy the UI source code and configurations into our working dir
 COPY ./frontend ./
 
+# TODO: fix it
 ENV VITE_HUU_API_BASE_URL=https://qa.homeunite.us/api
 
 # install the NPM packages and generate the UI build

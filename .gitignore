@@ -3,3 +3,4 @@ data
 **/.db
 .DS_Store
 .vscode
+.localdev
