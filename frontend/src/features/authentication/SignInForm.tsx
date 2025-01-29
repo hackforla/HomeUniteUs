@@ -9,20 +9,14 @@ import {
 // import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
 import {object, string} from 'yup';
-
 import {SignInRequest} from '../../services/auth';
 import {PasswordField} from './PasswordField';
-import {useEffect} from 'react';
 
 interface SignInFormProps {
   isLoading: boolean;
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
   getTokenIsLoading?: boolean;
   type?: 'coordinator' | 'guest' | 'host';
-  fieldErrors?: {
-    email?: string;
-    password?: string;
-  };
 }
 
 const validationSchema = object({
@@ -30,11 +24,7 @@ const validationSchema = object({
   password: string().required('password is required'),
 });
 
-export const SignInForm = ({
-  onSubmit,
-  isLoading,
-  fieldErrors,
-}: SignInFormProps) => {
+export const SignInForm = ({onSubmit, isLoading}: SignInFormProps) => {
   const {
     handleSubmit,
     handleChange,
@@ -44,7 +34,6 @@ export const SignInForm = ({
     errors,
     isValid,
     dirty,
-    setFieldError,
   } = useFormik({
     initialValues: {
       email: '',
@@ -55,17 +44,6 @@ export const SignInForm = ({
       onSubmit(values);
     },
   });
-
-  useEffect(() => {
-    if (fieldErrors) {
-      if (fieldErrors.email) {
-        setFieldError('email', fieldErrors.email);
-      }
-      if (fieldErrors.password) {
-        setFieldError('password', fieldErrors.password);
-      }
-    }
-  }, [fieldErrors, setFieldError]);
 
   return (
     <Stack
@@ -83,11 +61,8 @@ export const SignInForm = ({
         value={email}
         onChange={handleChange}
         onBlur={handleBlur}
-        error={
-          touched.email &&
-          (Boolean(errors.email) || Boolean(fieldErrors?.email))
-        }
-        helperText={touched.email && (errors.email || fieldErrors?.email)}
+        error={touched.email && Boolean(errors.email)}
+        helperText={touched.email && errors.email}
       />
       <PasswordField
         fullWidth
@@ -98,13 +73,8 @@ export const SignInForm = ({
         value={password}
         onChange={handleChange}
         onBlur={handleBlur}
-        error={
-          touched.password &&
-          (Boolean(errors.password) || Boolean(fieldErrors?.password))
-        }
-        helperText={
-          touched.password && (errors.password || fieldErrors?.password)
-        }
+        error={touched.password && Boolean(errors.password)}
+        helperText={touched.password && errors.password}
         inputProps={{
           'aria-label': 'password',
         }}
