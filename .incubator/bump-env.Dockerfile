@@ -1,0 +1,4 @@
+ARG EXISTING_IMG
+FROM ${EXISTING_IMG}
+
+COPY ./backend/.env ./.env

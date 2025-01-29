@@ -1,0 +1,62 @@
+name: Deploy to Incubator
+on:
+  workflow_dispatch:
+    inputs:
+      target-host-environment:
+        type: choice
+        description: The AWS environment to deploy (dev/test/prod)
+        options: 
+        - dev
+        - test
+        - prod
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  TerraformPlan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v4
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::035866691871:role/gha-incubator
+          role-session-name: ghaincubatorsession
+          aws-region: us-west-2
+      - name: Push Docker container to ECR
+        # env:
+        #   IMAGE_URL: ${{  }}
+        run: |
+          docker push 
+      - name: Update ECS
+        # env:
+        #   IMAGE_URL: ${{  }}
+        run: |
+          ## TODO: this will free us from having to maintain the template ecs task defintion
+          ##   file in sync with its terraform equivalent in the incubator IAC repo
+          # aws ecs describe-task-definition --task-definition homeuniteus --output json \
+          #   | jq --arg IMAGE_URL "${IMAGE_URL}" '.taskDefinition | .containerDefinitions[0].image = $IMAGE_URL' \
+          #   > ./ecs-task-definition.json
+
+          # populate and load the template file, by replacing the templated value(s) and storing output in a 
+          #   local env var
+          ECS_TASK_DEFINITION=$( sed "s/__IMAGE_URL__/${IMAGE_URL}/g" < ./.incubator/ecs-taskdef-template.json )
+
+          # register the task definition with the updated docker image url, write output to both stdout and 
+          #   local json file
+          aws ecs register-task-definition --cli-input-json "${ECS_TASK_DEFINITION}" \
+            | tee ./ecs-taskdef-revision.json
+
+          # force a new deployment for the new task definition we just registered
+          aws ecs update-service \
+            --cluster incubator-prod \
+            --service homeuniteus \
+            --task-definiton homeuniteus \
+            --force-new-deployment
+
+
+
+
+
+          

@@ -1,0 +1,18 @@
+TASKDEFINITION	256	arn:aws:iam::035866691871:role/incubator-prod-ecs-task-role	homeuniteus	512	awsvpc	2025-01-16T19:17:54.294000-08:00	arn:aws:iam::035866691871:user/tyler.thome	44	ACTIVE	arn:aws:ecs:us-west-2:035866691871:task-definition/homeuniteus:44	arn:aws:iam::035866691871:role/incubator-prod-ecs-task-role
+COMPATIBILITIES	EC2
+COMPATIBILITIES	FARGATE
+CONTAINERDEFINITIONS	256	True	035866691871.dkr.ecr.us-west-2.amazonaws.com/homeuniteus:474d7e82c4.20250116-191446	512	homeuniteus	False
+ENVIRONMENT	APP_ENVIRONMENT	DEV
+LOGCONFIGURATION	awslogs
+OPTIONS	ecs/homeuniteus	us-west-2	app
+PORTMAPPINGS	80	80	tcp
+REQUIRESATTRIBUTES	com.amazonaws.ecs.capability.logging-driver.awslogs
+REQUIRESATTRIBUTES	ecs.capability.execution-role-awslogs
+REQUIRESATTRIBUTES	com.amazonaws.ecs.capability.ecr-auth
+REQUIRESATTRIBUTES	com.amazonaws.ecs.capability.docker-remote-api.1.19
+REQUIRESATTRIBUTES	com.amazonaws.ecs.capability.docker-remote-api.1.21
+REQUIRESATTRIBUTES	com.amazonaws.ecs.capability.task-iam-role
+REQUIRESATTRIBUTES	ecs.capability.execution-role-ecr-pull
+REQUIRESATTRIBUTES	com.amazonaws.ecs.capability.docker-remote-api.1.18
+REQUIRESATTRIBUTES	ecs.capability.task-eni
+REQUIRESCOMPATIBILITIES	FARGATE
