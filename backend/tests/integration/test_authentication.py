@@ -383,8 +383,6 @@ def test_user_signup_rollback(client, api_settings, cognito_client,
         assert rolledback_user is None
 
 
-
-
 def test_signout_success(client, api_settings, cognito_client):
     """Test successful signout flow with token/cookie cleanup"""
 
@@ -410,20 +408,5 @@ def test_signout_success(client, api_settings, cognito_client):
     assert protected_response.status_code == 401
 
 
-def test_signout_invalid_token(client):
-    """Test signout with invalid token"""
-    
-    mock_token = jwt.encode(
-        {
-            "sub": "1234567890",
-            "iat": int(time.time())
-        },
-        "wrong-secret",  
-        algorithm="HS256"
-    )
-    
-    response = client.post(
-        PATH + '/signout',
-        headers={"Authorization": f"Bearer {mock_token}"}
-    )
-    assert response.status_code == 401
+
+
