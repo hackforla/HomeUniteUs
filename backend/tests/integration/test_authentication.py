@@ -1,11 +1,13 @@
 import string
 import secrets
 import pytest
-
+import jwt
+import time
 from fastapi.testclient import TestClient
-
 from app.modules.deps import get_cognito_client
 from app.modules.access.models import User
+
+
 
 PATH = "/api/auth"
 secretsGenerator = secrets.SystemRandom()
@@ -379,3 +381,49 @@ def test_user_signup_rollback(client, api_settings, cognito_client,
         rolledback_user = sess.query(User).filter_by(
             email=rollback_email).first()
         assert rolledback_user is None
+
+
+
+
+def test_signout_success(client, api_settings, cognito_client):
+    """Test successful signout flow with token/cookie cleanup"""
+
+    email = f'{secretsGenerator.randint(1_000, 2_000)}@email.com'
+    password = 'Fake4!@#$2589FFF'
+    jwt = create_and_signin_user(client, api_settings, cognito_client, email, password)
+
+    response = client.post(
+        PATH + '/signout',
+        headers={"Authorization": f"Bearer {jwt}"}
+    )
+    
+    assert response.status_code == 200
+    assert response.json()["message"] == "User signed out successfully"
+    
+    assert 'refresh_token' not in response.cookies
+    assert 'id_token' not in response.cookies
+    
+    protected_response = client.get(
+        '/api/users/current',
+        headers={"Authorization": f"Bearer {jwt}"}
+    )
+    assert protected_response.status_code == 401
+
+
+def test_signout_invalid_token(client):
+    """Test signout with invalid token"""
+    
+    mock_token = jwt.encode(
+        {
+            "sub": "1234567890",
+            "iat": int(time.time())
+        },
+        "wrong-secret",  
+        algorithm="HS256"
+    )
+    
+    response = client.post(
+        PATH + '/signout',
+        headers={"Authorization": f"Bearer {mock_token}"}
+    )
+    assert response.status_code == 401

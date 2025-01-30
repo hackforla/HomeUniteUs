@@ -1,6 +1,6 @@
 
 import logging
-from pythonjsonlogger import jsonlogger
+from pythonjsonlogger.json import JsonFormatter
 from .config import Settings
 
 logger = logging.getLogger(__name__)
@@ -10,12 +10,11 @@ def setup_logging(settings: Settings):
         log_level = logging.DEBUG
     else:
         """
-        log only on error in production to reduce logging costs.
+        logging only on error in production to reduce logging costs.
         uncomment second line and remove first if info logging is 
         needed. 
         """
         log_level = logging.ERROR
-        # log_level = logging.INFO
 
     formatter = jsonlogger.JsonFormatter(
         '%(asctime)s %(name)s %(levelname)s %(message)s',
