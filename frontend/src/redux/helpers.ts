@@ -1,5 +1,9 @@
 interface ApiError {
   data: {
+    detail: {
+      message: string;
+      code: string;
+    };
     message: string;
     code: string;
   };
