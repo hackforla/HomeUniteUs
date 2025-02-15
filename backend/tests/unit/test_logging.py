@@ -1,12 +1,8 @@
+
 import pytest
-from fastapi import FastAPI
-from fastapi.testclient import TestClient
 from loguru import logger
 from app.core.logging import setup_logging
 from app.core.config import Settings
-import json
-import uuid
-import re
 import io
 import sys
 
@@ -19,19 +15,6 @@ def setup_test_logging():
     logger.remove()
 
 
-@pytest.fixture
-def test_app():
-    """Fixture for creating test FastAPI app"""
-    app = FastAPI()
-    
-    @app.get("/test")
-    async def test_endpoint():
-        logger.info("Test endpoint called")
-        return {"message": "test"}
-    
-    return app
-
-
 def test_logging_setup_development():
     """Test that logging is properly configured in development environment"""
     stdout = io.StringIO()
@@ -39,7 +22,16 @@ def test_logging_setup_development():
     
     settings = Settings(
         HUU_ENVIRONMENT="development",
-        LOG_LEVEL="DEBUG"
+        LOG_LEVEL="DEBUG",
+        COGNITO_CLIENT_ID="test_client_id",
+        COGNITO_CLIENT_SECRET="test_client_secret",
+        COGNITO_REGION="us-east-1",
+        COGNITO_REDIRECT_URI="http://test.com",
+        COGNITO_USER_POOL_ID="test_pool_id",
+        COGNITO_ACCESS_ID="test_access_id",
+        COGNITO_ACCESS_KEY="test_access_key",
+        ROOT_URL="http://test.com",
+        DATABASE_URL="sqlite:///test.db"
     )
     
     setup_logging(settings)
@@ -60,31 +52,47 @@ def test_logging_setup_production():
     
     settings = Settings(
         HUU_ENVIRONMENT="production",
-        LOG_LEVEL="INFO"
+        LOG_LEVEL="INFO",
+        COGNITO_CLIENT_ID="test_client_id",
+        COGNITO_CLIENT_SECRET="test_client_secret",
+        COGNITO_REGION="us-east-1",
+        COGNITO_REDIRECT_URI="http://test.com",
+        COGNITO_USER_POOL_ID="test_pool_id",
+        COGNITO_ACCESS_ID="test_access_id",
+        COGNITO_ACCESS_KEY="test_access_key",
+        ROOT_URL="http://test.com",
+        DATABASE_URL="sqlite:///test.db"
     )
     
     setup_logging(settings)
     test_message = "Test production message"
     logger.info(test_message)
     
-    # Reset stdout
     sys.stdout = sys.__stdout__
     output = stdout.getvalue()
     
-    # Check if message was logged
     assert test_message in output
-    assert "|" in output  # Check format separator
+    assert "|" in output 
     assert "INFO" in output
 
 
-def test_development_format():
+def test_development_logging_format():
     """Test that development environment has correct format"""
     stdout = io.StringIO()
     sys.stdout = stdout
     
     settings = Settings(
         HUU_ENVIRONMENT="development",
-        LOG_LEVEL="INFO"
+        LOG_LEVEL="INFO",
+        COGNITO_CLIENT_ID="test_client_id",
+        COGNITO_CLIENT_SECRET="test_client_secret",
+        COGNITO_REGION="us-east-1",
+        COGNITO_REDIRECT_URI="http://test.com",
+        COGNITO_USER_POOL_ID="test_pool_id",
+        COGNITO_ACCESS_ID="test_access_id",
+        COGNITO_ACCESS_KEY="test_access_key",
+        ROOT_URL="http://test.com",
+        DATABASE_URL="sqlite:///test.db"
     )
     
     setup_logging(settings)
@@ -96,7 +104,7 @@ def test_development_format():
     assert "\x1b[37m" in output 
     assert "\x1b[32m" in output 
     assert "\x1b[36m" in output  
-    assert "test_development_format" in output  
+    assert "test_development_logging_format" in output  
     assert "|" in output
 
 
@@ -107,16 +115,23 @@ def test_logging_level_respect():
     
     settings = Settings(
         HUU_ENVIRONMENT="development",
-        LOG_LEVEL="INFO"
+        LOG_LEVEL="INFO",
+        COGNITO_CLIENT_ID="test_client_id",
+        COGNITO_CLIENT_SECRET="test_client_secret",
+        COGNITO_REGION="us-east-1",
+        COGNITO_REDIRECT_URI="http://test.com",
+        COGNITO_USER_POOL_ID="test_pool_id",
+        COGNITO_ACCESS_ID="test_access_id",
+        COGNITO_ACCESS_KEY="test_access_key",
+        ROOT_URL="http://test.com",
+        DATABASE_URL="sqlite:///test.db"
     )
     
     setup_logging(settings)
     
-  
     logger.debug("Debug message")
     logger.info("Info message")
     
-
     sys.stdout = sys.__stdout__
     output = stdout.getvalue()
     
@@ -131,7 +146,16 @@ def test_error_logging():
     
     settings = Settings(
         HUU_ENVIRONMENT="development",
-        LOG_LEVEL="ERROR"
+        LOG_LEVEL="ERROR",
+        COGNITO_CLIENT_ID="test_client_id",
+        COGNITO_CLIENT_SECRET="test_client_secret",
+        COGNITO_REGION="us-east-1",
+        COGNITO_REDIRECT_URI="http://test.com",
+        COGNITO_USER_POOL_ID="test_pool_id",
+        COGNITO_ACCESS_ID="test_access_id",
+        COGNITO_ACCESS_KEY="test_access_key",
+        ROOT_URL="http://test.com",
+        DATABASE_URL="sqlite:///test.db"
     )
     
     setup_logging(settings)
@@ -143,26 +167,3 @@ def test_error_logging():
     
     assert error_message in output
     assert "ERROR" in output
-
-
-def test_development_format():
-    """Test that development environment has correct format"""
-    stdout = io.StringIO()
-    sys.stdout = stdout
-    
-    settings = Settings(
-        HUU_ENVIRONMENT="development",
-        LOG_LEVEL="INFO"
-    )
-    
-    setup_logging(settings)
-    logger.info("Test message")
-    
-    sys.stdout = sys.__stdout__
-    output = stdout.getvalue()
-    
-    assert "\x1b[37m" in output 
-    assert "\x1b[32m" in output  
-    assert "\x1b[36m" in output  
-    assert "test_development_format" in output  
-    assert "|" in output

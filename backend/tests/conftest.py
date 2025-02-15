@@ -57,7 +57,7 @@ def api_settings():
     os.environ["ROOT_URL"] = "testing"
     os.environ["DATABASE_URL"] = "testing"
     os.environ["HUU_ENVIRONMENT"] = "testing" 
-    os.environ["LOG_LEVEL"] = "DEBUG"
+    os.environ["LOG_LEVEL"] = "debug"
     return get_settings()
 
 
