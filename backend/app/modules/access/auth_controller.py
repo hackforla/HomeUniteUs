@@ -1,13 +1,12 @@
-import logging
 import random
 import jwt
 import boto3
-
 
 from fastapi import Depends, APIRouter, HTTPException, Response, Request, Cookie, status
 from fastapi.security import HTTPBearer
 from fastapi.responses import RedirectResponse, JSONResponse
 from botocore.exceptions import ClientError, ParamValidationError
+from loguru import logger
 
 from app.modules.access.schemas import (
     UserCreate, UserSignInRequest, UserSignInResponse, ForgotPasswordRequest, ConfirmForgotPasswordResponse,
@@ -20,7 +19,6 @@ from app.modules.deps import (SettingsDep, DbSessionDep, CognitoIdpDep,
                               role_to_cognito_group_map)
 
 router = APIRouter()
-logger = logging.getLogger(__name__)
 
 
 # Helper function to set session cookies
@@ -47,24 +45,25 @@ def confirm_sign_up(
             Username=email,
             ConfirmationCode=code
         )
+        logger.info("User email confirmed successfully", email = email)
         return RedirectResponse(f"{settings.ROOT_URL}/email-verification-success")
         
     except ClientError as e:
         error_code = e.response['Error']['Code']
-        logger.warning("Failed to confirm signup", extra={
-            "error_code": error_code,
-            "email": email
-        })
+        logger.warning("Failed to confirm signup", 
+            error_code = error_code,
+            email = email
+        )
         # Add error code to URL for better error messaging on frontend
         return RedirectResponse(
             f"{settings.ROOT_URL}/email-verification-error?code={error_code}"
         )
 
     except Exception as e:
-        logger.error("Unexpected error in confirm signup", extra={
-            "error": str(e),
-            "email": email
-        })
+        logger.error("Unexpected error in confirm signup", 
+            error = str(e),
+            email = email
+        )
         return RedirectResponse(f"{settings.ROOT_URL}/email-verification-error")
 
 
@@ -162,9 +161,7 @@ def signup(body: UserCreate,
         user = create_user(db, body)
 
     except Exception as e:
-        logger.warning("Failed to create user in database", extra={
-            "error": str(e)
-        })
+        logger.warning("Failed to create user in database",error = str(e))
         raise HTTPException(status_code=400, detail="Failed to create user")
 
     # Add user to cognito
@@ -176,22 +173,22 @@ def signup(body: UserCreate,
             Password=body.password,
             ClientMetadata={"url": settings.ROOT_URL},
         )
-        
+        logger.info("User successfully signed up", email = body.email, role = body.role)
     except ClientError as e:
         error_code = e.response.get("Error", {}).get("Code")
         error_message = e.response.get("Error", {}).get("Message")
-        logger.error("Cognito signup failed", extra={
-            "error_code": error_code,
-            "error_message": error_message
-        })
+        logger.error("Cognito signup failed", 
+            error_code = error_code,
+            error_message = error_message
+        )
         
         delete_user(db, user.id)
         raise HTTPException(status_code=400, detail=f"Failed to create user: {error_message}")
         
     except Exception as e:
-        logger.error("Unexpected error during Cognito signup", extra={
-            "error": str(e)
-        })
+        logger.error("Unexpected error during Cognito signup",
+        error = str(e)
+        )
         delete_user(db, user.id)
         raise HTTPException(status_code=400, detail="Failed to create user")
 
@@ -204,10 +201,10 @@ def signup(body: UserCreate,
         )
 
     except Exception as e:
-        logger.error("Failed to add user to group", extra={
-            "error": str(e),
-            "group": role_to_cognito_group_map[body.role]
-        })
+        logger.error("Failed to add user to group", 
+            error = str(e),
+            group = role_to_cognito_group_map[body.role]
+        )
         cognito_client.admin_delete_user(
             UserPoolId=settings.COGNITO_USER_POOL_ID,
             Username=user.email
@@ -249,10 +246,10 @@ def signin(body: UserSignInRequest,
         error_code = e.response["Error"]["Code"]
         error_message = e.response["Error"]["Message"]
 
-        logger.error("Authentication failed", extra={
-            "error_code": error_code,
-            "user_email": body.email
-        })
+        logger.error("Authentication failed", 
+            error_code = error_code,
+            user_email = body.email
+        )
 
         if error_code == "NotAuthorizedException":
             raise HTTPException(
@@ -309,9 +306,9 @@ def signin(body: UserSignInRequest,
     try:
         user = get_user(db, body.email)
         if user is None:
-            logger.error("User found in Cognito but not in database", extra={
-            "user_email": body.email
-            })
+            logger.error("User found in Cognito but not in database", 
+            user_email = body.email
+            )
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail={
@@ -319,18 +316,18 @@ def signin(body: UserSignInRequest,
                     "message": "User not found in database"
                 }
             )
-
         set_session_cookie(response, auth_response)
+        logger.info("User successfully signed in", user_email = body.email)
 
         return {
             "user": user,
             "token": auth_response["AuthenticationResult"]["AccessToken"],
         }
     except Exception as e:
-        logger.error("Database error during user lookup", extra={
-            "error": str(e),
-            "user_email": body.email
-        })
+        logger.error("Database error during user lookup", 
+            error =  str(e),
+            user_email = body.email
+        )
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail={
@@ -368,10 +365,10 @@ def signout(request: Request, cognito_client: CognitoIdpDep) -> JSONResponse:
             )
         except ClientError as e:
             error_code = e.response["Error"]["Code"]
-            logger.error("Cognito signout failed", extra={
-                "error_code": error_code,
-                "error_message": e.response["Error"]["Message"]
-            })
+            logger.error("Cognito signout failed", 
+                error_code = error_code,
+                error_message = e.response["Error"]["Message"]
+            )
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail={
@@ -414,11 +411,11 @@ def current_session(
     refresh_token = request.cookies.get('refresh_token')
     
     if None in (refresh_token, id_token):
-        logger.info("Session refresh failed", extra={
-            "reason": "Missing tokens",
-            "has_id_token": id_token is not None,
-            "has_refresh_token": refresh_token is not None
-        })
+        logger.info("Session refresh failed", 
+            reason = "Missing tokens",
+            has_id_token = id_token is not None,
+            has_refresh_token = refresh_token is not None
+        )
         raise HTTPException(status_code=401,
                             detail="Missing refresh token or id token")
 
@@ -427,7 +424,7 @@ def current_session(
                                   options={"verify_signature": False})
 
     user = get_user(db, decoded_id_token['email'])
-
+    
     try:
         auth_response = cognito_client.initiate_auth(
             ClientId=settings.COGNITO_CLIENT_ID,
@@ -440,17 +437,17 @@ def current_session(
     except ClientError as e:
         code = e.response['Error']['Code']
         message = e.response['Error']['Message']
-        logger.error("Token refresh failed", extra={
-            "error_code": code,
-            "error_message": message,
-            "username": decoded_id_token.get("cognito:username")
-        })
+        logger.error("Token refresh failed", 
+            error_code = code,
+            error_message = message,
+            username = decoded_id_token.get("cognito:username")
+        )
         raise HTTPException(status_code=400,
                             detail={
                                 "code": code,
                                 "message": message
                             })
-
+    logger.info("Session successfully refreshed", username = decoded_id_token.get("cognito:username"))
     return {
         "user": user,
         "token": auth_response['AuthenticationResult']['AccessToken'],
@@ -466,11 +463,11 @@ def refresh(request: Request,
     id_token = request.cookies.get('id_token')
 
     if None in (refresh_token, id_token):
-        logger.warning("Token refresh failed", extra={
-            "reason": "Missing tokens",
-            "has_refresh_token": refresh_token is not None,
-            "has_id_token": id_token is not None
-        })
+        logger.warning("Token refresh failed", 
+            reason = "Missing tokens",
+            has_refresh_token = refresh_token is not None,
+            has_id_token = id_token is not None
+        )
         raise HTTPException(status_code=401,
                             detail="Missing refresh token or id token")
 
@@ -490,11 +487,11 @@ def refresh(request: Request,
     except ClientError as e:
         code = e.response['Error']['Code']
         message = e.response['Error']['Message']
-        logger.error("Token refresh failed", extra={
-            "error_code": code,
-            "error_message": message,
-            "username": decoded_id_token.get("cognito:username")
-        })
+        logger.error("Token refresh failed", 
+            error_code = code,
+            error_message= message,
+            username= decoded_id_token.get("cognito:username")
+        )
         raise HTTPException(status_code=400,
                             detail={
                                 "code": code,
@@ -524,10 +521,10 @@ def forgot_password(body: ForgotPasswordRequest,
     except boto3.exceptions.Boto3Error as e:
         code = e.response['Error']['Code']
         message = e.response['Error']['Message']
-        logger.error("Forgot password request failed", extra={
-            "error_code": code,
-            "error_message": message
-        })
+        logger.error("Forgot password request failed", 
+            error_code = code,
+            error_message = message
+        )
         raise HTTPException(status_code=401,
                             detail={
                                 "code": code,
@@ -557,10 +554,10 @@ def confirm_forgot_password(body: ConfirmForgotPasswordRequest,
     except boto3.exceptions.Boto3Error as e:
         code = e.response['Error']['Code']
         message = e.response['Error']['Message']
-        logger.error("Password reset confirmation failed", extra={
-            "error_code": code,
-            "error_message": message
-        })
+        logger.error("Password reset confirmation failed", 
+            error_code = code,
+            error_message = message
+        )
         raise HTTPException(status_code=401,
                             detail={
                                 "code": code,
@@ -585,11 +582,11 @@ def invite(body: InviteRequest,
     refresh_token = request.cookies.get('refresh_token')
 
     if None in (refresh_token, id_token):
-        logger.warning("Invite request failed", extra={
-            "reason": "Missing tokens",
-            "has_refresh_token": refresh_token is not None,
-            "has_id_token": id_token is not None
-        })
+        logger.warning("Invite request failed", 
+            reason = "Missing tokens",
+            has_refresh_token = refresh_token is not None,
+            has_id_token = id_token is not None
+        )
         raise HTTPException(status_code=401,
                             detail="Missing refresh token or id token")
 
@@ -599,9 +596,9 @@ def invite(body: InviteRequest,
 
     coordinator_email = decoded_id_token.get('email')
     if not coordinator_email:
-        logger.error("Invite request failed", extra={
-            "reason": "Missing email in decoded token"
-        })
+        logger.error("Invite request failed", 
+            reason = "Missing email in decoded token"
+        )
         raise HTTPException(status_code=401,
                             detail="Missing 'email' field in the decoded ID token.")
 
@@ -626,11 +623,11 @@ def invite(body: InviteRequest,
         error_code = error.response['Error']['Code']
         error_message = error.response['Error']['Message']
 
-        logger.warning("Failed to create user in Cognito", extra={
-            "error_code": error_code,
-            "error_message": error_message,
-            "invited_by": coordinator_email
-        })
+        logger.warning("Failed to create user in Cognito", 
+            error_code = error_code,
+            error_message = error_message,
+            invited_by = coordinator_email
+        )
 
         if error_code == 'UserNotFoundException':
             raise HTTPException(status_code=400, detail="User not found. Confirmation not sent.")
@@ -649,9 +646,9 @@ def invite(body: InviteRequest,
         guest_id = user.id
         coordinator = get_user(db, coordinator_email)
         if not coordinator:
-            logger.error("Coordinator not found", extra={
-                "coordinator_email": coordinator_email
-            })
+            logger.error("Coordinator not found", 
+                coordinator_email = coordinator_email
+            )
             raise HTTPException(status_code=400, detail="Coordinator not found")
         coordinator_id = coordinator.id
         
@@ -660,11 +657,15 @@ def invite(body: InviteRequest,
                 guest_id=guest_id,
                 coordinator_id=coordinator_id
             )
+        logger.info("User successfully invited",
+            invited_email = body.email,
+            invited_by = coordinator_email
+        )
     except Exception as error:
-        logger.error("Failed to complete invite process", extra={
-            "error": str(error),
-            "invited_by": coordinator_email
-        })
+        logger.error("Failed to complete invite process", 
+            error = str(error),
+            invited_by = coordinator_email
+        )
         raise HTTPException(status_code=400, detail=str(error))
 
 
@@ -709,17 +710,17 @@ def confirm_invite(
         }
         msg = error_messages.get(error_code, e.response['Error']['Message'])
 
-        logger.warning("Invite confirmation failed", extra={
-            "error_code": error_code,
-            "error_message": msg
-        })
+        logger.warning("Invite confirmation failed", 
+            error_code = error_code,
+            error_message  = msg
+        )
         raise HTTPException(status_code=400, detail={"code": error_code, "message": msg})
     except ParamValidationError as e:
         error_msg = f"The parameters you provided are incorrect: {e}"
 
-        logger.error("Parameter validation failed during invite confirmation", extra={
-            "error_message": error_msg
-        })
+        logger.error("Parameter validation failed during invite confirmation", 
+            error_message = error_msg
+        )
 
         raise HTTPException(status_code=400, detail={"code": "ParamValidationError", "message": error_msg})
 
@@ -754,10 +755,10 @@ def new_password(
         error_code = e.response['Error']['Code']
         error_message = e.response['Error']['Message']
 
-        logger.error("Failed to respond to password change challenge", extra={
-            "error_code": error_code,
-            "error_message": error_message
-        })
+        logger.error("Failed to respond to password change challenge", 
+            error_code = error_code,
+            error_message = error_message
+        )
 
         raise HTTPException(status_code=500, detail={
             "code": error_code,
@@ -778,14 +779,16 @@ def new_password(
             logger.error("User not found in database after password change")
             raise HTTPException(status_code=404, detail="User not found")
     except Exception as e:
-        logger.error("Database error during user lookup", extra={
-            "error": str(e)
-        })
+        logger.error("Database error during user lookup", 
+            error = str(e)
+        )
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
     response.set_cookie("refresh_token", refresh_token, httponly=True)
     response.set_cookie("id_token", id_token, httponly=True)
-
+    logger.info("User successfully set new password",
+            user_id = body.userId
+        )
     return {
         "user": user,
         "token": access_token
