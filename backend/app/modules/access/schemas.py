@@ -87,6 +87,10 @@ class NewPasswordRequest(BaseModel):
     password: str
     sessionId: str
 
+class ResendConfirmationCodeRequest(BaseModel):
+    email: str
+
+
 
 # class SmartNested(Nested):
 #     '''

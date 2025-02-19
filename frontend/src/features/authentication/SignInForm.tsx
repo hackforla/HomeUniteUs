@@ -10,14 +10,12 @@ import {
 import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
 import {object, string} from 'yup';
-
 import {SignInRequest} from '../../services/auth';
 import {PasswordField} from './PasswordField';
 
 interface SignInFormProps {
   isLoading: boolean;
   onSubmit: ({email, password}: SignInRequest) => Promise<void>;
-  // signInIsLoading: boolean;
   getTokenIsLoading?: boolean;
   type?: 'coordinator' | 'guest' | 'host';
 }

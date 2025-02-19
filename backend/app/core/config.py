@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     HUU_ENVIRONMENT: str
     ROOT_URL: str
     DATABASE_URL: str
+    LOG_LEVEL: str
 
 
 @lru_cache
