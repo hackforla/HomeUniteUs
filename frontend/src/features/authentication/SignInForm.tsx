@@ -5,8 +5,9 @@ import {
   Link,
   TextField,
   CircularProgress,
+  Divider,
 } from '@mui/material';
-// import GoogleIcon from '@mui/icons-material/Google';
+import GoogleIcon from '@mui/icons-material/Google';
 import {useFormik} from 'formik';
 import {object, string} from 'yup';
 import {SignInRequest} from '../../services/auth';
@@ -24,7 +25,11 @@ const validationSchema = object({
   password: string().required('password is required'),
 });
 
-export const SignInForm = ({onSubmit, isLoading}: SignInFormProps) => {
+export const SignInForm = ({
+  onSubmit, 
+  isLoading,
+  getTokenIsLoading
+}: SignInFormProps) => {
   const {
     handleSubmit,
     handleChange,
@@ -97,8 +102,8 @@ export const SignInForm = ({onSubmit, isLoading}: SignInFormProps) => {
         ) : null}
       </Button>
       {/* TODO: ADD THIS BACK ONCE GOOGLE AUTH IS SETUP */}
-      {/* <Divider>or</Divider> */}
-      {/* <Button
+      <Divider>or</Divider>
+      <Button
         disabled={getTokenIsLoading}
         variant="outlined"
         size="large"
@@ -112,7 +117,7 @@ export const SignInForm = ({onSubmit, isLoading}: SignInFormProps) => {
         {getTokenIsLoading ? (
           <CircularProgress sx={{mx: 1}} size={20} color="inherit" />
         ) : null}
-      </Button> */}
+      </Button>
     </Stack>
   );
 };

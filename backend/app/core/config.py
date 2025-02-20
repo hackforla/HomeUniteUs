@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     COGNITO_ACCESS_ID: str
     COGNITO_ACCESS_KEY: str
     COGNITO_ENDPOINT_URL: str | None = None
+    COGNITO_IDP_ENDPOINT_URL: str | None = None
     HUU_ENVIRONMENT: str
     ROOT_URL: str
     DATABASE_URL: str

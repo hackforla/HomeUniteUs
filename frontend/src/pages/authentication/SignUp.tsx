@@ -8,7 +8,7 @@ import {
   Link,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import {useNavigate, useParams} from 'react-router-dom';
+import {useLocation, useNavigate, useParams} from 'react-router-dom';
 
 import {
   useGoogleSignUpMutation,
@@ -18,6 +18,7 @@ import {
 import {isErrorWithMessage, isFetchBaseQueryError} from '../../redux/helpers';
 import {useAuthenticateWithOAuth} from '../../features/authentication/hooks/useAuthenticateWithOAuth';
 import {FormContainer, SignUpForm} from '../../features/authentication';
+import { LocationState } from './SignIn';
 
 export const SignUp = () => {
   const [errorMessage, setErrorMessage] = React.useState('');
@@ -28,11 +29,13 @@ export const SignUp = () => {
 
   const [googleSignUp, {isLoading: getTokenIsLoading}] =
     useGoogleSignUpMutation();
-  // get type from params
-  // const locationState = location.state as LocationState;
 
-  // Save location from which user was redirected to login page
-  // const from = locationState?.from?.pathname || '/';
+    // const location = useLocation()
+    // // get type from params
+    // const locationState = location.state as LocationState;
+
+    // // Save location from which user was redirected to login page
+    // const from = locationState?.from?.pathname || '/';
 
   const callbackUri = `/signup/${type}`;
   useAuthenticateWithOAuth({
@@ -106,10 +109,11 @@ export const SignUp = () => {
         <SignUpForm
           onSubmit={handleSignUp}
           isLoading={signUpIsLoading || getTokenIsLoading}
+          type={type}
         />
         <Divider sx={{width: '100%'}} />
         <Stack direction="row" justifyContent="flex-end" gap={0.5}>
-          <Typography>Already an account?</Typography>
+          <Typography>Already have an account?</Typography>
           <Link underline="always" href="/signin">
             Sign in
           </Link>

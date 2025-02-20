@@ -7,14 +7,27 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def get_role(db: Session, role: int):
-    return db.query(models.Role).filter(models.Role.type == role.value).first()
+def get_role(db: Session, role: str):
+    return db.query(models.Role).filter(models.Role.type == role.lower()).first()
 
-def get_user(db: Session, email: str):
+def get_role_by_id(db: Session, role_id: int):
+    return db.query(models.Role).filter(models.Role.id == role_id).first()
+
+def get_user(db: Session, email: str) -> models.User:
     return db.query(models.User).filter(models.User.email == email).first()
 
 def get_user_by_id(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()
+
+def create_user_from_schema(db: Session, user: schemas.UserCreate):
+    return create_user(
+        db=db,
+        email=user.email,
+        firstName=user.firstName,
+        middleName=user.middleName,
+        lastName=user.lastName,
+        role=user.role
+    )
 
 
 def create_user(db: Session, user: schemas.UserCreate):
