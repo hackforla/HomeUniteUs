@@ -183,7 +183,7 @@ python-dateutil==2.9.0.post0
     #   moto
 python-dotenv==0.20.0
     # via homeuniteus-api (pyproject.toml)
-python-jose==3.3.0
+python-jose==3.4.0
     # via
     #   moto
     #   python-jose
