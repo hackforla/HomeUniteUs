@@ -47,6 +47,18 @@ def get_intake_profile_responses(user_id, db_session: DbSessionDep):
     #     if responses:
     #         return responses, 200
     #     return [], 202
+@router.get("/form/{profile_type}", status_code=status.HTTP_200_OK)
+def get_intake_profile_form(profile_type: str,
+                            profile_form_1: Annotated[dict, Depends(get_form_1)],
+                            profile_form_2: Annotated[dict, Depends(get_form_2)]):
+    """Get the Intake Profile form definition for host or guest."""
+    if profile_type == "guest":
+        return profile_form_1
+    if profile_type == "host":
+        return profile_form_2
+
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                        detail=f"Form type {profile_type} does not exist.")
 
 
 @router.get("/form/{profile_id}", status_code=status.HTTP_200_OK)
