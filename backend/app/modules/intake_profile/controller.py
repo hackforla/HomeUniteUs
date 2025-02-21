@@ -61,15 +61,15 @@ def get_intake_profile_form(profile_type: str,
                         detail=f"Form type {profile_type} does not exist.")
 
 
-@router.get("/form/{profile_id}", status_code=status.HTTP_200_OK)
-def get_intake_profile_form(profile_id: int,
-                            profile_form_1: Annotated[str, Depends(get_form_1)],
-                            profile_form_2: Annotated[str, Depends(get_form_2)]):
-    """Get the Intake Profile form definition."""
-    if profile_id == 1:
-        return profile_form_1
-    if profile_id == 2:
-        return profile_form_2
+# @router.get("/form/{profile_id}", status_code=status.HTTP_200_OK)
+# def get_intake_profile_form(profile_id: int,
+#                             profile_form_1: Annotated[str, Depends(get_form_1)],
+#                             profile_form_2: Annotated[str, Depends(get_form_2)]):
+#     """Get the Intake Profile form definition."""
+#     if profile_id == 1:
+#         return profile_form_1
+#     if profile_id == 2:
+#         return profile_form_2
 
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                        detail=f"Form with id {profile_id} does not exist.")
+#     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+#                         detail=f"Form with id {profile_id} does not exist.")
