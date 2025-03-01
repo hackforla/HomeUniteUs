@@ -12,6 +12,7 @@ import {ProfileSidebar} from '../../features/intake-profile';
 export type Values = {
   [key: string]: Response['value'];
 };
+import {useEffect} from 'react';
 
 export type InitialValues = Record<string, Values>;
 
@@ -31,7 +32,16 @@ export const IntakeProfile = () => {
     {profileId: profileId},
     {skip: !profileId},
   );
-  const {data: responsesData} = useGetResponsesQuery({userId: '1'});
+
+  const {data: responsesData} = useGetResponsesQuery({userId: 'guest'});
+
+  useEffect(() => {
+    console.log('Profile ID:', profileId);
+    console.log('Group ID:', groupId);
+    console.log('Profile Data:', profileData);
+    console.log('Responses Data:', responsesData);
+    console.log('URL Path:', location.pathname);
+  }, [profileId, groupId, profileData, responsesData, location]);
 
   if (
     profileId === undefined ||

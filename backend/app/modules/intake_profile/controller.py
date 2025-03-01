@@ -6,9 +6,9 @@ from app.modules.deps import DbSessionDep, get_form_1, get_form_2
 router = APIRouter()
 
 
-@router.put("/responses/{user_id}", status_code=status.HTTP_501_NOT_IMPLEMENTED)
-def update_intake_profile_responses(user_id, body, db_session: DbSessionDep):
-    pass
+# @router.put("/responses/{user_id}", status_code=status.HTTP_501_NOT_IMPLEMENTED)
+# def update_intake_profile_responses(user_id, body, db_session: DbSessionDep):
+#     pass
     # TODO: Implement update intake profile responses
     # with db_session.begin() as session:
     #     user_repo = UserRepository(session)
@@ -30,9 +30,9 @@ def update_intake_profile_responses(user_id, body, db_session: DbSessionDep):
     #     return {}, 204
 
 
-@router.get("/responses/{user_id}", status_code=status.HTTP_501_NOT_IMPLEMENTED)
-def get_intake_profile_responses(user_id, db_session: DbSessionDep):
-    pass
+# @router.get("/responses/{user_id}", status_code=status.HTTP_501_NOT_IMPLEMENTED)
+# def get_intake_profile_responses(user_id, db_session: DbSessionDep):
+#     pass
     # TODO: Implement get Intake Profile responses
     # with db_session.begin() as session:
     #     user_repo = UserRepository(session)
@@ -47,18 +47,20 @@ def get_intake_profile_responses(user_id, db_session: DbSessionDep):
     #     if responses:
     #         return responses, 200
     #     return [], 202
-@router.get("/form/{profile_type}", status_code=status.HTTP_200_OK)
-def get_intake_profile_form(profile_type: str,
-                            profile_form_1: Annotated[dict, Depends(get_form_1)],
-                            profile_form_2: Annotated[dict, Depends(get_form_2)]):
-    """Get the Intake Profile form definition for host or guest."""
-    if profile_type == "guest":
-        return profile_form_1
-    if profile_type == "host":
-        return profile_form_2
 
-    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                        detail=f"Form type {profile_type} does not exist.")
+# this is where i left off
+# @router.get("/responses/{profile_type}", status_code=status.HTTP_200_OK)
+# def get_intake_profile_form(profile_type: str,
+#                             profile_form_1: Annotated[dict, Depends(get_form_1)],
+#                             profile_form_2: Annotated[dict, Depends(get_form_2)]):
+#     """Get the Intake Profile form definition for host or guest."""
+#     if profile_type == "guest":
+#         return profile_form_1
+#     if profile_type == "host":
+#         return profile_form_2
+
+#     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+#                         detail=f"Form type {profile_type} does not exist.")
 
 
 # @router.get("/form/{profile_id}", status_code=status.HTTP_200_OK)
@@ -73,3 +75,30 @@ def get_intake_profile_form(profile_type: str,
 
 #     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
 #                         detail=f"Form with id {profile_id} does not exist.")
+
+
+from typing import Annotated
+from fastapi import APIRouter, HTTPException, status, Depends
+
+from app.modules.deps import DbSessionDep, get_form_1, get_form_2
+
+router = APIRouter()
+
+@router.get("/form/{profile_type}", status_code=status.HTTP_200_OK)
+def get_intake_profile_form(profile_type: str,
+                            profile_form_1: Annotated[dict, Depends(get_form_1)],
+                            profile_form_2: Annotated[dict, Depends(get_form_2)]):
+    """Get the Intake Profile form definition and responses for host or guest."""
+    if profile_type == "guest":
+        return {
+            "form": profile_form_1,
+            "responses": profile_form_1.get("responses", [])
+        }
+    if profile_type == "host":
+        return {
+            "form": profile_form_2,
+            "responses": profile_form_2.get("responses", [])
+        }
+
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                        detail=f"Form type {profile_type} does not exist.")
