@@ -65,7 +65,7 @@ export interface Guest {
 }
 
 export interface Response {
-  id: string;
+  id?: string;
   fieldId: string;
   value: string | Guest[] | Pet[] | undefined;
 }
@@ -82,14 +82,6 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/intake-profile/form/${queryArg.profileId}`,
       }),
     }),
-    getResponses: build.query<
-      GetProfileResponsesApiResponse,
-      GetProfileResponsesApiArg
-    >({
-      query: queryArg => ({
-        url: `/intake-profile/responses/${queryArg.userId}`,
-      }),
-    }),
   }),
   overrideExisting: false,
 });
@@ -99,18 +91,11 @@ export {injectedRtkApi as hostAPI};
 export interface GetProfileApiResponse {
   id: string;
   fieldGroups: FieldGroup[];
+  responses?: Response[];
 }
 
 export interface GetProfileApiArg {
-  profileId: string | undefined;
+  profileId: string;
 }
 
-export interface GetProfileResponsesApiResponse {
-  responses: Response[];
-}
-
-export interface GetProfileResponsesApiArg {
-  userId: string | undefined;
-}
-
-export const {useGetProfileQuery, useGetResponsesQuery} = injectedRtkApi;
+export const {useGetProfileQuery} = injectedRtkApi;
