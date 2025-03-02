@@ -217,18 +217,19 @@ export const RenderFields = ({groupId, field}: RenderFieldProps) => {
     case 'contact_method':
       // eslint-disable-next-line no-case-declarations
       const {emailFieldId, phoneFieldId} = field.linkedFields || {};
+
       // eslint-disable-next-line no-case-declarations
       let isEmailFilled = false;
       // eslint-disable-next-line no-case-declarations
       let isPhoneFilled = false;
       if (emailFieldId) {
-        const emailValue = values[emailFieldId];
+        const emailValue = values[groupId][emailFieldId];
         isEmailFilled =
           typeof emailValue === 'string' && /\S+@\S+\.\S+/.test(emailValue);
       }
       // eslint-disable-next-line no-case-declarations
       if (phoneFieldId) {
-        const phoneValue = values[phoneFieldId];
+        const phoneValue = values[groupId][phoneFieldId];
         isPhoneFilled =
           typeof phoneValue === 'string' && phoneRegExp.test(phoneValue);
       }
