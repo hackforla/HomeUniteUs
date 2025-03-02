@@ -36,7 +36,8 @@ const tasks: Task[] = [
         description:
           'Start your guest application to move on to the next step.',
         linkText: 'Start Application',
-        url: 'profile/1/group/1',
+        // url: 'profile/1/group/1',
+        url: 'profile/guest',
       },
       {
         id: 2,
