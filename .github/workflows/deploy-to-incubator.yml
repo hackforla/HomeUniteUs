@@ -38,13 +38,13 @@ jobs:
           docker build -f ./.incubator/app.Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-      # - name: Redeploy image in ECS
-      #   id: redeploy-service
-      #   env:
-      #     CLUSTER_NAME: incubator-prod
-      #     SERVICE_NAME: home-unite-us-fullstack-${{ inputs.target-host-environment }}
-      #   run: |
-      #     aws ecs update-service --force-new-deployment --service $SERVICE_NAME --cluster $CLUSTER_NAME
+      - name: Redeploy image in ECS
+        id: redeploy-service
+        env:
+          CLUSTER_NAME: incubator-prod
+          SERVICE_NAME: home-unite-us-fullstack-${{ inputs.target-host-environment }}
+        run: |
+          aws ecs update-service --force-new-deployment --service $SERVICE_NAME --cluster $CLUSTER_NAME
 
 
 
