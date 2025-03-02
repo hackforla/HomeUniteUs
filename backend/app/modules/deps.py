@@ -60,6 +60,10 @@ def db_session(engine: DbEngineDep):
 DbSessionDep = Annotated[Session, Depends(db_session)]
 
 def get_cognito_client(settings: SettingsDep):
+    # if this is running in ECS, we need to not set aws_access_key_id and aws_secret_access_key
+    if (len(self.config["COGNITO_ACCESS_ID"] || "") == 0 or len(self.config["COGNITO_ACCESS_ID"] || "") == 0)
+        return boto3.client('cognito-idp')
+
     cognito_client = boto3.client(
         "cognito-idp",
         region_name=settings.COGNITO_REGION,
