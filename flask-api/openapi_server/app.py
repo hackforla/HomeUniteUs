@@ -52,11 +52,15 @@ class HUUFlaskApp(Flask):
         if self._boto_client:
             return self._boto_client
         
-        self._boto_client = boto3.client('cognito-idp', 
-                                         region_name=self.config["COGNITO_REGION"], 
-                                         aws_access_key_id=self.config["COGNITO_ACCESS_ID"],
-                                         aws_secret_access_key=self.config["COGNITO_ACCESS_KEY"]
-                                        )
+        # if this is running in ECS, we need to not set aws_access_key_id and aws_secret_access_key
+        if (len(self.config["COGNITO_ACCESS_ID"] || "") == 0 or len(self.config["COGNITO_ACCESS_ID"] || "") == 0)
+            self._boto_client = boto3.client('cognito-idp')
+        else 
+            self._boto_client = boto3.client('cognito-idp', 
+                                            region_name=self.config["COGNITO_REGION"], 
+                                            aws_access_key_id=self.config["COGNITO_ACCESS_ID"],
+                                            aws_secret_access_key=self.config["COGNITO_ACCESS_KEY"]
+                                            )
         return self._boto_client
 
     def calc_secret_hash(self, username: str) -> str:
