@@ -53,7 +53,7 @@ class HUUFlaskApp(Flask):
             return self._boto_client
         
         # if this is running in ECS, we need to not set aws_access_key_id and aws_secret_access_key
-        if (len(self.config["COGNITO_ACCESS_ID"] || "") == 0 or len(self.config["COGNITO_ACCESS_ID"] || "") == 0)
+        if len(self.config["COGNITO_ACCESS_ID"]) == 0 or len(self.config["COGNITO_ACCESS_ID"]) == 0:
             self._boto_client = boto3.client('cognito-idp')
         else 
             self._boto_client = boto3.client('cognito-idp', 
