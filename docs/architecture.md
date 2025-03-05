@@ -16,8 +16,9 @@ architecture-beta
 
     app:R --> L:api
     api:R --> L:junctionCenter
-    junctionCenter:T ->> B:db
-    junctionCenter:B ->> T:s3
+    junctionCenter:T --> B:db
+    junctionCenter:B --> T:s3
+
 ```
 <!-- ```mermaid
 architecture-beta
