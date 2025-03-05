@@ -12,7 +12,9 @@ architecture-beta
     service api(server)[ECS] in incubator
     service app(server)[UI] in browser
 
-    app:T --> B:api
+    app:R --> L:api
+    api:R --> L:db
+    api:R --> L:s3
 ```
 <!-- ```mermaid
 architecture-beta
