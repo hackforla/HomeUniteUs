@@ -12,9 +12,12 @@ architecture-beta
     service api(server)[ECS] in incubator
     service app(server)[UI] in browser
 
+    junction junctionCenter
+
     app:R --> L:api
-    api:R --> L:db
-    api:R --> L:s3
+    api:R --> L:junctionCenter
+    junctionCenter:T ->> B:db
+    junctionCenter:B ->> T:s3
 ```
 <!-- ```mermaid
 architecture-beta
