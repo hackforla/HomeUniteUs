@@ -36,3 +36,7 @@ sequenceDiagram
     API->>DB: Validate and create/update rows for<br>user in Host Intake Responses table
     API->>S3: Upload photos to Host Photos bucket
 ```
+
+##### As SVG
+
+![HomeUniteUs Guest sequence diagram](Guest_Sequence.svg)
