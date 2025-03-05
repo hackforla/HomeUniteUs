@@ -19,7 +19,7 @@ architecture-beta
 
     app:R --> L:api
     api:R -- L:junctionCenter
-    api:R -- L:junctionRight
+    junctionCenter:R -- L:junctionRight
     junctionCenter:T --> B:db
     junctionCenter:B --> T:s3
     junctionRight:T --> B:cognito
