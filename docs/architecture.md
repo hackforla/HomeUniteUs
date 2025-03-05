@@ -9,8 +9,8 @@ architecture-beta
 
     service db(database)[PostgreSQL DB] in incubator
     service s3(disk)[S3] in incubator
-    service cognito(server)[Cognito] in incubator
-    service secrets(server)[Secrets Manager] in incubator
+    service cognito(database)[Cognito] in incubator
+    service secrets(database)[Secrets Manager] in incubator
     service api(server)[ECS] in incubator
     service app(server)[React App] in browser
 
