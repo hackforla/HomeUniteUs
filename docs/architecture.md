@@ -4,15 +4,15 @@
 
 ```mermaid
 architecture-beta
-    group incubator(cloud)[Incubator - AWS Account]
+    group incubator(cloud)[Incubator AWS Account]
     group browser(internet)[Browser]
 
     service db(database)[PostgreSQL DB] in incubator
     service s3(disk)[S3] in incubator
     service cognito(server)[Cognito User Pool] in incubator
     service secrets(server)[Secrets Manager] in incubator
-    service api(server)[Server API - ECS Container] in incubator
-    service app(server)[Client UI - React App] in browser
+    service api(server)[Server API ECS Container] in incubator
+    service app(server)[Client UI React App] in browser
 
     junction junctionCenter
     junction junctionRight
