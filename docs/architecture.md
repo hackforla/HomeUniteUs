@@ -2,6 +2,12 @@
 
 ### Infrastructure
 
+##### Incubator
+
+![HomeUniteUs deployment architecture](HUU_Incubator_Architecture.svg)
+
+##### High-level
+
 ```mermaid
 architecture-beta
     group incubator(cloud)[Incubator AWS Account]
@@ -26,3 +32,5 @@ architecture-beta
     junctionRight:B --> T:secrets
 
 ```
+
+
