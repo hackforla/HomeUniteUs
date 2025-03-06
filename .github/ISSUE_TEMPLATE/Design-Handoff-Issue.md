@@ -12,7 +12,7 @@ assignees: ''
 * Feature
 * Role
 * Milestone
-* Points 
+* Size 
 * Project 
 * Type
    - Bug
