@@ -23,7 +23,10 @@ assignees: ''
   - Task - select if the issue is administrative, not a feature
 
 ### Overview
-This issue is for tracking design work related to [Related User Story #]. [Brief summary of the related user Story - We need to do X for Y reason.]
+[Brief summary of the related user Story - We need to do X for Y reason.]
+
+### Details
+This issue is for tracking design work related to [Related User Story #]. 
 
 ### Action Items
 - Assign and Prep
