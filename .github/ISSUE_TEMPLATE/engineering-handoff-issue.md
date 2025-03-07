@@ -12,12 +12,14 @@ assignees: ''
 * Feature
 * Role
 * Milestone
-* Points 
+* Size
 * Project 
-* Type
-   - Bug
-   - Feature
-   - Task
+### Select the applicable type (located in the right sidebar)
+- Under Type,![image](https://github.com/user-attachments/assets/aaf85aa9-ac24-41c7-aac5-e0fd10a3f5de)
+ select the applicable label:
+   - Bug - select if the issue is to fix a bug
+   - Feature - select if the issue is product feature
+   - Task - select if the issue is administrative, not a feature
  
 ### Overview
 This issue is for tracking engineering work related to #[add related user story issue number], which is [Provide a brief description of the feature, outlining its purpose and expected outcome see the related user story - We need to do X for Y reason.]
