@@ -6,8 +6,11 @@ labels: 'milestone: missing, points: missing, Role: Design, Complexity: Missing,
 assignees: ''
 
 ---
+### Customize This Issue
+- Action Items
+- Resources
 
-**UPDATE LABELS: Add the following labels to each new issue, and remove default labels. Then remove this section:**
+### UPDATE LABELS: Add the following labels to each new issue, and remove default labels. Then remove this section:
 * Complexity
 * Feature
 * Role
@@ -32,9 +35,8 @@ This issue is for tracking design work related to [Related User Story #].
 - Assign and Prep
   - [ ] Designer: Review User Story
   - [ ] Designer: Work with PM and Design Lead to clarify any questions about the User Story
-  - [ ] Designer: Work with Design Lead to determine appropriate place/page to Draft Design in
-### Figma
-- Draft and Review:
+  - [ ] Designer: Review the figma location and get any needed clarification from Design Lead
+- Draft:
    - [ ] Designer: Draft Design
    - [ ] Complete Design Iterations section below
       - [ ] design requirement 1
@@ -42,9 +44,13 @@ This issue is for tracking design work related to [Related User Story #].
       - [ ] design requirement 99
    - [ ] Document user interaction in Figma
    - [ ] Designer: Add Screenshots of design and link to Figma page in a comment
-   - [ ] Let Product know that the design is ready for review
+- Review: 
+   -  Let Design Lead know that the design is ready for review
       - [ ] Designer: Change Issue Status to "For Review/Feedback Needed"
-      - [ ] Designer: Add Label "Ready for: Product"
+      - [ ] Designer: Add Label "Ready for: (Select the applicable design persona) 
+        - [ ] Design - Coordinator
+        - [ ] Design - Host
+        - [ ] Design - Guest
       - [ ] Designer: Tag the PM of the related User Story in a comment below and let them know that a draft is ready for review
 - [ ] Product: Review Design Screenshots and provide feedback
 - [ ] Repeat above steps until design is approved
@@ -54,3 +60,4 @@ This issue is for tracking design work related to [Related User Story #].
    - [ ] Designer: Add link to Figma and Screenshots to a comment in the linked User Story
 
 ### Resources/Instructions
+- [Figma link where design should go]
