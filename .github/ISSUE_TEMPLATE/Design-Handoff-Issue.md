@@ -30,7 +30,6 @@ This issue is for tracking design work related to [Related User Story #].
 
 ### Action Items
 - Assign and Prep
-  - [ ] Design Lead: Review User Story and assign Designer
   - [ ] Designer: Review User Story
   - [ ] Designer: Work with PM and Design Lead to clarify any questions about the User Story
   - [ ] Designer: Work with Design Lead to determine appropriate place/page to Draft Design in
