@@ -51,7 +51,7 @@ This issue is for tracking design work related to [Related User Story #].
         - [ ] Design - Coordinator
         - [ ] Design - Host
         - [ ] Design - Guest
-      - [ ] Designer: Tag the PM of the related User Story in a comment below and let them know that a draft is ready for review
+      - [ ] Designer: @message the PM of the related User Story in a comment below and let them know that a draft is ready for review
 - [ ] Product: Review Design Screenshots and provide feedback
 - [ ] Repeat above steps until design is approved
 - [ ] Update the Hand Off section of this ticket with the final iteration of this design
