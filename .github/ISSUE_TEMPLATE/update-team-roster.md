@@ -2,7 +2,8 @@
 name: Update Team Roster
 about: Provides new team members a link to team roster to input their information
 title: ''
-labels: documentation, good first issue
+labels: 'Complexity: Missing, documentation, Feature: Missing, good first issue, milestone:
+  missing, Role: missing, size: missing'
 assignees: ''
 
 ---
