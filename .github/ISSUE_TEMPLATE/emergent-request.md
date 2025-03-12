@@ -4,7 +4,7 @@ about: When you discover something in your issue that is out of scope and it nee
   a new issue or discussion
 title: 'ER: [replace with info ] '
 labels: 'Complexity: Missing, Emergent Request, Feature: Missing, milestone: missing,
-  Role: missing'
+  Role: missing, size: missing'
 assignees: ''
 
 ---

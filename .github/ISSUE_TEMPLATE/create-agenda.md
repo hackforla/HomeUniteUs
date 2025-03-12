@@ -2,7 +2,8 @@
 name: Create Agenda
 about: Assign issue to all team members day after meetup in prep for next meetup
 title: ''
-labels: documentation, help wanted
+labels: 'Complexity: Missing, documentation, Feature: Missing, help wanted, milestone:
+  missing, Role: missing, size: missing'
 assignees: ''
 
 ---
