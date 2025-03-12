@@ -7,37 +7,65 @@ interface GetResponsesParams {
   userId: string;
 }
 
+// export const handlers = [
+//   http.get('/api/intake-profile/form/:profileId', req => {
+//     const id = req.params.profileId;
+//     const profile = intakeProfiles.find(p => p.id === id);
+
+//     if (profile) {
+//       return HttpResponse.json(profile);
+//     }
+
+//     return new HttpResponse(null, {status: 404});
+//   }),
+
+//   http.get<GetResponsesParams, GetProfileResponsesApiResponse>(
+//     '/api/intake-profile/responses/:userId',
+//     () => {
+//       const fields = intakeProfiles[0].fieldGroups
+//         .map(fieldGroup => fieldGroup.fields)
+//         .flat();
+
+//       const responses = fields.map(field => {
+//         const value = getResponseValue(field);
+//         return {
+//           fieldId: field.id,
+//           value,
+//         };
+//       });
+
+//       // return a list of filled in responses
+//       return HttpResponse.json({responses});
+//       // return an empty list of responses
+//       // return HttpResponse.json({responses: []});
+//     },
+//   ),
+// ];
+
 export const handlers = [
-  http.get('/api/intake-profile/form/:profileId', req => {
-    const id = req.params.profileId;
-    const profile = intakeProfiles.find(p => p.id === id);
-
-    if (profile) {
-      return HttpResponse.json(profile);
-    }
-
-    return new HttpResponse(null, {status: 404});
-  }),
-
   http.get<GetResponsesParams, GetProfileResponsesApiResponse>(
-    '/api/intake-profile/responses/:userId',
-    () => {
-      const fields = intakeProfiles[0].fieldGroups
-        .map(fieldGroup => fieldGroup.fields)
-        .flat();
+    '/api/intake-profile/responses/:profile_type',
+    req => {
+      const profileType = req.params.userId;
+      const profile = intakeProfiles.find(p => p.id === profileType);
 
-      const responses = fields.map(field => {
-        const value = getResponseValue(field);
-        return {
-          fieldId: field.id,
-          value,
-        };
-      });
+      if (profile) {
+        const fields = profile.fieldGroups
+          .map(fieldGroup => fieldGroup.fields)
+          .flat();
 
-      // return a list of filled in responses
-      return HttpResponse.json({responses});
-      // return an empty list of responses
-      // return HttpResponse.json({responses: []});
+        const responses = fields.map(field => {
+          const value = getResponseValue(field);
+          return {
+            fieldId: field.id,
+            value,
+          };
+        });
+
+        return HttpResponse.json({responses});
+      }
+
+      return new HttpResponse(null, {status: 404});
     },
   ),
 ];
