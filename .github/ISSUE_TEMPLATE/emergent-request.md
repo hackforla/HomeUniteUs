@@ -1,8 +1,10 @@
 ---
 name: Emergent Request
-about: When you discover something in your issue that is out of scope and it needs a new issue or discussion
+about: When you discover something in your issue that is out of scope and it needs
+  a new issue or discussion
 title: 'ER: [replace with info ] '
-labels: 'milestone: missing, points: 0.25, Role: missing, Complexity: Missing, Feature: Missing, Emergent Request'
+labels: 'Complexity: Missing, Emergent Request, Feature: Missing, milestone: missing,
+  Role: missing'
 assignees: ''
 
 ---
