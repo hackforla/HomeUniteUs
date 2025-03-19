@@ -2,7 +2,8 @@
 name: Onboarding
 about: Onboarding New Team Members
 title: ''
-labels: 'Feature: Administrative'
+labels: 'Complexity: Missing, Feature: Missing, milestone: missing, Role: missing,
+  size: missing'
 assignees: ''
 
 ---

@@ -40,6 +40,10 @@ class UserSignInRequest(BaseModel):
     email: EmailStr
     password: str
 
+class AuthCodeSignUpRequest(BaseModel):
+    code: str
+  
+
 
 class UserSignInResponse(BaseModel):
     user: User
@@ -82,6 +86,10 @@ class NewPasswordRequest(BaseModel):
     userId: str
     password: str
     sessionId: str
+
+class ResendConfirmationCodeRequest(BaseModel):
+    email: str
+
 
 
 # class SmartNested(Nested):

@@ -1,4 +1,5 @@
 import boto3
+
 import jwt
 import time
 import hmac
@@ -58,19 +59,17 @@ def db_session(engine: DbEngineDep):
 
 DbSessionDep = Annotated[Session, Depends(db_session)]
 
-
 def get_cognito_client(settings: SettingsDep):
-    return boto3.client(
+    cognito_client = boto3.client(
         "cognito-idp",
         region_name=settings.COGNITO_REGION,
         aws_access_key_id=settings.COGNITO_ACCESS_ID,
         aws_secret_access_key=settings.COGNITO_ACCESS_KEY,
-        endpoint_url=settings.COGNITO_ENDPOINT_URL
+        endpoint_url=settings.COGNITO_IDP_ENDPOINT_URL
     )
-
+    return cognito_client
 
 CognitoIdpDep = Annotated[Any, Depends(get_cognito_client)]
-
 
 def requires_auth(request: Request, cognito_client: CognitoIdpDep):
     # Check for Authorization header

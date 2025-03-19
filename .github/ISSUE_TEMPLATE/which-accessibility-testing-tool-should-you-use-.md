@@ -3,7 +3,8 @@ name: Which accessibility testing tool should you use?
 about: There are a lot of tools, this issue has a list of our favorites and links
   to more
 title: Which accessibility testing tool should you use?
-labels: ''
+labels: 'Complexity: Missing, Feature: Missing, milestone: missing, Role: missing,
+  size: missing'
 assignees: ''
 
 ---

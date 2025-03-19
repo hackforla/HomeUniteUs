@@ -1,8 +1,10 @@
 ---
 name: PM to Design Handoff Issue
-about: PMs use this template when a User Story is ready for design. This will be a separate issue for design to track their work.
+about: PMs use this template when a User Story is ready for design. This will be a
+  separate issue for design to track their work.
 title: 'Design: [Related User Story Title]'
-labels: 'milestone: missing, points: missing, Role: Design, Complexity: Missing, Feature: Missing'
+labels: 'Complexity: Missing, Feature: Missing, milestone: missing, Role: Design,
+  size: missing'
 assignees: ''
 
 ---
@@ -10,7 +12,7 @@ assignees: ''
 **UPDATE LABELS: Add the following labels to each new issue, and remove default labels. Then remove this section:**
 * Role
 * Feature
-* Points 
+* Size 
 * Complexity
 
 ### Overview
