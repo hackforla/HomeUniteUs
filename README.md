@@ -70,5 +70,3 @@ The password for all test users is `Test123!`.
 ## Testing Instructions
 
 Testing instructions for each application are in the [backend](./backend/README.md) and [frontend](./frontend/README.md) README files.
-
-# Testing
