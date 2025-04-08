@@ -2,7 +2,8 @@
 name: Control what appears when you paste your sites link in social media sites
 about: Add Open Graph Markup tags to header
 title: Control what appears when you paste your sites link in social media sites
-labels: enhancement, question
+labels: 'Complexity: Missing, enhancement, Feature: Missing, milestone: missing, Role:
+  missing, size: missing'
 assignees: ''
 
 ---

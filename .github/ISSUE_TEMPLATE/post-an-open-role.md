@@ -2,7 +2,8 @@
 name: Post an open role
 about: Recruit volunteers for specific open roles template
 title: 'HUU: Open Role for: [Replace with NAME OF ROLE]'
-labels: 'Complexity: Small, feature: recruitment, role: missing'
+labels: 'Complexity: Missing, Complexity: Small, Feature: Missing, feature: recruitment,
+  milestone: missing, Role: missing, size: missing'
 assignees: ''
 
 ---
