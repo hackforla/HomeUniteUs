@@ -172,6 +172,11 @@ def signup(body: UserCreate,
         user = create_user(db, body)
 
     except Exception as e:
+        raise HTTPException(status_code=400, detail="Failed to create user in database")
+ 
+    if user is None:
+        raise HTTPException(status_code=400, detail="User already exists")
+    
         logger.warning("Failed to create user in database",error = str(e))
         raise HTTPException(status_code=400, detail="Failed to create user")
 
@@ -197,11 +202,11 @@ def signup(body: UserCreate,
         raise HTTPException(status_code=400, detail=f"Failed to create user: {error_message}")
         
     except Exception as e:
-        logger.error("Unexpected error during Cognito signup",
-        error = str(e)
-        )
+
+        logging.error(f"Failed to create user in cognito: {e}")
+
         delete_user(db, user.id)
-        raise HTTPException(status_code=400, detail="Failed to create user")
+        raise HTTPException(status_code=400, detail="Failed to create user in cognito")
 
     # Add user to group
     try:

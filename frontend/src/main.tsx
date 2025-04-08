@@ -16,6 +16,7 @@ import {ProfileReview} from './features/intake-profile/ProfileReview';
 import {FieldGroupList} from './features/intake-profile/IntakeProfileGroups';
 import {
   AppLayout,
+  AuthenticatedLayout,
   CoordinatorDashboardLayout,
   GuestDashboardLayout,
 } from './features/layouts';
@@ -41,6 +42,8 @@ import {
   GuestSettings,
   CoordinatorDashboard,
   IntakeProfile,
+  IntakeProfilePortal,
+  IntakeProfileSection,
 } from './pages';
 import {SystemAdminDashboard} from './pages/SystemAdminDashboard';
 // import {enableMocking} from './utils/testing/browser';
@@ -103,29 +106,29 @@ function HuuApp() {
           />
           <Route path="/create-password" element={<NewPassword />} />
         </Route>
-        <Route
-          path="/guest"
-          element={
-            <ProtectedRoute>
-              <GuestDashboardLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<GuestApplicationTracker />} />
-          <Route path="documents" element={<GuestDocuments />} />
-          <Route path="contacts" element={<GuestContacts />} />
-          <Route path="tasks" element={<GuestTasks />} />
-          <Route path="settings" element={<GuestSettings />} />
+        <Route path="/guest">
           <Route
-            path="profile/:profileId"
             element={
               <ProtectedRoute>
-                <IntakeProfile />
+                <GuestDashboardLayout />
               </ProtectedRoute>
             }
           >
-            <Route path="group/:groupId" element={<FieldGroupList />} />
-            <Route path="review" element={<ProfileReview />} />
+            <Route index element={<GuestApplicationTracker />} />
+            <Route path="documents" element={<GuestDocuments />} />
+            <Route path="contacts" element={<GuestContacts />} />
+            <Route path="tasks" element={<GuestTasks />} />
+            <Route path="settings" element={<GuestSettings />} />
+          </Route>
+          <Route element={<AuthenticatedLayout />}>
+            <Route
+              path="profile/:profileId"
+              element={<IntakeProfilePortal />}
+            />
+            <Route
+              path="profile/:profileId/:sectionId"
+              element={<IntakeProfileSection />}
+            />
           </Route>
         </Route>
         <Route
@@ -145,7 +148,12 @@ function HuuApp() {
               <HostDashboard />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route path="profile/:profileId" element={<IntakeProfile />}>
+            <Route path="group/:groupId" element={<FieldGroupList />} />
+            <Route path="review" element={<ProfileReview />} />
+          </Route>
+        </Route>
         <Route
           path="/admin"
           element={

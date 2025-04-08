@@ -1,21 +1,22 @@
 import {faker} from '@faker-js/faker';
 import {Stack, Typography, Button, TextField} from '@mui/material';
-import {
-  FormikErrors,
-  FormikHandlers,
-  FieldArray,
-  useFormikContext,
-} from 'formik';
-import {InitialValues} from 'src/pages/intake-profile/IntakeProfile';
+import {FormikErrors, FormikHandlers, FieldArray} from 'formik';
+import {InitialValues} from '../../../pages/intake-profile/IntakeProfile';
 import {Guest} from '../../../services/profile';
 import {DatePickerField} from './DatePickerField';
 
 interface AdditionalGuestsFieldProps {
   errors: FormikErrors<InitialValues>;
-  guests: Guest[];
   fieldId: string;
   groupId: string;
+  guests: Guest[];
   onChange: FormikHandlers['handleChange'];
+  setFieldValue: (
+    field: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    value: any,
+    shouldValidate?: boolean,
+  ) => Promise<void | FormikErrors<InitialValues>>;
 }
 
 export const AdditionalGuestsField = ({
@@ -24,8 +25,8 @@ export const AdditionalGuestsField = ({
   fieldId,
   groupId,
   onChange,
+  setFieldValue,
 }: AdditionalGuestsFieldProps) => {
-  const {setFieldValue} = useFormikContext<InitialValues>();
   return (
     <Stack gap={2}>
       <FieldArray name={`${groupId}.${fieldId}`}>

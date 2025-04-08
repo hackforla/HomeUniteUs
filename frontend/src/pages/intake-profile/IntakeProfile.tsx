@@ -7,12 +7,21 @@ import {
   CircularProgress,
   Typography,
 } from '@mui/material';
+import {Container, Stack, useMediaQuery, useTheme} from '@mui/material';
 import {Outlet, useLocation, useNavigate, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
 import {buildValidationSchema, createInitialValues} from './helpers';
 import {useGetProfileQuery, Response} from '../../services/profile';
 import {ProfileSidebar} from '../../features/intake-profile';
 
+import {useState} from 'react';
+import {createInitialValues} from '../../features/intake-profile/helpers';
+import {
+  useGetProfileQuery,
+  useGetResponsesQuery,
+  Response,
+} from '../../services/profile';
+import {ProfileActions, ProfileSidebar} from '../../features/intake-profile';
 export type Values = {
   [key: string]: Response['value'];
 };
@@ -24,6 +33,7 @@ export const IntakeProfile = () => {
   const navigate = useNavigate();
   const toolbarHeight = Number(theme.mixins.toolbar.minHeight);
   const params = useParams();
+  const {profileId, groupId} = useParams();
   const location = useLocation();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [showSections, setShowSections] = useState(isMobile);
@@ -108,9 +118,31 @@ export const IntakeProfile = () => {
     params.groupId === undefined
       ? {}
       : buildValidationSchema(fieldGroups, params.groupId);
+  const {data: profileData} = useGetProfileQuery(
+    {profileId: profileId},
+    {skip: !profileId},
+  );
+  const {data: responsesData} = useGetResponsesQuery({userId: '1'});
+
+  if (
+    profileId === undefined ||
+    profileData === undefined ||
+    responsesData === undefined
+  )
+    return null;
+
+  const {fieldGroups} = profileData;
+  const {responses} = responsesData;
+
+  // create validation schema for current group. Return empty object if groupId is undefined, which means we are on welcome or review page
+  // TODO: Reimplement validation schema generation
+  // const validationSchema =
+  //   groupId === undefined ? {} : buildValidationSchema(fieldGroups, groupId);
 
   // create initial values from responses and fieldGroups
   const initialValues = createInitialValues(fieldGroups, responses);
+
+  const initalValues = createInitialValues(fieldGroups, responses);
 
   const currentIndex = fieldGroups.findIndex(
     group => group.id === selectedItem,
@@ -146,6 +178,8 @@ export const IntakeProfile = () => {
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
+      initialValues={initalValues}
+      // validationSchema={validationSchema}
       enableReinitialize={true}
       onSubmit={values => {
         if (!params.groupId) {
@@ -177,10 +211,11 @@ export const IntakeProfile = () => {
     >
       {({errors, handleSubmit}) => (
         <Stack
-          direction="row"
           sx={{
-            height: `calc(100vh - ${toolbarHeight}px)`,
+            flexDirection: 'row',
+            height: '100vh',
             backgroundColor: 'grey.50',
+            overflowY: 'scroll',
           }}
         >
           <ProfileSidebar
@@ -256,8 +291,27 @@ export const IntakeProfile = () => {
               >
                 Return to Profile Sections
               </Button>
+          <Container sx={{height: '100%'}} maxWidth="md">
+            <Stack
+              onSubmit={handleSubmit}
+              component="form"
+              sx={{
+                flex: 1,
+                my: 4,
+                display: {xs: showSections ? 'none' : 'flex', md: 'flex'},
+              }}
+            >
+              <Stack sx={{overflowY: 'auto'}}>
+                <Outlet context={{groupId, fieldGroups, errors}} />
+              </Stack>
+              <ProfileActions
+                handleBack={handleBack}
+                handleNext={handleNext}
+                handleSubmitApplication={handleSubmitApplication}
+                toggleShowSections={toggleShowSections}
+              />
             </Stack>
-          </Stack>
+          </Container>
         </Stack>
       )}
     </Formik>

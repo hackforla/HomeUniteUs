@@ -63,7 +63,7 @@ export const SignUp = () => {
     }
 
     try {
-      await signUp({
+      const response = await signUp({
         email,
         password,
         firstName,
@@ -71,9 +71,11 @@ export const SignUp = () => {
         role: type,
       }).unwrap();
 
-      // Navigate to success page, passing along the original location
-      navigate(`/signup/success?email=${email}`, {state: {from}});
+      if (!response.error) {
+        navigate(`/signup/success?email=${email}`);
+      }
     } catch (err) {
+      console.log({err});
       if (isFetchBaseQueryError(err)) {
         const errMsg = err.data?.detail?.message || 'Failed to sign up';
         setErrorMessage(errMsg);
