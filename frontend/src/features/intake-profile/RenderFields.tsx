@@ -194,21 +194,24 @@ export const RenderFields = ({
         />
       );
     case 'contact_method':
+
       // eslint-disable-next-line no-case-declarations
-      const {emailFieldId, phoneFieldId} = field.linkedFields;
+      const {emailFieldId, phoneFieldId} = field.linkedFields!;
+
       // eslint-disable-next-line no-case-declarations
       let isEmailFilled = false;
+
       // eslint-disable-next-line no-case-declarations
       let isPhoneFilled = false;
       if (emailFieldId) {
         // This isn't best practice and can be replaced with validator library to verify email
         isEmailFilled = Boolean(
-          values[emailFieldId] && /\S+@\S+\.\S+/.test(values[emailFieldId]),
+          values[emailFieldId] && /\S+@\S+\.\S+/.test(values[emailFieldId].toString()),
         );
       }
       // eslint-disable-next-line no-case-declarations
       if (phoneFieldId) {
-        isPhoneFilled = phoneRegExp.test(values[phoneFieldId]);
+        isPhoneFilled = phoneRegExp.test(values[phoneFieldId].toString());
       }
 
       return (

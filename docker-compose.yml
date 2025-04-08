@@ -41,7 +41,7 @@ services:
     build:
       context: ./backend
     ports:
-      - "8000:8000"
+      - "8080:8080"
     environment:
       - COGNITO_CLIENT_ID=testing
       - COGNITO_CLIENT_SECRET=testing
