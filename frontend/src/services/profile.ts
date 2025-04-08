@@ -66,7 +66,7 @@ export interface Guest {
 }
 
 export interface Response {
-  id: string;
+  id?: string;
   fieldId: string;
   value: string | Guest[] | Pet[] | undefined;
 }
@@ -117,6 +117,7 @@ export {injectedRtkApi as hostAPI};
 export interface GetProfileApiResponse {
   id: string;
   fieldGroups: FieldGroup[];
+  responses?: Response[];
 }
 
 export interface GetProfileApiArg {

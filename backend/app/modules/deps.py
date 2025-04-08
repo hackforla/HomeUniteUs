@@ -26,6 +26,7 @@ def get_form_1():
         import json
         with open("form_data/form1.json", "r") as f:
             FORM_1 = json.load(f)
+            FORM_1['id'] = 'guest'
     return FORM_1
 
 
@@ -35,6 +36,7 @@ def get_form_2():
         import json
         with open("form_data/form2.json", "r") as f:
             FORM_2 = json.load(f)
+            FORM_2['id'] = 'host'
     return FORM_2
 ################################################################################
 
