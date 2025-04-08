@@ -93,6 +93,8 @@ describe('Sign Up', () => {
       .click();
 
     cy.wait('@signUp').its('request.body').should('deep.equal', user);
+    // print the response body
+    cy.wait('@signUp').its('response.body').then(console.log);
 
     cy.url().should('include', `signup/success?email=${user.email}`);
   });

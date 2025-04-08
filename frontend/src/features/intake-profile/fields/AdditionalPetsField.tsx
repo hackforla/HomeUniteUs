@@ -1,17 +1,24 @@
 import {Stack, Button, TextField, Typography} from '@mui/material';
-import {FormikErrors, FieldArray, useFormikContext} from 'formik';
+import {FormikErrors, FieldArray} from 'formik';
 import {Pet} from '../../../services/profile';
 import Autocomplete from '@mui/material/Autocomplete';
-import {InitialValues} from 'src/pages/intake-profile/IntakeProfile';
+import {InitialValues} from '../../../pages/intake-profile/IntakeProfile';
+
 interface Values {
   pets: Pet[];
 }
 
 interface AdditionalPetsFieldProps {
-  pets: Pet[];
+  errors: FormikErrors<Values>;
   fieldId: string;
   groupId: string;
-  errors: FormikErrors<Values>;
+  pets: Pet[];
+  setFieldValue: (
+    field: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    value: any,
+    shouldValidate?: boolean,
+  ) => Promise<void | FormikErrors<InitialValues>>;
 }
 
 const top_pets = [
@@ -26,12 +33,11 @@ const top_pets = [
 
 export const AdditionalPetsField = ({
   errors,
-  pets,
   fieldId,
   groupId,
+  pets,
+  setFieldValue,
 }: AdditionalPetsFieldProps) => {
-  const {setFieldValue} = useFormikContext<InitialValues>();
-
   return (
     <Stack gap={2}>
       <FieldArray name={`${groupId}.${fieldId}`}>
