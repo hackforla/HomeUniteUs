@@ -56,6 +56,7 @@ This issue is for tracking design work related to [Related User Story #].
 - [ ] Repeat above steps until design is approved
 - [ ] Update the Hand Off section of this ticket with the final iteration of this design
 - Engineering Handoff
+   - [ ] Product to draft Dev Handoff Issue
    - [ ] Designer and Product: Review with Engineering for questions
    - [ ] Designer: Add link to Figma and Screenshots to a comment in the linked User Story
 
