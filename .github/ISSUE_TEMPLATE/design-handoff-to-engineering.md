@@ -1,5 +1,5 @@
 ---
-name: "\U0001F6E0️ Design Handoff to Engineering"
+name: Design Handoff to Engineering
 about: To document and communicate finalized design work for Engineering implementation.
 title: 'Dev: [Design Handoff → Dev] <Feature Name or Epic>'
 labels: 'Complexity: Missing, Feature: Missing, milestone: missing, Role: missing,
