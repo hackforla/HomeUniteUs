@@ -1,9 +1,12 @@
 ---
 name: Design to Engineering Handoff Issue
-about: PMs & Designers use this template when a User Story is ready for Engineering. This will be a separate issue for Engineering to track their work.
-title: 'Engineering for #[add related user story issue number] [Related User Story Title]'
-labels: 'milestone: missing, points: missing, Role: missing, Complexity: Missing, Feature: Missing'
-assignees: 
+about: PMs & Designers use this template when a User Story is ready for Engineering.
+  This will be a separate issue for Engineering to track their work.
+title: 'Engineering for #[add related user story issue number] [Related User Story
+  Title]'
+labels: 'Complexity: Missing, Feature: Missing, milestone: missing, Role: missing,
+  size: missing'
+assignees: ''
 
 ---
 
