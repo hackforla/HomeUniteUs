@@ -1,9 +1,7 @@
 ---
-name: Design to Engineering Handoff Issue
-about: PMs & Designers use this template when a User Story is ready for Engineering.
-  This will be a separate issue for Engineering to track their work.
-title: 'Engineering for #[add related user story issue number] [Related User Story
-  Title]'
+name: "\U0001F6E0️ Design Handoff to Engineering"
+about: To document and communicate finalized design work for Engineering implementation.
+title: '"[Design Handoff → Dev] <Feature Name or Epic>"'
 labels: 'Complexity: Missing, Feature: Missing, milestone: missing, Role: missing,
   size: missing'
 assignees: ''
@@ -23,12 +21,17 @@ assignees: ''
    - Bug - select if the issue is to fix a bug
    - Feature - select if the issue is product feature
    - Task - select if the issue is administrative, not a feature
- 
-### Overview
+---
+
+### 🧩 Overview
 This issue is for tracking engineering work related to #[add related user story issue number], which is [Provide a brief description of the feature, outlining its purpose and expected outcome see the related user story - We need to do X for Y reason.]
 
 ### More Info
-Add additional context about the issue, this could include technical information
+- Add additional context about the issue, this could include technical information
+- Brief summary of the feature, component, or page.  
+- Explain what is being handed off and why.
+
+> _Example:_ Final UI for Host Intake Profile Page, including navigation, form field components, save/progress behavior, and validation states.
 
 ---
 
@@ -40,14 +43,6 @@ Add additional context about the issue, this could include technical information
 - [ ] xxx
 - [ ] xxx
 - [ ] xxx
-
----
-
-### 🎨 Designs / Mockups
-
-<!-- Link to Figma files, screenshots, or attach mockups -->
-
-[Figma file →](#)
 
 ---
 
@@ -71,62 +66,78 @@ Add additional context about the issue, this could include technical information
  
 ---
 
-### 🛠 Technical Notes (Optional)
+### 🎨 Final Design Links
 
-<!-- Notes from tech/engineering about approach, flags, dependencies, etc. -->
-
-- API endpoint: 
-- Feature flag: 
-- Known limitations: 
-
----
-
-### 🔧 Engineering Tasks
-
-<!-- Actionable dev steps for implementation. Include backend, frontend, tests, etc. -->
-### Steps to Implement 
--[Add engineering action items here] Such as:
-- [ ] Implement backend logic for profile update
-- [ ] Add UI form fields (email, display name)
-- [ ] Connect frontend to backend endpoint
-- [ ] Add input validation on frontend
-- [ ] Write unit and integration tests
-- [ ] Deploy under feature flag
-- [ ] Update API docs if applicable
+- **Figma File (or Zeplin, Sketch, etc.):** [Link]
+- **Page / Component Flow:** [Link or section]
+- **Design Specs / Measurements:** Included in Figma  
+- **Design System Components Used:** [e.g., Modal, Stepper, Accordion]
 
 ---
 
-### 🔗 Dependencies
+### 🔄 Interaction & Behavior Details
 
-<!-- List any related issues, blockers, or required assets -->
+Describe intended user interactions, transitions, and animations.
 
-- Blocked by: select "dependency" label and move this section to the top of the page.  Describe the dependency or link to the issue that is blocking this one from proceeding.
-- Depends on: #
-- Related to: #
-
----
-
-### 📊 Success Metrics
-
-<!-- Define how we measure if this feature is successful -->
-
-- KPI: 
-- Goal: 
-
----
-### ⚠️ Risk Assessment & Compliance Considerations
-
-- **Security Impact:** (e.g., new endpoints, data exposure, authentication changes?)
-- **Data Privacy:** (Does it handle PII or sensitive data? Do we need a DPA update?)
-- **Regulatory Impact:** (e.g., GDPR, HIPAA, PCI-DSS, etc.)
-- **Third-Party Tools:** (Any new integrations needing legal/security review?)
-- **Accessibility Concerns:** (Does this meet WCAG/ADA standards?)
-- **Rollback Plan:** (What’s the mitigation if something goes wrong?)
----
-
-### Attachments/Screenshots (If Applicable):
-(Insert wireframes, UI mockups, or relevant references)
+- Field validation rules
+- Hover/active states
+- Error/success messaging
+- Mobile responsiveness expectations
+- Page-to-page navigation
+- Accessibility considerations (e.g., tab order, color contrast)
 
 ---
 
-### Resources/Instructions
+### 📱 Responsive Layouts
+
+> If applicable, link to responsive designs  
+- ✅ Mobile: [Link]  
+- ✅ Tablet: [Link]  
+- ✅ Desktop: [Link]
+
+---
+
+### ✅ UX Acceptance Checklist
+
+- [x] Visual design QA complete
+- [x] Copy finalized
+- [x] Accessibility reviewed (basic standards)
+- [x] Edge cases covered
+- [x] Placeholder behavior confirmed (empty states, loading, etc.)
+
+---
+
+### 🧪 Known Edge Cases or Special Logic
+
+Highlight any non-obvious logic or conditional behaviors:
+- Conditional field rendering
+- Required vs optional inputs
+- Scroll behavior or sticky elements
+- Form submission triggers
+
+---
+
+### 🛠 Dev/Engineering Notes (from Design)
+
+(Optional) Any known technical constraints, performance considerations, or anticipated pain points.
+
+---
+
+### 🔁 Review Expectations
+
+- Handoff Date: MM/DD/YYYY  
+- Kickoff/Walkthrough with Dev Team: Scheduled? (Y/N)  
+
+---
+
+### 📎 Additional Resources
+
+- Related Product Spec / User Story: [Link]
+- Design QA Plan (if separate): [Link]
+- Existing related feature in Prod: [Link]
+
+---
+
+### 🏁 Ready for Dev?
+
+- [ ] Yes – Design is final, reviewed, and ready for Engineering to implement
