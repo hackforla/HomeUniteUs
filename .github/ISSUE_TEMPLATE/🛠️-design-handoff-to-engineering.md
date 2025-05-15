@@ -1,7 +1,7 @@
 ---
 name: "\U0001F6E0️ Design Handoff to Engineering"
 about: To document and communicate finalized design work for Engineering implementation.
-title: '"[Design Handoff → Dev] <Feature Name or Epic>"'
+title: 'Dev: [Design Handoff → Dev] <Feature Name or Epic>'
 labels: 'Complexity: Missing, Feature: Missing, milestone: missing, Role: missing,
   size: missing'
 assignees: ''
@@ -15,7 +15,7 @@ assignees: ''
 * Milestone
 * Size
 * Project 
-### Select the applicable type (located in the right sidebar)
+**Select the applicable type (located in the right sidebar) and remove this section**
 - Under Type,![image](https://github.com/user-attachments/assets/aaf85aa9-ac24-41c7-aac5-e0fd10a3f5de)
  select the applicable label:
    - Bug - select if the issue is to fix a bug
