@@ -253,7 +253,7 @@ urllib3==1.26.19
     #   botocore
     #   requests
     #   responses
-virtualenv==20.26.3
+virtualenv==20.26.6
     # via tox
 werkzeug==3.0.6
     # via
