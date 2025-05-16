@@ -33,22 +33,22 @@ Brief summary of the feature or enhancement, tied to the product spec.
 
 ### Action Items
 - Assign and Prep
-  - [ ] Engineer: Review User Story and Self-Assign
-  - [ ] Engineer: Work with PM and Design team member to clarify any questions about the User Story
-  - [ ] Engineer: Engineer work with Engineer team Lead to assign the appropriate size, complexity:
-      - [ ] Effort Estimation (Refined for Team Capacity)
-          - [ ] Front end
-          - [ ] Back end
-  - [ ] Engineer/Engineering Lead: determine if work should be split into multiple issues, if so create those issues and link them in this issue.
+  - [ ] Engineer: Understand the Issue to be drafted and Self-Assign
+  - [ ] Engineer: Conduct the necessary research (if applicable), clarify any questions 
+  - [ ] Engineer: Engineer work with Engineer team Lead to assign the appropriate size & complexity:
+  - [ ] Engineer/Engineering Lead: determine if work should be split into multiple issues, if so create those issues and link them in this issue (if applicable) or create as standalone.
 - Draft and Review:
-- [ ] Code is deployed, changes are visible in https://dev.homeunite.us/
-   - Let Product know that it is ready for review
-      - [ ] Engineer: Change Issue Status to "For Review/Feedback Needed"
-      - [ ] Engineer: Add Label "Ready for: Product"
-      - [ ] Engineer: Tag the PM (assignee) of the related User Story in a comment below and let them know that a draft is ready for review
-   - [ ] Product: Review https://dev.homeunite.us/ and compare against Acceptance Criteria
-   - [ ] Repeat above steps until all Acceptance Criteria in the User Story are accounted for
-
+  - [ ] Engineer: Change Issue Status to "For Review/Feedback Needed"
+  - [ ] Engineer: Add Label "Ready for: Lead Dev"
+  - [ ] Engineer 1st Level/Peer Review: Review and compare against Acceptance Criteria, provide feedback in comment section below, tag assignee.
+  - [ ] Engineer 1st Level/Peer Reviewer: Change Issue Status to "Questions/Clarification" and add label "Ready for Dev Team"
+  - [ ] Engineer (Assignee): Change Issue Status to "In Progress"
+  - [ ] Engineer (Assignee): Review issue comment(s) and resolve accordingly
+  - [ ] Repeat above steps until all Acceptance Criteria are accounted and comments are resolved
+  - [ ] Engineer 1st Level/Peer Reviewer: Change Issue Status to "For Review/Feedback Needed" and add label "Ready for: Dev Lead"
+  - [ ] 2nd final/Lead Engineer: Review and compare against Acceptance Criteria, provide feedback (if any) in comment section below, add label "Ready for Dev Team Member"
+  - [ ] Repeat above steps until all Acceptance Criteria are accounted and comments are resolved 
+   
 ### 📐 Scope of Work
 
 Clearly define what’s in scope for this issue.
