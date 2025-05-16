@@ -45,29 +45,11 @@ This issue is for tracking engineering work related to #[add related user story 
 
 ---
 
-### Action Items
-- Assign and Prep
-  - [ ] Engineer: Review User Story and Self-Assign
-  - [ ] Engineer: Work with PM and Design team member to clarify any questions about the User Story
-  - [ ] Engineer: Engineer work with Engineer team Lead to assign the appropriate size, complexity:
-      - [ ] Effort Estimation (Refined for Team Capacity)
-          - [ ] Front end
-          - [ ] Back end
-  - [ ] Engineer/Engineering Lead: determine if work should be split into multiple issues, if so create those issues and link them in this issue.
-- Draft and Review:
-- [ ] Code is deployed, changes are visible in https://dev.homeunite.us/
-   - Let Product know that it is ready for review
-      - [ ] Engineer: Change Issue Status to "For Review/Feedback Needed"
-      - [ ] Engineer: Add Label "Ready for: Product"
-      - [ ] Engineer: Tag the PM (assignee) of the related User Story in a comment below and let them know that a draft is ready for review
-   - [ ] Product: Review https://dev.homeunite.us/ and compare against Acceptance Criteria
-   - [ ] Repeat above steps until all Acceptance Criteria in the User Story are accounted for
- 
----
+
 
 ### 🎨 Final Design Links
 
-- **Figma File (or Zeplin, Sketch, etc.):** [Link]
+- **Figma File:** [Link]
 - **Page / Component Flow:** [Link or section]
 - **Design Specs / Measurements:** Included in Figma  
 - **Design System Components Used:** [e.g., Modal, Stepper, Accordion]
@@ -98,11 +80,20 @@ Describe intended user interactions, transitions, and animations.
 
 ### ✅ UX Acceptance Checklist
 
-- [x] Visual design QA complete
-- [x] Copy finalized
-- [x] Accessibility reviewed (basic standards)
-- [x] Edge cases covered
-- [x] Placeholder behavior confirmed (empty states, loading, etc.)
+- [ ] Visual design QA complete
+- [ ] Copy finalized
+- [ ] Accessibility reviewed (basic standards)
+- [ ] Edge cases covered
+- [ ] Placeholder behavior confirmed (empty states, loading, etc.)
+
+---
+
+### 📊 Success Metrics
+
+<!-- Define how we measure if this feature is successful -->
+
+- KPI: 
+- Goal: 
 
 ---
 
@@ -125,8 +116,52 @@ Highlight any non-obvious logic or conditional behaviors:
 ### 🔁 Review Expectations
 
 - Handoff Date: MM/DD/YYYY  
-- Kickoff/Walkthrough with Dev Team: Scheduled? (Y/N)  
+ - [ ] Kickoff/Walkthrough with Dev Team: scheduled and performed 
+ - [ ] Additional walkthrough needed?
 
+---
+
+### 🚩 Risks / Considerations
+
+- API spec not finalized – may need adjustments
+- Edge case for conditional fields requires backend logic
+- DB schema must be deployed first
+
+### ⚠️ Risk Assessment & Compliance Considerations
+- **Security Impact:** (e.g., new endpoints, data exposure, authentication changes?)
+- **Data Privacy:** (Does it handle PII or sensitive data? Do we need a DPA update?)
+- **Regulatory Impact:** (e.g., GDPR, HIPAA, PCI-DSS, etc.)
+- **Third-Party Tools:** (Any new integrations needing legal/security review?)
+- **Accessibility Concerns:** (Does this meet WCAG/ADA standards?)
+- **Rollback Plan:** (What’s the mitigation if something goes wrong?)
+---
+
+### Action Items
+- Assign and Prep
+  - [ ] Engineer: Review User Story and Self-Assign
+  - [ ] Engineer: Conduct the necessary research (if applicable), clarify any questions 
+  - [ ] Engineer: Work with PM and Design team member to clarify any questions about the User Story
+  - [ ] Engineer: Engineer work with Engineer team Lead to assign the appropriate size, complexity:
+  - [ ] Engineer/Engineering Lead: determine if work should be split into multiple issues, if so create those issues and link them in this issue (if applicable) or create as standalone.
+- Draft and Review:
+  - [ ] Engineer: Change Issue Status to "For Review/Feedback Needed"
+  - [ ] Engineer: Add Label "Ready for: Dev Peer Review"
+  - [ ] Engineer 1st Level/Peer Review: Review and compare against Acceptance Criteria, provide feedback in comment section below, tag assignee.
+  - [ ] Engineer 1st Level/Peer Reviewer: Change Issue Status to "Questions/Clarification" and add label "Ready for Dev Team Member"
+  - [ ] Engineer (Assignee): Change Issue Status to "In Progress"
+  - [ ] Engineer (Assignee): Review issue comment(s) and resolve accordingly
+  - [ ] Repeat above steps until all Acceptance Criteria are accounted and comments are resolved
+  - [ ] Engineer 1st Level/Peer Reviewer: Change Issue Status to "For Review/Feedback Needed" and add label "Ready for: Dev Lead"
+  - [ ] 2nd final/Lead Engineer: Review and compare against Acceptance Criteria, provide feedback (if any) in comment section below, add label "Ready for Dev Team Member"
+  - [ ] Repeat above steps until all Acceptance Criteria are accounted and comments are resolved
+- [ ] Code is deployed, changes are visible in https://dev.homeunite.us/
+   - Let Product know that it is ready for review
+      - [ ] Engineer: Change Issue Status to "For Review/Feedback Needed"
+      - [ ] Engineer: Add Label "Ready for: Product"
+      - [ ] Engineer: Tag the PM (assignee) of the related User Story in a comment below and let them know that a draft is ready for review
+   - [ ] Product: Review https://dev.homeunite.us/ and compare against Acceptance Criteria
+   - [ ] Repeat above steps until all Acceptance Criteria in the User Story are accounted for
+ 
 ---
 
 ### 📎 Additional Resources
@@ -136,7 +171,5 @@ Highlight any non-obvious logic or conditional behaviors:
 - Existing related feature in Prod: [Link]
 
 ---
-
-### 🏁 Ready for Dev?
 
 - [ ] Yes – Design is final, reviewed, and ready for Engineering to implement

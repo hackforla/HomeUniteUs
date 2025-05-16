@@ -31,24 +31,7 @@ Brief summary of the feature or enhancement, tied to the product spec.
 > _Example:_ Implement the frontend and backend logic for the Host Intake Profile form based on the approved product story.
 ---
 
-### Action Items
-- Assign and Prep
-  - [ ] Engineer: Understand the Issue to be drafted and Self-Assign
-  - [ ] Engineer: Conduct the necessary research (if applicable), clarify any questions 
-  - [ ] Engineer: Engineer work with Engineer team Lead to assign the appropriate size & complexity:
-  - [ ] Engineer/Engineering Lead: determine if work should be split into multiple issues, if so create those issues and link them in this issue (if applicable) or create as standalone.
-- Draft and Review:
-  - [ ] Engineer: Change Issue Status to "For Review/Feedback Needed"
-  - [ ] Engineer: Add Label "Ready for: Lead Dev"
-  - [ ] Engineer 1st Level/Peer Review: Review and compare against Acceptance Criteria, provide feedback in comment section below, tag assignee.
-  - [ ] Engineer 1st Level/Peer Reviewer: Change Issue Status to "Questions/Clarification" and add label "Ready for Dev Team"
-  - [ ] Engineer (Assignee): Change Issue Status to "In Progress"
-  - [ ] Engineer (Assignee): Review issue comment(s) and resolve accordingly
-  - [ ] Repeat above steps until all Acceptance Criteria are accounted and comments are resolved
-  - [ ] Engineer 1st Level/Peer Reviewer: Change Issue Status to "For Review/Feedback Needed" and add label "Ready for: Dev Lead"
-  - [ ] 2nd final/Lead Engineer: Review and compare against Acceptance Criteria, provide feedback (if any) in comment section below, add label "Ready for Dev Team Member"
-  - [ ] Repeat above steps until all Acceptance Criteria are accounted and comments are resolved 
-   
+
 ### 📐 Scope of Work
 
 Clearly define what’s in scope for this issue.
@@ -84,17 +67,13 @@ Clearly define what’s in scope for this issue.
 
 ---
 ### 🔄 Dependencies
-- Select "dependency" label and move this section to the top of the page.  Describe the dependency or link to the issue that is blocking this one from proceeding.
-- [ ] Product Spec: [Link]
-- [ ] Design Handoff: [Figma Link]
-- [ ] API Contracts (if available): [Link or status]
-- [ ] Feature Flag: [true/false]
+- Select "dependency" label and move this section to the top of the page.  Describe the dependency or link to the issue that is blocking this one from proceeding. 
 
 ---
 
 ### 📦 Technical Notes
 
-Engineering team should document their approach here.
+Engineering team should document their approach here, such as:
 - Component hierarchy or file structure plan
 - Libraries or dependencies needed
 - How local state and API responses will be managed
@@ -133,28 +112,36 @@ Engineering team should document their approach here.
 - Product Issue: [Link]
 - Design QA (if created): [Link]
 - Backend Ticket (if split): [Link]
+- Frontend Ticket (if split): [Link]
+---
 
+### Action Items
+- Assign and Prep
+  - [ ] Engineer: Understand the Issue to be drafted and Self-Assign
+  - [ ] Engineer: Conduct the necessary research (if applicable), clarify any questions 
+  - [ ] Engineer: Engineer work with Engineer team Lead to assign the appropriate size & complexity:
+  - [ ] Engineer/Engineering Lead: determine if work should be split into multiple issues, if so create those issues and link them in this issue (if applicable) or create as standalone.
+- Draft and Review:
+  - [ ] Engineer: Change Issue Status to "For Review/Feedback Needed"
+  - [ ] Engineer: Add Label "Ready for: Dev Peer Review"
+  - [ ] Engineer 1st Level/Peer Review: Review and compare against Acceptance Criteria, provide feedback in comment section below, tag assignee.
+  - [ ] Engineer 1st Level/Peer Reviewer: Change Issue Status to "Questions/Clarification" and add label "Ready for Dev Team Member"
+  - [ ] Engineer (Assignee): Change Issue Status to "In Progress"
+  - [ ] Engineer (Assignee): Review issue comment(s) and resolve accordingly
+  - [ ] Repeat above steps until all Acceptance Criteria are accounted and comments are resolved
+  - [ ] Engineer 1st Level/Peer Reviewer: Change Issue Status to "For Review/Feedback Needed" and add label "Ready for: Dev Lead"
+  - [ ] 2nd final/Lead Engineer: Review and compare against Acceptance Criteria, provide feedback (if any) in comment section below, add label "Ready for Dev Team Member"
+  - [ ] Repeat above steps until all Acceptance Criteria are accounted and comments are resolved 
+   
 ---
 
 ### 📎 Resources
 - Figma UI Reference: [Link]
 - Technical Design Doc (if applicable): [Link]
-- Slack Contact for Questions: [@person or #channel]
-
----
-
-### 📊 Success Metrics
-
-<!-- Define how we measure if this feature is successful -->
-
-- KPI: 
-- Goal: 
 
 ---
 
 ### Attachments/Screenshots (If Applicable):
-(Insert wireframes, UI mockups, or relevant references)
+- (Insert wireframes, UI mockups, or relevant references)
 
 ---
-
-### Resources/Instructions
