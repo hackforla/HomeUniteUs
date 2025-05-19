@@ -46,7 +46,7 @@ import {
   IntakeProfileSection,
 } from './pages';
 import {SystemAdminDashboard} from './pages/SystemAdminDashboard';
-import {enableMocking} from './utils/testing/browser';
+// import {enableMocking} from './utils/testing/browser';
 import {useAppDispatch} from './redux/hooks/store';
 import {setCredentials} from './redux/authSlice';
 import NotFound from './pages/NotFound';
@@ -170,21 +170,21 @@ function HuuApp() {
 
 const appRoot = document.getElementById('root') as HTMLElement;
 
-enableMocking().then(() => {
-  ReactDOM.createRoot(appRoot).render(
-    <React.StrictMode>
-      <Provider store={setupStore()}>
-        <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <StyledEngineProvider injectFirst>
-              <ThemeProvider theme={HomeUniteUsTheme}>
-                <CssBaseline />
-                <HuuApp />
-              </ThemeProvider>
-            </StyledEngineProvider>
-          </LocalizationProvider>
-        </BrowserRouter>
-      </Provider>
-    </React.StrictMode>,
-  );
-});
+// enableMocking().then(() => {
+ReactDOM.createRoot(appRoot).render(
+  <React.StrictMode>
+    <Provider store={setupStore()}>
+      <BrowserRouter>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={HomeUniteUsTheme}>
+              <CssBaseline />
+              <HuuApp />
+            </ThemeProvider>
+          </StyledEngineProvider>
+        </LocalizationProvider>
+      </BrowserRouter>
+    </Provider>
+  </React.StrictMode>,
+);
+// });
