@@ -2,13 +2,28 @@
 name: Product Issue Template - for non-user story
 about: This template is designed to keep non-feature or non-functional tasks organized
   and actionable.
-title: ''
-labels: ''
+title: "[Team] <Brief Description of Task or Initiative>"
+labels: 'Complexity: Missing, Feature: Missing, milestone: missing, Role: missing,
+  size: missing'
 assignees: ''
 
 ---
 
----
+**UPDATE LABELS: Add the following labels to each new issue and remove default labels. Then remove this section: **
+* Complexity
+* Feature
+* Milestone
+* Role
+* Size
+#### Select Project Board (located in the right sidebar)- Then remove this section:
+- Under Type,![image](https://github.com/user-attachments/assets/aaf85aa9-ac24-41c7-aac5-e0fd10a3f5de) 
+      - P: HUU: Project Board
+#### Select the applicable type (located in the right sidebar). Then remove this section:
+- Under Type,![image](https://github.com/user-attachments/assets/aaf85aa9-ac24-41c7-aac5-e0fd10a3f5de) select the applicable label:
+   - Bug - select if the issue is to fix a bug
+   - Feature - select if the issue is product feature
+   - Task - select if the issue is administrative, not a feature
+
 ### Overview
 [Provide a brief description of the task or initiative, outlining its purpose and expected outcome - We need to do X for Y reason.]
 

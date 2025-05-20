@@ -15,6 +15,14 @@ assignees: ''
 * Milestone
 * Role
 * Size
+#### Select Project Board (located in the right sidebar)- Then remove this section:
+- Under Type,![image](https://github.com/user-attachments/assets/aaf85aa9-ac24-41c7-aac5-e0fd10a3f5de) 
+      - P: HUU: Project Board
+#### Select the applicable type (located in the right sidebar). Then remove this section:
+- Under Type,![image](https://github.com/user-attachments/assets/aaf85aa9-ac24-41c7-aac5-e0fd10a3f5de) select the applicable label:
+   - Bug - select if the issue is to fix a bug
+   - Feature - select if the issue is product feature
+   - Task - select if the issue is administrative, not a feature
 
 ### Overview
 This issue is for tracking design work related to [Related User Story #]. [Brief summary of the related user Story]
