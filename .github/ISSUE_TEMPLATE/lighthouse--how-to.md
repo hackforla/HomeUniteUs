@@ -2,8 +2,7 @@
 name: 'Lighthouse: How To'
 about: Provides overview of how to use Lighthouse and links to additional resources
 title: 'Lighthouse: How To'
-labels: 'Complexity: Missing, Feature: Missing, milestone: missing, Role: missing,
-  size: missing'
+labels: 'Complexity: Missing, Feature: Missing, Role: missing'
 assignees: ''
 
 ---

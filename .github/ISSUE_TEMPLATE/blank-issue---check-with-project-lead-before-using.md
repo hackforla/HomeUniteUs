@@ -1,9 +1,9 @@
 ---
-name: Blank Issue
+name: Blank Issue - CHECK WITH PROJECT LEAD BEFORE USING
 about: Consistent formatting make Issues concise and easy to navigate
 title: ''
-labels: 'Complexity: Missing, Feature: Missing, milestone: missing, Role: missing,
-  size: missing'
+labels: 'Complexity: Missing, Feature: Missing, Milestone: missing, Project: Missing,
+  Role: missing, Size: missing'
 assignees: ''
 
 ---

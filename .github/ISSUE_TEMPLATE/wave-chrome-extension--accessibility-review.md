@@ -2,8 +2,7 @@
 name: 'Wave Chrome Extension: Accessibility review'
 about: Describe this issue template's purpose here.
 title: 'Wave Chrome Extension: Accessibility review'
-labels: 'Complexity: Missing, Feature: Missing, milestone: missing, Role: missing,
-  size: missing'
+labels: 'Complexity: Missing, Feature: Missing, Role: missing'
 assignees: ''
 
 ---

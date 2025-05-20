@@ -3,7 +3,8 @@ name: Product User Story Template
 about: Designed to be used by product managers to define features, align stakeholders,
   and hand off clear requirements to Design and Engineering.
 title: ''
-labels: ''
+labels: 'Complexity: Missing, Feature: Missing, Milestone: missing, Project: Missing,
+  Role: missing, Size: missing'
 assignees: ''
 
 ---

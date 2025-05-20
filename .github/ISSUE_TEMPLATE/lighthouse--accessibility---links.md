@@ -2,8 +2,7 @@
 name: 'Lighthouse: Accessibility - Links'
 about: AKA Links must have discernible text
 title: 'Lighthouse: Accessibility - Links'
-labels: 'Complexity: Missing, Feature: Missing, milestone: missing, Role: missing,
-  size: missing'
+labels: 'Complexity: Missing, Feature: Missing, Role: missing'
 assignees: ''
 
 ---

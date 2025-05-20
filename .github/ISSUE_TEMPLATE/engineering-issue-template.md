@@ -3,8 +3,8 @@ name: Engineering Issue Template
 about: 'Purpose: To document development work derived from product stories, including
   tech context, implementation plan, and delivery scope.'
 title: '"[Dev] <Feature or Component Name>"'
-labels: 'Complexity: Missing, Feature: Missing, milestone: missing, Role: missing,
-  size: missing'
+labels: 'Complexity: Missing, Feature: Missing, Milestone: missing, Project: Missing,
+  Role: missing, Size: missing'
 assignees: ''
 
 ---

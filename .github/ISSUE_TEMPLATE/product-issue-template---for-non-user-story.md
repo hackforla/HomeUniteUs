@@ -3,8 +3,8 @@ name: Product Issue Template - for non-user story
 about: This template is designed to keep non-feature or non-functional tasks organized
   and actionable.
 title: "[Team] <Brief Description of Task or Initiative>"
-labels: 'Complexity: Missing, Feature: Missing, milestone: missing, Role: missing,
-  size: missing'
+labels: 'Complexity: Missing, Feature: Missing, Milestone: missing, Project: Missing,
+  Role: missing, Size: missing'
 assignees: ''
 
 ---

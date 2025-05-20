@@ -2,8 +2,8 @@
 name: Create project card for [project name]
 about: Gather information to add this project to HackforLA's website
 title: ''
-labels: 'Complexity: Missing, documentation, Feature: Missing, good first issue, milestone:
-  missing, Role: missing, size: missing'
+labels: 'Complexity: Missing, documentation, Feature: Missing, good first issue, Role:
+  missing'
 assignees: ''
 
 ---

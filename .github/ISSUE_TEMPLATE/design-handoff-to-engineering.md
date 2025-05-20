@@ -2,8 +2,8 @@
 name: Design Handoff to Engineering
 about: To document and communicate finalized design work for Engineering implementation.
 title: 'Dev: [Design Handoff → Dev] <Feature Name or Epic>'
-labels: 'Complexity: Missing, Feature: Missing, milestone: missing, Role: missing,
-  size: missing'
+labels: 'Complexity: Missing, Feature: Missing, Milestone: missing, Project: Missing,
+  Role: missing, Size: missing'
 assignees: ''
 
 ---

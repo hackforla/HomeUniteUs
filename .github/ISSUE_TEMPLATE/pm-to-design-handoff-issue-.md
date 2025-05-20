@@ -3,8 +3,7 @@ name: 'PM to Design Handoff Issue '
 about: Handoff from Product to Design to start UI/UX work. This will be a separate
   issue for design to track their work.
 title: 'Design: [Related User Story Title]'
-labels: 'Complexity: Missing, Feature: Missing, milestone: missing, Role: Design,
-  size: missing'
+labels: 'Complexity: Missing, Feature: Missing, Role: Design'
 assignees: ''
 
 ---
