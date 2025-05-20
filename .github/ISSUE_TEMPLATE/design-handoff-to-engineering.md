@@ -138,15 +138,11 @@ Highlight any non-obvious logic or conditional behaviors:
 
 ### Action Items
 - Assign and Prep
-  - [ ] Engineer: Self-assign yourself to the development issue.
-  - [ ] Engineer: Move the development issue from the Prioritized Backlog to In Progress.
-  - [ ] Engineer: Review User Story 
+  - [ ] Engineer: Review User Story and Self-Assign
   - [ ] Engineer: Conduct the necessary research (if applicable), clarify any questions 
   - [ ] Engineer: Work with PM and Design team member to clarify any questions about the User Story
   - [ ] Engineer: Engineer work with Engineer team Lead to assign the appropriate size, complexity:
   - [ ] Engineer/Engineering Lead: determine if work should be split into multiple issues, if so create those issues and link them in this issue (if applicable) or create as standalone.
-   - [ ] Create a PR, if applicable.
-   - [ ] Once the PR has been approved, use it to close this issue. If there is no PR is associated with this issue, close this issue after lead signoff.
 - Draft and Review:
   - [ ] Engineer: Change Issue Status to "For Review/Feedback Needed"
   - [ ] Engineer: Add Label "Ready for: Dev Peer Review"
