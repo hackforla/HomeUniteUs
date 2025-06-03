@@ -37,11 +37,14 @@ assignees: ''
 - Brief summary of the feature, component, or page.  
 - Explain what is being handed off and why.
 
-> _Example:_ Final UI for Host Intake Profile Page, including navigation, form field components, save/progress behavior, and validation states.
+> _Example: Final UI for Host Intake Profile Page, including navigation, form field components, save/progress behavior, and validation states.
+
+### More Info
+Brief summary of the feature or enhancement, tied to the product spec.
 
 ---
 
-### ✅ Acceptance Criteria
+### ✅ Acceptance Criteria - Design
 *(Agreed upon by Product/Design/Engineering - this written from the user's perspective and describe the expected behavior of the feature).*
 <!-- List of clear, testable criteria. Use checkboxes. -->
 
@@ -169,6 +172,15 @@ Feature-specific items:
 - [ ] [Feature dependency]: [What this relies on] Select "dependency" label and move this to the top, before "Overview" section. 
 
 ---
+
+### 🧵 Related Issues
+
+- Product Issue: [Link]
+- Design QA (if created): [Link]
+- Backend Ticket (if split): [Link]
+- Frontend Ticket (if split): [Link]
+---
+
 
 ### Action Items
 - Assign and Prep
