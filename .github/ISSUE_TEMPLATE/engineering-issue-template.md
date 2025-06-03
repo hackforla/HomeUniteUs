@@ -24,13 +24,12 @@ assignees: ''
    - Bug - select if the issue is to fix a bug
    - Feature - select if the issue is product feature
    - Task - select if the issue is administrative, not a feature
-#### Select the applicable type (located in the right sidebar). Then remove this section:
-- Under Type,![image](https://github.com/user-attachments/assets/aaf85aa9-ac24-41c7-aac5-e0fd10a3f5de) select the applicable label:
-   - Bug - select if the issue is to fix a bug
-   - Feature - select if the issue is product feature
-   - Task - select if the issue is administrative, not a feature
+#### Select issue "Planned Start and End date".  Then remove this section:
+- Under selected Project Board: P: HUU: Project Board Under Type,![image](https://github.com/user-attachments/assets/aaf85aa9-ac24-41c7-aac5-e0fd10a3f5de) located in the right sidebar, click on the 2nd drop down button and select the appropriate "Planned Start and End Date"
 
-### Overview
+---
+
+### 🧩 Overview
 This issue is for tracking engineering work related to #[add related user story issue number], which is [Provide a brief description of the feature, outlining its purpose and expected outcome see the related user story - We need to do X for Y reason.]
 
 ### More Info
@@ -50,10 +49,14 @@ Clearly define what’s in scope for this issue.
 - Set up database schema if not yet implemented
 
 ### 🔧 Engineering Tasks
+*These are the specific technical work items required to build and deliver a new feature. They break down the overall feature into concrete, actionable development work.*
 
 <!-- Actionable dev steps for implementation. Include backend, frontend, tests, etc. -->
-### Steps to Implement 
--[Add engineering action items here] Such as:
+
+**Steps to Implement:**
+*These are sample tasks - adapt and expand based on the specific feature requirements*
+*Break down the feature into specific engineering tasks*
+- [Add engineering action items here] Such as:
 - [ ] Implement backend logic for profile update
 - [ ] Add UI form fields (email, display name)
 - [ ] Connect frontend to backend endpoint
@@ -65,7 +68,7 @@ Clearly define what’s in scope for this issue.
 ---
 
 ### ✅ Acceptance Criteria
-
+*Takes the design acceptance criteria and defines the technical requirements needed to make those user-facing features actually work - "What technical work must be completed to deliver this user experience".
 <!-- List of clear, testable criteria. Use checkboxes. -->
 
 - [ ] xxx
@@ -80,39 +83,39 @@ Clearly define what’s in scope for this issue.
 ---
 
 ### 📦 Technical Notes
-
-Engineering team should document their approach here, such as:
+*Provides the engineering team with technical context and constraints that help us make good implementation decisions and avoid common pitfalls specific to our system.*
+*Engineering team should document their approach here, such as:*
 - Component hierarchy or file structure plan
-- Libraries or dependencies needed
+- Libraries or dependencies needed  
 - How local state and API responses will be managed
 - Planned test coverage
-- API endpoint: 
-- Feature flag: 
-- Known limitations: 
+- API endpoint details
+- Feature flag configuration
+- Known limitations or constraints
 
 ---
 
 ### 🧪 Testing Strategy
+*Defines the comprehensive approach for validating that the feature works correctly, performs well, and meets all requirements before release. "How will we validate this feature works correctly before shipping it?"*
 - Unit tests for form logic and validation
 - Integration test with backend service
 - Cross-browser UI check
 - Responsive layout testing (mobile, tablet, desktop)
-
+- Manual testing for edge cases and user workflows
 ---
 
 ### 🚩 Risks / Considerations
+*Identifies potential technical, implementation, and delivery challenges that could impact the successful completion of the feature. "What could go wrong technically, and how should we prepare for it?"*
 
-- API spec not finalized – may need adjustments
-- Edge case for conditional fields requires backend logic
-- DB schema must be deployed first
-
-### ⚠️ Risk Assessment & Compliance Considerations
-- **Security Impact:** (e.g., new endpoints, data exposure, authentication changes?)
-- **Data Privacy:** (Does it handle PII or sensitive data? Do we need a DPA update?)
-- **Regulatory Impact:** (e.g., GDPR, HIPAA, PCI-DSS, etc.)
-- **Third-Party Tools:** (Any new integrations needing legal/security review?)
-- **Accessibility Concerns:** (Does this meet WCAG/ADA standards?)
-- **Rollback Plan:** (What’s the mitigation if something goes wrong?)
+**Examples:**
+- "Risk: File upload feature could impact server performance - plan load testing and optimization"
+- "Consideration: New authentication flow requires coordination with DevOps for environment variables"
+- "Risk: API spec not finalized – may need adjustments during development"
+- "Consideration: Edge case for conditional fields requires backend logic coordination"
+- "Dependency: DB schema must be deployed before feature implementation"
+**Feature-specific risks:**
+- [ ] [Risk/consideration]: [Impact and mitigation approach]
+- [ ] [Risk/consideration]: [Impact and mitigation approach]
 ---
 
 ### 🧵 Related Issues
@@ -129,6 +132,7 @@ Engineering team should document their approach here, such as:
   - [ ] Engineer: Conduct the necessary research (if applicable), clarify any questions 
   - [ ] Engineer: Engineer work with Engineer team Lead to assign the appropriate size & complexity:
   - [ ] Engineer/Engineering Lead: determine if work should be split into multiple issues, if so create those issues and link them in this issue (if applicable) or create as standalone.
+ - [ ] Engineer/Engineering Lead: determine and provide "start and end date" for Product to update.
 - Draft and Review:
   - [ ] Engineer: Change Issue Status to "For Review/Feedback Needed"
   - [ ] Engineer: Add Label "Ready for: Dev Peer Review"

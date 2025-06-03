@@ -28,11 +28,11 @@ assignees: ''
 ---
 
 ### 🧩 Overview
-(Completed by Design/PM)
-This issue is for tracking engineering work related to #[add related user story issue number], which is [Provide a brief description of the feature, outlining its purpose and expected outcome see the related user story - We need to do X for Y reason.]
+*(Completed by Design/PM)*
+*This issue is for tracking engineering work related to #[add related user story issue number], which is [Provide a brief description of the feature, outlining its purpose and expected outcome see the related user story - We need to do X for Y reason.]*
 
 ### More Info
-(Completed by Engineering/Dev)
+*(Completed by Engineering/Dev)*
 - Add additional context about the issue, this could include technical information
 - Brief summary of the feature, component, or page.  
 - Explain what is being handed off and why.
@@ -42,7 +42,7 @@ This issue is for tracking engineering work related to #[add related user story 
 ---
 
 ### ✅ Acceptance Criteria
-(Agreed upon by Product/Design/Engineering - this written from the user's perspective and describe the expected behavior of the feature).
+*(Agreed upon by Product/Design/Engineering - this written from the user's perspective and describe the expected behavior of the feature).*
 <!-- List of clear, testable criteria. Use checkboxes. -->
 
 - [ ] xxx
@@ -52,10 +52,8 @@ This issue is for tracking engineering work related to #[add related user story 
 
 ---
 
-
-
 ### 🎨 Final Design Links
-
+*(Provided by Design Team Member)*
 - **Figma File:** [Link]
 - **Page / Component Flow:** [Link or section]
 - **Design Specs / Measurements:** Included in Figma  
@@ -64,20 +62,30 @@ This issue is for tracking engineering work related to #[add related user story 
 ---
 
 ### 🔄 Interaction & Behavior Details
-(Completed by Design team member
-Describe intended user interactions, transitions, and animations.
+*(Completed by Design team member) *
+*Describe intended user interactions, transitions, and animations. *
+*Specify how users interact with interface elements and how the system responds. *
 
-- Field validation rules
-- Hover/active states
-- Error/success messaging
-- Mobile responsiveness expectations
-- Page-to-page navigation
-- Accessibility considerations (e.g., tab order, color contrast)
+Examples of what to include:
+- Click/tap/hover behaviors and visual feedback
+- Field validation rules and timing
+- Error/success messaging placement and behavior
+- Modal/dropdown opening and closing behavior
+- State changes (enabled/disabled, selected/unselected)
+- Page-to-page navigation and transitions
+- Animation and transition requirements
+- Form validation timing and error display
+- Loading states and progress indicators
+
+Specific interactions for this feature:
+- [ ] [User action]: [Expected system response]
+- [ ] [Interface element]: [Behavior in different states]
+- [ ] [Form/input]: [Validation and feedback timing]
 
 ---
 
 ### 📱 Responsive Layouts
-
+*Provided by Design Team Member*
 > If applicable, link to responsive designs  
 - ✅ Mobile: [Link]  
 - ✅ Tablet: [Link]  
@@ -86,7 +94,7 @@ Describe intended user interactions, transitions, and animations.
 ---
 
 ### ✅ UX Acceptance Checklist
-
+*Completed by Design Team Member - modify accordingly*
 - [ ] Visual design QA complete 
     - (Verify that all visual elements match the approved designs, including spacing, typography, colors, and component usage. Check that interactive states (hover, focus, active, disabled) are clearly defined and any design system components are properly specified).
 - [ ] Copy finalized 
@@ -105,7 +113,8 @@ Describe intended user interactions, transitions, and animations.
 ---
 
 ### 🧪 Known Edge Cases or Special Logic
-*Document unusual scenarios and custom business rules that require specific handling. Include both the condition and expected behavior.*
+*(Design/Product provide initial information, Engineering to add any technical cases)*
+*Document unusual scenarios and custom business rules that require specific handling. Include both the condition and expected behavior.* 
 
 Highlight any non-obvious logic or conditional behaviors:
 - Conditional field rendering
@@ -126,8 +135,9 @@ List specific cases for this feature:
 
 ---
 
-### 🛠 Dev/Engineering Notes (Optional) Any known technical constraints, performance considerations, or anticipated pain points.
-*Technical implementation details, constraints, and guidance specifically for the development team. This section bridges the gap between design intent and technical execution by providing engineering-specific context that isn't captured elsewhere.*
+### 🛠 Dev/Engineering Notes (Optional) 
+*Engineering to provide - any known technical constraints, performance considerations, or anticipated pain points. 
+*Technical implementation details, constraints, and guidance specifically for the development team. This section bridges the gap between design intent and technical execution by providing engineering-specific context that isn't captured elsewhere. *
 *Dev/Engineering Notes = "How to build it within our technical ecosystem"  i.e "Here are the technical things the dev team should know while building this feature."*
 
 Examples of what to include:
@@ -146,7 +156,7 @@ Specific technical guidance:
 ---
 
 ### 🚩 Risks / Considerations
-*Note potential challenges specific to implementing this feature.*
+* Engineering to provide - Note potential challenges specific to implementing this feature. *
 Examples of what to include:
 - Dependencies that must be completed first
 - Unfinalized specs that may change
