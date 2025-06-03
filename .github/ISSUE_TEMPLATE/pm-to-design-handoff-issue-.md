@@ -3,17 +3,19 @@ name: 'PM to Design Handoff Issue '
 about: Handoff from Product to Design to start UI/UX work. This will be a separate
   issue for design to track their work.
 title: 'Design: [Related User Story Title]'
-labels: 'Complexity: Missing, Feature: Missing, Role: Design'
+labels: 'Complexity: Missing, Feature: Missing, Milestone: missing, Project: Missing,
+  Role: Design, Size: missing'
 assignees: ''
 
 ---
 
-**UPDATE LABELS: Add the following labels to each new issue and remove default labels. Then remove this section: **
+**UPDATE LABELS: Add the following labels to each new issue, and remove default labels. Then remove this section:**
 * Complexity
 * Feature
-* Milestone
 * Role
+* Milestone
 * Size
+* Project 
 #### Select Project Board (located in the right sidebar)- Then remove this section:
 - Under Type,![image](https://github.com/user-attachments/assets/aaf85aa9-ac24-41c7-aac5-e0fd10a3f5de) 
       - P: HUU: Project Board
@@ -22,8 +24,12 @@ assignees: ''
    - Bug - select if the issue is to fix a bug
    - Feature - select if the issue is product feature
    - Task - select if the issue is administrative, not a feature
+#### Select issue "Planned Start and End date".  Then remove this section:
+- Under selected Project Board: P: HUU: Project Board Under Type,![image](https://github.com/user-attachments/assets/aaf85aa9-ac24-41c7-aac5-e0fd10a3f5de) located in the right sidebar, click on the 2nd drop down button and select the appropriate "Planned Start and End Date"
 
-### Overview
+---
+
+### 🧩 Overview
 This issue is for tracking design work related to [Related User Story #]. [Brief summary of the related user Story]
 
 ---
