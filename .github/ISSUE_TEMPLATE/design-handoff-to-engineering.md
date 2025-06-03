@@ -23,17 +23,16 @@ assignees: ''
    - Bug - select if the issue is to fix a bug
    - Feature - select if the issue is product feature
    - Task - select if the issue is administrative, not a feature
-#### Select the applicable type (located in the right sidebar) and remove this section
-- Under Type,![image](https://github.com/user-attachments/assets/aaf85aa9-ac24-41c7-aac5-e0fd10a3f5de) select the applicable label:
-   - Bug - select if the issue is to fix a bug
-   - Feature - select if the issue is product feature
-   - Task - select if the issue is administrative, not a feature
+#### Select issue "Planned Start and End date".  Then remove this section:
+- Under selected Project Board: P: HUU: Project Board Under Type,![image](https://github.com/user-attachments/assets/aaf85aa9-ac24-41c7-aac5-e0fd10a3f5de) located in the right sidebar, click on the 2nd drop down button and select the appropriate "Planned Start and End Date"
 ---
 
 ### 🧩 Overview
+(Completed by Design/PM)
 This issue is for tracking engineering work related to #[add related user story issue number], which is [Provide a brief description of the feature, outlining its purpose and expected outcome see the related user story - We need to do X for Y reason.]
 
 ### More Info
+(Completed by Engineering/Dev)
 - Add additional context about the issue, this could include technical information
 - Brief summary of the feature, component, or page.  
 - Explain what is being handed off and why.
@@ -43,7 +42,7 @@ This issue is for tracking engineering work related to #[add related user story 
 ---
 
 ### ✅ Acceptance Criteria
-
+(Agreed upon by Product/Design/Engineering - this written from the user's perspective and describe the expected behavior of the feature).
 <!-- List of clear, testable criteria. Use checkboxes. -->
 
 - [ ] xxx
@@ -65,7 +64,7 @@ This issue is for tracking engineering work related to #[add related user story 
 ---
 
 ### 🔄 Interaction & Behavior Details
-
+(Completed by Design team member
 Describe intended user interactions, transitions, and animations.
 
 - Field validation rules
@@ -88,24 +87,25 @@ Describe intended user interactions, transitions, and animations.
 
 ### ✅ UX Acceptance Checklist
 
-- [ ] Visual design QA complete
-- [ ] Copy finalized
-- [ ] Accessibility reviewed (basic standards)
-- [ ] Edge cases covered
-- [ ] Placeholder behavior confirmed (empty states, loading, etc.)
-
----
-
-### 📊 Success Metrics
-
-<!-- Define how we measure if this feature is successful -->
-
-- KPI: 
-- Goal: 
+- [ ] Visual design QA complete 
+    - (Verify that all visual elements match the approved designs, including spacing, typography, colors, and component usage. Check that interactive states (hover, focus, active, disabled) are clearly defined and any design system components are properly specified).
+- [ ] Copy finalized 
+    - (Confirm that all text content is final and approved - no placeholder text, lorem ipsum, or "TBD" copy remains. This includes labels, buttons, error messages, tooltips, and any microcopy. If copy is still being refined, note what's pending and when it will be finalized.)
+- [ ] Accessibility reviewed (basic standards) 
+    - (Ensure the design meets fundamental accessibility requirements: sufficient color contrast ratios, keyboard navigation considered, meaningful alt text planned for images, and form labels properly associated. Flag any potential accessibility concerns for developer attention.)
+- [ ] Edge cases covered 
+    - (Document how the design handles uncommon but important scenarios such as: very long text/names, empty data states, error conditions, slow loading, offline states, and boundary conditions (minimum/maximum values). List the specific edge cases considered for this feature.)
+- [ ] Placeholder behavior confirmed (empty states, loading, etc.) 
+    - (Define what users see during transitional states: loading spinners or skeletons while data loads, empty state messaging when no content exists, form validation feedback, and any progressive disclosure patterns. Include specific copy and visual treatment for these states.)
+- [ ] Responsive behavior documented (if applicable) 
+     - (Specify how the design adapts across different screen sizes and devices. Include breakpoint behavior, layout changes, content prioritization, and any mobile-specific interactions. Document which elements stack, hide, or transform on smaller screens, and note any touch-specific considerations like minimum tap target sizes.)
+- [ ] Design tokens/specifications provided for developers
+    - (Include precise technical specifications developers need for implementation: exact spacing values, font sizes, color hex codes, border radius, shadow values, and animation timing. Reference specific design system tokens where applicable or provide explicit measurements when custom styling is required.)
 
 ---
 
 ### 🧪 Known Edge Cases or Special Logic
+*Document unusual scenarios and custom business rules that require specific handling. Include both the condition and expected behavior.*
 
 Highlight any non-obvious logic or conditional behaviors:
 - Conditional field rendering
@@ -113,35 +113,51 @@ Highlight any non-obvious logic or conditional behaviors:
 - Scroll behavior or sticky elements
 - Form submission triggers
 
+Examples to consider:
+- Data validation boundaries (character limits, format requirements)
+- User behavior scenarios (rapid clicking, navigation during processes)
+- System failure states (API errors, network issues)
+- Business rule exceptions (user role differences, geographic restrictions)
+- Integration-specific requirements
+
+List specific cases for this feature:
+- [ ] [Condition]: [Expected behavior]
+- [ ] [Condition]: [Expected behavior]
+
 ---
 
-### 🛠 Dev/Engineering Notes (from Design)
+### 🛠 Dev/Engineering Notes (Optional) Any known technical constraints, performance considerations, or anticipated pain points.
+*Technical implementation details, constraints, and guidance specifically for the development team. This section bridges the gap between design intent and technical execution by providing engineering-specific context that isn't captured elsewhere.*
+*Dev/Engineering Notes = "How to build it within our technical ecosystem"  i.e "Here are the technical things the dev team should know while building this feature."*
 
-(Optional) Any known technical constraints, performance considerations, or anticipated pain points.
+Examples of what to include:
+- Framework/library requirements or preferences
+- Performance considerations and optimization notes
+- Integration details (APIs, database changes, third-party services)
+- Browser/device support requirements
+- Implementation phases or priorities (MVP vs. nice-to-have)
+- Technical gotchas, limitations, or workarounds needed
 
----
-
-### 🔁 Review Expectations
-
-- Handoff Date: MM/DD/YYYY  
- - [ ] Kickoff/Walkthrough with Dev Team: scheduled and performed 
- - [ ] Additional walkthrough needed?
+Specific technical guidance:
+- [ ] [Implementation detail]: [Specific guidance or constraint]
+- [ ] [Technical requirement]: [Why it's needed or how to approach]
+- [ ] [Integration note]: [What developers need to know]
 
 ---
 
 ### 🚩 Risks / Considerations
+*Note potential challenges specific to implementing this feature.*
+Examples of what to include:
+- Dependencies that must be completed first
+- Unfinalized specs that may change
+- Complex logic requiring coordination between teams
+- Technical constraints specific to this feature
 
-- API spec not finalized – may need adjustments
-- Edge case for conditional fields requires backend logic
-- DB schema must be deployed first
+Feature-specific items:
+- [ ] [Feature-specific risk]: [How it might impact implementation]
+- [ ] [Feature constraint]: [What developers should know]
+- [ ] [Feature dependency]: [What this relies on] Select "dependency" label and move this to the top, before "Overview" section. 
 
-### ⚠️ Risk Assessment & Compliance Considerations
-- **Security Impact:** (e.g., new endpoints, data exposure, authentication changes?)
-- **Data Privacy:** (Does it handle PII or sensitive data? Do we need a DPA update?)
-- **Regulatory Impact:** (e.g., GDPR, HIPAA, PCI-DSS, etc.)
-- **Third-Party Tools:** (Any new integrations needing legal/security review?)
-- **Accessibility Concerns:** (Does this meet WCAG/ADA standards?)
-- **Rollback Plan:** (What’s the mitigation if something goes wrong?)
 ---
 
 ### Action Items
@@ -149,8 +165,9 @@ Highlight any non-obvious logic or conditional behaviors:
   - [ ] Engineer: Review User Story and Self-Assign
   - [ ] Engineer: Conduct the necessary research (if applicable), clarify any questions 
   - [ ] Engineer: Work with PM and Design team member to clarify any questions about the User Story
-  - [ ] Engineer: Engineer work with Engineer team Lead to assign the appropriate size, complexity:
+  - [ ] Engineer: Engineer work with Engineer team Lead to assign the appropriate size, complexity 
   - [ ] Engineer/Engineering Lead: determine if work should be split into multiple issues, if so create those issues and link them in this issue (if applicable) or create as standalone.
+   - [ ] Engineer/Engineering Lead: determine and provide "start and end date" for Product to update.
 - Draft and Review:
   - [ ] Engineer: Change Issue Status to "For Review/Feedback Needed"
   - [ ] Engineer: Add Label "Ready for: Dev Peer Review"
