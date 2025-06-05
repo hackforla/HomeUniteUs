@@ -17,6 +17,41 @@ interface GetResponsesParams {
   userId: string;
 }
 
+// export const handlers = [
+//   http.get('/api/intake-profile/form/:profileId', req => {
+//     const id = req.params.profileId;
+//     const profile = intakeProfiles.find(p => p.id === id);
+
+//     if (profile) {
+//       return HttpResponse.json(profile);
+//     }
+
+//     return new HttpResponse(null, {status: 404});
+//   }),
+
+//   http.get<GetResponsesParams, GetProfileResponsesApiResponse>(
+//     '/api/intake-profile/responses/:userId',
+//     () => {
+//       const fields = intakeProfiles[0].fieldGroups
+//         .map(fieldGroup => fieldGroup.fields)
+//         .flat();
+
+//       const responses = fields.map(field => {
+//         const value = getResponseValue(field);
+//         return {
+//           fieldId: field.id,
+//           value,
+//         };
+//       });
+
+//       // return a list of filled in responses
+//       return HttpResponse.json({responses});
+//       // return an empty list of responses
+//       // return HttpResponse.json({responses: []});
+//     },
+//   ),
+// ];
+
 export const handlers = [
   http.post('/api/profile/responses', async ({request}) => {
     const responses = await request.json();
