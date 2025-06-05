@@ -19,11 +19,13 @@ assignees: ''
 #### Select Project Board (located in the right sidebar)- Then remove this section:
 - Under Type,![image](https://github.com/user-attachments/assets/aaf85aa9-ac24-41c7-aac5-e0fd10a3f5de) 
       - P: HUU: Project Board
-#### Select the applicable type (located in the right sidebar) and remove this section
+#### Select the applicable type (located in the right sidebar). Then remove this section:
 - Under Type,![image](https://github.com/user-attachments/assets/aaf85aa9-ac24-41c7-aac5-e0fd10a3f5de) select the applicable label:
    - Bug - select if the issue is to fix a bug
    - Feature - select if the issue is product feature
    - Task - select if the issue is administrative, not a feature
+#### Select issue "Planned Start and End date".  Then remove this section:
+- Under selected Project Board: P: HUU: Project Board Under Type,![image](https://github.com/user-attachments/assets/aaf85aa9-ac24-41c7-aac5-e0fd10a3f5de) located in the right sidebar, click on the 2nd drop down button and select the appropriate "Planned Start and End Date"
 ---
 
 ### 🧩 Overview
@@ -50,8 +52,10 @@ assignees: ''
 ---
 
 ## 🎯 Acceptance Criteria (Definition of Done)
-- [ ] Clear list of conditions to be met for this feature to be considered complete.
-- [ ] Each should be testable and specific.
+*Transfer information to Design to Engineering Issue to be checked off*
+*These high-level criteria will be detailed further in Design and Engineering handoff templates*
+- Clear list of conditions to be met for this feature to be considered complete.
+- Each should be testable and specific.
   
 > Example:
 > - [ ] Host can access the Profile from the dashboard.
@@ -77,7 +81,10 @@ assignees: ''
 
 ---
 
-## 📌 Scope Considerations
+## 📌 Scope Considerations (In/Out Scope)
+- [Feature List](https://docs.google.com/spreadsheets/d/1uM287TOz20jnXPS4kRe0Dt5GlhnPbNRYBHHOxcamCJ0/edit?gid=343529642#gid=343529642) *Add/Update Feature List*
+- [ ] Added to [Feature List](https://docs.google.com/spreadsheets/d/1uM287TOz20jnXPS4kRe0Dt5GlhnPbNRYBHHOxcamCJ0/edit?gid=343529642#gid=343529642) and completed information accordingly
+
 **In Scope:**
 - Initial release of host profile questions and storage.
 
@@ -87,26 +94,12 @@ assignees: ''
 
 ---
 
-## 🛑 Constraints / Risks
-- Legal or compliance considerations?
+## 🛑 Constraints / Risks / Workflow Dependency
+*(Compliance / Regulatory information will be captured in the Feature List, this should be specific to the feature, where applicable)
 - Known data dependencies?
 - Technical limitations?
 
 > Example: We must collect data in a way that meets GDPR and local data privacy laws.
-
----
-
-## ✅ Success Metrics
-How will we know this user story was successful?
-
-- [ ] % of Hosts who complete the Profile
-- [ ] % who resume after saving progress
-- [ ] Support tickets related to onboarding drop by X%
-
----
-
-## 🗓️ Target Sprint / Milestone
-> Example: Sprint 12 / Q3 Host Experience Initiative
 
 ---
 

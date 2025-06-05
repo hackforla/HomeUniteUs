@@ -30,25 +30,26 @@ assignees: ''
 ---
 
 ### 🧩 Overview
+*(Completed by PM. Copy from PM User Story) *
 This issue is for tracking design work related to [Related User Story #]. [Brief summary of the related user Story]
 
 ---
 
 ### 🧠 Context / Background
-
+*(Completed by PM. Copy from PM User Story) *
 _Why are we doing this?_  
 Describe the business problem, opportunity, or user pain point. Include relevant research findings, data, or product strategy that support the need for design work.
 
 ---
 
 ### 🎯 Problem Statement
-
+*(Completed by PM. Copy from PM User Story) *
 Summarize the core user or business problem that the design will solve.
 
 ---
 
 ### 👤 Target User(s)
-
+*(Completed by PM.) *
 Describe the persona(s) or specific user type this design is intended for.
 
 ---
@@ -91,6 +92,7 @@ List any constraints or guidance from Product or Tech:
 ---
 
 ### 🔁 Feedback Loops & Collaboration
+*(completed by Design) *
 - [ ] Design kickoff meeting scheduled
 - [ ] Begin wireframes or discovery
   - **Review Cycles:** [e.g., Weekly syncs, async feedback]
@@ -101,6 +103,7 @@ List any constraints or guidance from Product or Tech:
 ---
 
 ### 📋 Deliverables
+*(Completed by Design)*
 *What specific design artifacts are expected?*
 - [ ] User flows
 - [ ] Wireframes
