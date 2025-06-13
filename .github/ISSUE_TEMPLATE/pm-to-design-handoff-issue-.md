@@ -29,32 +29,32 @@ assignees: ''
 
 ---
 
-### 🧩 Overview
+## 🧩 Overview
 *(Completed by PM. Copy from PM User Story) *
 This issue is for tracking design work related to [Related User Story #]. [Brief summary of the related user Story]
 
 ---
 
-### 🧠 Context / Background
+## 🧠 Context / Background
 *(Completed by PM. Copy from PM User Story) *
 _Why are we doing this?_  
 Describe the business problem, opportunity, or user pain point. Include relevant research findings, data, or product strategy that support the need for design work.
 
 ---
 
-### 🎯 Problem Statement
+## 🎯 Problem Statement
 *(Completed by PM. Copy from PM User Story) *
 Summarize the core user or business problem that the design will solve.
 
 ---
 
-### 👤 Target User(s)
+## 👤 Target User(s)
 *(Completed by PM.) *
 Describe the persona(s) or specific user type this design is intended for.
 
 ---
 
-### 🎯 Goals & Objectives
+## 🎯 Goals & Objectives
 *This section helps the designer understand not just WHAT to design, but WHY they're designing it and what success looks like from a product perspective. *
 *Example: For a "Host/Guest Intake Profile Form" feature:
 *Goal: Create a streamlined onboarding form that captures essential host and guest information without overwhelming users
@@ -65,7 +65,7 @@ Describe the persona(s) or specific user type this design is intended for.
 
 ---
 
-### ✅ Success Criteria (Design-Specific)
+## ✅ Success Criteria (Design-Specific)
 *Validates that the design work itself is complete and meets quality standards (completed by PM) *
 - [ ] Addresses the core user problem
 - [ ] Aligns with product vision and brand guidelines
@@ -74,7 +74,7 @@ Describe the persona(s) or specific user type this design is intended for.
 
 ---
 
-### 📋 Functional Requirements (if applicable)
+## 📋 Functional Requirements (if applicable)
 *Only include if there are specific technical or business constraints that affect the design solution*
 - Data fields that must be captured (for compliance/integration reasons)
 - Required integrations with existing systems
@@ -82,7 +82,7 @@ Describe the persona(s) or specific user type this design is intended for.
 
 ---
 
-### 🧩 Functional Constraints
+## 🧩 Functional Constraints
 *(Completed by PM if applicable). These are non-negotiable parameters that affect design decisions - things the designer can't change but must accommodate in their design approach. *
 List any constraints or guidance from Product or Tech:
 - Must integrate with [existing flow/system]
@@ -91,7 +91,7 @@ List any constraints or guidance from Product or Tech:
 
 ---
 
-### 🔁 Feedback Loops & Collaboration
+## 🔁 Feedback Loops & Collaboration
 *(completed by Design) *
 - [ ] Design kickoff meeting scheduled
 - [ ] Begin wireframes or discovery
@@ -102,7 +102,7 @@ List any constraints or guidance from Product or Tech:
   - [ ] Final iteration - Add to Figma with explanation/comments
 ---
 
-### 📋 Deliverables
+## 📋 Deliverables
 *(Completed by Design)*
 *What specific design artifacts are expected?*
 - [ ] User flows
@@ -113,21 +113,21 @@ List any constraints or guidance from Product or Tech:
 
 ---
 
-### ⚠️ Known Risks or Open Questions
+## ⚠️ Known Risks or Open Questions
 *(completed by PM) identifies uncertainties, potential blockers, or areas needing clarification that could impact the design work or project success. Gives designers a heads-up about potential challenges or decisions that haven't been finalized yet, so they can plan accordingly and flag issues early."
 - Are there uncertainties that may affect design direction?
 - Anything Engineering or stakeholders should weigh in on early?
 
 ---
 
-### 🔗 Related Issues
+## 🔗 Related Issues
 - User Story: [Link]
 - Research findings: [Link if applicable]
 - Technical constraints: [Link if applicable]
 
 ---
 
-### Action Items
+## Action Items
 - Assign and Prep
   - [ ] Designer: Review User Story and self-assign 
   - [ ] Designer: Conduct the necessary research (if applicable), clarify any questions
@@ -155,7 +155,7 @@ List any constraints or guidance from Product or Tech:
    - [ ] Product: Review Design Screenshots and provide feedback
    - [ ] Repeat above steps until design is approved
 
-### 🚀 Handoff Requirements
+## 🚀 Handoff Requirements
 *What needs to be completed before this moves to engineering?*
 - [ ] Designer and Product: Review with Engineering for questions
 - [ ] Designer: Add link to Figma and Screenshots to a comment in the linked User Story
@@ -164,7 +164,7 @@ List any constraints or guidance from Product or Tech:
 - [ ] All design assets uploaded and documented
 ---
 
-### 📎 Resources & References
+## 📎 Resources & References
 
 - Existing Research: [Link]
 - Brand Guidelines / Design System: [Link]

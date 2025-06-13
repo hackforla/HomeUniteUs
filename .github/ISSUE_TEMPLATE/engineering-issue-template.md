@@ -29,17 +29,17 @@ assignees: ''
 
 ---
 
-### 🧩 Overview
+## 🧩 Overview
 This issue is for tracking engineering work related to #[add related user story issue number], which is [Provide a brief description of the feature, outlining its purpose and expected outcome see the related user story - We need to do X for Y reason.]
 
-### More Info
+## More Info
 Brief summary of the feature or enhancement, tied to the product spec.
 
 > _Example:_ Implement the frontend and backend logic for the Host Intake Profile form based on the approved product story.
 ---
 
 
-### 📐 Scope of Work
+## 📐 Scope of Work
 
 Clearly define what’s in scope for this issue.
 - Create form fields dynamically from schema
@@ -48,7 +48,7 @@ Clearly define what’s in scope for this issue.
 - Ensure user authentication is respected
 - Set up database schema if not yet implemented
 
-### 🔧 Engineering Tasks
+## 🔧 Engineering Tasks
 *These are the specific technical work items required to build and deliver a new feature. They break down the overall feature into concrete, actionable development work.*
 
 <!-- Actionable dev steps for implementation. Include backend, frontend, tests, etc. -->
@@ -67,7 +67,7 @@ Clearly define what’s in scope for this issue.
 
 ---
 
-### ✅ Acceptance Criteria
+## ✅ Acceptance Criteria
 *Takes the design acceptance criteria and defines the technical requirements needed to make those user-facing features actually work - "What technical work must be completed to deliver this user experience".
 <!-- List of clear, testable criteria. Use checkboxes. -->
 
@@ -77,12 +77,12 @@ Clearly define what’s in scope for this issue.
 - [ ] xxx
 
 ---
-### 🔄 Dependencies
+## 🔄 Dependencies
 - Select "dependency" label and move this section to the top of the page.  Describe the dependency or link to the issue that is blocking this one from proceeding. 
 
 ---
 
-### 📦 Technical Notes
+## 📦 Technical Notes
 *Provides the engineering team with technical context and constraints that help us make good implementation decisions and avoid common pitfalls specific to our system.*
 *Engineering team should document their approach here, such as:*
 - Component hierarchy or file structure plan
@@ -95,7 +95,7 @@ Clearly define what’s in scope for this issue.
 
 ---
 
-### 🧪 Testing Strategy
+## 🧪 Testing Strategy
 *Defines the comprehensive approach for validating that the feature works correctly, performs well, and meets all requirements before release. "How will we validate this feature works correctly before shipping it?"*
 - Unit tests for form logic and validation
 - Integration test with backend service
@@ -104,7 +104,7 @@ Clearly define what’s in scope for this issue.
 - Manual testing for edge cases and user workflows
 ---
 
-### 🚩 Risks / Considerations
+## 🚩 Risks / Considerations
 *Identifies potential technical, implementation, and delivery challenges that could impact the successful completion of the feature. "What could go wrong technically, and how should we prepare for it?"*
 
 **Examples:**
@@ -118,7 +118,7 @@ Clearly define what’s in scope for this issue.
 - [ ] [Risk/consideration]: [Impact and mitigation approach]
 ---
 
-### 🧵 Related Issues
+## 🧵 Related Issues
 
 - Product Issue: [Link]
 - Design QA (if created): [Link]
@@ -126,7 +126,7 @@ Clearly define what’s in scope for this issue.
 - Frontend Ticket (if split): [Link]
 ---
 
-### Action Items
+## Action Items
 - Assign and Prep
   - [ ] Engineer: Understand the Issue to be drafted and Self-Assign
   - [ ] Engineer: Conduct the necessary research (if applicable), clarify any questions 
@@ -147,13 +147,13 @@ Clearly define what’s in scope for this issue.
    
 ---
 
-### 📎 Resources
+## 📎 Resources
 - Figma UI Reference: [Link]
 - Technical Design Doc (if applicable): [Link]
 
 ---
 
-### Attachments/Screenshots (If Applicable):
+## Attachments/Screenshots (If Applicable):
 - (Insert wireframes, UI mockups, or relevant references)
 
 ---

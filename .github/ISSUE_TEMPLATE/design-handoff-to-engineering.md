@@ -27,11 +27,11 @@ assignees: ''
 - Under selected Project Board: P: HUU: Project Board Under Type,![image](https://github.com/user-attachments/assets/aaf85aa9-ac24-41c7-aac5-e0fd10a3f5de) located in the right sidebar, click on the 2nd drop down button and select the appropriate "Planned Start and End Date"
 ---
 
-### 🧩 Overview
+## 🧩 Overview
 *(Completed by Design/PM)*
 *This issue is for tracking engineering work related to #[add related user story issue number], which is [Provide a brief description of the feature, outlining its purpose and expected outcome see the related user story - We need to do X for Y reason.]*
 
-### More Info
+## More Info
 *(Completed by Engineering/Dev)*
 - Add additional context about the issue, this could include technical information
 - Brief summary of the feature, component, or page.  
@@ -39,12 +39,12 @@ assignees: ''
 
 > _Example: Final UI for Host Intake Profile Page, including navigation, form field components, save/progress behavior, and validation states.
 
-### More Info
+## More Info
 Brief summary of the feature or enhancement, tied to the product spec.
 
 ---
 
-### ✅ Acceptance Criteria - Design
+## ✅ Acceptance Criteria - Design
 *(Agreed upon by Product/Design/Engineering - this written from the user's perspective and describe the expected behavior of the feature).*
 <!-- List of clear, testable criteria. Use checkboxes. -->
 
@@ -55,7 +55,7 @@ Brief summary of the feature or enhancement, tied to the product spec.
 
 ---
 
-### 🎨 Final Design Links
+## 🎨 Final Design Links
 *(Provided by Design Team Member)*
 - **Figma File:** [Link]
 - **Page / Component Flow:** [Link or section]
@@ -64,7 +64,7 @@ Brief summary of the feature or enhancement, tied to the product spec.
 
 ---
 
-### 🔄 Interaction & Behavior Details
+## 🔄 Interaction & Behavior Details
 *(Completed by Design team member) *
 *Describe intended user interactions, transitions, and animations. *
 *Specify how users interact with interface elements and how the system responds. *
@@ -87,7 +87,7 @@ Specific interactions for this feature:
 
 ---
 
-### 📱 Responsive Layouts
+## 📱 Responsive Layouts
 *Provided by Design Team Member*
 > If applicable, link to responsive designs  
 - ✅ Mobile: [Link]  
@@ -96,7 +96,7 @@ Specific interactions for this feature:
 
 ---
 
-### ✅ UX Acceptance Checklist
+## ✅ UX Acceptance Checklist
 *Completed by Design Team Member - modify accordingly*
 - [ ] Visual design QA complete 
     - (Verify that all visual elements match the approved designs, including spacing, typography, colors, and component usage. Check that interactive states (hover, focus, active, disabled) are clearly defined and any design system components are properly specified).
@@ -115,7 +115,7 @@ Specific interactions for this feature:
 
 ---
 
-### 🧪 Known Edge Cases or Special Logic
+## 🧪 Known Edge Cases or Special Logic
 *(Design/Product provide initial information, Engineering to add any technical cases)*
 *Document unusual scenarios and custom business rules that require specific handling. Include both the condition and expected behavior.* 
 
@@ -138,7 +138,7 @@ List specific cases for this feature:
 
 ---
 
-### 🛠 Dev/Engineering Notes (Optional) 
+## 🛠 Dev/Engineering Notes (Optional) 
 *Engineering to provide - any known technical constraints, performance considerations, or anticipated pain points. 
 *Technical implementation details, constraints, and guidance specifically for the development team. This section bridges the gap between design intent and technical execution by providing engineering-specific context that isn't captured elsewhere. *
 *Dev/Engineering Notes = "How to build it within our technical ecosystem"  i.e "Here are the technical things the dev team should know while building this feature."*
@@ -158,7 +158,7 @@ Specific technical guidance:
 
 ---
 
-### 🚩 Risks / Considerations
+## 🚩 Risks / Considerations
 * Engineering to provide - Note potential challenges specific to implementing this feature. *
 Examples of what to include:
 - Dependencies that must be completed first
@@ -173,7 +173,7 @@ Feature-specific items:
 
 ---
 
-### 🧵 Related Issues
+## 🧵 Related Issues
 
 - Product Issue: [Link]
 - Design QA (if created): [Link]
@@ -182,7 +182,7 @@ Feature-specific items:
 ---
 
 
-### Action Items
+## Action Items
 - Assign and Prep
   - [ ] Engineer: Review User Story and Self-Assign
   - [ ] Engineer: Conduct the necessary research (if applicable), clarify any questions 
@@ -211,7 +211,7 @@ Feature-specific items:
  
 ---
 
-### 📎 Additional Resources
+## 📎 Additional Resources
 
 - Related Product Spec / User Story: [Link]
 - Design QA Plan (if separate): [Link]

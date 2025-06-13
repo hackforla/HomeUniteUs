@@ -28,7 +28,7 @@ assignees: ''
 - Under selected Project Board: P: HUU: Project Board Under Type,![image](https://github.com/user-attachments/assets/aaf85aa9-ac24-41c7-aac5-e0fd10a3f5de) located in the right sidebar, click on the 2nd drop down button and select the appropriate "Planned Start and End Date"
 ---
 
-### 🧩 Overview
+## 🧩 Overview
 [Provide a brief description of the task or initiative, outlining its purpose and expected outcome - We need to do X for Y reason.]
 
 > Example:  
@@ -36,7 +36,7 @@ assignees: ''
 
 ---
 
-### 🎯 Objective
+## 🎯 Objective
 > What outcome or decision should result from completing this task?
 
 > Example:  
@@ -44,7 +44,7 @@ assignees: ''
 
 ---
 
-### 🔍 Background / Context
+## 🔍 Background / Context
 > Any relevant links, research, documentation, team discussions, or past tickets that provide context.
 
 - Slack thread: [link]
@@ -52,7 +52,7 @@ assignees: ''
 
 ---
 
-### 📝 Scope of Work
+## 📝 Scope of Work
 Clearly list what is expected for this task to be complete, such as:
 
 - [ ] Conduct external research / internal analysis
@@ -62,7 +62,7 @@ Clearly list what is expected for this task to be complete, such as:
 
 ---
 
-### 📎 Deliverables
+## 📎 Deliverables
 What are the final outputs?
 
 - Slide deck? Documentation? Spreadsheet? Jira epics? Summary in Notion?
@@ -72,7 +72,7 @@ What are the final outputs?
 
 ---
 
-### 🧭 Success Criteria
+## 🧭 Success Criteria
 How will we know this task was completed effectively? Such as:
 
 - [ ] All required sources were reviewed
@@ -81,14 +81,14 @@ How will we know this task was completed effectively? Such as:
 
 ---
 
-### 🛑 Risks / Dependencies
+## 🛑 Risks / Dependencies
 > Are there blockers, timing challenges, or dependencies on other teams? Such as:
 
 - May require coordination with Design or Research
 - External access to data might be delayed
 
 ---
-### Action Items
+## Action Items
 - [ ] Assignee: Assign yourself to this issue.
 - [ ] Assignee: Move the issue from Prioritized Backlog to In Progress.
 - [ ] Product Manager (Assignee): Conduct the necessary research (if applicable), clarify any questions
@@ -111,7 +111,7 @@ How will we know this task was completed effectively? Such as:
 
 ---
 
-### 🔗 Related Tickets / Resources
+## 🔗 Related Tickets / Resources
 - Epic: [link]
 - Design: [link]
 - Engineering: [link]
