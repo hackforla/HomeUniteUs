@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
@@ -19,6 +20,7 @@ import {
   AuthenticatedLayout,
   CoordinatorDashboardLayout,
   GuestDashboardLayout,
+  HostDashboardLayout,
 } from './features/layouts';
 import {
   GuestApplicationTracker,
@@ -50,6 +52,21 @@ import {enableMocking} from './utils/testing/browser';
 import {useAppDispatch} from './redux/hooks/store';
 import {setCredentials} from './redux/authSlice';
 import NotFound from './pages/NotFound';
+
+import {WelcomePage} from './pages/host-dashboard/WelcomePage';
+import {ProfileOverview} from './pages/host-dashboard/ProfileOverview';
+import { ContactPage } from './pages/host-dashboard/ContactPage';
+import { BasicInformation } from './pages/host-dashboard/BasicInformation';
+import AddPhotos from './pages/host-dashboard/AddPhotos';
+import { HousingPage } from './pages/host-dashboard/HousingPage';
+import { EmploymentPage } from './pages/host-dashboard/EmploymentPage';
+import { InterestsPage } from './pages/host-dashboard/InterestsPage';
+import { ReferencesPage } from './pages/host-dashboard/ReferencesPage';
+import { BackgroundPage } from './pages/host-dashboard/BackgroundPage';
+import { MotivesPage } from './pages/host-dashboard/MotivesPage';
+import { SelfEvaluation } from './pages/host-dashboard/SelfEvaluation';
+import { AboutMe } from './pages/host-dashboard/AboutMe';
+import { PreferencesPage } from './pages/host-dashboard/PreferencesPage';
 
 function HuuApp() {
   const [session] = useSessionMutation({
@@ -141,14 +158,21 @@ function HuuApp() {
         >
           <Route index element={<CoordinatorDashboard />} />
         </Route>
+
         <Route
           path="/host"
           element={
             <ProtectedRoute>
-              <HostDashboard />
+              <HostDashboardLayout />
             </ProtectedRoute>
           }
         >
+          <Route index element={<HostDashboard />} />
+          <Route path="documents" element={<GuestDocuments />} />
+          <Route path="contacts" element={<GuestContacts />} />
+          <Route path="tasks" element={<GuestTasks />} />
+          <Route path="settings" element={<GuestSettings />} />
+ 
           <Route path="profile/:profileId" element={<IntakeProfile />}>
             <Route path="group/:groupId" element={<FieldGroupList />} />
             <Route path="review" element={<ProfileReview />} />
@@ -163,6 +187,106 @@ function HuuApp() {
           }
         />
         <Route path="*" element={<NotFound />} />
+
+        <Route path="/host/dashboard"
+            element={
+            <ProtectedRoute>
+              <HostDashboard />
+            </ProtectedRoute>
+            } />
+        <Route path="/host/welcome"
+            element={
+            <ProtectedRoute> 
+              <WelcomePage />
+            </ProtectedRoute>
+            } />
+        <Route path="/host/overview"
+            element={
+            <ProtectedRoute>
+              <ProfileOverview />
+            </ProtectedRoute>
+            } />
+        <Route path="/host/contact"
+            element={
+            <ProtectedRoute>
+              <ContactPage />
+            </ProtectedRoute>
+            } />
+        <Route path="/host/basic"
+            element={
+            <ProtectedRoute>
+              <BasicInformation />
+            </ProtectedRoute>
+            } />
+        <Route path="/host/photos"
+            element={
+            <ProtectedRoute>
+              <AddPhotos />
+            </ProtectedRoute>
+            } />
+        <Route path="/host/housing"
+            element={
+            <ProtectedRoute>
+              <HousingPage />
+            </ProtectedRoute>
+            } />
+
+        <Route path="/host/employment"
+            element={
+            <ProtectedRoute>
+              <EmploymentPage />
+            </ProtectedRoute>
+            } />
+
+        <Route path="/host/interests"
+            element={
+            <ProtectedRoute>
+              <InterestsPage />
+            </ProtectedRoute>
+            } />
+
+        <Route path="/host/references"
+            element={
+            <ProtectedRoute>
+              <ReferencesPage />
+            </ProtectedRoute>
+            } />
+
+        <Route path="/host/background"
+            element={
+            <ProtectedRoute> 
+              <BackgroundPage />
+            </ProtectedRoute>
+            } />
+
+        <Route path="/host/motives"
+            element={
+            <ProtectedRoute> 
+              <MotivesPage />
+            </ProtectedRoute>
+            } />
+
+        <Route path="/host/eval"
+            element={
+            <ProtectedRoute>
+              <SelfEvaluation />
+            </ProtectedRoute>
+            } />
+
+        <Route path="/host/me"
+            element={
+            <ProtectedRoute>
+              <AboutMe />
+            </ProtectedRoute>
+            } />
+
+        <Route path="/host/preferences"
+            element={
+            <ProtectedRoute>
+              <PreferencesPage />
+            </ProtectedRoute>
+            } />
+
       </Routes>
     </>
   );
