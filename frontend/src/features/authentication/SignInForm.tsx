@@ -26,9 +26,9 @@ const validationSchema = object({
 });
 
 export const SignInForm = ({
-  onSubmit, 
+  onSubmit,
   isLoading,
-  getTokenIsLoading
+  getTokenIsLoading,
 }: SignInFormProps) => {
   const {
     handleSubmit,
