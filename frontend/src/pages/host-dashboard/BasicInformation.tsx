@@ -305,7 +305,7 @@ export function BasicInformation() {
                           sx={{color: 'black', fontWeight: 'bold', mb: 1}}
                         >
                           {field === 'dob'
-                            ? 'Date of the Birth'
+                            ? 'Date of Birth'
                             : field.charAt(0).toUpperCase() + field.slice(1)}
                         </FormLabel>
                         <TextField
