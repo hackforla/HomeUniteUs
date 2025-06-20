@@ -67,6 +67,7 @@ import { MotivesPage } from './pages/host-dashboard/MotivesPage';
 import { SelfEvaluation } from './pages/host-dashboard/SelfEvaluation';
 import { AboutMe } from './pages/host-dashboard/AboutMe';
 import { PreferencesPage } from './pages/host-dashboard/PreferencesPage';
+import { ContactInfoDisplay } from './pages/host-dashboard/ContactInfoDisplay';
 
 function HuuApp() {
   const [session] = useSessionMutation({
@@ -286,6 +287,15 @@ function HuuApp() {
               <PreferencesPage />
             </ProtectedRoute>
             } />
+
+
+        <Route path="/host/contact-info/:contactId" 
+        element={
+        <ProtectedRoute>
+          <ContactInfoDisplay />
+        </ProtectedRoute>
+        } />
+
 
       </Routes>
     </>

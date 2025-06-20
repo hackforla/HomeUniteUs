@@ -46,12 +46,12 @@ services:
   #     - COGNITO_CLIENT_ID=testing
   #     - COGNITO_CLIENT_SECRET=testing
   #     - COGNITO_REGION=us-east-1
-  #     - COGNITO_REDIRECT_URI=http://localhost:4040/signin
+  #     - COGNITO_REDIRECT_URI=http://localhost:4041/signin
   #     - COGNITO_USER_POOL_ID=testing
   #     - COGNITO_ACCESS_ID=testing
   #     - COGNITO_ACCESS_KEY=testing
   #     - COGNITO_ENDPOINT_URL=http://motoserver:5000
-  #     - ROOT_URL=http://localhost:4040
+  #     - ROOT_URL=http://localhost:4041
   #     - DATABASE_URL=postgresql+psycopg2://postgres:postgres@db:5432/huu
   #   links:
   #     - db
@@ -62,7 +62,7 @@ services:
     # build:
     #   context: ./frontend
     # ports:
-      - "4040:80"
+      - "4041:80"
 volumes:
   db-data: {}
   pgadmin-data: {}

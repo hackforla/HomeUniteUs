@@ -24,7 +24,7 @@ RUN apt-get update && apt-get install -y curl
 COPY --from=builder /app .
 RUN npx cypress install
 HEALTHCHECK --interval=5s --timeout=5s --retries=3 \
-    CMD curl --fail http://127.0.0.1:4040 || exit 1
+    CMD curl --fail http://127.0.0.1:4041 || exit 1
 ENTRYPOINT ["/bin/sh", "-c"]
 CMD ["npx vite --host"]
 

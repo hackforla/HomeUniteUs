@@ -79,7 +79,7 @@ jobs:
       image: ghcr.io/hackforla/homeuniteus/app:latest-test
       options: --entrypoint /bin/bash --no-healthcheck
       env:
-          CYPRESS_BASE_URL: http://frontend:4040
+          CYPRESS_BASE_URL: http://frontend:4041
           CYPRESS_USE_MOCK: true
     steps:
       - name: Run Tests With Backend Mocking
@@ -102,7 +102,7 @@ jobs:
       image: ghcr.io/hackforla/homeuniteus/app:latest-test
       options: --entrypoint /bin/bash --no-healthcheck
       env:
-          CYPRESS_BASE_URL: http://frontend:4040
+          CYPRESS_BASE_URL: http://frontend:4041
           CYPRESS_USE_MOCK: false
           CYPRESS_REAL_EMAIL: testhost@test.com
           CYPRESS_REAL_PASSWORD: Test!123
@@ -127,4 +127,4 @@ jobs:
 #           install: false
 #           start: npm run dev
 #           working-directory: ./app
-#           wait-on: "http://[::1]:4040/"
+#           wait-on: "http://[::1]:4041/"

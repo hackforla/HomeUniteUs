@@ -1,4 +1,6 @@
 /* eslint-disable */
+import axios from 'axios';
+
 import {
   Box,
   Typography,
@@ -24,7 +26,7 @@ export function ContactPage() {
   const [error, setError] = useState('');
 
   // Handlers
-  const handleNextClick = () => {
+  const handleNextClick = async () => {
     if (!selectedOption) {
       setError('Please select an option for method of contact.');
       return;
@@ -38,9 +40,20 @@ export function ContactPage() {
       return;
     }
 
-    // Clear error and navigate
-    setError('');
-    navigate('/host/overview');
+    setError(''); // Clear any existing errors before sending
+
+    try {
+      await axios.post('/api/host-dashboard/contact-info', {
+        preferred_method: selectedOption,
+        phone_number: numericInput,
+      });
+
+      // If POST succeeds, navigate:
+      navigate('/host/overview');
+    } catch (err) {
+      console.error(err);
+      setError('Something went wrong while saving your info.');
+    }
   };
 
   const handlePreviousClick = () => {
