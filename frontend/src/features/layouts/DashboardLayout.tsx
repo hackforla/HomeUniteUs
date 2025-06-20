@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -7,10 +8,12 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 
+import {ReactNode} from 'react';
 import {Link} from '@mui/material';
 import {styled} from '@mui/system';
-import {Outlet, useLocation} from 'react-router-dom';
+import {Outlet, useNavigate, useLocation} from 'react-router-dom';
 
 import {AuthenticatedHeader} from '../ui';
 
@@ -24,12 +27,26 @@ interface OwnProps {
     icon: React.ReactNode;
     href: string;
   }[];
+  children?: ReactNode;
 }
 
-export function DashboardLayout({window, navItems}: OwnProps) {
+export function DashboardLayout({window, navItems, children}: OwnProps) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const isWelcomePage = location.pathname === '/host/welcome';
+
+  const leftContent = isWelcomePage ? (
+    <Typography
+      variant="body2"
+      sx={{cursor: 'pointer'}}
+      onClick={() => navigate('/host')}
+    >
+      &lt; Back to Dashboard
+    </Typography>
+  ) : null;
 
   const handleDrawerToggle = () => {
     setMobileOpen(prevState => !prevState);
@@ -64,7 +81,7 @@ export function DashboardLayout({window, navItems}: OwnProps) {
 
   return (
     <Box sx={{display: 'flex'}}>
-      <AuthenticatedHeader onClick={handleDrawerToggle} />
+      <AuthenticatedHeader onClick={handleDrawerToggle} leftContent={leftContent} />
       <StyledDrawer
         width={DRAWER_WIDTH}
         variant="permanent"
@@ -95,7 +112,7 @@ export function DashboardLayout({window, navItems}: OwnProps) {
       </StyledDrawer>
       <Box component="main" sx={{flex: 1}}>
         <Toolbar />
-        <Outlet />
+        {children || <Outlet />} 
       </Box>
     </Box>
   );

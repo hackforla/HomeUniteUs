@@ -18,7 +18,7 @@ The minimum node version enforced is currently 20+, which is the current LTS ver
 4. Run the command `npm install` to download all dependencies from the local package.json
 5. Create a local `.env` file and copy the contents from `.env.example`
 6. Message a team member to obtain values for the .env file
-7. From the `frontend/` directory run `npm run dev` to start a development server at `http://127.0.0.1:4040/`
+7. From the `frontend/` directory run `npm run dev` to start a development server at `http://127.0.0.1:4041/`
 
 The setup for the front end application is now complete and you should see the website running in your browser at the listed port.
 
@@ -64,7 +64,7 @@ The table below describes the environment variables that are used by this app:
 
 | Variable                | Required? | Example                    | Description                                                                                                                                                                                                                                                                              |
 | ----------------------- | --------- | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `VITE_HUU_API_BASE_URL` | YES       | http://localhost:8080/api/ | The HUU API's base URL. In a development environment (mode is 'development' or 'test'): if this variable is not defined, then `http://localhost:4040/api/` will be used by default. In non-development environment: if this variable is not defined, then the build will throw an error. |
+| `VITE_HUU_API_BASE_URL` | YES       | http://localhost:8080/api/ | The HUU API's base URL. In a development environment (mode is 'development' or 'test'): if this variable is not defined, then `http://localhost:4041/api/` will be used by default. In non-development environment: if this variable is not defined, then the build will throw an error. |
 |                         |           |                            |                                                                                                                                                                                                                                                                                          |
 
 ## Production

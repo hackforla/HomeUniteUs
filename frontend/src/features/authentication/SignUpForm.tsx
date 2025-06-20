@@ -34,7 +34,7 @@ export const SignUpForm = ({
   type,
   getTokenIsLoading = false,
   signUpHostIsLoading = false,
-  signUpCoordinatorIsLoading = false
+  signUpCoordinatorIsLoading = false,
 }: SignUpFormProps) => {
   const isAnyLoading =
     isLoading ||

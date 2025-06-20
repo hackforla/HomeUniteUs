@@ -21,6 +21,7 @@ export const typeValidations = {
   email: string().email('Must be a valid email address'),
   yes_no: string(),
   dropdown: string(),
+  date: string(),
   additional_guests: array().of(
     object().shape({
       name: string().required('Name is required'),
