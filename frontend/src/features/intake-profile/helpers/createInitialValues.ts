@@ -2,7 +2,7 @@ import {InitialValues} from '../../../pages/intake-profile/IntakeProfile';
 import {FieldGroup, FieldTypes, Response} from '../../../services/profile';
 
 /**
- * Creates an object used for the initial Formik valiues
+ * Creates an object used for the initial Formik values
  * It takes the form of:
  * {
  *  fieldGroupId: {
@@ -26,6 +26,10 @@ const fieldDefaultValue = (fieldType: FieldTypes) => {
       return '';
     case 'yes_no':
       return '';
+    case 'multiple_choice':
+      return [];
+    case 'contact_method':
+      return '';
     case 'pets':
       return [];
     default:
@@ -34,16 +38,29 @@ const fieldDefaultValue = (fieldType: FieldTypes) => {
 };
 
 export const createInitialValues = (
-  fieldGroups: FieldGroup[],
-  responses: Response[],
+  fieldGroups: FieldGroup[] | undefined,
+  responses: Response[] | undefined,
 ): InitialValues => {
+  // Early return if fieldGroups is undefined or empty
+  if (!fieldGroups || fieldGroups.length === 0) {
+    return {};
+  }
+
+  // Use empty array if responses is undefined
+  const safeResponses = responses || [];
+
   return fieldGroups.reduce((acc: InitialValues, fieldGroup) => {
-    const fields = fieldGroup.fields.reduce((acc, field) => {
+    // Skip groups without fields
+    if (!fieldGroup.fields || fieldGroup.fields.length === 0) {
+      return acc;
+    }
+
+    const fields = fieldGroup.fields.reduce((fieldAcc, field) => {
       return {
-        ...acc,
+        ...fieldAcc,
         [field.id]:
-          responses.find(response => response.fieldId === field.id)?.value ||
-          fieldDefaultValue(field.type),
+          safeResponses.find(response => response.fieldId === field.id)
+            ?.value || fieldDefaultValue(field.type),
       };
     }, {});
 

@@ -1,1 +1,344 @@
-{"id":"1","fieldGroups":[{"id":"1293","title":"Basic Information","fields":[{"id":"3922","title":"First Name","type":"short_text","properties":{},"validations":{"required":true}},{"id":"5572","title":"Last Name","type":"short_text","properties":{},"validations":{"required":true}},{"id":"2188","title":"Date of Birth","type":"date","properties":{},"validations":{"required":true}},{"id":"3924","title":"Gender Identity","type":"dropdown","properties":{"choices":[{"id":"1359","label":"Woman"},{"id":"5342","label":"Man"},{"id":"3151","label":"Questioning"},{"id":"2178","label":"Transgender"},{"id":"3667","label":"Non-binary"},{"id":"3708","label":"Doesn’t know or prefers not to answer\\t"}]},"validations":{"required":true}}]},{"id":"1348","title":"Contact Information","fields":[{"id":"7813","title":"Email","type":"email","properties":{},"validations":{"required":true}},{"id":"2044","title":"Phone Number","type":"number","properties":{},"validations":{"required":true}},{"id":"7504","title":"What is the best way to contact you?","type":"contact_method","properties":{},"validations":{"required":true},"linkedFields":{"emailFieldId":"3158","phoneFieldId":"9365"}}]},{"id":"6577","title":"Other Guests/Pets","fields":[{"id":"7709","title":"Additional Guests","type":"additional_guests","properties":{},"validations":{}},{"id":"7740","title":"Do you have any pets in your care?","type":"yes_no","properties":{},"validations":{"required":true}},{"id":"5056","title":"Pet Type","type":"pets","properties":{},"validations":{"required":false}}]},{"id":"1676","title":"Employment Information","fields":[{"id":"5478","title":"Are you currently employed?","type":"yes_no","properties":{},"validations":{"required":true}},{"id":"8533","title":"If yes, please describe your employment.","type":"long_text","properties":{},"validations":{"required_if":{"field_id":"5478","value":"yes"}}},{"id":"8487","title":"If no, are you currently looking for work? If so, what type?","type":"long_text","properties":{},"validations":{"required_if":{"field_id":"5478","value":"no"}}}]},{"id":"5996","title":"Education","fields":[{"id":"6478","title":"Are you enrolled in an Educational Program?","type":"yes_no","properties":{},"validations":{"required":true}},{"id":"7222","title":"If yes, please describe the program.","type":"long_text","properties":{},"validations":{"required_if":{"field_id":"6478","value":"yes"}}},{"id":"7661","title":"If no, are you hoping to enroll in an Educational Program? If so, what type?","type":"long_text","properties":{},"validations":{"required_if":{"field_id":"6478","value":"no"}}}]},{"id":"4480","title":"Language Proficiency","fields":[{"id":"5479","title":"Are you bilingual or multilingual?","type":"yes_no","properties":{},"validations":{"required":true}},{"id":"2359","title":"If yes, what languages do you speak?","type":"long_text","properties":{},"validations":{"required_if":{"field_id":"5479","value":"yes"}}}]},{"id":"5282","title":"Substance Use","fields":[{"id":"8229","title":"Do you smoke cigarettes?","type":"yes_no","properties":{},"validations":{"required":true}},{"id":"7844","title":"Do you drink alcohol?","type":"yes_no","properties":{},"validations":{"required":true}},{"id":"7494","title":"Do you use any other substances?","type":"yes_no","properties":{},"validations":{"required":true}}]},{"id":"3691","title":"Mental Health","fields":[{"id":"3831","title":"Do you suffer mental illness?","type":"yes_no","properties":{},"validations":{"required":true}}]},{"id":"7816","title":"Interest in Being a Guest","fields":[{"id":"1885","title":"Please share how you think participating in the Host Homes Program will help you obtain long-term housing and meet your educational and/or employment goals:","type":"long_text","properties":{},"validations":{"required":true}},{"id":"1185","title":"What kind of relationship do you hope to have with your host home?","type":"long_text","properties":{},"validations":{"required":true}},{"id":"3749","title":"Please describe any challenges you foresee encountering in participating in the Host Homes Program.","type":"long_text","properties":{},"validations":{"required":true}}]},{"id":"8837","title":"About You","fields":[{"id":"3411","title":"Please take some time to write an introduction of yourself that you would feel comfortable with the Host Homes Coordinator sharing with a potential host. Feel free to talk about your interests, your story or anything else that you think would be important to share:","type":"long_text","properties":{},"validations":{"required":true}}]}]}
+{
+    "id": "1",
+    "fieldGroups": [
+      {
+        "id": "1293",
+        "title": "Basic Information",
+        "fields": [
+          {
+            "id": "3922",
+            "title": "First Name",
+            "type": "short_text",
+            "properties": {},
+            "validations": {
+              "required": true
+            }
+          },
+          {
+            "id": "5572",
+            "title": "Last Name",
+            "type": "short_text",
+            "properties": {},
+            "validations": {
+              "required": true
+            }
+          },
+          {
+            "id": "2188",
+            "title": "Date of Birth",
+            "type": "date",
+            "properties": {},
+            "validations": {
+              "required": true
+            }
+          },
+          {
+            "id": "3924",
+            "title": "Gender Identity",
+            "type": "dropdown",
+            "properties": {
+              "choices": [
+                {
+                  "id": "1359",
+                  "label": "Woman"
+                },
+                {
+                  "id": "5342",
+                  "label": "Man"
+                },
+                {
+                  "id": "3151",
+                  "label": "Questioning"
+                },
+                {
+                  "id": "2178",
+                  "label": "Transgender"
+                },
+                {
+                  "id": "3667",
+                  "label": "Non-binary"
+                },
+                {
+                  "id": "3708",
+                  "label": "Doesn’t know or prefers not to answer"
+                }
+              ]
+            },
+            "validations": {
+              "required": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "1348",
+        "title": "Contact Information",
+        "fields": [
+          {
+            "id": "7813",
+            "title": "Email",
+            "type": "email",
+            "properties": {},
+            "validations": {
+              "required": true
+            }
+          },
+          {
+            "id": "2044",
+            "title": "Phone Number",
+            "type": "number",
+            "properties": {},
+            "validations": {
+              "required": true
+            }
+          },
+          {
+            "id": "7504",
+            "title": "What is the best way to contact you?",
+            "type": "contact_method",
+            "properties": {},
+            "validations": {
+              "required": true
+            },
+            "linkedFields": {
+              "emailFieldId": "7813",
+              "phoneFieldId": "2044"
+            }
+          }
+        ]
+      },
+      {
+        "id": "6577",
+        "title": "Other Guests/Pets",
+        "fields": [
+          {
+            "id": "7709",
+            "title": "Additional Guests",
+            "type": "additional_guests",
+            "properties": {},
+            "validations": {}
+          },
+          {
+            "id": "7740",
+            "title": "Do you have any pets in your care?",
+            "type": "yes_no",
+            "properties": {},
+            "validations": {
+              "required": true
+            }
+          },
+          {
+            "id": "5056",
+            "title": "Pet Type",
+            "type": "pets",
+            "properties": {},
+            "validations": {
+              "required": false
+            }
+          }
+        ]
+      },
+      {
+        "id": "1676",
+        "title": "Employment Information",
+        "fields": [
+          {
+            "id": "5478",
+            "title": "Are you currently employed?",
+            "type": "yes_no",
+            "properties": {},
+            "validations": {
+              "required": true
+            }
+          },
+          {
+            "id": "8533",
+            "title": "If yes, please describe your employment.",
+            "type": "long_text",
+            "properties": {},
+            "validations": {
+              "required_if": {
+                "field_id": "5478",
+                "value": "yes"
+              }
+            }
+          },
+          {
+            "id": "8487",
+            "title": "If no, are you currently looking for work? If so, what type?",
+            "type": "long_text",
+            "properties": {},
+            "validations": {
+              "required_if": {
+                "field_id": "5478",
+                "value": "no"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "5996",
+        "title": "Education",
+        "fields": [
+          {
+            "id": "6478",
+            "title": "Are you enrolled in an Educational Program?",
+            "type": "yes_no",
+            "properties": {},
+            "validations": {
+              "required": true
+            }
+          },
+          {
+            "id": "7222",
+            "title": "If yes, please describe the program.",
+            "type": "long_text",
+            "properties": {},
+            "validations": {
+              "required_if": {
+                "field_id": "6478",
+                "value": "yes"
+              }
+            }
+          },
+          {
+            "id": "7661",
+            "title": "If no, are you hoping to enroll in an Educational Program? If so, what type?",
+            "type": "long_text",
+            "properties": {},
+            "validations": {
+              "required_if": {
+                "field_id": "6478",
+                "value": "no"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "4480",
+        "title": "Language Proficiency",
+        "fields": [
+          {
+            "id": "5479",
+            "title": "Are you bilingual or multilingual?",
+            "type": "yes_no",
+            "properties": {},
+            "validations": {
+              "required": true
+            }
+          },
+          {
+            "id": "2359",
+            "title": "If yes, what languages do you speak?",
+            "type": "long_text",
+            "properties": {},
+            "validations": {
+              "required_if": {
+                "field_id": "5479",
+                "value": "yes"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": "5282",
+        "title": "Substance Use",
+        "fields": [
+          {
+            "id": "8229",
+            "title": "Do you smoke cigarettes?",
+            "type": "yes_no",
+            "properties": {},
+            "validations": {
+              "required": true
+            }
+          },
+          {
+            "id": "7844",
+            "title": "Do you drink alcohol?",
+            "type": "yes_no",
+            "properties": {},
+            "validations": {
+              "required": true
+            }
+          },
+          {
+            "id": "7494",
+            "title": "Do you use any other substances?",
+            "type": "yes_no",
+            "properties": {},
+            "validations": {
+              "required": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "3691",
+        "title": "Mental Health",
+        "fields": [
+          {
+            "id": "3831",
+            "title": "Do you suffer mental illness?",
+            "type": "yes_no",
+            "properties": {},
+            "validations": {
+              "required": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "7816",
+        "title": "Interest in Being a Guest",
+        "fields": [
+          {
+            "id": "1885",
+            "title": "Please share how you think participating in the Host Homes Program will help you obtain long-term housing and meet your educational and/or employment goals:",
+            "type": "long_text",
+            "properties": {},
+            "validations": {
+              "required": true
+            }
+          },
+          {
+            "id": "1185",
+            "title": "What kind of relationship do you hope to have with your host home?",
+            "type": "long_text",
+            "properties": {},
+            "validations": {
+              "required": true
+            }
+          },
+          {
+            "id": "3749",
+            "title": "Please describe any challenges you foresee encountering in participating in the Host Homes Program.",
+            "type": "long_text",
+            "properties": {},
+            "validations": {
+              "required": true
+            }
+          }
+        ]
+      },
+      {
+        "id": "8837",
+        "title": "About You",
+        "fields": [
+          {
+            "id": "3411",
+            "title": "Please take some time to write an introduction of yourself that you would feel comfortable with the Host Homes Coordinator sharing with a potential host. Feel free to talk about your interests, your story or anything else that you think would be important to share:",
+            "type": "long_text",
+            "properties": {},
+            "validations": {
+              "required": true
+            }
+          }
+        ]
+      }
+    ]
+  }
+  

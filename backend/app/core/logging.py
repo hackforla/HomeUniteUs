@@ -37,8 +37,10 @@ def setup_logging(settings: Settings):
                 )
 
         logging.basicConfig(handlers=[InterceptHandler()], level=0, force=True)
-
-        if settings.HUU_ENVIRONMENT.lower() in ["development", "qa", "local"]:
+        '''
+        A logging file can replace logging to standard out by changing sys.stdout to filename.log
+        '''
+        if settings.HUU_ENVIRONMENT.lower() in ["development", "local"]:
             logger.add(
                 sys.stdout,
                 format="<white>{time:YYYY-MM-DD HH:mm:ss}</white> | <level>{level: <8}</level> | <cyan>{name}</cyan>:<green>{function}</green> - <white>{message}</white>",

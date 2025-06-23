@@ -18,24 +18,32 @@ import {
 import {isErrorWithMessage, isFetchBaseQueryError} from '../../redux/helpers';
 import {useAuthenticateWithOAuth} from '../../features/authentication/hooks/useAuthenticateWithOAuth';
 import {FormContainer, SignUpForm} from '../../features/authentication';
-import { LocationState } from './SignIn';
+// Uncomment this import if it's in a separate file
+// import { LocationState } from './SignIn';
+
+// You might need to define LocationState if it's not imported
+interface LocationState {
+  from?: {
+    pathname: string;
+  };
+}
 
 export const SignUp = () => {
   const [errorMessage, setErrorMessage] = React.useState('');
   const {type} = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Get location state information
+  const locationState = location.state as LocationState;
+
+  // Save location from which user was redirected to login page
+  const from = locationState?.from?.pathname || '/';
 
   const [signUp, {isLoading: signUpIsLoading}] = useSignUpMutation();
 
   const [googleSignUp, {isLoading: getTokenIsLoading}] =
     useGoogleSignUpMutation();
-
-    // const location = useLocation()
-    // // get type from params
-    // const locationState = location.state as LocationState;
-
-    // // Save location from which user was redirected to login page
-    // const from = locationState?.from?.pathname || '/';
 
   const callbackUri = `/signup/${type}`;
   useAuthenticateWithOAuth({
