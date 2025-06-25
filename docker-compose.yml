@@ -62,7 +62,7 @@ services:
     # build:
     #   context: ./frontend
     # ports:
-      - "4040:80"
+      # - "4040:80"
 volumes:
   db-data: {}
   pgadmin-data: {}

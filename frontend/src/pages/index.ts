@@ -1,4 +1,5 @@
 export {CoordinatorDashboard} from './coordinator-dashboard/CoordinatorDashboard';
+export {CandidateProfile} from './coordinator-dashboard/CandidateProfile';
 export {GuestApplicationTracker} from './guest-dashboard/GuestDashboard';
 export {GuestSettings} from './guest-dashboard/GuestSettings';
 export {GuestContacts} from './guest-dashboard/GuestContacts';

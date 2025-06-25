@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {Box, Tabs, Tab, Typography, Pagination, Stack} from '@mui/material';
 import {
   DataGrid,
@@ -7,8 +8,11 @@ import {
   gridPageSelector,
   useGridApiContext,
   useGridSelector,
+  GridRenderCellParams,
 } from '@mui/x-data-grid';
-// import {faker} from '@faker-js/faker';
+import {IconButton} from '@material-ui/core';
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import {styled} from '@mui/material/styles';
 
 import {
@@ -16,29 +20,12 @@ import {
   DashboardDataItem,
   DashboardDataResponse,
   useGetAllDashboardDataMutation,
+  fakeCandidates,
 } from '../../services/coordinator';
 import {
   GuestInviteButton,
   LoadingComponent,
 } from '../../features/coordinator-dashboard';
-
-const columns: GridColDef[] = [
-  {
-    field: 'userName',
-    headerName: 'Applicant',
-    flex: 1,
-  },
-  {field: 'userType', headerName: 'Type'},
-  {field: 'caseStatus', headerName: 'Status'},
-  {field: 'coordinatorName', headerName: 'Coordinator', flex: 1},
-  {field: 'lastUpdated', headerName: 'Updated', flex: 1},
-  {
-    field: 'notes',
-    headerName: 'Notes',
-    editable: true,
-    flex: 1,
-  },
-];
 
 function a11yProps(index: number) {
   return {
@@ -49,9 +36,60 @@ function a11yProps(index: number) {
 
 export const CoordinatorDashboard = () => {
   const [value, setValue] = useState(0);
+  const navigate = useNavigate();
+
   const [dashboardDataItems, setDashboardDataItems] = useState(
-    [] as DashboardDataItem[],
+    // [] as DashboardDataItem[],
+    fakeCandidates as DashboardDataItem[],
   );
+
+  const handleSelectUser = (profileId: number) => {
+    navigate(`/coordinator/profile/${profileId}`);
+  };
+
+  const columns: GridColDef[] = [
+    {
+      field: 'userName',
+      headerName: 'Applicant',
+      flex: 1,
+    },
+    {field: 'userType', headerName: 'Type'},
+    {field: 'caseStatus', headerName: 'Status'},
+    {field: 'coordinatorName', headerName: 'Coordinator', flex: 1},
+    {field: 'lastUpdated', headerName: 'Updated', flex: 1},
+    {
+      field: 'notes',
+      headerName: 'Notes',
+      editable: true,
+      flex: 1,
+    },
+    {
+      field: 'id',
+      headerName: '',
+      renderCell: (params: GridRenderCellParams) => (
+        <IconButton
+          name="selectUser"
+          onClick={() => handleSelectUser(params.value)}
+        >
+          <PostAddIcon />
+          <MoreVertIcon />
+        </IconButton>
+      ),
+    },
+    // {
+    //   field: 'doink',
+    //   headerName: '',
+    //   renderCell: (params: GridRenderCellParams) => (
+    //     <IconButton
+    //       name="edituser"
+    //       onClick={() => handleSelectUser(params.value)}
+    //     >
+    //       <MoreVertIcon />
+    //     </IconButton>
+    //   ),
+    // },
+  ];
+
   // const [getAllDashboardData, {isLoading, isSuccess, reset}] = useGetAllDashboardDataMutation();
   const [getAllDashboardData] = useGetAllDashboardDataMutation();
 

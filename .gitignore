@@ -1,7 +1,8 @@
-**/.env
+**/.env*
 data
 **/.db
 .DS_Store
 .vscode
 .localdev
 ./ecs-taskdef-revision.json
+node_modules/

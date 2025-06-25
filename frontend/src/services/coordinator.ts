@@ -1,4 +1,5 @@
 import {api} from './api';
+import {faker} from '@faker-js/faker';
 
 /** Specifies information needed to invite a new `Guest` user to create an account */
 export interface InviteGuestRequest {
@@ -16,7 +17,13 @@ export interface DashboardDataItem {
   coordinatorName: string;
   userType: 'GUEST' | 'HOST' | 'COORDINATOR';
   lastUpdated: string;
-  notes: string;
+  notes: string[];
+
+  substance_abuse: {
+    cigarette: boolean;
+    alcohol: boolean;
+    other: boolean;
+  };
 }
 
 /** Error model for admin-level API responses */
@@ -66,6 +73,30 @@ const coordinatorApi = api.injectEndpoints({
     }),
   }),
 });
+
+export const fakeCandidates: DashboardDataItem[] = [];
+for (let n = 0; n < 7; n++) {
+  fakeCandidates.push({
+    id: n,
+    userId: faker.person.firstName(),
+    userName: faker.person.fullName(),
+    caseStatus: faker.helpers.arrayElement([
+      'In Review',
+      'Application Started',
+      'Intake Profile Started',
+    ]),
+    coordinatorName: faker.person.fullName(),
+    userType: faker.helpers.arrayElement(['GUEST', 'HOST', 'COORDINATOR']),
+    lastUpdated: faker.date.past().toISOString(),
+    notes: [faker.word.words(), faker.word.words(), faker.word.words()],
+
+    substance_abuse: {
+      cigarette: faker.helpers.arrayElement([true, false]),
+      alcohol: faker.helpers.arrayElement([true, false]),
+      other: faker.helpers.arrayElement([true, false]),
+    },
+  });
+}
 
 export const {
   useInviteGuestMutation,
