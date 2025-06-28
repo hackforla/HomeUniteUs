@@ -8,6 +8,10 @@ export interface InviteGuestRequest {
   email: string;
 }
 
+export interface IndexableObj {
+  [key: string]: string | IndexableObj;
+}
+
 /** Display data for a single user within the `CoordinatorDashboard` module */
 export interface DashboardDataItem {
   id: number;
