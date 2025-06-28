@@ -19,7 +19,12 @@ import HowToRegIcon from '@mui/icons-material/HowToReg';
 import HandshakeIcon from '@mui/icons-material/Handshake';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
-import {DashboardDataItem, fakeCandidates} from '../../services/coordinator';
+import {IntakeProfileSectionsAccordion} from '../../features/coordinator-dashboard';
+import {
+  DashboardDataItem,
+  fakeCandidates,
+  IntakeProfileSection,
+} from '../../services/coordinator';
 
 const StyledButton = styled(Button)(() => ({
   // padding: `${theme.spacing(6)} ${theme.spacing(2)}`,
@@ -66,7 +71,12 @@ const CandidateReviewStep: React.FC<CandidateReviewStep> = ({
   );
 };
 
-const CandidateReviewStepsData = [
+interface CandidateReviewStepsDatum {
+  stepName: string;
+  StepIcon: SvgIconComponent;
+}
+
+const CandidateReviewStepsData: CandidateReviewStepsDatum[] = [
   {
     stepName: 'Intake Profile',
     StepIcon: AccountBoxIcon,
@@ -93,19 +103,39 @@ const CandidateReviewSteps = CandidateReviewStepsData.map((item, index) => (
   />
 ));
 
-// const intakeProfileSectionsList: string[] = [
-//   'Employement Information',
-//   'language Proficiency',
-//   'Substance Abuse',
-//   'Education',
-//   'Background',
-//   'Interest as Guest',
-// ];
-
-// // TODO use MUI
-// const IntakeProfileSections = () => {
-//   return <></>;
-// };
+const IntakeProfileSectionsList: IntakeProfileSection[] = [
+  {
+    sectionName: 'Employement Information',
+    queries: [
+      {
+        question: 'What is your favorite color?',
+        answer: "I don't know, red?",
+      },
+    ],
+  },
+  {sectionName: 'Employement Information', queries: []},
+  {sectionName: 'Language Proficiency', queries: []},
+  {
+    sectionName: 'Substance Abuse',
+    queries: [
+      {
+        question: 'Do you smoke cigarettes?',
+        answer: 'Yes',
+      },
+      {
+        question: 'Do you drink alcohol?',
+        answer: 'Yes',
+      },
+      {
+        question: 'Do you use any other substances?',
+        answer: 'No',
+      },
+    ],
+  },
+  {sectionName: 'Education', queries: []},
+  {sectionName: 'Background', queries: []},
+  {sectionName: 'Interest as Guest', queries: []},
+];
 
 export const CandidateProfile = () => {
   let {profileId} = useParams();
@@ -330,7 +360,11 @@ export const CandidateProfile = () => {
               height: '100%',
             }}
           >
-            <Stack direction={'column'}></Stack>
+            <Stack direction={'column'}>
+              <IntakeProfileSectionsAccordion
+                IntakeProfileSectionsList={IntakeProfileSectionsList}
+              />
+            </Stack>
           </Box>
         </Stack>
       </Stack>

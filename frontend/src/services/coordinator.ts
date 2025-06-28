@@ -102,6 +102,16 @@ for (let n = 0; n < 7; n++) {
   });
 }
 
+export interface IntakeProfileSection {
+  sectionName: string;
+  queries: query[];
+}
+
+interface query {
+  question: string;
+  answer: string;
+}
+
 export const {
   useInviteGuestMutation,
   useGetAllDashboardDataMutation,
