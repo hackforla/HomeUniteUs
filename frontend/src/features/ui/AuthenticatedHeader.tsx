@@ -121,6 +121,7 @@ const AvatarDropdownMenu = () => {
   // ?? as the initials for debugging purposes
   const user = useSelector(selectCurrentUser) || {
     role: {} as UserRole,
+    id: 0,
     email: 'unknown',
     firstName: '?',
     lastName: '?',
@@ -130,7 +131,11 @@ const AvatarDropdownMenu = () => {
     <Box sx={{ flexGrow: 0 }}>
       <Tooltip title="Open settings">
         <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-          <Avatar alt={user.firstName + user.lastName}>{getInitials(user)}</Avatar>
+          {/* <Avatar alt={user.firstName + user.lastName}>{getInitials(user)}</Avatar> */}
+          <Avatar alt={`${user.firstName} ${user.lastName}`}>
+            {user.id ? user.id.toString() : getInitials(user)}
+          </Avatar>
+
         </IconButton>
       </Tooltip>
       <Menu
