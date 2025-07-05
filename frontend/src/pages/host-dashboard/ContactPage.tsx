@@ -43,9 +43,13 @@ export function ContactPage() {
     setError(''); // Clear any existing errors before sending
 
     try {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const userId = user?.id ?? 1;
+
       await axios.post('/api/host-dashboard/contact-info', {
         preferred_method: selectedOption,
         phone_number: numericInput,
+        user_id: userId,
       });
 
       // If POST succeeds, navigate:

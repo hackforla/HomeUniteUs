@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime, func
+from sqlalchemy import Column, Integer, String, DateTime, func, ForeignKey
 from app.core.db import Base
 
 class ContactInfo(Base):
@@ -8,3 +8,4 @@ class ContactInfo(Base):
     preferred_method = Column(String(50), nullable=False)
     phone_number = Column(String(20), nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id', ondelete='CASCADE'), nullable=True)
