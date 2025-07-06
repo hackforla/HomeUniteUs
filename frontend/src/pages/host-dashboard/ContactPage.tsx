@@ -27,38 +27,33 @@ export function ContactPage() {
 
   // Handlers
   const handleNextClick = async () => {
-    if (!selectedOption) {
-      setError('Please select an option for method of contact.');
-      return;
-    }
     if (
-      !numericInput ||
-      !/^\d+$/.test(numericInput) ||
-      numericInput.length < 10
+      numericInput && // only validate if user typed something
+      (!/^\d+$/.test(numericInput) || numericInput.length < 10)
     ) {
       setError('Please enter a valid numeric value with at least 10 digits.');
       return;
     }
 
-    setError(''); // Clear any existing errors before sending
+    setError(''); // clear any previous error
 
     try {
       const user = JSON.parse(localStorage.getItem('user') || '{}');
       const userId = user?.id ?? 1;
 
       await axios.post('/api/host-dashboard/contact-info', {
-        preferred_method: selectedOption,
-        phone_number: numericInput,
+        preferred_method: selectedOption || null,
+        phone_number: numericInput || null,
         user_id: userId,
       });
 
-      // If POST succeeds, navigate:
       navigate('/host/overview');
     } catch (err) {
       console.error(err);
       setError('Something went wrong while saving your info.');
     }
   };
+
 
   const handlePreviousClick = () => {
     navigate('/host/welcome');

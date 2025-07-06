@@ -1,32 +1,104 @@
 /* eslint-disable */
-import {Box, Button, Typography} from '@mui/material';
-import {styled} from '@mui/system';
-import {useNavigate} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Box, Button, Typography } from '@mui/material';
+import { styled } from '@mui/system';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export function ProfileOverview() {
   const navigate = useNavigate();
+  const [completionStatus, setCompletionStatus] = useState<{ [key: string]: string }>({});
+
+  useEffect(() => {
+    async function fetchStatus() {
+      try {
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const userId = user?.id ?? 1;
+
+        const res = await axios.get(`/api/host-dashboard/completion-status/${userId}`);
+        setCompletionStatus(res.data);
+      } catch (err) {
+        console.error('Error fetching completion status:', err);
+      }
+    }
+    fetchStatus();
+  }, []);
 
   const buttons = [
-    {label: 'Contact Information', to: '/host/contact'},
-    {label: 'Basic Information', to: '/host/basic'},
-    {label: 'Photos', to: '/host/photos'},
-    {label: 'Housing', to: '/host/housing'},
-    {label: 'Employment', to: '/host/employment'},
-    {label: 'Interests and Hobbies', to: '/host/interests'},
-    {label: 'References', to: '/host/references'},
-    {label: 'Background', to: '/host/background'},
-    {label: 'Interest in Being a Host', to: '/host/motives'},
-    {label: 'Preferences in a Guest', to: '/host/preferences'},
-    {label: 'Strengths and Challenges', to: '/host/eval'},
-    {label: 'About Me', to: '/host/me'},
+    { label: 'Contact Information', to: '/host/contact' },
+    { label: 'Basic Information', to: '/host/basic' },
+    { label: 'Photos', to: '/host/photos' },
+    { label: 'Housing', to: '/host/housing' },
+    { label: 'Employment', to: '/host/employment' },
+    { label: 'Interests and Hobbies', to: '/host/interests' },
+    { label: 'References', to: '/host/references' },
+    { label: 'Background', to: '/host/background' },
+    { label: 'Interest in Being a Host', to: '/host/motives' },
+    { label: 'Preferences in a Guest', to: '/host/preferences' },
+    { label: 'Strengths and Challenges', to: '/host/eval' },
+    { label: 'About Me', to: '/host/me' },
   ];
+
+  // Icons for completion status
+  const CompleteIcon = () => (
+    <Box
+      sx={{
+        width: 24,
+        height: 24,
+        borderRadius: '50%',
+        backgroundColor: 'white',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: 1,
+      }}
+    >
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="green"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <polyline points="20 6 9 17 4 12" />
+      </svg>
+    </Box>
+  );
+
+  const PartialIcon = () => (
+    <Box
+      sx={{
+        width: 24,
+        height: 24,
+        borderRadius: '50%',
+        background: 'linear-gradient(90deg, white 50%, transparent 50%)',
+        border: '2px solid white',
+        marginLeft: 1,
+      }}
+    />
+  );
+
+  const IncompleteIcon = () => (
+    <Box
+      sx={{
+        width: 24,
+        height: 24,
+        borderRadius: '50%',
+        border: '2px solid white',
+        marginLeft: 1,
+      }}
+    />
+  );
 
   return (
     <PageContainer>
       <Header>
         <Typography
           variant="body2"
-          sx={{cursor: 'pointer'}}
+          sx={{ cursor: 'pointer' }}
           onClick={() => navigate('/host/')}
         >
           &lt; Back to Dashboard
@@ -34,12 +106,10 @@ export function ProfileOverview() {
       </Header>
 
       <IntroText>
-        <Typography variant="h4" gutterBottom sx={{fontWeight: 'bold'}}>
+        <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>
           Profile Overview
         </Typography>
-        <Typography variant="body1">
-          We want to get to know you better
-        </Typography>
+        <Typography variant="body1">We want to get to know you better</Typography>
       </IntroText>
 
       <ContentArea>
@@ -49,15 +119,35 @@ export function ProfileOverview() {
         />
 
         <ButtonsContainer>
-          {buttons.map(({label, to}) => (
-            <RoundedButton
-              key={label}
-              onClick={() => navigate(to)}
-              variant="outlined"
-            >
-              {label}
-            </RoundedButton>
-          ))}
+          {buttons.map(({ label, to }) => {
+            const status = completionStatus[label];
+            let icon = null;
+            if (status === 'complete') {
+              icon = <CompleteIcon />;
+            } else if (status === 'partial') {
+              icon = <PartialIcon />;
+            } else if (status === 'incomplete') {
+              icon = <IncompleteIcon />;
+            }
+
+            return (
+              <RoundedButton
+                key={label}
+                onClick={() => navigate(to)}
+                variant="outlined"
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  gap: 1.5,
+                  paddingLeft: 2,
+                }}
+              >
+                {icon}
+                {label}
+              </RoundedButton>
+            );
+          })}
 
           <SquareGreyButton onClick={() => navigate('/some/other/path')}>
             Review Profile
@@ -76,7 +166,7 @@ const PageContainer = styled(Box)({
   padding: '20px 40px',
 });
 
-const Header = styled(Box)(({theme}) => ({
+const Header = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2, 4),
   borderBottom: `1px solid ${theme.palette.divider}`,
   backgroundColor: theme.palette.background.paper,
@@ -118,6 +208,7 @@ const RoundedButton = styled(Button)({
   padding: '10px 24px',
   fontWeight: 600,
   minWidth: 180,
+  justifyContent: 'center',
   '&:hover': {
     backgroundColor: '#0057A1',
   },

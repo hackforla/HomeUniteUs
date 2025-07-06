@@ -2,8 +2,11 @@
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 from sqlalchemy.types import JSON
-from typing import Any
+from typing import Any, Generator
+from fastapi import Depends
 import logging
+
+from app.core.config import get_settings
 
 logger = logging.getLogger(__name__)
 
@@ -14,6 +17,7 @@ _DbSessionFactory = None
 class Base(DeclarativeBase):
     type_annotation_map = {dict[str, Any]: JSON}
 
+
 def init_db(engine):
     if engine is None:
         logger.error("Database engine initialization failed: engine is None")
@@ -23,7 +27,6 @@ def init_db(engine):
         Base.metadata.create_all(bind=engine, checkfirst=True)
         with engine.connect() as connection:
             connection.execute(text("SELECT 1"))
-            
     except Exception as e:
         logger.error("Database initialization failed", extra={
             "error": str(e),
@@ -32,7 +35,7 @@ def init_db(engine):
         raise
 
 
-def db_engine(settings):
+def db_engine(settings) -> "Engine":
     global _db_engine
     if _db_engine is None:
         try:
@@ -46,7 +49,7 @@ def db_engine(settings):
     return _db_engine
 
 
-def db_session_factory(engine):
+def db_session_factory(engine) -> sessionmaker:
     global _DbSessionFactory
     if _DbSessionFactory is None:
         try:
@@ -62,3 +65,16 @@ def db_session_factory(engine):
             })
             raise
     return _DbSessionFactory
+
+
+def get_db(settings = Depends(get_settings)) -> Generator:
+    """
+    FastAPI dependency that provides a SQLAlchemy Session.
+    """
+    engine = db_engine(settings)
+    SessionLocal = db_session_factory(engine)
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
