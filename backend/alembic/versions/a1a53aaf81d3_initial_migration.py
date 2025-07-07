@@ -36,9 +36,9 @@ def upgrade() -> None:
         sa.Column('title', sa.String(), nullable=False),
         sa.Column('description', sa.String(), nullable=False),
         sa.Column('created_at',
-                  sa.DateTime(timezone=True),
-                  server_default=sa.sql.func.utcnow(),
-                  nullable=False), sa.PrimaryKeyConstraint('form_id'))
+                sa.DateTime(timezone=True),
+                server_default=sa.text('CURRENT_TIMESTAMP'),
+                nullable=False)),
     op.create_table('housing_orgs',
                     sa.Column('housing_org_id', sa.Integer(), nullable=False),
                     sa.Column('org_name', sa.String(), nullable=False),
