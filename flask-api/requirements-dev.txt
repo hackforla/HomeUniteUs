@@ -65,7 +65,7 @@ ecdsa==0.19.0
     #   python-jose
 exceptiongroup==1.2.2
     # via pytest
-filelock==3.15.4
+filelock==3.20.1
     # via
     #   tox
     #   virtualenv
