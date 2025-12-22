@@ -112,7 +112,7 @@ markupsafe==2.1.5
     #   jinja2
     #   mako
     #   werkzeug
-marshmallow==3.20.1
+marshmallow==3.26.2
     # via
     #   homeuniteus-api (pyproject.toml)
     #   marshmallow-sqlalchemy
