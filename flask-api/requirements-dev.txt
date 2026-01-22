@@ -260,7 +260,7 @@ werkzeug==3.0.6
     #   connexion
     #   flask
     #   moto
-wheel==0.44.0
+wheel==0.46.2
     # via pip-tools
 xmltodict==0.13.0
     # via moto
