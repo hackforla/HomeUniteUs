@@ -2,8 +2,9 @@ import {useTheme} from '@mui/material/styles';
 import {InProgressIcon} from '../../ui/icons/InProgressIcon';
 import LockIcon from '@mui/icons-material/Lock';
 import {CheckCircleOutlined} from '@mui/icons-material';
+import {Box} from '@mui/material';
 
-const useStatusStyling = () => {
+export const useStatusStyling = () => {
   const theme = useTheme();
 
   return {
@@ -14,7 +15,16 @@ const useStatusStyling = () => {
       shadow: 'grey.50',
     },
     incomplete: {
-      icon: null,
+      icon: (
+        <Box
+          sx={{
+            width: 24,
+            height: 24,
+            border: `2px solid white`,
+            borderRadius: `100%`,
+          }}
+        />
+      ),
       color: theme.palette.primary.contrastText,
       borderColor: 'grey.50',
       shadow: 'grey.50',
@@ -42,5 +52,3 @@ const useStatusStyling = () => {
     },
   };
 };
-
-export default useStatusStyling;

@@ -1,14 +1,14 @@
-import {Button, Stack, useMediaQuery, useTheme} from '@mui/material';
+import {Container, Stack, useMediaQuery, useTheme} from '@mui/material';
 import {Outlet, useLocation, useNavigate, useParams} from 'react-router-dom';
 import {Formik} from 'formik';
-import {buildValidationSchema, createInitialValues} from './helpers';
+import {useState} from 'react';
+import {createInitialValues} from '../../features/intake-profile/helpers';
 import {
   useGetProfileQuery,
   useGetResponsesQuery,
   Response,
 } from '../../services/profile';
-import {useState} from 'react';
-import {ProfileSidebar} from '../../features/intake-profile';
+import {ProfileActions, ProfileSidebar} from '../../features/intake-profile';
 export type Values = {
   [key: string]: Response['value'];
 };
@@ -18,7 +18,6 @@ export type InitialValues = Record<string, Values>;
 export const IntakeProfile = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const toolbarHeight = Number(theme.mixins.toolbar.minHeight);
   const {profileId, groupId} = useParams();
   const location = useLocation();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -44,11 +43,13 @@ export const IntakeProfile = () => {
   const {responses} = responsesData;
 
   // create validation schema for current group. Return empty object if groupId is undefined, which means we are on welcome or review page
-  const validationSchema =
-    groupId === undefined ? {} : buildValidationSchema(fieldGroups, groupId);
+  // TODO: Reimplement validation schema generation
+  // const validationSchema =
+  //   groupId === undefined ? {} : buildValidationSchema(fieldGroups, groupId);
 
   // create initial values from responses and fieldGroups
   const initalValues = createInitialValues(fieldGroups, responses);
+
   const currentIndex = fieldGroups.findIndex(
     group => group.id === selectedItem,
   );
@@ -82,7 +83,7 @@ export const IntakeProfile = () => {
   return (
     <Formik
       initialValues={initalValues}
-      validationSchema={validationSchema}
+      // validationSchema={validationSchema}
       enableReinitialize={true}
       onSubmit={values => {
         if (!groupId) {
@@ -112,10 +113,11 @@ export const IntakeProfile = () => {
     >
       {({errors, handleSubmit}) => (
         <Stack
-          direction="row"
           sx={{
-            height: `calc(100vh - ${toolbarHeight}px)`,
+            flexDirection: 'row',
+            height: '100vh',
             backgroundColor: 'grey.50',
+            overflowY: 'scroll',
           }}
         >
           <ProfileSidebar
@@ -126,71 +128,27 @@ export const IntakeProfile = () => {
             setSelectedItem={setSelectedItem}
             showSections={showSections}
           />
-          <Stack
-            onSubmit={handleSubmit}
-            component="form"
-            sx={{
-              height: '100%',
-              flex: 1,
-              display: {xs: showSections ? 'none' : 'flex', md: 'flex'},
-            }}
-          >
-            <Stack sx={{overflowY: 'auto'}}>
-              <Outlet context={{groupId, fieldGroups, errors}} />
-            </Stack>
+          <Container sx={{height: '100%'}} maxWidth="md">
             <Stack
+              onSubmit={handleSubmit}
+              component="form"
               sx={{
-                flexDirection: {xs: 'column', md: 'row'},
-                marginLeft: {xs: '0', md: 'auto'},
-                gap: 1,
-                p: 2,
+                flex: 1,
+                my: 4,
+                display: {xs: showSections ? 'none' : 'flex', md: 'flex'},
               }}
             >
-              <Button
-                size="medium"
-                variant="outlined"
-                onClick={handleBack}
-                style={{border: '2px solid'}} //in styles to prevent bug where button becomes smaller on hover
-                sx={{width: {sm: '100%', md: 161}}}
-              >
-                Back
-              </Button>
-              {location.pathname.includes('review') ? (
-                <Button
-                  size="medium"
-                  variant="contained"
-                  onClick={handleSubmitApplication}
-                  sx={{width: {sm: '100%', md: 183}}}
-                >
-                  Submit Application
-                </Button>
-              ) : (
-                <Button
-                  size="medium"
-                  variant="contained"
-                  onClick={handleNext}
-                  sx={{width: {sm: '100%', md: 183}}}
-                >
-                  Continue
-                </Button>
-              )}
-
-              <Button
-                size="medium"
-                variant="text"
-                onClick={toggleShowSections}
-                sx={{
-                  border: 2,
-                  width: {sm: '100%'},
-                  display: {md: 'none'},
-                  color: 'black',
-                  borderColor: 'transparent',
-                }}
-              >
-                Return to Profile Sections
-              </Button>
+              <Stack sx={{overflowY: 'auto'}}>
+                <Outlet context={{groupId, fieldGroups, errors}} />
+              </Stack>
+              <ProfileActions
+                handleBack={handleBack}
+                handleNext={handleNext}
+                handleSubmitApplication={handleSubmitApplication}
+                toggleShowSections={toggleShowSections}
+              />
             </Stack>
-          </Stack>
+          </Container>
         </Stack>
       )}
     </Formik>

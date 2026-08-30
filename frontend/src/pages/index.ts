@@ -19,3 +19,5 @@ export {ForgotPasswordSuccess} from './authentication/ForgotPasswordSuccess';
 export {Settings} from './Settings';
 export {ConfirmSignUp} from './authentication/ConfirmSignUp';
 export {IntakeProfile} from './intake-profile/IntakeProfile';
+export {IntakeProfileSection} from './intake-profile/IntakeProfileSection';
+export {IntakeProfilePortal} from './intake-profile/IntakeProfilePortal';
