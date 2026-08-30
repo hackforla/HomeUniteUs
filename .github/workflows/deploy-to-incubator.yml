@@ -7,6 +7,7 @@ on:
         description: The AWS environment to deploy (dev/test/prod)
         options: 
         - qa
+        - prod
 permissions:
   id-token: write
   contents: read
