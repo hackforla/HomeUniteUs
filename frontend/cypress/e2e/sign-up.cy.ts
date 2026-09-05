@@ -6,6 +6,7 @@ describe('Sign Up', () => {
       // While Mocking always return a successful status code
       cy.intercept('POST', '/api/auth/signup', {
         statusCode: 200,
+        body: {message: 'User sign up successful'},
       }).as('signUp');
     } else {
       // cy.intercept without a request will not stub out the real API call
@@ -61,7 +62,7 @@ describe('Sign Up', () => {
     cy.url().should('include', `signup/success?email=${user.email}`);
   });
 
-  it.only('user can sign up as a host', () => {
+  it('user can sign up as a host', () => {
     const user = {
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
@@ -93,8 +94,6 @@ describe('Sign Up', () => {
       .click();
 
     cy.wait('@signUp').its('request.body').should('deep.equal', user);
-    // print the response body
-    cy.wait('@signUp').its('response.body').then(console.log);
 
     cy.url().should('include', `signup/success?email=${user.email}`);
   });
