@@ -19,7 +19,7 @@ done;
 
 COMMIT_PREFIX="$(git log -n1 --pretty='%H' | head -c10)"
 TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
-ECR_REPO='035866691871.dkr.ecr.us-west-2.amazonaws.com/homeuniteus'
+ECR_REPO='035866691871.dkr.ecr.us-west-2.amazonaws.com/home-unite-us-fullstack'
 
 IMAGE_URL="${ECR_REPO}:${COMMIT_PREFIX}.${TIMESTAMP}"
 

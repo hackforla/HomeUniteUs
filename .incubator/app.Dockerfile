@@ -1,6 +1,6 @@
 ARG NODE_VERSION=20.18.0-bookworm
 ARG HUU_BASE_VERSION=1.1
-ARG HUU_ECR_REPOSITORY=035866691871.dkr.ecr.us-west-2.amazonaws.com/homeuniteus
+ARG HUU_ECR_REPOSITORY=035866691871.dkr.ecr.us-west-2.amazonaws.com/home-unite-us-fullstack
 
 # use the official Node image for building the UI bundle
 FROM node:${NODE_VERSION} AS client-builder
