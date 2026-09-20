@@ -72,7 +72,9 @@ if __name__ == '__main__':
             create_user(cognito_client, user_pool_id, email, group)
             print(email + '/Test123! created.')
 
-    sql = 'INSERT INTO public.user (email, "firstName", "lastName", "roleId") VALUES (%s, %s, %s, %s) ON CONFLICT(email) DO NOTHING'
+    create_table = 'CREATE TABLE IF NOT EXISTS public.user (id SERIAL NOT NULL, email varchar(256), "firstName" varchar(256), "lastName" varchar(256), "roleId" integer, PRIMARY KEY (id));'
+
+    sql = 'INSERT INTO public.user (email, "firstName", "lastName", "roleId") VALUES (%s, %s, %s, %s)'
     url = urlparse(os.environ['DATABASE_URL'])
     with psycopg2.connect(database=url.path[1:],
                           user=url.username,
@@ -80,5 +82,7 @@ if __name__ == '__main__':
                           host=url.hostname,
                           port=url.port) as db_conn:
         with db_conn.cursor() as cur:
+            cur.execute(create_table)
+            db_conn.commit()
             cur.executemany(sql, rows)
             db_conn.commit()

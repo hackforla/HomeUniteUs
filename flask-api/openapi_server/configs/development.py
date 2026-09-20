@@ -9,7 +9,7 @@ class DevelopmentHUUConfig(HUUConfig):
     HOST: str = "127.0.0.1"
     TESTING: bool = False
     SECRET_KEY: str = "unsecurekey"
-    ROOT_URL: str = "http://localhost:4040"
+    ROOT_URL: str = "http://localhost:4041"
     DATABASE_URL: str = "sqlite:///./homeuniteus.db"
 
     def post_validate(self):

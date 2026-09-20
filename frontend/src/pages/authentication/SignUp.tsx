@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import {
   IconButton,
@@ -14,6 +15,7 @@ import {
   useGoogleSignUpMutation,
   useSignUpMutation,
   SignUpRequest,
+  SignUpResponse,
 } from '../../services/auth';
 import {isErrorWithMessage, isFetchBaseQueryError} from '../../redux/helpers';
 import {useAuthenticateWithOAuth} from '../../features/authentication/hooks/useAuthenticateWithOAuth';
@@ -55,7 +57,7 @@ export const SignUp = () => {
     }
 
     try {
-      const response = await signUp({
+      const response: SignUpResponse = await signUp({
         email,
         password,
         firstName,

@@ -42,6 +42,7 @@
     "@mui/x-data-grid": "^6.15.0",
     "@mui/x-date-pickers": "^7.5.1",
     "@reduxjs/toolkit": "^1.8.3",
+    "axios": "^1.10.0",
     "date-fns": "^2.30.0",
     "formik": "^2.2.9",
     "framer-motion": "^11.9.0",

@@ -9,16 +9,19 @@ if [ -r .env ]; then
 fi
 
 # Alembic migration
-alembic upgrade head
+# alembic upgrade head
 
 if [ "$1" == "prod" ]; then
     fastapi run app/main.py --port 8000
 else
+    env | grep COGNITO
     # Setup moto server and export Cognito environment variables
     python startup_scripts/setup_moto_server.py > envfile
+    cat envfile
     source envfile
     rm envfile
-
+    env | grep COGNITO
+    sleep 3
     # Create test users in moto server and postgres
     python startup_scripts/create_groups_users.py
 

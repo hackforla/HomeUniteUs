@@ -4,6 +4,7 @@ import {User} from './user';
 export interface SignUpResponse {
   user: User;
   token: string;
+  error?: string;
 }
 
 export interface SignUpRequest {

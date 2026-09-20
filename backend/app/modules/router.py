@@ -5,6 +5,8 @@ from app.modules.intake_profile import controller as intake_profile
 from app.modules.tenant_housing_orgs import controller as housing_org
 from app.modules.workflow.dashboards.coordinator import coordinator_dashboard
 
+from app.modules.host_dashboard import routes as host_dashboard_routes
+
 api_router = APIRouter()
 
 api_router.include_router(auth_controller.router,
@@ -23,3 +25,7 @@ api_router.include_router(housing_org.router,
                           prefix="/housing-orgs",
                           tags=["tenant_housing_orgs"])
 api_router.include_router(coordinator_dashboard.router, tags=["coordinator"])
+
+api_router.include_router(host_dashboard_routes.router,
+                          prefix="/host-dashboard",
+                          tags=["host-dashboard"])

@@ -45,4 +45,4 @@ RUN chmod +x /code/startup_scripts/entrypoint.sh
 WORKDIR /code
 ENTRYPOINT ["/code/startup_scripts/entrypoint.sh"]
 CMD []
-EXPOSE 8000
+EXPOSE 8080

@@ -1,6 +1,6 @@
 # Named temprorary image to build client bundles
-FROM node:lts-alpine as builder
-ARG VITE_HUU_API_BASE_URL
+FROM node:20-alpine as builder
+ARG VITE_HUU_API_BASE_URL=http://localhost:8080/api/
 ENV VITE_HUU_API_BASE_URL=${VITE_HUU_API_BASE_URL}
 
 # do all copies/builds within a subdirectory
@@ -19,11 +19,12 @@ FROM cypress/base as development
 WORKDIR /app
 RUN apt-get update && apt-get install -y curl
 
+
 # Copy built assets and all source files from builder
 COPY --from=builder /app .
 RUN npx cypress install
 HEALTHCHECK --interval=5s --timeout=5s --retries=3 \
-    CMD curl --fail http://127.0.0.1:4040 || exit 1
+    CMD curl --fail http://127.0.0.1:4041 || exit 1
 ENTRYPOINT ["/bin/sh", "-c"]
 CMD ["npx vite --host"]
 
@@ -42,4 +43,3 @@ RUN if [ -e "nginx.conf" ]; then \
 #    publish to a different port at Docker 
 #    runtime environment level
 EXPOSE 80
-ENTRYPOINT ["/bin/sh", "-c"]
